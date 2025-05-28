@@ -1,0 +1,113 @@
+:root {
+	/**
+	 * Scaling units
+	 */
+	--space-scale-1: 0.25;
+	--space-scale-2: 0.5;
+	--space-scale-3: 0.75;
+	--space-scale-4: 1;
+	--space-scale-5: 1.5;
+	--space-scale-6: 2;
+	--space-scale-7: 3;
+	--space-scale-8: 4;
+	--space-scale-9: 5;
+
+	--size-scale-1: 0.75;
+	--size-scale-2: 0.875;
+	--size-scale-3: 1;
+	--size-scale-4: 1.125;
+	--size-scale-5: 1.25;
+	--size-scale-6: 1.5;
+	--size-scale-7: 2;
+	--size-scale-8: 2.5;
+	--size-scale-9: 4;
+
+	/**
+	 * Size declarations
+	 */
+	--space-1: calc(1rem * var(--space-scale-1));
+	--space-2: calc(1rem * var(--space-scale-2));
+	--space-3: calc(1rem * var(--space-scale-3));
+	--space-4: calc(1rem * var(--space-scale-4));
+	--space-5: calc(1rem * var(--space-scale-5));
+	--space-6: calc(1rem * var(--space-scale-6));
+	--space-7: calc(1rem * var(--space-scale-7));
+	--space-8: calc(1rem * var(--space-scale-8));
+	--space-9: calc(1rem * var(--space-scale-9));
+
+	--size-1: calc(1em * var(--size-scale-1));
+	--size-2: calc(1em * var(--size-scale-2));
+	--size-3: calc(1em * var(--size-scale-3));
+	--size-4: calc(1em * var(--size-scale-4));
+	--size-5: calc(1em * var(--size-scale-5));
+	--size-6: calc(1em * var(--size-scale-6));
+	--size-7: calc(1em * var(--size-scale-7));
+	--size-8: calc(1em * var(--size-scale-8));
+	--size-9: calc(1em * var(--size-scale-9));
+
+	--golden-ratio: 1.618;
+
+	/**
+	 * Spacing aliases
+	 */
+	--gap--tiny: var(--space-2);
+	--gap--small: var(--space-3);
+	--gap: var(--space-4);
+	--gap--large: var(--space-7);
+	--gap--huge: var(--space-9);
+
+	--app-inset: var(--gap--large);
+
+	/**
+	 * Colors
+	 */
+	--color-error: indianred;
+	--color-warning: darkorange;
+	--color-success: olivedrab;
+
+	--color-text: var(--gold-11);
+	--color-text--light: var(--gold-10);
+	--color-text--heavy: var(--gold-12);
+
+	--color-border: var(--gold-7);
+	--color-border--light: var(--gold-6);
+	--color-border--heavy: var(--gold-10);
+
+	--color-link: var(--gold-11);
+
+	/**
+	 * Typography
+	 */
+	--line-length: 60ch;
+	--line-height: 1.5;
+	--line-height--compact: 1.15;
+
+	/**
+	 * Misc.
+	 */
+	--radius: 9px;
+
+	--radius--none: 0;
+	--radius--small: 4px;
+	--radius--regular: var(--radius);
+	--radius--large: 18px;
+	--radius--full: 9999px;
+
+	--container: 1350px;
+
+	/**
+	 * Transitions
+	 */
+	--transition-duration: 250ms;
+	--transition-duration-exit: 100ms;
+	--transition-duration--slow: 500ms;
+
+	--swift-in: cubic-bezier(0.1, 1, 0.55, 1);
+	--ease-out--expo: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-in--expo: cubic-bezier(0.7, 0, 0.84, 0);
+
+	/**
+	 * z-index
+	 */
+	--z-modal: 9990;
+}

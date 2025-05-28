@@ -1,0 +1,130 @@
+/**
+ * Define global @layer precedence
+ */
+@layer reset, ui, composition, feature, utils;
+
+@layer reset {
+	:root {
+		accent-color: var(--gold-7);
+		color-scheme: light dark;
+	}
+
+	*,
+	::before,
+	::after {
+		margin: 0;
+		padding: 0;
+		min-width: 0;
+		box-sizing: border-box;
+		position: relative;
+	}
+
+	/**
+	 * 1. Fill browser window
+	 * 2. Use default cursor, unless to imply interactivity.
+	 * 3. Flatten unwanted line-height
+	 */
+	html {
+		height: 100%; /* 1 */
+		cursor: default; /* 2 */
+		line-height: 1; /* 3 */
+	}
+
+	@media (prefers-color-scheme: dark) {
+		html {
+			color-scheme: dark;
+		}
+	}
+
+	body {
+		overflow-x: hidden;
+		max-width: 100vw;
+		min-height: 100%;
+		font-family: var(--font-sans-serif);
+		background-color: light-dark(var(--gold-1), var(--mauve-12));
+		color: light-dark(var(--gold-12), var(--mauve-1));
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+	}
+
+	/**
+	 * Re-apply the pointer cursor
+	 */
+	a {
+		color: inherit;
+		cursor: revert;
+		text-decoration: none;
+		transition-property: opacity, color;
+		transition-duration: var(--transition-duration);
+
+		&:active:hover {
+			transition: none;
+			opacity: 0.5;
+		}
+	}
+
+	p {
+		line-height: var(--line-height);
+	}
+
+	ol,
+	ul,
+	menu {
+		list-style: none;
+	}
+
+	:where([hidden]) {
+		display: none;
+	}
+
+	form {
+		display: block;
+	}
+
+	fieldset {
+		display: block;
+		border: none;
+	}
+
+	img {
+		display: block;
+		height: auto;
+	}
+
+	svg {
+		fill: currentColor;
+	}
+
+	table {
+		text-indent: 0;
+		border-color: inherit;
+		border-collapse: collapse;
+	}
+
+	:focus {
+		outline: none;
+	}
+
+	:focus-visible {
+		outline: 2px solid light-dark(var(--gold-5), var(--mauve-5));
+		outline-offset: 1px;
+	}
+
+	hr {
+		border: none;
+		border-top: 1px solid var(--color-border);
+		width: 100%;
+		max-width: var(--line-length);
+		margin-inline: auto;
+	}
+
+	:is(h1, h2, h3, h4, h5, h6) {
+		text-box: trim-both ex alphabetic;
+	}
+
+	::selection {
+		color: light-dark(var(--gold-2), var(--mauve-2));
+		background-color: light-dark(var(--gold-11), var(--mauve-11));
+		text-shadow: 0.025em 0.025em light-dark(var(--gold-10), var(--mauve-10));
+	}
+}
