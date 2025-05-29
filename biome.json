@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": ["src/**", "next.config.ts"]
+		"includes": ["src/**", "next.config.ts", "drizzle.config.ts"]
 	},
 	"formatter": {
 		"enabled": true,

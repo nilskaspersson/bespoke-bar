@@ -8,20 +8,31 @@
 		"start": "next start",
 		"lint": "biome check",
 		"ncu": "npx npm-check-updates --interactive",
-		"ci": "biome ci && npm run build"
+		"ci": "biome ci && npm run build",
+		"drizzle:push": "drizzle-kit push",
+		"drizzle:generate": "drizzle-kit generate",
+		"drizzle:migrate": "drizzle-kit migrate"
 	},
 	"dependencies": {
+		"@neondatabase/serverless": "1.0.0",
 		"@radix-ui/colors": "3.0.0",
 		"clsx": "2.1.1",
+		"dotenv": "16.5.0",
+		"drizzle-orm": "0.44.0",
+		"nanoid": "5.1.5",
 		"next": "15.3.2",
+		"pg": "8.16.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.0-beta.5",
 		"@types/node": "22.15.23",
+		"@types/pg": "8.15.2",
 		"@types/react": "19.1.6",
 		"@types/react-dom": "19.1.5",
+		"drizzle-kit": "0.31.1",
+		"tsx": "4.19.4",
 		"typescript": "5.8.3",
 		"typescript-plugin-css-modules": "5.1.0"
 	}
