@@ -1,6 +1,5 @@
 import { relations } from "drizzle-orm";
 import {
-	pgEnum,
 	pgTable,
 	real,
 	serial,
@@ -9,22 +8,7 @@ import {
 	varchar,
 } from "drizzle-orm/pg-core";
 import { RecipesTable } from "@/db/schema/recipes";
-
-/**
- * These are some of the volume units from `convert-units`. We are likely going to
- * want to extend this to include "oz" as a common shorthand for "fl-oz". We are
- * likely going to want to add things like "barspoon" and "dash" as custom units.
- */
-export const unitEnum = pgEnum("unit", [
-	"fl-oz",
-	"cup",
-	"pnt",
-	"l",
-	"ml",
-	"cl",
-	"tsp",
-	"Tbs",
-]);
+import { unitEnum } from "@/db/schema/units";
 
 export const SpecsTable = pgTable("specs", {
 	id: serial("id").primaryKey(),
@@ -43,3 +27,12 @@ export const specsRelations = relations(SpecsTable, ({ one }) => ({
 		references: [RecipesTable.id],
 	}),
 }));
+
+export type Spec = typeof SpecsTable.$inferSelect;
+
+export type NewSpec = Omit<typeof SpecsTable.$inferInsert, "id" | "createdAt">;
+
+/**
+ * The fields users can provide to create a spec.
+ */
+export type UserInputSpec = Pick<Spec, "quantity" | "unit" | "ingredient">;

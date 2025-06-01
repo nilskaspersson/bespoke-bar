@@ -1,0 +1,11 @@
+@layer layout {
+	.main {
+		display: grid;
+		place-items: center;
+		min-height: 100vh;
+	}
+
+	.input {
+		font-size: 3rem;
+	}
+}

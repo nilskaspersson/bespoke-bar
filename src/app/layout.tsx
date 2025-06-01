@@ -1,5 +1,5 @@
 import { Figtree } from "next/font/google";
-import "./theme";
+import "./(theme)";
 import type { PropsWithChildren } from "react";
 
 const sans = Figtree({
