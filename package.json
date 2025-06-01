@@ -7,8 +7,9 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check",
+		"test": "vitest run",
 		"ncu": "npx npm-check-updates --interactive",
-		"ci": "biome ci && npm run build",
+		"ci": "biome ci && npm run test && npm run build",
 		"drizzle:push": "drizzle-kit push",
 		"drizzle:generate": "drizzle-kit generate",
 		"drizzle:migrate": "drizzle-kit migrate"
@@ -17,8 +18,10 @@
 		"@neondatabase/serverless": "1.0.0",
 		"@radix-ui/colors": "3.0.0",
 		"clsx": "2.1.1",
+		"convert-units": "3.0.0-beta.7",
 		"dotenv": "16.5.0",
 		"drizzle-orm": "0.44.0",
+		"drizzle-zod": "0.8.2",
 		"nanoid": "5.1.5",
 		"next": "15.3.2",
 		"pg": "8.16.0",
@@ -27,13 +30,19 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.0-beta.5",
+		"@testing-library/dom": "10.4.0",
+		"@testing-library/react": "16.3.0",
 		"@types/node": "22.15.23",
 		"@types/pg": "8.15.2",
 		"@types/react": "19.1.6",
 		"@types/react-dom": "19.1.5",
+		"@vitejs/plugin-react": "4.5.0",
 		"drizzle-kit": "0.31.1",
+		"jsdom": "26.1.0",
 		"tsx": "4.19.4",
 		"typescript": "5.8.3",
-		"typescript-plugin-css-modules": "5.1.0"
+		"typescript-plugin-css-modules": "5.1.0",
+		"vite-tsconfig-paths": "5.1.4",
+		"vitest": "3.1.4"
 	}
 }
