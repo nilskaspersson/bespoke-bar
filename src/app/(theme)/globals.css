@@ -1,7 +1,7 @@
 /**
  * Define global @layer precedence
  */
-@layer reset, ui, composition, feature, utils;
+@layer reset, ui, composition, feature, layout, utils;
 
 @layer reset {
 	:root {
