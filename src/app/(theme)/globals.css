@@ -5,7 +5,7 @@
 
 @layer reset {
 	:root {
-		accent-color: var(--gold-7);
+		accent-color: var(--mauve-7);
 		color-scheme: light dark;
 	}
 
@@ -30,19 +30,13 @@
 		line-height: 1; /* 3 */
 	}
 
-	@media (prefers-color-scheme: dark) {
-		html {
-			color-scheme: dark;
-		}
-	}
-
 	body {
 		overflow-x: hidden;
 		max-width: 100vw;
 		min-height: 100%;
 		font-family: var(--font-sans-serif);
-		background-color: light-dark(var(--gold-1), var(--mauve-12));
-		color: light-dark(var(--gold-12), var(--mauve-1));
+		background-color: light-dark(var(--mauve-1), var(--mauve-12));
+		color: light-dark(var(--mauve-12), var(--mauve-1));
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 	}
