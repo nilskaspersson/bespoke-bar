@@ -28,6 +28,17 @@
 			"react": "all"
 		}
 	},
+	"css": {
+		"parser": {
+			"cssModules": true
+		},
+		"formatter": {
+			"enabled": false
+		},
+		"linter": {
+			"enabled": false
+		}
+	},
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double"
