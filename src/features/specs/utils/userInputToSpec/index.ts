@@ -1,7 +1,7 @@
 import type { UserInputSpec } from "@/db/schema/specs";
-import { parseIngredient } from "@/features/ingredients/utils/parseIngredient";
-import { parseQuantity } from "@/features/quantity/utils/parseQuantity";
-import { parseUnit } from "@/features/units/utils/parseUnit";
+import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";
+import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
+import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
 export function userInputToSpec(userInput: string): UserInputSpec | null {
@@ -13,9 +13,9 @@ export function userInputToSpec(userInput: string): UserInputSpec | null {
 	}
 
 	const [quantity, unit, ingredient] = sequencedParsers(
-		parseQuantity,
-		parseUnit,
-		parseIngredient,
+		quantityTextParser,
+		unitTextParser,
+		ingredientTextParser,
 	)(userInput);
 
 	if (!ingredient) {
