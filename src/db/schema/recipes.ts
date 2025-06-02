@@ -11,6 +11,8 @@ export const RecipesTable = pgTable("recipes", {
 	description: varchar("description", { length: 500 }),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at"),
+	createdBy: text("created_by").notNull(), // Clerk userId
+	ownerId: text("owner_id"), // Clerk userId or orgId
 });
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({

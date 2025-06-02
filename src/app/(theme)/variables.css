@@ -61,6 +61,7 @@
 	/**
 	 * Colors
 	 */
+	--color-blue: #669bbc;
 	--color-error: indianred;
 	--color-warning: darkorange;
 	--color-success: olivedrab;
@@ -69,11 +70,11 @@
 	--color-text--light: var(--gold-10);
 	--color-text--heavy: var(--gold-12);
 
-	--color-border: var(--gold-7);
-	--color-border--light: var(--gold-6);
-	--color-border--heavy: var(--gold-10);
+	--color-border: light-dark(var(--mauve-6), var(--mauve-8));
+	--color-border--light: light-dark(var(--mauve-4), var(--mauve-11));
+	--color-border--heavy: light-dark(var(--mauve-10), var(--mauve-4));
 
-	--color-link: var(--gold-11);
+	--color-link: var(--color-blue);
 
 	/**
 	 * Typography
@@ -94,6 +95,7 @@
 	--radius--full: 9999px;
 
 	--container: 1350px;
+	--app-header--height: 50px;
 
 	/**
 	 * Transitions

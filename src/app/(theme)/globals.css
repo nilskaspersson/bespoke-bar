@@ -44,7 +44,7 @@
 	/**
 	 * Re-apply the pointer cursor
 	 */
-	a {
+	:where(a) {
 		color: inherit;
 		cursor: revert;
 		text-decoration: none;
@@ -57,13 +57,11 @@
 		}
 	}
 
-	p {
+	:where(p) {
 		line-height: var(--line-height);
 	}
 
-	ol,
-	ul,
-	menu {
+	:where(ol, ul, menu) {
 		list-style: none;
 	}
 
@@ -117,8 +115,8 @@
 	}
 
 	::selection {
-		color: light-dark(var(--gold-2), var(--mauve-2));
-		background-color: light-dark(var(--gold-11), var(--mauve-11));
-		text-shadow: 0.025em 0.025em light-dark(var(--gold-10), var(--mauve-10));
+		color: var(--mauve-1);
+		background-color: var(--color-blue);
+		text-shadow: 0.03em 0.03em 0 color-mix(in srgb, var(--color-blue) 50%, black);
 	}
 }
