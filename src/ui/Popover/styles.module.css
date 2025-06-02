@@ -1,0 +1,34 @@
+@layer ui {
+	.popover {
+		position: fixed;
+		top: var(--popoverTop);
+		left: var(--popoverLeft);
+
+		background-color: light-dark(var(--mauve-12), var(--mauve-1));
+		color: light-dark(var(--mauve-12), var(--mauve-1));
+		padding: var(--gap);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--high);
+		border: none;
+
+		transition-behavior: allow-discrete;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+		transition-property: opacity, transform;
+		opacity: 0;
+
+		&:popover-open {
+			opacity: 1;
+		}
+
+		@starting-style {
+			&:popover-open {
+				opacity: 0;
+			}
+
+			&:popover-open {
+				transform: translateY(var(--gap--small));
+			}
+		}
+	}
+}

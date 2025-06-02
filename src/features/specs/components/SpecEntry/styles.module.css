@@ -1,0 +1,12 @@
+@layer feature {
+	.entry {
+		display: flex;
+		gap: 0.5ch;
+		font-size: var(--size-5);
+	}
+
+	.quantity {
+		font-weight: 700;
+		font-variant-numeric: tabular-nums;
+	}
+}

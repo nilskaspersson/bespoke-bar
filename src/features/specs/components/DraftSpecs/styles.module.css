@@ -1,0 +1,22 @@
+@layer feature {
+	.container {
+		display: grid;
+		gap: var(--gap);
+		padding: var(--gap);
+		border-radius: var(--radius--large);
+		background-color: light-dark(var(--mauve-3), var(--mauve-11));
+	}
+
+	.form {
+		display: block;
+	}
+
+	.input {
+		display: block;
+		font-size: 2rem;
+		max-width: 100%;
+		width: auto;
+		padding: var(--gap--tiny) var(--gap);
+		border-radius: var(--radius--full);
+	}
+}

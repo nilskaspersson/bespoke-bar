@@ -1,5 +1,4 @@
 import { pipe } from "@/utils";
-import type { Parser } from "@/utils/sequencedParsers";
 
 // biome-ignore lint/suspicious/noControlCharactersInRegex: We look for control characters in order to remove them.
 const CONTROL_CHARS_PATTERN = /[\x00-\x1F\x7F]/g;
@@ -16,21 +15,27 @@ const normalizeWhitespace = (text: string): string =>
 const capitalizeFirst = (text: string): string =>
 	text.charAt(0).toUpperCase() + text.slice(1);
 
-const processText = pipe(
+const tranformIngredient = pipe(
 	capitalizeFirst,
 	normalizeWhitespace,
 	sanitizeControlChars,
 );
 
-export const parseIngredient: Parser<string | null> = (userInput: string) => {
+export function formatIngredient(userInput: string): string | null {
 	const text = userInput.trim();
 
 	if (!text) {
-		return [null, ""];
+		return null;
 	}
 
+	return tranformIngredient(text);
+}
+
+export function ingredientTextParser(
+	userInput: string,
+): [string | null, string] {
 	/**
 	 * Return empty remainder, this is assumed to be the end of the input
 	 */
-	return [processText(text), ""];
-};
+	return [formatIngredient(userInput), ""];
+}

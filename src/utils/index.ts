@@ -6,6 +6,16 @@ export function pipe<T>(fn: (a: T) => T, ...fns: Array<(a: T) => T>) {
 	return fns.reduce((prev, next) => (v) => next(prev(v)), fn);
 }
 
+export function omit<T, K extends keyof T>(o: T, ...keys: K[]): Omit<T, K> {
+	const result = { ...o };
+
+	for (const key of keys) {
+		delete result[key];
+	}
+
+	return result;
+}
+
 /**
  * Escapes special characters in a string for use in a regular expression.
  * @param string - The string to escape.
@@ -27,4 +37,8 @@ export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 	}
 
 	return inverted;
+}
+
+export function isUndefined(o: unknown): o is undefined {
+	return typeof o === "undefined";
 }
