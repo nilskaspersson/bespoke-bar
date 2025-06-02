@@ -1,0 +1,13 @@
+@layer feature {
+	.button {
+		all: unset;
+		cursor: pointer;
+		font: inherit;
+		border-radius: var(--radius--full);
+
+		&:hover,
+		&:focus {
+			background-color: var(--mauve-6);
+		}
+	}
+}
