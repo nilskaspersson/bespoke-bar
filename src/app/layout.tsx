@@ -1,9 +1,9 @@
-import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 import { Figtree } from "next/font/google";
-import "./(theme)";
+import "./theme";
+import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
-import { AppHeader } from "@/app/AppHeader";
+import { AppHeader } from "@/app/components/AppHeader";
+import { AuthProvider } from "@/app/components/AuthProvider";
 
 const sans = Figtree({
 	subsets: ["latin"],
@@ -13,17 +13,20 @@ const sans = Figtree({
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
-		<html lang="en">
+		<html
+			lang="en"
+			/**
+			 * Suppresses hydration warning of next-themes
+			 */
+			suppressHydrationWarning
+		>
 			<body className={sans.variable}>
-				<ClerkProvider
-					appearance={{
-						baseTheme: dark,
-					}}
-				>
-					<AppHeader />
-
-					<main>{children}</main>
-				</ClerkProvider>
+				<ThemeProvider>
+					<AuthProvider>
+						<AppHeader />
+						<main>{children}</main>
+					</AuthProvider>
+				</ThemeProvider>
 			</body>
 		</html>
 	);
