@@ -1,0 +1,32 @@
+@layer ui {
+	.icon {
+		--icon-color: currentColor;
+		--icon-length: 1em;
+
+		display: inline-block;
+		width: var(--icon-length);
+		height: var(--icon-length);
+		aspect-ratio: 1 / 1;
+		color: var(--icon-color);
+		fill: var(--icon-color);
+		vertical-align: middle;
+		transition-property: color, fill;
+		transition-duration: var(--transition-duration);
+	}
+
+	.tiny {
+		--icon-length: var(--space-2);
+	}
+
+	.small {
+		--icon-length: var(--space-3);
+	}
+
+	.large {
+		--icon-length: var(--space-4);
+	}
+
+	.huge {
+		--icon-length: var(--space-6);
+	}
+}

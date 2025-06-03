@@ -13,3 +13,4 @@ import "@radix-ui/colors/mauve.css";
  */
 import "./variables.css";
 import "./globals.css";
+import "./utils.css";
