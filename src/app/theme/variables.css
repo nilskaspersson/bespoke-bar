@@ -66,13 +66,13 @@
 	--color-warning: darkorange;
 	--color-success: olivedrab;
 
-	--color-text: var(--gold-11);
-	--color-text--light: var(--gold-10);
-	--color-text--heavy: var(--gold-12);
+	--color-text: var(--mauve-11);
+	--color-text--light: var(--mauve-10);
+	--color-text--heavy: var(--mauve-12);
 
-	--color-border: light-dark(var(--mauve-6), var(--mauve-8));
+	--color-border: light-dark(var(--mauve-6), var(--mauve-10));
 	--color-border--light: light-dark(var(--mauve-4), var(--mauve-11));
-	--color-border--heavy: light-dark(var(--mauve-10), var(--mauve-4));
+	--color-border--heavy: var(--mauve-8);
 
 	--color-link: var(--color-blue);
 

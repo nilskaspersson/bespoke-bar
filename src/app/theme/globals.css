@@ -6,7 +6,7 @@
 @layer reset {
 	:root {
 		accent-color: var(--mauve-7);
-		color-scheme: light dark;
+		/* color-scheme: light dark; */
 	}
 
 	*,
