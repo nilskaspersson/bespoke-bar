@@ -1,0 +1,17 @@
+@layer ui {
+	.flex {
+		display: flex;
+		gap: var(--jsxGap);
+		align-items: var(--jsxAlignItems);
+		justify-content: var(--jsxJustifyContent);
+		flex-direction: row;
+	}
+
+	.wrap {
+		flex-wrap: wrap;
+	}
+
+	.column {
+		flex-direction: column;
+	}
+}

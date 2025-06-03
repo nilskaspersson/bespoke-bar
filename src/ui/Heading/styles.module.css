@@ -1,0 +1,19 @@
+@layer ui {
+	.heading {
+		font-size: var(--jsxFontSize, 1rem);
+		text-align: var(--jsxTextAlign, inherit);
+		color: var(--color-text--heavy);
+
+		text-wrap: balance;
+		max-width: var(--line-length);
+		line-height: var(--line-height--compact);
+		text-wrap: balance;
+		font-weight: 900;
+		word-break: break-word;
+		text-box: trim-both cap alphabetic;
+
+		& > a:hover {
+			color: var(--color-link);
+		}
+	}
+}

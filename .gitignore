@@ -35,7 +35,7 @@ yarn-error.log*
 # env files
 .env
 .env.local
-.nvmrc
+.npmrc
 
 # vercel
 .vercel
