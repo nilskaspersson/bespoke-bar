@@ -1,5 +1,4 @@
 import {
-	ClerkLoaded,
 	OrganizationSwitcher,
 	SignedIn,
 	SignedOut,
@@ -25,29 +24,27 @@ export function AppHeader() {
 				</SignedIn>
 			</div>
 
-			<ClerkLoaded>
-				<div className={styles.grid}>
-					<ThemePicker />
+			<div className={styles.grid}>
+				<ThemePicker />
 
-					<SignedOut>
-						<SignInButton mode="modal">
-							<Button variant="base" className={styles.button}>
-								Sign in
-							</Button>
-						</SignInButton>
+				<SignedOut>
+					<SignInButton mode="modal">
+						<Button variant="base" className={styles.button}>
+							Sign in
+						</Button>
+					</SignInButton>
 
-						<SignUpButton mode="modal">
-							<Button variant="base" className={styles.button}>
-								Sign up
-							</Button>
-						</SignUpButton>
-					</SignedOut>
+					<SignUpButton mode="modal">
+						<Button variant="base" className={styles.button}>
+							Sign up
+						</Button>
+					</SignUpButton>
+				</SignedOut>
 
-					<SignedIn>
-						<UserButton />
-					</SignedIn>
-				</div>
-			</ClerkLoaded>
+				<SignedIn>
+					<UserButton />
+				</SignedIn>
+			</div>
 		</header>
 	);
 }
