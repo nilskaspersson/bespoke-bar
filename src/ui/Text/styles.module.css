@@ -1,0 +1,39 @@
+@layer ui {
+	.text {
+		font-size: var(--jsxFontSize, inherit);
+		font-weight: var(--jsxFontWeight, inherit);
+		text-align: var(--jsxTextAlign, inherit);
+
+		text-wrap: pretty;
+		line-height: var(--line-height);
+
+		&:not(.fullWidth) {
+			max-width: var(--line-length);
+		}
+	}
+
+	.truncate {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	.compact {
+		line-height: var(--line-height--compact);
+	}
+
+	.serif {
+		font-family: var(--font-serif, serif);
+	}
+
+	.italic {
+		font-style: italic;
+	}
+
+	.light {
+		color: var(--color-text--light);
+	}
+
+	.heavy {
+		color: var(--color-text--heavy);
+	}
+}
