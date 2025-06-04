@@ -1,19 +1,27 @@
-@layer layout {
+
+@layer composition {
 	.header {
+		display: grid;
+		/**
+		 * min-height to respect safe-area-inset-top
+		 */
+		min-height: var(--app-header--height);
+		background-color: var(--mauve-3);
+		border-bottom: 1px solid var(--color-border--light);
+	}
+
+	.container {
 		display: flex;
-		height: var(--app-header--height);
 		align-items: center;
 		justify-content: space-between;
 		gap: var(--gap);
 		padding-inline: var(--gap);
-		background-color: light-dark(var(--mauve-2), var(--mauve-12));
-		border-bottom: 1px solid var(--color-border--light);
 	}
 
 	.logo {
 		font-size: var(--size-5);
 		font-weight: 700;
-		color: light-dark(var(--mauve-12), var(--mauve-1));
+		color: var(--mauve-12);
 	}
 
 	.grid {

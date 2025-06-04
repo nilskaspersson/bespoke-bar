@@ -1,0 +1,15 @@
+@layer layout {
+	.navigation {
+		position: sticky;
+		top: 0;
+		z-index: var(--z-navigation);
+		padding-left: env(safe-area-inset-left);
+		padding-right: env(safe-area-inset-right);
+	}
+
+	.main {
+		padding-block: var(--app-inset);
+		padding-left: env(safe-area-inset-left);
+		padding-right: env(safe-area-inset-right);
+	}
+}
