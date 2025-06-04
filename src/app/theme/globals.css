@@ -111,6 +111,7 @@
 	::selection {
 		color: var(--mauve-1);
 		background-color: var(--color-blue);
-		text-shadow: 0.03em 0.03em 0 color-mix(in srgb, var(--color-blue) 50%, black);
+		text-shadow: 0.03em 0.03em 0
+			color-mix(in srgb, var(--color-blue) 50%, black);
 	}
 }
