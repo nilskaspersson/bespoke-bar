@@ -1,5 +1,10 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+	experimental: {
+		inlineCss: true,
+		useLightningcss: true,
+	},
+};
 
 export default nextConfig;

@@ -1,3 +1,10 @@
+/**
+ * This shadows our real @layer declarations, but Next.js currently has an issue
+ * where even module import order isn't respected, and this happens to be the first
+ * module loaded.
+ */
+@layer base, ui, composition, feature, layout, utils;
+
 @layer composition {
 	.header {
 		display: grid;
