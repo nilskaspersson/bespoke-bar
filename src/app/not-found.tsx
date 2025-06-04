@@ -1,15 +1,10 @@
+import { SystemError } from "@/app/components/SystemError";
 import { LinkButton } from "@/ui/Button";
 
 export default function NotFound() {
 	return (
-		<section>
-			<h1>404</h1>
-
-			<p>The requested page could not be found.</p>
-
-			<LinkButton href="/" variant="solid">
-				Back to home
-			</LinkButton>
-		</section>
+		<SystemError code={404} message="The requested page could not be found.">
+			<LinkButton href="/">Back to home</LinkButton>
+		</SystemError>
 	);
 }

@@ -1,0 +1,13 @@
+@layer composition {
+	.base {
+		display: grid;
+		place-items: center;
+		flex: 1 1 auto;
+	}
+
+	.container {
+		display: grid;
+		place-items: center;
+		gap: var(--space-6);
+	}
+}
