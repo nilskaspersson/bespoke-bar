@@ -1,0 +1,33 @@
+@layer components {
+	@property --from {
+		syntax: "<color>";
+		inherits: false;
+		initial-value: color(display-p3 0.354 0.445 0.866);
+	}
+
+	@property --to {
+		syntax: "<color>";
+		inherits: false;
+		initial-value: color(display-p3 0.864 0.364 0.539);
+	}
+
+	@keyframes gradient {
+		to {
+			--from: color(display-p3 0.862 0.415 0.298);
+			--to: color(display-p3 0.426 0.694 0.426);
+		}
+	}
+
+	.gradient {
+		@supports (background-clip: text) {
+			background: linear-gradient(to right in oklab, var(--from), var(--to));
+			animation: gradient 2s linear infinite alternate;
+			background-clip: text;
+			color: transparent;
+		}
+
+		@supports not (background-clip: text) {
+			color: color(display-p3 0.864 0.364 0.539);
+		}
+	}
+}
