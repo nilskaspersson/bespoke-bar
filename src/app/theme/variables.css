@@ -71,6 +71,7 @@
 	--color-text--heavy: var(--mauve-12);
 
 	--color-background: var(--mauve-3);
+	--color-background--light: var(--mauve-4);
 
 	--color-border--light: var(--mauve-5);
 	--color-border: var(--mauve-6);
