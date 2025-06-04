@@ -1,0 +1,21 @@
+@layer layout {
+	.body {
+		display: grid;
+		grid-template:
+			"header" auto
+			"main" 1fr
+			"footer" auto;
+	}
+
+	.header {
+		grid-area: header;
+		padding-top: env(safe-area-inset-top);
+		padding-right: env(safe-area-inset-right);
+		padding-left: env(safe-area-inset-left);
+	}
+
+	.main {
+		grid-area: main;
+		display: grid;
+	}
+}

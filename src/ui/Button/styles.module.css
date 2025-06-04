@@ -17,9 +17,8 @@
 		box-shadow: 0 0 0 transparent;
 
 		&:not(:active) {
-			transition-property:
-				background-color, border-color, color, outline-color, transform,
-				box-shadow;
+			transition-property: background-color, border-color, color, outline-color,
+				transform, box-shadow;
 			transition-duration: var(--transition-duration);
 		}
 
@@ -53,9 +52,13 @@
 	/**
 	 * Variants
 	 */
-	.solid {}
+	.solid {
+		padding: var(--space-1);
+	}
 
-	.outline {}
+	.outline {
+		border: 1px solid var(--color-border);
+	}
 
 	.icon {
 		aspect-ratio: 1 / 1;

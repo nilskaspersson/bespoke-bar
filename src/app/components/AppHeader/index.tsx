@@ -1,31 +1,30 @@
 import {
-	ClerkLoaded,
-	OrganizationSwitcher,
 	SignedIn,
 	SignedOut,
 	SignInButton,
 	SignUpButton,
 	UserButton,
 } from "@clerk/nextjs";
+import { clsx } from "clsx";
 import Link from "next/link";
+import type { HTMLAttributes } from "react";
 import { ThemePicker } from "@/app/components/ThemePicker";
 import { Button } from "@/ui/Button";
 import styles from "./styles.module.css";
 
-export function AppHeader() {
+export function AppHeader({
+	className,
+	...props
+}: HTMLAttributes<HTMLDivElement>) {
 	return (
-		<header className={styles.header}>
-			<div className={styles.grid}>
-				<div className={styles.logo}>
-					<Link href="/">Bespoke Bar</Link>
+		<header className={clsx(styles.header, className)} {...props}>
+			<div className={styles.container}>
+				<div className={styles.grid}>
+					<div className={styles.logo}>
+						<Link href="/">Bespoke Bar</Link>
+					</div>
 				</div>
 
-				<SignedIn>
-					<OrganizationSwitcher hidePersonal hideSlug />
-				</SignedIn>
-			</div>
-
-			<ClerkLoaded>
 				<div className={styles.grid}>
 					<ThemePicker />
 
@@ -47,7 +46,7 @@ export function AppHeader() {
 						<UserButton />
 					</SignedIn>
 				</div>
-			</ClerkLoaded>
+			</div>
 		</header>
 	);
 }

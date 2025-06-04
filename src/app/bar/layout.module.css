@@ -1,0 +1,62 @@
+@layer layout {
+	.container {
+		display: grid;
+		grid-template:
+			"navigation" auto
+			"main" 1fr;
+	}
+
+	.navigation {
+		position: sticky;
+		top: 0;
+		z-index: var(--z-navigation);
+		padding-left: env(safe-area-inset-left);
+		padding-right: env(safe-area-inset-right);
+	}
+
+	.main {
+		display: grid;
+		padding-block: var(--app-inset);
+		padding-left: env(safe-area-inset-left);
+		padding-right: env(safe-area-inset-right);
+
+		&::before {
+			--length: var(--app-inset);
+			--width: 1px;
+			--color: var(--color-border--light);
+
+			content: "";
+			display: block;
+			position: absolute;
+			inset: 0;
+
+			/**
+			 * Vertical lines
+			 */
+			background:
+				linear-gradient(
+					90deg,
+					var(--color) var(--width),
+					transparent var(--width) var(--length)
+				)
+				50% 50% / var(--length) var(--length),
+				/**
+				 * Horizontal lines
+				 */
+				linear-gradient(
+					var(--color) var(--width),
+					transparent var(--width) var(--length)
+				) 50% 50% / var(--length) var(--length);
+
+			/**
+			 * Offset the grid lines by their width, to avoid bordered body
+			 */
+			background-position: calc(var(--width) * -1) calc(var(--width) * -1);
+
+			/**
+			 * Fade out the lines diagonally
+			 */
+			mask: linear-gradient(-25deg, transparent 50%, white);
+		}
+	}
+}
