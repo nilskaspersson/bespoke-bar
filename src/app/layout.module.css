@@ -15,7 +15,7 @@
 	}
 
 	.main {
-		display: grid;
 		grid-area: main;
+		display: grid;
 	}
 }

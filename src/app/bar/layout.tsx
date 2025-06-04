@@ -14,9 +14,9 @@ export default async function Layout({
 	}
 
 	return (
-		<section>
+		<div className={styles.container}>
 			<BarNavigation className={styles.navigation} />
-			<section className={styles.main}>{children}</section>
-		</section>
+			<div className={styles.main}>{children}</div>
+		</div>
 	);
 }

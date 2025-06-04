@@ -40,7 +40,7 @@
 		}
 
 		&:has(input:checked) {
-			box-shadow: 0 1px 1px var(--mauve-8);
+			box-shadow: 0 1px 1px var(--mauve-6);
 			background-color: var(--mauve-1);
 			color: var(--mauve-12);
 		}
