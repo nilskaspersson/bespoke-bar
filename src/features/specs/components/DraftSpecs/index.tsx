@@ -36,7 +36,7 @@ export function DraftSpecs({
 	return (
 		<div {...props} className={clsx(styles.container, className)}>
 			{specs.length > 0 ? (
-				<ul>
+				<ul className={styles.box}>
 					{specs.map((spec) => (
 						<li key={spec[KEY_FIELD]}>
 							<SpecEntry spec={spec} onChange={createChangeHandler(spec)} />

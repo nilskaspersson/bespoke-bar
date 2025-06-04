@@ -4,8 +4,7 @@
 		top: var(--popoverTop);
 		left: var(--popoverLeft);
 
-		background-color: light-dark(var(--mauve-12), var(--mauve-1));
-		color: light-dark(var(--mauve-12), var(--mauve-1));
+		background-color: var(--mauve-2);
 		padding: var(--gap);
 		border-radius: var(--radius--large);
 		box-shadow: var(--shadow--high);
