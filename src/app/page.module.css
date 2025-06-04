@@ -2,7 +2,16 @@
 	.main {
 		display: grid;
 		place-items: center;
-		min-height: 100vh;
-		padding: var(--app-inset);
+	}
+
+	.content {
+		display: grid;
+		text-align: center;
+		gap: var(--space-8);
+	}
+
+	.heading {
+		text-align: center;
+		font-size: var(--size-9);
 	}
 }
