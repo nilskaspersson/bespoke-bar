@@ -1,12 +1,16 @@
+import "./layers.css";
+
 /**
  * Default colors. See available scales here:
  * https://www.radix-ui.com/colors/docs/palette-composition/scales
  *
  * More info here:
  * https://www.radix-ui.com/colors/docs/overview/usage
+ *
+ * The values are manually copied from the repository; Radix doesn't allow customizing
+ * the dark mode value assignments.
  */
-import "@radix-ui/colors/gold.css";
-import "@radix-ui/colors/mauve.css";
+import "./colors.css";
 
 /**
  * Color aliases, scaling, resets, and misc assignments

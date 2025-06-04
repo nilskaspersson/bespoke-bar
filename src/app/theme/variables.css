@@ -70,9 +70,11 @@
 	--color-text--light: var(--mauve-10);
 	--color-text--heavy: var(--mauve-12);
 
-	--color-border: light-dark(var(--mauve-6), var(--mauve-10));
-	--color-border--light: light-dark(var(--mauve-4), var(--mauve-11));
-	--color-border--heavy: var(--mauve-8);
+	--color-background: var(--mauve-2);
+
+	--color-border--light: var(--mauve-5);
+	--color-border: var(--mauve-6);
+	--color-border--heavy: var(--mauve-7);
 
 	--color-link: var(--color-blue);
 
@@ -94,7 +96,7 @@
 	--radius--large: 18px;
 	--radius--full: 9999px;
 
-	--container: 1350px;
+	--container: 1250px;
 	--app-header--height: 50px;
 
 	/**
@@ -111,6 +113,7 @@
 	/**
 	 * z-index
 	 */
+	--z-navigation: 100;
 	--z-modal: 9990;
 
 	--shadow-color: 300deg 5% 64%;

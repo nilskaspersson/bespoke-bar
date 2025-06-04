@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "clsx";
 import type { HTMLAttributes } from "react";
 import type { Spec } from "@/db/schema/specs";
 import { IngredientPicker } from "@/features/ingredients/components/IngredientPicker";

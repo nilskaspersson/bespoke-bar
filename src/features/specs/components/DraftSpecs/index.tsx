@@ -1,6 +1,6 @@
 "use client";
 
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { type HTMLAttributes, useState } from "react";
 import type { UserInputSpec } from "@/db/schema/specs";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";

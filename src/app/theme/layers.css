@@ -1,0 +1,4 @@
+/**
+ * Define global @layer precedence
+ */
+@layer base, ui, composition, feature, layout, utils;
