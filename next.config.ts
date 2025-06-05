@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
 	experimental: {
 		inlineCss: true,
 		useLightningcss: true,
+		authInterrupts: true,
 	},
 };
 
