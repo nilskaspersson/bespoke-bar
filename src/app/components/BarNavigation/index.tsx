@@ -37,7 +37,7 @@ export function BarNavigation({
 						<Link
 							href="/bar/lists"
 							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar/lists",
+								[styles.isActive]: pathname.startsWith("/bar/lists"),
 							})}
 						>
 							Lists
@@ -48,7 +48,7 @@ export function BarNavigation({
 						<Link
 							href="/bar/recipes"
 							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar/recipes",
+								[styles.isActive]: pathname.startsWith("/bar/recipes"),
 							})}
 						>
 							Recipes
@@ -59,7 +59,7 @@ export function BarNavigation({
 						<Link
 							href="/bar/ingredients"
 							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar/ingredients",
+								[styles.isActive]: pathname.startsWith("/bar/ingredients"),
 							})}
 						>
 							Ingredients

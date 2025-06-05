@@ -2,16 +2,21 @@
 
 import { clsx } from "clsx";
 import { type HTMLAttributes, useState } from "react";
+import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import type { UserInputSpec } from "@/db/schema/specs";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
+import { Button } from "@/ui/Button";
 import { KEY_FIELD, type WithKey, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function DraftSpecs({
 	className,
+	createRecipe,
 	...props
-}: HTMLAttributes<HTMLDivElement>) {
+}: {
+	createRecipe: (specs: UserInputSpec[]) => Promise<RecipeWithSpecs>;
+} & HTMLAttributes<HTMLDivElement>) {
 	const [specs, setSpecs] = useState<WithKey<UserInputSpec>[]>([]);
 
 	const handleSubmit = (formData: FormData) => {
@@ -36,13 +41,17 @@ export function DraftSpecs({
 	return (
 		<div {...props} className={clsx(styles.container, className)}>
 			{specs.length > 0 ? (
-				<ul className={styles.box}>
-					{specs.map((spec) => (
-						<li key={spec[KEY_FIELD]}>
-							<SpecEntry spec={spec} onChange={createChangeHandler(spec)} />
-						</li>
-					))}
-				</ul>
+				<form action={() => void createRecipe(specs)}>
+					<ul className={styles.box}>
+						{specs.map((spec) => (
+							<li key={spec[KEY_FIELD]}>
+								<SpecEntry spec={spec} onChange={createChangeHandler(spec)} />
+							</li>
+						))}
+					</ul>
+
+					<Button type="submit">Save Recipe</Button>
+				</form>
 			) : null}
 
 			<form action={handleSubmit} className={styles.form}>
