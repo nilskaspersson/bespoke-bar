@@ -12,6 +12,7 @@ import { nanoid } from "nanoid";
 import { z } from "zod/v4";
 import { RecipesTable } from "@/db/schema/recipes";
 import { unitEnum } from "@/db/schema/units";
+import type { Identity } from "@/utils/types";
 
 export const SpecsTable = pgTable(
 	"specs",
@@ -44,13 +45,16 @@ export const specsRelations = relations(SpecsTable, ({ one }) => ({
 
 export type Spec = typeof SpecsTable.$inferSelect;
 
-export type NewSpec = Omit<typeof SpecsTable.$inferInsert, "id" | "createdAt">;
+export type InsertSpec = Omit<
+	typeof SpecsTable.$inferInsert,
+	"id" | "createdAt"
+>;
 
 /**
  * The fields users can provide to create a spec.
  */
-export type UserInputSpec = Partial<
-	Pick<Spec, "quantity" | "unit" | "ingredient">
+export type UserInputSpec = Identity<
+	Partial<Pick<Spec, "quantity" | "unit" | "ingredient">>
 >;
 
 const specsConstraintsSchema = {
