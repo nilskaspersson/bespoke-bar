@@ -1,5 +1,4 @@
 import "./theme";
-
 import { clsx } from "clsx";
 import { Figtree } from "next/font/google";
 import { ThemeProvider } from "next-themes";

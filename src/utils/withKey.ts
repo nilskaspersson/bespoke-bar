@@ -1,4 +1,5 @@
 import { omit } from "@/utils";
+import type { Identity } from "@/utils/types";
 
 /**
  * Use for temporary fields to key React nodes.
@@ -21,6 +22,6 @@ export function withKey<T extends Record<PropertyKey, unknown>>(
 
 export function withoutKey<T>(
 	o: WithKey<T>,
-): Omit<WithKey<T>, typeof KEY_FIELD> {
+): Identity<Omit<WithKey<T>, typeof KEY_FIELD>> {
 	return omit(o, KEY_FIELD);
 }

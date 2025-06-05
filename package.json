@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev --turbopack",
+		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check",
@@ -13,7 +13,8 @@
 		"update-icons": "npm i @awesome.me/kit-20e437f9b8@latest",
 		"drizzle:push": "drizzle-kit push",
 		"drizzle:generate": "drizzle-kit generate",
-		"drizzle:migrate": "drizzle-kit migrate"
+		"drizzle:migrate": "drizzle-kit migrate",
+		"drizzle:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
 		"@clerk/nextjs": "6.20.2",

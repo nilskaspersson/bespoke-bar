@@ -1,13 +1,7 @@
 "use client";
 
-import {
-	type FormEventHandler,
-	useCallback,
-	useId,
-	useRef,
-	useState,
-} from "react";
-import { type Spec, specsInsertSchema } from "@/db/schema/specs";
+import { useCallback, useId, useRef, useState } from "react";
+import type { Spec } from "@/db/schema/specs";
 import { formatIngredient } from "@/features/ingredients/utils/parseIngredient";
 import { Popover } from "@/ui/Popover";
 import styles from "./styles.module.css";
@@ -37,23 +31,6 @@ export function IngredientPicker({
 		[onChange],
 	);
 
-	const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
-		(event) => {
-			event.preventDefault();
-			const formData = new FormData(event.currentTarget);
-			const parsedIngredient = specsInsertSchema.shape.ingredient.safeParse(
-				formData.get("ingredient"),
-			);
-
-			if (parsedIngredient.success) {
-				handleChange(parsedIngredient.data);
-			} else {
-				event.stopPropagation();
-			}
-		},
-		[handleChange],
-	);
-
 	if (ingredient == null) {
 		return null;
 	}
@@ -70,15 +47,13 @@ export function IngredientPicker({
 			</button>
 
 			<Popover id={id} anchorRef={anchorRef}>
-				<form onSubmit={handleSubmit}>
-					<input
-						type="text"
-						name="ingredient"
-						value={value}
-						onChange={(event) => setValue(event.target.value)}
-						onBlur={() => handleChange(value)}
-					/>
-				</form>
+				<input
+					type="text"
+					name="ingredient"
+					value={value}
+					onChange={(event) => setValue(event.target.value)}
+					onBlur={() => handleChange(value)}
+				/>
 			</Popover>
 		</div>
 	);

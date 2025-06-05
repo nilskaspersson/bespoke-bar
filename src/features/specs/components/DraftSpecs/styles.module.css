@@ -2,9 +2,12 @@
 	.container {
 		display: grid;
 		gap: var(--gap);
+	}
+
+	.box {
 		padding: var(--gap);
 		border-radius: var(--radius--large);
-		background-color: light-dark(var(--mauve-3), var(--mauve-11));
+		background-color: var(--mauve-2);
 	}
 
 	.form {

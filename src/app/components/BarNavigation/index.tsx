@@ -35,20 +35,9 @@ export function BarNavigation({
 
 					<li className={styles.item}>
 						<Link
-							href="/bar/recipes"
-							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar/recipes",
-							})}
-						>
-							Recipes
-						</Link>
-					</li>
-
-					<li className={styles.item}>
-						<Link
 							href="/bar/lists"
 							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar/lists",
+								[styles.isActive]: pathname.startsWith("/bar/lists"),
 							})}
 						>
 							Lists
@@ -57,9 +46,20 @@ export function BarNavigation({
 
 					<li className={styles.item}>
 						<Link
+							href="/bar/recipes"
+							className={clsx(styles.link, {
+								[styles.isActive]: pathname.startsWith("/bar/recipes"),
+							})}
+						>
+							Recipes
+						</Link>
+					</li>
+
+					<li className={styles.item}>
+						<Link
 							href="/bar/ingredients"
 							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar/ingredients",
+								[styles.isActive]: pathname.startsWith("/bar/ingredients"),
 							})}
 						>
 							Ingredients
