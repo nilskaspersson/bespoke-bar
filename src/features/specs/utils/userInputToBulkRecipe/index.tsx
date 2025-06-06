@@ -7,60 +7,58 @@ export type DraftRecipe = {
 };
 
 const PATTERN_REPEATING_NEWLINES = /\n(?:\s*\n)+/;
+const PATTERN_LIST_PREFIX = /^[-*]\s*/;
+
+function removeListPrefix(line: string): string {
+	return line.replace(PATTERN_LIST_PREFIX, "");
+}
 
 export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
-	const recipeBlocks = userInput.trim().split(PATTERN_REPEATING_NEWLINES);
+	const textBlocks = userInput.trim().split(PATTERN_REPEATING_NEWLINES);
 
 	const results: DraftRecipe[] = [];
 
-	for (let i = 0; i < recipeBlocks.length; i++) {
-		const block = recipeBlocks[i].trim();
-
-		if (block.length === 0) {
-			continue;
-		}
-
-		const rawLines = block.split("\n");
+	for (let i = 0; i < textBlocks.length; i++) {
+		const rawLines = textBlocks[i].trim().split("\n");
 
 		if (rawLines.length === 0) {
 			continue;
 		}
 
 		let recipeName: string | undefined;
-		let startIndex = 0;
+		const specs: UserInputSpec[] = [];
 
 		/**
-		 * Consider the first line as a recipe name rather than sole ingredient name if
-		 * doesn't have a quantity or unit
+		 * Parse the first line of the block independently. If it looks like a spec, push
+		 * it to specs. If not, consider it the name of the recipe.
 		 */
-		const firstLine = rawLines[0].trim();
+		if (rawLines[0].length > 0) {
+			const firstLineAsSpec = userInputToSpec(removeListPrefix(rawLines[0]));
 
-		if (firstLine.length > 0) {
-			const firstLineAsSpec = userInputToSpec(rawLines[0]);
-
-			if (
-				firstLineAsSpec?.quantity === null &&
-				firstLineAsSpec?.unit === null
-			) {
-				recipeName = rawLines[0].trim();
-				startIndex = 1;
+			if (firstLineAsSpec) {
+				if (
+					firstLineAsSpec.quantity !== null ||
+					firstLineAsSpec.unit !== null
+				) {
+					specs.push(firstLineAsSpec);
+				} else {
+					recipeName = rawLines[0].trim();
+				}
 			}
 		}
 
 		/**
-		 * Parse the rest of the lines as specs, skipping the first line if it's a recipe
-		 * name.
+		 * Parse the rest of the lines as specs, offset starting index by 1 since we
+		 * already parsed the first line of the block.
 		 */
-		const specs: UserInputSpec[] = [];
-
-		for (let j = startIndex; j < rawLines.length; j++) {
+		for (let j = 1; j < rawLines.length; j++) {
 			const line = rawLines[j].trim();
 
 			if (line.length === 0) {
 				continue;
 			}
 
-			const spec = userInputToSpec(line);
+			const spec = userInputToSpec(removeListPrefix(line));
 
 			if (spec) {
 				specs.push(spec);

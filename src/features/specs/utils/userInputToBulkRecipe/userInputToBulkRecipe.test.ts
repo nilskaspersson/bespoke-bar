@@ -6,15 +6,20 @@ Recipe 1
  1 cl Gin
 2 l Suze
 
-Summer evenings 😍
+  Summer evenings 😍
         5 cl Gin
 30 ml lime juice
 2   cucumber slices
 
 😋
 
-1oz milk
-1cl cinnamon syrup
+- 1oz milk
+- 1cl cinnamon syrup
+
+Gimlet
+*5cl gin
+* 3cl lime
+* 2cl simple syrup
 
 .
 `;
@@ -42,6 +47,14 @@ describe("userInputToBulkRecipe", () => {
 				specs: [
 					{ quantity: 1, unit: "fl_oz", ingredient: "Milk" },
 					{ quantity: 1, unit: "cl", ingredient: "Cinnamon syrup" },
+				],
+			},
+			{
+				name: "Gimlet",
+				specs: [
+					{ quantity: 5, unit: "cl", ingredient: "Gin" },
+					{ quantity: 3, unit: "cl", ingredient: "Lime" },
+					{ quantity: 2, unit: "cl", ingredient: "Simple syrup" },
 				],
 			},
 		]);
