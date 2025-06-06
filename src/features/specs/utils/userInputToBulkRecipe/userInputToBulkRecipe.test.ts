@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { withoutID } from "@/utils/withId";
 import { userInputToBulkRecipe } from ".";
 
 const USER_INPUT = `
@@ -11,7 +12,6 @@ Recipe 1
 30 ml lime juice
 2   cucumber slices
 
-😋
 
 - 1oz milk
 -1cl cinnamon syrup
@@ -21,12 +21,20 @@ Gimlet
 * 3cl lime
 * 2cl simple syrup
 
-.
-`;
+kall
+4.5 ml whiskey
+
+
+  `;
 
 describe("userInputToBulkRecipe", () => {
 	test("parses a wide range of input", () => {
-		expect(userInputToBulkRecipe(USER_INPUT)).toEqual([
+		const data = userInputToBulkRecipe(USER_INPUT).map((o) => ({
+			...o,
+			specs: o.specs?.map(withoutID),
+		}));
+
+		expect(data).toEqual([
 			{
 				name: "Recipe 1",
 				specs: [
@@ -56,6 +64,10 @@ describe("userInputToBulkRecipe", () => {
 					{ quantity: 3, unit: "cl", ingredient: "Lime" },
 					{ quantity: 2, unit: "cl", ingredient: "Simple syrup" },
 				],
+			},
+			{
+				name: "kall",
+				specs: [{ quantity: 4.5, unit: "ml", ingredient: "Whiskey" }],
 			},
 		]);
 	});

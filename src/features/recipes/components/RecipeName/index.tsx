@@ -2,7 +2,7 @@ import type { Recipe } from "@/db/schema/recipes";
 import styles from "./styles.module.css";
 
 type Props = {
-	recipe: Recipe;
+	recipe: Partial<Recipe>;
 };
 
 export function RecipeName({ recipe }: Props) {

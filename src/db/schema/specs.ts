@@ -53,8 +53,8 @@ export type InsertSpec = Omit<
 /**
  * The fields users can provide to create a spec.
  */
-export type UserInputSpec = Identity<
-	Pick<Spec, "quantity" | "unit" | "ingredient">
+export type DraftSpec = Identity<
+	Partial<Pick<Spec, "quantity" | "unit" | "ingredient">>
 >;
 
 const specsConstraintsSchema = {

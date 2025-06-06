@@ -2,16 +2,16 @@ import { auth } from "@clerk/nextjs/server";
 import { forbidden } from "next/navigation";
 import { db } from "@/db";
 import {
+	type DraftRecipe,
 	insertRecipeSchema,
 	RecipesTable,
 	type RecipeWithSpecs,
-	type UserInputRecipe,
 } from "@/db/schema/recipes";
 import {
+	type DraftSpec,
 	type InsertSpec,
 	SpecsTable,
 	specsInsertSchema,
-	type UserInputSpec,
 } from "@/db/schema/specs";
 
 /**
@@ -20,8 +20,8 @@ import {
  * @returns Newly created Recipe with Specs.
  */
 export async function createRecipeFromSpecs(
-	userInputSpecs: UserInputSpec[],
-	userInputRecipe?: Partial<UserInputRecipe>,
+	userInputSpecs: DraftSpec[],
+	userInputRecipe?: DraftRecipe,
 ): Promise<RecipeWithSpecs> {
 	"use server";
 

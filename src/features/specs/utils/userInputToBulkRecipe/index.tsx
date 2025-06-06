@@ -1,10 +1,6 @@
-import type { UserInputSpec } from "@/db/schema/specs";
+import type { DraftRecipe } from "@/db/schema/recipes";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
-
-export type DraftRecipe = {
-	name: string | null;
-	specs: UserInputSpec[];
-};
+import { withID } from "@/utils/withId";
 
 const PATTERN_REPEATING_NEWLINES = /\n(?:\s*\n)+/;
 const PATTERN_LIST_PREFIX = /^[-*]\s*/;
@@ -26,7 +22,7 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 		}
 
 		let recipeName: string | undefined;
-		const specs: UserInputSpec[] = [];
+		const specs: DraftRecipe["specs"] = [];
 
 		/**
 		 * Parse the first line of the block independently. If it looks like a spec, push
@@ -35,15 +31,13 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 		if (lines[0].length > 0) {
 			const firstLineAsSpec = userInputToSpec(removeListPrefix(lines[0]));
 
-			if (firstLineAsSpec) {
-				if (
-					firstLineAsSpec.quantity !== null ||
-					firstLineAsSpec.unit !== null
-				) {
-					specs.push(firstLineAsSpec);
-				} else {
-					recipeName = lines[0].trim();
-				}
+			/**
+			 * Check quantity only, unit can be ambiguous if a name ends with a unit
+			 */
+			if (firstLineAsSpec && firstLineAsSpec.quantity !== null) {
+				specs.push(withID(firstLineAsSpec));
+			} else {
+				recipeName = lines[0].trim();
 			}
 		}
 
@@ -55,16 +49,14 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 			const spec = userInputToSpec(removeListPrefix(lines[j]));
 
 			if (spec) {
-				specs.push(spec);
+				specs.push(withID(spec));
 			}
 		}
 
-		if (specs.length > 0) {
-			results.push({
-				name: recipeName ?? null,
-				specs,
-			});
-		}
+		results.push({
+			name: recipeName ?? null,
+			specs,
+		});
 	}
 
 	return results;

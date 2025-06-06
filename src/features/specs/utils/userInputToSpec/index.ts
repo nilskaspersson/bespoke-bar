@@ -1,10 +1,10 @@
-import type { UserInputSpec } from "@/db/schema/specs";
+import type { DraftSpec } from "@/db/schema/specs";
 import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
-export function userInputToSpec(userInput: string): UserInputSpec | null {
+export function userInputToSpec(userInput: string): DraftSpec | null {
 	const trimmedInput = userInput.trim();
 
 	/**
@@ -20,11 +20,7 @@ export function userInputToSpec(userInput: string): UserInputSpec | null {
 		ingredientTextParser,
 	)(trimmedInput);
 
-	if (!ingredient) {
-		return null;
-	}
-
-	const spec: UserInputSpec = {
+	const spec: DraftSpec = {
 		quantity,
 		unit,
 		ingredient,
