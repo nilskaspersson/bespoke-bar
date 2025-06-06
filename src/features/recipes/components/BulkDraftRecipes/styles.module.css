@@ -1,0 +1,6 @@
+@layer feature {
+	.layout {
+		display: flex;
+		gap: var(--gap--large);
+	}
+}
