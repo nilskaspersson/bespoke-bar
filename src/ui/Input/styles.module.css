@@ -1,0 +1,13 @@
+@layer ui {
+	.textarea {
+		--inset: var(--space-2);
+
+		height: auto;
+		resize: none;
+		max-width: 100%;
+		padding-block: var(--inset);
+		line-height: var(--line-height);
+		field-sizing: content;
+		min-block-size: calc(3lh + var(--inset) * 2 + 2px);
+	}
+}

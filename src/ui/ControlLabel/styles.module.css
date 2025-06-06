@@ -1,0 +1,16 @@
+@layer ui {
+	.base {
+		display: flex;
+		gap: var(--space-2);
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.label {
+		color: var(--color-text--heavy);
+
+		.base:has(:user-invalid) > & > .text {
+			text-decoration: underline wavy var(--color-error);
+		}
+	}
+}
