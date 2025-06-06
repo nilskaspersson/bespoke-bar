@@ -14,7 +14,7 @@ Recipe 1
 😋
 
 - 1oz milk
-- 1cl cinnamon syrup
+-1cl cinnamon syrup
 
 Gimlet
 *5cl gin

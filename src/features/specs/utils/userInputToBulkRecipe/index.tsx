@@ -19,9 +19,9 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 	const results: DraftRecipe[] = [];
 
 	for (let i = 0; i < textBlocks.length; i++) {
-		const rawLines = textBlocks[i].trim().split("\n");
+		const lines = textBlocks[i].trim().split("\n");
 
-		if (rawLines.length === 0) {
+		if (lines.length === 0) {
 			continue;
 		}
 
@@ -32,8 +32,8 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 		 * Parse the first line of the block independently. If it looks like a spec, push
 		 * it to specs. If not, consider it the name of the recipe.
 		 */
-		if (rawLines[0].length > 0) {
-			const firstLineAsSpec = userInputToSpec(removeListPrefix(rawLines[0]));
+		if (lines[0].length > 0) {
+			const firstLineAsSpec = userInputToSpec(removeListPrefix(lines[0]));
 
 			if (firstLineAsSpec) {
 				if (
@@ -42,7 +42,7 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 				) {
 					specs.push(firstLineAsSpec);
 				} else {
-					recipeName = rawLines[0].trim();
+					recipeName = lines[0].trim();
 				}
 			}
 		}
@@ -51,14 +51,8 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 		 * Parse the rest of the lines as specs, offset starting index by 1 since we
 		 * already parsed the first line of the block.
 		 */
-		for (let j = 1; j < rawLines.length; j++) {
-			const line = rawLines[j].trim();
-
-			if (line.length === 0) {
-				continue;
-			}
-
-			const spec = userInputToSpec(removeListPrefix(line));
+		for (let j = 1; j < lines.length; j++) {
+			const spec = userInputToSpec(removeListPrefix(lines[j]));
 
 			if (spec) {
 				specs.push(spec);

@@ -5,10 +5,12 @@ import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
 export function userInputToSpec(userInput: string): UserInputSpec | null {
+	const trimmedInput = userInput.trim();
+
 	/**
-	 * Let's not try to parse something that's obviously too long
+	 * Let's not try to parse something that's obviously too long, or empty
 	 */
-	if (userInput.length > 1000) {
+	if (trimmedInput.length > 1000 || trimmedInput.length === 0) {
 		return null;
 	}
 
@@ -16,7 +18,7 @@ export function userInputToSpec(userInput: string): UserInputSpec | null {
 		quantityTextParser,
 		unitTextParser,
 		ingredientTextParser,
-	)(userInput);
+	)(trimmedInput);
 
 	if (!ingredient) {
 		return null;
