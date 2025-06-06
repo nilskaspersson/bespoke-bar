@@ -10,8 +10,9 @@ import {
 import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
-import { Button } from "@/ui/Button";
+import { Grid } from "@/ui/Grid";
 import { Input } from "@/ui/Input";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { type WithID, withID } from "@/utils/withId";
 import styles from "./styles.module.css";
 
@@ -21,7 +22,7 @@ export function BulkDraftRecipes({
 	...props
 }: {
 	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe["id"][]>;
-} & HTMLAttributes<HTMLDivElement>) {
+} & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [inputValue, setInputValue] = useState("");
 	const deferredInputValue = useDeferredValue(inputValue);
 
@@ -30,8 +31,17 @@ export function BulkDraftRecipes({
 		[deferredInputValue],
 	);
 
+	const formAction = async () => {
+		await createRecipes(draftRecipes);
+		setInputValue("");
+	};
+
 	return (
-		<section {...props} className={clsx(className, styles.layout)}>
+		<form
+			{...props}
+			className={clsx(className, styles.layout)}
+			action={formAction}
+		>
 			<div>
 				<Input
 					as="textarea"
@@ -44,19 +54,21 @@ export function BulkDraftRecipes({
 
 			<div>
 				{draftRecipes.length > 0 ? (
-					<div>
-						{draftRecipes.map((recipe) => (
-							<RecipeCard key={recipe.id} recipe={recipe} />
-						))}
+					<Grid gap={6}>
+						<Grid as="ul" gap={6}>
+							{draftRecipes.map((recipe) => (
+								<li key={recipe.id}>
+									<RecipeCard recipe={recipe} />
+								</li>
+							))}
+						</Grid>
 
-						<form action={() => void createRecipes(draftRecipes)}>
-							<Button type="submit">
-								{draftRecipes.length > 1 ? "Save Recipes" : "Save Recipe"}
-							</Button>
-						</form>
-					</div>
+						<SubmitButton>
+							{draftRecipes.length > 1 ? "Save Recipes" : "Save Recipe"}
+						</SubmitButton>
+					</Grid>
 				) : null}
 			</div>
-		</section>
+		</form>
 	);
 }

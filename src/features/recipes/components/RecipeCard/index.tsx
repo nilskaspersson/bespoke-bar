@@ -3,26 +3,27 @@ import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
 
 import { GradientText } from "@/ui/GradientText";
+import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 
 export function RecipeCard<T extends DraftRecipe>(props: { recipe: T }) {
 	return (
-		<div>
-			<Heading level="h3">
+		<Grid gap={2}>
+			<Heading level="h3" size={6}>
 				<GradientText>
 					<RecipeName recipe={props.recipe} />
 				</GradientText>
 			</Heading>
 
 			{props.recipe.specs ? (
-				<ul>
+				<Grid as="ul" gap={1}>
 					{props.recipe.specs.map((spec) => (
 						<li key={spec.id}>
 							<SpecEntry spec={spec} />
 						</li>
 					))}
-				</ul>
+				</Grid>
 			) : null}
-		</div>
+		</Grid>
 	);
 }
