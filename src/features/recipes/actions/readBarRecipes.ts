@@ -6,7 +6,7 @@ import { forbidden } from "next/navigation";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 
-export async function getBarRecipes() {
+export async function readBarRecipes() {
 	const { orgId } = await auth();
 
 	if (!orgId) {
