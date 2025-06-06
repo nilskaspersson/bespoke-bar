@@ -10,7 +10,7 @@ export function IngredientPicker({
 	onChange,
 	ingredient,
 }: {
-	onChange: (ingredient: Spec["ingredient"] | undefined) => void;
+	onChange: (ingredient: Spec["ingredient"]) => void;
 	ingredient: Spec["ingredient"] | undefined;
 }) {
 	const id = useId();

@@ -1,14 +1,16 @@
-import type { UserInputSpec } from "@/db/schema/specs";
+import type { DraftSpec } from "@/db/schema/specs";
 import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
-export function userInputToSpec(userInput: string): UserInputSpec | null {
+export function userInputToSpec(userInput: string): DraftSpec | null {
+	const trimmedInput = userInput.trim();
+
 	/**
-	 * Let's not try to parse something that's obviously too long
+	 * Let's not try to parse something that's obviously too long, or empty
 	 */
-	if (userInput.length > 1000) {
+	if (trimmedInput.length > 1000 || trimmedInput.length === 0) {
 		return null;
 	}
 
@@ -16,13 +18,9 @@ export function userInputToSpec(userInput: string): UserInputSpec | null {
 		quantityTextParser,
 		unitTextParser,
 		ingredientTextParser,
-	)(userInput);
+	)(trimmedInput);
 
-	if (!ingredient) {
-		return null;
-	}
-
-	const spec: UserInputSpec = {
+	const spec: DraftSpec = {
 		quantity,
 		unit,
 		ingredient,

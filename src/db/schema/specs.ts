@@ -53,7 +53,7 @@ export type InsertSpec = Omit<
 /**
  * The fields users can provide to create a spec.
  */
-export type UserInputSpec = Identity<
+export type DraftSpec = Identity<
 	Partial<Pick<Spec, "quantity" | "unit" | "ingredient">>
 >;
 

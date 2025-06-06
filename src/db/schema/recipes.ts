@@ -6,8 +6,9 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { type Spec, SpecsTable } from "@/db/schema/specs";
+import { type DraftSpec, type Spec, SpecsTable } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
+import type { WithID } from "@/utils/withId";
 
 export const RecipesTable = pgTable("recipes", {
 	id: text("id")
@@ -37,10 +38,13 @@ export type InsertRecipe = Omit<
 >;
 
 /**
- * The fields users can provide to create a recipe.
+ * The fields users can provide to create a recipe. If it has specs, those must be
+ * with IDs to use as keys.
  */
-export type UserInputRecipe = Identity<
-	Partial<Pick<Recipe, "name" | "description">>
+export type DraftRecipe = Identity<
+	Partial<Pick<Recipe, "name" | "description">> & {
+		specs?: WithID<DraftSpec>[];
+	}
 >;
 
 export const selectRecipeSchema = createSelectSchema(RecipesTable);

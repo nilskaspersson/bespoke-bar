@@ -31,11 +31,10 @@ export function formatIngredient(userInput: string): string | null {
 	return tranformIngredient(text);
 }
 
-export function ingredientTextParser(
-	userInput: string,
-): [string | null, string] {
+export function ingredientTextParser(userInput: string): [string, string] {
 	/**
-	 * Return empty remainder, this is assumed to be the end of the input
+	 * Return empty remainder, this is assumed to be the end of the input. Always
+	 * return a string.
 	 */
-	return [formatIngredient(userInput), ""];
+	return [formatIngredient(userInput) || "", ""];
 }
