@@ -11,8 +11,8 @@ export function SpecEntry({
 	spec,
 	...props
 }: {
-	spec: Partial<Spec>;
-	onChange: (spec: Partial<Spec>) => void;
+	spec: Spec;
+	onChange: (spec: Spec) => void;
 } & Omit<HTMLAttributes<HTMLDivElement>, "onChange">) {
 	return (
 		<div className={clsx(styles.entry, className)} {...props}>
