@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { forbidden } from "next/navigation";
 import { db } from "@/db";
 import {
-	type InsertRecipe,
+	insertRecipeSchema,
 	RecipesTable,
 	type RecipeWithSpecs,
 	type UserInputRecipe,
@@ -10,6 +10,7 @@ import {
 import {
 	type InsertSpec,
 	SpecsTable,
+	specsInsertSchema,
 	type UserInputSpec,
 } from "@/db/schema/specs";
 
@@ -30,23 +31,37 @@ export async function createRecipeFromSpecs(
 		forbidden();
 	}
 
+	const validatedUserInputRecipe = insertRecipeSchema.parse({
+		name: userInputRecipe?.name ?? null,
+		description: userInputRecipe?.description ?? null,
+		createdBy: userId,
+		orgId: orgId,
+	});
+
+	const validatedUserInputSpecs: Omit<InsertSpec, "recipeId">[] =
+		specsInsertSchema
+			.omit({ recipeId: true })
+			.array()
+			.parse(
+				userInputSpecs.map((spec) => ({
+					quantity: spec.quantity,
+					unit: spec.unit,
+					ingredient: spec.ingredient ?? "",
+				})),
+			);
+
 	const result = await db.transaction(async (tx) => {
 		const [recipe] = await tx
 			.insert(RecipesTable)
-			.values({
-				name: userInputRecipe?.name ?? null,
-				description: userInputRecipe?.description ?? null,
-				createdBy: userId,
-				orgId: orgId,
-			} satisfies InsertRecipe)
+			.values(validatedUserInputRecipe)
 			.returning();
 
-		const specsToInsert: InsertSpec[] = userInputSpecs.map((spec) => ({
-			recipeId: recipe.id,
-			quantity: spec.quantity,
-			unit: spec.unit,
-			ingredient: spec.ingredient ?? "",
-		}));
+		/**
+		 * Run schema once again, without omits
+		 */
+		const specsToInsert = specsInsertSchema
+			.array()
+			.parse(validatedUserInputSpecs);
 
 		const specs = await tx.insert(SpecsTable).values(specsToInsert).returning();
 

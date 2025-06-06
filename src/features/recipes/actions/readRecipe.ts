@@ -4,7 +4,7 @@ import { forbidden } from "next/navigation";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 
-export async function getRecipe(id: string | undefined) {
+export async function readRecipe(id: string | undefined) {
 	if (!id) {
 		return undefined;
 	}

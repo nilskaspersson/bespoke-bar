@@ -58,6 +58,13 @@
 
 	--app-inset: var(--gap--large);
 
+	--control-height--small: 2.5rem;
+	--control-height: var(--space-7);
+	--control-height--large: var(--space-8);
+	--control-width: 35ch;
+	--control-width--small: 20ch;
+	--control-inset: var(--space-4);
+
 	/**
 	 * Colors
 	 */

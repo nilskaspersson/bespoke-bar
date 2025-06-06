@@ -1,5 +1,10 @@
 import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+	createInsertSchema,
+	createSelectSchema,
+	createUpdateSchema,
+} from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { type Spec, SpecsTable } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
@@ -9,7 +14,7 @@ export const RecipesTable = pgTable("recipes", {
 		.primaryKey()
 		.$defaultFn(() => nanoid(10)),
 	name: varchar("name", { length: 100 }),
-	description: varchar("description", { length: 500 }),
+	description: varchar("description", { length: 5000 }),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at"),
 	createdBy: text("created_by").notNull(), // Clerk userId
@@ -28,7 +33,7 @@ export type RecipeWithSpecs = Recipe & {
 
 export type InsertRecipe = Omit<
 	typeof RecipesTable.$inferInsert,
-	"id" | "createdAt"
+	"id" | "createdAt" | "updatedAt" | "createdBy" | "orgId"
 >;
 
 /**
@@ -37,3 +42,7 @@ export type InsertRecipe = Omit<
 export type UserInputRecipe = Identity<
 	Partial<Pick<Recipe, "name" | "description">>
 >;
+
+export const selectRecipeSchema = createSelectSchema(RecipesTable);
+export const insertRecipeSchema = createInsertSchema(RecipesTable);
+export const updateRecipeSchema = createUpdateSchema(RecipesTable);

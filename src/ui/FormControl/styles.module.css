@@ -1,0 +1,61 @@
+@layer reset {
+	.control {
+		--r: var(--radius);
+		--w: var(--control-width);
+		--h: var(--control-height);
+
+		width: var(--w);
+		height: var(--h);
+		max-width: 100%;
+		color: var(--color-text--heavy);
+		background-color: var(--mauve-2);
+		padding-inline: var(--control-inset);
+		border-radius: var(--r);
+		font-family: inherit;
+		font-size: 1rem;
+		font-weight: 600;
+		border: 1px solid var(--color-border);
+		outline: 5px solid transparent;
+		outline-offset: -1px;
+		transition-property: border-color, outline-color;
+		transition-duration: var(--transition-duration);
+
+		&.regular {
+			--h: var(--control-height);
+		}
+
+		&.small {
+			--h: var(--control-height--small);
+		}
+
+		&.large {
+			--h: var(--control-height--large);
+		}
+
+		&:not([aria-disabled="true"]) {
+			&:hover {
+				border-color: var(--color-border--heavy);
+			}
+
+			&:focus {
+				outline-color: var(--color-blue);
+			}
+		}
+
+		&[aria-disabled="true"] {
+			cursor: not-allowed;
+		}
+
+		&.fullWidth {
+			--w: 100%;
+		}
+
+		&.compact {
+			--w: var(--control-width--small);
+		}
+
+		&.rounded {
+			--r: var(--radius--full);
+		}
+	}
+}

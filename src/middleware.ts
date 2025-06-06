@@ -1,6 +1,15 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+const isProtectedRoute = createRouteMatcher(["/bar/(.*)"]);
+
+export default clerkMiddleware(async (auth, req) => {
+	/**
+	 * Eagerly redirect away from authenticated routes
+	 */
+	if (isProtectedRoute(req)) {
+		await auth.protect();
+	}
+});
 
 export const config = {
 	matcher: [
