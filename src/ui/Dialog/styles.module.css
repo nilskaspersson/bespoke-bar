@@ -1,0 +1,78 @@
+@layer ui {
+	.dialog {
+		display: grid;
+		place-items: center;
+		width: 100dvw;
+		height: 100dvh;
+		max-width: none;
+		max-height: none;
+		contain: strict;
+		container: inline-size;
+		position: fixed;
+		inset: 0;
+		background-color: transparent;
+		z-index: var(--z-modal);
+		border: none;
+
+		transition-property: opacity, display;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: ease;
+		transition-behavior: allow-discrete;
+		opacity: 0;
+
+		&[open] {
+			opacity: 1;
+		}
+
+		&[open] {
+			@starting-style {
+				opacity: 0;
+			}
+		}
+
+		&::backdrop {
+			background-color: rgba(0, 0, 0, 0.2);
+		}
+	}
+
+	@property --from {
+		syntax: "<color>";
+		inherits: false;
+		initial-value: color(display-p3 0.354 0.445 0.866);
+	}
+
+	@property --to {
+		syntax: "<color>";
+		inherits: false;
+		initial-value: color(display-p3 0.864 0.364 0.539);
+	}
+
+	@keyframes gradient {
+		to {
+			--from: color(display-p3 0.862 0.415 0.298);
+			--to: color(display-p3 0.426 0.694 0.426);
+		}
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		:global(html) {
+			background: linear-gradient(to right in oklab, var(--from), var(--to));
+
+			&:has(.dialog[open]) {
+				animation: gradient 2s linear infinite alternate;
+			}
+		}
+
+		:global(body) {
+			transition-property: opacity, scale;
+			transition-duration: var(--transition-duration);
+			transition-timing-function: ease;
+
+			&:has(.dialog[open]) {
+				overflow: hidden;
+				height: 100dvh;
+				scale: 0.975;
+			}
+		}
+	}
+}

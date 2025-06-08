@@ -1,4 +1,4 @@
-@layer components {
+@layer ui {
 	@property --from {
 		syntax: "<color>";
 		inherits: false;
