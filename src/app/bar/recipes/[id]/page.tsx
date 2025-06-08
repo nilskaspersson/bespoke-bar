@@ -5,6 +5,7 @@ import {
 } from "@/features/recipes/actions/archiveRecipe";
 import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
 import { readRecipe } from "@/features/recipes/actions/readRecipe";
+import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
@@ -50,16 +51,15 @@ export default async function RecipePage({ params: paramsPromise }: Props) {
 							</form>
 						)}
 
-						<form
+						<DeleteRecipe
+							recipe={recipe}
 							action={deleteRecipe.bind(null, {
 								id: recipe.id,
 								redirectTo: "/bar/recipes",
 							})}
 						>
-							<SubmitButton>
-								<Icon name="trash" /> Delete
-							</SubmitButton>
-						</form>
+							<Icon name="trash" /> Delete
+						</DeleteRecipe>
 
 						<LinkButton href={`/bar/recipes/${id}/edit`}>
 							<Icon name="pen" /> Edit

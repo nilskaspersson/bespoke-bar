@@ -1,0 +1,54 @@
+@layer ui {
+	.lightbox {
+		background-color: var(--mauve-3);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow);
+
+		transition-property: opacity, transform;
+		transition-duration: var(--transition-duration);
+		transition-behavior: allow-discrete;
+
+		@starting-style {
+			opacity: 0;
+		}
+
+		@media (prefers-reduced-motion: no-preference) {
+			@starting-style {
+				transform: translateY(var(--gap)) scale(0.95);
+			}
+		}
+	}
+
+	.contain {
+		background-color: var(--mauve-2);
+		border-radius: inherit;
+	}
+
+	.content {
+		padding: var(--gap);
+	}
+
+	.notice {
+		display: flex;
+		align-items: baseline;
+		gap: var(--gap--small);
+		padding: var(--gap--small) var(--gap);
+		background-color: var(--red-3);
+		color: var(--red-11);
+		border-block: 1px solid var(--red-4);
+		border-bottom-right-radius: inherit;
+		border-bottom-left-radius: inherit;
+	}
+
+	.icon {
+		flex: 0 0 auto;
+		top: 0.15lh;
+	}
+
+	.footer {
+		display: flex;
+		justify-content: flex-end;
+		gap: var(--gap--small);
+		padding: var(--gap);
+	}
+}
