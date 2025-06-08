@@ -16,10 +16,13 @@ export const RecipesTable = pgTable("recipes", {
 		.$defaultFn(() => nanoid(10)),
 	name: varchar("name", { length: 100 }),
 	description: varchar("description", { length: 5000 }),
+	archivedBy: text("archived_by"),
+	archivedAt: timestamp("archived_at"),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
+	createdBy: text("created_by").notNull(),
 	updatedAt: timestamp("updated_at"),
-	createdBy: text("created_by").notNull(), // Clerk userId
-	orgId: text("org_id"), // Clerk orgId
+	updatedBy: text("updated_by"),
+	orgId: text("org_id"),
 });
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({
