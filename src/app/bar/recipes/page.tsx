@@ -8,6 +8,7 @@ import { Icon } from "@/ui/Icon";
 
 export default async function RecipesPage() {
 	const recipes = await readBarRecipes();
+	const archivedRecipes = await readBarRecipes({ archivedRecipes: true });
 
 	return (
 		<Container as="article">
@@ -22,6 +23,17 @@ export default async function RecipesPage() {
 
 			<ul>
 				{recipes.map((recipe) => (
+					<li key={recipe.id}>
+						<Link href={`/bar/recipes/${recipe.id}`}>
+							<RecipeName recipe={recipe} />
+						</Link>
+					</li>
+				))}
+			</ul>
+
+			<Heading level="h6">Archive</Heading>
+			<ul>
+				{archivedRecipes.map((recipe) => (
 					<li key={recipe.id}>
 						<Link href={`/bar/recipes/${recipe.id}`}>
 							<RecipeName recipe={recipe} />
