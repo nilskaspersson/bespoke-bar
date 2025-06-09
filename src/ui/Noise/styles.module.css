@@ -1,0 +1,34 @@
+@layer ui {
+	.texture {
+		/**
+		 * Fade towards bottom, and hide noise filter "overflow"
+		 */
+		mask-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.25));
+		contain: strict;
+
+		&,
+		&::before,
+		&::after {
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			pointer-events: none;
+			user-select: none;
+		}
+
+		&::before,
+		&::after {
+			content: "";
+			display: block;
+		}
+
+		&::before {
+			background-color: var(--mauve-1);
+		}
+
+		&::after {
+			filter: var(--noise-filter);
+			opacity: 0.35;
+		}
+	}
+}

@@ -13,25 +13,10 @@
 		background-color: transparent;
 		z-index: var(--z-modal);
 		border: none;
-
-		transition-property: opacity, display;
-		transition-duration: var(--transition-duration);
-		transition-timing-function: ease;
-		transition-behavior: allow-discrete;
-		opacity: 0;
-
-		&[open] {
-			opacity: 1;
-		}
-
-		&[open] {
-			@starting-style {
-				opacity: 0;
-			}
-		}
+		padding: var(--gap);
 
 		&::backdrop {
-			background-color: rgba(0, 0, 0, 0.2);
+			display: none;
 		}
 	}
 
@@ -64,14 +49,17 @@
 		}
 
 		:global(body) {
-			transition-property: opacity, scale;
+			transition-property: scale, filter;
 			transition-duration: var(--transition-duration);
 			transition-timing-function: ease;
 
 			&:has(.dialog[open]) {
 				overflow: hidden;
+				contain: strict; /* Hack to enforce hiding overflow under border-radius */
 				height: 100dvh;
-				scale: 0.975;
+				scale: 0.98;
+				filter: brightness(0.8);
+				border-radius: var(--radius--large);
 			}
 		}
 	}

@@ -1,8 +1,23 @@
 @layer ui {
 	.lightbox {
-		background-color: var(--mauve-3);
+		display: grid;
+		grid-template:
+			"alert" 1fr
+			"notice" auto
+			"actions" auto;
+
+		max-height: 100%;
+		min-height: 0;
+		word-wrap: break-word;
+
+		backdrop-filter: blur(var(--size-1)) brightness(1.2);
+		padding: var(--gap--tiny);
 		border-radius: var(--radius--large);
-		box-shadow: var(--shadow);
+		box-shadow: var(--shadow--high);
+
+		--shine: rgba(255, 255, 255, 0.15);
+		border-top: 1px solid var(--shine);
+		border-left: 1px solid var(--shine);
 
 		transition-property: opacity, transform;
 		transition-duration: var(--transition-duration);
@@ -20,32 +35,47 @@
 	}
 
 	.contain {
+		grid-area: alert;
 		background-color: var(--mauve-2);
-		border-radius: inherit;
+		border-top-left-radius: inherit;
+		border-top-right-radius: inherit;
+		overflow: auto;
+		min-height: 0;
+		box-shadow: var(--shadow--low);
+	}
+
+	.heading {
+		padding: var(--gap);
+		position: sticky;
+		top: 0;
+		background-color: inherit;
+		z-index: 1;
 	}
 
 	.content {
-		padding: var(--gap);
+		padding: 0 var(--gap) var(--gap);
 	}
 
 	.notice {
 		display: flex;
 		align-items: baseline;
 		gap: var(--gap--small);
-		padding: var(--gap--small) var(--gap);
-		background-color: var(--red-3);
-		color: var(--red-11);
-		border-block: 1px solid var(--red-4);
+		padding: var(--gap--small) var(--gap) calc(var(--gap--small) + 2px);
+		background-color: var(--red-4);
+		color: var(--red-12);
+		border-top: 1px solid var(--red-5);
 		border-bottom-right-radius: inherit;
 		border-bottom-left-radius: inherit;
+		box-shadow: var(--shadow--low);
 	}
 
 	.icon {
 		flex: 0 0 auto;
-		top: 0.15lh;
+		top: 0.1lh;
 	}
 
-	.footer {
+	.actions {
+		grid-area: actions;
 		display: flex;
 		justify-content: flex-end;
 		gap: var(--gap--small);

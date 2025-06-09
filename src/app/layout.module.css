@@ -17,5 +17,6 @@
 	.main {
 		grid-area: main;
 		display: grid;
+		overflow: hidden auto;
 	}
 }
