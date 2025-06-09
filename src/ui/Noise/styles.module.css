@@ -28,7 +28,7 @@
 
 		&::after {
 			filter: var(--noise-filter);
-			opacity: 0.25;
+			opacity: 0.35;
 		}
 	}
 }
