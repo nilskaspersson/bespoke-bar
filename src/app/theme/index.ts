@@ -10,7 +10,8 @@ import "./layers.css";
  * The values are manually copied from the repository; Radix doesn't allow customizing
  * the dark mode value assignments.
  */
-import "./colors.css";
+import "./colors/mauve.css";
+import "./colors/red.css";
 
 /**
  * Color aliases, scaling, resets, and misc assignments
