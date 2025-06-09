@@ -1,7 +1,6 @@
 @layer ui {
 	.icon {
 		--icon-color: currentColor;
-		--icon-length: 1em;
 
 		display: inline-block;
 		width: var(--icon-length);
@@ -12,6 +11,10 @@
 		vertical-align: middle;
 		transition-property: color, fill;
 		transition-duration: var(--transition-duration);
+	}
+
+	.default {
+		--icon-length: 1em;
 	}
 
 	.tiny {

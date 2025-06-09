@@ -6,8 +6,6 @@ import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
 import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 
@@ -36,7 +34,12 @@ export function DeleteRecipe({
 			{isPending ? (
 				<Alert
 					onClose={rejectAction}
-					notice="This action is permanent and cannot be undone. "
+					heading="Delete Recipe"
+					notice={
+						<>
+							This action is <strong>permanent</strong> and cannot be undone.
+						</>
+					}
 					actions={
 						<>
 							<Button onClick={rejectAction} autoFocus>
@@ -49,17 +52,13 @@ export function DeleteRecipe({
 						</>
 					}
 				>
-					<Grid gap={2}>
-						<Heading level="h6">Delete Recipe</Heading>
-
-						<Text as="p">
-							You are about to delete{" "}
-							<Text italic>
-								<RecipeName recipe={recipe} />
-							</Text>
-							, do you want to continue?
+					<Text as="p">
+						You are about to delete{" "}
+						<Text italic>
+							<RecipeName recipe={recipe} />
 						</Text>
-					</Grid>
+						, do you want to continue?
+					</Text>
 				</Alert>
 			) : null}
 		</form>
