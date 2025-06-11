@@ -10,14 +10,21 @@
 		min-height: 0;
 		word-wrap: break-word;
 
-		backdrop-filter: blur(var(--size-1)) brightness(1.2);
+		backdrop-filter: blur(var(--size-1)) brightness(1.25);
 		padding: var(--gap--tiny);
 		border-radius: var(--radius--large);
 		box-shadow: var(--shadow--high);
 
-		--shine: rgba(255, 255, 255, 0.15);
+		--shine: rgba(255, 255, 255, 0.1);
 		border-top: 1px solid var(--shine);
 		border-left: 1px solid var(--shine);
+
+		background-image: radial-gradient(
+			circle at top left,
+			var(--shine),
+			transparent
+		);
+		background-origin: border-box;
 
 		transition-property: opacity, transform;
 		transition-duration: var(--transition-duration);

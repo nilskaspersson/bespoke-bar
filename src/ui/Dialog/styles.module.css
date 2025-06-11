@@ -51,7 +51,10 @@
 		:global(body) {
 			transition-property: scale, filter;
 			transition-duration: var(--transition-duration);
-			transition-timing-function: ease;
+
+			> * {
+				transition: filter var(--transition-duration);
+			}
 
 			&:has(.dialog[open]) {
 				overflow: hidden;
@@ -60,6 +63,10 @@
 				scale: 0.98;
 				filter: brightness(0.8);
 				border-radius: var(--radius--large);
+
+				> * {
+					filter: blur(1px);
+				}
 			}
 		}
 	}

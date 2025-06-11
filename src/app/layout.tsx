@@ -5,7 +5,6 @@ import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 import { AppHeader } from "@/app/components/AppHeader";
 import { AuthProvider } from "@/app/components/AuthProvider";
-import { RootNoiseTexture } from "@/app/components/RootNoiseTexture";
 import styles from "./layout.module.css";
 
 const sans = Figtree({
@@ -30,8 +29,6 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 						<main className={styles.main}>{children}</main>
 					</AuthProvider>
 				</ThemeProvider>
-
-				<RootNoiseTexture />
 			</body>
 		</html>
 	);
