@@ -1,9 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
-import { forbidden, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 import { revalidateRecipePaths } from "@/features/recipes/utils";
+import { authOrForbidden } from "@/utils/auth";
 
 export async function deleteRecipe({
 	id,
@@ -14,15 +14,11 @@ export async function deleteRecipe({
 }): Promise<void> {
 	"use server";
 
-	const { userId } = await auth();
-
-	if (!userId) {
-		forbidden();
-	}
+	const { orgId } = await authOrForbidden();
 
 	await db
 		.delete(RecipesTable)
-		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.createdBy, userId)));
+		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
 	revalidateRecipePaths(id);
 

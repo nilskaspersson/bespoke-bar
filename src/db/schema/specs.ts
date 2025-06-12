@@ -66,10 +66,10 @@ const specsConstraintsSchema = {
 	quantity: z.coerce.number().positive().nullable(),
 };
 
-export const specsInsertSchema = createInsertSchema(SpecsTable).extend(
+export const insertSpecsSchema = createInsertSchema(SpecsTable).extend(
 	specsConstraintsSchema,
 );
 
-export const specsUpdateSchema = createUpdateSchema(SpecsTable).extend(
+export const updateSpecsSchema = createUpdateSchema(SpecsTable).extend(
 	specsConstraintsSchema,
 );

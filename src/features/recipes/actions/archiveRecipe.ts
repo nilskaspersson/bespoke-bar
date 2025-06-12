@@ -1,9 +1,9 @@
-import { auth } from "@clerk/nextjs/server";
 import { and, eq } from "drizzle-orm";
-import { forbidden, redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 import { revalidateRecipePaths } from "@/features/recipes/utils";
+import { authOrForbidden } from "@/utils/auth";
 
 export async function archiveRecipe({
 	id,
@@ -14,11 +14,7 @@ export async function archiveRecipe({
 }): Promise<void> {
 	"use server";
 
-	const { userId } = await auth();
-
-	if (!userId) {
-		forbidden();
-	}
+	const { userId, orgId } = await authOrForbidden();
 
 	await db
 		.update(RecipesTable)
@@ -26,7 +22,7 @@ export async function archiveRecipe({
 			archivedAt: new Date(),
 			archivedBy: userId,
 		})
-		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.createdBy, userId)));
+		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
 	revalidateRecipePaths(id);
 
@@ -44,11 +40,7 @@ export async function unarchiveRecipe({
 }): Promise<void> {
 	"use server";
 
-	const { userId } = await auth();
-
-	if (!userId) {
-		forbidden();
-	}
+	const { userId, orgId } = await authOrForbidden();
 
 	await db
 		.update(RecipesTable)
@@ -58,7 +50,7 @@ export async function unarchiveRecipe({
 			updatedBy: userId,
 			updatedAt: new Date(),
 		})
-		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.createdBy, userId)));
+		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
 	revalidateRecipePaths(id);
 
