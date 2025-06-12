@@ -1,15 +1,16 @@
 import { relations, sql } from "drizzle-orm";
 import {
 	check,
+	index,
 	pgTable,
 	real,
 	text,
 	timestamp,
-	varchar,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod/v4";
+import { IngredientsTable } from "@/db/schema/ingredients";
 import { RecipesTable } from "@/db/schema/recipes";
 import { unitEnum } from "@/db/schema/units";
 import type { Identity } from "@/utils/types";
@@ -25,7 +26,9 @@ export const SpecsTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		quantity: real("quantity"),
 		unit: unitEnum("unit"),
-		ingredient: varchar("ingredient", { length: 100 }).notNull(),
+		ingredient: text("ingredient")
+			.notNull()
+			.references(() => IngredientsTable.id, { onDelete: "restrict" }),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 	},
 	(table) => [
@@ -33,6 +36,8 @@ export const SpecsTable = pgTable(
 			"quantity_null_or_positive",
 			sql`${table.quantity} IS NULL OR ${table.quantity} > 0`,
 		),
+		index("idx_specs_recipe").on(table.recipeId),
+		index("idx_specs_ingredient").on(table.ingredient),
 	],
 );
 

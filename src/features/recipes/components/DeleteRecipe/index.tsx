@@ -57,7 +57,7 @@ export function DeleteRecipe({
 						<Text italic>
 							<RecipeName recipe={recipe} />
 						</Text>
-						, do you want to continue?
+						. Do you want to continue?
 					</Text>
 				</Alert>
 			) : null}

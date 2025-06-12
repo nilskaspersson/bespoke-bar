@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { index, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import {
 	createInsertSchema,
 	createSelectSchema,
@@ -10,20 +10,24 @@ import { type DraftSpec, type Spec, SpecsTable } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
 import type { WithID } from "@/utils/withId";
 
-export const RecipesTable = pgTable("recipes", {
-	id: text("id")
-		.primaryKey()
-		.$defaultFn(() => nanoid(10)),
-	name: varchar("name", { length: 100 }),
-	description: varchar("description", { length: 5000 }),
-	archivedBy: text("archived_by"),
-	archivedAt: timestamp("archived_at"),
-	createdAt: timestamp("created_at").defaultNow().notNull(),
-	createdBy: text("created_by").notNull(),
-	updatedAt: timestamp("updated_at"),
-	updatedBy: text("updated_by"),
-	orgId: text("org_id"),
-});
+export const RecipesTable = pgTable(
+	"recipes",
+	{
+		id: text("id")
+			.primaryKey()
+			.$defaultFn(() => nanoid(10)),
+		name: varchar("name", { length: 100 }),
+		description: varchar("description", { length: 5000 }),
+		archivedBy: text("archived_by"),
+		archivedAt: timestamp("archived_at"),
+		createdAt: timestamp("created_at").defaultNow().notNull(),
+		createdBy: text("created_by").notNull(),
+		updatedAt: timestamp("updated_at"),
+		updatedBy: text("updated_by"),
+		orgId: text("org_id").notNull(),
+	},
+	(table) => [index("idx_recipes_org").on(table.orgId)],
+);
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({
 	specs: many(SpecsTable),
