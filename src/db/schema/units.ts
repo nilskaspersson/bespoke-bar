@@ -20,3 +20,14 @@ export const unitEnum = pgEnum("unit", [
 export const supportedUnits = createSelectSchema(unitEnum);
 
 export type Unit = z.infer<typeof supportedUnits>;
+
+/**
+ * These measurements roughly align with some measurement of `convert-units`. While
+ * the majority of ingredients will be volume, it can make sense to have mass
+ * conversions for sugars, etc.
+ */
+export const measurementTypes = pgEnum("measurement_type", [
+	"volume",
+	"mass",
+	"pieces",
+]);
