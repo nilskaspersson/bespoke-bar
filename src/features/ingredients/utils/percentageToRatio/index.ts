@@ -1,34 +1,63 @@
+import { z } from "zod/v4";
+
+const PATTERN_GLOBAL_PERCENTAGE = /%/g;
 const PATTERN_INT_INPUT = /^\d{1,3}$/;
 const PATTERN_NUMERIC_INPUT = /^(\d+\.?\d*|\.\d+)$/;
 
-export function percentageToRatio(userInput: string | null): number | null {
-	if (!userInput || typeof userInput !== "string") {
-		return null;
-	}
+export const percentageToRatioSchema = z
+	.union([z.string(), z.null(), z.undefined()])
+	.transform((input, ctx) => {
+		if (!input || typeof input !== "string") {
+			return null;
+		}
 
-	const text = userInput.replace(/%/g, "").trim();
+		const text = input.replace(PATTERN_GLOBAL_PERCENTAGE, "").trim();
 
-	if (text === "") {
-		return null;
-	}
+		if (text === "") {
+			return null;
+		}
 
-	/**
-	 * The majority of input will be integers, let's use that as a fast path.
-	 */
-	if (PATTERN_INT_INPUT.test(text)) {
-		const num = parseInt(text, 10);
-		return num <= 100 ? num / 100 : null;
-	}
+		/**
+		 * The majority of input will be integers, let's use that as a fast path.
+		 */
+		if (PATTERN_INT_INPUT.test(text)) {
+			const num = parseInt(text, 10);
 
-	if (!PATTERN_NUMERIC_INPUT.test(text)) {
-		return null;
-	}
+			if (num > 100) {
+				ctx.addIssue({
+					code: "custom",
+					message: "Percentage must be between 0 and 100",
+					input,
+				});
 
-	const parsed = parseFloat(text);
+				return z.NEVER;
+			}
 
-	if (Number.isNaN(parsed) || parsed < 0 || parsed > 100) {
-		return null;
-	}
+			return num / 100;
+		}
 
-	return Math.round((parsed / 100) * 10000) / 10000;
-}
+		if (!PATTERN_NUMERIC_INPUT.test(text)) {
+			ctx.addIssue({
+				code: "custom",
+				message: "Must be a valid percentage format (e.g., 40, 37.5%, 12.25%)",
+				input,
+			});
+
+			return z.NEVER;
+		}
+
+		const parsed = parseFloat(text);
+
+		if (Number.isNaN(parsed) || parsed < 0 || parsed > 100) {
+			ctx.addIssue({
+				code: "custom",
+				message: "Percentage must be between 0 and 100",
+				input,
+			});
+
+			return z.NEVER;
+		}
+
+		return Math.round((parsed / 100) * 10000) / 10000;
+	})
+	.pipe(z.number().min(0).max(1).nullable());

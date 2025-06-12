@@ -1,12 +1,12 @@
 import type { ComponentProps } from "react";
 import { insertIngredientSchema } from "@/db/schema/ingredients";
 import { createIngredient } from "@/features/ingredients/actions/createIngredient";
+import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { Grid } from "@/ui/Grid";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 
-export async function CreateIngredientForm({
-	...props
-}: ComponentProps<"form">) {
+export function CreateIngredientForm({ ...props }: ComponentProps<"form">) {
 	const formAction = async (formData: FormData) => {
 		"use server";
 
@@ -14,7 +14,7 @@ export async function CreateIngredientForm({
 			name: formData.get("name"),
 			category: formData.get("category"),
 			measurementType: formData.get("measurementType") ?? null,
-			abv: formData.get("abv") ?? null,
+			abv: percentageToRatioSchema.parse(formData.get("abv")),
 			brand: formData.get("brand") ?? null,
 			price: formData.get("price") ?? null,
 		});
@@ -43,8 +43,15 @@ export async function CreateIngredientForm({
 							items (f.e., cherries, umbrellas).'
 				/>
 
-				<TextField label="Price" name="price" />
+				<TextField
+					label="Price"
+					name="price"
+					helperText="In your local currency"
+				/>
+
 				<TextField label="Brand" name="brand" />
+
+				<SubmitButton>Save Ingredient</SubmitButton>
 			</Grid>
 		</form>
 	);
