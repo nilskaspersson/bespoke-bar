@@ -43,7 +43,7 @@ export const IngredientsTable = pgTable(
 		unique("unique_name").on(table.name, table.orgId),
 		check(
 			"abv_valid_range",
-			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 100)`,
+			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 1)`,
 		),
 		check("price_positive", sql`${table.price} IS NULL OR ${table.price} > 0`),
 		check(
@@ -69,8 +69,10 @@ export type InsertIngredient = Omit<
  * The fields users can provide to create an ingredient.
  */
 export type DraftIngredient = Identity<
-	Pick<Ingredient, "name" | "category"> &
-		Partial<Pick<Ingredient, "abv" | "brand" | "price">>
+	Pick<
+		Partial<Ingredient>,
+		"name" | "abv" | "brand" | "price" | "category" | "measurementType"
+	>
 >;
 
 const ingredientsConstraintsSchema = {
