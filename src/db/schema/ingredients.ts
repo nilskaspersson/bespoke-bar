@@ -19,7 +19,6 @@ import { z } from "zod/v4";
 import { systemCategoryEnum } from "@/db/schema/categories";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes } from "@/db/schema/units";
-import type { Identity } from "@/utils/types";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
@@ -43,7 +42,7 @@ export const IngredientsTable = pgTable(
 		unique("unique_name").on(table.name, table.orgId),
 		check(
 			"abv_valid_range",
-			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 100)`,
+			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 1)`,
 		),
 		check("price_positive", sql`${table.price} IS NULL OR ${table.price} > 0`),
 		check(
@@ -63,14 +62,6 @@ export type Ingredient = typeof IngredientsTable.$inferSelect;
 export type InsertIngredient = Omit<
 	typeof IngredientsTable.$inferInsert,
 	"id" | "createdAt" | "updatedAt"
->;
-
-/**
- * The fields users can provide to create an ingredient.
- */
-export type DraftIngredient = Identity<
-	Pick<Ingredient, "name" | "category"> &
-		Partial<Pick<Ingredient, "abv" | "brand" | "price">>
 >;
 
 const ingredientsConstraintsSchema = {
@@ -102,6 +93,22 @@ export const insertIngredientSchema = createInsertSchema(IngredientsTable)
 	.extend(ingredientsConstraintsSchema)
 	.refine(...ingredientsRefinements);
 
+export const draftIngredientSchema = createInsertSchema(IngredientsTable)
+	.omit({
+		orgId: true,
+		createdBy: true,
+		updatedBy: true,
+		createdAt: true,
+		updatedAt: true,
+	})
+	.extend(ingredientsConstraintsSchema)
+	.refine(...ingredientsRefinements);
+
 export const updateIngredientSchema = createUpdateSchema(IngredientsTable)
 	.extend(ingredientsConstraintsSchema)
 	.refine(...ingredientsRefinements);
+
+/**
+ * The fields users can provide to create an ingredient.
+ */
+export type DraftIngredient = z.infer<typeof draftIngredientSchema>;

@@ -70,7 +70,7 @@ export default async function RecipePage({ params: paramsPromise }: Props) {
 				<ul>
 					{recipe.specs.map((spec) => (
 						<li key={spec.id}>
-							{spec.quantity} {spec.unit} {spec.ingredient}
+							{spec.quantity} {spec.unit} {spec.ingredientId}
 						</li>
 					))}
 				</ul>

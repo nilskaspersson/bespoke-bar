@@ -2,6 +2,8 @@ import "dotenv/config";
 import { neon } from "@neondatabase/serverless";
 import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
 import { drizzle } from "drizzle-orm/node-postgres";
+import * as categories from "./schema/categories";
+import * as ingredients from "./schema/ingredients";
 import * as recipes from "./schema/recipes";
 import * as specs from "./schema/specs";
 import * as units from "./schema/units";
@@ -11,6 +13,8 @@ if (!process.env.DATABASE_URL) {
 }
 
 const schema = {
+	...categories,
+	...ingredients,
 	...recipes,
 	...specs,
 	...units,

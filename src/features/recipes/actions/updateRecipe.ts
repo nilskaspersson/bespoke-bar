@@ -1,6 +1,4 @@
-import { auth } from "@clerk/nextjs/server";
 import { and, eq, or, sql } from "drizzle-orm";
-import { forbidden } from "next/navigation";
 import { db } from "@/db";
 import {
 	type InsertRecipe,
@@ -8,6 +6,7 @@ import {
 	RecipesTable,
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
+import { authOrForbidden } from "@/utils/auth";
 
 export async function updateRecipe(
 	id: Recipe["id"],
@@ -15,11 +14,7 @@ export async function updateRecipe(
 ): Promise<Recipe> {
 	"use server";
 
-	const { userId, orgId } = await auth();
-
-	if (!userId) {
-		forbidden();
-	}
+	const { userId, orgId } = await authOrForbidden();
 
 	const validatedUserInputRecipe = updateRecipeSchema.parse(userInputRecipe);
 

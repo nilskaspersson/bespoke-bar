@@ -24,7 +24,7 @@ export function SpecEntry<T extends DraftSpec>({
 			{spec.unit != null ? <span>{spec.unit}</span> : null}
 
 			<IngredientPicker
-				ingredient={spec.ingredient}
+				ingredient={spec.ingredientId}
 				onChange={(ingredient) => onChange?.({ ...spec, ingredient })}
 			/>
 		</div>

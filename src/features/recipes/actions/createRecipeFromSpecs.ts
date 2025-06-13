@@ -1,5 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
-import { forbidden } from "next/navigation";
 import { db } from "@/db";
 import {
 	type DraftRecipe,
@@ -10,9 +8,10 @@ import {
 import {
 	type DraftSpec,
 	type InsertSpec,
+	insertSpecsSchema,
 	SpecsTable,
-	specsInsertSchema,
 } from "@/db/schema/specs";
+import { authOrForbidden } from "@/utils/auth";
 
 /**
  * Given user input specs, create a recipe and specs in the database. Optionally
@@ -25,11 +24,7 @@ export async function createRecipeFromSpecs(
 ): Promise<RecipeWithSpecs> {
 	"use server";
 
-	const { userId, orgId } = await auth();
-
-	if (!userId) {
-		forbidden();
-	}
+	const { userId, orgId } = await authOrForbidden();
 
 	const validatedUserInputRecipe = insertRecipeSchema.parse({
 		name: userInputRecipe?.name ?? null,
@@ -39,14 +34,14 @@ export async function createRecipeFromSpecs(
 	});
 
 	const validatedUserInputSpecs: Omit<InsertSpec, "recipeId">[] =
-		specsInsertSchema
+		insertSpecsSchema
 			.omit({ recipeId: true })
 			.array()
 			.parse(
 				userInputSpecs.map((spec) => ({
 					quantity: spec.quantity,
 					unit: spec.unit,
-					ingredient: spec.ingredient ?? "",
+					ingredientId: spec.ingredientId,
 				})),
 			);
 
@@ -59,7 +54,7 @@ export async function createRecipeFromSpecs(
 		/**
 		 * Run schema once again, without omits
 		 */
-		const specsToInsert = specsInsertSchema
+		const specsToInsert = insertSpecsSchema
 			.array()
 			.parse(validatedUserInputSpecs);
 
