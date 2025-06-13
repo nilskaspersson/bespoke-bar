@@ -23,7 +23,6 @@ export async function createIngredient(
 		...userIngredient,
 		orgId,
 		createdBy: userId,
-		updatedBy: userId,
 	});
 
 	const [ingredient] = await db

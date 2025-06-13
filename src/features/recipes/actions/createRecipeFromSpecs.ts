@@ -41,7 +41,7 @@ export async function createRecipeFromSpecs(
 				userInputSpecs.map((spec) => ({
 					quantity: spec.quantity,
 					unit: spec.unit,
-					ingredient: spec.ingredient ?? "",
+					ingredientId: spec.ingredientId,
 				})),
 			);
 

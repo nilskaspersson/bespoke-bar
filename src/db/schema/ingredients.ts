@@ -19,7 +19,6 @@ import { z } from "zod/v4";
 import { systemCategoryEnum } from "@/db/schema/categories";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes } from "@/db/schema/units";
-import type { Identity } from "@/utils/types";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
@@ -65,16 +64,6 @@ export type InsertIngredient = Omit<
 	"id" | "createdAt" | "updatedAt"
 >;
 
-/**
- * The fields users can provide to create an ingredient.
- */
-export type DraftIngredient = Identity<
-	Pick<
-		Partial<Ingredient>,
-		"name" | "abv" | "brand" | "price" | "category" | "measurementType"
-	>
->;
-
 const ingredientsConstraintsSchema = {
 	abv: z.coerce.number().min(0).max(100).nullable(),
 	price: z.coerce.number().positive().nullable(),
@@ -104,6 +93,22 @@ export const insertIngredientSchema = createInsertSchema(IngredientsTable)
 	.extend(ingredientsConstraintsSchema)
 	.refine(...ingredientsRefinements);
 
+export const draftIngredientSchema = createInsertSchema(IngredientsTable)
+	.omit({
+		orgId: true,
+		createdBy: true,
+		updatedBy: true,
+		createdAt: true,
+		updatedAt: true,
+	})
+	.extend(ingredientsConstraintsSchema)
+	.refine(...ingredientsRefinements);
+
 export const updateIngredientSchema = createUpdateSchema(IngredientsTable)
 	.extend(ingredientsConstraintsSchema)
 	.refine(...ingredientsRefinements);
+
+/**
+ * The fields users can provide to create an ingredient.
+ */
+export type DraftIngredient = z.infer<typeof draftIngredientSchema>;

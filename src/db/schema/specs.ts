@@ -26,7 +26,7 @@ export const SpecsTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		quantity: real("quantity"),
 		unit: unitEnum("unit"),
-		ingredient: text("ingredient")
+		ingredientId: text("ingredient_id")
 			.notNull()
 			.references(() => IngredientsTable.id, { onDelete: "restrict" }),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -37,7 +37,7 @@ export const SpecsTable = pgTable(
 			sql`${table.quantity} IS NULL OR ${table.quantity} > 0`,
 		),
 		index("idx_specs_recipe").on(table.recipeId),
-		index("idx_specs_ingredient").on(table.ingredient),
+		index("idx_specs_ingredient").on(table.ingredientId),
 	],
 );
 
@@ -45,6 +45,10 @@ export const specsRelations = relations(SpecsTable, ({ one }) => ({
 	recipe: one(RecipesTable, {
 		fields: [SpecsTable.recipeId],
 		references: [RecipesTable.id],
+	}),
+	ingredient: one(IngredientsTable, {
+		fields: [SpecsTable.ingredientId],
+		references: [IngredientsTable.id],
 	}),
 }));
 
@@ -59,7 +63,9 @@ export type InsertSpec = Omit<
  * The fields users can provide to create a spec.
  */
 export type DraftSpec = Identity<
-	Partial<Pick<Spec, "quantity" | "unit" | "ingredient">>
+	Partial<Pick<Spec, "quantity" | "unit" | "ingredientId">> & {
+		ingredientName?: string;
+	}
 >;
 
 const specsConstraintsSchema = {

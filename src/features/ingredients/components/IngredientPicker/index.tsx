@@ -10,8 +10,8 @@ export function IngredientPicker({
 	onChange,
 	ingredient,
 }: {
-	onChange: (ingredient: Spec["ingredient"]) => void;
-	ingredient: Spec["ingredient"] | undefined;
+	onChange: (ingredientId: Spec["ingredientId"]) => void;
+	ingredient: Spec["ingredientId"] | undefined;
 }) {
 	const id = useId();
 	const anchorRef = useRef<HTMLButtonElement>(null);

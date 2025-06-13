@@ -14,7 +14,7 @@ export function userInputToSpec(userInput: string): DraftSpec | null {
 		return null;
 	}
 
-	const [quantity, unit, ingredient] = sequencedParsers(
+	const [quantity, unit, ingredientName] = sequencedParsers(
 		quantityTextParser,
 		unitTextParser,
 		ingredientTextParser,
@@ -23,7 +23,7 @@ export function userInputToSpec(userInput: string): DraftSpec | null {
 	const spec: DraftSpec = {
 		quantity,
 		unit,
-		ingredient,
+		ingredientName,
 	};
 
 	return spec;

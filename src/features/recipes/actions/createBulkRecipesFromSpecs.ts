@@ -41,7 +41,7 @@ export async function createBulkRecipesFromSpecs(
 					draftRecipe.specs?.map((spec) => ({
 						quantity: spec.quantity,
 						unit: spec.unit,
-						ingredient: spec.ingredient,
+						ingredientId: spec.ingredientId,
 					})),
 				),
 		);

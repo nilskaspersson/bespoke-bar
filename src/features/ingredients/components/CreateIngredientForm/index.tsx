@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { insertIngredientSchema } from "@/db/schema/ingredients";
+import { draftIngredientSchema } from "@/db/schema/ingredients";
 import { createIngredient } from "@/features/ingredients/actions/createIngredient";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { Grid } from "@/ui/Grid";
@@ -10,7 +10,7 @@ export function CreateIngredientForm({ ...props }: ComponentProps<"form">) {
 	const formAction = async (formData: FormData) => {
 		"use server";
 
-		const values = insertIngredientSchema.parse({
+		const values = draftIngredientSchema.parse({
 			name: formData.get("name"),
 			category: formData.get("category"),
 			measurementType: formData.get("measurementType") ?? null,
@@ -32,7 +32,7 @@ export function CreateIngredientForm({ ...props }: ComponentProps<"form">) {
 					label="Alcohol by volume (ABV)"
 					name="abv"
 					placeholder="%"
-					helperText="Percentage (from 0-100%). Up to two decimal places."
+					helperText="Percentage value from 0-100%. Up to two decimal places."
 				/>
 
 				<TextField
