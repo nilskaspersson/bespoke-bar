@@ -65,6 +65,7 @@ export type InsertIngredient = Omit<
 >;
 
 const ingredientsConstraintsSchema = {
+	name: z.string().min(1, "Name is required"),
 	abv: z.coerce.number().min(0).max(100).nullable(),
 	price: z.coerce.number().positive().nullable(),
 };
