@@ -41,10 +41,15 @@
 
 	@media (prefers-reduced-motion: no-preference) {
 		:global(html) {
-			background: linear-gradient(to right in oklab, var(--from), var(--to));
+			background-image: linear-gradient(
+				to right in oklab,
+				var(--from),
+				var(--to)
+			);
+			animation: gradient 2s linear infinite alternate;
 
-			&:has(.dialog[open]) {
-				animation: gradient 2s linear infinite alternate;
+			&:not(:has(.dialog[open])) {
+				animation-play-state: paused;
 			}
 		}
 

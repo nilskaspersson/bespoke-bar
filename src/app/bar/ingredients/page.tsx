@@ -1,13 +1,27 @@
+import Link from "next/link";
+import { readIngredients } from "@/features/ingredients/actions/readIngredients";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Heading } from "@/ui/Heading";
 
-export default function IngredientsPage() {
+export default async function IngredientsPage() {
+	const ingredients = await readIngredients();
+
 	return (
 		<Container as="article">
 			<Heading level="h1">Ingredients</Heading>
 
 			<LinkButton href="/bar/ingredients/create">Create Ingredient</LinkButton>
+
+			<ul>
+				{ingredients.map((ingredient) => (
+					<li key={ingredient.id}>
+						<Link href={`/bar/ingredients/${ingredient.id}`}>
+							{ingredient.name}
+						</Link>
+					</li>
+				))}
+			</ul>
 		</Container>
 	);
 }
