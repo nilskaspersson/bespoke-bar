@@ -1,4 +1,4 @@
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
 	type InsertRecipe,
@@ -6,6 +6,7 @@ import {
 	RecipesTable,
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
+import { revalidateRecipePaths } from "@/features/recipes/utils";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function updateRecipe(
@@ -20,19 +21,15 @@ export async function updateRecipe(
 
 	const [result] = await db
 		.update(RecipesTable)
-		.set({ ...validatedUserInputRecipe, updatedAt: sql`NOW()` })
-		.where(
-			and(
-				eq(RecipesTable.id, id),
-				orgId
-					? or(
-							eq(RecipesTable.createdBy, userId),
-							eq(RecipesTable.orgId, orgId),
-						)
-					: eq(RecipesTable.createdBy, userId),
-			),
-		)
+		.set({
+			...validatedUserInputRecipe,
+			updatedAt: sql`NOW()`,
+			updatedBy: userId,
+		})
+		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)))
 		.returning();
+
+	revalidateRecipePaths(id);
 
 	return result;
 }
