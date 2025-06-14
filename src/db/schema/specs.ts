@@ -10,7 +10,7 @@ import {
 import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod/v4";
-import { IngredientsTable } from "@/db/schema/ingredients";
+import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import { RecipesTable } from "@/db/schema/recipes";
 import { unitEnum } from "@/db/schema/units";
 import type { Identity } from "@/utils/types";
@@ -63,10 +63,16 @@ export type InsertSpec = Omit<
  * The fields users can provide to create a spec.
  */
 export type DraftSpec = Identity<
-	Partial<Pick<Spec, "quantity" | "unit" | "ingredientId">> & {
-		ingredientName?: string;
-	}
+	Partial<Pick<Spec, "quantity" | "unit" | "ingredientId">>
 >;
+
+export type SpecWithIngredient = Spec & {
+	ingredient: Ingredient;
+};
+
+export type DraftSpecWithDraftIngredient = DraftSpec & {
+	ingredient: Partial<Ingredient>;
+};
 
 const specsConstraintsSchema = {
 	quantity: z.coerce.number().positive().nullable(),

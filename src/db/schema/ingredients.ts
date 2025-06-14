@@ -66,8 +66,14 @@ export type InsertIngredient = Omit<
 
 const ingredientsConstraintsSchema = {
 	name: z.string().min(1, "Name is required"),
-	abv: z.coerce.number().min(0).max(100).nullable(),
-	price: z.coerce.number().positive().nullable(),
+	abv: z.preprocess(
+		(val) => (val === undefined ? null : val),
+		z.coerce.number().min(0).max(100).nullable(),
+	),
+	price: z.preprocess(
+		(val) => (val === undefined ? null : val),
+		z.coerce.number().nullable(),
+	),
 };
 
 type IngredientRefinementInput = Partial<
@@ -96,6 +102,7 @@ export const insertIngredientSchema = createInsertSchema(IngredientsTable)
 
 export const draftIngredientSchema = createInsertSchema(IngredientsTable)
 	.omit({
+		id: true,
 		orgId: true,
 		createdBy: true,
 		updatedBy: true,

@@ -16,7 +16,11 @@ export async function readRecipe(id: string | undefined) {
 			or(eq(RecipesTable.createdBy, userId), eq(RecipesTable.orgId, orgId)),
 		),
 		with: {
-			specs: true,
+			specs: {
+				with: {
+					ingredient: true,
+				},
+			},
 		},
 	});
 

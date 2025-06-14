@@ -1,10 +1,14 @@
-import type { DraftSpec } from "@/db/schema/specs";
+import type { Ingredient } from "@/db/schema/ingredients";
+import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
-export function userInputToSpec(userInput: string): DraftSpec | null {
+export function userInputToSpec(
+	userInput: string,
+	ingredients: Ingredient[],
+): DraftSpecWithDraftIngredient | null {
 	const trimmedInput = userInput.trim();
 
 	/**
@@ -20,10 +24,15 @@ export function userInputToSpec(userInput: string): DraftSpec | null {
 		ingredientTextParser,
 	)(trimmedInput);
 
-	const spec: DraftSpec = {
+	const ingredient = ingredients.find(
+		({ name }) => name.toLowerCase() === ingredientName.toLowerCase(),
+	);
+
+	const spec: DraftSpecWithDraftIngredient = {
 		quantity,
 		unit,
-		ingredientName,
+		ingredientId: ingredient?.id,
+		ingredient: ingredient ?? { name: ingredientName },
 	};
 
 	return spec;
