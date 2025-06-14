@@ -1,0 +1,32 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import { Flex } from "@/ui/Flex";
+import { Grid } from "@/ui/Grid";
+import { Spinner } from "@/ui/Spinner";
+import { Text } from "@/ui/Text";
+import styles from "./styles.module.css";
+
+export function LoadingScreen() {
+	const pathname = usePathname();
+
+	return (
+		<aside className={styles.loading}>
+			<Grid gap={6}>
+				<Flex alignItems="center" direction="column" gap={2}>
+					<Spinner size="huge" />
+
+					<Text as="p" size={4} align="center">
+						Shaking up the page…
+					</Text>
+				</Flex>
+
+				<Grid gap={2} className={styles.stuck} justifyItems="center">
+					<Text as="p" weight={700}>
+						Stuck? Try <a href={pathname}>reloading the page</a>
+					</Text>
+				</Grid>
+			</Grid>
+		</aside>
+	);
+}
