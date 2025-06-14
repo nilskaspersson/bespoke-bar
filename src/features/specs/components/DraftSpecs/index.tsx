@@ -13,11 +13,11 @@ import styles from "./styles.module.css";
 
 export function DraftSpecs({
 	className,
-	createRecipe,
+	createRecipes,
 	ingredients,
 	...props
 }: {
-	createRecipe: (recipe: DraftRecipe) => Promise<RecipeWithSpecs>;
+	createRecipes: (recipes: DraftRecipe[]) => Promise<RecipeWithSpecs[]>;
 	ingredients: Ingredient[];
 } & HTMLAttributes<HTMLDivElement>) {
 	const [specs, setSpecs] = useState<WithKey<DraftSpecWithDraftIngredient>[]>(
@@ -44,18 +44,20 @@ export function DraftSpecs({
 			);
 		};
 
-	const createRecipeAction = () => {
-		const recipe: DraftRecipe = {
-			specs,
-		};
+	const createRecipesAction = () => {
+		const recipes: DraftRecipe[] = [
+			{
+				specs,
+			},
+		];
 
-		createRecipe(recipe);
+		createRecipes(recipes);
 	};
 
 	return (
 		<div {...props} className={clsx(styles.container, className)}>
 			{specs.length > 0 ? (
-				<form action={createRecipeAction}>
+				<form action={createRecipesAction}>
 					<ul className={styles.box}>
 						{specs.map((spec) => (
 							<li key={spec[KEY_NAME]}>

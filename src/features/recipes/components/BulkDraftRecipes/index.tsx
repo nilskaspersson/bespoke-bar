@@ -7,7 +7,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
+import type { DraftRecipe, RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
 import { Grid } from "@/ui/Grid";
@@ -21,7 +21,7 @@ export function BulkDraftRecipes({
 	className,
 	...props
 }: {
-	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe["id"][]>;
+	createRecipes: (recipes: DraftRecipe[]) => Promise<RecipeWithSpecs[]>;
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [inputValue, setInputValue] = useState("");
 	const deferredInputValue = useDeferredValue(inputValue);
