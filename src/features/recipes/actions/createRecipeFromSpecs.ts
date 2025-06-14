@@ -85,7 +85,9 @@ export async function createRecipesFromSpecs(
 			const specsToInsert = prepareSpecsForInsertion(
 				userInputRecipe,
 				recipe.id,
-				createdIngredientNameToId,
+				(spec) =>
+					spec.ingredientId ||
+					createdIngredientNameToId.get(spec.ingredient?.name ?? ""),
 			);
 
 			const specs = await tx

@@ -4,7 +4,11 @@ import {
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
 import { type DraftRecipe, insertRecipeSchema } from "@/db/schema/recipes";
-import { type InsertSpec, insertSpecsSchema } from "@/db/schema/specs";
+import {
+	type DraftSpecWithDraftIngredient,
+	type InsertSpec,
+	insertSpecsSchema,
+} from "@/db/schema/specs";
 
 /**
  * Prepares spec data for insertion by mapping ingredient IDs and recipe ID.
@@ -12,18 +16,16 @@ import { type InsertSpec, insertSpecsSchema } from "@/db/schema/specs";
 export function prepareSpecsForInsertion(
 	userInputRecipe: DraftRecipe,
 	recipeId: string,
-	ingredientNameToId: Map<Ingredient["name"], Ingredient["id"]>,
+	getIngredientId: (
+		spec: DraftSpecWithDraftIngredient,
+	) => Ingredient["id"] | undefined,
 ): InsertSpec[] {
 	if (!userInputRecipe.specs) {
 		throw new Error(`No specs found for recipe ${userInputRecipe.name}`);
 	}
 
 	return userInputRecipe.specs.map((spec) => {
-		const ingredientId =
-			spec.ingredientId ||
-			(spec.ingredient?.name
-				? ingredientNameToId.get(spec.ingredient.name)
-				: undefined);
+		const ingredientId = getIngredientId(spec);
 
 		if (!ingredientId) {
 			throw new Error(
@@ -51,7 +53,9 @@ export function validateAndExtractIngredients(
 	validatedRecipes: ReturnType<typeof insertRecipeSchema.parse>[];
 	uniqueIngredientsToCreate: Map<Ingredient["name"], InsertIngredient>;
 } {
-	// Validate all recipes have specs
+	/**
+	 * All recipes have specs
+	 */
 	userInputRecipes.forEach((recipe, index) => {
 		if (!recipe.specs || recipe.specs.length === 0) {
 			throw new Error(`No specs provided for recipe at index ${index}`);
@@ -59,7 +63,7 @@ export function validateAndExtractIngredients(
 	});
 
 	/**
-	 * Validate all recipe data upfront
+	 * Validate recipes, prepare with creator data
 	 */
 	const validatedRecipes = userInputRecipes.map((recipe) =>
 		insertRecipeSchema.parse({
@@ -71,7 +75,7 @@ export function validateAndExtractIngredients(
 	);
 
 	/**
-	 * Collect unique ingredients by name (first occurrence wins).
+	 * Collect unique ingredients by name (first occurrence's config wins).
 	 */
 	const uniqueIngredientsToCreate = new Map<
 		Ingredient["name"],
