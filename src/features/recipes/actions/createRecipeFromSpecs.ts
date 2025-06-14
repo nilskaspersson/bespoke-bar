@@ -1,7 +1,6 @@
-"use server";
-
 import { db } from "@/db";
 import {
+	type Ingredient,
 	IngredientsTable,
 	type InsertIngredient,
 	insertIngredientSchema,
@@ -27,12 +26,102 @@ import { authOrForbidden } from "@/utils/auth";
 export async function createRecipesFromSpecs(
 	userInputRecipes: DraftRecipe[],
 ): Promise<RecipeWithSpecs[]> {
+	"use server";
+
 	const { userId, orgId } = await authOrForbidden();
 
 	if (!userInputRecipes || userInputRecipes.length === 0) {
 		throw new Error("No recipes provided");
 	}
 
+	const { validatedRecipes, uniqueIngredientsToCreate } =
+		validateAndExtractIngredients(userInputRecipes, userId, orgId);
+
+	/**
+	 * Start the db transaction
+	 */
+	const result = await db.transaction(async (tx) => {
+		/**
+		 * Insert all new ingredients once and create name-to-id mapping
+		 */
+		const createdIngredientNameToId = new Map<
+			Ingredient["name"],
+			Ingredient["id"]
+		>();
+
+		if (uniqueIngredientsToCreate.size > 0) {
+			const ingredientsToInsert = Array.from(
+				uniqueIngredientsToCreate.values(),
+			);
+
+			const createdIngredients = await tx
+				.insert(IngredientsTable)
+				.values(ingredientsToInsert)
+				.returning();
+
+			createdIngredients.forEach((ingredient) => {
+				createdIngredientNameToId.set(ingredient.name, ingredient.id);
+			});
+		}
+
+		/**
+		 * Process each recipe: insert recipe, then its specs
+		 */
+		const createdRecipesWithSpecs: RecipeWithSpecs[] = [];
+
+		for (let i = 0; i < userInputRecipes.length; i++) {
+			const userInputRecipe = userInputRecipes[i];
+			const validatedRecipe = validatedRecipes[i];
+
+			/**
+			 * Insert the Recipe
+			 */
+			const [recipe] = await tx
+				.insert(RecipesTable)
+				.values(validatedRecipe)
+				.returning();
+
+			if (!recipe) {
+				throw new Error(`Failed to create recipe at index ${i}`);
+			}
+
+			/**
+			 * Prepare and insert Specs
+			 */
+			const specsToInsert = prepareSpecsForInsertion(
+				userInputRecipe,
+				recipe.id,
+				createdIngredientNameToId,
+			);
+
+			const specs = await tx
+				.insert(SpecsTable)
+				.values(specsToInsert)
+				.returning();
+
+			createdRecipesWithSpecs.push({
+				...recipe,
+				specs,
+			});
+		}
+
+		return createdRecipesWithSpecs;
+	});
+
+	return result;
+}
+
+/**
+ * Validates ingredients and extracts ingredients to be created.
+ */
+function validateAndExtractIngredients(
+	userInputRecipes: DraftRecipe[],
+	userId: string,
+	orgId: string,
+): {
+	validatedRecipes: ReturnType<typeof insertRecipeSchema.parse>[];
+	uniqueIngredientsToCreate: Map<Ingredient["name"], InsertIngredient>;
+} {
 	// Validate all recipes have specs
 	userInputRecipes.forEach((recipe, index) => {
 		if (!recipe.specs || recipe.specs.length === 0) {
@@ -43,7 +132,7 @@ export async function createRecipesFromSpecs(
 	/**
 	 * Validate all recipe data upfront
 	 */
-	const validatedUserInputRecipes = userInputRecipes.map((recipe) =>
+	const validatedRecipes = userInputRecipes.map((recipe) =>
 		insertRecipeSchema.parse({
 			name: recipe.name ?? null,
 			description: recipe.description ?? null,
@@ -53,20 +142,28 @@ export async function createRecipesFromSpecs(
 	);
 
 	/**
-	 * Collect all unique ingredients that need to be created across ALL recipes
+	 * Collect unique ingredients by name (first occurrence wins).
 	 */
-	const uniqueIngredientsToCreate = new Map<string, InsertIngredient>();
+	const uniqueIngredientsToCreate = new Map<
+		Ingredient["name"],
+		InsertIngredient
+	>();
 
 	userInputRecipes.forEach((recipe) => {
 		recipe.specs?.forEach((spec) => {
 			if (!spec.ingredient?.id && spec.ingredient?.name) {
 				const ingredientName = spec.ingredient.name;
+				/**
+				 * Only add if we haven't seen this name before. This way, a set of Recipes can all
+				 * contain the same new ingredient.
+				 */
 				if (!uniqueIngredientsToCreate.has(ingredientName)) {
 					const validatedIngredient = insertIngredientSchema.parse({
 						...spec.ingredient,
 						createdBy: userId,
 						orgId,
 					});
+
 					uniqueIngredientsToCreate.set(ingredientName, validatedIngredient);
 				}
 			}
@@ -87,93 +184,42 @@ export async function createRecipesFromSpecs(
 		}
 	});
 
-	/**
-	 * Start the db transaction
-	 */
-	const result = await db.transaction(async (tx) => {
-		/**
-		 * Insert all new ingredients once and create name-to-id mapping
-		 */
-		const createdIngredientNameToId = new Map<string, string>();
+	return {
+		validatedRecipes,
+		uniqueIngredientsToCreate,
+	};
+}
 
-		if (uniqueIngredientsToCreate.size > 0) {
-			const ingredientsToInsert = Array.from(
-				uniqueIngredientsToCreate.values(),
+/**
+ * Prepares spec data for insertion by mapping ingredient IDs and recipe ID.
+ */
+export function prepareSpecsForInsertion(
+	userInputRecipe: DraftRecipe,
+	recipeId: string,
+	ingredientNameToId: Map<string, string>,
+): InsertSpec[] {
+	if (!userInputRecipe.specs) {
+		throw new Error(`No specs found for recipe ${userInputRecipe.name}`);
+	}
+
+	return userInputRecipe.specs.map((spec) => {
+		const ingredientId =
+			spec.ingredientId ||
+			(spec.ingredient?.name
+				? ingredientNameToId.get(spec.ingredient.name)
+				: undefined);
+
+		if (!ingredientId) {
+			throw new Error(
+				`No ingredientId found for spec ${spec.ingredient.name} in recipe ${userInputRecipe.name}`,
 			);
-			const createdIngredients = await tx
-				.insert(IngredientsTable)
-				.values(ingredientsToInsert)
-				.returning();
-
-			createdIngredients.forEach((ingredient) => {
-				createdIngredientNameToId.set(ingredient.name, ingredient.id);
-			});
 		}
 
-		/**
-		 * Process each recipe: insert recipe, then its specs
-		 */
-		const createdRecipesWithSpecs: RecipeWithSpecs[] = [];
-
-		for (let i = 0; i < userInputRecipes.length; i++) {
-			const userInputRecipe = userInputRecipes[i];
-			const validatedRecipe = validatedUserInputRecipes[i];
-
-			/**
-			 * Insert the Recipe
-			 */
-			const [recipe] = await tx
-				.insert(RecipesTable)
-				.values(validatedRecipe)
-				.returning();
-
-			if (!recipe) {
-				throw new Error(`Failed to create recipe at index ${i}`);
-			}
-
-			/**
-			 * Prepare specs with recipeId and ingredientIds, then insert them
-			 */
-			if (!userInputRecipe.specs) {
-				throw new Error(`No specs found for recipe at index ${i}`);
-			}
-
-			const specsToInsert: InsertSpec[] = userInputRecipe.specs.map(
-				(spec, specIndex) => {
-					const ingredientId =
-						spec.ingredientId ||
-						(spec.ingredient?.name
-							? createdIngredientNameToId.get(spec.ingredient.name)
-							: undefined);
-
-					if (!ingredientId) {
-						throw new Error(
-							`No ingredientId found for spec at index ${specIndex} in recipe at index ${i}`,
-						);
-					}
-
-					return insertSpecsSchema.parse({
-						quantity: spec.quantity,
-						unit: spec.unit,
-						ingredientId,
-						recipeId: recipe.id,
-					});
-				},
-			);
-
-			const specs = await tx
-				.insert(SpecsTable)
-				.values(specsToInsert)
-				.returning();
-
-			createdRecipesWithSpecs.push({
-				...recipe,
-				specs,
-			});
-		}
-
-		return createdRecipesWithSpecs;
+		return insertSpecsSchema.parse({
+			quantity: spec.quantity,
+			unit: spec.unit,
+			ingredientId,
+			recipeId,
+		});
 	});
-
-	return result;
 }
