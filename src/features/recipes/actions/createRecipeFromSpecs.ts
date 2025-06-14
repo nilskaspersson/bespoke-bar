@@ -7,8 +7,9 @@ import {
 } from "@/db/schema/recipes";
 import { SpecsTable } from "@/db/schema/specs";
 import {
+	extractIngredientsToCreate,
 	prepareSpecsForInsertion,
-	validateAndExtractIngredients,
+	validateRecipes,
 } from "@/features/recipes/utils/schema";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -28,8 +29,13 @@ export async function createRecipesFromSpecs(
 		throw new Error("No recipes provided");
 	}
 
-	const { validatedRecipes, uniqueIngredientsToCreate } =
-		validateAndExtractIngredients(userInputRecipes, userId, orgId);
+	const validatedRecipes = validateRecipes(userInputRecipes, userId, orgId);
+
+	const ingredientsToCreate = extractIngredientsToCreate(
+		userInputRecipes,
+		userId,
+		orgId,
+	);
 
 	/**
 	 * Start the db transaction
@@ -43,10 +49,8 @@ export async function createRecipesFromSpecs(
 			Ingredient["id"]
 		>();
 
-		if (uniqueIngredientsToCreate.size > 0) {
-			const ingredientsToInsert = Array.from(
-				uniqueIngredientsToCreate.values(),
-			);
+		if (ingredientsToCreate.size > 0) {
+			const ingredientsToInsert = Array.from(ingredientsToCreate.values());
 
 			const createdIngredients = await tx
 				.insert(IngredientsTable)

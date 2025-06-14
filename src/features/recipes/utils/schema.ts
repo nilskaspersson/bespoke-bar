@@ -43,29 +43,20 @@ export function prepareSpecsForInsertion(
 }
 
 /**
- * Validates ingredients and extracts ingredients to be created.
+ * Validates recipe data and prepares it for insertion.
  */
-export function validateAndExtractIngredients(
+export function validateRecipes(
 	userInputRecipes: DraftRecipe[],
 	userId: string,
 	orgId: string,
-): {
-	validatedRecipes: ReturnType<typeof insertRecipeSchema.parse>[];
-	uniqueIngredientsToCreate: Map<Ingredient["name"], InsertIngredient>;
-} {
-	/**
-	 * All recipes have specs
-	 */
+): ReturnType<typeof insertRecipeSchema.parse>[] {
 	userInputRecipes.forEach((recipe, index) => {
 		if (!recipe.specs || recipe.specs.length === 0) {
 			throw new Error(`No specs provided for recipe at index ${index}`);
 		}
 	});
 
-	/**
-	 * Validate recipes, prepare with creator data
-	 */
-	const validatedRecipes = userInputRecipes.map((recipe) =>
+	return userInputRecipes.map((recipe) =>
 		insertRecipeSchema.parse({
 			name: recipe.name ?? null,
 			description: recipe.description ?? null,
@@ -73,10 +64,16 @@ export function validateAndExtractIngredients(
 			orgId,
 		}),
 	);
+}
 
-	/**
-	 * Collect unique ingredients by name (first occurrence's config wins).
-	 */
+/**
+ * Extracts new ingredients from user input
+ */
+export function extractIngredientsToCreate(
+	userInputRecipes: DraftRecipe[],
+	userId: string,
+	orgId: string,
+): Map<Ingredient["name"], InsertIngredient> {
 	const uniqueIngredientsToCreate = new Map<
 		Ingredient["name"],
 		InsertIngredient
@@ -86,10 +83,7 @@ export function validateAndExtractIngredients(
 		recipe.specs?.forEach((spec) => {
 			if (!spec.ingredient?.id && spec.ingredient?.name) {
 				const ingredientName = spec.ingredient.name;
-				/**
-				 * Only add if we haven't seen this name before. This way, a set of Recipes can all
-				 * contain the same new ingredient.
-				 */
+
 				if (!uniqueIngredientsToCreate.has(ingredientName)) {
 					const validatedIngredient = insertIngredientSchema.parse({
 						...spec.ingredient,
@@ -103,9 +97,6 @@ export function validateAndExtractIngredients(
 		});
 	});
 
-	/**
-	 * Parse all specs eagerly to avoid starting the tx in case of invalid data
-	 */
 	const specValidationSchema = insertSpecsSchema.omit({
 		ingredientId: true,
 		recipeId: true,
@@ -117,8 +108,5 @@ export function validateAndExtractIngredients(
 		}
 	});
 
-	return {
-		validatedRecipes,
-		uniqueIngredientsToCreate,
-	};
+	return uniqueIngredientsToCreate;
 }
