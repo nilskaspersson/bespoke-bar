@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { readIngredients } from "@/features/ingredients/actions/readIngredients";
 import { LinkButton } from "@/ui/Button";
@@ -25,3 +26,7 @@ export default async function IngredientsPage() {
 		</Container>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Ingredients",
+};
