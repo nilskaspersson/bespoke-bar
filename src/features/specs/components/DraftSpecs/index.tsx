@@ -2,38 +2,49 @@
 
 import { clsx } from "clsx";
 import { type HTMLAttributes, useState } from "react";
+import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import type { DraftSpec } from "@/db/schema/specs";
+import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
 import { Button } from "@/ui/Button";
-import { type WithID, withID } from "@/utils/withId";
+import { KEY_NAME, type WithKey, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function DraftSpecs({
 	className,
 	createRecipe,
+	ingredients,
 	...props
 }: {
-	createRecipe: (specs: DraftSpec[]) => Promise<RecipeWithSpecs>;
+	createRecipe: (
+		specs: DraftSpecWithDraftIngredient[],
+	) => Promise<RecipeWithSpecs>;
+	ingredients: Ingredient[];
 } & HTMLAttributes<HTMLDivElement>) {
-	const [specs, setSpecs] = useState<WithID<DraftSpec>[]>([]);
+	const [specs, setSpecs] = useState<WithKey<DraftSpecWithDraftIngredient>[]>(
+		[],
+	);
 
 	const handleSubmit = (formData: FormData) => {
 		const entry = formData.get("spec");
 
 		if (entry) {
-			const spec = userInputToSpec(entry.toString());
+			const spec = userInputToSpec(entry.toString(), ingredients);
 
 			if (!spec) return;
 
-			setSpecs((prev) => [...prev, withID(spec)]);
+			setSpecs((prev) => [...prev, withKey(spec)]);
 		}
 	};
 
-	const createChangeHandler = (spec: WithID<DraftSpec>) => (o: DraftSpec) => {
-		setSpecs((prev) => prev.map((s) => (s.id === spec.id ? withID(o) : s)));
-	};
+	const createChangeHandler =
+		(spec: WithKey<DraftSpecWithDraftIngredient>) =>
+		(o: DraftSpecWithDraftIngredient) => {
+			setSpecs((prev) =>
+				prev.map((s) => (s[KEY_NAME] === spec[KEY_NAME] ? withKey(o) : s)),
+			);
+		};
 
 	return (
 		<div {...props} className={clsx(styles.container, className)}>
@@ -41,7 +52,7 @@ export function DraftSpecs({
 				<form action={() => void createRecipe(specs)}>
 					<ul className={styles.box}>
 						{specs.map((spec) => (
-							<li key={spec.id}>
+							<li key={spec[KEY_NAME]}>
 								<SpecEntry spec={spec} onChange={createChangeHandler(spec)} />
 							</li>
 						))}

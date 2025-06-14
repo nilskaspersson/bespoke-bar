@@ -13,7 +13,7 @@ import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRec
 import { Grid } from "@/ui/Grid";
 import { Input } from "@/ui/Input";
 import { SubmitButton } from "@/ui/SubmitButton";
-import { type WithID, withID } from "@/utils/withId";
+import { KEY_NAME, type WithKey, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function BulkDraftRecipes({
@@ -26,8 +26,8 @@ export function BulkDraftRecipes({
 	const [inputValue, setInputValue] = useState("");
 	const deferredInputValue = useDeferredValue(inputValue);
 
-	const draftRecipes: WithID<DraftRecipe>[] = useMemo(
-		() => userInputToBulkRecipe(deferredInputValue).map(withID),
+	const draftRecipes: WithKey<DraftRecipe>[] = useMemo(
+		() => userInputToBulkRecipe(deferredInputValue).map(withKey),
 		[deferredInputValue],
 	);
 
@@ -57,7 +57,7 @@ export function BulkDraftRecipes({
 					<Grid gap={6}>
 						<Grid as="ul" gap={6}>
 							{draftRecipes.map((recipe) => (
-								<li key={recipe.id}>
+								<li key={recipe[KEY_NAME]}>
 									<RecipeCard recipe={recipe} />
 								</li>
 							))}

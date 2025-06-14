@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { withoutID } from "@/utils/withId";
+import { withoutKey } from "@/utils/withKey";
 import { userInputToBulkRecipe } from ".";
 
 const USER_INPUT = `
@@ -31,7 +31,7 @@ describe("userInputToBulkRecipe", () => {
 	test("parses a wide range of input", () => {
 		const data = userInputToBulkRecipe(USER_INPUT).map((o) => ({
 			...o,
-			specs: o.specs?.map(withoutID),
+			specs: o.specs?.map(withoutKey),
 		}));
 
 		expect(data).toEqual([

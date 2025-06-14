@@ -8,7 +8,7 @@ import {
 import { nanoid } from "nanoid";
 import { type DraftSpec, type Spec, SpecsTable } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
-import type { WithID } from "@/utils/withId";
+import type { WithKey } from "@/utils/withKey";
 
 export const RecipesTable = pgTable(
 	"recipes",
@@ -50,7 +50,7 @@ export type InsertRecipe = Omit<
  */
 export type DraftRecipe = Identity<
 	Partial<Pick<Recipe, "name" | "description">> & {
-		specs?: WithID<DraftSpec>[];
+		specs?: WithKey<DraftSpec>[];
 	}
 >;
 

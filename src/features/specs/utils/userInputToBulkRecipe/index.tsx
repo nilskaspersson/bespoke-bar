@@ -1,6 +1,6 @@
 import type { DraftRecipe } from "@/db/schema/recipes";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
-import { withID } from "@/utils/withId";
+import { withKey } from "@/utils/withKey";
 
 const PATTERN_REPEATING_NEWLINES = /\n(?:\s*\n)+/;
 const PATTERN_LIST_PREFIX = /^[-*]\s*/;
@@ -35,7 +35,7 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 			 * Check quantity only, unit can be ambiguous if a name ends with a unit
 			 */
 			if (firstLineAsSpec && firstLineAsSpec.quantity !== null) {
-				specs.push(withID(firstLineAsSpec));
+				specs.push(withKey(firstLineAsSpec));
 			} else {
 				recipeName = lines[0].trim();
 			}
@@ -49,7 +49,7 @@ export function userInputToBulkRecipe(userInput: string): DraftRecipe[] {
 			const spec = userInputToSpec(removeListPrefix(lines[j]));
 
 			if (spec) {
-				specs.push(withID(spec));
+				specs.push(withKey(spec));
 			}
 		}
 
