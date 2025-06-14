@@ -6,7 +6,11 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { type DraftSpec, type Spec, SpecsTable } from "@/db/schema/specs";
+import {
+	type DraftSpecWithDraftIngredient,
+	type Spec,
+	SpecsTable,
+} from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
 import type { WithKey } from "@/utils/withKey";
 
@@ -50,7 +54,7 @@ export type InsertRecipe = Omit<
  */
 export type DraftRecipe = Identity<
 	Partial<Pick<Recipe, "name" | "description">> & {
-		specs?: WithKey<DraftSpec>[];
+		specs?: WithKey<DraftSpecWithDraftIngredient>[];
 	}
 >;
 

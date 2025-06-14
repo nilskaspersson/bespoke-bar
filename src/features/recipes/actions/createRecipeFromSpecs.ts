@@ -12,7 +12,6 @@ import {
 	type RecipeWithSpecs,
 } from "@/db/schema/recipes";
 import {
-	type DraftSpecWithDraftIngredient,
 	type InsertSpec,
 	insertSpecsSchema,
 	SpecsTable,
@@ -25,10 +24,15 @@ import { authOrForbidden } from "@/utils/auth";
  * @returns Newly created Recipe with Specs.
  */
 export async function createRecipeFromSpecs(
-	userInputSpecs: DraftSpecWithDraftIngredient[],
 	userInputRecipe?: DraftRecipe,
 ): Promise<RecipeWithSpecs> {
 	const { userId, orgId } = await authOrForbidden();
+
+	const userInputSpecs = userInputRecipe?.specs;
+
+	if (!userInputSpecs) {
+		throw new Error("No specs provided");
+	}
 
 	const validatedUserInputRecipe = insertRecipeSchema.parse({
 		name: userInputRecipe?.name ?? null,

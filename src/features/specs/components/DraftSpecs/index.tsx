@@ -3,7 +3,7 @@
 import { clsx } from "clsx";
 import { type HTMLAttributes, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { DraftRecipe, RecipeWithSpecs } from "@/db/schema/recipes";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
@@ -17,9 +17,7 @@ export function DraftSpecs({
 	ingredients,
 	...props
 }: {
-	createRecipe: (
-		specs: DraftSpecWithDraftIngredient[],
-	) => Promise<RecipeWithSpecs>;
+	createRecipe: (recipe: DraftRecipe) => Promise<RecipeWithSpecs>;
 	ingredients: Ingredient[];
 } & HTMLAttributes<HTMLDivElement>) {
 	const [specs, setSpecs] = useState<WithKey<DraftSpecWithDraftIngredient>[]>(
@@ -46,10 +44,18 @@ export function DraftSpecs({
 			);
 		};
 
+	const createRecipeAction = () => {
+		const recipe: DraftRecipe = {
+			specs,
+		};
+
+		createRecipe(recipe);
+	};
+
 	return (
 		<div {...props} className={clsx(styles.container, className)}>
 			{specs.length > 0 ? (
-				<form action={() => void createRecipe(specs)}>
+				<form action={createRecipeAction}>
 					<ul className={styles.box}>
 						{specs.map((spec) => (
 							<li key={spec[KEY_NAME]}>
