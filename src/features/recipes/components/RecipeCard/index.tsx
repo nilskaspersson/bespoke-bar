@@ -5,6 +5,7 @@ import { SpecEntry } from "@/features/specs/components/SpecEntry";
 import { GradientText } from "@/ui/GradientText";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { KEY_NAME } from "@/utils/withKey";
 
 export function RecipeCard<T extends DraftRecipe>(props: { recipe: T }) {
 	return (
@@ -18,7 +19,7 @@ export function RecipeCard<T extends DraftRecipe>(props: { recipe: T }) {
 			{props.recipe.specs ? (
 				<Grid as="ul" gap={1}>
 					{props.recipe.specs.map((spec) => (
-						<li key={spec.id}>
+						<li key={spec[KEY_NAME]}>
 							<SpecEntry spec={spec} />
 						</li>
 					))}

@@ -7,6 +7,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import type { Ingredient } from "@/db/schema/ingredients";
 import type { DraftRecipe, RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
@@ -19,16 +20,18 @@ import styles from "./styles.module.css";
 export function BulkDraftRecipes({
 	createRecipes,
 	className,
+	ingredients,
 	...props
 }: {
 	createRecipes: (recipes: DraftRecipe[]) => Promise<RecipeWithSpecs[]>;
+	ingredients: Ingredient[];
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [inputValue, setInputValue] = useState("");
 	const deferredInputValue = useDeferredValue(inputValue);
 
 	const draftRecipes: WithKey<DraftRecipe>[] = useMemo(
-		() => userInputToBulkRecipe(deferredInputValue).map(withKey),
-		[deferredInputValue],
+		() => userInputToBulkRecipe(deferredInputValue, ingredients).map(withKey),
+		[deferredInputValue, ingredients],
 	);
 
 	const formAction = async () => {

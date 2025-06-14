@@ -21,7 +21,10 @@ export default async function CreateRecipePage() {
 					ingredients={ingredients}
 				/>
 
-				<BulkDraftRecipes createRecipes={createRecipesFromSpecs} />
+				<BulkDraftRecipes
+					createRecipes={createRecipesFromSpecs}
+					ingredients={ingredients}
+				/>
 			</Grid>
 		</Container>
 	);

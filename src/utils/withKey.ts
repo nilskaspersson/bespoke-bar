@@ -3,7 +3,7 @@ import type { Identity } from "@/utils/types";
 
 export const KEY_NAME = "_key";
 
-export type WithKey<T> = T & { [KEY_NAME]: string };
+export type WithKey<T> = Identity<T & { [KEY_NAME]: string }>;
 
 export function hasKey<T extends Record<PropertyKey, unknown>>(
 	o: T,
@@ -13,7 +13,7 @@ export function hasKey<T extends Record<PropertyKey, unknown>>(
 
 export function withKey<T extends Record<PropertyKey, unknown>>(
 	o: T,
-): Identity<WithKey<T>> {
+): WithKey<T> {
 	return hasKey(o) ? o : { ...o, [KEY_NAME]: crypto.randomUUID() };
 }
 
