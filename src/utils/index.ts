@@ -16,6 +16,21 @@ export function omit<T, K extends keyof T>(o: T, ...keys: K[]): Omit<T, K> {
 	return result;
 }
 
+export function pick<T extends Record<PropertyKey, unknown>, K extends keyof T>(
+	o: T,
+	...keys: K[]
+): Pick<T, K> {
+	const result = {} as Pick<T, K>;
+
+	for (const key of keys) {
+		if (key in o) {
+			result[key] = o[key];
+		}
+	}
+
+	return result;
+}
+
 /**
  * Escapes special characters in a string for use in a regular expression.
  * @param string - The string to escape.
