@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import {
 	IngredientsTable,
+	type InsertIngredient,
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
 import {
@@ -54,21 +55,19 @@ export async function createRecipesFromSpecs(
 	/**
 	 * Collect all unique ingredients that need to be created across ALL recipes
 	 */
-	const uniqueIngredientsToCreate = new Map<string, any>();
+	const uniqueIngredientsToCreate = new Map<string, InsertIngredient>();
 
 	userInputRecipes.forEach((recipe) => {
 		recipe.specs?.forEach((spec) => {
 			if (!spec.ingredient?.id && spec.ingredient?.name) {
 				const ingredientName = spec.ingredient.name;
 				if (!uniqueIngredientsToCreate.has(ingredientName)) {
-					uniqueIngredientsToCreate.set(
-						ingredientName,
-						insertIngredientSchema.parse({
-							...spec.ingredient,
-							createdBy: userId,
-							orgId,
-						}),
-					);
+					const validatedIngredient = insertIngredientSchema.parse({
+						...spec.ingredient,
+						createdBy: userId,
+						orgId,
+					});
+					uniqueIngredientsToCreate.set(ingredientName, validatedIngredient);
 				}
 			}
 		});
@@ -77,11 +76,15 @@ export async function createRecipesFromSpecs(
 	/**
 	 * Parse all specs eagerly to avoid starting the tx in case of invalid data
 	 */
+	const specValidationSchema = insertSpecsSchema.omit({
+		ingredientId: true,
+		recipeId: true,
+	});
+
 	userInputRecipes.forEach((recipe) => {
-		insertSpecsSchema
-			.omit({ ingredientId: true, recipeId: true })
-			.array()
-			.parse(recipe.specs);
+		if (recipe.specs) {
+			specValidationSchema.array().parse(recipe.specs);
+		}
 	});
 
 	/**
@@ -124,14 +127,24 @@ export async function createRecipesFromSpecs(
 				.values(validatedRecipe)
 				.returning();
 
+			if (!recipe) {
+				throw new Error(`Failed to create recipe at index ${i}`);
+			}
+
 			/**
 			 * Prepare specs with recipeId and ingredientIds, then insert them
 			 */
-			const specsToInsert: InsertSpec[] = userInputRecipe.specs!.map(
+			if (!userInputRecipe.specs) {
+				throw new Error(`No specs found for recipe at index ${i}`);
+			}
+
+			const specsToInsert: InsertSpec[] = userInputRecipe.specs.map(
 				(spec, specIndex) => {
 					const ingredientId =
 						spec.ingredientId ||
-						createdIngredientNameToId.get(spec.ingredient?.name ?? "");
+						(spec.ingredient?.name
+							? createdIngredientNameToId.get(spec.ingredient.name)
+							: undefined);
 
 					if (!ingredientId) {
 						throw new Error(
