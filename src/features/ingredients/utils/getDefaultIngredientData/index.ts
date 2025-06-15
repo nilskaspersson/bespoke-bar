@@ -6,7 +6,7 @@ import { getMeasurementFromUnit } from "@/features/units/utils/getMeasurementFro
 
 export function getDefaultIngredientData(
 	ingredientName: string,
-	unit?: Unit,
+	unit: Unit | null | undefined,
 ): Partial<DraftIngredient> {
 	const category = matchNameWithCategory(ingredientName);
 

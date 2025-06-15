@@ -34,7 +34,7 @@ export function userInputToSpec(
 		quantity,
 		unit,
 		ingredientId: ingredient?.id,
-		ingredient: ingredient ?? getDefaultIngredientData(ingredientName),
+		ingredient: ingredient ?? getDefaultIngredientData(ingredientName, unit),
 	};
 
 	return spec;
