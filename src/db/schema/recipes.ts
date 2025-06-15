@@ -6,10 +6,11 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
+import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import {
 	type DraftSpecWithDraftIngredient,
-	type Spec,
 	SpecsTable,
+	type SpecWithIngredient,
 } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
 import type { WithKey } from "@/utils/withKey";
@@ -22,6 +23,7 @@ export const RecipesTable = pgTable(
 			.$defaultFn(() => nanoid(10)),
 		name: varchar("name", { length: 100 }),
 		description: varchar("description", { length: 5000 }),
+		preparationMethod: preparationMethodEnum("preparation_method"),
 		archivedBy: text("archived_by"),
 		archivedAt: timestamp("archived_at"),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -40,7 +42,7 @@ export const recipesRelations = relations(RecipesTable, ({ many }) => ({
 export type Recipe = typeof RecipesTable.$inferSelect;
 
 export type RecipeWithSpecs = Recipe & {
-	specs: Spec[];
+	specs: SpecWithIngredient[];
 };
 
 export type InsertRecipe = Omit<
