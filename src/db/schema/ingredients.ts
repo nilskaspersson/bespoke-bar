@@ -16,10 +16,11 @@ import {
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod/v4";
-import { systemCategoryEnum } from "@/db/schema/categories";
+import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
 import { SpecsTable } from "@/db/schema/specs";
-import { measurementTypes } from "@/db/schema/units";
+import { measurementTypes, supportedMeasurements } from "@/db/schema/units";
 import { sqlNormalizedString } from "@/db/utils";
+import { nullifyEmptyField } from "@/utils/form";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
@@ -70,13 +71,16 @@ export type InsertIngredient = Omit<
 
 const ingredientsConstraintsSchema = {
 	name: z.string().min(1, "Name is required"),
+	category: z.preprocess(nullifyEmptyField, systemCategories.nullable()),
 	abv: z.preprocess(
-		(val) => (val === undefined ? null : val),
+		nullifyEmptyField,
 		z.coerce.number().min(0).max(100).nullable(),
 	),
-	price: z.preprocess(
-		(val) => (val === undefined ? null : val),
-		z.coerce.number().nullable(),
+	brand: z.preprocess(nullifyEmptyField, z.string().nullable()),
+	price: z.preprocess(nullifyEmptyField, z.coerce.number().nullable()),
+	measurementType: z.preprocess(
+		nullifyEmptyField,
+		supportedMeasurements.nullable(),
 	),
 };
 
