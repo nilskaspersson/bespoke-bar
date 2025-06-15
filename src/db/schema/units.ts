@@ -31,3 +31,7 @@ export const measurementTypes = pgEnum("measurement_type", [
 	"mass",
 	"pieces",
 ]);
+
+export const supportedMeasurements = createSelectSchema(measurementTypes);
+
+export type Measurement = z.infer<typeof supportedMeasurements>;

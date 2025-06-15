@@ -5,7 +5,7 @@ import { invertMapToSets } from "@/utils";
 /**
  * A map of our database units to the units supported by `convert-units`.
  */
-export const DB_VOLUME_UNIT_TO_LIB_UNIT = new Map<Unit, VolumeUnits>([
+export const DB_UNIT_TO_LIB_UNIT = new Map<Unit, VolumeUnits>([
 	["cl", "cl"],
 	["cup", "cup"],
 	["fl_oz", "fl-oz"],

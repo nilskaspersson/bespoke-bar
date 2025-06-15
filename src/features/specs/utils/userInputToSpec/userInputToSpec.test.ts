@@ -1,7 +1,17 @@
 import { describe, expect, test } from "vitest";
+import type { Ingredient } from "@/db/schema/ingredients";
 import { supportedUnits } from "@/db/schema/units";
 import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
 import { userInputToSpec } from ".";
+
+const EMPTY_INGREDIENT: Partial<Ingredient> = {
+	name: "",
+	category: null,
+	abv: null,
+	brand: null,
+	measurementType: null,
+	price: null,
+};
 
 describe("userInputToSpec", () => {
 	describe("parses unit", () => {
@@ -9,7 +19,13 @@ describe("userInputToSpec", () => {
 			expect(userInputToSpec(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
 				quantity: 1,
 				unit,
-				ingredient: { name: "Gin" },
+				ingredient: {
+					...EMPTY_INGREDIENT,
+					name: "Gin",
+					abv: 0.4,
+					category: "gin",
+					measurementType: "volume",
+				},
 				ingredientId: undefined,
 			});
 		});
@@ -22,7 +38,14 @@ describe("userInputToSpec", () => {
 				expect(userInputToSpec(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
 					quantity: 1,
 					unit: unit.toLowerCase(),
-					ingredient: { name: "Gin" },
+
+					ingredient: {
+						...EMPTY_INGREDIENT,
+						name: "Gin",
+						abv: 0.4,
+						category: "gin",
+						measurementType: "volume",
+					},
 					ingredientId: undefined,
 				});
 			},
@@ -36,7 +59,13 @@ describe("userInputToSpec", () => {
 				{
 					quantity: 5,
 					unit: "cl",
-					ingredient: { name: "Tanqueray Gin" },
+					ingredient: {
+						...EMPTY_INGREDIENT,
+						name: "Tanqueray Gin",
+						category: "gin",
+						abv: 0.4,
+						measurementType: "volume",
+					},
 					ingredientId: undefined,
 				},
 			],
@@ -45,7 +74,11 @@ describe("userInputToSpec", () => {
 				{
 					quantity: 2,
 					unit: "ml",
-					ingredient: { name: "Suze" },
+					ingredient: {
+						...EMPTY_INGREDIENT,
+						name: "Suze",
+						measurementType: "volume",
+					},
 					ingredientId: undefined,
 				},
 			],
@@ -54,7 +87,12 @@ describe("userInputToSpec", () => {
 				{
 					quantity: 3,
 					unit: "fl_oz",
-					ingredient: { name: "Lemon juice" },
+					ingredient: {
+						...EMPTY_INGREDIENT,
+						name: "Lemon juice",
+						category: "citrus",
+						measurementType: "volume",
+					},
 					ingredientId: undefined,
 				},
 			],

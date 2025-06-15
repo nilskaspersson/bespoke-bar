@@ -1,3 +1,5 @@
+"use server";
+
 import { db } from "@/db";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import {
@@ -5,7 +7,7 @@ import {
 	RecipesTable,
 	type RecipeWithSpecs,
 } from "@/db/schema/recipes";
-import { SpecsTable } from "@/db/schema/specs";
+import { insertSpecsSchema, SpecsTable } from "@/db/schema/specs";
 import {
 	extractIngredientsToCreate,
 	prepareSpecsForInsertion,
@@ -21,16 +23,34 @@ import { authOrForbidden } from "@/utils/auth";
 export async function createRecipesFromSpecs(
 	userInputRecipes: DraftRecipe[],
 ): Promise<RecipeWithSpecs[]> {
-	"use server";
-
 	const { userId, orgId } = await authOrForbidden();
 
 	if (!userInputRecipes || userInputRecipes.length === 0) {
 		throw new Error("No recipes provided");
 	}
 
+	/**
+	 * 1. Validate all recipes
+	 */
 	const validatedRecipes = validateRecipes(userInputRecipes, userId, orgId);
 
+	/**
+	 * 2. Then all specs, only to throw for invalid structures
+	 */
+	const specValidationSchema = insertSpecsSchema.omit({
+		ingredientId: true,
+		recipeId: true,
+	});
+
+	userInputRecipes.forEach((recipe) => {
+		if (recipe.specs) {
+			specValidationSchema.array().parse(recipe.specs);
+		}
+	});
+
+	/**
+	 * 3. Finally extract ingredients to create and validate them
+	 */
 	const ingredientsToCreate = extractIngredientsToCreate(
 		userInputRecipes,
 		userId,
