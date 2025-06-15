@@ -3,6 +3,7 @@ import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { readIngredient } from "@/features/ingredients/actions/readIngredient";
 import { updateIngredient } from "@/features/ingredients/actions/updateIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
+import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -27,7 +28,7 @@ export default async function EditIngredientPage({
 		const values = updateIngredientSchema.parse({
 			name: formData.get("name"),
 			category: formData.get("category"),
-			abv: formData.get("abv"),
+			abv: percentageToRatioSchema.parse(formData.get("abv")),
 			brand: formData.get("brand"),
 			price: formData.get("price"),
 			measurementType: formData.get("measurementType"),
