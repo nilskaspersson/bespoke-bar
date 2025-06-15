@@ -18,7 +18,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 	{
 		id: "sP9_RdWlqg",
 		name: "Lime",
-		category: null,
+		category: "citrus",
 		abv: null,
 		brand: null,
 		price: null,
@@ -32,7 +32,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 	{
 		id: "-3913mq9Wm",
 		name: "Simple syrup",
-		category: null,
+		category: "syrup",
 		abv: null,
 		brand: null,
 		price: null,

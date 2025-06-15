@@ -1,7 +1,17 @@
 import { describe, expect, test } from "vitest";
+import type { Ingredient } from "@/db/schema/ingredients";
 import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
 import { withoutKey } from "@/utils/withKey";
 import { userInputToBulkRecipe } from ".";
+
+const EMPTY_INGREDIENT: Partial<Ingredient> = {
+	name: "",
+	category: null,
+	abv: null,
+	brand: null,
+	measurementType: null,
+	price: null,
+};
 
 const USER_INPUT = `
 Recipe 1
@@ -49,13 +59,23 @@ describe("userInputToBulkRecipe", () => {
 					{
 						quantity: 1,
 						unit: "cl",
-						ingredient: { name: "Gin" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Gin",
+							measurementType: "volume",
+							category: "gin",
+							abv: 0.4,
+						},
 						ingredientId: undefined,
 					},
 					{
 						quantity: 2,
 						unit: "l",
-						ingredient: { name: "Suze" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Suze",
+							measurementType: "volume",
+						},
 						ingredientId: undefined,
 					},
 				],
@@ -66,19 +86,30 @@ describe("userInputToBulkRecipe", () => {
 					{
 						quantity: 5,
 						unit: "cl",
-						ingredient: { name: "Gin" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Gin",
+							category: "gin",
+							abv: 0.4,
+							measurementType: "volume",
+						},
 						ingredientId: undefined,
 					},
 					{
 						quantity: 30,
 						unit: "ml",
-						ingredient: { name: "Lime juice" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Lime juice",
+							category: "citrus",
+							measurementType: "volume",
+						},
 						ingredientId: undefined,
 					},
 					{
 						quantity: 2,
 						unit: null,
-						ingredient: { name: "Cucumber slices" },
+						ingredient: { ...EMPTY_INGREDIENT, name: "Cucumber slices" },
 						ingredientId: undefined,
 					},
 				],
@@ -89,13 +120,22 @@ describe("userInputToBulkRecipe", () => {
 					{
 						quantity: 1,
 						unit: "fl_oz",
-						ingredient: { name: "Milk" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Milk",
+							measurementType: "volume",
+							category: "dairy",
+						},
 						ingredientId: undefined,
 					},
 					{
 						quantity: 1,
 						unit: "cl",
-						ingredient: { name: "Cinnamon syrup" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Cinnamon syrup",
+							measurementType: "volume",
+						},
 						ingredientId: undefined,
 					},
 				],
@@ -106,7 +146,13 @@ describe("userInputToBulkRecipe", () => {
 					{
 						quantity: 5,
 						unit: "cl",
-						ingredient: { name: "Gin" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Gin",
+							measurementType: "volume",
+							category: "gin",
+							abv: 0.4,
+						},
 						ingredientId: undefined,
 					},
 					{
@@ -129,7 +175,13 @@ describe("userInputToBulkRecipe", () => {
 					{
 						quantity: 4.5,
 						unit: "ml",
-						ingredient: { name: "Whiskey" },
+						ingredient: {
+							...EMPTY_INGREDIENT,
+							name: "Whiskey",
+							category: "whiskey",
+							measurementType: "volume",
+							abv: 0.4,
+						},
 						ingredientId: undefined,
 					},
 				],
