@@ -13,6 +13,7 @@ export const systemCategoryEnum = pgEnum("system_category", [
 	"calvados",
 	"cognac",
 	"gin",
+	"genever",
 	"grappa",
 	"mezcal",
 	"pisco",
