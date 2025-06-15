@@ -81,31 +81,26 @@ export function extractIngredientsToCreate(
 
 	userInputRecipes.forEach((recipe) => {
 		recipe.specs?.forEach((spec) => {
-			if (!spec.ingredient?.id && spec.ingredient?.name) {
-				const ingredientName = spec.ingredient.name;
-
-				if (!uniqueIngredientsToCreate.has(ingredientName)) {
-					const validatedIngredient = insertIngredientSchema.parse({
-						...spec.ingredient,
-						createdBy: userId,
-						orgId,
-					});
-
-					uniqueIngredientsToCreate.set(ingredientName, validatedIngredient);
+			/**
+			 * No spec ingredientId but a defined ingredient object + name = new ingredient
+			 */
+			if (!spec.ingredientId && spec.ingredient?.name) {
+				if (uniqueIngredientsToCreate.has(spec.ingredient.name)) {
+					return;
 				}
+
+				const validatedIngredient = insertIngredientSchema.parse({
+					...spec.ingredient,
+					createdBy: userId,
+					orgId,
+				});
+
+				uniqueIngredientsToCreate.set(
+					spec.ingredient.name,
+					validatedIngredient,
+				);
 			}
 		});
-	});
-
-	const specValidationSchema = insertSpecsSchema.omit({
-		ingredientId: true,
-		recipeId: true,
-	});
-
-	userInputRecipes.forEach((recipe) => {
-		if (recipe.specs) {
-			specValidationSchema.array().parse(recipe.specs);
-		}
 	});
 
 	return uniqueIngredientsToCreate;

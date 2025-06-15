@@ -1,8 +1,10 @@
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
+import { getDefaultIngredientData } from "@/features/ingredients/utils/getDefaultIngredientData";
 import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
+
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
 export function userInputToSpec(
@@ -32,7 +34,7 @@ export function userInputToSpec(
 		quantity,
 		unit,
 		ingredientId: ingredient?.id,
-		ingredient: ingredient ?? { name: ingredientName },
+		ingredient: ingredient ?? getDefaultIngredientData(ingredientName),
 	};
 
 	return spec;
