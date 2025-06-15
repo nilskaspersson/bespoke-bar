@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Container } from "@/ui/Container";
 import { Heading } from "@/ui/Heading";
 
@@ -8,3 +9,7 @@ export default function ListsPage() {
 		</Container>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Lists",
+};

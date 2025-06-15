@@ -7,28 +7,31 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
+import type { Ingredient } from "@/db/schema/ingredients";
+import type { DraftRecipe, RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
 import { Grid } from "@/ui/Grid";
 import { Input } from "@/ui/Input";
 import { SubmitButton } from "@/ui/SubmitButton";
-import { type WithID, withID } from "@/utils/withId";
+import { KEY_NAME, type WithKey, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function BulkDraftRecipes({
 	createRecipes,
 	className,
+	ingredients,
 	...props
 }: {
-	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe["id"][]>;
+	createRecipes: (recipes: DraftRecipe[]) => Promise<RecipeWithSpecs[]>;
+	ingredients: Ingredient[];
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [inputValue, setInputValue] = useState("");
 	const deferredInputValue = useDeferredValue(inputValue);
 
-	const draftRecipes: WithID<DraftRecipe>[] = useMemo(
-		() => userInputToBulkRecipe(deferredInputValue).map(withID),
-		[deferredInputValue],
+	const draftRecipes: WithKey<DraftRecipe>[] = useMemo(
+		() => userInputToBulkRecipe(deferredInputValue, ingredients).map(withKey),
+		[deferredInputValue, ingredients],
 	);
 
 	const formAction = async () => {
@@ -57,7 +60,7 @@ export function BulkDraftRecipes({
 					<Grid gap={6}>
 						<Grid as="ul" gap={6}>
 							{draftRecipes.map((recipe) => (
-								<li key={recipe.id}>
+								<li key={recipe[KEY_NAME]}>
 									<RecipeCard recipe={recipe} />
 								</li>
 							))}

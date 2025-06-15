@@ -1,5 +1,6 @@
 import "./theme";
 import { clsx } from "clsx";
+import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
@@ -33,3 +34,28 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 		</html>
 	);
 }
+
+export const metadata: Metadata = {
+	/**
+	 * The { title: "Name" } set by a page or layout will be interpolated into template
+	 */
+	title: {
+		template: "%s :: Bespoke Bar",
+		default: "Mise en place :: Bespoke Bar",
+	},
+	/**
+	 * It's me!
+	 */
+	authors: {
+		name: "Nils Kaspersson",
+		url: "https://github.com/nilskaspersson",
+	},
+	creator: "Nils Kaspersson",
+	publisher: "Nils Kaspersson",
+	/**
+	 * Opt out of indexing of all pages by default. Pages down the line can opt in.
+	 */
+	robots: {
+		index: false,
+	},
+};

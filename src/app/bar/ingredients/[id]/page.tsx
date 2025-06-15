@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
 import { readIngredient } from "@/features/ingredients/actions/readIngredient";
@@ -8,11 +9,11 @@ import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 
-export default async function IngredientPage({
-	params,
-}: {
-	params: Promise<{ id: string }>;
-}) {
+type Props = {
+	params: Promise<{ id?: string }>;
+};
+
+export default async function IngredientPage({ params }: Props) {
 	const { id } = await params;
 	const ingredient = await readIngredient(id);
 
@@ -43,4 +44,19 @@ export default async function IngredientPage({
 			<Text as="p">{ingredient.measurementType}</Text>
 		</Container>
 	);
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { id } = await params;
+	const ingredient = await readIngredient(id);
+
+	if (!ingredient) {
+		return {
+			title: "Mystery ingredient",
+		};
+	}
+
+	return {
+		title: ingredient.name,
+	};
 }

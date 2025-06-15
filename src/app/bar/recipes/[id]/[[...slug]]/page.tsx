@@ -1,3 +1,5 @@
+import { clerkClient } from "@clerk/nextjs/server";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import {
 	archiveRecipe,
@@ -19,8 +21,12 @@ type Props = {
 	params: Promise<{ id?: string }>;
 };
 
-export default async function RecipePage({ params: paramsPromise }: Props) {
-	const { id } = await paramsPromise;
+/**
+ * [[...slug]] enables suffixing the URL with a slug of the recipe name for
+ * improved readability of links.
+ */
+export default async function RecipePage({ params }: Props) {
+	const { id } = await params;
 	const recipe = await readRecipe(id);
 
 	if (!recipe) {
@@ -70,11 +76,39 @@ export default async function RecipePage({ params: paramsPromise }: Props) {
 				<ul>
 					{recipe.specs.map((spec) => (
 						<li key={spec.id}>
-							{spec.quantity} {spec.unit} {spec.ingredientId}
+							{spec.quantity} {spec.unit} {spec.ingredient.name}
 						</li>
 					))}
 				</ul>
 			</Grid>
 		</Container>
 	);
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const { id } = await params;
+	const recipe = await readRecipe(id);
+
+	if (!recipe) {
+		return {
+			title: "Recipe not found",
+		};
+	}
+
+	const client = await clerkClient();
+	const user = await client.users.getUser(recipe.createdBy);
+
+	return {
+		title: recipe.name || "Unnamed Recipe",
+		/**
+		 * We often generate links with a human-readable suffix of the recipe name. Add a
+		 * canonical reference to the plain URL with only the recipe ID.
+		 */
+		alternates: {
+			canonical: `/bar/recipes/${recipe.id}`,
+		},
+		authors: {
+			name: user.fullName || "Unknown bartender",
+		},
+	};
 }

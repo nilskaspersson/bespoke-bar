@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { CreateIngredientForm } from "@/features/ingredients/components/CreateIngredientForm";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -14,3 +15,7 @@ export default function CreateIngredientPage() {
 		</Container>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Create Ingredient",
+};

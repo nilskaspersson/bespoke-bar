@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { withoutID } from "@/utils/withId";
+import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
+import { withoutKey } from "@/utils/withKey";
 import { userInputToBulkRecipe } from ".";
 
 const USER_INPUT = `
@@ -29,45 +30,109 @@ kall
 
 describe("userInputToBulkRecipe", () => {
 	test("parses a wide range of input", () => {
-		const data = userInputToBulkRecipe(USER_INPUT).map((o) => ({
-			...o,
-			specs: o.specs?.map(withoutID),
-		}));
+		const data = userInputToBulkRecipe(USER_INPUT, MOCK_INGREDIENTS).map(
+			(o) => ({
+				...o,
+				specs: o.specs?.map(withoutKey),
+			}),
+		);
+
+		const LIME = MOCK_INGREDIENTS.find((o) => o.name.toLowerCase() === "lime");
+		const SIMPLE_SYRUP = MOCK_INGREDIENTS.find(
+			(o) => o.name.toLowerCase() === "simple syrup",
+		);
 
 		expect(data).toEqual([
 			{
 				name: "Recipe 1",
 				specs: [
-					{ quantity: 1, unit: "cl", ingredient: "Gin" },
-					{ quantity: 2, unit: "l", ingredient: "Suze" },
+					{
+						quantity: 1,
+						unit: "cl",
+						ingredient: { name: "Gin" },
+						ingredientId: undefined,
+					},
+					{
+						quantity: 2,
+						unit: "l",
+						ingredient: { name: "Suze" },
+						ingredientId: undefined,
+					},
 				],
 			},
 			{
 				name: "Summer evenings 😍",
 				specs: [
-					{ quantity: 5, unit: "cl", ingredient: "Gin" },
-					{ quantity: 30, unit: "ml", ingredient: "Lime juice" },
-					{ quantity: 2, unit: null, ingredient: "Cucumber slices" },
+					{
+						quantity: 5,
+						unit: "cl",
+						ingredient: { name: "Gin" },
+						ingredientId: undefined,
+					},
+					{
+						quantity: 30,
+						unit: "ml",
+						ingredient: { name: "Lime juice" },
+						ingredientId: undefined,
+					},
+					{
+						quantity: 2,
+						unit: null,
+						ingredient: { name: "Cucumber slices" },
+						ingredientId: undefined,
+					},
 				],
 			},
 			{
 				name: null,
 				specs: [
-					{ quantity: 1, unit: "fl_oz", ingredient: "Milk" },
-					{ quantity: 1, unit: "cl", ingredient: "Cinnamon syrup" },
+					{
+						quantity: 1,
+						unit: "fl_oz",
+						ingredient: { name: "Milk" },
+						ingredientId: undefined,
+					},
+					{
+						quantity: 1,
+						unit: "cl",
+						ingredient: { name: "Cinnamon syrup" },
+						ingredientId: undefined,
+					},
 				],
 			},
 			{
 				name: "Gimlet",
 				specs: [
-					{ quantity: 5, unit: "cl", ingredient: "Gin" },
-					{ quantity: 3, unit: "cl", ingredient: "Lime" },
-					{ quantity: 2, unit: "cl", ingredient: "Simple syrup" },
+					{
+						quantity: 5,
+						unit: "cl",
+						ingredient: { name: "Gin" },
+						ingredientId: undefined,
+					},
+					{
+						quantity: 3,
+						unit: "cl",
+						ingredient: LIME,
+						ingredientId: LIME?.id,
+					},
+					{
+						quantity: 2,
+						unit: "cl",
+						ingredient: SIMPLE_SYRUP,
+						ingredientId: SIMPLE_SYRUP?.id,
+					},
 				],
 			},
 			{
 				name: "kall",
-				specs: [{ quantity: 4.5, unit: "ml", ingredient: "Whiskey" }],
+				specs: [
+					{
+						quantity: 4.5,
+						unit: "ml",
+						ingredient: { name: "Whiskey" },
+						ingredientId: undefined,
+					},
+				],
 			},
 		]);
 	});

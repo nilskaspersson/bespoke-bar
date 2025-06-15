@@ -6,7 +6,7 @@ import {
 	real,
 	text,
 	timestamp,
-	unique,
+	uniqueIndex,
 	varchar,
 } from "drizzle-orm/pg-core";
 import {
@@ -19,6 +19,7 @@ import { z } from "zod/v4";
 import { systemCategoryEnum } from "@/db/schema/categories";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes } from "@/db/schema/units";
+import { sqlNormalizedString } from "@/db/utils";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
@@ -39,7 +40,10 @@ export const IngredientsTable = pgTable(
 		updatedBy: text("updated_by"),
 	},
 	(table) => [
-		unique("unique_name").on(table.name, table.orgId),
+		uniqueIndex("unique_name_case_insensitive").on(
+			sqlNormalizedString(table.name),
+			table.orgId,
+		),
 		check(
 			"abv_valid_range",
 			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 1)`,
@@ -66,8 +70,14 @@ export type InsertIngredient = Omit<
 
 const ingredientsConstraintsSchema = {
 	name: z.string().min(1, "Name is required"),
-	abv: z.coerce.number().min(0).max(100).nullable(),
-	price: z.coerce.number().positive().nullable(),
+	abv: z.preprocess(
+		(val) => (val === undefined ? null : val),
+		z.coerce.number().min(0).max(100).nullable(),
+	),
+	price: z.preprocess(
+		(val) => (val === undefined ? null : val),
+		z.coerce.number().nullable(),
+	),
 };
 
 type IngredientRefinementInput = Partial<
@@ -96,6 +106,7 @@ export const insertIngredientSchema = createInsertSchema(IngredientsTable)
 
 export const draftIngredientSchema = createInsertSchema(IngredientsTable)
 	.omit({
+		id: true,
 		orgId: true,
 		createdBy: true,
 		updatedBy: true,
