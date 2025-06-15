@@ -9,6 +9,8 @@ import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
 import { readRecipe } from "@/features/recipes/actions/readRecipe";
 import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
+import { formatVolume } from "@/features/units/utils/formatVolume";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
@@ -16,6 +18,8 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
+import { Text } from "@/ui/Text";
+import { percentageFormatter } from "@/utils/formatting";
 
 type Props = {
 	params: Promise<{ id?: string }>;
@@ -32,6 +36,8 @@ export default async function RecipePage({ params }: Props) {
 	if (!recipe) {
 		notFound();
 	}
+
+	const recipeMetrics = calculateRecipeMetrics(recipe);
 
 	return (
 		<Container as="article">
@@ -80,6 +86,16 @@ export default async function RecipePage({ params }: Props) {
 						</li>
 					))}
 				</ul>
+
+				<Text>Abv: {percentageFormatter.format(recipeMetrics.abv)}</Text>
+
+				<Text>
+					Original volume: {formatVolume(recipeMetrics.originalVolume)} <br />
+					Final volume: {formatVolume(recipeMetrics.finalVolume)} (
+					{formatVolume(recipeMetrics.dilutionVolume)} dilution,{" "}
+					{percentageFormatter.format(recipeMetrics.dilutionOfFinalVolume)}{" "}
+					dilution)
+				</Text>
 			</Grid>
 		</Container>
 	);
