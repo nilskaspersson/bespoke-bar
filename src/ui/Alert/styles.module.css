@@ -86,6 +86,6 @@
 		display: flex;
 		justify-content: flex-end;
 		gap: var(--gap--small);
-		padding: var(--gap);
+		margin-top: var(--gap--small);
 	}
 }

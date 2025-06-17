@@ -54,9 +54,20 @@ export default async function RecipePage({ params }: Props) {
 					</Heading>
 
 					<Flex gap={2}>
+						<LinkButton
+							href={`/bar/recipes/${id}/edit`}
+							variant="outline"
+							color="heavy"
+							size="small"
+						>
+							<Icon name="pen" /> Edit
+						</LinkButton>
+
 						{recipe.archivedAt ? (
 							<form action={unarchiveRecipe.bind(null, { id: recipe.id })}>
-								<SubmitButton>Unarchive</SubmitButton>
+								<SubmitButton variant="solid" color="heavy" size="small">
+									Unarchive
+								</SubmitButton>
 							</form>
 						) : (
 							<form
@@ -65,7 +76,9 @@ export default async function RecipePage({ params }: Props) {
 									redirectTo: "/bar/recipes",
 								})}
 							>
-								<SubmitButton>Archive</SubmitButton>
+								<SubmitButton variant="ghost" color="light" size="small">
+									Archive
+								</SubmitButton>
 							</form>
 						)}
 
@@ -78,10 +91,6 @@ export default async function RecipePage({ params }: Props) {
 						>
 							<Icon name="trash" /> Delete
 						</DeleteRecipe>
-
-						<LinkButton href={`/bar/recipes/${id}/edit`}>
-							<Icon name="pen" /> Edit
-						</LinkButton>
 					</Flex>
 				</Flex>
 

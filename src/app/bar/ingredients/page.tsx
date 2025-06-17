@@ -12,7 +12,9 @@ export default async function IngredientsPage() {
 		<Container as="article">
 			<Heading level="h1">Ingredients</Heading>
 
-			<LinkButton href="/bar/ingredients/create">Create Ingredient</LinkButton>
+			<LinkButton href="/bar/ingredients/create" variant="solid" color="heavy">
+				Create Ingredient
+			</LinkButton>
 
 			<ul>
 				{ingredients.map((ingredient) => (

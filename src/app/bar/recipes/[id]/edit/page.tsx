@@ -59,7 +59,9 @@ export default async function EditRecipePage({ params: paramsPromise }: Props) {
 						/>
 
 						<div>
-							<Button type="submit">Save</Button>
+							<Button type="submit" variant="solid" color="heavy">
+								Save
+							</Button>
 						</div>
 					</Grid>
 				</form>

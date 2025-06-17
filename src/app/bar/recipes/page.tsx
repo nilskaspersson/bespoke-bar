@@ -17,7 +17,7 @@ export default async function RecipesPage() {
 			<header>
 				<Heading level="h1">Recipes</Heading>
 
-				<LinkButton href="/bar/recipes/create">
+				<LinkButton href="/bar/recipes/create" variant="solid" color="heavy">
 					Create Recipe
 					<Icon name="pen" />
 				</LinkButton>
