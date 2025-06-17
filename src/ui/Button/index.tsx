@@ -1,37 +1,45 @@
 import { clsx } from "clsx";
 import type { Route } from "next";
 import Link from "next/link";
-import type {
-	AnchorHTMLAttributes,
-	ButtonHTMLAttributes,
-	ComponentProps,
-	RefAttributes,
-} from "react";
-
+import type { ComponentProps } from "react";
+import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
 type Props = {
 	icon?: boolean;
-	variant?: "solid" | "outline" | "base";
+	variant?: "solid" | "outline" | "base" | "ghost";
+	color?: SystemColor;
+	size?: "small" | "regular" | "large";
+	fullWidth?: boolean;
 };
 
 export function Button({
+	children,
+	className,
+	color = "light",
 	icon,
 	variant = "base",
-	children,
+	size = "regular",
+	fullWidth,
 	...props
-}: Props &
-	RefAttributes<HTMLButtonElement> &
-	ButtonHTMLAttributes<HTMLButtonElement>) {
+}: Props & Omit<ComponentProps<"button">, "color">) {
 	return (
 		<button
 			type="button"
 			{...props}
-			className={clsx(styles.button, props.className, styles[variant], {
-				[styles.icon]: icon,
-			})}
+			className={clsx(
+				className,
+				styles.button,
+				styles[variant],
+				styles[color],
+				styles[size],
+				{
+					[styles.icon]: icon,
+					[styles.fullWidth]: fullWidth,
+				},
+			)}
 		>
-			{children}
+			<span className={styles.label}>{children}</span>
 		</button>
 	);
 }
@@ -39,20 +47,29 @@ export function Button({
 export type ButtonProps = ComponentProps<typeof Button>;
 
 export function LinkButton({
-	icon,
-	variant = "outline",
 	children,
+	className,
+	color = "light",
+	icon,
+	variant = "base",
+	size = "regular",
 	...props
-}: Props & { href: Route } & RefAttributes<HTMLAnchorElement> &
-	AnchorHTMLAttributes<HTMLAnchorElement>) {
+}: Props & { href: Route } & ComponentProps<typeof Link>) {
 	return (
 		<Link
 			{...props}
-			className={clsx(styles.button, props.className, styles[variant], {
-				[styles.icon]: icon,
-			})}
+			className={clsx(
+				className,
+				styles.button,
+				styles[variant],
+				styles[color],
+				styles[size],
+				{
+					[styles.icon]: icon,
+				},
+			)}
 		>
-			{children}
+			<span className={styles.label}>{children}</span>
 		</Link>
 	);
 }

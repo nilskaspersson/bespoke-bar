@@ -17,9 +17,21 @@
 		box-shadow: 0 0 0 transparent;
 
 		&:not(:active) {
-			transition-property: background-color, border-color, color, outline-color,
-				transform, box-shadow;
+			transition-property: background-color, border-color, color, transform;
 			transition-duration: var(--transition-duration);
+		}
+
+		&[disabled] {
+			cursor: auto;
+		}
+
+		&:focus {
+			z-index: 1;
+		}
+
+		&:focus-visible {
+			outline: var(--space-1) solid hsl(from var(--button-color) h s l / 80%);
+			outline-offset: 1px;
 		}
 
 		&:where(:not(.base)) {
@@ -27,25 +39,88 @@
 			height: var(--button-height);
 			font-size: var(--button-font-size);
 
-			gap: var(--space-2);
 			border-radius: var(--radius--large);
 			font-weight: 500;
+
+			> .label {
+				display: inline-flex;
+				align-items: center;
+				gap: var(--space-2);
+			}
+
+			/**
+			 * Basically immediately after click
+			 */
+			&:focus:not(:focus-visible):not(:active) {
+				animation: shadowPulse var(--transition-duration--slow) forwards;
+			}
+
+			&:active {
+				transition: none;
+				transform: scale(0.98);
+				box-shadow: inset 0 0 1rem
+					color-mix(in srgb, var(--button-color) 65%, black);
+
+				> .label {
+					transition: none;
+					opacity: 0.75;
+				}
+			}
 		}
 
-		&[disabled] {
-			cursor: auto;
+		.label {
+			transition: opacity var(--transition-duration);
+		}
+
+		--text-lightness: 90%;
+
+		[data-theme="dark"] & {
+			--text-lightness: 0%;
 		}
 	}
 
+	/**
+	 * Colors
+	 */
+	.light {
+		--button-color: var(--color-border--heavy);
+		--text-lightness: 0%;
+
+		[data-theme="dark"] & {
+			--text-lightness: 90%;
+		}
+	}
+
+	.heavy {
+		--button-color: var(--mauve-12);
+	}
+
+	.red {
+		--button-color: var(--red-11);
+	}
+
+	.accent {
+		--button-color: var(--color-accent);
+	}
+
+	/**
+	 * Sizes
+	 */
+	.small {
+		--button-inset: var(--space-3);
+		--button-height: var(--space-6);
+		--button-font-size: var(--size-2);
+	}
+
 	.regular {
-		--button-inset: var(--space-4);
-		--button-height: var(--control-height--small);
+		--button-inset: var(--space-3);
+		--button-height: 40px;
 		--button-font-size: var(--size-3);
 	}
 
 	.large {
-		--button-inset: var(--space-6);
-		--button-height: var(--control-height);
+		--button-inset: var(--space-4);
+		--button-height: var(--space-7);
 		--button-font-size: var(--size-4);
 	}
 
@@ -53,16 +128,49 @@
 	 * Variants
 	 */
 	.solid {
-		padding: var(--space-1);
+		background-color: var(--button-color);
+		color: hsl(from var(--button-color) h s var(--text-lightness));
+		border: 1px solid var(--button-color);
+		border-top-color: color-mix(in srgb, var(--button-color) 90%, white);
+		border-left-color: color-mix(in srgb, var(--button-color) 90%, white);
 	}
 
 	.outline {
-		border: 1px solid var(--color-border);
+		border: 1px solid var(--button-color);
+		color: var(--button-color);
 	}
 
+	.ghost {
+		color: var(--color-text--heavy);
+
+		&:hover,
+		&:focus-visible {
+			background-color: hsl(from var(--button-color) h s 90%);
+			color: hsl(from var(--button-color) h s 10%);
+		}
+	}
+
+	/**
+	 * Modifiers
+	 */
 	.icon {
 		aspect-ratio: 1 / 1;
 		padding: 0;
 		border-radius: var(--radius--full);
+	}
+
+	.fullWidth {
+		width: 100%;
+		flex: 1 1 auto;
+	}
+
+	@keyframes shadowPulse {
+		from {
+			box-shadow: 0 0 0 0 hsl(from var(--button-color) h s l / 33.333%);
+		}
+
+		to {
+			box-shadow: 0 0 0.5rem var(--size-7) transparent;
+		}
 	}
 }
