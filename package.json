@@ -32,11 +32,11 @@
 		"pg": "8.16.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"zod": "3.25.64"
+		"zod": "3.25.67"
 	},
 	"devDependencies": {
-		"@awesome.me/kit-20e437f9b8": "1.0.103",
-		"@biomejs/biome": "2.0.0-beta.6",
+		"@awesome.me/kit-20e437f9b8": "1.0.106",
+		"@biomejs/biome": "2.0.0",
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/react": "16.3.0",
 		"@types/node": "24.0.3",
@@ -50,6 +50,6 @@
 		"typescript": "5.8.3",
 		"typescript-plugin-css-modules": "5.1.0",
 		"vite-tsconfig-paths": "5.1.4",
-		"vitest": "3.2.3"
+		"vitest": "3.2.4"
 	}
 }

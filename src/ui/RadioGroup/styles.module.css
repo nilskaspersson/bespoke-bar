@@ -1,0 +1,8 @@
+@layer ui {
+	.fieldset {
+		display: flex;
+		gap: var(--space-1);
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
