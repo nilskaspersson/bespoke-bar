@@ -7,7 +7,9 @@ export default function ForbiddenPage() {
 		<SystemError code={403} message="Forbidden">
 			<Text>You are not authorized to view this recipe.</Text>
 
-			<LinkButton href="/">Back to home</LinkButton>
+			<LinkButton href="/" variant="outline" color="heavy">
+				Back to home
+			</LinkButton>
 		</SystemError>
 	);
 }

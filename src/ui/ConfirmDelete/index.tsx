@@ -4,6 +4,7 @@ import type { PropsWithChildren } from "react";
 import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
 import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
+import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 
 export function ConfirmDelete({
@@ -30,7 +31,9 @@ export function ConfirmDelete({
 
 	return (
 		<form className={className} onSubmit={confirmSubmit}>
-			<SubmitButton>{children}</SubmitButton>
+			<SubmitButton variant="outline" color="red" size="small">
+				{children}
+			</SubmitButton>
 
 			{isPending ? (
 				<Alert
@@ -39,11 +42,24 @@ export function ConfirmDelete({
 					notice={notice}
 					actions={
 						<>
-							<Button onClick={rejectAction} autoFocus>
+							<Button
+								onClick={rejectAction}
+								autoFocus
+								size="small"
+								variant="ghost"
+							>
 								Cancel
 							</Button>
 
-							<Button onClick={resolveAction} disabled={isSubmitting}>
+							<Button
+								onClick={resolveAction}
+								disabled={isSubmitting}
+								variant="solid"
+								size="small"
+								color="red"
+							>
+								<Icon name="trash" />
+
 								{actionLabel}
 							</Button>
 						</>

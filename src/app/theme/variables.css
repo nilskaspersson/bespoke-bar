@@ -83,6 +83,7 @@
 	--color-border: var(--mauve-6);
 	--color-border--heavy: var(--mauve-7);
 
+	--color-accent: var(--color-blue);
 	--color-link: var(--color-blue);
 
 	/**

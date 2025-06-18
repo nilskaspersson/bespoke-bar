@@ -9,6 +9,7 @@ import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
 import { readRecipe } from "@/features/recipes/actions/readRecipe";
 import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { isValidRecipeParams } from "@/features/recipes/utils";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { formatVolume } from "@/features/units/utils/formatVolume";
 import { LinkButton } from "@/ui/Button";
@@ -22,7 +23,7 @@ import { Text } from "@/ui/Text";
 import { percentageFormatter } from "@/utils/formatting";
 
 type Props = {
-	params: Promise<{ id?: string }>;
+	params: Promise<{ id?: string; slug?: string[] }>;
 };
 
 /**
@@ -30,7 +31,12 @@ type Props = {
  * improved readability of links.
  */
 export default async function RecipePage({ params }: Props) {
-	const { id } = await params;
+	const { id, slug } = await params;
+
+	if (!isValidRecipeParams(id, slug)) {
+		notFound();
+	}
+
 	const recipe = await readRecipe(id);
 
 	if (!recipe) {
@@ -48,9 +54,20 @@ export default async function RecipePage({ params }: Props) {
 					</Heading>
 
 					<Flex gap={2}>
+						<LinkButton
+							href={`/bar/recipes/${id}/edit`}
+							variant="outline"
+							color="heavy"
+							size="small"
+						>
+							<Icon name="pen" /> Edit
+						</LinkButton>
+
 						{recipe.archivedAt ? (
 							<form action={unarchiveRecipe.bind(null, { id: recipe.id })}>
-								<SubmitButton>Unarchive</SubmitButton>
+								<SubmitButton variant="solid" color="heavy" size="small">
+									Unarchive
+								</SubmitButton>
 							</form>
 						) : (
 							<form
@@ -59,7 +76,9 @@ export default async function RecipePage({ params }: Props) {
 									redirectTo: "/bar/recipes",
 								})}
 							>
-								<SubmitButton>Archive</SubmitButton>
+								<SubmitButton variant="ghost" color="light" size="small">
+									Archive
+								</SubmitButton>
 							</form>
 						)}
 
@@ -72,10 +91,6 @@ export default async function RecipePage({ params }: Props) {
 						>
 							<Icon name="trash" /> Delete
 						</DeleteRecipe>
-
-						<LinkButton href={`/bar/recipes/${id}/edit`}>
-							<Icon name="pen" /> Edit
-						</LinkButton>
 					</Flex>
 				</Flex>
 

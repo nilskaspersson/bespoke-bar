@@ -17,8 +17,8 @@
 		"drizzle:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
-		"@clerk/nextjs": "6.21.0",
-		"@clerk/themes": "2.2.49",
+		"@clerk/nextjs": "6.22.0",
+		"@clerk/themes": "2.2.50",
 		"@neondatabase/serverless": "1.0.1",
 		"@radix-ui/react-slot": "1.2.3",
 		"clsx": "2.1.1",
@@ -32,21 +32,21 @@
 		"pg": "8.16.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
-		"zod": "3.25.62"
+		"zod": "3.25.64"
 	},
 	"devDependencies": {
 		"@awesome.me/kit-20e437f9b8": "1.0.103",
 		"@biomejs/biome": "2.0.0-beta.6",
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/react": "16.3.0",
-		"@types/node": "24.0.1",
+		"@types/node": "24.0.3",
 		"@types/pg": "8.15.4",
 		"@types/react": "19.1.8",
 		"@types/react-dom": "19.1.6",
 		"@vitejs/plugin-react": "4.5.2",
 		"drizzle-kit": "0.31.1",
 		"jsdom": "26.1.0",
-		"tsx": "4.20.1",
+		"tsx": "4.20.3",
 		"typescript": "5.8.3",
 		"typescript-plugin-css-modules": "5.1.0",
 		"vite-tsconfig-paths": "5.1.4",

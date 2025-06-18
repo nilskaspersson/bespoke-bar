@@ -4,8 +4,8 @@ import { db } from "@/db";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import {
 	type DraftRecipe,
+	type Recipe,
 	RecipesTable,
-	type RecipeWithSpecs,
 } from "@/db/schema/recipes";
 import { insertSpecsSchema, SpecsTable } from "@/db/schema/specs";
 import {
@@ -22,7 +22,7 @@ import { authOrForbidden } from "@/utils/auth";
  */
 export async function createRecipesFromSpecs(
 	userInputRecipes: DraftRecipe[],
-): Promise<RecipeWithSpecs[]> {
+): Promise<Recipe[]> {
 	const { userId, orgId } = await authOrForbidden();
 
 	if (!userInputRecipes || userInputRecipes.length === 0) {
@@ -85,7 +85,7 @@ export async function createRecipesFromSpecs(
 		/**
 		 * Process each recipe: insert recipe, then its specs
 		 */
-		const createdRecipesWithSpecs: RecipeWithSpecs[] = [];
+		const createdRecipesWithSpecs: Recipe[] = [];
 
 		for (let i = 0; i < userInputRecipes.length; i++) {
 			const userInputRecipe = userInputRecipes[i];
@@ -114,15 +114,9 @@ export async function createRecipesFromSpecs(
 					createdIngredientNameToId.get(spec.ingredient?.name ?? ""),
 			);
 
-			const specs = await tx
-				.insert(SpecsTable)
-				.values(specsToInsert)
-				.returning();
+			await tx.insert(SpecsTable).values(specsToInsert);
 
-			createdRecipesWithSpecs.push({
-				...recipe,
-				specs,
-			});
+			createdRecipesWithSpecs.push(recipe);
 		}
 
 		return createdRecipesWithSpecs;

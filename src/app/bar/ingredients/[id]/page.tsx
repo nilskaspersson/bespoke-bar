@@ -35,7 +35,14 @@ export default async function IngredientPage({ params }: Props) {
 				<Icon name="trash" /> Delete
 			</DeleteIngredient>
 
-			<LinkButton href={`/bar/ingredients/${id}/edit`}>Edit</LinkButton>
+			<LinkButton
+				href={`/bar/ingredients/${id}/edit`}
+				variant="outline"
+				color="heavy"
+				size="small"
+			>
+				Edit
+			</LinkButton>
 
 			<Text as="p">{ingredient.category}</Text>
 			<Text as="p">{ingredient.abv}</Text>
