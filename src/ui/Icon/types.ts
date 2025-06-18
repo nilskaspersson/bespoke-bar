@@ -19,6 +19,7 @@ export type IconName =
 	| "circle-exclamation"
 	| "circle-info"
 	| "circle-question"
+	| "circle-small"
 	| "circle-user"
 	| "circle-xmark"
 	| "clock-rotate-left"

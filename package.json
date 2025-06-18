@@ -35,7 +35,7 @@
 		"zod": "3.25.67"
 	},
 	"devDependencies": {
-		"@awesome.me/kit-20e437f9b8": "1.0.103",
+		"@awesome.me/kit-20e437f9b8": "1.0.106",
 		"@biomejs/biome": "2.0.0",
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/react": "16.3.0",
