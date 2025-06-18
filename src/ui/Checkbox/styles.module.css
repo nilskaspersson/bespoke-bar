@@ -1,0 +1,89 @@
+@layer ui {
+	.base {
+		--checkbox-length: calc(var(--control-height) / 2);
+		display: grid;
+		justify-items: start;
+
+		&.isDisabled {
+			opacity: 0.5;
+		}
+	}
+
+	.input {
+		position: absolute;
+		width: 0;
+		height: 0;
+		opacity: 0;
+		inset: 50% auto 0 var(--checkbox-length);
+	}
+
+	.label {
+		display: flex;
+		align-items: center;
+		gap: var(--gap--tiny);
+
+		.input:user-invalid + & .inner {
+			text-decoration: underline wavy var(--color-error);
+		}
+
+		/**
+		 * Prevent text selection on double-clicks, there should be a better way?
+		 */
+		&:hover {
+			user-select: none;
+		}
+	}
+
+	.text {
+		transition: color var(--transition-duration);
+
+		.input:checked + .label > & {
+			color: var(--color-text--heavy);
+		}
+	}
+
+	.box {
+		display: inline-grid;
+		color: white;
+		background-color: white;
+		flex: 0 0 var(--checkbox-length);
+		width: var(--checkbox-length);
+		height: var(--checkbox-length);
+		place-items: center;
+		border-radius: var(--radius--small);
+		border: 1px solid var(--color-border);
+		outline: 2px solid transparent;
+		outline-offset: 1px;
+		transition-property: border-color, outline-color;
+		transition-duration: var(--transition-duration);
+
+		.input:not(:disabled) + .label > & {
+			cursor: pointer;
+
+			&:hover {
+				border-color: var(--color-border--heavy);
+			}
+		}
+
+		.input:checked + .label > & {
+			background-color: var(--color-accent);
+			border-color: var(--color-accent);
+		}
+
+		.input:focus-visible + .label > & {
+			outline-color: var(--color-accent);
+		}
+
+		&.radio {
+			border-radius: 50%;
+		}
+	}
+
+	.icon {
+		transition: opacity var(--transition-duration) var(--swift-in);
+
+		.input:not(:checked) + .label & {
+			opacity: 0;
+		}
+	}
+}
