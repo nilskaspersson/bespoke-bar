@@ -8,7 +8,7 @@ import {
 	useState,
 } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { DraftRecipe, RecipeWithSpecs } from "@/db/schema/recipes";
+import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
 import { Grid } from "@/ui/Grid";
@@ -23,7 +23,7 @@ export function BulkDraftRecipes({
 	ingredients,
 	...props
 }: {
-	createRecipes: (recipes: DraftRecipe[]) => Promise<RecipeWithSpecs[]>;
+	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe[]>;
 	ingredients: Ingredient[];
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [inputValue, setInputValue] = useState("");

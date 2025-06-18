@@ -3,7 +3,7 @@
 import { clsx } from "clsx";
 import { type HTMLAttributes, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { DraftRecipe, RecipeWithSpecs } from "@/db/schema/recipes";
+import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
@@ -17,7 +17,7 @@ export function DraftSpecs({
 	ingredients,
 	...props
 }: {
-	createRecipes: (recipes: DraftRecipe[]) => Promise<RecipeWithSpecs[]>;
+	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe[]>;
 	ingredients: Ingredient[];
 } & HTMLAttributes<HTMLDivElement>) {
 	const [specs, setSpecs] = useState<WithKey<DraftSpecWithDraftIngredient>[]>(
