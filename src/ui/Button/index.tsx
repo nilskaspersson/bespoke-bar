@@ -9,7 +9,7 @@ type Props = {
 	icon?: boolean;
 	variant?: "solid" | "outline" | "base" | "ghost";
 	color?: SystemColor;
-	size?: "small" | "regular" | "large";
+	size?: "tiny" | "small" | "regular" | "large";
 	fullWidth?: boolean;
 };
 

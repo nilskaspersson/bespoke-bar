@@ -10,6 +10,11 @@
 		&:not(.fullWidth) {
 			max-width: var(--line-length);
 		}
+
+		&:is(p) > a {
+			color: var(--color-accent);
+			text-decoration: underline;
+		}
 	}
 
 	.truncate {

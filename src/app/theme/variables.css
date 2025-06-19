@@ -120,6 +120,7 @@
 	 */
 	--z-navigation: 100;
 	--z-modal: 9990;
+	--z-popover: 990;
 
 	--shadow-color: 270deg 3.85% 10.2%;
 	--shadow--low:

@@ -1,0 +1,43 @@
+@layer ui {
+	.lightbox {
+		--brightness: 1;
+		--shine: oklch(100% 0 0 / 0.075);
+
+		background-color: var(--mauve-3);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--high);
+
+		border-top: 1px solid var(--shine);
+		border-left: 1px solid var(--shine);
+
+		@supports (backdrop-filter: blur(var(--size-1))) {
+			background-color: hsl(from var(--mauve-3) h s l / 50%);
+			backdrop-filter: blur(var(--size-1));
+		}
+
+		[data-theme="dark"] & {
+			--brightness: 1.1;
+		}
+
+		background-image: radial-gradient(
+			circle at top left,
+			var(--shine),
+			transparent
+		);
+		background-origin: border-box;
+
+		transition-property: opacity, transform;
+		transition-duration: var(--transition-duration);
+		transition-behavior: allow-discrete;
+
+		@starting-style {
+			opacity: 0;
+		}
+
+		@media (prefers-reduced-motion: no-preference) {
+			@starting-style {
+				transform: translateY(var(--gap)) scale(0.95);
+			}
+		}
+	}
+}
