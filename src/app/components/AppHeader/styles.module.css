@@ -34,10 +34,6 @@
 	.grid {
 		display: flex;
 		align-items: center;
-		gap: var(--gap--small);
-	}
-
-	.button {
-		font-size: var(--size-2);
+		gap: var(--gap--tiny);
 	}
 }

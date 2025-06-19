@@ -29,17 +29,17 @@ export function AppHeader({
 					<ThemePicker />
 
 					<SignedOut>
-						<SignInButton mode="modal">
-							<Button variant="base" className={styles.button}>
-								Sign in
-							</Button>
-						</SignInButton>
-
 						<SignUpButton mode="modal">
-							<Button variant="base" className={styles.button}>
+							<Button variant="ghost" size="tiny">
 								Sign up
 							</Button>
 						</SignUpButton>
+
+						<SignInButton mode="modal">
+							<Button variant="solid" size="tiny" color="heavy">
+								Sign in
+							</Button>
+						</SignInButton>
 					</SignedOut>
 
 					<SignedIn>
