@@ -10,6 +10,7 @@ import {
 import { Dialog } from "@/ui/Dialog";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+import { Lightbox } from "@/ui/Lightbox";
 import { Noise } from "@/ui/Noise";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -39,7 +40,7 @@ export function Alert({
 
 	return (
 		<Dialog ref={dialogRef} {...props}>
-			<div className={clsx(className, styles.lightbox)}>
+			<Lightbox className={clsx(className, styles.lightbox)}>
 				<Noise />
 
 				<div className={styles.contain}>
@@ -61,7 +62,7 @@ export function Alert({
 				) : null}
 
 				{actions ? <footer className={styles.actions}>{actions}</footer> : null}
-			</div>
+			</Lightbox>
 		</Dialog>
 	);
 }
