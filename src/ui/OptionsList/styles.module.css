@@ -1,0 +1,32 @@
+@layer ui {
+	.lightbox {
+		--spacing: var(--space-2);
+
+		position: absolute;
+		top: calc(100% + var(--spacing));
+		left: 0;
+		width: 100%;
+		z-index: var(--z-popover);
+		text-align: initial;
+		padding-inline: var(--spacing);
+	}
+
+	.options {
+		--est-item-height: 40px;
+		max-height: calc(var(--est-item-height) * 5 + var(--spacing) * 2);
+		overflow-y: auto;
+		padding-block: var(--spacing);
+	}
+
+	.header {
+		margin-inline: var(--spacing);
+		border-bottom: 1px solid var(--color-border);
+		padding-block: calc(var(--spacing) * 2);
+	}
+
+	.footer {
+		margin-inline: var(--spacing);
+		border-top: 1px solid var(--color-border);
+		padding-block: calc(var(--spacing) * 2);
+	}
+}

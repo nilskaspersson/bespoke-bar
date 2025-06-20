@@ -1,0 +1,27 @@
+@layer ui {
+	.item {
+		display: flex;
+		gap: var(--gap);
+		padding: var(--spacing);
+		cursor: pointer;
+		border-radius: var(--radius);
+		transition: background-color, color;
+		transition-duration: var(--transition-duration--short);
+
+		&.isHighlighted {
+			background-color: hsl(from var(--mauve-1) h s l / 50%);
+		}
+	}
+
+	.label {
+		flex: 1 1 auto;
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	.icon {
+		flex: 0 0 auto;
+		align-self: center;
+		color: var(--mauve-12);
+	}
+}

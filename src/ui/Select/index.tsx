@@ -1,17 +1,18 @@
 "use client";
 
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { useSelect } from "downshift";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
-import { Icon } from "@/ui/Icon";
-import { Lightbox } from "@/ui/Lightbox";
+import { OptionItem } from "@/ui/OptionItem";
+import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { KEY_NAME, type WithKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Props<T> = {
 	className?: string;
+	defaultValue?: string;
 	footer?: React.ReactNode;
 	getItemLabel?: (item: WithKey<T>) => React.ReactNode;
 	getItemValue: (item: WithKey<T>) => string;
@@ -37,6 +38,7 @@ type Props<T> = {
  */
 export function Select<T>({
 	className,
+	defaultValue,
 	footer,
 	getItemLabel,
 	getItemValue,
@@ -45,7 +47,7 @@ export function Select<T>({
 	label,
 	name,
 	placeholder,
-}: Props<T>) {
+}: Props<WithKey<T>>) {
 	const {
 		isOpen,
 		selectedItem,
@@ -56,7 +58,11 @@ export function Select<T>({
 		getItemProps,
 	} = useSelect({
 		items,
-		defaultSelectedItem: undefined,
+		defaultSelectedItem: defaultValue
+			? items.find((o) => getItemValue(o) === defaultValue)
+			: undefined,
+		scrollIntoView: (node) =>
+			node?.scrollIntoView({ behavior: "instant", block: "center" }),
 		itemToString,
 	});
 
@@ -88,38 +94,28 @@ export function Select<T>({
 					/>
 
 					{isOpen ? (
-						<Lightbox className={styles.lightbox}>
-							<ul className={styles.options}>
-								{items.map((item, index) => (
-									<li
-										key={item[KEY_NAME]}
-										className={clsx(styles.item, {
-											[styles.isHighlighted]: highlightedIndex === index,
-										})}
-										{...getItemProps({ item, index })}
-									>
-										<div className={styles.label}>
-											{getItemLabel ? (
-												getItemLabel(item)
-											) : (
-												<Text size={3} heavy>
-													{itemToString(item)}
-												</Text>
-											)}
-										</div>
-
-										{selectedItem &&
-										getItemValue(selectedItem) === getItemValue(item) ? (
-											<div className={styles.icon}>
-												<Icon name="check" />
-											</div>
-										) : null}
-									</li>
-								))}
-							</ul>
-
-							{footer ? <div className={styles.footer}>{footer}</div> : null}
-						</Lightbox>
+						<OptionsList footer={footer}>
+							{items.map((item, index) => (
+								<OptionItem
+									key={item[KEY_NAME]}
+									{...getItemProps({ item, index })}
+									isHighlighted={highlightedIndex === index}
+									isSelected={
+										selectedItem
+											? getItemValue(selectedItem) === getItemValue(item)
+											: false
+									}
+								>
+									{getItemLabel ? (
+										getItemLabel(item)
+									) : (
+										<Text size={3} heavy>
+											{itemToString(item)}
+										</Text>
+									)}
+								</OptionItem>
+							))}
+						</OptionsList>
 					) : null}
 				</div>
 			</div>
