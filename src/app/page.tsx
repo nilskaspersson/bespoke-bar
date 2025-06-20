@@ -3,7 +3,6 @@ import { Container } from "@/ui/Container";
 import { GradientText } from "@/ui/GradientText";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
-
 import styles from "./page.module.css";
 
 export default async function Home() {
@@ -17,7 +16,7 @@ export default async function Home() {
 				</Heading>
 
 				<div>
-					<LinkButton variant="solid" color="primary" href="/bar">
+					<LinkButton href="/bar" variant="outline" color="heavy" size="large">
 						Get started
 						<Icon name="martini-glass" size="small" />
 					</LinkButton>

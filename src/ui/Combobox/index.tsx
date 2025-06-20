@@ -1,9 +1,12 @@
 "use client";
 
 import { clsx } from "clsx";
-import { useSelect } from "downshift";
+import { useCombobox } from "downshift";
+import { useDeferredValue, useMemo, useState } from "react";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
+import { Icon } from "@/ui/Icon";
+import { Input } from "@/ui/Input";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
@@ -12,58 +15,64 @@ import styles from "./styles.module.css";
 
 type Props<T> = {
 	className?: string;
-	defaultValue?: string;
 	footer?: React.ReactNode;
+	defaultValue?: string;
 	getItemLabel?: (item: WithKey<T>) => React.ReactNode;
 	getItemValue: (item: WithKey<T>) => string;
+	header?: React.ReactNode;
 	items: WithKey<T>[];
 	itemToString: (item: WithKey<T> | null) => string;
 	label?: React.ReactNode;
 	name: string;
-	placeholder?: React.ReactNode;
 };
 
-/**
- * This component is not quite idiomatic to downshift. There are two larger issues
- * with this structure:
- *
- * 1. WAI-ARIA patterns for select/comboboxes does not allow for the listbox and
- *    options to be separated, which means we couldn't support a footer or other
- *    supplementary nodes.
- * 2. Downshift needs the "Menu" to always be rendered, which further means we cannot
- *    even really style the Lightbox even if it was the list.
- *
- * But, I can't let perfect be the enemy of good. Maybe solve one of these issues
- * in the future.
- */
-export function Select<T>({
+export function Combobox<T>({
 	className,
 	defaultValue,
 	footer,
 	getItemLabel,
 	getItemValue,
+	header,
 	items,
 	itemToString,
 	label,
 	name,
-	placeholder,
-}: Props<WithKey<T>>) {
+}: Props<T>) {
+	const [inputValue, setInputValue] = useState<string | null>(null);
+	const deferredInputValue = useDeferredValue<typeof inputValue>(inputValue);
+
+	const filteredItems = useMemo(() => {
+		const normalizeLabel = (item: WithKey<T>) =>
+			itemToString(item).toLowerCase();
+
+		return deferredInputValue
+			? items.filter((o) =>
+					normalizeLabel(o).includes(deferredInputValue ?? ""),
+				)
+			: items;
+	}, [deferredInputValue, items, itemToString]);
+
 	const {
 		isOpen,
-		selectedItem,
 		getToggleButtonProps,
 		getLabelProps,
 		getMenuProps,
+		getInputProps,
 		highlightedIndex,
 		getItemProps,
-	} = useSelect({
+		selectedItem,
+		reset,
+	} = useCombobox({
+		onInputValueChange({ inputValue }) {
+			setInputValue(inputValue.trim().toLowerCase());
+		},
 		items,
+		itemToString,
 		defaultSelectedItem: defaultValue
 			? items.find((o) => getItemValue(o) === defaultValue)
 			: undefined,
 		scrollIntoView: (node) =>
 			node?.scrollIntoView({ behavior: "instant", block: "center" }),
-		itemToString,
 	});
 
 	return (
@@ -73,18 +82,31 @@ export function Select<T>({
 			className={clsx(styles.base, className)}
 		>
 			<div className={styles.contain}>
-				<Button
-					variant="outline"
-					color="light"
-					{...getToggleButtonProps()}
-					className={clsx(styles.button, {
-						[styles.hasValue]: Boolean(selectedItem),
-					})}
-				>
-					{selectedItem
-						? itemToString(selectedItem)
-						: (placeholder ?? "Select…")}
-				</Button>
+				<Input {...getInputProps()} type="search" className={styles.input} />
+
+				<menu className={styles.actions}>
+					{Boolean(selectedItem) || Boolean(deferredInputValue) ? (
+						<Button
+							variant="base"
+							icon
+							onClick={reset}
+							className={styles.clear}
+						>
+							<Icon name="xmark" />
+						</Button>
+					) : null}
+
+					<Button
+						variant="base"
+						{...getToggleButtonProps()}
+						className={styles.toggle}
+					>
+						<Icon
+							name="angle-down"
+							className={clsx(styles.icon, { [styles.isOpen]: isOpen })}
+						/>
+					</Button>
+				</menu>
 
 				<div {...getMenuProps()}>
 					<input
@@ -93,9 +115,9 @@ export function Select<T>({
 						value={selectedItem ? getItemValue(selectedItem) : ""}
 					/>
 
-					{isOpen ? (
-						<OptionsList footer={footer}>
-							{items.map((item, index) => (
+					{isOpen && filteredItems.length > 0 ? (
+						<OptionsList footer={footer} header={header}>
+							{filteredItems.map((item, index) => (
 								<OptionItem
 									key={item[KEY_NAME]}
 									{...getItemProps({ item, index })}
