@@ -1,0 +1,55 @@
+@layer ui {
+	.base {
+		--spacing: var(--space-2);
+
+		min-width: var(--control-width--small);
+		width: 100%;
+		max-width: min(var(--control-width), 100dvw);
+	}
+
+	.contain {
+		align-self: stretch;
+	}
+
+	.input {
+		padding-right: calc(var(--control-inset) + var(--control-height));
+	}
+
+	.actions {
+		position: absolute;
+		inset: 0 0 0 auto;
+		display: flex;
+	}
+
+	.toggle {
+		border: 1px solid var(--color-border);
+		width: var(--control-height);
+		border-radius: 0 var(--radius) var(--radius) 0;
+
+		&:hover {
+			color: var(--mauve-12);
+			border-color: var(--color-border--heavy);
+		}
+	}
+
+	.icon {
+		transition-property: transform;
+		transition-duration: var(--transition-duration);
+
+		&.isOpen {
+			transform: scaleY(-1);
+		}
+	}
+
+	.clear {
+		color: var(--color-text);
+
+		&:hover {
+			color: var(--color-text--heavy);
+		}
+
+		&:active:hover {
+			opacity: 0.5;
+		}
+	}
+}
