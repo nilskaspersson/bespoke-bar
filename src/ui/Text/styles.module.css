@@ -11,7 +11,7 @@
 			max-width: var(--line-length);
 		}
 
-		&:is(p) > a {
+		> a {
 			color: var(--color-accent);
 			text-decoration: underline;
 		}
