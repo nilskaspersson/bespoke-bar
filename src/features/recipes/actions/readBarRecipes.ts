@@ -1,6 +1,6 @@
 "use server";
 
-import { and, eq, isNotNull, isNull } from "drizzle-orm";
+import { and, asc, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 import { authOrForbidden } from "@/utils/auth";
@@ -15,6 +15,14 @@ export async function readBarRecipes(options?: { archivedRecipes?: boolean }) {
 				? isNotNull(RecipesTable.archivedAt)
 				: isNull(RecipesTable.archivedAt),
 		),
+		with: {
+			specs: {
+				with: {
+					ingredient: true,
+				},
+			},
+		},
+		orderBy: [desc(RecipesTable.createdAt)],
 	});
 
 	return recipes;

@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
-import { revalidateRecipePaths } from "@/features/recipes/utils";
+import { revalidateRecipePaths } from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function deleteRecipe({
