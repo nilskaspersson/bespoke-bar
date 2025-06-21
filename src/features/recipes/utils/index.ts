@@ -1,10 +1,8 @@
-import { revalidatePath } from "next/cache";
-import type { Recipe } from "@/db/schema/recipes";
-
-export function revalidateRecipePaths(id: Recipe["id"]) {
-	revalidatePath("/bar/recipes");
-	revalidatePath(`/bar/recipes/${id}`);
-}
+import type { FilterFn, SortingFn } from "@tanstack/react-table";
+import type { Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
+import { normalizeInput } from "@/utils";
+import { collator } from "@/utils/formatting";
+import { recipeToUrlSlug } from "@/utils/url";
 
 const PATTERN_URL_FRIENDLY_SLUG = /^[a-zA-Z0-9_-]+$/;
 
@@ -26,3 +24,24 @@ export function isValidRecipeParams(
 
 	return slug.every((segment) => PATTERN_URL_FRIENDLY_SLUG.test(segment));
 }
+
+export function getRecipeUrl(recipe: Recipe) {
+	return `/bar/recipes/${recipe.id}/${recipeToUrlSlug(recipe)}`;
+}
+
+export const sortingFnCreatedAt: SortingFn<RecipeWithSpecs> = (rowA, rowB) => {
+	const dateA = rowA.original.createdAt.getTime();
+	const dateB = rowB.original.createdAt.getTime();
+
+	if (dateA !== dateB) {
+		return dateA - dateB;
+	}
+
+	return collator.compare(rowA.original.name ?? "", rowB.original.name ?? "");
+};
+
+export const globalFilterRecipeFn: FilterFn<RecipeWithSpecs> = (
+	row,
+	columnId,
+	filterValue,
+) => normalizeInput(String(row.getValue(columnId) || "")).includes(filterValue);
