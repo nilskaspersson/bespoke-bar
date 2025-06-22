@@ -32,6 +32,14 @@ const nextConfig: NextConfig = {
 			},
 		];
 	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "img.clerk.com",
+			},
+		],
+	},
 	experimental: {
 		inlineCss: true,
 		useLightningcss: true,
