@@ -1,10 +1,10 @@
 @layer ui {
 	.lightbox {
 		--brightness: 1;
-		--shine: oklch(100% 0 0 / 0.075);
+		--r: var(--radius--large);
 
 		background-color: var(--mauve-3);
-		border-radius: var(--radius--large);
+		border-radius: var(--r);
 		box-shadow: var(--shadow--high);
 
 		border-top: 1px solid var(--shine);
@@ -38,6 +38,10 @@
 			@starting-style {
 				transform: translateY(var(--gap)) scale(0.95);
 			}
+		}
+
+		&.rounded {
+			--r: var(--radius--full);
 		}
 	}
 }

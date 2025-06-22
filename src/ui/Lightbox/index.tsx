@@ -6,10 +6,16 @@ import styles from "./styles.module.css";
 export function Lightbox({
 	children,
 	className,
+	rounded,
 	...props
-}: ComponentProps<"div">) {
+}: ComponentProps<"div"> & { rounded?: boolean }) {
 	return (
-		<div className={clsx(styles.lightbox, className)} {...props}>
+		<div
+			className={clsx(styles.lightbox, className, {
+				[styles.rounded]: rounded,
+			})}
+			{...props}
+		>
 			<Noise />
 			{children}
 		</div>
