@@ -34,12 +34,7 @@
 			outline-offset: 1px;
 		}
 
-		&:where(:not(.base, .text)) {
-			padding-inline: var(--button-inset);
-			height: var(--button-height);
-			font-size: var(--button-font-size);
-
-			border-radius: var(--radius--large);
+		&:where(:not(.base)) {
 			font-weight: 600;
 
 			> .label {
@@ -48,22 +43,27 @@
 				gap: var(--space-2);
 			}
 
-			/**
-			 * Basically immediately after click
-			 */
-			&:focus:not(:focus-visible):not(:active) {
-				animation: shadowPulse var(--transition-duration--slow) forwards;
-			}
-
 			&:active {
 				transition: none;
-				box-shadow: inset 0 0 1rem
-					color-mix(in srgb, var(--button-color) 80%, black);
 
 				> .label {
 					transition: none;
 					opacity: 0.75;
 				}
+			}
+		}
+
+		&:where(:not(.base, .text)) {
+			padding-inline: var(--button-inset);
+			height: var(--button-height);
+			font-size: var(--button-font-size);
+			border-radius: var(--radius--large);
+
+			/**
+			 * Basically immediately after click
+			 */
+			&:focus:not(:focus-visible):not(:active) {
+				animation: shadowPulse var(--transition-duration--slow) forwards;
 			}
 		}
 
@@ -141,9 +141,8 @@
 		transition-duration: var(--transition-duration);
 		color: var(--button-color);
 
-		&:active:hover {
-			transition: none;
-			opacity: 0.5;
+		&:hover {
+			color: var(--color-text--heavy);
 		}
 	}
 
@@ -153,12 +152,17 @@
 		border: 1px solid var(--button-color);
 		border-top-color: color-mix(in srgb, var(--button-color) 90%, white);
 		border-left-color: color-mix(in srgb, var(--button-color) 90%, white);
+
+		&:active:hover {
+			box-shadow: inset 0 0 1rem
+				color-mix(in srgb, var(--button-color) 80%, black);
+		}
 	}
 
 	.outline {
 		border: 1px solid var(--button-color);
 		color: var(--button-color);
-		background-color: var(--mauve-4);
+		background-color: hsl(from var(--button-color) h s 95%);
 
 		&.light {
 			color: hsl(from var(--button-color) h s var(--text-lightness));
