@@ -5,8 +5,9 @@
 		align-items: center;
 		border-radius: var(--radius--full);
 		color: var(--color-text--heavy);
-		background-color: var(--mauve-1);
-		border: 1px solid var(--mauve-1);
+		background-color: var(--mauve-2);
+		border: var(--space-1) solid transparent;
+		box-shadow: var(--shadow--low);
 	}
 
 	.text {
