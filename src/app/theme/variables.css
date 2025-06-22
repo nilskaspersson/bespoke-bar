@@ -100,9 +100,11 @@
 	--radius--small: calc(var(--radius) / 2);
 	--radius--large: calc(var(--radius) * 2);
 	--radius--full: 9999px;
+	--shine: oklch(100% 0 0 / 0.075);
 
 	--container: 1250px;
 	--app-header--height: 50px;
+	--app-navigation--height: 50px;
 
 	/**
 	 * Transitions

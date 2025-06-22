@@ -21,6 +21,7 @@
 		"@clerk/themes": "2.2.50",
 		"@neondatabase/serverless": "1.0.1",
 		"@radix-ui/react-slot": "1.2.3",
+		"@tanstack/react-table": "8.21.3",
 		"clsx": "2.1.1",
 		"convert-units": "3.0.0-beta.7",
 		"dotenv": "16.5.0",

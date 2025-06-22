@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
-import { revalidateIngredientPaths } from "@/features/ingredients/utils";
+import { revalidateIngredientPaths } from "@/features/ingredients/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function deleteIngredient({

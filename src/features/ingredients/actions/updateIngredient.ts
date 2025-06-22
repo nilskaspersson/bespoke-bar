@@ -5,7 +5,7 @@ import {
 	IngredientsTable,
 	updateIngredientSchema,
 } from "@/db/schema/ingredients";
-import { revalidateIngredientPaths } from "@/features/ingredients/utils";
+import { revalidateIngredientPaths } from "@/features/ingredients/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function updateIngredient(

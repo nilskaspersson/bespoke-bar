@@ -1,0 +1,22 @@
+@layer feature {
+	.chip {
+		display: inline-flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		border-radius: var(--radius--full);
+		color: var(--color-text--heavy);
+		background-color: var(--mauve-2);
+		border: var(--space-1) solid transparent;
+		box-shadow: var(--shadow--low);
+	}
+
+	.text {
+		max-width: 20ch;
+		white-space: nowrap;
+		padding-inline: var(--space-2);
+	}
+
+	.avatar {
+		flex: 0 0 auto;
+	}
+}

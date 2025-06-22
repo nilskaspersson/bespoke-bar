@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { readIngredients } from "@/features/ingredients/actions/readIngredients";
+import { getIngredientUrl } from "@/features/ingredients/utils";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Heading } from "@/ui/Heading";
@@ -19,9 +20,7 @@ export default async function IngredientsPage() {
 			<ul>
 				{ingredients.map((ingredient) => (
 					<li key={ingredient.id}>
-						<Link href={`/bar/ingredients/${ingredient.id}`}>
-							{ingredient.name}
-						</Link>
+						<Link href={getIngredientUrl(ingredient)}>{ingredient.name}</Link>
 					</li>
 				))}
 			</ul>

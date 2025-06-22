@@ -6,7 +6,7 @@ import {
 	RecipesTable,
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
-import { revalidateRecipePaths } from "@/features/recipes/utils";
+import { revalidateRecipePaths } from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function updateRecipe(

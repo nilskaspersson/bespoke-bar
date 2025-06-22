@@ -7,7 +7,7 @@ import styles from "./styles.module.css";
 
 type Props = {
 	icon?: boolean;
-	variant?: "solid" | "outline" | "base" | "ghost";
+	variant?: "solid" | "outline" | "base" | "ghost" | "text";
 	color?: SystemColor;
 	size?: "tiny" | "small" | "regular" | "large";
 	fullWidth?: boolean;
@@ -16,7 +16,7 @@ type Props = {
 export function Button({
 	children,
 	className,
-	color = "light",
+	color = "regular",
 	icon,
 	variant = "base",
 	size = "regular",

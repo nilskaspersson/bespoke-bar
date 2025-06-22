@@ -1,9 +1,5 @@
 import { clsx } from "clsx";
-import {
-	createElement,
-	type InputHTMLAttributes,
-	type TextareaHTMLAttributes,
-} from "react";
+import { type ComponentProps, createElement } from "react";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
 import styles from "./styles.module.css";
 
@@ -18,11 +14,11 @@ type BaseProps = {
 
 type InputProps = BaseProps & {
 	as?: "input";
-} & InputHTMLAttributes<HTMLInputElement>;
+} & ComponentProps<"input">;
 
 type TextareaProps = BaseProps & {
 	as?: "textarea";
-} & TextareaHTMLAttributes<HTMLTextAreaElement>;
+} & ComponentProps<"textarea">;
 
 export function Input(props: InputProps): React.ReactNode;
 export function Input(props: TextareaProps): React.ReactNode;

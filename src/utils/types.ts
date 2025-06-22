@@ -22,4 +22,4 @@ export type Scale = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export type FontWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900;
 
-export type SystemColor = "accent" | "light" | "heavy" | "red";
+export type SystemColor = "regular" | "accent" | "light" | "heavy" | "red";
