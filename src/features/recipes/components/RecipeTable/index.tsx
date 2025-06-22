@@ -11,9 +11,11 @@ import {
 } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import Link from "next/link";
-import { type ComponentProps, useState } from "react";
+import { type ComponentProps, useMemo, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { getIngredientUrl } from "@/features/ingredients/utils";
+import { UserChip } from "@/features/organisation/components/UserChip";
+import type { UserIdMap } from "@/features/organisation/types";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
 	getRecipeUrl,
@@ -23,67 +25,83 @@ import {
 import { Input } from "@/ui/Input";
 import { TableHeader } from "@/ui/Table/TableHeader";
 import { Text } from "@/ui/Text";
+import { Time } from "@/ui/Time";
 import { normalizeInput } from "@/utils";
 import styles from "./styles.module.css";
 
 type Props = {
 	recipes: RecipeWithSpecs[] | undefined | null;
+	members: UserIdMap;
 };
 
 const columnHelper = createColumnHelper<RecipeWithSpecs>();
 
-const columns = [
-	columnHelper.accessor("name", {
-		header: "Name",
-		cell: (info) => (
-			<Link href={getRecipeUrl(info.row.original)} prefetch={false}>
-				<RecipeName recipe={info.row.original} />
-			</Link>
-		),
-		sortingFn: "text",
-	}),
-	columnHelper.accessor(
-		(row) => row.specs.map((spec) => spec.ingredient.name).join(", "),
-		{
-			id: "specs",
-			header: "Specs",
-			cell: (info) =>
-				info.row.original.specs.map((spec, i, arr) => (
-					<Text key={spec.ingredient.id}>
-						<Link href={getIngredientUrl(spec.ingredient)} prefetch={false}>
-							{spec.ingredient.name}
-						</Link>
-
-						{i < arr.length - 1 && ", "}
-					</Text>
-				)),
-		},
-	),
-	columnHelper.accessor("preparationMethod", {
-		header: "Preparation Method",
-	}),
-	columnHelper.accessor("createdAt", {
-		header: "Created At",
-		sortingFn: sortingFnCreatedAt,
-	}),
-	columnHelper.accessor("createdBy", {
-		header: "Created By",
-	}),
-];
-
 export function RecipeTable({
 	className,
 	recipes,
+	members,
 	...props
 }: Props & ComponentProps<"section">) {
-	const [data] = useState(() => structuredClone(recipes ?? []));
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "createdAt", desc: true },
 	]);
 
+	const columns = useMemo(
+		() => [
+			columnHelper.accessor("name", {
+				header: "Name",
+				cell: (info) => (
+					<Link href={getRecipeUrl(info.row.original)} prefetch={false}>
+						<RecipeName recipe={info.row.original} />
+					</Link>
+				),
+				sortingFn: "text",
+			}),
+			columnHelper.accessor(
+				(row) => row.specs.map((spec) => spec.ingredient.name).join(", "),
+				{
+					id: "specs",
+					header: "Specs",
+					cell: (info) =>
+						info.row.original.specs.map((spec, i, arr) => (
+							<Text key={spec.id} compact>
+								<Link href={getIngredientUrl(spec.ingredient)} prefetch={false}>
+									{spec.ingredient.name}
+								</Link>
+
+								{i < arr.length - 1 && ", "}
+							</Text>
+						)),
+				},
+			),
+			columnHelper.accessor("preparationMethod", {
+				header: "Preparation Method",
+			}),
+			columnHelper.accessor("createdAt", {
+				header: "Created",
+				cell: (info) => <Time date={info.row.original.createdAt} />,
+				sortingFn: sortingFnCreatedAt,
+			}),
+			columnHelper.accessor(
+				(row) => {
+					const user = members[row.createdBy];
+					if (!user) return null;
+					return `${user.firstName} ${user.lastName}`;
+				},
+				{
+					header: "Author",
+					cell: (info) => (
+						<UserChip user={members[info.row.original.createdBy]} />
+					),
+				},
+			),
+		],
+		[members],
+	);
+
 	const table = useReactTable({
 		columns,
-		data,
+		data: recipes ?? [],
 		getCoreRowModel: getCoreRowModel(),
 		getFilteredRowModel: getFilteredRowModel(),
 		getSortedRowModel: getSortedRowModel(),

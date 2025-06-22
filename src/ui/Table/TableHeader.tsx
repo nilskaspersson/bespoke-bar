@@ -24,8 +24,9 @@ export function TableHeader<T>({ table }: { table: Table<T> }) {
 							<th key={header.id}>
 								{header.isPlaceholder ? null : (
 									<Button
-										variant="base"
+										variant="text"
 										onClick={header.column.getToggleSortingHandler()}
+										color={isSorted ? "heavy" : undefined}
 										title={
 											header.column.getCanSort()
 												? header.column.getNextSortingOrder() === "asc"
