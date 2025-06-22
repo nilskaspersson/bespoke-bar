@@ -2,7 +2,6 @@
 
 import {
 	createColumnHelper,
-	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
 	getSortedRowModel,
@@ -11,7 +10,7 @@ import {
 } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import Link from "next/link";
-import { type ComponentProps, useMemo, useState } from "react";
+import { type ComponentProps, useMemo, useRef, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { UserChip } from "@/features/organisation/components/UserChip";
@@ -22,8 +21,12 @@ import {
 	globalFilterRecipeFn,
 	sortingFnCreatedAt,
 } from "@/features/recipes/utils";
+import { Button } from "@/ui/Button";
+import { Heading } from "@/ui/Heading";
+import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
-import { TableHeader } from "@/ui/Table/TableHeader";
+import { Lightbox } from "@/ui/Lightbox";
+import { Table, TableBody, TableHeader } from "@/ui/Table";
 import { Text } from "@/ui/Text";
 import { Time } from "@/ui/Time";
 import { normalizeInput } from "@/utils";
@@ -46,12 +49,20 @@ export function RecipeTable({
 		{ id: "createdAt", desc: true },
 	]);
 
+	const formRef = useRef<HTMLFormElement>(null);
+
 	const columns = useMemo(
 		() => [
 			columnHelper.accessor("name", {
 				header: "Name",
+				size: 200,
+				maxSize: 200,
 				cell: (info) => (
-					<Link href={getRecipeUrl(info.row.original)} prefetch={false}>
+					<Link
+						href={getRecipeUrl(info.row.original)}
+						prefetch={false}
+						className={styles.recipeName}
+					>
 						<RecipeName recipe={info.row.original} />
 					</Link>
 				),
@@ -62,24 +73,29 @@ export function RecipeTable({
 				{
 					id: "specs",
 					header: "Specs",
+					enableSorting: false,
 					cell: (info) =>
-						info.row.original.specs.map((spec, i, arr) => (
-							<Text key={spec.id} compact>
-								<Link href={getIngredientUrl(spec.ingredient)} prefetch={false}>
+						info.row.original.specs.map((spec) => (
+							<div key={spec.id} className={styles.spec}>
+								{spec.quantity} {spec.unit}{" "}
+								<Link
+									href={getIngredientUrl(spec.ingredient)}
+									prefetch={false}
+									className={styles.ingredient}
+								>
 									{spec.ingredient.name}
 								</Link>
-
-								{i < arr.length - 1 && ", "}
-							</Text>
+							</div>
 						)),
 				},
 			),
 			columnHelper.accessor("preparationMethod", {
-				header: "Preparation Method",
+				header: "Style",
+				cell: () => <Text size={2}>Sour</Text>,
 			}),
 			columnHelper.accessor("createdAt", {
 				header: "Created",
-				cell: (info) => <Time date={info.row.original.createdAt} />,
+				cell: (info) => <Time date={info.row.original.createdAt} size={2} />,
 				sortingFn: sortingFnCreatedAt,
 			}),
 			columnHelper.accessor(
@@ -114,33 +130,60 @@ export function RecipeTable({
 		return null;
 	}
 
+	const hasActiveFilter = Boolean(table.getState().globalFilter);
+
+	const clearSearch = () => {
+		table.resetGlobalFilter();
+		formRef.current?.reset();
+	};
+
 	return (
-		<section className={clsx(className)} {...props}>
+		<section className={clsx(className, styles.base)} {...props}>
 			<div>
-				<Input
-					type="search"
-					placeholder="Search…"
-					onChange={(e) =>
-						table.setGlobalFilter(normalizeInput(e.target.value))
-					}
-				/>
+				<Table>
+					<TableHeader getHeaderGroups={table.getHeaderGroups} />
+					<TableBody getRowModel={table.getRowModel} />
+				</Table>
+
+				{hasActiveFilter && recipes.length > 0 && table.getRowCount() === 0 ? (
+					<aside className={styles.empty}>
+						<Heading level="h6">Nothing matches your search</Heading>
+
+						<Button
+							variant="outline"
+							color="accent"
+							size="small"
+							onClick={clearSearch}
+						>
+							Clear search
+						</Button>
+					</aside>
+				) : null}
 			</div>
 
-			<table className={styles.table}>
-				<TableHeader table={table} />
+			<Lightbox rounded className={styles.search}>
+				<form ref={formRef}>
+					<Input
+						type="search"
+						rounded
+						placeholder="Search for recipes…"
+						onChange={(e) =>
+							table.setGlobalFilter(normalizeInput(e.target.value))
+						}
+					/>
 
-				<tbody>
-					{table.getRowModel().rows.map((row) => (
-						<tr key={row.id}>
-							{row.getVisibleCells().map((cell) => (
-								<td key={cell.id}>
-									{flexRender(cell.column.columnDef.cell, cell.getContext())}
-								</td>
-							))}
-						</tr>
-					))}
-				</tbody>
-			</table>
+					{hasActiveFilter ? (
+						<Button
+							variant="base"
+							icon
+							className={styles.clear}
+							onClick={clearSearch}
+						>
+							<Icon name="xmark" />
+						</Button>
+					) : null}
+				</form>
+			</Lightbox>
 		</section>
 	);
 }

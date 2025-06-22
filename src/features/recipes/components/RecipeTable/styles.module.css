@@ -1,5 +1,61 @@
 @layer feature {
-	.table {
+	.base {
+		display: grid;
+		grid-template-rows: 1fr auto;
 		width: 100%;
+		max-width: 80ch;
+		margin-inline: auto;
+	}
+
+	.search {
+		display: grid;
+		justify-self: center;
+		justify-content: center;
+		z-index: 1;
+		position: sticky;
+		top: 100px;
+		bottom: var(--gap);
+		margin-top: var(--gap);
+		padding: var(--space-2);
+	}
+
+	.clear {
+		position: absolute;
+		right: var(--space-4);
+		top: calc(50% - 0.5rem);
+	}
+
+	.recipeName {
+		display: inline-block;
+		font-weight: 700;
+		color: var(--color-text--heavy);
+		text-wrap: balance;
+
+		&:hover {
+			color: var(--color-accent);
+		}
+	}
+
+	.spec {
+		white-space: nowrap;
+		font-size: var(--size-2);
+	}
+
+	.ingredient {
+		color: var(--color-text--heavy);
+
+		&:hover {
+			color: var(--color-accent);
+		}
+	}
+
+	.empty {
+		display: grid;
+		place-items: center;
+		gap: var(--space-3);
+		padding: var(--gap);
+		background-color: var(--mauve-1);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--low);
 	}
 }
