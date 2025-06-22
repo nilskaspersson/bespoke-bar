@@ -34,7 +34,7 @@
 			outline-offset: 1px;
 		}
 
-		&:where(:not(.base)) {
+		&:where(:not(.base, .text)) {
 			padding-inline: var(--button-inset);
 			height: var(--button-height);
 			font-size: var(--button-font-size);
@@ -81,6 +81,10 @@
 	/**
 	 * Colors
 	 */
+	.regular {
+		--button-color: var(--color-text);
+	}
+
 	.light {
 		--button-color: var(--color-border--heavy);
 		--text-lightness: 0%;
@@ -132,6 +136,17 @@
 	/**
 	 * Variants
 	 */
+	.text {
+		transition-property: color, opacity;
+		transition-duration: var(--transition-duration);
+		color: var(--button-color);
+
+		&:active:hover {
+			transition: none;
+			opacity: 0.5;
+		}
+	}
+
 	.solid {
 		background-color: var(--button-color);
 		color: hsl(from var(--button-color) h s var(--text-lightness));
