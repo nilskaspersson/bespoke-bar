@@ -1,6 +1,6 @@
 @layer base {
 	:root {
-		accent-color: var(--color-blue);
+		accent-color: var(--color-accent);
 	}
 
 	*,
@@ -91,7 +91,7 @@
 	}
 
 	:focus-visible {
-		outline: var(--space-1) solid var(--color-blue);
+		outline: var(--space-1) solid var(--color-accent);
 		outline-offset: 1px;
 	}
 
@@ -109,8 +109,8 @@
 
 	::selection {
 		color: var(--mauve-1);
-		background-color: var(--color-blue);
+		background-color: var(--color-accent);
 		text-shadow: 0.03em 0.03em 0
-			color-mix(in srgb, var(--color-blue) 50%, black);
+			color-mix(in srgb, var(--color-accent) 50%, black);
 	}
 }

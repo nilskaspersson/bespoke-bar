@@ -15,7 +15,7 @@
 		transition: border-color var(--transition-duration);
 
 		&:has(input:focus-visible) {
-			outline: 2px solid var(--color-blue);
+			outline: 2px solid var(--iris-11);
 			outline-offset: 1px;
 		}
 	}

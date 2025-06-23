@@ -38,7 +38,8 @@
 	},
 	"devDependencies": {
 		"@awesome.me/kit-20e437f9b8": "1.0.106",
-		"@biomejs/biome": "2.0.0",
+		"@biomejs/biome": "2.0.4",
+		"@radix-ui/colors": "3.0.0",
 		"@testing-library/dom": "10.4.0",
 		"@testing-library/react": "16.3.0",
 		"@types/node": "24.0.3",

@@ -38,7 +38,7 @@
 			}
 
 			&:focus {
-				outline-color: var(--color-blue);
+				outline-color: var(--color-accent);
 			}
 		}
 
