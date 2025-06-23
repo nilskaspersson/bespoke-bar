@@ -36,7 +36,12 @@ export function TableHeader<T>({
 						);
 
 						return (
-							<th key={header.id} className={clsx(styles.cell, styles.th)}>
+							<th
+								key={header.id}
+								className={clsx(styles.cell, styles.th, {
+									[styles.sortable]: canSort,
+								})}
+							>
 								{header.isPlaceholder ? null : canSort ? (
 									<Button
 										variant="text"

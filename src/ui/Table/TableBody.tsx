@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 
 export function TableBody<T>({
 	getRowModel,
+	className,
 	...props
 }: { getRowModel: Table<T>["getRowModel"] } & Omit<
 	ComponentProps<"tbody">,
@@ -15,7 +16,7 @@ export function TableBody<T>({
 	}
 
 	return (
-		<tbody {...props}>
+		<tbody className={clsx(styles.tbody, className)} {...props}>
 			{getRowModel().rows.map((row) => (
 				<tr key={row.id} className={styles.row}>
 					{row.getVisibleCells().map((cell) => (
@@ -23,6 +24,7 @@ export function TableBody<T>({
 							key={cell.id}
 							className={clsx(styles.cell, styles.td)}
 							width={cell.column.getSize()}
+							data-label={cell.column.columnDef.header}
 						>
 							{flexRender(cell.column.columnDef.cell, cell.getContext())}
 						</td>

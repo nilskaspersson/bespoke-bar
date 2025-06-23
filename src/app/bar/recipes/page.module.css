@@ -1,6 +1,14 @@
 @layer layout {
 	.container {
 		display: grid;
-		grid-template-rows: auto 1fr;
+		gap: var(--gap);
+		grid-template:
+			"header" auto
+			"actions" auto
+			"table" 1fr;
+	}
+
+	.table {
+		grid-area: table;
 	}
 }

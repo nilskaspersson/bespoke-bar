@@ -22,6 +22,7 @@ import {
 	sortingFnCreatedAt,
 } from "@/features/recipes/utils";
 import { Button } from "@/ui/Button";
+import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
@@ -74,19 +75,22 @@ export function RecipeTable({
 					id: "specs",
 					header: "Specs",
 					enableSorting: false,
-					cell: (info) =>
-						info.row.original.specs.map((spec) => (
-							<div key={spec.id} className={styles.spec}>
-								{spec.quantity} {spec.unit}{" "}
-								<Link
-									href={getIngredientUrl(spec.ingredient)}
-									prefetch={false}
-									className={styles.ingredient}
-								>
-									{spec.ingredient.name}
-								</Link>
-							</div>
-						)),
+					cell: (info) => (
+						<ul>
+							{info.row.original.specs.map((spec) => (
+								<li key={spec.id} className={styles.spec}>
+									{spec.quantity} {spec.unit}{" "}
+									<Link
+										href={getIngredientUrl(spec.ingredient)}
+										prefetch={false}
+										className={styles.ingredient}
+									>
+										{spec.ingredient.name}
+									</Link>
+								</li>
+							))}
+						</ul>
+					),
 				},
 			),
 			columnHelper.accessor("preparationMethod", {
@@ -95,7 +99,9 @@ export function RecipeTable({
 			}),
 			columnHelper.accessor("createdAt", {
 				header: "Created",
-				cell: (info) => <Time date={info.row.original.createdAt} size={2} />,
+				cell: (info) => (
+					<Time date={info.row.original.createdAt} size={2} italic />
+				),
 				sortingFn: sortingFnCreatedAt,
 			}),
 			columnHelper.accessor(
@@ -116,6 +122,11 @@ export function RecipeTable({
 	);
 
 	const table = useReactTable({
+		/**
+		 * Set to false to prevent internal warning. Absolute nonsense.
+		 * https://github.com/TanStack/table/issues/5026#issuecomment-2528094258
+		 */
+		autoResetPageIndex: false,
 		columns,
 		data: recipes ?? [],
 		getCoreRowModel: getCoreRowModel(),
@@ -131,6 +142,8 @@ export function RecipeTable({
 	}
 
 	const hasActiveFilter = Boolean(table.getState().globalFilter);
+	const isFilteredEmpty =
+		hasActiveFilter && recipes.length > 0 && table.getRowCount() === 0;
 
 	const clearSearch = () => {
 		table.resetGlobalFilter();
@@ -139,14 +152,22 @@ export function RecipeTable({
 
 	return (
 		<section className={clsx(className, styles.base)} {...props}>
-			<div>
-				<Table>
-					<TableHeader getHeaderGroups={table.getHeaderGroups} />
-					<TableBody getRowModel={table.getRowModel} />
-				</Table>
+			<Grid gap={3}>
+				{!isFilteredEmpty ? (
+					<Table>
+						<TableHeader getHeaderGroups={table.getHeaderGroups} />
+						<TableBody getRowModel={table.getRowModel} />
+					</Table>
+				) : null}
 
-				{hasActiveFilter && recipes.length > 0 && table.getRowCount() === 0 ? (
-					<aside className={styles.empty}>
+				{isFilteredEmpty ? (
+					<Grid
+						as="aside"
+						gap={4}
+						className={styles.empty}
+						justifyContent="center"
+						justifyItems="center"
+					>
 						<Heading level="h6">Nothing matches your search</Heading>
 
 						<Button
@@ -157,9 +178,9 @@ export function RecipeTable({
 						>
 							Clear search
 						</Button>
-					</aside>
+					</Grid>
 				) : null}
-			</div>
+			</Grid>
 
 			<Lightbox rounded className={styles.search}>
 				<form ref={formRef}>
