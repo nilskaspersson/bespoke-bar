@@ -14,7 +14,7 @@ export function LoadingScreen() {
 		<aside className={styles.loading}>
 			<Grid gap={6}>
 				<Flex alignItems="center" direction="column" gap={2}>
-					<Spinner size="huge" />
+					<Spinner size={8} />
 
 					<Text as="p" size={4} align="center">
 						Shaking up the page…

@@ -7,7 +7,7 @@ import {
 } from "@clerk/nextjs";
 import { clsx } from "clsx";
 import Link from "next/link";
-import type { HTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import { ThemePicker } from "@/app/components/ThemePicker";
 import { Button } from "@/ui/Button";
 import styles from "./styles.module.css";
@@ -15,7 +15,7 @@ import styles from "./styles.module.css";
 export function AppHeader({
 	className,
 	...props
-}: HTMLAttributes<HTMLDivElement>) {
+}: Omit<ComponentProps<"header">, "children">) {
 	return (
 		<header className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>

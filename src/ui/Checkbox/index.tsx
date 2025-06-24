@@ -46,7 +46,7 @@ export function Checkbox({
 					<Icon
 						name={type === "checkbox" ? "check" : "circle-small"}
 						className={styles.icon}
-						size="large"
+						size={4}
 					/>
 				</div>
 

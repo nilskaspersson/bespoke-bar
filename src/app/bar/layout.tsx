@@ -1,6 +1,7 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { BarNavigation } from "@/app/components/BarNavigation";
+import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -16,7 +17,8 @@ export default async function Layout({
 
 	return (
 		<div className={styles.container}>
-			<BarNavigation className={styles.navigation} />
+			<SecondaryNavigation className={styles.navigation} />
+			<BarNavigation className={styles.barNavigation} />
 			<div className={styles.main}>{children}</div>
 		</div>
 	);

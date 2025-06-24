@@ -18,7 +18,7 @@ export default async function Home() {
 				<div>
 					<LinkButton href="/bar" variant="outline" color="heavy" size="large">
 						Get started
-						<Icon name="martini-glass" size="small" />
+						<Icon name="martini-glass" size={3} />
 					</LinkButton>
 				</div>
 			</div>
