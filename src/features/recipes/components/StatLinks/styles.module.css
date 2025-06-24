@@ -1,0 +1,17 @@
+@layer feature {
+	.link {
+		&:hover,
+		&:focus-visible {
+			color: var(--color-accent);
+		}
+	}
+
+	.count {
+		transition: color var(--transition-duration);
+		color: var(--color-text--heavy);
+
+		.link:has(:hover, :focus-visible) & {
+			color: var(--iris-12);
+		}
+	}
+}

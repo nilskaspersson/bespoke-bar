@@ -84,6 +84,7 @@ export function RecipeTable({
 										href={getIngredientUrl(spec.ingredient)}
 										prefetch={false}
 										className={styles.ingredient}
+										title={spec.ingredient.name}
 									>
 										{spec.ingredient.name}
 									</Link>

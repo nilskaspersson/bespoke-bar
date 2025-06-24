@@ -8,13 +8,19 @@
 	}
 
 	.search {
+		--offset: calc(var(--gap--small) + var(--bar-navigation--height));
 		display: grid;
 		justify-self: center;
 		justify-content: center;
 		z-index: 1;
 		position: sticky;
-		bottom: calc(var(--gap--small) + var(--bar-navigation--height));
+		bottom: var(--offset);
 		padding: var(--space-2);
+		margin-inline: calc(var(--app-inset) / 2 * -1);
+
+		@media (min-width: 814px) {
+			--offset: var(--gap--small);
+		}
 	}
 
 	.clear {
@@ -28,6 +34,7 @@
 		font-weight: 700;
 		color: var(--color-text--heavy);
 		text-wrap: balance;
+		word-break: break-word;
 
 		&:hover {
 			color: var(--color-accent);
@@ -35,8 +42,10 @@
 	}
 
 	.spec {
-		white-space: nowrap;
 		font-size: var(--size-2);
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 
 	.ingredient {

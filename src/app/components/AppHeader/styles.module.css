@@ -20,12 +20,6 @@
 		padding-inline: var(--gap);
 	}
 
-	.logo {
-		font-size: var(--size-6);
-		font-weight: 700;
-		color: var(--mauve-12);
-	}
-
 	.grid {
 		display: flex;
 		align-items: center;

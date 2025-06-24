@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-// import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -68,7 +68,9 @@ export function AppFooter({
 					</Grid>
 				</nav>
 
-				<Text size={1}>Copyright © {new Date().getFullYear()} Bespoke Bar</Text>
+				<Text size={1} light>
+					Copyright © {new Date().getFullYear()} Bespoke Bar
+				</Text>
 			</Grid>
 		</footer>
 	);

@@ -1,0 +1,7 @@
+@layer ui {
+	.logo {
+		font-size: var(--size-6);
+		font-weight: 700;
+		color: var(--mauve-12);
+	}
+}
