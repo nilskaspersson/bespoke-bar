@@ -9,7 +9,7 @@
 		"lint": "biome check",
 		"test": "vitest run",
 		"ncu": "npx npm-check-updates --interactive",
-		"ci": "biome ci && npm run test && drizzle:migrate && npm run build",
+		"ci": "biome ci && npm run test && npm run drizzle:migrate && npm run build",
 		"update-icons": "npm i @awesome.me/kit-20e437f9b8@latest",
 		"drizzle:push": "drizzle-kit push",
 		"drizzle:generate": "drizzle-kit generate",
