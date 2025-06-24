@@ -1,7 +1,6 @@
 import "dotenv/config";
-import { neon } from "@neondatabase/serverless";
-import { drizzle as drizzleNeon } from "drizzle-orm/neon-http";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle as drizzleNeon } from "drizzle-orm/neon-serverless";
+import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
 import * as categories from "./schema/categories";
 import * as ingredients from "./schema/ingredients";
 import * as preparationMethods from "./schema/preparationMethods";
@@ -25,7 +24,7 @@ const schema = {
 const onVercel = process.env.VERCEL === "1";
 
 const db = onVercel
-	? drizzleNeon(neon(process.env.DATABASE_URL), { schema })
-	: drizzle(process.env.DATABASE_URL, { schema });
+	? drizzleNeon(process.env.DATABASE_URL, { schema })
+	: drizzlePostgres(process.env.DATABASE_URL, { schema });
 
 export { db };
