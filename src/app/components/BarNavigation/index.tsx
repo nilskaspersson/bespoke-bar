@@ -24,11 +24,12 @@ export function BarNavigation({
 						color="accent"
 						variant={pathname === "/bar" ? "solid" : "outline"}
 						inert={pathname === "/bar"}
+						className={styles.button}
 					>
-						<Icon name="duotone-shop" size={5} />
+						<Icon name="duotone-shop" size={4} />
 
 						<Text size={1} className={styles.label}>
-							Bar
+							Overview
 						</Text>
 					</LinkButton>
 				</li>
@@ -40,8 +41,9 @@ export function BarNavigation({
 						color="accent"
 						variant={pathname === "/bar/lists" ? "solid" : "outline"}
 						inert={pathname === "/bar/lists"}
+						className={styles.button}
 					>
-						<Icon name="duotone-memo-pad" size={5} />
+						<Icon name="duotone-memo-pad" size={4} />
 
 						<Text size={1} className={styles.label}>
 							Lists
@@ -56,8 +58,9 @@ export function BarNavigation({
 						color="accent"
 						variant={pathname === "/bar/recipes" ? "solid" : "outline"}
 						inert={pathname === "/bar/recipes"}
+						className={styles.button}
 					>
-						<Icon name="duotone-martini-glass" size={5} />
+						<Icon name="duotone-martini-glass" size={4} />
 
 						<Text size={1} className={styles.label}>
 							Recipes
@@ -72,8 +75,9 @@ export function BarNavigation({
 						color="accent"
 						variant={pathname === "/bar/ingredients" ? "solid" : "outline"}
 						inert={pathname === "/bar/ingredients"}
+						className={styles.button}
 					>
-						<Icon name="duotone-wine-bottle" size={5} />
+						<Icon name="duotone-wine-bottle" size={4} />
 
 						<Text size={1} className={styles.label}>
 							Ingredients

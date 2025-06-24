@@ -16,7 +16,9 @@
 
 	.main {
 		grid-area: main;
-		display: grid;
+		display: flex;
+		flex-direction: column;
+		min-height: calc(100dvh - var(--app-header--height));
 	}
 
 	.footer {

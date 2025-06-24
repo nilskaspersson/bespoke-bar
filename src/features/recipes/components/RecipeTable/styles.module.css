@@ -13,9 +13,7 @@
 		justify-content: center;
 		z-index: 1;
 		position: sticky;
-		top: 100px;
-		bottom: var(--gap);
-		margin-top: var(--gap);
+		bottom: calc(var(--gap--small) + var(--bar-navigation--height));
 		padding: var(--space-2);
 	}
 

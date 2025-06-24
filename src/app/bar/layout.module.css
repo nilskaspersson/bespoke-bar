@@ -3,10 +3,10 @@
 		display: grid;
 		grid-template:
 			"navigation" auto
-			"bar-navigation" auto
 			"main" 1fr;
 		padding-left: env(safe-area-inset-left);
 		padding-right: env(safe-area-inset-right);
+		flex: 1 1 auto;
 
 		&::before {
 			--length: var(--app-inset);
@@ -53,14 +53,15 @@
 	}
 
 	.barNavigation {
-		grid-area: bar-navigation;
-		padding-top: var(--gap);
+		height: var(--bar-navigation--height);
+		position: sticky;
+		bottom: 0;
+		flex: 0 0 auto;
 	}
 
 	.main {
 		display: grid;
 		grid-area: main;
-		padding-top: var(--gap);
-		padding-bottom: var(--gap--large);
+		padding-block: var(--gap);
 	}
 }

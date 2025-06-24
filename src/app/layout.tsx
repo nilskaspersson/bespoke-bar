@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Figtree } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
+import { AppFooter } from "@/app/components/AppFooter";
 import { AppHeader } from "@/app/components/AppHeader";
 import { AuthProvider } from "@/app/components/AuthProvider";
 import styles from "./layout.module.css";
@@ -28,7 +29,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 					<AuthProvider>
 						<AppHeader className={styles.header} />
 						<main className={styles.main}>{children}</main>
-						{/* <AppFooter className={styles.footer} /> */}
+						<AppFooter className={styles.footer} />
 					</AuthProvider>
 				</ThemeProvider>
 			</body>

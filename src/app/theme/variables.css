@@ -102,8 +102,10 @@
 	--shine: oklch(100% 0 0 / 0.075);
 
 	--container: 90ch;
+
 	--app-header--height: var(--space-8);
 	--app-navigation--height: var(--size-8);
+	--bar-navigation--height: var(--space-8);
 
 	/**
 	 * Transitions
