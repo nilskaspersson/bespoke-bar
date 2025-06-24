@@ -1,72 +1,86 @@
 "use client";
 
-import { OrganizationSwitcher } from "@clerk/nextjs";
 import { clsx } from "clsx";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { HTMLAttributes } from "react";
+import type { ComponentProps } from "react";
+import { LinkButton } from "@/ui/Button";
+import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function BarNavigation({
 	className,
 	...props
-}: Omit<HTMLAttributes<HTMLDivElement>, "children">) {
+}: Omit<ComponentProps<"nav">, "children">) {
 	const pathname = usePathname();
 
 	return (
 		<nav className={clsx(styles.nav, className)} {...props}>
-			<div className={styles.container}>
-				<div className={styles.bar}>
-					<OrganizationSwitcher hidePersonal hideSlug />
-				</div>
+			<ul className={styles.list}>
+				<li>
+					<LinkButton
+						href="/bar"
+						icon
+						color="accent"
+						variant={pathname === "/bar" ? "solid" : "outline"}
+						inert={pathname === "/bar"}
+					>
+						<Icon name="duotone-shop" size={5} />
 
-				<Text as="ul" size={2} compact className={styles.list}>
-					<li className={styles.item}>
-						<Link
-							href="/bar"
-							className={clsx(styles.link, {
-								[styles.isActive]: pathname === "/bar",
-							})}
-						>
-							Overview
-						</Link>
-					</li>
+						<Text size={1} className={styles.label}>
+							Bar
+						</Text>
+					</LinkButton>
+				</li>
 
-					<li className={styles.item}>
-						<Link
-							href="/bar/lists"
-							className={clsx(styles.link, {
-								[styles.isActive]: pathname.startsWith("/bar/lists"),
-							})}
-						>
+				<li>
+					<LinkButton
+						href="/bar/lists"
+						icon
+						color="accent"
+						variant={pathname === "/bar/lists" ? "solid" : "outline"}
+						inert={pathname === "/bar/lists"}
+					>
+						<Icon name="duotone-memo-pad" size={5} />
+
+						<Text size={1} className={styles.label}>
 							Lists
-						</Link>
-					</li>
+						</Text>
+					</LinkButton>
+				</li>
 
-					<li className={styles.item}>
-						<Link
-							href="/bar/recipes"
-							className={clsx(styles.link, {
-								[styles.isActive]: pathname.startsWith("/bar/recipes"),
-							})}
-						>
+				<li>
+					<LinkButton
+						href="/bar/recipes"
+						icon
+						color="accent"
+						variant={pathname === "/bar/recipes" ? "solid" : "outline"}
+						inert={pathname === "/bar/recipes"}
+					>
+						<Icon name="duotone-martini-glass" size={5} />
+
+						<Text size={1} className={styles.label}>
 							Recipes
-						</Link>
-					</li>
+						</Text>
+					</LinkButton>
+				</li>
 
-					<li className={styles.item}>
-						<Link
-							href="/bar/ingredients"
-							className={clsx(styles.link, {
-								[styles.isActive]: pathname.startsWith("/bar/ingredients"),
-							})}
-						>
+				<li>
+					<LinkButton
+						href="/bar/ingredients"
+						icon
+						color="accent"
+						variant={pathname === "/bar/ingredients" ? "solid" : "outline"}
+						inert={pathname === "/bar/ingredients"}
+					>
+						<Icon name="duotone-wine-bottle" size={5} />
+
+						<Text size={1} className={styles.label}>
 							Ingredients
-						</Link>
-					</li>
-				</Text>
-			</div>
+						</Text>
+					</LinkButton>
+				</li>
+			</ul>
 		</nav>
 	);
 }

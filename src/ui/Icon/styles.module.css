@@ -1,6 +1,7 @@
 @layer ui {
 	.icon {
 		--icon-color: currentColor;
+		--icon-length: var(--jsxIconLength, 1em);
 
 		display: inline-block;
 		width: var(--icon-length);
@@ -11,25 +12,5 @@
 		vertical-align: middle;
 		transition-property: color, fill;
 		transition-duration: var(--transition-duration);
-	}
-
-	.default {
-		--icon-length: 1em;
-	}
-
-	.tiny {
-		--icon-length: var(--space-2);
-	}
-
-	.small {
-		--icon-length: var(--space-3);
-	}
-
-	.large {
-		--icon-length: var(--space-4);
-	}
-
-	.huge {
-		--icon-length: var(--space-6);
 	}
 }

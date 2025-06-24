@@ -26,7 +26,7 @@ export function TableHeader<T>({
 	return (
 		<thead className={clsx(styles.thead, className)} {...props}>
 			{getHeaderGroups().map((headerGroup) => (
-				<tr key={headerGroup.id} className={styles.row}>
+				<tr key={headerGroup.id} className={styles.tableHeaderRow}>
 					{headerGroup.headers.map((header) => {
 						const isSorted = header.column.getIsSorted();
 						const canSort = header.column.getCanSort();
@@ -36,7 +36,12 @@ export function TableHeader<T>({
 						);
 
 						return (
-							<th key={header.id} className={clsx(styles.cell, styles.th)}>
+							<th
+								key={header.id}
+								className={clsx(styles.cell, styles.th, {
+									[styles.sortable]: canSort,
+								})}
+							>
 								{header.isPlaceholder ? null : canSort ? (
 									<Button
 										variant="text"
@@ -56,7 +61,7 @@ export function TableHeader<T>({
 											{canSort ? (
 												<Icon
 													name={isSorted ? SORT_ICON_MAP.get(isSorted) : "sort"}
-													size="small"
+													size={1}
 												/>
 											) : null}
 										</span>

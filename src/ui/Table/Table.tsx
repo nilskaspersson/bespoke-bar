@@ -9,8 +9,10 @@ export function Table({
 	...props
 }: ComponentProps<"table">) {
 	return (
-		<table className={clsx(styles.table, className)} {...props}>
-			{children}
-		</table>
+		<div className={styles.base}>
+			<table className={clsx(styles.table, className)} {...props}>
+				{children}
+			</table>
+		</div>
 	);
 }
