@@ -4,8 +4,6 @@
 		grid-template:
 			"navigation" auto
 			"main" 1fr;
-		padding-left: env(safe-area-inset-left);
-		padding-right: env(safe-area-inset-right);
 		flex: 1 1 auto;
 
 		&::before {
@@ -67,5 +65,7 @@
 		display: grid;
 		grid-area: main;
 		padding-top: var(--gap);
+		padding-left: env(safe-area-inset-left);
+		padding-right: env(safe-area-inset-right);
 	}
 }

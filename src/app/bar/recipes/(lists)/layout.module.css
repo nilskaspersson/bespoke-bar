@@ -2,7 +2,7 @@
 	.container {
 		display: grid;
 		gap: var(--gap);
-		padding-bottom: var(--gap--small);
+		padding-bottom: var(--gap);
 		grid-template:
 			"header" auto
 			"actions" auto
