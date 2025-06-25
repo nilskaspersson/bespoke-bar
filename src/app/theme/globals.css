@@ -103,6 +103,10 @@
 		margin-inline: auto;
 	}
 
+	abbr {
+		cursor: help;
+	}
+
 	:is(h1, h2, h3, h4, h5, h6) {
 		text-box: trim-both ex alphabetic;
 	}

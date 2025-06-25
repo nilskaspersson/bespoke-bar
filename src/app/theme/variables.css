@@ -2,6 +2,7 @@
 	/**
 	 * Scaling units
 	 */
+	--space-scale-0: 0.2;
 	--space-scale-1: 0.25;
 	--space-scale-2: 0.5;
 	--space-scale-3: 0.75;
@@ -12,6 +13,7 @@
 	--space-scale-8: 4;
 	--space-scale-9: 5;
 
+	--size-scale-0: 0.5;
 	--size-scale-1: 0.75;
 	--size-scale-2: 0.875;
 	--size-scale-3: 1;
@@ -25,6 +27,7 @@
 	/**
 	 * Size declarations
 	 */
+	--space-0: calc(1rem * var(--space-scale-0));
 	--space-1: calc(1rem * var(--space-scale-1));
 	--space-2: calc(1rem * var(--space-scale-2));
 	--space-3: calc(1rem * var(--space-scale-3));
@@ -35,6 +38,7 @@
 	--space-8: calc(1rem * var(--space-scale-8));
 	--space-9: calc(1rem * var(--space-scale-9));
 
+	--size-0: calc(1em * var(--size-scale-0));
 	--size-1: calc(1em * var(--size-scale-1));
 	--size-2: calc(1em * var(--size-scale-2));
 	--size-3: calc(1em * var(--size-scale-3));
