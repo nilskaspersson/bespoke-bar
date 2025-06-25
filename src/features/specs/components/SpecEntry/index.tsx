@@ -2,7 +2,6 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
-import { QuantityPicker } from "@/features/quantity/components/QuantityPicker";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -15,21 +14,32 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	spec: T;
 	onChange?: (spec: T) => void;
 } & Omit<HTMLAttributes<HTMLDivElement>, "onChange">) {
+	const isDraftIngredient = !spec.ingredientId;
+
 	return (
-		<Text as="div" className={clsx(styles.entry, className)} {...props}>
-			<QuantityPicker
-				quantity={spec.quantity}
-				onChange={(quantity) => onChange?.({ ...spec, quantity })}
-			/>
+		<Text as="div" compact className={clsx(styles.entry, className)} {...props}>
+			{spec.quantity != null ? (
+				<span className={styles.node}>{spec.quantity}</span>
+			) : null}
 
-			{spec.unit != null ? <span>{spec.unit}</span> : null}
+			{spec.unit != null ? (
+				<span className={styles.node}>{spec.unit}</span>
+			) : null}
 
-			{spec.ingredient.createdAt != null ? (
-				<Link href={`/bar/ingredients/${spec.ingredient.id}`}>
+			{isDraftIngredient ? (
+				<>
+					<span className={clsx(styles.node, styles.name)}>
+						{spec.ingredient.name}
+					</span>
+					<span className={clsx(styles.node, styles.new)}>New</span>
+				</>
+			) : (
+				<Link
+					href={`/bar/ingredients/${spec.ingredient.id}`}
+					className={clsx(styles.node, styles.name)}
+				>
 					{spec.ingredient.name}
 				</Link>
-			) : (
-				<span>{spec.ingredient.name}</span>
 			)}
 		</Text>
 	);
