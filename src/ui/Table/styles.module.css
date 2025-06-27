@@ -163,6 +163,7 @@
 		white-space: nowrap;
 		transition: color var(--transition-duration);
 		padding-block: var(--space-3);
+		color: var(--mauve-12);
 
 		@container table (width >= 750px) {
 			border-top: 1px solid var(--shine);

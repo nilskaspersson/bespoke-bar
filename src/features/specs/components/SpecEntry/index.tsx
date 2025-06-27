@@ -2,10 +2,7 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
-import {
-	formatVolume,
-	quantityToBestUnit,
-} from "@/features/units/utils/formatVolume";
+import { quantityToBestUnit } from "@/features/units/utils/formatVolume";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 

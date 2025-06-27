@@ -36,7 +36,7 @@
 			@supports (backdrop-filter: blur(var(--size-1))) {
 				--bg-from: hsl(from var(--red-10) h s l / 20%);
 				--bg-to: hsl(from var(--iris-10) h s l / 20%);
-				backdrop-filter: blur(var(--size-1));
+				backdrop-filter: blur(var(--size-0));
 			}
 		}
 	}

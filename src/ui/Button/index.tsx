@@ -52,7 +52,7 @@ export function LinkButton({
 	color = "light",
 	icon,
 	variant = "base",
-	size = "regular",
+	size = "default",
 	...props
 }: Props & { href: Route } & ComponentProps<typeof Link>) {
 	return (

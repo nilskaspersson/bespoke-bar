@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
-import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import type { IconName } from "@/ui/Icon/types";
 import { Text } from "@/ui/Text";

@@ -52,26 +52,31 @@
 				animation-play-state: paused;
 			}
 		}
+	}
 
-		:global(body) {
+	:global(body) {
+		@media (prefers-reduced-motion: no-preference) {
 			transition-property: scale, filter;
 			transition-duration: var(--transition-duration);
 
 			> * {
 				transition: filter var(--transition-duration);
 			}
+		}
 
-			&:has(.dialog[open]) {
-				overflow: hidden;
+		&:has(.dialog[open]) {
+			height: 100dvh;
+			overflow: hidden;
+
+			> * {
+				filter: blur(2px);
+			}
+
+			@media (prefers-reduced-motion: no-preference) and (min-width: 750px) {
 				contain: strict; /* Hack to enforce hiding overflow under border-radius */
-				height: 100dvh;
 				scale: 0.98;
 				filter: brightness(0.9);
 				border-radius: var(--radius--large);
-
-				> * {
-					filter: blur(1px);
-				}
 			}
 		}
 	}
