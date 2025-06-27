@@ -1,22 +1,30 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import { Noise } from "@/ui/Noise";
 import styles from "./styles.module.css";
+
+type Props = {
+	rounded?: boolean;
+	forceTheme?: "light" | "dark";
+	translucent?: boolean;
+};
 
 export function Lightbox({
 	children,
 	className,
 	rounded,
+	forceTheme,
+	translucent,
 	...props
-}: ComponentProps<"div"> & { rounded?: boolean }) {
+}: ComponentProps<"div"> & Props) {
 	return (
 		<div
+			data-theme={forceTheme}
 			className={clsx(styles.lightbox, className, {
 				[styles.rounded]: rounded,
+				[styles.translucent]: translucent,
 			})}
 			{...props}
 		>
-			<Noise />
 			{children}
 		</div>
 	);

@@ -7,10 +7,10 @@
 	}
 
 	.label {
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 
 		.base:has(:user-invalid) > & > .text {
-			text-decoration: underline wavy var(--color-error);
+			text-decoration: underline wavy var(--red-9);
 		}
 	}
 }

@@ -1,3 +1,4 @@
+import type { Unit } from "@/db/schema/units";
 import { convert } from "@/features/units/utils/convert";
 import { volumeFormatter } from "@/utils/formatting";
 
@@ -39,4 +40,21 @@ export function formatVolume(
 	}
 
 	return `${volumeFormatter.format(volumeInMl)} ml`;
+}
+
+export function quantityToBestUnit(
+	quantity: number | null | undefined,
+	unit: Unit | null | undefined,
+	unitSystem: "metric" | "imperial" = "metric",
+): string {
+	if (!quantity) {
+		return "";
+	}
+
+	if (!unit) {
+		return quantity.toString();
+	}
+
+	const volumeInMl = convert(quantity).from(unit).to("ml");
+	return formatVolume(volumeInMl, unitSystem);
 }

@@ -30,20 +30,20 @@
 	 */
 	.regular {
 		--bgc: transparent;
-		--bc: var(--color-border);
+		--bc: var(--mauve-6);
 		--c: inherit;
 	}
 
 	.light {
-		--bgc: var(--color-background--light);
-		--bc: var(--color-border);
-		--c: var(--color-text--light);
+		--bgc: var(--mauve-5);
+		--bc: var(--mauve-6);
+		--c: var(--mauve-10);
 	}
 
 	.heavy {
-		--bgc: var(--color-background);
-		--bc: var(--color-border--heavy);
-		--c: var(--color-text--heavy);
+		--bgc: var(--mauve-3);
+		--bc: var(--mauve-12);
+		--c: var(--mauve-11);
 	}
 
 	.accent {

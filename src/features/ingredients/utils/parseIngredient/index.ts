@@ -12,14 +12,7 @@ const sanitizeControlChars = (text: string): string =>
 const normalizeWhitespace = (text: string): string =>
 	/\s{2,}/.test(text) ? text.replace(WHITESPACE_PATTERN, " ") : text;
 
-const capitalizeFirst = (text: string): string =>
-	text.charAt(0).toUpperCase() + text.slice(1);
-
-const tranformIngredient = pipe(
-	capitalizeFirst,
-	normalizeWhitespace,
-	sanitizeControlChars,
-);
+const tranformIngredient = pipe(normalizeWhitespace, sanitizeControlChars);
 
 export function formatIngredient(userInput: string): string | null {
 	const text = userInput.trim();

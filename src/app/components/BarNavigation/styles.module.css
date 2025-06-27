@@ -9,7 +9,7 @@
 		justify-content: center;
 		gap: var(--space-6);
 		background-color: var(--mauve-1);
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--mauve-6);
 		padding-top: var(--inset);
 		padding-bottom: calc(var(--inset) + var(--label-offset));
 	}
@@ -20,7 +20,7 @@
 		display: flex;
 		justify-content: center;
 		text-align: center;
-		color: var(--color-accent);
+		color: var(--iris-11);
 	}
 
 	.button {

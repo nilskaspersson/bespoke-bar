@@ -13,7 +13,6 @@ import {
 	type SpecWithIngredient,
 } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
-import type { WithKey } from "@/utils/withKey";
 
 export const RecipesTable = pgTable(
 	"recipes",
@@ -55,8 +54,8 @@ export type InsertRecipe = Omit<
  * with IDs to use as keys.
  */
 export type DraftRecipe = Identity<
-	Partial<Pick<Recipe, "name" | "description">> & {
-		specs?: WithKey<DraftSpecWithDraftIngredient>[];
+	Partial<Pick<Recipe, "name" | "description" | "preparationMethod">> & {
+		specs?: DraftSpecWithDraftIngredient[];
 	}
 >;
 

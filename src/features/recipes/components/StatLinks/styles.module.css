@@ -2,13 +2,13 @@
 	.link {
 		&:hover,
 		&:focus-visible {
-			color: var(--color-accent);
+			color: var(--iris-11);
 		}
 	}
 
 	.count {
 		transition: color var(--transition-duration);
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 
 		.link:has(:hover, :focus-visible) & {
 			color: var(--iris-12);

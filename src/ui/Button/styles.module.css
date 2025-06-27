@@ -71,10 +71,12 @@
 			transition: opacity var(--transition-duration);
 		}
 
-		--text-lightness: 90%;
-
 		[data-theme="dark"] & {
 			--text-lightness: 0%;
+		}
+
+		[data-theme="light"] & {
+			--text-lightness: 90%;
 		}
 	}
 
@@ -82,15 +84,17 @@
 	 * Colors
 	 */
 	.regular {
-		--button-color: var(--color-text);
+		--button-color: --mauve-11;
 	}
 
 	.light {
-		--button-color: var(--color-border--heavy);
-		--text-lightness: 0%;
-
 		[data-theme="dark"] & {
 			--text-lightness: 90%;
+		}
+
+		[data-theme="light"] & {
+			--button-color: var(--mauve-7);
+			--text-lightness: 0%;
 		}
 	}
 
@@ -103,7 +107,7 @@
 	}
 
 	.accent {
-		--button-color: var(--color-accent);
+		--button-color: var(--iris-11);
 	}
 
 	/**
@@ -121,7 +125,7 @@
 		--button-font-size: var(--size-2);
 	}
 
-	.regular {
+	.default {
 		--button-inset: var(--space-3);
 		--button-height: 40px;
 		--button-font-size: var(--size-3);
@@ -142,7 +146,7 @@
 		color: var(--button-color);
 
 		&:hover {
-			color: var(--color-text--heavy);
+			color: var(--mauve-12);
 		}
 	}
 
@@ -175,12 +179,12 @@
 	}
 
 	.ghost {
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 
 		&:hover,
 		&:focus-visible {
 			background-color: hsl(from var(--button-color) h s 90%);
-			color: hsl(from var(--button-color) h s 10%);
+			color: hsl(from var(--button-color) h s 20%);
 		}
 	}
 

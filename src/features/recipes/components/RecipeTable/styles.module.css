@@ -32,12 +32,12 @@
 	.recipeName {
 		display: inline-block;
 		font-weight: 700;
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 		text-wrap: balance;
 		word-break: break-word;
 
 		&:hover {
-			color: var(--color-accent);
+			color: var(--iris-11);
 		}
 	}
 
@@ -49,10 +49,10 @@
 	}
 
 	.ingredient {
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 
 		&:hover {
-			color: var(--color-accent);
+			color: var(--iris-11);
 		}
 	}
 

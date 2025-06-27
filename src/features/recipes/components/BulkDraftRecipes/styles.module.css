@@ -1,6 +1,15 @@
 @layer feature {
-	.layout {
-		display: flex;
-		gap: var(--gap--large);
+	.form {
+		display: grid;
+		grid-template-rows: auto auto;
+		align-content: end;
+		/* display: contents; */
+		/* display: flex; */
+		/* gap: var(--gap--large); */
+		position: sticky;
+		bottom: 0;
+	}
+
+	.act {
 	}
 }

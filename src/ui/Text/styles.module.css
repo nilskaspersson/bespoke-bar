@@ -30,7 +30,7 @@
 		}
 
 		> a {
-			color: var(--color-accent);
+			color: var(--iris-11);
 			text-decoration: underline;
 		}
 
@@ -61,10 +61,10 @@
 	}
 
 	.light {
-		color: var(--color-text--light);
+		color: var(--mauve-10);
 	}
 
 	.heavy {
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 	}
 }

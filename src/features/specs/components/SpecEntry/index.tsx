@@ -2,6 +2,10 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { HTMLAttributes } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
+import {
+	formatVolume,
+	quantityToBestUnit,
+} from "@/features/units/utils/formatVolume";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -18,12 +22,10 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 
 	return (
 		<Text as="div" compact className={clsx(styles.entry, className)} {...props}>
-			{spec.quantity != null ? (
-				<span className={styles.node}>{spec.quantity}</span>
-			) : null}
-
-			{spec.unit != null ? (
-				<span className={styles.node}>{spec.unit}</span>
+			{spec.quantity != null || spec.unit != null ? (
+				<span className={styles.node}>
+					{quantityToBestUnit(spec.quantity, spec.unit)}
+				</span>
 			) : null}
 
 			{isDraftIngredient ? (

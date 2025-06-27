@@ -4,7 +4,7 @@
 		cursor: pointer;
 		font: inherit;
 		border-radius: var(--radius--full);
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 
 		&:hover,
 		&:focus {

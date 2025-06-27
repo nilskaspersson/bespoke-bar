@@ -71,23 +71,29 @@
 
 	/**
 	 * Colors
+	 *
+	 * Avoid standard color names. It's tempting, but different backgrounds demand
+	 * different contrast ratios, and overrides of the underlying variable doesn't
+	 * reflect the alias. F.e., using `var(--color-text)` in a component prevents
+	 * local light mode override.
+
+		--color-error: var(--red-9);
+		--color-warning: darkorange;
+		--color-success: olivedrab;
+
+		--color-text: var(--mauve-11);
+		--color-text--light: var(--mauve-10);
+		--color-text--heavy: var(--mauve-12);
+
+		--color-background: var(--mauve-3);
+
+		--color-border--light: var(--mauve-5);
+		--color-border: var(--mauve-6);
+		--color-border--heavy: var(--mauve-7);
+
+		--color-accent: var(--iris-11);
+		--color-link: var(--color-accent);
 	 */
-	--color-error: var(--red-9);
-	--color-warning: darkorange;
-	--color-success: olivedrab;
-
-	--color-text: var(--mauve-11);
-	--color-text--light: var(--mauve-10);
-	--color-text--heavy: var(--mauve-12);
-
-	--color-background: var(--mauve-3);
-
-	--color-border--light: var(--mauve-5);
-	--color-border: var(--mauve-6);
-	--color-border--heavy: var(--mauve-7);
-
-	--color-accent: var(--iris-11);
-	--color-link: var(--color-accent);
 
 	/**
 	 * Typography

@@ -11,7 +11,6 @@ import { Dialog } from "@/ui/Dialog";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Lightbox } from "@/ui/Lightbox";
-import { Noise } from "@/ui/Noise";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -40,9 +39,7 @@ export function Alert({
 
 	return (
 		<Dialog ref={dialogRef} {...props}>
-			<Lightbox className={clsx(className, styles.lightbox)}>
-				<Noise />
-
+			<Lightbox className={clsx(className, styles.lightbox)} forceTheme="light">
 				<div className={styles.contain}>
 					{heading ? (
 						<Heading level="h6" className={styles.heading}>

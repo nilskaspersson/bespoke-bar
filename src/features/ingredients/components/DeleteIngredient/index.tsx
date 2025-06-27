@@ -27,8 +27,8 @@ export function DeleteIngredient({
 			}
 			description={
 				<Text as="p">
-					You are about to delete <Text italic>{ingredient.name}</Text>. Do you
-					want to continue?
+					You are about to delete <i>{ingredient.name}</i>. Do you want to
+					continue?
 				</Text>
 			}
 		>

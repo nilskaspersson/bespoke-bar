@@ -21,7 +21,7 @@
 
 	.required::after {
 		content: " *";
-		color: var(--color-error);
+		color: var(--red-9);
 		text-decoration: none;
 	}
 }

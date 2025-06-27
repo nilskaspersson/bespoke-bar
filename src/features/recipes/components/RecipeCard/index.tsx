@@ -10,7 +10,7 @@ import { KEY_NAME } from "@/utils/withKey";
 export function RecipeCard<T extends DraftRecipe>(props: { recipe: T }) {
 	return (
 		<Grid gap={2}>
-			<Heading level="h3" size={6}>
+			<Heading level="h3" size={4}>
 				<GradientText>
 					<RecipeName recipe={props.recipe} />
 				</GradientText>

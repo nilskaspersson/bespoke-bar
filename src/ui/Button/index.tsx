@@ -9,7 +9,7 @@ type Props = {
 	icon?: boolean;
 	variant?: "solid" | "outline" | "base" | "ghost" | "text";
 	color?: SystemColor;
-	size?: "tiny" | "small" | "regular" | "large";
+	size?: "tiny" | "small" | "default" | "large";
 	fullWidth?: boolean;
 };
 
@@ -19,7 +19,7 @@ export function Button({
 	color = "regular",
 	icon,
 	variant = "base",
-	size = "regular",
+	size = "default",
 	fullWidth,
 	...props
 }: Props & Omit<ComponentProps<"button">, "color">) {

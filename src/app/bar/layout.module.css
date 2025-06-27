@@ -9,7 +9,7 @@
 		&::before {
 			--length: var(--app-inset);
 			--width: 1px;
-			--color: var(--color-border--light);
+			--color: var(--mauve-5);
 
 			content: "";
 			display: block;

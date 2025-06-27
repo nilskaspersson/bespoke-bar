@@ -1,62 +1,4 @@
 @layer base {
-	:root {
-		--mauve-1: #fdfcfd;
-		--mauve-2: #faf9fb;
-		--mauve-3: #f2eff3;
-		--mauve-4: #eae7ec;
-		--mauve-5: #e3dfe6;
-		--mauve-6: #dbd8e0;
-		--mauve-7: #d0cdd7;
-		--mauve-8: #bcbac7;
-		--mauve-9: #8e8c99;
-		--mauve-10: #84828e;
-		--mauve-11: #65636d;
-		--mauve-12: #211f26;
-
-		--red-1: #fffcfc;
-		--red-2: #fff7f7;
-		--red-3: #feebec;
-		--red-4: #ffdbdc;
-		--red-5: #ffcdce;
-		--red-6: #fdbdbe;
-		--red-7: #f4a9aa;
-		--red-8: #eb8e90;
-		--red-9: #e5484d;
-		--red-10: #dc3e42;
-		--red-11: #ce2c31;
-		--red-12: #641723;
-
-		@supports (color: color(display-p3 1 1 1)) {
-			@media (color-gamut: p3) {
-				--mauve-1: color(display-p3 0.991 0.988 0.992);
-				--mauve-2: color(display-p3 0.98 0.976 0.984);
-				--mauve-3: color(display-p3 0.946 0.938 0.952);
-				--mauve-4: color(display-p3 0.915 0.906 0.925);
-				--mauve-5: color(display-p3 0.886 0.876 0.901);
-				--mauve-6: color(display-p3 0.856 0.846 0.875);
-				--mauve-7: color(display-p3 0.814 0.804 0.84);
-				--mauve-8: color(display-p3 0.735 0.728 0.777);
-				--mauve-9: color(display-p3 0.555 0.549 0.596);
-				--mauve-10: color(display-p3 0.514 0.508 0.552);
-				--mauve-11: color(display-p3 0.395 0.388 0.424);
-				--mauve-12: color(display-p3 0.128 0.122 0.147);
-
-				--red-1: color(display-p3 0.998 0.989 0.988);
-				--red-2: color(display-p3 0.995 0.971 0.971);
-				--red-3: color(display-p3 0.985 0.925 0.925);
-				--red-4: color(display-p3 0.999 0.866 0.866);
-				--red-5: color(display-p3 0.984 0.812 0.811);
-				--red-6: color(display-p3 0.955 0.751 0.749);
-				--red-7: color(display-p3 0.915 0.675 0.672);
-				--red-8: color(display-p3 0.872 0.575 0.572);
-				--red-9: color(display-p3 0.83 0.329 0.324);
-				--red-10: color(display-p3 0.798 0.294 0.285);
-				--red-11: color(display-p3 0.744 0.234 0.222);
-				--red-12: color(display-p3 0.36 0.115 0.143);
-			}
-		}
-	}
-
 	[data-theme="dark"] {
 		--mauve-1: #121113;
 		--mauve-2: #1a191b;
@@ -70,19 +12,6 @@
 		--mauve-10: #7c7a85;
 		--mauve-11: #b5b2bc;
 		--mauve-12: #eeeef0;
-
-		--red-1: #191111;
-		--red-2: #201314;
-		--red-3: #3b1219;
-		--red-4: #500f1c;
-		--red-5: #611623;
-		--red-6: #72232d;
-		--red-7: #8c333a;
-		--red-8: #b54548;
-		--red-9: #e5484d;
-		--red-10: #ec5d5e;
-		--red-11: #ff9592;
-		--red-12: #ffd1d9;
 
 		@supports (color: color(display-p3 1 1 1)) {
 			@media (color-gamut: p3) {
@@ -98,19 +27,38 @@
 				--mauve-10: color(display-p3 0.487 0.48 0.519);
 				--mauve-11: color(display-p3 0.707 0.7 0.735);
 				--mauve-12: color(display-p3 0.933 0.933 0.94);
+			}
+		}
+	}
 
-				--red-1: color(display-p3 0.093 0.068 0.067);
-				--red-2: color(display-p3 0.118 0.077 0.079);
-				--red-3: color(display-p3 0.211 0.081 0.099);
-				--red-4: color(display-p3 0.287 0.079 0.113);
-				--red-5: color(display-p3 0.348 0.11 0.142);
-				--red-6: color(display-p3 0.414 0.16 0.183);
-				--red-7: color(display-p3 0.508 0.224 0.236);
-				--red-8: color(display-p3 0.659 0.298 0.297);
-				--red-9: color(display-p3 0.83 0.329 0.324);
-				--red-10: color(display-p3 0.861 0.403 0.387);
-				--red-11: color(display-p3 1 0.57 0.55);
-				--red-12: color(display-p3 0.971 0.826 0.852);
+	[data-theme="light"] {
+		--mauve-1: #fdfcfd;
+		--mauve-2: #faf9fb;
+		--mauve-3: #f2eff3;
+		--mauve-4: #eae7ec;
+		--mauve-5: #e3dfe6;
+		--mauve-6: #dbd8e0;
+		--mauve-7: #d0cdd7;
+		--mauve-8: #bcbac7;
+		--mauve-9: #8e8c99;
+		--mauve-10: #84828e;
+		--mauve-11: #65636d;
+		--mauve-12: #211f26;
+
+		@supports (color: color(display-p3 1 1 1)) {
+			@media (color-gamut: p3) {
+				--mauve-1: color(display-p3 0.991 0.988 0.992);
+				--mauve-2: color(display-p3 0.98 0.976 0.984);
+				--mauve-3: color(display-p3 0.946 0.938 0.952);
+				--mauve-4: color(display-p3 0.915 0.906 0.925);
+				--mauve-5: color(display-p3 0.886 0.876 0.901);
+				--mauve-6: color(display-p3 0.856 0.846 0.875);
+				--mauve-7: color(display-p3 0.814 0.804 0.84);
+				--mauve-8: color(display-p3 0.735 0.728 0.777);
+				--mauve-9: color(display-p3 0.555 0.549 0.596);
+				--mauve-10: color(display-p3 0.514 0.508 0.552);
+				--mauve-11: color(display-p3 0.395 0.388 0.424);
+				--mauve-12: color(display-p3 0.128 0.122 0.147);
 			}
 		}
 	}
