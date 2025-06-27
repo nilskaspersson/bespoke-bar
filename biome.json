@@ -18,7 +18,6 @@
 		"enabled": true,
 		"useEditorconfig": true
 	},
-	"assist": { "actions": { "source": { "organizeImports": "on" } } },
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -31,11 +30,6 @@
 	"css": {
 		"parser": {
 			"cssModules": true
-		}
-	},
-	"javascript": {
-		"formatter": {
-			"quoteStyle": "double"
 		}
 	}
 }
