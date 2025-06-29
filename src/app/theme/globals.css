@@ -50,6 +50,10 @@
 		}
 	}
 
+	:where(a, button, label, input, textarea, select, summary) {
+		touch-action: manipulation;
+	}
+
 	:where(p) {
 		line-height: var(--line-height);
 	}
@@ -115,5 +119,21 @@
 		color: var(--mauve-1);
 		background-color: var(--iris-11);
 		text-shadow: 0.03em 0.03em 0 color-mix(in srgb, var(--iris-11) 50%, black);
+	}
+
+	summary {
+		transition-property: color, opacity;
+		transition-duration: var(--transition-duration);
+		cursor: pointer;
+
+		[open] > &,
+		&:hover {
+			color: var(--mauve-12);
+		}
+
+		&:active:hover {
+			transition: none;
+			opacity: 0.5;
+		}
 	}
 }

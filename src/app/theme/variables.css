@@ -13,7 +13,7 @@
 	--space-scale-8: 4;
 	--space-scale-9: 5;
 
-	--size-scale-0: 0.5;
+	--size-scale-0: 0.65;
 	--size-scale-1: 0.75;
 	--size-scale-2: 0.875;
 	--size-scale-3: 1;
@@ -57,7 +57,7 @@
 	--gap--tiny: var(--space-2);
 	--gap--small: var(--space-3);
 	--gap: var(--space-4);
-	--gap--large: var(--space-7);
+	--gap--large: var(--space-6);
 	--gap--huge: var(--space-9);
 
 	--app-inset: var(--space-6);
