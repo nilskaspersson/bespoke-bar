@@ -18,6 +18,10 @@
 		flex-shrink: 1;
 		text-wrap: balance;
 		word-break: break-word;
+
+		&:not(:is(a)) {
+			color: var(--mauve-12);
+		}
 	}
 
 	.new {
@@ -27,7 +31,7 @@
 		color: var(--mauve-12);
 		font-weight: 600;
 		padding: var(--space-0);
-		background-color: var(--iris-10);
+		background-color: var(--iris-7);
 		border-radius: var(--radius--small);
 	}
 }

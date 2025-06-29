@@ -8,7 +8,7 @@ import { escapeRegex } from "@/utils";
 const COMMON_UNITS = ["cl", "fl oz", "oz"];
 
 const COMMON_UNITS_PATTERN = new RegExp(
-	`(${COMMON_UNITS.map(escapeRegex).join("|")})(?=\\s|$)`,
+	`^(${COMMON_UNITS.map(escapeRegex).join("|")})(?=\\s|$)`,
 	"i",
 );
 
@@ -21,7 +21,7 @@ const UNCOMMON_MATCH_TERMS = Array.from(ALIAS_TO_DB_VOLUME_UNIT.keys())
 	.sort((a, b) => b.length - a.length);
 
 const fullUnitPattern = new RegExp(
-	`(${UNCOMMON_MATCH_TERMS.map(escapeRegex).join("|")})(?=\\s|$)`,
+	`^(${UNCOMMON_MATCH_TERMS.map(escapeRegex).join("|")})(?=\\s|$)`,
 	"i",
 );
 

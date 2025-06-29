@@ -1,27 +1,33 @@
 import { clsx } from "clsx";
 import Link from "next/link";
-import type { HTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
+import type { UnitSystems } from "@/features/units/utils/convert";
+import { formatUnit } from "@/features/units/utils/formatUnit";
 import { quantityToBestUnit } from "@/features/units/utils/formatVolume";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	className,
+	convertUnits,
 	onChange,
 	spec,
 	...props
 }: {
 	spec: T;
 	onChange?: (spec: T) => void;
-} & Omit<HTMLAttributes<HTMLDivElement>, "onChange">) {
+	convertUnits?: UnitSystems | null;
+} & Omit<ComponentProps<typeof Text>, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 
 	return (
 		<Text as="div" compact className={clsx(styles.entry, className)} {...props}>
 			{spec.quantity != null || spec.unit != null ? (
 				<span className={styles.node}>
-					{quantityToBestUnit(spec.quantity, spec.unit)}
+					{convertUnits
+						? quantityToBestUnit(spec.quantity, spec.unit, convertUnits)
+						: `${spec.quantity} ${formatUnit(spec.unit)}`}
 				</span>
 			) : null}
 

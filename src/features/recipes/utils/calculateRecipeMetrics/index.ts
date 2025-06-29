@@ -1,9 +1,10 @@
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
 import type { DraftRecipe } from "@/db/schema/recipes";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
+import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
 
-export type RecipeAbvResult = {
+export type RecipeMetrics = {
 	abv: number;
 	originalVolume: number;
 	dilutionVolume: number;
@@ -53,13 +54,19 @@ export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 			continue;
 		}
 
-		const measurementType = convert().describe(spec.unit).measure;
+		const libUnit = DB_UNIT_TO_LIB_UNIT.get(spec.unit);
+
+		if (!libUnit) {
+			continue;
+		}
+
+		const measurementType = convert().describe(libUnit).measure;
 
 		if (measurementType !== "volume") {
 			continue;
 		}
 
-		const volumeInMl = convert(spec.quantity).from(spec.unit).to("ml");
+		const volumeInMl = convert(spec.quantity).from(libUnit).to("ml");
 		totalLiquidVolume += volumeInMl;
 
 		if (typeof spec.ingredient.abv === "number" && spec.ingredient.abv > 0) {
@@ -73,7 +80,7 @@ export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 export function calculateRecipeMetrics<T extends DraftRecipe>(
 	recipe: T,
 	dilutionOverride?: number,
-): RecipeAbvResult {
+): RecipeMetrics {
 	const volumes = calculateSpecsVolumes(recipe.specs);
 
 	if (volumes.totalLiquidVolume === 0) {

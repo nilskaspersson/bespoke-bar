@@ -10,11 +10,21 @@ import volume, {
 	type VolumeUnits,
 } from "convert-units/definitions/volume";
 
-type Measures = "length" | "volume";
-type Systems = LengthSystems | VolumeSystems;
-type Units = LengthUnits | VolumeUnits;
+export type UnitMeasures = "length" | "volume";
+export type UnitSystems = LengthSystems | VolumeSystems;
+export type UnitTypes = LengthUnits | VolumeUnits;
 
-export const convert = configureMeasurements<Measures, Systems, Units>({
+export const convert = configureMeasurements<
+	UnitMeasures,
+	UnitSystems,
+	UnitTypes
+>({
 	volume,
 	length,
 });
+
+export function isValidUnitSystem(
+	unitSystem: unknown,
+): unitSystem is UnitSystems {
+	return unitSystem === "metric" || unitSystem === "imperial";
+}
