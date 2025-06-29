@@ -33,13 +33,17 @@
 			color: var(--iris-11);
 			text-decoration: underline;
 		}
+	}
 
-		& ul {
-			list-style: disc inside;
+	.list {
+		& ol,
+		&:is(ol) {
+			list-style: decimal inside;
 		}
 
-		& ol {
-			list-style: decimal inside;
+		& ul,
+		&:is(ul) {
+			list-style: disc inside;
 		}
 	}
 

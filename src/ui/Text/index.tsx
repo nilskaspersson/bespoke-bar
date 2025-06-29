@@ -15,6 +15,7 @@ export type TextProps<E extends ElementType> = {
 	heavy?: boolean;
 	italic?: boolean;
 	light?: boolean;
+	list?: boolean;
 	serif?: boolean;
 	size?: Scale;
 	truncate?: boolean;
@@ -31,6 +32,7 @@ export function Text<E extends ElementType = "span">({
 	heavy,
 	italic,
 	light,
+	list,
 	serif,
 	size,
 	truncate,
@@ -49,11 +51,13 @@ export function Text<E extends ElementType = "span">({
 				[styles.serif]: serif,
 				[styles.truncate]: truncate,
 				[styles.fullWidth]: fullWidth,
+				[styles.list]: list,
 			}),
 			style: mergeStyleSources(
 				slotProps.style,
 				toCSSVars({
-					jsxFontSize: size ? `var(--size-${size})` : undefined,
+					jsxFontSize:
+						typeof size === "number" ? `var(--size-${size})` : undefined,
 					jsxFontWeight: weight,
 					jsxTextAlign: align,
 				}),
