@@ -37,4 +37,8 @@
 		justify-content: var(--jsxJustifyContent);
 		justify-items: var(--jsxJustifyItems);
 	}
+
+	.inline {
+		display: inline-grid;
+	}
 }

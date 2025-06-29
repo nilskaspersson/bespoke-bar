@@ -16,7 +16,6 @@ export function Checkbox({
 	type?: "checkbox" | "radio";
 }) {
 	const localId = useId();
-
 	const inputId = id ?? localId;
 
 	const isRadio = type === "radio";
