@@ -8,9 +8,11 @@
 		border: 1px solid var(--bc);
 		color: var(--c);
 
-		display: flex;
+		display: inline-flex;
 		column-gap: var(--inset);
 		border-radius: var(--radius);
+		width: fit-content;
+		max-width: var(--line-length);
 	}
 
 	.icon {
@@ -37,12 +39,12 @@
 	.light {
 		--bgc: var(--mauve-5);
 		--bc: var(--mauve-6);
-		--c: var(--mauve-10);
+		--c: var(--mauve-12);
 	}
 
 	.heavy {
 		--bgc: var(--mauve-3);
-		--bc: var(--mauve-12);
+		--bc: var(--mauve-9);
 		--c: var(--mauve-11);
 	}
 

@@ -13,7 +13,7 @@ type Props = {
 	heading?: ReactNode;
 	icon?: IconName;
 	size?: Scale;
-} & ComponentProps<"section">;
+};
 
 export function Callout({
 	children,
@@ -24,9 +24,9 @@ export function Callout({
 	size = 3,
 	style,
 	...props
-}: Props) {
+}: Props & ComponentProps<"div">) {
 	return (
-		<section
+		<div
 			{...props}
 			className={clsx(styles.callout, className, styles[color])}
 			style={mergeStyleSources(
@@ -49,6 +49,6 @@ export function Callout({
 					{children}
 				</Text>
 			</div>
-		</section>
+		</div>
 	);
 }
