@@ -1,0 +1,134 @@
+/** biome-ignore-all lint/style/noDescendingSpecificity: I have no idea what this lint rule is supposed to be about */
+
+@layer ui {
+	.fieldset {
+		display: inline-grid;
+		font-weight: 500;
+		width: fit-content;
+	}
+
+	.options {
+		display: flex;
+		border-radius: var(--radius--full);
+		border: 1px solid var(--iris-6);
+		padding: var(--space-0);
+		gap: var(--space-0);
+		background-color: var(--iris-1);
+		color: var(--iris-12);
+	}
+
+	.group {
+		display: flex;
+	}
+
+	.items {
+		display: flex;
+	}
+
+	.item {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: var(--radius--full);
+		padding: var(--space-3) var(--space-4);
+		cursor: pointer;
+		transition: background-color var(--transition-duration);
+
+		&:has(.input:checked) {
+			color: var(--iris-12);
+			background-image: radial-gradient(
+				circle at top left,
+				var(--iris-5),
+				var(--iris-7)
+			);
+		}
+
+		&:has(:focus-visible) {
+			outline: var(--space-1) solid var(--iris-11);
+		}
+
+		.single > &:hover {
+			background-color: var(--iris-3);
+		}
+	}
+
+	.input {
+		position: absolute;
+		width: 0;
+		height: 0;
+		opacity: 0;
+	}
+
+	.single {
+		padding: var(--space-0);
+	}
+
+	.multiple {
+		--verticalOffset: 1rem;
+
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		border-radius: var(--radius--full);
+		transition-property: background-color;
+		transition-duration: var(--transition-duration);
+		border: var(--space-0) solid transparent;
+
+		&:has(.input:checked) {
+			background-color: var(--iris-12);
+			color: var(--iris-4);
+		}
+
+		&:hover {
+			background-color: var(--iris-3);
+		}
+	}
+
+	.groupLabel {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
+		position: absolute;
+		inset: 0;
+		padding-bottom: var(--verticalOffset);
+		color: var(--iris-12);
+		transition-property: scale, transform;
+		transition-duration: var(--transition-duration);
+		transform-origin: center bottom;
+
+		.multiple:has(.input:checked) & {
+			transform: translateY(calc(-75%));
+			scale: 0.75;
+
+			> .groupLabelText {
+				color: var(--iris-4);
+				background-color: var(--iris-12);
+				padding: var(--space-1) var(--space-2);
+				border-top-left-radius: var(--radius--large);
+				border-top-right-radius: var(--radius--large);
+			}
+		}
+	}
+
+	.value {
+		display: inline-block;
+		transition-property: transform, scale, color;
+		transition-duration: var(--transition-duration);
+		transform-origin: top center;
+
+		.multiple:not(:has(.input:checked)) & {
+			transform: translateY(80%) scale(0.65);
+			color: var(--iris-11);
+		}
+
+		.item:first-child > & {
+			transform-origin: top right;
+		}
+
+		.item:last-child > & {
+			transform-origin: top left;
+		}
+	}
+}
