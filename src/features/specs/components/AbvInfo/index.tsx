@@ -3,7 +3,6 @@ import type { DraftRecipe } from "@/db/schema/recipes";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { specIsDraft } from "@/features/specs/utils";
-import { formatVolume } from "@/features/units/utils/formatVolume";
 import { Callout } from "@/ui/Callout";
 import { Text } from "@/ui/Text";
 import { percentageFormatter } from "@/utils/formatting";

@@ -2,8 +2,10 @@
 
 @layer ui {
 	.fieldset {
-		display: inline-grid;
+		display: inline-flex;
 		font-weight: 500;
+		white-space: nowrap;
+		font-size: var(--size-2);
 		width: fit-content;
 	}
 
@@ -15,10 +17,12 @@
 		gap: var(--space-0);
 		background-color: var(--iris-1);
 		color: var(--iris-12);
+		flex: 0 0 auto;
 	}
 
 	.group {
 		display: flex;
+		flex: 0 0 auto;
 	}
 
 	.items {
@@ -114,7 +118,8 @@
 
 	.value {
 		display: inline-block;
-		transition-property: transform, scale, color;
+		text-align: center;
+		transition-property: transform, color;
 		transition-duration: var(--transition-duration);
 		transform-origin: top center;
 
