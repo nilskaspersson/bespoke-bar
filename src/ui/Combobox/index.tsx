@@ -10,18 +10,18 @@ import { Input } from "@/ui/Input";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
-import { KEY_NAME, type WithKey } from "@/utils/withKey";
+import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Props<T> = {
 	className?: string;
 	footer?: React.ReactNode;
 	defaultValue?: string;
-	getItemLabel?: (item: WithKey<T>) => React.ReactNode;
-	getItemValue: (item: WithKey<T>) => string;
+	getItemLabel?: (item: Keyed<T>) => React.ReactNode;
+	getItemValue: (item: Keyed<T>) => string;
 	header?: React.ReactNode;
-	items: WithKey<T>[];
-	itemToString: (item: WithKey<T> | null) => string;
+	items: Keyed<T>[];
+	itemToString: (item: Keyed<T> | null) => string;
 	label?: React.ReactNode;
 	name: string;
 };
@@ -42,8 +42,7 @@ export function Combobox<T>({
 	const deferredInputValue = useDeferredValue<typeof inputValue>(inputValue);
 
 	const filteredItems = useMemo(() => {
-		const normalizeLabel = (item: WithKey<T>) =>
-			itemToString(item).toLowerCase();
+		const normalizeLabel = (item: Keyed<T>) => itemToString(item).toLowerCase();
 
 		return deferredInputValue
 			? items.filter((o) =>
@@ -119,7 +118,7 @@ export function Combobox<T>({
 						<OptionsList footer={footer} header={header}>
 							{filteredItems.map((item, index) => (
 								<OptionItem
-									key={item[KEY_NAME]}
+									key={getKey(item)}
 									{...getItemProps({ item, index })}
 									isHighlighted={highlightedIndex === index}
 									isSelected={

@@ -9,7 +9,7 @@ import {
 	useState,
 } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
+import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
 import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
@@ -21,7 +21,7 @@ import { Input } from "@/ui/Input";
 import { Lightbox } from "@/ui/Lightbox";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
-import { KEY_NAME, type WithKey, withKey } from "@/utils/withKey";
+import { getKey, type Keyed, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function BulkDraftRecipes({
@@ -31,7 +31,7 @@ export function BulkDraftRecipes({
 	ingredients,
 	...props
 }: {
-	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe[]>;
+	createRecipes: (recipes: BaseRecipe[]) => Promise<Recipe[]>;
 	ingredients: Ingredient[];
 	empty?: ReactNode;
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
@@ -42,7 +42,7 @@ export function BulkDraftRecipes({
 	const [inputValue, setInputValue] = useState("");
 	const deferredInputValue = useDeferredValue(inputValue);
 
-	const draftRecipes: WithKey<DraftRecipe>[] = useMemo(
+	const draftRecipes: Keyed<BaseRecipe>[] = useMemo(
 		() =>
 			userInputToBulkRecipe(deferredInputValue, ingredients)
 				.filter((recipe) => !isEmptyDraftRecipe(recipe))
@@ -73,7 +73,7 @@ export function BulkDraftRecipes({
 				) : (
 					<ul className={styles.recipes}>
 						{draftRecipes.map((recipe) => (
-							<li key={recipe[KEY_NAME]} className={styles.recipe}>
+							<li key={getKey(recipe)} className={styles.recipe}>
 								<DraftRecipeCard
 									recipe={recipe}
 									convertUnits={withConversionSystem}

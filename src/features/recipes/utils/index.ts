@@ -1,5 +1,5 @@
 import type { FilterFn, SortingFn } from "@tanstack/react-table";
-import type { DraftRecipe, Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
+import type { BaseRecipe, Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
 import { normalizeInput } from "@/utils";
 import { collator } from "@/utils/formatting";
 import { recipeToUrlSlug } from "@/utils/url";
@@ -46,6 +46,6 @@ export const globalFilterRecipeFn: FilterFn<RecipeWithSpecs> = (
 	filterValue,
 ) => normalizeInput(String(row.getValue(columnId) || "")).includes(filterValue);
 
-export function isEmptyDraftRecipe(recipe: DraftRecipe) {
+export function isEmptyDraftRecipe(recipe: BaseRecipe) {
 	return !recipe.name && (!recipe.specs || recipe.specs.length === 0);
 }

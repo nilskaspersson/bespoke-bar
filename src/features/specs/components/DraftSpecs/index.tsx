@@ -3,12 +3,12 @@
 import { clsx } from "clsx";
 import { type HTMLAttributes, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { DraftRecipe, Recipe } from "@/db/schema/recipes";
+import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
 import { Button } from "@/ui/Button";
-import { KEY_NAME, type WithKey, withKey } from "@/utils/withKey";
+import { getKey, type Keyed, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function DraftSpecs({
@@ -17,12 +17,10 @@ export function DraftSpecs({
 	ingredients,
 	...props
 }: {
-	createRecipes: (recipes: DraftRecipe[]) => Promise<Recipe[]>;
+	createRecipes: (recipes: BaseRecipe[]) => Promise<Recipe[]>;
 	ingredients: Ingredient[];
 } & HTMLAttributes<HTMLDivElement>) {
-	const [specs, setSpecs] = useState<WithKey<DraftSpecWithDraftIngredient>[]>(
-		[],
-	);
+	const [specs, setSpecs] = useState<Keyed<DraftSpecWithDraftIngredient>[]>([]);
 
 	const handleSubmit = (formData: FormData) => {
 		const entry = formData.get("spec");
@@ -37,15 +35,15 @@ export function DraftSpecs({
 	};
 
 	const createChangeHandler =
-		(spec: WithKey<DraftSpecWithDraftIngredient>) =>
+		(spec: Keyed<DraftSpecWithDraftIngredient>) =>
 		(o: DraftSpecWithDraftIngredient) => {
 			setSpecs((prev) =>
-				prev.map((s) => (s[KEY_NAME] === spec[KEY_NAME] ? withKey(o) : s)),
+				prev.map((s) => (getKey(s) === getKey(spec) ? withKey(o) : s)),
 			);
 		};
 
 	const createRecipesAction = () => {
-		const recipes: DraftRecipe[] = [
+		const recipes: BaseRecipe[] = [
 			{
 				specs,
 			},
@@ -60,7 +58,7 @@ export function DraftSpecs({
 				<form action={createRecipesAction}>
 					<ul className={styles.box}>
 						{specs.map((spec) => (
-							<li key={spec[KEY_NAME]}>
+							<li key={getKey(spec)}>
 								<SpecEntry spec={spec} onChange={createChangeHandler(spec)} />
 							</li>
 						))}

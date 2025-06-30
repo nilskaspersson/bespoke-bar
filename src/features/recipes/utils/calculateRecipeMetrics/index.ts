@@ -1,5 +1,5 @@
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
-import type { DraftRecipe } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
@@ -77,7 +77,7 @@ export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 	return { totalLiquidVolume, alcoholVolume };
 }
 
-export function calculateRecipeMetrics<T extends DraftRecipe>(
+export function calculateRecipeMetrics<T extends BaseRecipe>(
 	recipe: T,
 	dilutionOverride?: number,
 ): RecipeMetrics {

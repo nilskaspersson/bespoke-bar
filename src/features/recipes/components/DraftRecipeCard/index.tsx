@@ -1,4 +1,4 @@
-import type { DraftRecipe } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
 import { AbvInfo } from "@/features/specs/components/AbvInfo";
@@ -9,10 +9,10 @@ import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
-import { KEY_NAME } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
-export function DraftRecipeCard<T extends DraftRecipe>(props: {
+export function DraftRecipeCard<T extends BaseRecipe>(props: {
 	recipe: T;
 	convertUnits?: UnitSystems | null;
 }) {
@@ -34,7 +34,7 @@ export function DraftRecipeCard<T extends DraftRecipe>(props: {
 				<>
 					<Grid as="ul" gap={1}>
 						{props.recipe.specs.map((spec) => (
-							<li key={spec[KEY_NAME]}>
+							<li key={getKey(spec)}>
 								<SpecEntry spec={spec} convertUnits={props.convertUnits} />
 							</li>
 						))}

@@ -1,13 +1,13 @@
 "use client";
 
 import clsx from "clsx";
-import type { ChangeEvent, ComponentProps } from "react";
-import { KEY_NAME, type WithKey } from "@/utils/withKey";
+import type { ChangeEvent, ComponentProps, ReactNode } from "react";
+import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
-type Group<T> = {
+type Group = {
 	label: string;
-	options: T[];
+	options: Keyed<Option>[];
 };
 
 type Option = {
@@ -15,19 +15,14 @@ type Option = {
 	value: string;
 };
 
-type ItemProps<T extends WithKey<Option>> = {
-	option: T;
+type ItemProps = {
+	option: Keyed<Option>;
 	name: string;
 	isChecked: boolean;
 	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 };
 
-function Item<T extends WithKey<Option>>({
-	option,
-	name,
-	isChecked,
-	onChange,
-}: ItemProps<T>) {
+function Item({ option, name, isChecked, onChange }: ItemProps) {
 	return (
 		<label className={styles.item}>
 			<input
@@ -44,7 +39,7 @@ function Item<T extends WithKey<Option>>({
 	);
 }
 
-export function WeightedToggle<T extends WithKey<Option>>({
+export function WeightedToggle({
 	className,
 	defaultValue,
 	groups,
@@ -53,9 +48,9 @@ export function WeightedToggle<T extends WithKey<Option>>({
 	onChange,
 	...fieldsetProps
 }: Omit<ComponentProps<"fieldset">, "children" | "onChange"> & {
-	defaultValue?: T["value"];
-	groups: WithKey<Group<T>>[];
-	legend?: React.ReactNode;
+	defaultValue?: Option["value"];
+	groups: Keyed<Group>[];
+	legend?: ReactNode;
 	name: string;
 	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }) {
@@ -68,7 +63,7 @@ export function WeightedToggle<T extends WithKey<Option>>({
 					const isSingle = group.options.length === 1;
 
 					return (
-						<div key={group[KEY_NAME]} className={styles.group}>
+						<div key={getKey(group)} className={styles.group}>
 							{isSingle ? (
 								<div className={styles.single}>
 									<Item
@@ -87,7 +82,7 @@ export function WeightedToggle<T extends WithKey<Option>>({
 									<div className={styles.items}>
 										{group.options.map((option) => (
 											<Item
-												key={option[KEY_NAME]}
+												key={getKey(option)}
 												option={option}
 												name={name}
 												isChecked={option.value === defaultValue}

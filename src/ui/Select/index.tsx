@@ -7,17 +7,17 @@ import { ControlLabel } from "@/ui/ControlLabel";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
-import { KEY_NAME, type WithKey } from "@/utils/withKey";
+import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Props<T> = {
 	className?: string;
 	defaultValue?: string;
 	footer?: React.ReactNode;
-	getItemLabel?: (item: WithKey<T>) => React.ReactNode;
-	getItemValue: (item: WithKey<T>) => string;
-	items: WithKey<T>[];
-	itemToString: (item: WithKey<T> | null) => string;
+	getItemLabel?: (item: Keyed<T>) => React.ReactNode;
+	getItemValue: (item: Keyed<T>) => string;
+	items: Keyed<T>[];
+	itemToString: (item: Keyed<T> | null) => string;
 	label?: React.ReactNode;
 	name: string;
 	placeholder?: React.ReactNode;
@@ -47,7 +47,7 @@ export function Select<T>({
 	label,
 	name,
 	placeholder,
-}: Props<WithKey<T>>) {
+}: Props<T>) {
 	const {
 		isOpen,
 		selectedItem,
@@ -97,7 +97,7 @@ export function Select<T>({
 						<OptionsList footer={footer}>
 							{items.map((item, index) => (
 								<OptionItem
-									key={item[KEY_NAME]}
+									key={getKey(item)}
 									{...getItemProps({ item, index })}
 									isHighlighted={highlightedIndex === index}
 									isSelected={

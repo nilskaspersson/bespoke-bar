@@ -57,7 +57,6 @@ export function SelectUnitConversion({
 		<WeightedToggle
 			name={name}
 			defaultValue={defaultValue ?? "off"}
-			// legend={<Legend />}
 			groups={OPTIONS}
 			onChange={handleChange}
 		/>

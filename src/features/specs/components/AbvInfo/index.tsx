@@ -1,15 +1,15 @@
 import type { ComponentProps } from "react";
-import type { DraftRecipe } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { specIsDraft } from "@/features/specs/utils";
 import { Callout } from "@/ui/Callout";
 import { Text } from "@/ui/Text";
 import { percentageFormatter } from "@/utils/formatting";
-import { KEY_NAME } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
-export function AbvInfo<T extends DraftRecipe>({
+export function AbvInfo<T extends BaseRecipe>({
 	recipe,
 	className,
 }: { recipe: T; className?: string } & ComponentProps<"details">) {
@@ -46,7 +46,7 @@ export function AbvInfo<T extends DraftRecipe>({
 						{draftSpecs
 							.filter((o) => Boolean(o.ingredient.name))
 							.map((spec) => (
-								<li key={spec[KEY_NAME]} className={styles.spec}>
+								<li key={getKey(spec)} className={styles.spec}>
 									{spec.ingredient.name} (
 									{percentageFormatter.format(spec.ingredient.abv ?? 0)})
 								</li>

@@ -1,11 +1,11 @@
 import type { ComponentProps } from "react";
-import type { DraftRecipe } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { formatVolume } from "@/features/units/utils/formatVolume";
 import { Text } from "@/ui/Text";
 import { percentageFormatter } from "@/utils/formatting";
 
-export function VolumeInfo<T extends DraftRecipe>({
+export function VolumeInfo<T extends BaseRecipe>({
 	recipe,
 	...props
 }: { recipe: T } & ComponentProps<"details">) {

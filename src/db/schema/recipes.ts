@@ -13,6 +13,7 @@ import {
 	type SpecWithIngredient,
 } from "@/db/schema/specs";
 import type { Identity } from "@/utils/types";
+import type { Keyed } from "@/utils/withKey";
 
 export const RecipesTable = pgTable(
 	"recipes",
@@ -50,12 +51,12 @@ export type InsertRecipe = Omit<
 >;
 
 /**
- * The fields users can provide to create a recipe. If it has specs, those must be
- * with IDs to use as keys.
+ * Baseline Recipe structure for component generics to extend. Can be a draft, can
+ * be a db entity.
  */
-export type DraftRecipe = Identity<
+export type BaseRecipe = Identity<
 	Partial<Pick<Recipe, "name" | "description" | "preparationMethod">> & {
-		specs?: DraftSpecWithDraftIngredient[];
+		specs?: Keyed<DraftSpecWithDraftIngredient>[];
 	}
 >;
 
