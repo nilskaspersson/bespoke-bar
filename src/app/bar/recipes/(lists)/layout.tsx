@@ -16,7 +16,7 @@ export default async function Layout({
 				<Heading level="h1">Recipes</Heading>
 
 				<LinkButton
-					href="/bar/recipes/create"
+					href="/bar/recipes/create/bulk"
 					variant="solid"
 					color="accent"
 					size="small"
