@@ -8,15 +8,19 @@
 	}
 
 	.search {
+		--offset: calc(var(--gap) + var(--bar-navigation--height));
 		display: grid;
 		justify-self: center;
 		justify-content: center;
 		z-index: 1;
 		position: sticky;
-		top: 100px;
-		bottom: var(--gap);
-		margin-top: var(--gap);
+		bottom: var(--offset);
 		padding: var(--space-2);
+		margin-inline: calc(var(--app-inset) / 2 * -1);
+
+		@media (min-width: 814px) {
+			--offset: var(--gap);
+		}
 	}
 
 	.clear {
@@ -28,24 +32,27 @@
 	.recipeName {
 		display: inline-block;
 		font-weight: 700;
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 		text-wrap: balance;
+		word-break: break-word;
 
 		&:hover {
-			color: var(--color-accent);
+			color: var(--iris-11);
 		}
 	}
 
 	.spec {
-		white-space: nowrap;
 		font-size: var(--size-2);
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		overflow: hidden;
 	}
 
 	.ingredient {
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 
 		&:hover {
-			color: var(--color-accent);
+			color: var(--iris-11);
 		}
 	}
 

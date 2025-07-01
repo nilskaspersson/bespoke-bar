@@ -3,7 +3,7 @@
 import { db } from "@/db";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import {
-	type DraftRecipe,
+	type BaseRecipe,
 	type Recipe,
 	RecipesTable,
 } from "@/db/schema/recipes";
@@ -21,7 +21,7 @@ import { authOrForbidden } from "@/utils/auth";
  * @returns Array of newly created Recipes with Specs.
  */
 export async function createRecipesFromSpecs(
-	userInputRecipes: DraftRecipe[],
+	userInputRecipes: BaseRecipe[],
 ): Promise<Recipe[]> {
 	const { userId, orgId } = await authOrForbidden();
 

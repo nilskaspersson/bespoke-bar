@@ -1,6 +1,71 @@
 @layer feature {
-	.layout {
-		display: flex;
+	.form {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
 		gap: var(--gap--large);
+	}
+
+	.recipes {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	}
+
+	.recipe {
+		display: grid;
+		margin-left: -1px;
+		margin-bottom: -1px;
+	}
+
+	.act {
+		--offset: 0;
+
+		display: grid;
+		grid-template-rows: auto 1fr;
+		gap: var(--gap--tiny);
+		padding: var(--space-2);
+
+		&:not(.isExpanded) {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+			margin-inline: calc(var(--app-inset) / 2 * -1);
+			position: sticky;
+			bottom: var(--offset);
+
+			@media (max-width: 814px) {
+				--offset: var(--bar-navigation--height);
+			}
+		}
+
+		&.isExpanded {
+			position: fixed;
+			inset: -1px;
+			border-radius: 0;
+			z-index: var(--z-modal);
+		}
+	}
+
+	.actions {
+		display: grid;
+		grid-template: "left center right" auto / 1fr 2fr 1fr;
+		gap: var(--gap);
+		justify-content: space-between;
+		align-items: center;
+		height: var(--size-3);
+	}
+
+	.expand {
+		grid-area: left;
+		justify-self: start;
+	}
+
+	.label {
+		grid-area: center;
+		justify-self: center;
+	}
+
+	.create {
+		grid-area: right;
+		justify-self: end;
+		font-size: var(--size-2);
 	}
 }

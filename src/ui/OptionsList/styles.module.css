@@ -20,13 +20,13 @@
 
 	.header {
 		margin-inline: var(--spacing);
-		border-bottom: 1px solid var(--color-border);
+		border-bottom: 1px solid var(--mauve-6);
 		padding-block: calc(var(--spacing) * 2);
 	}
 
 	.footer {
 		margin-inline: var(--spacing);
-		border-top: 1px solid var(--color-border);
+		border-top: 1px solid var(--mauve-6);
 		padding-block: calc(var(--spacing) * 2);
 	}
 }

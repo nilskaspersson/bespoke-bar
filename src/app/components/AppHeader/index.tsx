@@ -6,10 +6,10 @@ import {
 	UserButton,
 } from "@clerk/nextjs";
 import { clsx } from "clsx";
-import Link from "next/link";
 import type { ComponentProps } from "react";
 import { ThemePicker } from "@/app/components/ThemePicker";
 import { Button } from "@/ui/Button";
+import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
 
 export function AppHeader({
@@ -19,11 +19,7 @@ export function AppHeader({
 	return (
 		<header className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>
-				<div className={styles.grid}>
-					<div className={styles.logo}>
-						<Link href="/">Bespoke Bar</Link>
-					</div>
-				</div>
+				<Logo />
 
 				<div className={styles.grid}>
 					<ThemePicker />

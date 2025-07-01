@@ -22,13 +22,13 @@ export function DeleteIngredient({
 			actionLabel="Delete Ingredient"
 			notice={
 				<>
-					This action is <strong>permanent</strong> and cannot be undone.
+					This action is <strong>permanent</strong>. It cannot be undone.
 				</>
 			}
 			description={
 				<Text as="p">
-					You are about to delete <Text italic>{ingredient.name}</Text>. Do you
-					want to continue?
+					You are about to delete <i>{ingredient.name}</i>. Do you want to
+					continue?
 				</Text>
 			}
 		>

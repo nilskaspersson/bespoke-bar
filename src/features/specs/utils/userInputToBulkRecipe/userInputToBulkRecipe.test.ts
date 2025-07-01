@@ -100,7 +100,7 @@ describe("userInputToBulkRecipe", () => {
 						unit: "ml",
 						ingredient: {
 							...EMPTY_INGREDIENT,
-							name: "Lime juice",
+							name: "lime juice",
 							category: "citrus",
 							measurementType: "volume",
 						},
@@ -109,7 +109,7 @@ describe("userInputToBulkRecipe", () => {
 					{
 						quantity: 2,
 						unit: null,
-						ingredient: { ...EMPTY_INGREDIENT, name: "Cucumber slices" },
+						ingredient: { ...EMPTY_INGREDIENT, name: "cucumber slices" },
 						ingredientId: undefined,
 					},
 				],
@@ -122,7 +122,7 @@ describe("userInputToBulkRecipe", () => {
 						unit: "fl_oz",
 						ingredient: {
 							...EMPTY_INGREDIENT,
-							name: "Milk",
+							name: "milk",
 							measurementType: "volume",
 							category: "dairy",
 						},
@@ -133,7 +133,7 @@ describe("userInputToBulkRecipe", () => {
 						unit: "cl",
 						ingredient: {
 							...EMPTY_INGREDIENT,
-							name: "Cinnamon syrup",
+							name: "cinnamon syrup",
 							measurementType: "volume",
 						},
 						ingredientId: undefined,
@@ -148,7 +148,7 @@ describe("userInputToBulkRecipe", () => {
 						unit: "cl",
 						ingredient: {
 							...EMPTY_INGREDIENT,
-							name: "Gin",
+							name: "gin",
 							measurementType: "volume",
 							category: "gin",
 							abv: 0.4,
@@ -177,7 +177,7 @@ describe("userInputToBulkRecipe", () => {
 						unit: "ml",
 						ingredient: {
 							...EMPTY_INGREDIENT,
-							name: "Whiskey",
+							name: "whiskey",
 							category: "whiskey",
 							measurementType: "volume",
 							abv: 0.4,

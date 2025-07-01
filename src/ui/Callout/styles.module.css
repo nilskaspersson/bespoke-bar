@@ -1,0 +1,62 @@
+@layer ui {
+	.callout {
+		--inset: min(calc(var(--jsxSize, 0) / 2), var(--gap--large));
+
+		padding: var(--inset);
+
+		background-color: var(--bgc);
+		border: 1px solid var(--bc);
+		color: var(--c);
+
+		display: inline-flex;
+		column-gap: var(--inset);
+		border-radius: var(--radius);
+		width: fit-content;
+		max-width: var(--line-length);
+	}
+
+	.icon {
+		grid-area: icon;
+		top: 1px;
+		flex: 0 0 auto;
+	}
+
+	.content {
+		display: grid;
+		gap: var(--space-1);
+		flex: 1 1 auto;
+	}
+
+	/**
+	 * Colors
+	 */
+	.regular {
+		--bgc: transparent;
+		--bc: var(--mauve-6);
+		--c: inherit;
+	}
+
+	.light {
+		--bgc: var(--mauve-5);
+		--bc: var(--mauve-6);
+		--c: var(--mauve-12);
+	}
+
+	.heavy {
+		--bgc: var(--mauve-3);
+		--bc: var(--mauve-9);
+		--c: var(--mauve-11);
+	}
+
+	.accent {
+		--bgc: var(--iris-4);
+		--bc: var(--iris-7);
+		--c: var(--iris-12);
+	}
+
+	.red {
+		--bgc: var(--red-4);
+		--bc: var(--red-7);
+		--c: var(--red-12);
+	}
+}

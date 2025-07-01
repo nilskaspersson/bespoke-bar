@@ -1,0 +1,6 @@
+@layer feature {
+	.spec {
+		text-wrap: balance;
+		word-break: break-word;
+	}
+}

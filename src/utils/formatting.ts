@@ -11,7 +11,7 @@ export const percentageFormatter = new Intl.NumberFormat("en-GB", {
 
 export const volumeFormatter = new Intl.NumberFormat("en-GB", {
 	minimumFractionDigits: 0,
-	maximumFractionDigits: 1,
+	maximumFractionDigits: 2,
 });
 
 export const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {

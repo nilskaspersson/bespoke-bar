@@ -1,35 +1,30 @@
 @layer composition {
 	.nav {
 		--label-offset: var(--space-4);
-		--inset: var(--space-4);
-
-		display: flex;
-		justify-content: center;
-		align-items: center;
-
-		@media (min-width: 814px) {
-			display: none;
-		}
+		--inset: var(--space-2);
 	}
 
 	.list {
 		display: flex;
+		justify-content: center;
 		gap: var(--space-6);
-		background-color: var(--mauve-2);
-		box-shadow: inset 0 0 1em var(--mauve-1);
+		background-color: var(--mauve-1);
+		border-top: 1px solid var(--mauve-6);
 		padding-top: var(--inset);
 		padding-bottom: calc(var(--inset) + var(--label-offset));
-		padding-inline: var(--space-6);
-		border-radius: var(--radius--full);
 	}
 
 	.label {
 		position: absolute;
-		inset: 100% 0 auto;
-		margin-top: var(--gap--small);
+		inset: calc(100% + 2ex) 0 auto;
 		display: flex;
 		justify-content: center;
 		text-align: center;
-		color: var(--color-accent);
+		color: var(--iris-11);
+		font-size: var(--size-0);
+	}
+
+	.button {
+		height: 2rem;
 	}
 }

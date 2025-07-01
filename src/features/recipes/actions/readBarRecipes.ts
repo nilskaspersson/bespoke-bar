@@ -1,20 +1,15 @@
 "use server";
 
-import { and, desc, eq, isNotNull, isNull } from "drizzle-orm";
+import { and, desc, eq, isNull } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 import { authOrForbidden } from "@/utils/auth";
 
-export async function readBarRecipes(options?: { archivedRecipes?: boolean }) {
+export async function readBarRecipes() {
 	const { orgId } = await authOrForbidden();
 
 	const recipes = await db.query.RecipesTable.findMany({
-		where: and(
-			eq(RecipesTable.orgId, orgId),
-			options?.archivedRecipes
-				? isNotNull(RecipesTable.archivedAt)
-				: isNull(RecipesTable.archivedAt),
-		),
+		where: and(eq(RecipesTable.orgId, orgId), isNull(RecipesTable.archivedAt)),
 		with: {
 			specs: {
 				with: {

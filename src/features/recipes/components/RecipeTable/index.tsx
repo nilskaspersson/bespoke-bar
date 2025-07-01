@@ -84,6 +84,7 @@ export function RecipeTable({
 										href={getIngredientUrl(spec.ingredient)}
 										prefetch={false}
 										className={styles.ingredient}
+										title={spec.ingredient.name}
 									>
 										{spec.ingredient.name}
 									</Link>
@@ -182,7 +183,12 @@ export function RecipeTable({
 				) : null}
 			</Grid>
 
-			<Lightbox rounded className={styles.search}>
+			<Lightbox
+				rounded
+				translucent
+				className={styles.search}
+				forceTheme="light"
+			>
 				<form ref={formRef}>
 					<Input
 						type="search"

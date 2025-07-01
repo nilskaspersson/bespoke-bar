@@ -4,7 +4,7 @@
 		flex-wrap: nowrap;
 		align-items: center;
 		border-radius: var(--radius--full);
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 		background-color: var(--mauve-2);
 		border: var(--space-1) solid transparent;
 		box-shadow: var(--shadow--low);

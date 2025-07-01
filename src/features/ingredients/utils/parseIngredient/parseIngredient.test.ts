@@ -2,12 +2,12 @@ import { describe, expect, test } from "vitest";
 import { formatIngredient } from ".";
 
 describe("parseIngredient", () => {
-	describe("basic capitalization + whitespace handling", () => {
+	describe("whitespace handling", () => {
 		test.each([
-			["gin", "Gin"],
-			["lemon juice", "Lemon juice"],
-			["  gin  ", "Gin"],
-			["gin   and   tonic", "Gin and tonic"],
+			["gin", "gin"],
+			["lemon juice", "lemon juice"],
+			["  gin  ", "gin"],
+			["gin   and   tonic", "gin and tonic"],
 		])('Parses "%s" as %j', (input, expected) => {
 			expect(formatIngredient(input)).toEqual(expected);
 		});
@@ -15,8 +15,8 @@ describe("parseIngredient", () => {
 
 	describe("preserve user casing after first letter", () => {
 		test.each([
-			["grey GOOSE vodka", "Grey GOOSE vodka"],
-			["crème de cacao", "Crème de cacao"],
+			["grey GOOSE vodka", "grey GOOSE vodka"],
+			["crème de cacao", "crème de cacao"],
 		])('Parses "%s" as %j', (input, expected) => {
 			expect(formatIngredient(input)).toEqual(expected);
 		});
@@ -24,12 +24,12 @@ describe("parseIngredient", () => {
 
 	describe("edge cases (special characters, empty strings, etc.)", () => {
 		test.each([
-			["gin\x00tonic", "Gintonic"],
-			["lemon\x08juice", "Lemonjuice"],
-			["  gin\x00   &   tonic  ", "Gin & tonic"],
+			["gin\x00tonic", "gintonic"],
+			["lemon\x08juice", "lemonjuice"],
+			["  gin\x00   &   tonic  ", "gin & tonic"],
 			["", null],
 			["   ", null],
-			["jalapeño", "Jalapeño"],
+			["jalapeño", "jalapeño"],
 		])('Parses "%s" as %j', (input, expected) => {
 			expect(formatIngredient(input)).toEqual(expected);
 		});

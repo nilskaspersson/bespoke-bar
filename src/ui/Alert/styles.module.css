@@ -10,6 +10,7 @@
 		min-height: 0;
 		word-wrap: break-word;
 		padding: var(--gap--tiny);
+		color: var(--mauve-11);
 	}
 
 	.contain {
@@ -28,6 +29,7 @@
 		top: 0;
 		background-color: inherit;
 		z-index: 1;
+		color: var(--mauve-12);
 	}
 
 	.content {
@@ -56,6 +58,7 @@
 		grid-area: actions;
 		display: flex;
 		justify-content: flex-end;
+		align-items: center;
 		gap: var(--gap--small);
 		margin-top: var(--gap--small);
 	}

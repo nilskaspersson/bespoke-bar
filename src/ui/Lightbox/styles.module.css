@@ -1,29 +1,17 @@
 @layer ui {
 	.lightbox {
-		--brightness: 1;
 		--r: var(--radius--large);
+		--bg-from: var(--red-4);
+		--bg-to: var(--iris-4);
 
-		background-color: var(--mauve-3);
 		border-radius: var(--r);
 		box-shadow: var(--shadow--high);
 
 		border-top: 1px solid var(--shine);
 		border-left: 1px solid var(--shine);
 
-		@supports (backdrop-filter: blur(var(--size-1))) {
-			background-color: hsl(from var(--mauve-3) h s l / 50%);
-			backdrop-filter: blur(var(--size-1));
-		}
+		background-image: linear-gradient(-45deg, var(--bg-from), var(--bg-to));
 
-		[data-theme="dark"] & {
-			--brightness: 1.1;
-		}
-
-		background-image: radial-gradient(
-			circle at top left,
-			var(--shine),
-			transparent
-		);
 		background-origin: border-box;
 
 		transition-property: opacity, transform;
@@ -42,6 +30,14 @@
 
 		&.rounded {
 			--r: var(--radius--full);
+		}
+
+		&.translucent {
+			@supports (backdrop-filter: blur(var(--size-1))) {
+				--bg-from: hsl(from var(--red-10) h s l / 20%);
+				--bg-to: hsl(from var(--iris-10) h s l / 20%);
+				backdrop-filter: blur(var(--size-0));
+			}
 		}
 	}
 }

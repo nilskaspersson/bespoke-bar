@@ -2,7 +2,7 @@
 	.nav {
 		display: grid;
 		background-color: var(--mauve-4);
-		border-bottom: 1px solid var(--color-border--light);
+		border-bottom: 1px solid var(--mauve-5);
 		padding-bottom: 1px;
 		contain: strict;
 		height: var(--app-navigation--height);
@@ -21,7 +21,7 @@
 
 		@media (min-width: 814px) {
 			padding-right: calc(var(--gap) - var(--clerk-button-inset));
-			border-right: 1px solid var(--color-border);
+			border-right: 1px solid var(--mauve-6);
 		}
 	}
 
@@ -48,7 +48,7 @@
 		padding-inline: calc(var(--gap) / 2);
 		margin-bottom: -1px;
 		font-weight: 500;
-		color: var(--color-text);
+		color: var(--mauve-11);
 
 		&::before {
 			content: "";

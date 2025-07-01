@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 import type { InputHTMLAttributes } from "react";
 import { Checkbox } from "@/ui/Checkbox";
 import { Text } from "@/ui/Text";
-import { KEY_NAME, type WithKey } from "@/utils/withKey";
+import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export type Option = {
@@ -19,7 +19,7 @@ export function RadioGroup({
 }: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value"> & {
 	legend: React.ReactNode;
 	name: string;
-	options: WithKey<Option>[] | null | undefined;
+	options: Keyed<Option>[] | null | undefined;
 }) {
 	return (
 		<fieldset className={clsx(className, styles.fieldset)} id={id}>
@@ -38,7 +38,7 @@ export function RadioGroup({
 
 			{options?.map((option) => (
 				<Checkbox
-					key={option[KEY_NAME]}
+					key={getKey(option)}
 					type="radio"
 					label={option.label}
 					value={option.value}

@@ -1,8 +1,26 @@
 @layer ui {
+	@property --jsxFontSize {
+		syntax: "<length>";
+		initial-value: inherit;
+		inherits: false;
+	}
+
+	@property --jsxFontWeight {
+		syntax: "<number>";
+		initial-value: inherit;
+		inherits: false;
+	}
+
+	@property --jsxTextAlign {
+		syntax: "<text-align>";
+		initial-value: inherit;
+		inherits: false;
+	}
+
 	.text {
-		font-size: var(--jsxFontSize, inherit);
-		font-weight: var(--jsxFontWeight, inherit);
-		text-align: var(--jsxTextAlign, inherit);
+		font-size: var(--jsxFontSize);
+		font-weight: var(--jsxFontWeight);
+		text-align: var(--jsxTextAlign);
 
 		text-wrap: pretty;
 		line-height: var(--line-height);
@@ -12,8 +30,20 @@
 		}
 
 		> a {
-			color: var(--color-accent);
+			color: var(--iris-11);
 			text-decoration: underline;
+		}
+	}
+
+	.list {
+		& ol,
+		&:is(ol) {
+			list-style: decimal inside;
+		}
+
+		& ul,
+		&:is(ul) {
+			list-style: disc inside;
 		}
 	}
 
@@ -35,10 +65,10 @@
 	}
 
 	.light {
-		color: var(--color-text--light);
+		color: var(--mauve-10);
 	}
 
 	.heavy {
-		color: var(--color-text--heavy);
+		color: var(--mauve-12);
 	}
 }

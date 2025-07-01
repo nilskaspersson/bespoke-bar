@@ -1,3 +1,5 @@
+import type { Unit } from "@/db/schema/units";
+import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
 import { volumeFormatter } from "@/utils/formatting";
 
@@ -33,10 +35,33 @@ export function formatVolume(
 		return `${volumeFormatter.format(liters)} l`;
 	}
 
-	if (volumeInMl >= 100) {
+	if (volumeInMl >= 10) {
 		const centiliters = convert(volumeInMl).from("ml").to("cl");
 		return `${volumeFormatter.format(centiliters)} cl`;
 	}
 
 	return `${volumeFormatter.format(volumeInMl)} ml`;
+}
+
+export function quantityToBestUnit(
+	quantity: number | null | undefined,
+	unit: Unit | null | undefined,
+	unitSystem: "metric" | "imperial" = "metric",
+): string {
+	if (!quantity) {
+		return "";
+	}
+
+	if (!unit) {
+		return quantity.toString();
+	}
+
+	const libUnit = DB_UNIT_TO_LIB_UNIT.get(unit);
+
+	if (!libUnit) {
+		return quantity.toString();
+	}
+
+	const volumeInMl = convert(quantity).from(libUnit).to("ml");
+	return formatVolume(volumeInMl, unitSystem);
 }

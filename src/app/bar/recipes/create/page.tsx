@@ -1,32 +1,32 @@
 import type { Metadata } from "next";
-import { readIngredients } from "@/features/ingredients/actions/readIngredients";
-
-import { createRecipesFromSpecs } from "@/features/recipes/actions/createRecipeFromSpecs";
-import { BulkDraftRecipes } from "@/features/recipes/components/BulkDraftRecipes";
-import { DraftSpecs } from "@/features/specs/components/DraftSpecs";
-import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
+import { LinkButton } from "@/ui/Button";
+import { Text } from "@/ui/Text";
 
 export default async function CreateRecipePage() {
-	const ingredients = await readIngredients();
-
 	return (
-		<Container as="article">
-			<Grid gap={4}>
-				<Heading level="h1">Create Recipe</Heading>
+		<section>
+			<nav>
+				<LinkButton
+					href="/bar/recipes/create"
+					inert
+					aria-disabled
+					variant="solid"
+					color="heavy"
+				>
+					Single recipe
+				</LinkButton>
 
-				<DraftSpecs
-					createRecipes={createRecipesFromSpecs}
-					ingredients={ingredients}
-				/>
+				<Text>or</Text>
 
-				<BulkDraftRecipes
-					createRecipes={createRecipesFromSpecs}
-					ingredients={ingredients}
-				/>
-			</Grid>
-		</Container>
+				<LinkButton
+					href="/bar/recipes/create/bulk"
+					variant="solid"
+					color="accent"
+				>
+					Bulk creation
+				</LinkButton>
+			</nav>
+		</section>
 	);
 }
 

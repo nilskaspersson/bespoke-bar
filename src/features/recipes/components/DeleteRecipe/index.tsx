@@ -23,15 +23,15 @@ export function DeleteRecipe({
 			actionLabel="Delete Recipe"
 			notice={
 				<>
-					This action is <strong>permanent</strong> and cannot be undone.
+					This action is <strong>permanent</strong>. It cannot be undone.
 				</>
 			}
 			description={
 				<Text as="p">
 					You are about to delete{" "}
-					<Text italic>
+					<i>
 						<RecipeName recipe={recipe} />
-					</Text>
+					</i>
 					. Do you want to continue?
 				</Text>
 			}

@@ -46,7 +46,7 @@ export function TableHeader<T>({
 									<Button
 										variant="text"
 										onClick={header.column.getToggleSortingHandler()}
-										color={isSorted ? "heavy" : undefined}
+										color={isSorted ? "accent" : "heavy"}
 										title={
 											header.column.getNextSortingOrder() === "asc"
 												? "Sort ascending"

@@ -1,0 +1,10 @@
+@layer feature {
+	.callout {
+		margin-top: var(--space-1);
+	}
+
+	.spec {
+		text-wrap: balance;
+		word-break: break-word;
+	}
+}

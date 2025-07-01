@@ -1,5 +1,5 @@
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { DraftRecipe } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
 import { withKey } from "@/utils/withKey";
 
@@ -13,10 +13,10 @@ function removeListPrefix(line: string): string {
 export function userInputToBulkRecipe(
 	userInput: string,
 	ingredients: Ingredient[],
-): DraftRecipe[] {
+): BaseRecipe[] {
 	const textBlocks = userInput.trim().split(PATTERN_REPEATING_NEWLINES);
 
-	const results: DraftRecipe[] = [];
+	const results: BaseRecipe[] = [];
 
 	for (let i = 0; i < textBlocks.length; i++) {
 		const lines = textBlocks[i].trim().split("\n");
@@ -26,7 +26,7 @@ export function userInputToBulkRecipe(
 		}
 
 		let recipeName: string | undefined;
-		const specs: DraftRecipe["specs"] = [];
+		const specs: BaseRecipe["specs"] = [];
 
 		/**
 		 * Parse the first line of the block independently. If it looks like a spec, push

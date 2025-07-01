@@ -1,0 +1,12 @@
+@layer feature {
+	.card {
+		background-color: var(--mauve-3);
+		padding: var(--space-5);
+		border: 1px solid var(--mauve-6);
+	}
+
+	.icon {
+		fill: var(--mauve-8);
+		flex: 0 0 auto;
+	}
+}

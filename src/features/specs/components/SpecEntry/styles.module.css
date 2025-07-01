@@ -2,11 +2,36 @@
 	.entry {
 		display: flex;
 		gap: 0.5ch;
-		font-size: var(--size-5);
+		font-size: var(--size-4);
+	}
+
+	.node {
+		flex: 0 0 auto;
 	}
 
 	.quantity {
 		font-weight: 700;
 		font-variant-numeric: tabular-nums;
+	}
+
+	.name {
+		flex-shrink: 1;
+		text-wrap: balance;
+		word-break: break-word;
+
+		&:not(:is(a)) {
+			color: var(--mauve-12);
+		}
+	}
+
+	.new {
+		line-height: 1;
+		font-size: var(--size-0);
+		align-self: start;
+		color: var(--mauve-12);
+		font-weight: 600;
+		padding: var(--space-0);
+		background-color: var(--iris-7);
+		border-radius: var(--radius--small);
 	}
 }

@@ -26,7 +26,8 @@ export function Icon({
 			style={mergeStyleSources(
 				style,
 				toCSSVars({
-					jsxIconLength: size ? `var(--size-${size})` : undefined,
+					jsxIconLength:
+						typeof size === "number" ? `var(--size-${size})` : undefined,
 				}),
 			)}
 		>

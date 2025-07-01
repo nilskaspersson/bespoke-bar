@@ -3,7 +3,7 @@ import {
 	type InsertIngredient,
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
-import { type DraftRecipe, insertRecipeSchema } from "@/db/schema/recipes";
+import { type BaseRecipe, insertRecipeSchema } from "@/db/schema/recipes";
 import {
 	type DraftSpecWithDraftIngredient,
 	type InsertSpec,
@@ -14,7 +14,7 @@ import {
  * Prepares spec data for insertion by mapping ingredient IDs and recipe ID.
  */
 export function prepareSpecsForInsertion(
-	userInputRecipe: DraftRecipe,
+	userInputRecipe: BaseRecipe,
 	recipeId: string,
 	getIngredientId: (
 		spec: DraftSpecWithDraftIngredient,
@@ -46,7 +46,7 @@ export function prepareSpecsForInsertion(
  * Validates recipe data and prepares it for insertion.
  */
 export function validateRecipes(
-	userInputRecipes: DraftRecipe[],
+	userInputRecipes: BaseRecipe[],
 	userId: string,
 	orgId: string,
 ): ReturnType<typeof insertRecipeSchema.parse>[] {
@@ -70,7 +70,7 @@ export function validateRecipes(
  * Extracts new ingredients from user input
  */
 export function extractIngredientsToCreate(
-	userInputRecipes: DraftRecipe[],
+	userInputRecipes: BaseRecipe[],
 	userId: string,
 	orgId: string,
 ): Map<Ingredient["name"], InsertIngredient> {

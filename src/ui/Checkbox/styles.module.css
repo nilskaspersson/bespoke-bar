@@ -23,7 +23,7 @@
 		gap: var(--gap--tiny);
 
 		.input:user-invalid + & .inner {
-			text-decoration: underline wavy var(--color-error);
+			text-decoration: underline wavy var(--red-9);
 		}
 
 		/**
@@ -38,7 +38,7 @@
 		transition: color var(--transition-duration);
 
 		.input:checked + .label > & {
-			color: var(--color-text--heavy);
+			color: var(--mauve-12);
 		}
 	}
 
@@ -51,7 +51,7 @@
 		height: var(--checkbox-length);
 		place-items: center;
 		border-radius: var(--radius--small);
-		border: 1px solid var(--color-border);
+		border: 1px solid var(--mauve-6);
 		outline: 2px solid transparent;
 		outline-offset: 1px;
 		transition-property: border-color, outline-color;
@@ -61,17 +61,17 @@
 			cursor: pointer;
 
 			&:hover {
-				border-color: var(--color-border--heavy);
+				border-color: var(--mauve-7);
 			}
 		}
 
 		.input:checked + .label > & {
-			background-color: var(--color-accent);
-			border-color: var(--color-accent);
+			background-color: var(--iris-11);
+			border-color: var(--iris-11);
 		}
 
 		.input:focus-visible + .label > & {
-			outline-color: var(--color-accent);
+			outline-color: var(--iris-11);
 		}
 
 		&.radio {

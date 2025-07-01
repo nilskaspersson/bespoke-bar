@@ -11,6 +11,7 @@ type Props = {
 	as?: React.ElementType;
 	asChild?: boolean;
 	gap?: Scale;
+	inline?: boolean;
 	justifyContent?: "start" | "end" | "center" | "stretch" | "space-between";
 	justifyItems?: "start" | "end" | "center" | "stretch" | "baseline";
 };
@@ -22,6 +23,7 @@ export function Grid({
 	asChild,
 	children,
 	gap = 0,
+	inline,
 	justifyContent,
 	justifyItems,
 	...slotProps
@@ -30,7 +32,9 @@ export function Grid({
 		asChild ? Slot : as,
 		{
 			...slotProps,
-			className: clsx(slotProps.className, styles.grid),
+			className: clsx(slotProps.className, styles.grid, {
+				[styles.inline]: inline,
+			}),
 			style: mergeStyleSources(
 				slotProps.style,
 				toCSSVars({

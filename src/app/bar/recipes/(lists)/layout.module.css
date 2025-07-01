@@ -1,0 +1,24 @@
+@layer layout {
+	.container {
+		display: grid;
+		gap: var(--gap);
+		padding-bottom: var(--gap);
+		grid-template:
+			"header" auto
+			"actions" auto
+			"table" 1fr;
+	}
+
+	.header {
+		grid-area: header;
+		display: flex;
+		gap: var(--gap) var(--gap--large);
+		justify-content: space-between;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+
+	.actions {
+		grid-area: actions;
+	}
+}

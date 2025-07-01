@@ -1,4 +1,5 @@
 @layer base {
+	[data-theme="light"],
 	:root {
 		--iris-1: #fdfdff;
 		--iris-2: #f8f8ff;

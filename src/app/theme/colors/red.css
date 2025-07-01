@@ -1,4 +1,5 @@
 @layer base {
+	[data-theme="light"],
 	:root {
 		--red-1: #fffcfc;
 		--red-2: #fff7f7;

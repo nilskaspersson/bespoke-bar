@@ -16,11 +16,14 @@ export default async function Layout({
 	}
 
 	return (
-		<div className={styles.container}>
-			<SecondaryNavigation className={styles.navigation} />
+		<>
+			<div className={styles.container}>
+				<SecondaryNavigation className={styles.navigation} />
+				<div className={styles.main}>{children}</div>
+			</div>
+
 			<BarNavigation className={styles.barNavigation} />
-			<div className={styles.main}>{children}</div>
-		</div>
+		</>
 	);
 }
 
