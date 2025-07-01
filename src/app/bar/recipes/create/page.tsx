@@ -1,19 +1,17 @@
 import type { Metadata } from "next";
 import { LinkButton } from "@/ui/Button";
 import { Text } from "@/ui/Text";
-import styles from "./page.module.css";
 
 export default async function CreateRecipePage() {
 	return (
 		<section>
-			<nav className={styles.nav}>
+			<nav>
 				<LinkButton
 					href="/bar/recipes/create"
 					inert
 					aria-disabled
 					variant="solid"
 					color="heavy"
-					fullWidth
 				>
 					Single recipe
 				</LinkButton>
@@ -24,7 +22,6 @@ export default async function CreateRecipePage() {
 					href="/bar/recipes/create/bulk"
 					variant="solid"
 					color="accent"
-					fullWidth
 				>
 					Bulk creation
 				</LinkButton>

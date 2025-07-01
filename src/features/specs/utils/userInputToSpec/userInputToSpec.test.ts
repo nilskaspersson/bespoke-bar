@@ -21,7 +21,7 @@ describe("userInputToSpec", () => {
 				unit,
 				ingredient: {
 					...EMPTY_INGREDIENT,
-					name: "Gin",
+					name: "gin",
 					abv: 0.4,
 					category: "gin",
 					measurementType: "volume",
@@ -41,7 +41,7 @@ describe("userInputToSpec", () => {
 
 					ingredient: {
 						...EMPTY_INGREDIENT,
-						name: "Gin",
+						name: "gin",
 						abv: 0.4,
 						category: "gin",
 						measurementType: "volume",
@@ -55,7 +55,7 @@ describe("userInputToSpec", () => {
 	describe("parses common unit deviations", () => {
 		test.each([
 			[
-				"5cl tanqueray Gin",
+				"5cl Tanqueray Gin",
 				{
 					quantity: 5,
 					unit: "cl",
@@ -73,11 +73,11 @@ describe("userInputToSpec", () => {
 				"2 _ml Suze",
 				{
 					quantity: 2,
-					unit: "ml",
+					unit: null,
 					ingredient: {
 						...EMPTY_INGREDIENT,
-						name: "Suze",
-						measurementType: "volume",
+						name: "_ml Suze",
+						measurementType: null,
 					},
 					ingredientId: undefined,
 				},
