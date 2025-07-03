@@ -22,4 +22,17 @@
 		gap: var(--gap--tiny);
 		align-items: center;
 	}
+
+	.card {
+		--sticky-offset: var(--gap--small);
+		position: sticky;
+		bottom: var(--sticky-offset);
+		top: var(--gap--small);
+		margin-bottom: var(--gap--large);
+		z-index: 10;
+
+		@media (max-width: 814px) {
+			--sticky-offset: calc(var(--gap--small) + var(--bar-navigation--height));
+		}
+	}
 }

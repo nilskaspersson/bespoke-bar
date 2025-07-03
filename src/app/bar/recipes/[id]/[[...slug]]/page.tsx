@@ -43,10 +43,10 @@ export default async function RecipePage({ params }: Props) {
 
 	return (
 		<Container asChild className={styles.container}>
-			<Grid gap={4}>
+			<Grid gap={9}>
 				<RecipeArticle recipe={recipe} />
 
-				<Flex gap={2}>
+				<Flex gap={2} justifyContent="center">
 					<LinkButton
 						href={`/bar/recipes/${id}/edit`}
 						variant="outline"

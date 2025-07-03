@@ -7,7 +7,6 @@ import { getFullName } from "@/features/organisation/utils";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
@@ -32,69 +31,62 @@ export async function RecipeArticle({
 					by {getFullName(author) ?? <i>{FALLBACK_USER_NAME}</i>},{" "}
 					<Time date={recipe.createdAt} relativeThreshold={0} />
 				</Text>
+
+				{recipe.description ? (
+					<Text as="p" className={styles.description}>
+						{recipe.description}
+					</Text>
+				) : null}
 			</header>
 
 			<hr className={styles.divider} />
 
-			<Grid gap={9} justifyItems="center">
-				<RecipeInfo
-					recipe={recipe}
-					header={
-						<Flex gap={4} justifyContent="space-between">
-							<Heading level="h3" size={3}>
-								<RecipeName recipe={recipe} />
-							</Heading>
+			<RecipeInfo
+				recipe={recipe}
+				header={
+					<Flex gap={4} justifyContent="space-between">
+						<Heading level="h3" size={3}>
+							<RecipeName recipe={recipe} />
+						</Heading>
 
-							<Icon
-								name="duotone-martini-glass"
-								size={3}
-								className={styles.icon}
-							/>
-						</Flex>
-					}
-					tools={
-						<dl className={styles.tools}>
-							<div>
-								<Text as="dt" size={0} compact>
-									Method
-								</Text>
-								<Text as="dd" size={2} heavy weight={500}>
-									Shaken
-								</Text>
-							</div>
+						<Icon
+							name="duotone-martini-glass"
+							size={3}
+							className={styles.icon}
+						/>
+					</Flex>
+				}
+				tools={
+					<dl className={styles.tools}>
+						<div>
+							<Text as="dt" size={0} compact>
+								Method
+							</Text>
+							<Text as="dd" size={2} heavy weight={500}>
+								Shaken
+							</Text>
+						</div>
 
-							<div>
-								<Text as="dt" size={0} compact>
-									Glassware
-								</Text>
-								<Text as="dd" size={2} heavy weight={500}>
-									Coupe
-								</Text>
-							</div>
+						<div>
+							<Text as="dt" size={0} compact>
+								Glassware
+							</Text>
+							<Text as="dd" size={2} heavy weight={500}>
+								Coupe
+							</Text>
+						</div>
 
-							<div>
-								<Text as="dt" size={0} compact>
-									Garnish
-								</Text>
-								<Text as="dd" size={2} heavy weight={500}>
-									Lime wheel
-								</Text>
-							</div>
-						</dl>
-					}
-				/>
-
-				<Grid gap={2}>
-					<Text as="ol" list>
-						<li>Add all ingredients to the shaker.</li>
-						<li>Shake well.</li>
-						<li>Strain into a glass.</li>
-						<li>Garnish with a lemon twist.</li>
-					</Text>
-				</Grid>
-
-				<Text as="p">{recipe.description}</Text>
-			</Grid>
+						<div>
+							<Text as="dt" size={0} compact>
+								Garnish
+							</Text>
+							<Text as="dd" size={2} heavy weight={500}>
+								Lime wheel
+							</Text>
+						</div>
+					</dl>
+				}
+			/>
 		</article>
 	);
 }

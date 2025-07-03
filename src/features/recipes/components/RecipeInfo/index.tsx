@@ -1,12 +1,6 @@
 "use client";
 
-import { clsx } from "clsx";
-import {
-	type ComponentProps,
-	type ReactNode,
-	useDeferredValue,
-	useState,
-} from "react";
+import { type ReactNode, useDeferredValue, useState } from "react";
 import z from "zod/v4";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -21,15 +15,14 @@ import { SelectUnitConversion } from "../SelectUnitConversion";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends BaseRecipe>({
-	className,
 	recipe,
 	header,
 	tools,
-	...props
-}: { recipe: T; header?: ReactNode; tools?: ReactNode } & Omit<
-	ComponentProps<"section">,
-	"children"
->) {
+}: {
+	recipe: T;
+	header?: ReactNode;
+	tools?: ReactNode;
+}) {
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
 
@@ -41,13 +34,14 @@ export function RecipeInfo<T extends BaseRecipe>({
 	}
 
 	return (
-		<section {...props} className={clsx(styles.base, className)}>
+		<>
 			<RecipeCard
 				recipe={recipe}
 				header={header}
 				tools={tools}
 				servings={deferredServings}
 				withConversionSystem={withConversionSystem}
+				className={styles.card}
 			/>
 
 			<aside className={styles.aside}>
@@ -108,6 +102,6 @@ export function RecipeInfo<T extends BaseRecipe>({
 					convertUnits={withConversionSystem}
 				/>
 			</aside>
-		</section>
+		</>
 	);
 }

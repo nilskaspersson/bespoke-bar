@@ -5,16 +5,20 @@
 		container: article / inline-size;
 	}
 
-	.divider {
-		margin-block: var(--space-9);
-	}
-
 	.header {
 		display: grid;
 		gap: var(--gap);
 		justify-items: center;
-		padding-top: var(--space-9);
+		padding-block: var(--space-9);
 		text-align: center;
+	}
+
+	.description {
+		margin-top: var(--gap);
+	}
+
+	.divider {
+		margin-bottom: var(--space-6);
 	}
 
 	.name {
