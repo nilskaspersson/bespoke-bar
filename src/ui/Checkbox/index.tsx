@@ -2,18 +2,38 @@ import { clsx } from "clsx";
 import { type InputHTMLAttributes, useId } from "react";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import type { Scale } from "@/utils/types";
 import styles from "./styles.module.css";
+
+type CheckboxSize = "small" | "regular" | "large";
+
+const TEXT_SIZE_MAP = new Map<CheckboxSize, Scale>([
+	["small", 1],
+	["regular", 2],
+	["large", 5],
+]);
+
+const ICON_SIZE_MAP = new Map<CheckboxSize, Scale>([
+	["small", 1],
+	["regular", 4],
+	["large", 6],
+]);
 
 export function Checkbox({
 	className,
 	id,
 	label,
 	type = "checkbox",
+	size = "regular",
 	...inputProps
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "className" | "type"> & {
+}: Omit<
+	InputHTMLAttributes<HTMLInputElement>,
+	"className" | "type" | "size"
+> & {
 	className?: string;
 	label: React.ReactNode;
 	type?: "checkbox" | "radio";
+	size?: CheckboxSize;
 }) {
 	const localId = useId();
 	const inputId = id ?? localId;
@@ -22,7 +42,7 @@ export function Checkbox({
 
 	return (
 		<div
-			className={clsx(className, styles.base, {
+			className={clsx(className, styles.base, styles[size], {
 				[styles.isDisabled]: inputProps.disabled,
 			})}
 		>
@@ -34,7 +54,7 @@ export function Checkbox({
 			/>
 
 			<Text
-				size={2}
+				size={TEXT_SIZE_MAP.get(size) ?? 2}
 				as="label"
 				weight={500}
 				compact
@@ -45,7 +65,7 @@ export function Checkbox({
 					<Icon
 						name={type === "checkbox" ? "check" : "circle-small"}
 						className={styles.icon}
-						size={4}
+						size={ICON_SIZE_MAP.get(size) ?? 4}
 					/>
 				</div>
 

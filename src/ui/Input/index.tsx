@@ -8,6 +8,7 @@ type BaseProps = {
 	id?: string;
 	readOnly?: boolean;
 	compact?: boolean;
+	pill?: boolean;
 	fullWidth?: boolean;
 	rounded?: boolean;
 };
@@ -25,6 +26,7 @@ export function Input(props: TextareaProps): React.ReactNode;
 export function Input({
 	as = "input",
 	compact,
+	pill,
 	fullWidth,
 	rounded,
 	...props
@@ -36,6 +38,7 @@ export function Input({
 		...props,
 		className: clsx(props.className, formControlStyles.control, {
 			[styles.textarea]: isTextArea,
+			[styles.pill]: pill,
 			[formControlStyles.compact]: compact,
 			[formControlStyles.fullWidth]: fullWidth,
 			[formControlStyles.rounded]: rounded,

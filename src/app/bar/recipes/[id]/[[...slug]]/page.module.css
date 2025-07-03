@@ -1,0 +1,5 @@
+@layer layout {
+	.container {
+		padding-bottom: var(--gap--huge);
+	}
+}

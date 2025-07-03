@@ -1,30 +1,44 @@
+import { clsx } from "clsx";
+import type { ReactNode } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
-import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { SpecEntry } from "@/features/specs/components/SpecEntry";
-
-import { GradientText } from "@/ui/GradientText";
+import { SpecsList } from "@/features/specs/components/SpecsList";
+import type { UnitSystems } from "@/features/units/utils/convert";
 import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { getKey } from "@/utils/withKey";
+import styles from "./styles.module.css";
 
-export function RecipeCard<T extends BaseRecipe>(props: { recipe: T }) {
+export function RecipeCard<T extends BaseRecipe>({
+	recipe,
+	header,
+	tools,
+	servings,
+	withConversionSystem,
+	className,
+}: {
+	recipe: T;
+	header?: ReactNode;
+	tools?: ReactNode;
+	servings?: number;
+	withConversionSystem?: UnitSystems | null;
+	className?: string;
+}) {
+	if (!recipe.specs || recipe.specs.length === 0) {
+		return null;
+	}
+
 	return (
-		<Grid gap={2}>
-			<Heading level="h3" size={4}>
-				<GradientText>
-					<RecipeName recipe={props.recipe} />
-				</GradientText>
-			</Heading>
+		<div className={clsx(styles.base, className)}>
+			<Grid className={styles.card} gap={3}>
+				{header}
 
-			{props.recipe.specs ? (
-				<Grid as="ul" gap={1}>
-					{props.recipe.specs.map((spec) => (
-						<li key={getKey(spec)}>
-							<SpecEntry spec={spec} />
-						</li>
-					))}
-				</Grid>
-			) : null}
-		</Grid>
+				<SpecsList
+					specs={recipe.specs}
+					className={styles.specs}
+					servings={servings}
+					convertUnits={withConversionSystem}
+				/>
+			</Grid>
+
+			{tools ? <aside className={styles.tools}>{tools}</aside> : null}
+		</div>
 	);
 }

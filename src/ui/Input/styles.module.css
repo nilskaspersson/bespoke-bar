@@ -10,4 +10,11 @@
 		field-sizing: content;
 		min-block-size: calc(2lh + var(--inset) * 2 + 2px);
 	}
+
+	.pill {
+		min-width: 10ch;
+		width: var(--control-width--small);
+		height: 2em;
+		border-radius: var(--radius--full);
+	}
 }

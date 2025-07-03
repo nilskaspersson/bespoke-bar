@@ -37,10 +37,12 @@ export function SelectUnitConversion({
 	defaultValue,
 	onChange,
 	name,
+	className,
 }: {
 	defaultValue?: UnitSystems | null;
 	onChange?: (unitSystem: UnitSystems | null) => void;
 	name: string;
+	className?: string;
 }) {
 	const handleChange = useCallback(
 		(event: ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +61,7 @@ export function SelectUnitConversion({
 			defaultValue={defaultValue ?? "off"}
 			groups={OPTIONS}
 			onChange={handleChange}
+			className={className}
 		/>
 	);
 }

@@ -3,7 +3,7 @@
  * where even module import order isn't respected, and this happens to be the first
  * module loaded.
  */
-@layer base, ui, feature, composition, layout, utils;
+@layer base, ui, component, feature, composition, layout, utils;
 
 @layer composition {
 	.footer {

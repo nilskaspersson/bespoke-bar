@@ -1,0 +1,25 @@
+@layer feature {
+	.base {
+		display: grid;
+		gap: var(--gap--large);
+		width: 100%;
+		justify-items: center;
+		contain: layout;
+		container-type: inline-size;
+	}
+
+	.aside {
+		display: grid;
+		gap: var(--gap);
+		background-color: var(--mauve-2);
+		padding: var(--gap);
+		border-radius: var(--radius--large);
+	}
+
+	.servings {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap--tiny);
+		align-items: center;
+	}
+}

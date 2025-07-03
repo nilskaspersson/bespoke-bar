@@ -1,6 +1,7 @@
 import type { PublicUserData } from "@clerk/types";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { getFullName } from "@/features/organisation/utils";
 import { Avatar } from "@/ui/Avatar";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -28,7 +29,7 @@ export function UserChip({
 				className={styles.text}
 				weight={500}
 			>
-				{user.firstName} {user.lastName?.slice(0, 1)}
+				{getFullName(user, { abbreviate: true })}
 			</Text>
 		</span>
 	);

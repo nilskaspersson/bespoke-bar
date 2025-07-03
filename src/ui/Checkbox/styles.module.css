@@ -1,11 +1,22 @@
 @layer ui {
 	.base {
-		--checkbox-length: calc(var(--control-height) / 2);
 		display: grid;
 		justify-items: start;
 
 		&.isDisabled {
 			opacity: 0.5;
+		}
+
+		&.regular {
+			--checkbox-length: calc(var(--control-height) / 2);
+		}
+
+		&.small {
+			--checkbox-length: var(--space-4);
+		}
+
+		&.large {
+			--checkbox-length: var(--control-height);
 		}
 	}
 
@@ -20,7 +31,7 @@
 	.label {
 		display: flex;
 		align-items: center;
-		gap: var(--gap--tiny);
+		gap: 0.5em;
 
 		.input:user-invalid + & .inner {
 			text-decoration: underline wavy var(--red-9);

@@ -13,11 +13,13 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	convertUnits,
 	onChange,
 	spec,
+	servings = 1,
 	...props
 }: {
 	spec: T;
 	onChange?: (spec: T) => void;
 	convertUnits?: UnitSystems | null;
+	servings?: number;
 } & Omit<ComponentProps<typeof Text>, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 
@@ -26,8 +28,13 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 			{spec.quantity != null || spec.unit != null ? (
 				<span className={styles.node}>
 					{convertUnits
-						? quantityToBestUnit(spec.quantity, spec.unit, convertUnits)
-						: `${spec.quantity} ${formatUnit(spec.unit)}`}
+						? quantityToBestUnit({
+								quantity: spec.quantity,
+								unit: spec.unit,
+								unitSystem: convertUnits,
+								servings,
+							})
+						: `${spec.quantity ? spec.quantity * servings : ""} ${formatUnit(spec.unit)}`}
 				</span>
 			) : null}
 

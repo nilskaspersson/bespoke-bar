@@ -1,0 +1,5 @@
+@layer feature {
+	.list {
+		color: var(--mauve-12);
+	}
+}

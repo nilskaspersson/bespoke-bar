@@ -1,0 +1,7 @@
+@layer feature {
+	.base {
+		border-radius: var(--radius);
+		border: 1px dashed var(--mauve-7);
+		padding: var(--gap--tiny) var(--gap--small);
+	}
+}

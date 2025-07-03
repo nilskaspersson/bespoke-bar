@@ -2,6 +2,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { BarNavigation } from "@/app/components/BarNavigation";
 import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
+import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -42,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		organizationId: orgId,
 	});
 
-	const organizationName = organization.name || "Unknown bar";
+	const organizationName = organization.name || FALLBACK_BAR_NAME;
 
 	return {
 		title: {

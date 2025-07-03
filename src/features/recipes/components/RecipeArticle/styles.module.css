@@ -1,0 +1,47 @@
+@layer feature {
+	.article {
+		display: grid;
+		justify-items: center;
+		container: article / inline-size;
+	}
+
+	.divider {
+		margin-block: var(--space-9);
+	}
+
+	.header {
+		display: grid;
+		gap: var(--gap);
+		justify-items: center;
+		padding-top: var(--space-9);
+		text-align: center;
+	}
+
+	.name {
+		@container article (width > 500px) {
+			font-size: var(--size-9);
+		}
+	}
+
+	.icon {
+		fill: var(--iris-8);
+		flex: 0 0 auto;
+	}
+
+	.tools {
+		display: flex;
+		gap: var(--gap--small) var(--gap--large);
+
+		@container (width > 350px) {
+			flex-direction: column;
+			text-align: right;
+			max-width: 10ch;
+		}
+
+		@container (width <= 350px) {
+			/* biome-ignore lint/suspicious/noDuplicateProperties: False positive */
+			flex-direction: row;
+			flex-wrap: wrap;
+		}
+	}
+}
