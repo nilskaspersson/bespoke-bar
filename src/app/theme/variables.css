@@ -38,16 +38,16 @@
 	--space-8: calc(1rem * var(--space-scale-8));
 	--space-9: calc(1rem * var(--space-scale-9));
 
-	--size-0: calc(1em * var(--size-scale-0));
-	--size-1: calc(1em * var(--size-scale-1));
-	--size-2: calc(1em * var(--size-scale-2));
-	--size-3: calc(1em * var(--size-scale-3));
-	--size-4: calc(1em * var(--size-scale-4));
-	--size-5: calc(1em * var(--size-scale-5));
-	--size-6: calc(1em * var(--size-scale-6));
-	--size-7: calc(1em * var(--size-scale-7));
-	--size-8: calc(1em * var(--size-scale-8));
-	--size-9: calc(1em * var(--size-scale-9));
+	--size-0: calc(1rem * var(--size-scale-0));
+	--size-1: calc(1rem * var(--size-scale-1));
+	--size-2: calc(1rem * var(--size-scale-2));
+	--size-3: calc(1rem * var(--size-scale-3));
+	--size-4: calc(1rem * var(--size-scale-4));
+	--size-5: calc(1rem * var(--size-scale-5));
+	--size-6: calc(1rem * var(--size-scale-6));
+	--size-7: calc(1rem * var(--size-scale-7));
+	--size-8: calc(1rem * var(--size-scale-8));
+	--size-9: calc(1rem * var(--size-scale-9));
 
 	--golden-ratio: 1.618;
 
@@ -135,24 +135,24 @@
 	--z-modal: 9990;
 	--z-popover: 990;
 
-	--shadow-color: 270deg 3.85% 10.2%;
+	--shadow-color: 270deg 3.85% 10%;
 	--shadow--low:
 		0px 0.5px 0.5px hsl(var(--shadow-color) / 0.2),
 		0px 1px 1px -1px hsl(var(--shadow-color) / 0.15),
 		0px 2px 2px -3px hsl(var(--shadow-color) / 0.1);
 	--shadow:
-		0px 1px 1px hsl(var(--shadow-color) / 0.2),
-		0px 2px 2px -1px hsl(var(--shadow-color) / 0.175),
-		0px 4px 4px -2px hsl(var(--shadow-color) / 0.15),
-		0px 10px 10px -3px hsl(var(--shadow-color) / 0.1);
+		0px 1px 1px hsl(var(--shadow-color) / 0.1),
+		0px 2px 2px -1px hsl(var(--shadow-color) / 0.1),
+		0px 4px 4px -2px hsl(var(--shadow-color) / 0.05),
+		0px 10px 10px -3px hsl(var(--shadow-color) / 0.05);
 	--shadow--high:
 		0px 1px 1px hsl(var(--shadow-color) / 0.1),
 		0px 3px 3px -0.5px hsl(var(--shadow-color) / 0.1),
-		0px 6px 6px -1px hsl(var(--shadow-color) / 0.1),
-		0px 10px 10px -2px hsl(var(--shadow-color) / 0.1),
-		0px 20px 20px -2px hsl(var(--shadow-color) / 0.1),
-		0px 30px 30px -3px hsl(var(--shadow-color) / 0.1),
-		0px 50px 50px -3px hsl(var(--shadow-color) / 0.1);
+		0px 6px 6px -1px hsl(var(--shadow-color) / 0.05),
+		0px 10px 10px -2px hsl(var(--shadow-color) / 0.05),
+		0px 20px 20px -2px hsl(var(--shadow-color) / 0.05),
+		0px 30px 30px -3px hsl(var(--shadow-color) / 0.05),
+		0px 50px 50px -3px hsl(var(--shadow-color) / 0.05);
 }
 
 [data-theme="dark"] {

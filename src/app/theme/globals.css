@@ -95,7 +95,7 @@
 	}
 
 	:focus-visible {
-		outline: var(--space-1) solid var(--iris-11);
+		outline: var(--space-0) solid var(--iris-11);
 		outline-offset: 1px;
 	}
 

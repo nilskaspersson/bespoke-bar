@@ -1,6 +1,6 @@
 "use client";
 
-import clsx from "clsx";
+import { clsx } from "clsx";
 import type { ChangeEvent, ComponentProps, ReactNode } from "react";
 import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
