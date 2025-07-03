@@ -9,6 +9,7 @@ import type { z } from "zod/v4";
  */
 export const unitEnum = pgEnum("unit", [
 	"cl",
+	"dl",
 	"cup",
 	"fl_oz",
 	"l",

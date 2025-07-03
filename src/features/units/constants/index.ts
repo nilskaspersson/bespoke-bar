@@ -8,6 +8,7 @@ import { invertMapToSets } from "@/utils";
 export const DB_UNIT_TO_LIB_UNIT = new Map<Unit, VolumeUnits>([
 	["cl", "cl"],
 	["cup", "cup"],
+	["dl", "dl"],
 	["fl_oz", "fl-oz"],
 	["l", "l"],
 	["ml", "ml"],
@@ -21,10 +22,19 @@ export const DB_UNIT_TO_LIB_UNIT = new Map<Unit, VolumeUnits>([
 export const ALIAS_TO_DB_VOLUME_UNIT = new Map<string, Unit>([
 	// Centiliters
 	["cl", "cl"],
+	["cls", "cl"],
 	["centiliter", "cl"],
 	["centilitre", "cl"],
 	["centiliters", "cl"],
 	["centilitres", "cl"],
+
+	// Deciliter
+	["dl", "dl"],
+	["dls", "dl"],
+	["deciliter", "dl"],
+	["decilitre", "dl"],
+	["deciliters", "dl"],
+	["decilitres", "dl"],
 
 	// Cups
 	["cup", "cup"],
@@ -34,11 +44,17 @@ export const ALIAS_TO_DB_VOLUME_UNIT = new Map<string, Unit>([
 	["fl_oz", "fl_oz"],
 	["fl-oz", "fl_oz"],
 	["fl oz", "fl_oz"],
+	["fl.oz.", "fl_oz"],
+	["floz", "fl_oz"],
 	["fluid ounce", "fl_oz"],
 	["fluid ounces", "fl_oz"],
+	/**
+	 * !!! Default "oz" to fluid ounces !!!
+	 */
 	["ounce", "fl_oz"],
 	["ounces", "fl_oz"],
-	["oz", "fl_oz"], // !!! Default "oz" to fluid ounces !!!
+	["oz", "fl_oz"],
+	["oz.", "fl_oz"],
 
 	// Liters
 	["l", "l"],
@@ -49,6 +65,7 @@ export const ALIAS_TO_DB_VOLUME_UNIT = new Map<string, Unit>([
 
 	// Milliliters
 	["ml", "ml"],
+	["mls", "ml"],
 	["milliliter", "ml"],
 	["millilitre", "ml"],
 	["milliliters", "ml"],
