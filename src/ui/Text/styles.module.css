@@ -21,6 +21,7 @@
 		font-size: var(--jsxFontSize);
 		font-weight: var(--jsxFontWeight);
 		text-align: var(--jsxTextAlign);
+		color: var(--mauve-11);
 
 		text-wrap: pretty;
 		line-height: var(--line-height);
@@ -32,6 +33,24 @@
 		> a {
 			color: var(--iris-11);
 			text-decoration: underline;
+		}
+
+		&:is(table) {
+			th,
+			td {
+				text-align: left;
+				font-weight: inherit;
+				border: 1px solid var(--mauve-6);
+				padding: 0.25em 1ch;
+			}
+		}
+
+		&:is(dl) {
+			dt {
+				&:not(:first-child) {
+					margin-top: var(--gap--tiny);
+				}
+			}
 		}
 	}
 

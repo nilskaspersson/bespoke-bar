@@ -55,7 +55,7 @@
 			border-left: 1px solid var(--shine);
 			background-color: var(--mauve-4);
 			padding-inline: var(--gap);
-			box-shadow: var(--shadow--low);
+			box-shadow: var(--shadow);
 			border-radius: var(--radius--full);
 
 			@supports (backdrop-filter: blur(var(--size-1))) {
@@ -95,7 +95,6 @@
 			padding: var(--gap);
 			background-color: var(--table-background-color);
 			border-radius: var(--table-radius);
-			box-shadow: var(--shadow--low);
 			border: 1px solid var(--iris-6);
 		}
 	}

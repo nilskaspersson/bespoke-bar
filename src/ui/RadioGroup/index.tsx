@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import type { InputHTMLAttributes } from "react";
+import type { ComponentProps } from "react";
 import { Checkbox } from "@/ui/Checkbox";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
@@ -16,7 +16,7 @@ export function RadioGroup({
 	options,
 	id,
 	...inputProps
-}: Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value"> & {
+}: Omit<ComponentProps<typeof Checkbox>, "type" | "value" | "label"> & {
 	legend: React.ReactNode;
 	name: string;
 	options: Keyed<Option>[] | null | undefined;

@@ -15,7 +15,7 @@
 		font-size: max(1rem, 16px);
 		font-weight: 600;
 		border: 1px solid var(--mauve-6);
-		outline: 5px solid transparent;
+		outline: var(--space-0) solid transparent;
 		outline-offset: 0;
 		transition-property: border-color, outline-color;
 		transition-duration: var(--transition-duration);
@@ -51,6 +51,7 @@
 		}
 
 		&.compact {
+			--h: var(--control-height--small);
 			--w: var(--control-width--small);
 		}
 

@@ -183,34 +183,44 @@ export function RecipeTable({
 				) : null}
 			</Grid>
 
-			<Lightbox
-				rounded
-				translucent
-				className={styles.search}
-				forceTheme="light"
-			>
-				<form ref={formRef}>
-					<Input
-						type="search"
-						rounded
-						placeholder="Search for recipes…"
-						onChange={(e) =>
-							table.setGlobalFilter(normalizeInput(e.target.value))
-						}
-					/>
+			<aside className={styles.sticky}>
+				{hasActiveFilter ? (
+					<Text as="div" size={0} compact className={styles.status} heavy>
+						{table.getRowCount()}{" "}
+						{table.getRowCount() === 1 ? "recipe" : "recipes"} matching "
+						{table.getState().globalFilter}"
+					</Text>
+				) : null}
 
-					{hasActiveFilter ? (
-						<Button
-							variant="base"
-							icon
-							className={styles.clear}
-							onClick={clearSearch}
-						>
-							<Icon name="xmark" />
-						</Button>
-					) : null}
-				</form>
-			</Lightbox>
+				<Lightbox
+					rounded
+					translucent
+					className={styles.search}
+					forceTheme="light"
+				>
+					<form ref={formRef}>
+						<Input
+							type="search"
+							rounded
+							placeholder="Search for recipes…"
+							onChange={(e) =>
+								table.setGlobalFilter(normalizeInput(e.target.value))
+							}
+						/>
+
+						{hasActiveFilter ? (
+							<Button
+								variant="base"
+								icon
+								className={styles.clear}
+								onClick={clearSearch}
+							>
+								<Icon name="xmark" />
+							</Button>
+						) : null}
+					</form>
+				</Lightbox>
+			</aside>
 		</section>
 	);
 }

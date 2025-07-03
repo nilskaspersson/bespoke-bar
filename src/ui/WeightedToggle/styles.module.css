@@ -12,11 +12,11 @@
 	.options {
 		display: flex;
 		border-radius: var(--radius--full);
-		border: 1px solid var(--iris-6);
+		border: 1px solid var(--mauve-6);
 		padding: var(--space-0);
 		gap: var(--space-0);
-		background-color: var(--iris-1);
-		color: var(--iris-12);
+		background-color: var(--mauve-1);
+		color: var(--mauve-12);
 		flex: 0 0 auto;
 	}
 
@@ -48,11 +48,11 @@
 		}
 
 		&:has(:focus-visible) {
-			outline: var(--space-1) solid var(--iris-11);
+			outline: var(--space-0) solid var(--mauve-11);
 		}
 
 		.single > &:hover {
-			background-color: var(--iris-3);
+			background-color: var(--mauve-3);
 		}
 	}
 
@@ -80,12 +80,12 @@
 		border: var(--space-0) solid transparent;
 
 		&:has(.input:checked) {
-			background-color: var(--iris-12);
-			color: var(--iris-4);
+			background-color: var(--mauve-12);
+			color: var(--mauve-4);
 		}
 
 		&:hover {
-			background-color: var(--iris-3);
+			background-color: var(--mauve-3);
 		}
 	}
 
@@ -97,7 +97,7 @@
 		position: absolute;
 		inset: 0;
 		padding-bottom: var(--verticalOffset);
-		color: var(--iris-12);
+		color: var(--mauve-12);
 		transition-property: scale, transform;
 		transition-duration: var(--transition-duration);
 		transform-origin: center bottom;
@@ -107,8 +107,8 @@
 			scale: 0.75;
 
 			> .groupLabelText {
-				color: var(--iris-4);
-				background-color: var(--iris-12);
+				color: var(--mauve-4);
+				background-color: var(--mauve-12);
 				padding: var(--space-1) var(--space-2);
 				border-top-left-radius: var(--radius--large);
 				border-top-right-radius: var(--radius--large);
@@ -125,7 +125,7 @@
 
 		.multiple:not(:has(.input:checked)) & {
 			transform: translateY(80%) scale(0.65);
-			color: var(--iris-11);
+			color: var(--mauve-11);
 		}
 
 		.item:first-child > & {

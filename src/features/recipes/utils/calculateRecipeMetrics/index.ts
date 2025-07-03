@@ -6,6 +6,7 @@ import { convert } from "@/features/units/utils/convert";
 
 export type RecipeMetrics = {
 	abv: number;
+	undilutedAbv: number;
 	originalVolume: number;
 	dilutionVolume: number;
 	finalVolume: number;
@@ -41,6 +42,7 @@ function getDefaultDilution(
  */
 export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 	specs: T[] | undefined,
+	servings = 1,
 ) {
 	if (!specs || specs.length === 0) {
 		return { totalLiquidVolume: 0, alcoholVolume: 0 };
@@ -74,18 +76,22 @@ export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 		}
 	}
 
-	return { totalLiquidVolume, alcoholVolume };
+	return {
+		totalLiquidVolume: totalLiquidVolume * servings,
+		alcoholVolume: alcoholVolume * servings,
+	};
 }
 
 export function calculateRecipeMetrics<T extends BaseRecipe>(
 	recipe: T,
-	dilutionOverride?: number,
+	{ servings = 1 }: { servings?: number } = {},
 ): RecipeMetrics {
-	const volumes = calculateSpecsVolumes(recipe.specs);
+	const volumes = calculateSpecsVolumes(recipe.specs, servings);
 
 	if (volumes.totalLiquidVolume === 0) {
 		return {
 			abv: 0,
+			undilutedAbv: 0,
 			originalVolume: 0,
 			dilutionVolume: 0,
 			finalVolume: 0,
@@ -94,8 +100,7 @@ export function calculateRecipeMetrics<T extends BaseRecipe>(
 		};
 	}
 
-	const dilutionOfOriginalVolume =
-		dilutionOverride ?? getDefaultDilution(recipe.preparationMethod);
+	const dilutionOfOriginalVolume = getDefaultDilution(recipe.preparationMethod);
 
 	const dilutionVolume = volumes.totalLiquidVolume * dilutionOfOriginalVolume;
 	const finalVolume = volumes.totalLiquidVolume + dilutionVolume;
@@ -103,6 +108,7 @@ export function calculateRecipeMetrics<T extends BaseRecipe>(
 
 	return {
 		abv: volumes.alcoholVolume / finalVolume,
+		undilutedAbv: volumes.alcoholVolume / volumes.totalLiquidVolume,
 		originalVolume: volumes.totalLiquidVolume,
 		dilutionVolume,
 		finalVolume,

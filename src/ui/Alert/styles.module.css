@@ -1,4 +1,4 @@
-@layer ui {
+@layer component {
 	.lightbox {
 		display: grid;
 		grid-template:

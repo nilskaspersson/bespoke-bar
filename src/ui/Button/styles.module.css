@@ -30,7 +30,7 @@
 		}
 
 		&:focus-visible {
-			outline: var(--space-1) solid hsl(from var(--button-color) h s l / 80%);
+			outline: var(--space-0) solid hsl(from var(--button-color) h s l / 80%);
 			outline-offset: 1px;
 		}
 
@@ -84,11 +84,12 @@
 	 * Colors
 	 */
 	.regular {
-		--button-color: --mauve-11;
+		--button-color: var(--mauve-11);
 	}
 
 	.light {
 		[data-theme="dark"] & {
+			--button-color: var(--mauve-7);
 			--text-lightness: 90%;
 		}
 

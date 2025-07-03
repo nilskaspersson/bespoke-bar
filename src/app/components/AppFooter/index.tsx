@@ -12,7 +12,11 @@ export function AppFooter({
 	...props
 }: Omit<ComponentProps<"footer">, "children">) {
 	return (
-		<footer className={clsx(styles.footer, className)} {...props}>
+		<footer
+			className={clsx(styles.footer, className)}
+			data-theme="dark"
+			{...props}
+		>
 			<Grid className={styles.contain} gap={6}>
 				<nav className={styles.nav}>
 					<Grid gap={1}>

@@ -1,25 +1,25 @@
 import type { Unit } from "@/db/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
-import { convert } from "@/features/units/utils/convert";
+import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { volumeFormatter } from "@/utils/formatting";
 
 export function formatVolume(
 	volumeInMl: number,
-	unitSystem: "metric" | "imperial" = "metric",
+	unitSystem: UnitSystems | null = "metric",
 ): string {
 	if (volumeInMl === 0) return unitSystem === "metric" ? "0 ml" : "0 fl oz";
 
 	if (unitSystem === "imperial") {
 		const flOz = convert(volumeInMl).from("ml").to("fl-oz");
 
-		if (flOz >= 32) {
-			const quarts = convert(flOz).from("fl-oz").to("qt");
-			return `${volumeFormatter.format(quarts)} qt`;
+		if (flOz >= 128) {
+			const gallons = convert(flOz).from("fl-oz").to("gal");
+			return `${volumeFormatter.format(gallons)} gal`;
 		}
 
-		if (flOz >= 16) {
-			const pints = convert(flOz).from("fl-oz").to("pnt");
-			return `${volumeFormatter.format(pints)} pt`;
+		if (flOz >= 64) {
+			const quarts = convert(flOz).from("fl-oz").to("qt");
+			return `${volumeFormatter.format(quarts)} qt`;
 		}
 
 		if (flOz >= 8) {
@@ -35,6 +35,11 @@ export function formatVolume(
 		return `${volumeFormatter.format(liters)} l`;
 	}
 
+	if (volumeInMl >= 200) {
+		const deciliters = convert(volumeInMl).from("ml").to("dl");
+		return `${volumeFormatter.format(deciliters)} dl`;
+	}
+
 	if (volumeInMl >= 10) {
 		const centiliters = convert(volumeInMl).from("ml").to("cl");
 		return `${volumeFormatter.format(centiliters)} cl`;
@@ -43,25 +48,34 @@ export function formatVolume(
 	return `${volumeFormatter.format(volumeInMl)} ml`;
 }
 
-export function quantityToBestUnit(
-	quantity: number | null | undefined,
-	unit: Unit | null | undefined,
-	unitSystem: "metric" | "imperial" = "metric",
-): string {
+export function quantityToBestUnit({
+	quantity,
+	unit,
+	unitSystem = "metric",
+	servings = 1,
+}: {
+	quantity: number | null | undefined;
+	unit: Unit | null | undefined;
+	unitSystem?: "metric" | "imperial";
+	servings?: number;
+}): string {
 	if (!quantity) {
 		return "";
 	}
 
+	const q = quantity * servings;
+
 	if (!unit) {
-		return quantity.toString();
+		return q.toString();
 	}
 
 	const libUnit = DB_UNIT_TO_LIB_UNIT.get(unit);
 
 	if (!libUnit) {
-		return quantity.toString();
+		return q.toString();
 	}
 
-	const volumeInMl = convert(quantity).from(libUnit).to("ml");
+	const volumeInMl = convert(q).from(libUnit).to("ml");
+
 	return formatVolume(volumeInMl, unitSystem);
 }

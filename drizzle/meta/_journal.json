@@ -8,6 +8,13 @@
       "when": 1750759409458,
       "tag": "0000_illegal_shadowcat",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1751527431267,
+      "tag": "0001_clever_vector",
+      "breakpoints": true
     }
   ]
 }

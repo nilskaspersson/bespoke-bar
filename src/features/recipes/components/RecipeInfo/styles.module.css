@@ -1,0 +1,38 @@
+@layer feature {
+	.base {
+		display: grid;
+		gap: var(--gap--large);
+		width: 100%;
+		justify-items: center;
+		contain: layout;
+		container-type: inline-size;
+	}
+
+	.aside {
+		display: grid;
+		gap: var(--gap);
+		background-color: var(--mauve-2);
+		padding: var(--gap);
+		border-radius: var(--radius--large);
+	}
+
+	.servings {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap--tiny);
+		align-items: center;
+	}
+
+	.card {
+		--sticky-offset: var(--gap--small);
+		position: sticky;
+		bottom: var(--sticky-offset);
+		top: var(--gap--small);
+		margin-bottom: var(--gap--large);
+		z-index: 10;
+
+		@media (max-width: 814px) {
+			--sticky-offset: calc(var(--gap--small) + var(--bar-navigation--height));
+		}
+	}
+}

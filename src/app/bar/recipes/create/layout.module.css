@@ -2,6 +2,7 @@
 	.container {
 		display: grid;
 		gap: var(--gap);
+		padding-top: var(--app-inset);
 		grid-template:
 			"header" auto
 			"content" 1fr;

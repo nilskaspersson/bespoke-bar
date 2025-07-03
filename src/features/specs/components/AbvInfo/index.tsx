@@ -12,7 +12,12 @@ import styles from "./styles.module.css";
 export function AbvInfo<T extends BaseRecipe>({
 	recipe,
 	className,
-}: { recipe: T; className?: string } & ComponentProps<"details">) {
+	diluted = true,
+	...props
+}: { recipe: T; diluted?: boolean } & Omit<
+	ComponentProps<"details">,
+	"children"
+>) {
 	const recipeMetrics = calculateRecipeMetrics(recipe);
 
 	/**
@@ -23,15 +28,29 @@ export function AbvInfo<T extends BaseRecipe>({
 	const isInconclusive = draftSpecs && draftSpecs.length > 0;
 
 	return (
-		<details className={className}>
+		<details className={className} {...props}>
 			<Text as="summary" size={1} compact>
-				<Abv />: {percentageFormatter.format(recipeMetrics.abv)}
+				<Abv />:{" "}
+				<Text heavy weight={600}>
+					{percentageFormatter.format(
+						diluted ? recipeMetrics.abv : recipeMetrics.undilutedAbv,
+					)}
+				</Text>{" "}
+				({diluted ? "diluted" : "undiluted"})
 			</Text>
 
-			<Text size={1}>
-				Includes{" "}
-				{percentageFormatter.format(recipeMetrics.dilutionOfFinalVolume)}{" "}
-				dilution.
+			<Text as="table" size={1}>
+				<tbody>
+					<tr>
+						<th>Diluted abv</th>
+						<td>{percentageFormatter.format(recipeMetrics.abv)}</td>
+					</tr>
+
+					<tr>
+						<th>Undiluted abv</th>
+						<td>{percentageFormatter.format(recipeMetrics.undilutedAbv)}</td>
+					</tr>
+				</tbody>
 			</Text>
 
 			{isInconclusive ? (
