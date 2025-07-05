@@ -32,13 +32,14 @@
 			--h: var(--control-height--large);
 		}
 
-		&:not([aria-disabled="true"]) {
+		&:not([aria-disabled="true"]):not(:user-invalid) {
 			&:hover {
-				border-color: var(--mauve-7);
+				border-color: var(--mauve-8);
 			}
 
 			&:focus {
 				outline-color: var(--iris-11);
+				border-color: var(--iris-11);
 			}
 		}
 
@@ -57,6 +58,14 @@
 
 		&.rounded {
 			--r: var(--radius--full);
+		}
+
+		&:user-invalid {
+			border-color: var(--red-11);
+
+			&:focus {
+				outline-color: var(--red-11);
+			}
 		}
 	}
 }

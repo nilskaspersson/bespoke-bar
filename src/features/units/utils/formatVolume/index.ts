@@ -2,11 +2,12 @@ import type { Unit } from "@/db/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
+import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
 import { volumeFormatter } from "@/utils/formatting";
 
 export function formatVolume(
 	volumeInMl: number,
-	unitSystem: UnitSystems | null = "metric",
+	unitSystem: UnitSystems | null | undefined,
 ): string {
 	if (volumeInMl === 0) return unitSystem === "metric" ? "0 ml" : "0 fl oz";
 
@@ -52,31 +53,37 @@ export function formatVolume(
 export function quantityToBestUnit({
 	quantity,
 	unit,
-	unitSystem = "metric",
+	unitSystem,
 	servings = 1,
 }: {
 	quantity: number | null | undefined;
 	unit: Unit | null | undefined;
-	unitSystem?: UnitSystems;
+	unitSystem?: UnitSystems | null;
 	servings?: number;
 }): string {
 	if (!quantity) {
 		return "";
 	}
 
-	const q = quantity * servings;
+	const qty = quantity * servings;
 
 	if (!unit) {
-		return q.toString();
+		return qty.toString();
 	}
 
 	const libUnit = DB_UNIT_TO_LIB_UNIT.get(unit);
 
 	if (!libUnit) {
-		return q.toString();
+		return qty.toString();
 	}
 
-	const volumeInMl = convert(q).from(libUnit).to("ml");
+	const volumeInMl = convert(qty).from(libUnit).to("ml");
+
+	const nativeUnitSystem = getUnitSystemFromUnit(unit);
+
+	if (nativeUnitSystem === "bartending" && volumeInMl <= 10) {
+		return `${qty} ${getFormattedUnit(unit, qty)}`;
+	}
 
 	return formatVolume(volumeInMl, unitSystem);
 }

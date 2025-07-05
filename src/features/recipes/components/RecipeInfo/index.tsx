@@ -77,18 +77,16 @@ export function RecipeInfo<T extends BaseRecipe>({
 								type="number"
 								pill
 								min={1}
-								max={1000000}
+								max={1000000000}
 								onChange={(event) => {
 									const parsedValue = z.coerce
 										.number()
 										.min(1)
-										.max(1000000)
+										.max(1000000000)
 										.safeParse(event.target.value);
 
 									if (parsedValue.success) {
 										setServings(parsedValue.data);
-									} else {
-										setServings(1);
 									}
 								}}
 							/>

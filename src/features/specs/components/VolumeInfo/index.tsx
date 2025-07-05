@@ -7,7 +7,7 @@ import { formatVolume } from "@/features/units/utils/formatVolume";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
-import { percentageFormatter } from "@/utils/formatting";
+import { percentageFormatter, quantityFormatter } from "@/utils/formatting";
 import { getKey } from "@/utils/withKey";
 
 export function VolumeInfo<T extends BaseRecipe>({
@@ -33,7 +33,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 			<Text as="summary" size={1} compact>
 				{typeof servings === "number" && servings === 1
 					? "Volume per serving: "
-					: `Total volume (${servings} servings): `}
+					: `Total volume (${quantityFormatter.format(servings)} servings): `}
 				<Text heavy weight={600}>
 					{formatVolume(
 						diluted ? recipeMetrics.finalVolume : recipeMetrics.originalVolume,
@@ -95,7 +95,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 						color="light"
 						heading="Volume estimates:"
 					>
-						<ul>
+						<Text as="ul" list>
 							{recipe.specs
 								?.filter((spec) => isBartendingUnit(spec.unit))
 								.map((spec) => {
@@ -104,20 +104,20 @@ export function VolumeInfo<T extends BaseRecipe>({
 									}
 
 									const unitData = convert().describe(spec.unit);
+									const qty = spec.quantity * servings;
 
 									return (
 										<li key={getKey(spec)}>
-											{spec.quantity}{" "}
-											{spec.quantity > 1 ? unitData.plural : unitData.singular}{" "}
+											{qty} {qty > 1 ? unitData.plural : unitData.singular}{" "}
 											{spec.ingredient.name} ={" "}
 											{formatVolume(
-												convert(spec.quantity).from(spec.unit).to("ml"),
+												convert(spec.quantity).from(spec.unit).to("ml") * qty,
 												convertUnits,
 											)}
 										</li>
 									);
 								})}
-						</ul>
+						</Text>
 					</Callout>
 				) : null}
 			</Grid>
