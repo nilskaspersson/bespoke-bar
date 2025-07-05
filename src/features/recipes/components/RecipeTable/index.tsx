@@ -21,6 +21,7 @@ import {
 	globalFilterRecipeFn,
 	sortingFnCreatedAt,
 } from "@/features/recipes/utils";
+import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -79,7 +80,7 @@ export function RecipeTable({
 						<ul>
 							{info.row.original.specs.map((spec) => (
 								<li key={spec.id} className={styles.spec}>
-									{spec.quantity} {spec.unit}{" "}
+									{spec.quantity} {getFormattedUnit(spec.unit, spec.quantity)}{" "}
 									<Link
 										href={getIngredientUrl(spec.ingredient)}
 										prefetch={false}

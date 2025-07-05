@@ -3,8 +3,8 @@ import Link from "next/link";
 import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { formatUnit } from "@/features/units/utils/formatUnit";
 import { quantityToBestUnit } from "@/features/units/utils/formatVolume";
+import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -34,7 +34,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 								unitSystem: convertUnits,
 								servings,
 							})
-						: `${spec.quantity ? spec.quantity * servings : ""} ${formatUnit(spec.unit)}`}
+						: `${spec.quantity ? spec.quantity * servings : ""} ${getFormattedUnit(spec.unit, spec.quantity)}`}
 				</span>
 			) : null}
 

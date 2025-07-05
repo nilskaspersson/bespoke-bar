@@ -1,6 +1,7 @@
 import type { Unit } from "@/db/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
+import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { volumeFormatter } from "@/utils/formatting";
 
 export function formatVolume(
@@ -14,38 +15,38 @@ export function formatVolume(
 
 		if (flOz >= 128) {
 			const gallons = convert(flOz).from("fl-oz").to("gal");
-			return `${volumeFormatter.format(gallons)} gal`;
+			return `${volumeFormatter.format(gallons)} ${getFormattedUnit("gal", gallons)}`;
 		}
 
 		if (flOz >= 64) {
 			const quarts = convert(flOz).from("fl-oz").to("qt");
-			return `${volumeFormatter.format(quarts)} qt`;
+			return `${volumeFormatter.format(quarts)} ${getFormattedUnit("qt", quarts)}`;
 		}
 
 		if (flOz >= 8) {
 			const cups = convert(flOz).from("fl-oz").to("cup");
-			return `${volumeFormatter.format(cups)} cup`;
+			return `${volumeFormatter.format(cups)} ${getFormattedUnit("cup", cups)}`;
 		}
 
-		return `${volumeFormatter.format(flOz)} fl oz`;
+		return `${volumeFormatter.format(flOz)} ${getFormattedUnit("fl_oz", flOz)}`;
 	}
 
 	if (volumeInMl >= 1000) {
 		const liters = convert(volumeInMl).from("ml").to("l");
-		return `${volumeFormatter.format(liters)} l`;
+		return `${volumeFormatter.format(liters)} ${getFormattedUnit("l", liters)}`;
 	}
 
 	if (volumeInMl >= 200) {
 		const deciliters = convert(volumeInMl).from("ml").to("dl");
-		return `${volumeFormatter.format(deciliters)} dl`;
+		return `${volumeFormatter.format(deciliters)} ${getFormattedUnit("dl", deciliters)}`;
 	}
 
 	if (volumeInMl >= 10) {
 		const centiliters = convert(volumeInMl).from("ml").to("cl");
-		return `${volumeFormatter.format(centiliters)} cl`;
+		return `${volumeFormatter.format(centiliters)} ${getFormattedUnit("cl", centiliters)}`;
 	}
 
-	return `${volumeFormatter.format(volumeInMl)} ml`;
+	return `${volumeFormatter.format(volumeInMl)} ${getFormattedUnit("ml", volumeInMl)}`;
 }
 
 export function quantityToBestUnit({
@@ -56,7 +57,7 @@ export function quantityToBestUnit({
 }: {
 	quantity: number | null | undefined;
 	unit: Unit | null | undefined;
-	unitSystem?: "metric" | "imperial";
+	unitSystem?: UnitSystems;
 	servings?: number;
 }): string {
 	if (!quantity) {

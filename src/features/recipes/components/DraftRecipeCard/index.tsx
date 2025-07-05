@@ -42,7 +42,11 @@ export function DraftRecipeCard<T extends BaseRecipe>(props: {
 
 					<Grid gap={1}>
 						<AbvInfo recipe={props.recipe} />
-						<VolumeInfo recipe={props.recipe} />
+
+						<VolumeInfo
+							recipe={props.recipe}
+							convertUnits={props.convertUnits}
+						/>
 					</Grid>
 				</>
 			) : null}
