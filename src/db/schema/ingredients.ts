@@ -32,7 +32,7 @@ export const IngredientsTable = pgTable(
 		category: systemCategoryEnum("category"),
 		abv: real("abv"),
 		brand: varchar("brand", { length: 100 }),
-		price: real("price"),
+		unitCost: real("unitCost"),
 		measurementType: measurementTypes("measurementType"),
 		orgId: text("org_id").notNull(),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -49,10 +49,13 @@ export const IngredientsTable = pgTable(
 			"abv_valid_range",
 			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 1)`,
 		),
-		check("price_positive", sql`${table.price} IS NULL OR ${table.price} > 0`),
 		check(
-			"price_requires_measurement_type",
-			sql`${table.price} IS NULL OR ${table.measurementType} IS NOT NULL`,
+			"cost_positive",
+			sql`${table.unitCost} IS NULL OR ${table.unitCost} > 0`,
+		),
+		check(
+			"cost_requires_measurement_type",
+			sql`${table.unitCost} IS NULL OR ${table.measurementType} IS NOT NULL`,
 		),
 		index("idx_ingredients_org").on(table.orgId),
 	],
@@ -77,7 +80,7 @@ const ingredientsConstraintsSchema = {
 		z.coerce.number().min(0).max(100).nullable(),
 	),
 	brand: z.preprocess(nullifyEmptyField, z.string().nullable()),
-	price: z.preprocess(nullifyEmptyField, z.coerce.number().nullable()),
+	unitCost: z.preprocess(nullifyEmptyField, z.coerce.number().nullable()),
 	measurementType: z.preprocess(
 		nullifyEmptyField,
 		supportedMeasurements.nullable(),
@@ -87,7 +90,7 @@ const ingredientsConstraintsSchema = {
 type IngredientRefinementInput = Partial<
 	Pick<
 		z.input<ReturnType<typeof createInsertSchema<typeof IngredientsTable>>>,
-		"price" | "measurementType"
+		"unitCost" | "measurementType"
 	>
 >;
 
@@ -95,9 +98,9 @@ const ingredientsRefinements: [
 	(data: IngredientRefinementInput) => boolean,
 	{ message: string; path: string[] },
 ] = [
-	(data) => data.price == null || data.measurementType != null,
+	(data) => data.unitCost == null || data.measurementType != null,
 	{
-		message: "Measurement type is required when price is provided",
+		message: "Measurement type is required when unitCost is provided",
 		path: ["measurementType"],
 	},
 ];

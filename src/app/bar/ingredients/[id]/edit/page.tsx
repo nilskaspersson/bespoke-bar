@@ -30,7 +30,7 @@ export default async function EditIngredientPage({
 			category: formData.get("category"),
 			abv: percentageToRatioSchema.parse(formData.get("abv")),
 			brand: formData.get("brand"),
-			price: formData.get("price"),
+			unitCost: formData.get("unitCost"),
 			measurementType: formData.get("measurementType"),
 		});
 

@@ -10,7 +10,7 @@ const EMPTY_INGREDIENT: Partial<Ingredient> = {
 	abv: null,
 	brand: null,
 	measurementType: null,
-	price: null,
+	unitCost: null,
 };
 
 describe("userInputToSpec", () => {

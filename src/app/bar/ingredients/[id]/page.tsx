@@ -47,7 +47,7 @@ export default async function IngredientPage({ params }: Props) {
 			<Text as="p">{ingredient.category}</Text>
 			<Text as="p">{ingredient.abv}</Text>
 			<Text as="p">{ingredient.brand}</Text>
-			<Text as="p">{ingredient.price}</Text>
+			<Text as="p">{ingredient.unitCost}</Text>
 			<Text as="p">{ingredient.measurementType}</Text>
 		</Container>
 	);

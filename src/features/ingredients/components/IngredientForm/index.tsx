@@ -29,17 +29,17 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 			<TextField
 				label="Measurement type"
 				name="measurementType"
-				helperText='Used for unit conversion and price calculations. Choose "Volume"
+				helperText='Used for unit conversion and cost calculations. Choose "Volume"
 							for liquids, "Weight" for solids, or "Count" for individual
 							items (f.e., cherries, umbrellas).'
 				defaultValue={ingredient?.measurementType ?? undefined}
 			/>
 
 			<TextField
-				label="Price"
-				name="price"
+				label="Cost per liter"
+				name="unitCost"
 				helperText="In your local currency"
-				defaultValue={ingredient?.price ?? undefined}
+				defaultValue={ingredient?.unitCost ?? undefined}
 			/>
 
 			<TextField

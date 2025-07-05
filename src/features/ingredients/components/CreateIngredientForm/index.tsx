@@ -14,7 +14,7 @@ export function CreateIngredientForm({ ...props }: ComponentProps<"form">) {
 			measurementType: formData.get("measurementType") || null,
 			abv: percentageToRatioSchema.parse(formData.get("abv")) || null,
 			brand: formData.get("brand") || null,
-			price: formData.get("price") || null,
+			unitCost: formData.get("unitCost") || null,
 		});
 
 		await createIngredient(values);
