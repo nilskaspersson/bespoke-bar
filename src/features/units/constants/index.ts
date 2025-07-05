@@ -1,5 +1,8 @@
-import type { VolumeUnits } from "convert-units/definitions/volume";
 import type { Unit } from "@/db/schema/units";
+import type {
+	BartendingUnits,
+	VolumeUnits,
+} from "@/features/units/constants/volume";
 import { invertMapToSets } from "@/utils";
 
 /**
@@ -14,6 +17,14 @@ export const DB_UNIT_TO_LIB_UNIT = new Map<Unit, VolumeUnits>([
 	["ml", "ml"],
 	["tbsp", "Tbs"],
 	["tsp", "tsp"],
+	["gal", "gal"],
+	["qt", "qt"],
+	["dash", "dash"],
+	["barspoon", "barspoon"],
+	["rinse", "rinse"],
+	["drop", "drop"],
+	["float", "float"],
+	["spray", "spray"],
 ]);
 
 /**
@@ -81,8 +92,49 @@ export const ALIAS_TO_DB_VOLUME_UNIT = new Map<string, Unit>([
 	["tsp", "tsp"],
 	["teaspoon", "tsp"],
 	["teaspoons", "tsp"],
+
+	// Gallons
+	["gal", "gal"],
+	["gallon", "gal"],
+	["gallons", "gal"],
+
+	// Quarts
+	["qt", "qt"],
+	["quart", "qt"],
+	["quarts", "qt"],
+
+	/**
+	 * Bartending units
+	 */
+	["dash", "dash"],
+	["dashes", "dash"],
+	["barspoon", "barspoon"],
+	["barspoons", "barspoon"],
+	["bsp", "barspoon"],
+	["bsps", "barspoon"],
+	["bar spoon", "barspoon"],
+	["bar spoons", "barspoon"],
+	["rinse", "rinse"],
+	["wash", "rinse"],
+	["drop", "drop"],
+	["drip", "drop"],
+	["drops", "drop"],
+	["float", "float"],
+	["layer", "float"],
+	["spray", "spray"],
+	["mist", "spray"],
+	["spritz", "spray"],
 ]);
 
 export const DB_VOLUME_UNIT_TO_ALIASES = invertMapToSets(
 	ALIAS_TO_DB_VOLUME_UNIT,
 );
+
+export const BARTENDING_UNITS = new Set<BartendingUnits>([
+	"dash",
+	"barspoon",
+	"rinse",
+	"drop",
+	"float",
+	"spray",
+]);

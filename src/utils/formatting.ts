@@ -14,6 +14,11 @@ export const volumeFormatter = new Intl.NumberFormat("en-GB", {
 	maximumFractionDigits: 2,
 });
 
+export const quantityFormatter = new Intl.NumberFormat("en-GB", {
+	minimumFractionDigits: 0,
+	maximumFractionDigits: 2,
+});
+
 export const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
 	year: "numeric",
 	month: "short",

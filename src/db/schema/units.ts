@@ -16,6 +16,18 @@ export const unitEnum = pgEnum("unit", [
 	"ml",
 	"tbsp",
 	"tsp",
+	"gal",
+	"qt",
+
+	/**
+	 * Informal
+	 */
+	"barspoon",
+	"dash",
+	"rinse",
+	"float",
+	"drop",
+	"spray",
 ]);
 
 export const supportedUnits = createSelectSchema(unitEnum);
