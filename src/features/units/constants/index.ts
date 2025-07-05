@@ -17,6 +17,8 @@ export const DB_UNIT_TO_LIB_UNIT = new Map<Unit, VolumeUnits>([
 	["ml", "ml"],
 	["tbsp", "Tbs"],
 	["tsp", "tsp"],
+	["gal", "gal"],
+	["qt", "qt"],
 	["dash", "dash"],
 	["barspoon", "barspoon"],
 	["rinse", "rinse"],
@@ -90,6 +92,16 @@ export const ALIAS_TO_DB_VOLUME_UNIT = new Map<string, Unit>([
 	["tsp", "tsp"],
 	["teaspoon", "tsp"],
 	["teaspoons", "tsp"],
+
+	// Gallons
+	["gal", "gal"],
+	["gallon", "gal"],
+	["gallons", "gal"],
+
+	// Quarts
+	["qt", "qt"],
+	["quart", "qt"],
+	["quarts", "qt"],
 
 	/**
 	 * Bartending units
