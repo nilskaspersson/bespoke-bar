@@ -17,7 +17,6 @@ export function getFormattedUnit(
 	}
 
 	const unitData = convert().describe(libUnit);
-
 	switch (unit) {
 		case "fl_oz":
 			return "fl oz";
@@ -25,6 +24,8 @@ export function getFormattedUnit(
 		case "cl":
 		case "ml":
 		case "dl":
+		case "tsp":
+		case "tbsp":
 			return unitData.abbr;
 
 		default:
