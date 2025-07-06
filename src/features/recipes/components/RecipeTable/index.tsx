@@ -8,30 +8,20 @@ import {
 	type SortingState,
 	useReactTable,
 } from "@tanstack/react-table";
-import { clsx } from "clsx";
 import Link from "next/link";
-import { type ComponentProps, useMemo, useRef, useState } from "react";
+import { type ComponentProps, useMemo, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { UserChip } from "@/features/organisation/components/UserChip";
 import type { UserIdMap } from "@/features/organisation/types";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
-import {
-	getRecipeUrl,
-	globalFilterRecipeFn,
-	sortingFnCreatedAt,
-} from "@/features/recipes/utils";
+import { getRecipeUrl } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { Button } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
-import { Lightbox } from "@/ui/Lightbox";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
+import { TableLayout } from "@/ui/TableLayout";
 import { Text } from "@/ui/Text";
 import { Time } from "@/ui/Time";
-import { normalizeInput } from "@/utils";
+import { globalFilterFn, sortingFnCreatedAt } from "@/utils/sorting";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -50,8 +40,6 @@ export function RecipeTable({
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "createdAt", desc: true },
 	]);
-
-	const formRef = useRef<HTMLFormElement>(null);
 
 	const columns = useMemo(
 		() => [
@@ -136,92 +124,23 @@ export function RecipeTable({
 		getSortedRowModel: getSortedRowModel(),
 		onSortingChange: setSorting,
 		state: { sorting },
-		globalFilterFn: globalFilterRecipeFn,
+		globalFilterFn,
 	});
 
 	if (!recipes) {
 		return null;
 	}
 
-	const hasActiveFilter = Boolean(table.getState().globalFilter);
-	const isFilteredEmpty =
-		hasActiveFilter && recipes.length > 0 && table.getRowCount() === 0;
-
-	const clearSearch = () => {
-		table.resetGlobalFilter();
-		formRef.current?.reset();
-	};
-
 	return (
-		<section className={clsx(className, styles.base)} {...props}>
-			<Grid gap={3}>
-				{!isFilteredEmpty ? (
-					<Table>
-						<TableHeader getHeaderGroups={table.getHeaderGroups} />
-						<TableBody getRowModel={table.getRowModel} />
-					</Table>
-				) : null}
-
-				{isFilteredEmpty ? (
-					<Grid
-						as="aside"
-						gap={4}
-						className={styles.empty}
-						justifyContent="center"
-						justifyItems="center"
-					>
-						<Heading level="h6">Nothing matches your search</Heading>
-
-						<Button
-							variant="outline"
-							color="accent"
-							size="small"
-							onClick={clearSearch}
-						>
-							Clear search
-						</Button>
-					</Grid>
-				) : null}
-			</Grid>
-
-			<aside className={styles.sticky}>
-				{hasActiveFilter ? (
-					<Text as="div" size={0} compact className={styles.status} heavy>
-						{table.getRowCount()}{" "}
-						{table.getRowCount() === 1 ? "recipe" : "recipes"} matching "
-						{table.getState().globalFilter}"
-					</Text>
-				) : null}
-
-				<Lightbox
-					rounded
-					translucent
-					className={styles.search}
-					forceTheme="light"
-				>
-					<form ref={formRef}>
-						<Input
-							type="search"
-							rounded
-							placeholder="Search for recipes…"
-							onChange={(e) =>
-								table.setGlobalFilter(normalizeInput(e.target.value))
-							}
-						/>
-
-						{hasActiveFilter ? (
-							<Button
-								variant="base"
-								icon
-								className={styles.clear}
-								onClick={clearSearch}
-							>
-								<Icon name="xmark" />
-							</Button>
-						) : null}
-					</form>
-				</Lightbox>
-			</aside>
-		</section>
+		<TableLayout
+			table={table}
+			searchPlaceholder="Search for recipes…"
+			{...props}
+		>
+			<Table>
+				<TableHeader getHeaderGroups={table.getHeaderGroups} />
+				<TableBody getRowModel={table.getRowModel} />
+			</Table>
+		</TableLayout>
 	);
 }
