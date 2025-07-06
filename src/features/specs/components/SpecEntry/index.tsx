@@ -2,12 +2,9 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
+import { formatSpecMeasure } from "@/features/specs/utils/formatSpecMeasure";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { quantityToBestUnit } from "@/features/units/utils/formatVolume";
-import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
 import { Text } from "@/ui/Text";
-import { quantityFormatter } from "@/utils/formatting";
 import styles from "./styles.module.css";
 
 export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
@@ -25,22 +22,11 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 } & Omit<ComponentProps<typeof Text>, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 
-	const unitSystem = convertUnits
-		? convertUnits
-		: getUnitSystemFromUnit(spec.unit);
-
 	return (
 		<Text as="div" compact className={clsx(styles.entry, className)} {...props}>
 			{spec.quantity != null || spec.unit != null ? (
 				<span className={styles.node}>
-					{convertUnits
-						? quantityToBestUnit({
-								quantity: spec.quantity,
-								unit: spec.unit,
-								unitSystem,
-								servings,
-							})
-						: `${spec.quantity ? quantityFormatter.format(spec.quantity * servings) : ""} ${getFormattedUnit(spec.unit, spec.quantity)}`}
+					{formatSpecMeasure({ spec, servings, convertUnits })}
 				</span>
 			) : null}
 

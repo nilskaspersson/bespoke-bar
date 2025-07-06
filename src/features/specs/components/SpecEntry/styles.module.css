@@ -3,15 +3,11 @@
 		display: flex;
 		gap: 0.5ch;
 		font-size: var(--size-4);
+		font-variant-numeric: tabular-nums;
 	}
 
 	.node {
 		flex: 0 0 auto;
-	}
-
-	.quantity {
-		font-weight: 700;
-		font-variant-numeric: tabular-nums;
 	}
 
 	.name {

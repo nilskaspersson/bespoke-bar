@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import { useCombobox } from "downshift";
-import { useDeferredValue, useMemo, useState } from "react";
+import { useDeferredValue, useId, useMemo, useState } from "react";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Icon } from "@/ui/Icon";
@@ -24,6 +24,7 @@ type Props<T> = {
 	itemToString: (item: Keyed<T> | null) => string;
 	label?: React.ReactNode;
 	name: string;
+	helperText?: React.ReactNode;
 };
 
 export function Combobox<T>({
@@ -37,7 +38,10 @@ export function Combobox<T>({
 	itemToString,
 	label,
 	name,
+	helperText,
 }: Props<T>) {
+	const helperTextId = useId();
+
 	const [inputValue, setInputValue] = useState<string | null>(null);
 	const deferredInputValue = useDeferredValue<typeof inputValue>(inputValue);
 
@@ -65,13 +69,13 @@ export function Combobox<T>({
 		onInputValueChange({ inputValue }) {
 			setInputValue(inputValue.trim().toLowerCase());
 		},
-		items,
+		items: filteredItems,
 		itemToString,
 		defaultSelectedItem: defaultValue
 			? items.find((o) => getItemValue(o) === defaultValue)
 			: undefined,
 		scrollIntoView: (node) =>
-			node?.scrollIntoView({ behavior: "instant", block: "center" }),
+			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
 	});
 
 	return (
@@ -84,7 +88,7 @@ export function Combobox<T>({
 				<Input {...getInputProps()} type="search" className={styles.input} />
 
 				<menu className={styles.actions}>
-					{Boolean(selectedItem) || Boolean(deferredInputValue) ? (
+					{deferredInputValue ? (
 						<Button
 							variant="base"
 							icon
@@ -140,6 +144,12 @@ export function Combobox<T>({
 					) : null}
 				</div>
 			</div>
+
+			{helperText ? (
+				<Text size={1} id={helperTextId}>
+					{helperText}
+				</Text>
+			) : null}
 		</ControlLabel>
 	);
 }

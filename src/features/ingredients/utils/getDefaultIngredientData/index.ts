@@ -14,7 +14,7 @@ export function getDefaultIngredientData(
 		name: ingredientName,
 		abv: category ? (CATEGORY_DEFAULT_ABV.get(category) ?? null) : null,
 		brand: null,
-		price: null,
+		unitCost: null,
 		category,
 		measurementType: getMeasurementFromUnit(unit),
 	};

@@ -3,8 +3,9 @@
 import { clsx } from "clsx";
 import { type ComponentProps, useState } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
-import { AbvInfo } from "@/features/specs/components/AbvInfo";
-import { VolumeInfo } from "@/features/specs/components/VolumeInfo";
+import { AbvInfo } from "@/features/recipes/components/AbvInfo";
+import { CostInfo } from "@/features/recipes/components/CostInfo";
+import { VolumeInfo } from "@/features/recipes/components/VolumeInfo";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
@@ -31,21 +32,28 @@ export function RecipeMetrics<T extends BaseRecipe>({
 			{...props}
 		>
 			<AbvInfo recipe={recipe} diluted={asDiluted} />
+
 			<VolumeInfo
-				recipe={recipe}
 				diluted={asDiluted}
+				recipe={recipe}
 				servings={1}
 				convertUnits={convertUnits}
 			/>
 
 			{typeof servings === "number" && servings > 1 ? (
 				<VolumeInfo
-					recipe={recipe}
 					diluted={asDiluted}
+					recipe={recipe}
 					servings={servings}
 					convertUnits={convertUnits}
 				/>
 			) : null}
+
+			<CostInfo
+				recipe={recipe}
+				servings={servings}
+				convertUnits={convertUnits}
+			/>
 
 			<hr />
 

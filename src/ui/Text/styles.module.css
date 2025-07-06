@@ -21,7 +21,6 @@
 		font-size: var(--jsxFontSize);
 		font-weight: var(--jsxFontWeight);
 		text-align: var(--jsxTextAlign);
-		color: var(--mauve-11);
 
 		text-wrap: pretty;
 		line-height: var(--line-height);
@@ -38,10 +37,11 @@
 		&:is(table) {
 			th,
 			td {
-				text-align: left;
+				text-align: var(--jsxTextAlign, left);
 				font-weight: inherit;
 				border: 1px solid var(--mauve-6);
 				padding: 0.25em 1ch;
+				font-variant-numeric: tabular-nums;
 			}
 		}
 

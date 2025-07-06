@@ -2,6 +2,7 @@
 
 import { clsx } from "clsx";
 import { useSelect } from "downshift";
+import { type ComponentProps, useId } from "react";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { OptionItem } from "@/ui/OptionItem";
@@ -18,9 +19,9 @@ type Props<T> = {
 	getItemValue: (item: Keyed<T>) => string;
 	items: Keyed<T>[];
 	itemToString: (item: Keyed<T> | null) => string;
-	label?: React.ReactNode;
 	name: string;
 	placeholder?: React.ReactNode;
+	helperText?: React.ReactNode;
 };
 
 /**
@@ -44,10 +45,13 @@ export function Select<T>({
 	getItemValue,
 	items,
 	itemToString,
-	label,
 	name,
 	placeholder,
-}: Props<T>) {
+	helperText,
+	...props
+}: Props<T> & Partial<ComponentProps<typeof ControlLabel>>) {
+	const helperTextId = useId();
+
 	const {
 		isOpen,
 		selectedItem,
@@ -61,16 +65,17 @@ export function Select<T>({
 		defaultSelectedItem: defaultValue
 			? items.find((o) => getItemValue(o) === defaultValue)
 			: undefined,
-		scrollIntoView: (node) =>
-			node?.scrollIntoView({ behavior: "instant", block: "center" }),
 		itemToString,
+		scrollIntoView: (node) =>
+			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
 	});
 
 	return (
 		<ControlLabel
+			{...props}
 			{...getLabelProps()}
-			label={label}
 			className={clsx(styles.base, className)}
+			aria-describedby={helperText ? helperTextId : undefined}
 		>
 			<div className={styles.contain}>
 				<Button
@@ -119,6 +124,12 @@ export function Select<T>({
 					) : null}
 				</div>
 			</div>
+
+			{helperText ? (
+				<Text size={1} id={helperTextId}>
+					{helperText}
+				</Text>
+			) : null}
 		</ControlLabel>
 	);
 }

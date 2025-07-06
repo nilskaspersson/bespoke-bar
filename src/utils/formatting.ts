@@ -19,6 +19,12 @@ export const quantityFormatter = new Intl.NumberFormat("en-GB", {
 	maximumFractionDigits: 2,
 });
 
+export const currencyFormatter = new Intl.NumberFormat("en-GB", {
+	style: "currency",
+	currency: "SEK",
+	currencyDisplay: "narrowSymbol",
+});
+
 export const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
 	year: "numeric",
 	month: "short",

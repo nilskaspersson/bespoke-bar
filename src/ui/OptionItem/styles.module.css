@@ -2,11 +2,12 @@
 	.item {
 		display: flex;
 		gap: var(--gap);
-		padding: var(--spacing);
+		padding-inline: var(--spacing);
 		cursor: pointer;
 		border-radius: var(--radius);
 		transition: background-color, color;
 		transition-duration: var(--transition-duration--short);
+		color: var(--mauve-12);
 
 		&.isHighlighted {
 			background-color: hsl(from var(--mauve-1) h s l / 50%);
@@ -17,6 +18,7 @@
 		flex: 1 1 auto;
 		text-overflow: ellipsis;
 		overflow: hidden;
+		padding-block: var(--space-2);
 	}
 
 	.icon {

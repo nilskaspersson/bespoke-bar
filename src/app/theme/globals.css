@@ -126,6 +126,10 @@
 		transition-duration: var(--transition-duration);
 		cursor: pointer;
 
+		[open] > & {
+			margin-bottom: var(--space-1);
+		}
+
 		[open] > &,
 		&:hover {
 			color: var(--mauve-12);
