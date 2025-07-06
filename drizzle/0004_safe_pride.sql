@@ -1,0 +1,2 @@
+CREATE INDEX "idx_recipes_org_archived_created" ON "recipes" USING btree ("org_id","archived_at","created_at" DESC NULLS LAST);--> statement-breakpoint
+CREATE INDEX "idx_specs_recipe_ingredient" ON "specs" USING btree ("recipe_id","ingredient_id");

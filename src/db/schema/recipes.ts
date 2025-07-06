@@ -32,7 +32,14 @@ export const RecipesTable = pgTable(
 		updatedBy: text("updated_by"),
 		orgId: text("org_id").notNull(),
 	},
-	(table) => [index("idx_recipes_org").on(table.orgId)],
+	(table) => [
+		index("idx_recipes_org").on(table.orgId),
+		index("idx_recipes_org_archived_created").on(
+			table.orgId,
+			table.archivedAt,
+			table.createdAt.desc(),
+		),
+	],
 );
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({
