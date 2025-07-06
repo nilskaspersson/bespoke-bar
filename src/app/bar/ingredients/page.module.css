@@ -6,7 +6,6 @@
 		padding-bottom: var(--gap);
 		grid-template:
 			"header" auto
-			"actions" auto
 			"table" 1fr;
 	}
 }
