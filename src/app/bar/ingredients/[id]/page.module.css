@@ -1,0 +1,6 @@
+@layer layout {
+	.icon {
+		fill: var(--iris-8);
+		flex: 0 0 auto;
+	}
+}
