@@ -15,7 +15,11 @@ export function OptionsList({
 	header?: React.ReactNode;
 }) {
 	return (
-		<Lightbox {...props} className={clsx(styles.lightbox, className)}>
+		<Lightbox
+			{...props}
+			className={clsx(styles.lightbox, className)}
+			translucent
+		>
 			{header ? <div className={styles.header}>{header}</div> : null}
 			<ul className={styles.options}>{children}</ul>
 			{footer ? <div className={styles.footer}>{footer}</div> : null}

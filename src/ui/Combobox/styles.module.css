@@ -1,4 +1,4 @@
-@layer ui {
+@layer component {
 	.base {
 		--spacing: var(--space-2);
 
@@ -17,18 +17,18 @@
 
 	.actions {
 		position: absolute;
-		inset: 0 0 0 auto;
+		inset: 1px 1px 1px auto;
 		display: flex;
 	}
 
 	.toggle {
-		border: 1px solid var(--mauve-6);
+		border-left: 1px solid var(--mauve-6);
 		width: var(--control-height);
 		border-radius: 0 var(--radius) var(--radius) 0;
 
 		&:hover {
 			color: var(--mauve-12);
-			border-color: var(--mauve-7);
+			background-color: var(--mauve-3);
 		}
 	}
 
