@@ -1,29 +1,37 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { readIngredients } from "@/features/ingredients/actions/readIngredients";
-import { getIngredientUrl } from "@/features/ingredients/utils";
+import { IngredientTable } from "@/features/ingredients/components/IngredientsTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
+import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
+import styles from "./page.module.css";
 
 export default async function IngredientsPage() {
 	const ingredients = await readIngredients();
 
 	return (
-		<Container as="article">
-			<Heading level="h1">Ingredients</Heading>
+		<Container as="article" className={styles.container}>
+			<Flex
+				as="header"
+				justifyContent="space-between"
+				alignItems="center"
+				wrap
+				gap={4}
+			>
+				<Heading level="h1">Ingredients</Heading>
 
-			<LinkButton href="/bar/ingredients/create" variant="solid" color="heavy">
-				Create Ingredient
-			</LinkButton>
+				<LinkButton
+					href="/bar/ingredients/create"
+					variant="solid"
+					color="accent"
+					size="small"
+				>
+					Create Ingredient
+				</LinkButton>
+			</Flex>
 
-			<ul>
-				{ingredients.map((ingredient) => (
-					<li key={ingredient.id}>
-						<Link href={getIngredientUrl(ingredient)}>{ingredient.name}</Link>
-					</li>
-				))}
-			</ul>
+			<IngredientTable ingredients={ingredients} />
 		</Container>
 	);
 }
