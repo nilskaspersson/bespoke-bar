@@ -45,7 +45,7 @@ export async function RecipeArticle({
 				recipe={recipe}
 				header={
 					<Flex gap={4} justifyContent="space-between">
-						<Heading level="h3" size={3}>
+						<Heading level="h3" size={4}>
 							<RecipeName recipe={recipe} />
 						</Heading>
 
