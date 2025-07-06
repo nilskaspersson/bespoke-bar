@@ -1,7 +1,10 @@
 import type { Ingredient } from "@/db/schema/ingredients";
+import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
+import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { Grid } from "@/ui/Grid";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
+import { percentageFormatter } from "@/utils/formatting";
 
 export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 	return (
@@ -13,26 +16,22 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 				defaultValue={ingredient?.name}
 			/>
 
-			<TextField
-				label="Category"
-				name="category"
-				defaultValue={ingredient?.category ?? undefined}
-			/>
+			<SelectCategory defaultValue={ingredient?.category ?? undefined} />
 
 			<TextField
 				label="Alcohol by volume (ABV)"
 				name="abv"
 				helperText="Percentage value from 0-100%. Up to two decimal places."
-				defaultValue={ingredient?.abv ?? undefined}
+				defaultValue={
+					ingredient?.abv
+						? percentageFormatter.format(ingredient.abv)
+						: undefined
+				}
 			/>
 
-			<TextField
-				label="Measurement type"
-				name="measurementType"
-				helperText='Used for unit conversion and cost calculations. Choose "Volume"
-							for liquids, "Weight" for solids, or "Count" for individual
-							items (f.e., cherries, umbrellas).'
+			<SelectMeasurementType
 				defaultValue={ingredient?.measurementType ?? undefined}
+				helperText={`Used for unit conversion and cost calculations. Choose "Volume" for liquids, "Mass" for solids, or "Pieces" for individual items (f.e., cherries, umbrellas).`}
 			/>
 
 			<TextField

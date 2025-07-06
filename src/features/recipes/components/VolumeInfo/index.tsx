@@ -43,7 +43,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 				({diluted ? "diluted" : "undiluted"})
 			</Text>
 
-			<Grid gap={2}>
+			<Grid gap={2} justifyItems="start">
 				<Text as="table" size={1}>
 					<tbody>
 						<tr>

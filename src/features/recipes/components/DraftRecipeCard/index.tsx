@@ -1,9 +1,9 @@
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { AbvInfo } from "@/features/recipes/components/AbvInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { VolumeInfo } from "@/features/recipes/components/VolumeInfo";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
-import { AbvInfo } from "@/features/specs/components/AbvInfo";
 import { SpecEntry } from "@/features/specs/components/SpecEntry";
-import { VolumeInfo } from "@/features/specs/components/VolumeInfo";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
