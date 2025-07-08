@@ -23,6 +23,8 @@ export const currencyFormatter = new Intl.NumberFormat("en-GB", {
 	style: "currency",
 	currency: "SEK",
 	currencyDisplay: "narrowSymbol",
+	minimumFractionDigits: 0,
+	maximumFractionDigits: 2,
 });
 
 export const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {

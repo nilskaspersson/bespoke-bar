@@ -28,6 +28,7 @@ export default async function EditIngredientPage({
 		const values = updateIngredientSchema.parse({
 			name: formData.get("name"),
 			category: formData.get("category"),
+			description: formData.get("description"),
 			abv: percentageToRatioSchema.parse(formData.get("abv")),
 			brand: formData.get("brand"),
 			unitCost: formData.get("unitCost"),

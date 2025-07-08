@@ -3,18 +3,30 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
 import { readIngredient } from "@/features/ingredients/actions/readIngredient";
+import { Abv } from "@/features/ingredients/components/Abv";
 import { DeleteIngredient } from "@/features/ingredients/components/DeleteIngredient";
+import {
+	CATEGORY_TO_LABEL,
+	MEASUREMENT_TO_LABEL,
+} from "@/features/ingredients/constants";
+import { formatIngredientUnitCost } from "@/features/ingredients/utils/formatIngredientUnitCost";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
+import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
 import { readBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { LinkButton } from "@/ui/Button";
+import { Callout } from "@/ui/Callout";
+import { Chip } from "@/ui/Chip";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
+import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { currencyFormatter, percentageFormatter } from "@/utils/formatting";
 import { getKey } from "@/utils/withKey";
 import styles from "./page.module.css";
 
@@ -24,9 +36,10 @@ type Props = {
 
 export default async function IngredientPage({ params }: Props) {
 	const { id } = await params;
-	const [ingredient, recipes] = await Promise.all([
+	const [ingredient, recipes, members] = await Promise.all([
 		readIngredient(id),
 		readBarRecipes(),
+		readOrganisationMembers(),
 	]);
 
 	if (!ingredient) {
@@ -39,67 +52,90 @@ export default async function IngredientPage({ params }: Props) {
 	);
 
 	return (
-		<Container as="article">
-			<Heading level="h1">{ingredient.name}</Heading>
+		<Container as="article" className={styles.container}>
+			<Grid gap={4} justifyContent="center">
+				<header>
+					{ingredient.category ? (
+						<Text as="div" size={2} compact>
+							{CATEGORY_TO_LABEL.get(ingredient.category)}
+						</Text>
+					) : null}
 
-			<DeleteIngredient
-				ingredient={ingredient}
-				action={deleteIngredient.bind(null, {
-					id: ingredient.id,
-					redirectTo: "/bar/ingredients",
-				})}
+					<Heading level="h1">{ingredient.name}</Heading>
+				</header>
+
+				<hr />
+
+				<Flex gap={2} wrap justifyContent="center">
+					{ingredient.abv ? (
+						<Chip label={<Abv />}>
+							{percentageFormatter.format(ingredient.abv)}
+						</Chip>
+					) : null}
+
+					{ingredient.brand ? (
+						<Chip label="Brand">{ingredient.brand}</Chip>
+					) : null}
+
+					{ingredient.unitCost && ingredient.measurementType ? (
+						<Chip label="Unit cost">
+							{formatIngredientUnitCost(
+								ingredient.unitCost,
+								ingredient.measurementType,
+							)}
+						</Chip>
+					) : null}
+				</Flex>
+
+				<hr />
+
+				{ingredient.description ? (
+					<Text as="p" heavy>
+						{ingredient.description}
+					</Text>
+				) : null}
+			</Grid>
+
+			<Flex
+				as="menu"
+				gap={4}
+				className={styles.actions}
+				justifyContent="center"
 			>
-				<Icon name="trash" /> Delete
-			</DeleteIngredient>
+				<LinkButton
+					href={`/bar/ingredients/${id}/edit`}
+					variant="outline"
+					color="heavy"
+					size="small"
+				>
+					Edit
+				</LinkButton>
 
-			<LinkButton
-				href={`/bar/ingredients/${id}/edit`}
-				variant="outline"
-				color="heavy"
-				size="small"
-			>
-				Edit
-			</LinkButton>
-
-			<Text as="p">{ingredient.category}</Text>
-			<Text as="p">{ingredient.abv}</Text>
-			<Text as="p">{ingredient.brand}</Text>
-			<Text as="p">{ingredient.unitCost}</Text>
-			<Text as="p">{ingredient.measurementType}</Text>
+				<DeleteIngredient
+					ingredient={ingredient}
+					action={deleteIngredient.bind(null, {
+						id: ingredient.id,
+						redirectTo: "/bar/ingredients",
+					})}
+				>
+					<Icon name="trash" /> Delete
+				</DeleteIngredient>
+			</Flex>
 
 			{recipesUsingIngredient.length > 0 ? (
-				<aside>
-					<Heading level="h2" size={3}>
+				<Grid as="aside" gap={4} justifyItems="center">
+					<Heading level="h2" size={4} className={styles.heading}>
 						{recipesUsingIngredient.length}{" "}
 						{recipesUsingIngredient.length === 1 ? "recipe" : "recipes"} use{" "}
 						{ingredient.name}
 					</Heading>
 
-					<Flex as="ul" wrap gap={4}>
-						{recipesUsingIngredient.map((recipe) => (
-							<li key={getKey(recipe)}>
-								<RecipeCard
-									header={
-										<Flex gap={4} justifyContent="space-between">
-											<Heading level="h3" size={4}>
-												<Link href={getRecipeUrl(recipe)} prefetch={false}>
-													<RecipeName recipe={recipe} />
-												</Link>
-											</Heading>
-
-											<Icon
-												name="duotone-martini-glass"
-												size={3}
-												className={styles.icon}
-											/>
-										</Flex>
-									}
-									recipe={recipe}
-								/>
-							</li>
-						))}
-					</Flex>
-				</aside>
+					<RecipeTable
+						recipes={recipesUsingIngredient}
+						members={members}
+						disableSearch
+					/>
+				</Grid>
 			) : null}
 		</Container>
 	);

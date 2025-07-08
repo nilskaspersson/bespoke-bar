@@ -19,6 +19,14 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 			<SelectCategory defaultValue={ingredient?.category ?? undefined} />
 
 			<TextField
+				label="Description"
+				name="description"
+				as="textarea"
+				rows={3}
+				defaultValue={ingredient?.description ?? undefined}
+			/>
+
+			<TextField
 				label="Alcohol by volume (ABV)"
 				name="abv"
 				helperText="Percentage value from 0-100%. Up to two decimal places."

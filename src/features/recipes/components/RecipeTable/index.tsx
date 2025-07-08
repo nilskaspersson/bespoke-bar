@@ -27,6 +27,7 @@ import styles from "./styles.module.css";
 type Props = {
 	recipes: RecipeWithSpecs[] | undefined | null;
 	members: UserIdMap;
+	disableSearch?: boolean;
 };
 
 const columnHelper = createColumnHelper<RecipeWithSpecs>();
@@ -35,6 +36,7 @@ export function RecipeTable({
 	className,
 	recipes,
 	members,
+	disableSearch,
 	...props
 }: Props & ComponentProps<"section">) {
 	const [sorting, setSorting] = useState<SortingState>([
@@ -135,6 +137,7 @@ export function RecipeTable({
 		<TableLayout
 			table={table}
 			searchPlaceholder="Search for recipes…"
+			disableSearch={disableSearch}
 			{...props}
 		>
 			<Table>
