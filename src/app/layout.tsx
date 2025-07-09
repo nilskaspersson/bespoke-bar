@@ -1,12 +1,13 @@
 import "./theme";
 import { clsx } from "clsx";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Figtree } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 import { AppFooter } from "@/app/components/AppFooter";
 import { AppHeader } from "@/app/components/AppHeader";
 import { AuthProvider } from "@/app/components/AuthProvider";
+import { ScrollFix } from "@/app/components/ScrollFix";
 import styles from "./layout.module.css";
 
 const sans = Figtree({
@@ -25,6 +26,8 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 			suppressHydrationWarning
 		>
 			<body className={clsx(sans.variable, styles.body)}>
+				<ScrollFix />
+
 				<ThemeProvider>
 					<AuthProvider>
 						<AppHeader className={styles.header} />
@@ -60,4 +63,8 @@ export const metadata: Metadata = {
 	robots: {
 		index: false,
 	},
+};
+
+export const viewport: Viewport = {
+	viewportFit: "cover",
 };
