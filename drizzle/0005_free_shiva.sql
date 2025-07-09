@@ -1,0 +1,1 @@
+ALTER TABLE "ingredients" ADD COLUMN "description" varchar(5000);
