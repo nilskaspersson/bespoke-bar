@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { readIngredient } from "@/features/ingredients/actions/readIngredient";
 import { updateIngredient } from "@/features/ingredients/actions/updateIngredient";
@@ -7,6 +7,7 @@ import { percentageToRatioSchema } from "@/features/ingredients/utils/percentage
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import styles from "./page.module.css";
 
 type Props = {
 	params: Promise<{ id?: string }>;
@@ -36,10 +37,12 @@ export default async function EditIngredientPage({
 		});
 
 		await updateIngredient(ingredient.id, values);
+
+		redirect(`/bar/ingredients/${id}`);
 	};
 
 	return (
-		<Container as="article">
+		<Container as="article" className={styles.container}>
 			<Grid gap={4}>
 				<Heading level="h1">Edit ingredient</Heading>
 

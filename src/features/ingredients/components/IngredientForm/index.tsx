@@ -2,13 +2,14 @@ import type { Ingredient } from "@/db/schema/ingredients";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { Grid } from "@/ui/Grid";
+import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 import { percentageFormatter } from "@/utils/formatting";
 
 export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 	return (
-		<Grid gap={4}>
+		<Grid gap={5}>
 			<TextField
 				label="Ingredient name"
 				name="name"
@@ -55,7 +56,12 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 				defaultValue={ingredient?.brand ?? undefined}
 			/>
 
-			<SubmitButton>Save Ingredient</SubmitButton>
+			<div>
+				<SubmitButton variant="solid" color="accent">
+					<Icon name="circle-check" />
+					Save changes
+				</SubmitButton>
+			</div>
 		</Grid>
 	);
 }
