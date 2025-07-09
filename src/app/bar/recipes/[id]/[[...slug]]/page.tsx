@@ -46,7 +46,7 @@ export default async function RecipePage({ params }: Props) {
 			<Grid gap={9}>
 				<RecipeArticle recipe={recipe} />
 
-				<Flex gap={2} justifyContent="center">
+				<Flex gap={2} justifyContent="center" className={styles.actions}>
 					<LinkButton
 						href={`/bar/recipes/${id}/edit`}
 						variant="outline"
