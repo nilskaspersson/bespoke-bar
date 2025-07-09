@@ -1,0 +1,20 @@
+@layer ui {
+	.chip {
+		display: inline-block;
+		background-color: var(--iris-1);
+		color: var(--iris-12);
+		padding: var(--space-3) var(--space-4);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow);
+		font-weight: 600;
+		font-size: var(--size-5);
+		line-height: var(--line-height--compact);
+		text-align: left;
+	}
+
+	.label {
+		display: block;
+		font-size: var(--size-1);
+		color: var(--iris-11);
+	}
+}

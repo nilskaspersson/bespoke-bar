@@ -39,7 +39,7 @@
 		}
 	}
 
-	@media (prefers-reduced-motion: no-preference) {
+	@media (prefers-reduced-motion: no-preference) and (min-width: 750px) {
 		:global(html) {
 			background-image: linear-gradient(
 				to right in oklab,

@@ -16,10 +16,12 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 	children,
 	table,
 	searchPlaceholder,
+	disableSearch,
 	...props
 }: ComponentProps<"section"> & {
 	table: Table<T>;
 	searchPlaceholder?: string;
+	disableSearch?: boolean;
 }) {
 	const formRef = useRef<HTMLFormElement>(null);
 
@@ -69,34 +71,36 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 					</Text>
 				) : null}
 
-				<Lightbox
-					rounded
-					translucent
-					className={styles.search}
-					forceTheme="light"
-				>
-					<form ref={formRef}>
-						<Input
-							type="search"
-							rounded
-							placeholder={searchPlaceholder ?? "Search…"}
-							onChange={(e) =>
-								table.setGlobalFilter(normalizeInput(e.target.value))
-							}
-						/>
+				{!disableSearch ? (
+					<Lightbox
+						rounded
+						translucent
+						className={styles.search}
+						forceTheme="light"
+					>
+						<form ref={formRef}>
+							<Input
+								type="search"
+								rounded
+								placeholder={searchPlaceholder ?? "Search…"}
+								onChange={(e) =>
+									table.setGlobalFilter(normalizeInput(e.target.value))
+								}
+							/>
 
-						{hasActiveFilter ? (
-							<Button
-								variant="base"
-								icon
-								className={styles.clear}
-								onClick={clearSearch}
-							>
-								<Icon name="xmark" />
-							</Button>
-						) : null}
-					</form>
-				</Lightbox>
+							{hasActiveFilter ? (
+								<Button
+									variant="base"
+									icon
+									className={styles.clear}
+									onClick={clearSearch}
+								>
+									<Icon name="xmark" />
+								</Button>
+							) : null}
+						</form>
+					</Lightbox>
+				) : null}
 			</aside>
 		</section>
 	);
