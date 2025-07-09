@@ -1,24 +1,16 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
 import { readIngredient } from "@/features/ingredients/actions/readIngredient";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { DeleteIngredient } from "@/features/ingredients/components/DeleteIngredient";
-import {
-	CATEGORY_TO_LABEL,
-	MEASUREMENT_TO_LABEL,
-} from "@/features/ingredients/constants";
+import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { formatIngredientUnitCost } from "@/features/ingredients/utils/formatIngredientUnitCost";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
 import { readBarRecipes } from "@/features/recipes/actions/readBarRecipes";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
-import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
-import { getRecipeUrl } from "@/features/recipes/utils";
 import { LinkButton } from "@/ui/Button";
-import { Callout } from "@/ui/Callout";
 import { Chip } from "@/ui/Chip";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
@@ -26,8 +18,7 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
-import { currencyFormatter, percentageFormatter } from "@/utils/formatting";
-import { getKey } from "@/utils/withKey";
+import { percentageFormatter } from "@/utils/formatting";
 import styles from "./page.module.css";
 
 type Props = {
@@ -84,6 +75,10 @@ export default async function IngredientPage({ params }: Props) {
 								ingredient.measurementType,
 							)}
 						</Chip>
+					) : null}
+
+					{recipesUsingIngredient.length > 0 ? (
+						<Chip label="Recipes">{recipesUsingIngredient.length}</Chip>
 					) : null}
 				</Flex>
 
