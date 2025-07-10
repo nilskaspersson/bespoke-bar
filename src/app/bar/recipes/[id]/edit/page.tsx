@@ -1,14 +1,13 @@
 import { notFound } from "next/navigation";
-import { updateRecipeSchema } from "@/db/schema/recipes";
 import { readRecipe } from "@/features/recipes/actions/readRecipe";
-import { updateRecipe } from "@/features/recipes/actions/updateRecipe";
-import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { Button } from "@/ui/Button";
+import { RecipeForm } from "@/features/recipes/components/RecipeForm";
+import { getRecipeUrl } from "@/features/recipes/utils";
+import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
-import { GradientText } from "@/ui/GradientText";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-import { TextField } from "@/ui/TextField";
+import { Icon } from "@/ui/Icon";
+import styles from "./page.module.css";
 
 type Props = {
 	params: Promise<{ id?: string }>;
@@ -22,49 +21,21 @@ export default async function EditRecipePage({ params: paramsPromise }: Props) {
 		notFound();
 	}
 
-	const formAction = async (formData: FormData) => {
-		"use server";
-
-		const values = updateRecipeSchema.parse({
-			name: formData.get("name"),
-			description: formData.get("description"),
-		});
-
-		await updateRecipe(recipe.id, values);
-	};
-
 	return (
-		<Container as="article">
+		<Container as="article" className={styles.container}>
 			<Grid gap={4}>
-				<Heading level="h1">
-					Edit recipe{" "}
-					<GradientText>
-						<RecipeName recipe={recipe} />
-					</GradientText>
-				</Heading>
+				<nav>
+					<LinkButton href={getRecipeUrl(recipe)} variant="text" color="accent">
+						<Icon name="angle-left" />
+						Back to recipe
+					</LinkButton>
+				</nav>
 
-				<form action={formAction}>
-					<Grid gap={4}>
-						<TextField
-							label="Name"
-							name="name"
-							defaultValue={recipe.name ?? ""}
-						/>
+				<header>
+					<Heading level="h1">Edit recipe</Heading>
+				</header>
 
-						<TextField
-							as="textarea"
-							label="Description"
-							name="description"
-							defaultValue={recipe.description ?? ""}
-						/>
-
-						<div>
-							<Button type="submit" variant="solid" color="heavy">
-								Save
-							</Button>
-						</div>
-					</Grid>
-				</form>
+				<RecipeForm recipe={recipe} />
 
 				<ul>
 					{recipe.specs.map((spec) => (
