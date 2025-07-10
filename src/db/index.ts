@@ -3,6 +3,7 @@ import { drizzle as drizzleNeon } from "drizzle-orm/neon-serverless";
 import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
 import * as categories from "./schema/categories";
 import * as ingredients from "./schema/ingredients";
+import * as organisations from "./schema/organisations";
 import * as preparationMethods from "./schema/preparationMethods";
 import * as recipes from "./schema/recipes";
 import * as specs from "./schema/specs";
@@ -15,6 +16,7 @@ if (!process.env.DATABASE_URL) {
 const schema = {
 	...categories,
 	...ingredients,
+	...organisations,
 	...preparationMethods,
 	...recipes,
 	...specs,
