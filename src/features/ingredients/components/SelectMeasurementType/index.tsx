@@ -8,7 +8,7 @@ import {
 } from "@/features/ingredients/constants";
 import { Select } from "@/ui/Select";
 import { Text } from "@/ui/Text";
-import { collator } from "@/utils/formatting";
+import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 type Option = (typeof OPTIONS)[number];

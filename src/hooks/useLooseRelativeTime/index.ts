@@ -1,10 +1,13 @@
-import { dateTimeFormatter, relativeTimeFormatter } from "@/utils/formatting";
+import { useCallback, useContext } from "react";
+import { FormatterContext } from "@/hooks/useFormatter";
 
-export function formatRelativeTime(
+export function formatLooseRelativeTime(
 	date: Date,
 	relativeThreshold = 30,
 	now = new Date(),
-): string {
+	dateTimeFormatter: Intl.DateTimeFormat,
+	relativeTimeFormatter: Intl.RelativeTimeFormat,
+) {
 	const diffInMs = date.getTime() - now.getTime();
 	const absDiffInDays = Math.floor(Math.abs(diffInMs) / (1000 * 60 * 60 * 24));
 
@@ -36,4 +39,21 @@ export function formatRelativeTime(
 			"minute",
 		);
 	}
+}
+
+export function useLooseRelativeTime() {
+	const { dateTimeFormatter, relativeTimeFormatter } =
+		useContext(FormatterContext);
+
+	return useCallback(
+		(date: Date, relativeThreshold = 30, now = new Date()) =>
+			formatLooseRelativeTime(
+				date,
+				relativeThreshold,
+				now,
+				dateTimeFormatter,
+				relativeTimeFormatter,
+			),
+		[dateTimeFormatter, relativeTimeFormatter],
+	);
 }

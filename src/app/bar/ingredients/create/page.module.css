@@ -1,0 +1,6 @@
+@layer layout {
+	.container {
+		padding-top: var(--app-inset);
+		padding-bottom: var(--gap--huge);
+	}
+}

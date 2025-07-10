@@ -1,14 +1,16 @@
+"use client";
+
 import Link from "next/link";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useContext } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { getRecipeCost } from "@/features/recipes/utils/getRecipeCost";
-import { formatSpecMeasure } from "@/features/specs/utils/formatSpecMeasure";
+import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
 import { getSpecCost } from "@/features/specs/utils/getSpecCost";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
-import { currencyFormatter, quantityFormatter } from "@/utils/formatting";
 import { getKey } from "@/utils/withKey";
 
 export function CostInfo<T extends BaseRecipe>({
@@ -21,6 +23,9 @@ export function CostInfo<T extends BaseRecipe>({
 	"children"
 >) {
 	const { cost, isIncomplete } = getRecipeCost(recipe);
+
+	const { currencyFormatter, quantityFormatter } = useContext(FormatterContext);
+	const formatSpecMeasure = useFormatSpecMeasure();
 
 	return (
 		<details {...props}>

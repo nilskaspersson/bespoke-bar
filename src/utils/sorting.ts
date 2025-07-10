@@ -1,6 +1,6 @@
 import type { Row } from "@tanstack/react-table";
 import { normalizeInput } from "@/utils";
-import { collator } from "@/utils/formatting";
+import { collator } from "@/utils/collator";
 
 export function sortingFnCreatedAt<
 	T extends { createdAt: Date; name: string | null },

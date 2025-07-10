@@ -5,13 +5,13 @@ import z from "zod/v4";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";
+import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Input } from "@/ui/Input";
 import { Text } from "@/ui/Text";
 import { times } from "@/utils";
-import { SelectUnitConversion } from "../SelectUnitConversion";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends BaseRecipe>({

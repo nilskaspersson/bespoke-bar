@@ -1,9 +1,9 @@
 "use client";
 
 import { clsx } from "clsx";
-import { type ComponentProps, useEffect, useState } from "react";
+import type { ComponentProps } from "react";
+import { useLooseRelativeTime } from "@/hooks/useLooseRelativeTime";
 import { Text } from "@/ui/Text";
-import { formatRelativeTime } from "@/utils/dateTime";
 import styles from "./styles.module.css";
 
 export function Time({
@@ -15,20 +15,8 @@ export function Time({
 	date: Date;
 	relativeThreshold?: number;
 } & Omit<ComponentProps<typeof Text>, "children">) {
-	const [mounted, setMounted] = useState(false);
-
-	useEffect(() => setMounted(true), []);
-
-	/**
-	 * Avoid hydration mismatch by not rendering on server. An alternative to this
-	 * could be to always render absolute time on the server, but that would cause
-	 * visual noise.
-	 */
-	if (!mounted) {
-		return null;
-	}
-
-	const displayText = formatRelativeTime(date, relativeThreshold);
+	const formatLooseRelativeTime = useLooseRelativeTime();
+	const displayText = formatLooseRelativeTime(date, relativeThreshold);
 	const isoString = date.toISOString();
 
 	return (

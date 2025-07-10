@@ -43,11 +43,6 @@ const tryParseUnit = (text: string, pattern: RegExp): [Unit | null, string] => {
 	return [unit, remainder];
 };
 
-export function formatUnit(userInput: string): Unit | null {
-	const [unit] = unitTextParser(userInput);
-	return unit;
-}
-
 export function unitTextParser(userInput: string): [Unit | null, string] {
 	const text = userInput.trim();
 

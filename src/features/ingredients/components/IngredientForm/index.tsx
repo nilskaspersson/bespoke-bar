@@ -1,13 +1,21 @@
 import type { Ingredient } from "@/db/schema/ingredients";
+import type { Organisation } from "@/db/schema/organisations";
+import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
+import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
-import { percentageFormatter } from "@/utils/formatting";
 
-export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
+export function IngredientForm({
+	ingredient,
+	organisation,
+}: {
+	ingredient?: Ingredient;
+	organisation: Organisation;
+}) {
 	return (
 		<Grid gap={5}>
 			<TextField
@@ -27,15 +35,11 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 				defaultValue={ingredient?.description ?? undefined}
 			/>
 
-			<TextField
+			<SelectAbv
+				ingredient={ingredient}
 				label="Alcohol by volume (ABV)"
 				name="abv"
 				helperText="Percentage value from 0-100%. Up to two decimal places."
-				defaultValue={
-					ingredient?.abv
-						? percentageFormatter.format(ingredient.abv)
-						: undefined
-				}
 			/>
 
 			<SelectMeasurementType
@@ -43,10 +47,10 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 				helperText={`Used for unit conversion and cost calculations. Choose "Volume" for liquids, "Mass" for solids, or "Pieces" for individual items (f.e., cherries, umbrellas).`}
 			/>
 
-			<TextField
+			<SelectUnitCost
+				currency={organisation.currency}
 				label="Cost per liter"
 				name="unitCost"
-				helperText="In your local currency"
 				defaultValue={ingredient?.unitCost ?? undefined}
 			/>
 

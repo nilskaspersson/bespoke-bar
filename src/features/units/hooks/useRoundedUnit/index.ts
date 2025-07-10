@@ -1,14 +1,13 @@
-import type { Unit } from "@/db/schema/units";
-import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
+import { useCallback, useContext } from "react";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
-import { volumeFormatter } from "@/utils/formatting";
+import { FormatterContext } from "@/hooks/useFormatter";
 
-export function formatVolume(
+export function roundUnit(
 	volumeInMl: number,
 	unitSystem: UnitSystems | null | undefined,
-): string {
+	volumeFormatter: Intl.NumberFormat,
+) {
 	if (volumeInMl === 0) return unitSystem === "metric" ? "0 ml" : "0 fl oz";
 
 	if (unitSystem === "imperial") {
@@ -50,40 +49,15 @@ export function formatVolume(
 	return `${volumeFormatter.format(volumeInMl)} ${getFormattedUnit("ml", volumeInMl)}`;
 }
 
-export function quantityToBestUnit({
-	quantity,
-	unit,
-	unitSystem,
-	servings = 1,
-}: {
-	quantity: number | null | undefined;
-	unit: Unit | null | undefined;
-	unitSystem?: UnitSystems | null;
-	servings?: number;
-}): string {
-	if (!quantity) {
-		return "";
-	}
+export function useRoundedUnit(): (
+	volumeInMl: number,
+	unitSystem: UnitSystems | null | undefined,
+) => string {
+	const { volumeFormatter } = useContext(FormatterContext);
 
-	const qty = quantity * servings;
-
-	if (!unit) {
-		return qty.toString();
-	}
-
-	const libUnit = DB_UNIT_TO_LIB_UNIT.get(unit);
-
-	if (!libUnit) {
-		return qty.toString();
-	}
-
-	const volumeInMl = convert(qty).from(libUnit).to("ml");
-
-	const nativeUnitSystem = getUnitSystemFromUnit(unit);
-
-	if (nativeUnitSystem === "bartending" && volumeInMl <= 10) {
-		return `${qty} ${getFormattedUnit(unit, qty)}`;
-	}
-
-	return formatVolume(volumeInMl, unitSystem);
+	return useCallback(
+		(volumeInMl: number, unitSystem: UnitSystems | null | undefined) =>
+			roundUnit(volumeInMl, unitSystem, volumeFormatter),
+		[volumeFormatter],
+	);
 }

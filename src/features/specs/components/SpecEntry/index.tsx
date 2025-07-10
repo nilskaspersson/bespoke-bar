@@ -2,7 +2,7 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
-import { formatSpecMeasure } from "@/features/specs/utils/formatSpecMeasure";
+import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -21,6 +21,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	servings?: number;
 } & Omit<ComponentProps<typeof Text>, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
+	const formatSpecMeasure = useFormatSpecMeasure();
 
 	return (
 		<Text as="div" compact className={clsx(styles.entry, className)} {...props}>
