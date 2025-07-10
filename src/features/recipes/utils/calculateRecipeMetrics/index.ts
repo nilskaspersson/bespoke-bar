@@ -1,4 +1,3 @@
-import type { PreparationMethod } from "@/db/schema/preparationMethods";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
@@ -13,29 +12,6 @@ export type RecipeMetrics = {
 	dilutionOfOriginalVolume: number;
 	dilutionOfFinalVolume: number;
 };
-
-/**
- * Get default dilution percentage averages based on preparation method
- */
-function getDefaultDilution(
-	preparationMethod: PreparationMethod | null | undefined,
-): number {
-	switch (preparationMethod) {
-		case "stirred":
-			return 0.4;
-		case "shaken":
-			return 0.55;
-		case "built":
-			return 0.15;
-		case "blended":
-			return 0.6;
-		case "carbonated":
-			return 0.2;
-
-		default:
-			return 0.35;
-	}
-}
 
 /**
  * Calculate total liquid and alcohol volumes from a list of specs
@@ -82,6 +58,39 @@ export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 	};
 }
 
+/**
+ * Get dilution target (percentage of final volume that should be water)
+ * from recipe, defaulting to 0 if not defined
+ */
+function getDilutionTarget(recipe: BaseRecipe): number {
+	const target = recipe.dilutionTarget;
+	return typeof target === "number" && target >= 0 && target < 1 ? target : 0;
+}
+
+/**
+ * Calculate dilution volume based on target percentage of final volume
+ */
+function calculateDilutionFromTarget(
+	originalVolume: number,
+	dilutionTarget: number,
+): { dilutionVolume: number; finalVolume: number } {
+	if (dilutionTarget === 0 || originalVolume === 0) {
+		return {
+			dilutionVolume: 0,
+			finalVolume: originalVolume,
+		};
+	}
+
+	const dilutionVolume =
+		(dilutionTarget * originalVolume) / (1 - dilutionTarget);
+	const finalVolume = originalVolume + dilutionVolume;
+
+	return {
+		dilutionVolume,
+		finalVolume,
+	};
+}
+
 export function calculateRecipeMetrics<T extends BaseRecipe>(
 	recipe: T,
 	{ servings = 1 }: { servings?: number } = {},
@@ -100,10 +109,13 @@ export function calculateRecipeMetrics<T extends BaseRecipe>(
 		};
 	}
 
-	const dilutionOfOriginalVolume = getDefaultDilution(recipe.preparationMethod);
+	const dilutionTarget = getDilutionTarget(recipe);
+	const { dilutionVolume, finalVolume } = calculateDilutionFromTarget(
+		volumes.totalLiquidVolume,
+		dilutionTarget,
+	);
 
-	const dilutionVolume = volumes.totalLiquidVolume * dilutionOfOriginalVolume;
-	const finalVolume = volumes.totalLiquidVolume + dilutionVolume;
+	const dilutionOfOriginalVolume = dilutionVolume / volumes.totalLiquidVolume;
 	const dilutionOfFinalVolume = dilutionVolume / finalVolume;
 
 	return {

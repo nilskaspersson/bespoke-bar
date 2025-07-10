@@ -58,20 +58,14 @@ export function VolumeInfo<T extends BaseRecipe>({
 						</tr>
 
 						<tr>
-							<th>Dilution</th>
+							<th>Water</th>
 							<td>
+								{roundUnit(recipeMetrics.dilutionVolume, convertUnits)} (
 								{percentageFormatter.format(
 									recipeMetrics.dilutionOfOriginalVolume,
 								)}{" "}
-								{recipe.preparationMethod
-									? `(${recipe.preparationMethod})`
-									: null}
+								of undiluted volume)
 							</td>
-						</tr>
-
-						<tr>
-							<th>Water</th>
-							<td>{roundUnit(recipeMetrics.dilutionVolume, convertUnits)}</td>
 						</tr>
 
 						<tr>

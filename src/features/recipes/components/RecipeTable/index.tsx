@@ -15,6 +15,7 @@ import { getIngredientUrl } from "@/features/ingredients/utils";
 import { UserChip } from "@/features/organisation/components/UserChip";
 import type { UserIdMap } from "@/features/organisation/types";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { METHOD_TO_LABEL } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
@@ -86,8 +87,13 @@ export function RecipeTable({
 				},
 			),
 			columnHelper.accessor("preparationMethod", {
-				header: "Style",
-				cell: () => <Text size={2}>Sour</Text>,
+				header: "Method",
+				cell: (info) =>
+					info.row.original.preparationMethod ? (
+						<Text size={2}>
+							{METHOD_TO_LABEL.get(info.row.original.preparationMethod)}
+						</Text>
+					) : null,
 			}),
 			columnHelper.accessor("createdAt", {
 				header: "Created",
