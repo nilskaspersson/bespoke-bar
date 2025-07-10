@@ -1,48 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { Unit } from "@/db/schema/units";
-import { formatVolume, quantityToBestUnit } from ".";
+import { roundUnit } from "@/features/units/hooks/useRoundedUnit";
+import type { UnitSystems } from "@/features/units/utils/convert";
+import { createVolumeFormatter } from "@/utils/formatting";
+import { quantityToBestUnit } from ".";
 
-describe("formatVolume", () => {
-	it("should return '0 ml' for zero volume with metric system", () => {
-		expect(formatVolume(0, "metric")).toBe("0 ml");
-	});
+const volumeFormatter = createVolumeFormatter("en-GB");
 
-	it("should return '0 fl oz' for zero volume with imperial system", () => {
-		expect(formatVolume(0, "imperial")).toBe("0 fl oz");
-	});
-
-	it("should format large imperial volumes as gallons", () => {
-		expect(formatVolume(15000, "imperial")).toBe("3.96 Gallons");
-	});
-
-	it("should format medium imperial volumes as cups", () => {
-		expect(formatVolume(300, "imperial")).toBe("1.27 Cups");
-	});
-
-	it("should format small imperial volumes as fl oz", () => {
-		expect(formatVolume(100, "imperial")).toBe("3.38 fl oz");
-	});
-
-	it("should format large metric volumes as liters", () => {
-		expect(formatVolume(1500, "metric")).toBe("1.5 Litres");
-	});
-
-	it("should format medium metric volumes as deciliters", () => {
-		expect(formatVolume(250, "metric")).toBe("2.5 dl");
-	});
-
-	it("should format small metric volumes as centiliters", () => {
-		expect(formatVolume(50, "metric")).toBe("5 cl");
-	});
-
-	it("should format very small metric volumes as ml", () => {
-		expect(formatVolume(5, "metric")).toBe("5 ml");
-	});
-
-	it("should default to metric formatting when unitSystem is null", () => {
-		expect(formatVolume(100, null)).toBe("10 cl");
-	});
-});
+const testRoundUnit = (
+	volumeInMl: number,
+	unitSystem: UnitSystems | null | undefined,
+) => roundUnit(volumeInMl, unitSystem, volumeFormatter);
 
 describe("quantityToBestUnit", () => {
 	it("should return empty string for null quantity", () => {
@@ -51,6 +19,7 @@ describe("quantityToBestUnit", () => {
 				quantity: null,
 				unit: "ml",
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("");
 	});
@@ -61,6 +30,7 @@ describe("quantityToBestUnit", () => {
 				quantity: undefined,
 				unit: "ml",
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("");
 	});
@@ -71,6 +41,7 @@ describe("quantityToBestUnit", () => {
 				quantity: 5,
 				unit: null,
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("5");
 	});
@@ -81,6 +52,7 @@ describe("quantityToBestUnit", () => {
 				quantity: 5,
 				unit: "INVALID_UNIT" as Unit,
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("5");
 	});
@@ -91,6 +63,7 @@ describe("quantityToBestUnit", () => {
 				quantity: 2,
 				unit: "dash",
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("2 dashes");
 	});
@@ -101,6 +74,7 @@ describe("quantityToBestUnit", () => {
 				quantity: 250,
 				unit: "ml",
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("2.5 dl");
 	});
@@ -112,6 +86,7 @@ describe("quantityToBestUnit", () => {
 				unit: "dash",
 				unitSystem: "metric",
 				servings: 3,
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("6 dashes");
 	});
@@ -122,6 +97,7 @@ describe("quantityToBestUnit", () => {
 				quantity: 100,
 				unit: "ml",
 				unitSystem: "imperial",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("3.38 fl oz");
 	});
@@ -132,6 +108,7 @@ describe("quantityToBestUnit", () => {
 				quantity: 50,
 				unit: "ml",
 				unitSystem: "metric",
+				roundUnit: testRoundUnit,
 			}),
 		).toBe("5 cl");
 	});

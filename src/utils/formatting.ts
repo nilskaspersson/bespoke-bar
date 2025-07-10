@@ -1,39 +1,50 @@
-export const collator = new Intl.Collator("en-GB", {
-	sensitivity: "base",
-	numeric: true,
-});
+export function createPercentageFormatter(language: string) {
+	return new Intl.NumberFormat(language, {
+		style: "percent",
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 2,
+	});
+}
 
-export const percentageFormatter = new Intl.NumberFormat("en-GB", {
-	style: "percent",
-	minimumFractionDigits: 0,
-	maximumFractionDigits: 2,
-});
+export function createVolumeFormatter(language: string) {
+	return new Intl.NumberFormat(language, {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 2,
+	});
+}
 
-export const volumeFormatter = new Intl.NumberFormat("en-GB", {
-	minimumFractionDigits: 0,
-	maximumFractionDigits: 2,
-});
+export function createQuantityFormatter(language: string) {
+	return new Intl.NumberFormat(language, {
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 2,
+	});
+}
 
-export const quantityFormatter = new Intl.NumberFormat("en-GB", {
-	minimumFractionDigits: 0,
-	maximumFractionDigits: 2,
-});
+export function createCurrencyFormatter(language: string, currency: string) {
+	return new Intl.NumberFormat(language, {
+		style: "currency",
+		currency,
+		currencyDisplay: "narrowSymbol",
+		minimumFractionDigits: 0,
+		maximumFractionDigits: 2,
+	});
+}
 
-export const currencyFormatter = new Intl.NumberFormat("en-GB", {
-	style: "currency",
-	currency: "SEK",
-	currencyDisplay: "narrowSymbol",
-	minimumFractionDigits: 0,
-	maximumFractionDigits: 2,
-});
+export function createCurrencyDisplayName(language: string) {
+	return new Intl.DisplayNames(language, { type: "currency" });
+}
 
-export const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
-	year: "numeric",
-	month: "short",
-	day: "numeric",
-});
+export function createDateTimeFormatter(language: string) {
+	return new Intl.DateTimeFormat(language, {
+		year: "numeric",
+		month: "short",
+		day: "numeric",
+	});
+}
 
-export const relativeTimeFormatter = new Intl.RelativeTimeFormat("en-GB", {
-	numeric: "auto",
-	style: "long",
-});
+export function createRelativeTimeFormatter(language: string) {
+	return new Intl.RelativeTimeFormat(language, {
+		numeric: "auto",
+		style: "long",
+	});
+}

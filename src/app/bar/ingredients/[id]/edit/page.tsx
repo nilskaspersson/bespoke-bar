@@ -4,6 +4,7 @@ import { readIngredient } from "@/features/ingredients/actions/readIngredient";
 import { updateIngredient } from "@/features/ingredients/actions/updateIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
+import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -17,7 +18,10 @@ export default async function EditIngredientPage({
 	params: paramsPromise,
 }: Props) {
 	const { id } = await paramsPromise;
-	const ingredient = await readIngredient(id);
+	const [ingredient, organisation] = await Promise.all([
+		readIngredient(id),
+		getOrCreateLocalOrganisation(),
+	]);
 
 	if (!ingredient) {
 		notFound();
@@ -47,7 +51,7 @@ export default async function EditIngredientPage({
 				<Heading level="h1">Edit ingredient</Heading>
 
 				<form action={formAction}>
-					<IngredientForm ingredient={ingredient} />
+					<IngredientForm ingredient={ingredient} organisation={organisation} />
 				</form>
 			</Grid>
 		</Container>

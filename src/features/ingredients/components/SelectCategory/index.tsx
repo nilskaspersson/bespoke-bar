@@ -4,7 +4,7 @@ import type { ComponentProps } from "react";
 import { systemCategories } from "@/db/schema/categories";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { Combobox } from "@/ui/Combobox";
-import { collator } from "@/utils/formatting";
+import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 const OPTIONS = systemCategories.options

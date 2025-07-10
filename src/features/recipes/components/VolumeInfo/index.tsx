@@ -1,13 +1,15 @@
-import type { ComponentProps } from "react";
+"use client";
+
+import { type ComponentProps, useContext } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
+import { useRoundedUnit } from "@/features/units/hooks/useRoundedUnit";
 import { isBartendingUnit } from "@/features/units/utils";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
-import { formatVolume } from "@/features/units/utils/formatVolume";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
-import { percentageFormatter, quantityFormatter } from "@/utils/formatting";
 import { getKey } from "@/utils/withKey";
 
 export function VolumeInfo<T extends BaseRecipe>({
@@ -22,6 +24,10 @@ export function VolumeInfo<T extends BaseRecipe>({
 	servings?: number;
 	convertUnits?: UnitSystems | null;
 } & Omit<ComponentProps<"details">, "children">) {
+	const { quantityFormatter, percentageFormatter } =
+		useContext(FormatterContext);
+	const roundUnit = useRoundedUnit();
+
 	const recipeMetrics = calculateRecipeMetrics(recipe, { servings });
 
 	const hasEstimatedVolumes = recipe.specs?.some((spec) =>
@@ -35,7 +41,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 					? "Volume per serving: "
 					: `Total volume (${quantityFormatter.format(servings)} servings): `}
 				<Text heavy weight={600}>
-					{formatVolume(
+					{roundUnit(
 						diluted ? recipeMetrics.finalVolume : recipeMetrics.originalVolume,
 						convertUnits,
 					)}
@@ -48,9 +54,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 					<tbody>
 						<tr>
 							<th>Undiluted volume</th>
-							<td>
-								{formatVolume(recipeMetrics.originalVolume, convertUnits)}
-							</td>
+							<td>{roundUnit(recipeMetrics.originalVolume, convertUnits)}</td>
 						</tr>
 
 						<tr>
@@ -67,9 +71,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 
 						<tr>
 							<th>Water</th>
-							<td>
-								{formatVolume(recipeMetrics.dilutionVolume, convertUnits)}
-							</td>
+							<td>{roundUnit(recipeMetrics.dilutionVolume, convertUnits)}</td>
 						</tr>
 
 						<tr>
@@ -83,7 +85,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 
 						<tr>
 							<th>Final volume</th>
-							<td>{formatVolume(recipeMetrics.finalVolume, convertUnits)}</td>
+							<td>{roundUnit(recipeMetrics.finalVolume, convertUnits)}</td>
 						</tr>
 					</tbody>
 				</Text>
@@ -110,7 +112,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 										<li key={getKey(spec)}>
 											{qty} {qty > 1 ? unitData.plural : unitData.singular}{" "}
 											{spec.ingredient.name} ={" "}
-											{formatVolume(
+											{roundUnit(
 												convert(spec.quantity).from(spec.unit).to("ml") * qty,
 												convertUnits,
 											)}
