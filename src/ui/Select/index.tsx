@@ -1,7 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import { useSelect } from "downshift";
+import { type UseSelectProps, useSelect } from "downshift";
 import { type ComponentProps, useId } from "react";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
@@ -22,6 +22,7 @@ type Props<T> = {
 	name: string;
 	placeholder?: React.ReactNode;
 	helperText?: React.ReactNode;
+	selectProps?: Partial<UseSelectProps<Keyed<T>>>;
 };
 
 /**
@@ -48,6 +49,7 @@ export function Select<T>({
 	name,
 	placeholder,
 	helperText,
+	selectProps,
 	...props
 }: Props<T> & Partial<ComponentProps<typeof ControlLabel>>) {
 	const helperTextId = useId();
@@ -68,6 +70,7 @@ export function Select<T>({
 		itemToString,
 		scrollIntoView: (node) =>
 			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
+		...selectProps,
 	});
 
 	return (
