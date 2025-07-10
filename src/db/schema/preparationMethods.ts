@@ -5,7 +5,7 @@ import type { z } from "zod/v4";
 export const preparationMethodEnum = pgEnum("preparation_method", [
 	"blended",
 	"built",
-	"carbonated",
+	"layered",
 	"shaken",
 	"stirred",
 ]);

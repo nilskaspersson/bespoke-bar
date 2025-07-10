@@ -1,3 +1,5 @@
+import type { CocktailStyle } from "@/db/schema/cocktailStyles";
+import type { Glassware } from "@/db/schema/glassware";
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
 
 export const METHOD_TO_LABEL = new Map<PreparationMethod, string>([
@@ -6,14 +8,6 @@ export const METHOD_TO_LABEL = new Map<PreparationMethod, string>([
 	["built", "Built"],
 	["blended", "Blended"],
 	["layered", "Layered"],
-]);
-
-export const METHOD_TO_DESCRIPTION = new Map<PreparationMethod, string>([
-	["stirred", "For cocktails like a martini or negroni"],
-	["shaken", "For cocktails like a daiquiri or"],
-	["built", "For cocktails like a long island iced tea"],
-	["blended", "For cocktails like a margarita or mojito"],
-	["layered", "For cocktails like a negroni"],
 ]);
 
 /**
@@ -25,4 +19,41 @@ export const METHOD_TO_DEFAULT_DILUTION = new Map<PreparationMethod, number>([
 	["built", 0.15],
 	["blended", 0.3],
 	["layered", 0],
+]);
+
+export const GLASSWARE_TO_LABEL = new Map<Glassware, string>([
+	["coupe", "Coupe"],
+	["fizz", "Fizz"],
+	["flute", "Flute"],
+	["highball", "Highball"],
+	["hurricane", "Hurricane"],
+	["julep", "Julep tin"],
+	["martini", "Martini"],
+	["nick_nora", "Nick & Nora"],
+	["pilsner", "Pilsner"],
+	["port", "Port"],
+	["rocks_double", "Rocks (double)"],
+	["rocks", "Rocks (single)"],
+	["shot", "Shot glass"],
+	["snifter", "Snifter"],
+	["tiki_mug", "Tiki mug"],
+	["wine", "Wine"],
+]);
+
+export const COCKTAIL_STYLE_TO_LABEL = new Map<CocktailStyle, string>([
+	["aperitif", "Aperitif"],
+	["cooler", "Cooler"],
+	["digestif", "Digestif"],
+	["fizz", "Fizz"],
+	["flip", "Flip"],
+	["highball", "Highball"],
+	["julep", "Julep"],
+	["martini", "Martini"],
+	["oldFashioned", "Old Fashioned"],
+	["other", "Other"],
+	["punch", "Punch"],
+	["smash", "Smash"],
+	["sour", "Sour"],
+	["spritz", "Spritz"],
+	["tiki", "Tiki"],
 ]);

@@ -5,7 +5,9 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { useActionState } from "react";
 import { type RecipeWithSpecs, updateRecipeSchema } from "@/db/schema/recipes";
 import { updateRecipeAction } from "@/features/recipes/actions/updateRecipe";
+import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
+import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
 import { Grid } from "@/ui/Grid";
@@ -34,10 +36,11 @@ export function RecipeForm({ recipe }: Props) {
 			description: recipe.description,
 			preparationMethod: recipe.preparationMethod,
 			dilutionTarget: recipe.dilutionTarget,
+			glassware: recipe.glassware,
+			garnish: recipe.garnish,
+			style: recipe.style,
 		},
 	});
-
-	console.log("render form");
 
 	return (
 		<FormProvider context={form.context}>
@@ -53,6 +56,12 @@ export function RecipeForm({ recipe }: Props) {
 						name="name"
 						required
 						defaultValue={fields.name.initialValue}
+					/>
+
+					<SelectCocktailStyle
+						label="Style"
+						name="style"
+						defaultValue={fields.style.initialValue}
 					/>
 
 					<TextField
@@ -81,6 +90,18 @@ export function RecipeForm({ recipe }: Props) {
 					/>
 
 					<SelectDilution name="dilutionTarget" />
+
+					<SelectGlassware
+						label="Glassware"
+						name="glassware"
+						defaultValue={fields.glassware.initialValue}
+					/>
+
+					<TextField
+						label="Garnish"
+						name="garnish"
+						defaultValue={fields.garnish.initialValue}
+					/>
 
 					<div>
 						<SubmitButton variant="solid" color="accent">

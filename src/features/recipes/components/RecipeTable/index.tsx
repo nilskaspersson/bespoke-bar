@@ -15,7 +15,10 @@ import { getIngredientUrl } from "@/features/ingredients/utils";
 import { UserChip } from "@/features/organisation/components/UserChip";
 import type { UserIdMap } from "@/features/organisation/types";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { METHOD_TO_LABEL } from "@/features/recipes/constants";
+import {
+	COCKTAIL_STYLE_TO_LABEL,
+	METHOD_TO_LABEL,
+} from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
@@ -86,6 +89,15 @@ export function RecipeTable({
 					),
 				},
 			),
+			columnHelper.accessor("style", {
+				header: "Style",
+				cell: (info) =>
+					info.row.original.style ? (
+						<Text size={2}>
+							{COCKTAIL_STYLE_TO_LABEL.get(info.row.original.style)}
+						</Text>
+					) : null,
+			}),
 			columnHelper.accessor("preparationMethod", {
 				header: "Method",
 				cell: (info) =>

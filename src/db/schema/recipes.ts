@@ -1,11 +1,20 @@
 import { relations } from "drizzle-orm";
-import { index, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+	index,
+	pgTable,
+	real,
+	text,
+	timestamp,
+	varchar,
+} from "drizzle-orm/pg-core";
 import {
 	createInsertSchema,
 	createSelectSchema,
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
+import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
+import { glasswareEnum } from "@/db/schema/glassware";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import {
 	type DraftSpecWithDraftIngredient,
@@ -24,6 +33,10 @@ export const RecipesTable = pgTable(
 		name: varchar("name", { length: 100 }),
 		description: varchar("description", { length: 5000 }),
 		preparationMethod: preparationMethodEnum("preparation_method"),
+		dilutionTarget: real("dilution_target"),
+		glassware: glasswareEnum("glassware"),
+		garnish: varchar("garnish", { length: 100 }),
+		style: cocktailStylesEnum("style"),
 		archivedBy: text("archived_by"),
 		archivedAt: timestamp("archived_at"),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -33,7 +46,7 @@ export const RecipesTable = pgTable(
 		orgId: text("org_id").notNull(),
 	},
 	(table) => [
-		index("idx_recipes_org").on(table.orgId),
+		index("idx_recipes_org").on(table.orgId, table.createdAt.desc()),
 		index("idx_recipes_org_archived_created").on(
 			table.orgId,
 			table.archivedAt,
@@ -62,7 +75,12 @@ export type InsertRecipe = Omit<
  * be a db entity.
  */
 export type BaseRecipe = Identity<
-	Partial<Pick<Recipe, "name" | "description" | "preparationMethod">> & {
+	Partial<
+		Pick<
+			Recipe,
+			"name" | "description" | "preparationMethod" | "dilutionTarget"
+		>
+	> & {
 		specs?: Keyed<DraftSpecWithDraftIngredient>[];
 	}
 >;
