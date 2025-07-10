@@ -1,0 +1,6 @@
+@layer component {
+	.range {
+		font-size: 1rem;
+		width: var(--control-width);
+	}
+}

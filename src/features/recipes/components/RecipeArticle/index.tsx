@@ -6,6 +6,7 @@ import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { RecipeTools } from "@/features/recipes/components/RecipeTools";
 import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
@@ -56,36 +57,7 @@ export async function RecipeArticle({
 						/>
 					</Flex>
 				}
-				tools={
-					<dl className={styles.tools}>
-						<div>
-							<Text as="dt" size={0} compact>
-								Method
-							</Text>
-							<Text as="dd" size={2} heavy weight={500}>
-								Shaken
-							</Text>
-						</div>
-
-						<div>
-							<Text as="dt" size={0} compact>
-								Glassware
-							</Text>
-							<Text as="dd" size={2} heavy weight={500}>
-								Coupe
-							</Text>
-						</div>
-
-						<div>
-							<Text as="dt" size={0} compact>
-								Garnish
-							</Text>
-							<Text as="dd" size={2} heavy weight={500}>
-								Lime wheel
-							</Text>
-						</div>
-					</dl>
-				}
+				tools={<RecipeTools recipe={recipe} className={styles.tools} />}
 			/>
 		</article>
 	);

@@ -38,7 +38,7 @@
 			th,
 			td {
 				text-align: var(--jsxTextAlign, left);
-				font-weight: inherit;
+				font-weight: var(--jsxFontWeight, inherit);
 				border: 1px solid var(--mauve-6);
 				padding: 0.25em 1ch;
 				font-variant-numeric: tabular-nums;

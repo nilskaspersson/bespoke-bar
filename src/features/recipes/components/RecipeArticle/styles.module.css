@@ -35,6 +35,7 @@
 	.tools {
 		display: flex;
 		gap: var(--gap--small) var(--gap--large);
+		word-break: break-word;
 
 		@container (width > 350px) {
 			flex-direction: column;

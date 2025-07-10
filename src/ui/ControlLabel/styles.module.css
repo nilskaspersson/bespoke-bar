@@ -8,6 +8,7 @@
 
 	.label {
 		color: var(--mauve-12);
+		font-variant-numeric: tabular-nums;
 
 		.base:has(:user-invalid) > & > .text {
 			text-decoration: underline wavy var(--red-9);
