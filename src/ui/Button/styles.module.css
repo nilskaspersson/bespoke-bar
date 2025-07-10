@@ -21,8 +21,9 @@
 			transition-duration: var(--transition-duration);
 		}
 
-		&[disabled] {
+		&[aria-disabled="true"] {
 			cursor: auto;
+			--button-color: var(--mauve-10);
 		}
 
 		&:focus {
@@ -43,7 +44,7 @@
 				gap: var(--space-2);
 			}
 
-			&:active {
+			&:not([aria-disabled="true"]):active {
 				transition: none;
 
 				> .label {
@@ -62,7 +63,7 @@
 			/**
 			 * Basically immediately after click
 			 */
-			&:focus:not(:focus-visible):not(:active) {
+			&:focus:not(:focus-visible):not(:active):not([aria-disabled="true"]) {
 				animation: shadowPulse var(--transition-duration--slow) forwards;
 			}
 		}
@@ -146,7 +147,7 @@
 		transition-duration: var(--transition-duration);
 		color: var(--button-color);
 
-		&:hover {
+		&:not([aria-disabled="true"]):hover {
 			color: var(--mauve-12);
 		}
 	}
@@ -158,7 +159,7 @@
 		border-top-color: color-mix(in srgb, var(--button-color) 90%, white);
 		border-left-color: color-mix(in srgb, var(--button-color) 90%, white);
 
-		&:active:hover {
+		&:not([aria-disabled="true"]):active:hover {
 			box-shadow: inset 0 0 1rem
 				color-mix(in srgb, var(--button-color) 80%, black);
 		}
@@ -173,19 +174,23 @@
 			color: hsl(from var(--button-color) h s var(--text-lightness));
 		}
 
-		&:hover,
-		&:focus-visible {
-			border-color: color-mix(in srgb, var(--button-color) 75%, white);
+		&:not([aria-disabled="true"]) {
+			&:hover,
+			&:focus-visible {
+				border-color: color-mix(in srgb, var(--button-color) 75%, white);
+			}
 		}
 	}
 
 	.ghost {
 		color: var(--mauve-12);
 
-		&:hover,
-		&:focus-visible {
-			background-color: hsl(from var(--button-color) h s 90%);
-			color: hsl(from var(--button-color) h s 20%);
+		&:not([aria-disabled="true"]) {
+			&:hover,
+			&:focus-visible {
+				background-color: hsl(from var(--button-color) h s 90%);
+				color: hsl(from var(--button-color) h s 20%);
+			}
 		}
 	}
 

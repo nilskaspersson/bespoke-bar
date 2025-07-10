@@ -3,7 +3,7 @@
 import type { PropsWithChildren } from "react";
 import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
 import { Alert } from "@/ui/Alert";
-import { Button } from "@/ui/Button";
+import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 
@@ -14,13 +14,15 @@ export function ConfirmDelete({
 	className,
 	description,
 	notice,
+	...props
 }: PropsWithChildren<{
 	action: () => Promise<void>;
 	className?: string;
 	actionLabel: string;
 	notice: React.ReactNode;
 	description: React.ReactNode;
-}>) {
+}> &
+	ButtonProps) {
 	const {
 		isPending,
 		confirmSubmit,
@@ -31,7 +33,7 @@ export function ConfirmDelete({
 
 	return (
 		<form className={className} onSubmit={confirmSubmit}>
-			<SubmitButton variant="outline" color="red" size="small">
+			<SubmitButton variant="outline" color="red" size="small" {...props}>
 				{children}
 			</SubmitButton>
 
@@ -52,7 +54,8 @@ export function ConfirmDelete({
 							</Button>
 
 							<Button
-								onClick={resolveAction}
+								onClick={props["aria-disabled"] ? undefined : resolveAction}
+								aria-disabled={props["aria-disabled"]}
 								disabled={isSubmitting}
 								variant="solid"
 								size="small"

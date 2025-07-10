@@ -2,23 +2,20 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
 import { readIngredient } from "@/features/ingredients/actions/readIngredient";
-import { Abv } from "@/features/ingredients/components/Abv";
 import { DeleteIngredient } from "@/features/ingredients/components/DeleteIngredient";
+import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { formatIngredientUnitCost } from "@/features/ingredients/utils/formatIngredientUnitCost";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
 import { readBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { LinkButton } from "@/ui/Button";
-import { Chip } from "@/ui/Chip";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
-import { percentageFormatter } from "@/utils/formatting";
 import styles from "./page.module.css";
 
 type Props = {
@@ -57,30 +54,10 @@ export default async function IngredientPage({ params }: Props) {
 
 				<hr />
 
-				<Flex gap={2} wrap justifyContent="center">
-					{ingredient.abv ? (
-						<Chip label={<Abv />}>
-							{percentageFormatter.format(ingredient.abv)}
-						</Chip>
-					) : null}
-
-					{ingredient.brand ? (
-						<Chip label="Brand">{ingredient.brand}</Chip>
-					) : null}
-
-					{ingredient.unitCost && ingredient.measurementType ? (
-						<Chip label="Unit cost">
-							{formatIngredientUnitCost(
-								ingredient.unitCost,
-								ingredient.measurementType,
-							)}
-						</Chip>
-					) : null}
-
-					{recipesUsingIngredient.length > 0 ? (
-						<Chip label="Recipes">{recipesUsingIngredient.length}</Chip>
-					) : null}
-				</Flex>
+				<IngredientChips
+					ingredient={ingredient}
+					recipesCount={recipesUsingIngredient.length}
+				/>
 
 				<hr />
 
@@ -108,6 +85,16 @@ export default async function IngredientPage({ params }: Props) {
 
 				<DeleteIngredient
 					ingredient={ingredient}
+					aria-disabled={recipesUsingIngredient.length > 0}
+					disabledReason={
+						recipesUsingIngredient.length > 0 ? (
+							<>
+								This ingredient is used in recipes and{" "}
+								<strong>cannot be deleted</strong>. Remove it from all recipes
+								first.
+							</>
+						) : undefined
+					}
 					action={deleteIngredient.bind(null, {
 						id: ingredient.id,
 						redirectTo: "/bar/ingredients",
