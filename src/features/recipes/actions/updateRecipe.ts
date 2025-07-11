@@ -50,10 +50,21 @@ export const updateRecipeAction = async (
 		return submission.reply();
 	}
 
+	/**
+	 * Conform converts empty strings to undefined. Convert undefined back to null for
+	 * the fields we want to allow users to clear,
+	 */
+	const patchRecipeData = {
+		...submission.value,
+		description: submission.value.description ?? null,
+		garnish: submission.value.garnish ?? null,
+		glassware: submission.value.glassware ?? null,
+	};
+
 	let result: Recipe;
 
 	try {
-		result = await updateRecipe(id, submission.value);
+		result = await updateRecipe(id, patchRecipeData);
 	} catch (_error) {
 		return submission.reply({
 			formErrors: ["Failed to update recipe"],

@@ -39,8 +39,7 @@ export function AbvInfo<T extends BaseRecipe>({
 					{percentageFormatter.format(
 						diluted ? recipeMetrics.abv : recipeMetrics.undilutedAbv,
 					)}
-				</Text>{" "}
-				({diluted ? "diluted" : "undiluted"})
+				</Text>
 			</Text>
 
 			<Grid gap={2} justifyItems="start">

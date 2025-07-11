@@ -8,8 +8,11 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import z from "zod/v4";
+import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
+
 import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
@@ -25,15 +28,15 @@ import { getKey, type Keyed, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function BulkDraftRecipes({
-	createRecipes,
 	className,
 	empty,
 	ingredients,
+	createRecipes,
 	...props
 }: {
-	createRecipes: (recipes: BaseRecipe[]) => Promise<Recipe[]>;
 	ingredients: Ingredient[];
 	empty?: ReactNode;
+	createRecipes: (recipes: RecipeFormData[]) => Promise<Recipe[]>;
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [withConversionSystem, setWithConversionSystem] =
 		useState<UnitSystems | null>(null);
@@ -51,7 +54,14 @@ export function BulkDraftRecipes({
 	);
 
 	const formAction = async () => {
-		await createRecipes(draftRecipes);
+		const data = z.array(recipeFormSchema).parse(
+			draftRecipes.map(({ specs, ...recipe }) => ({
+				recipe,
+				specs,
+			})),
+		);
+
+		await createRecipes(data);
 		setInputValue("");
 	};
 

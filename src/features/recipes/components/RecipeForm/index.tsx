@@ -2,9 +2,11 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useActionState } from "react";
-import { type RecipeWithSpecs, updateRecipeSchema } from "@/db/schema/recipes";
-import { updateRecipeAction } from "@/features/recipes/actions/updateRecipe";
+import { useActionState, useRef } from "react";
+import { recipeFormSchema } from "@/db/schema/composite";
+import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { upsertRecipeWithSpecsAction } from "@/features/recipes/actions/upsertRecipeWithSpecs";
+import { PreviewDraftRecipe } from "@/features/recipes/components/PreviewDraftRecipe";
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
@@ -14,67 +16,83 @@ import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
+import styles from "./styles.module.css";
 
 type Props = {
 	recipe: RecipeWithSpecs;
 };
 
 export function RecipeForm({ recipe }: Props) {
-	const [state, formAction] = useActionState(
-		updateRecipeAction.bind(null, recipe.id),
-		null,
-	);
+	const [state, formAction] = useActionState(upsertRecipeWithSpecsAction, null);
 
 	const [form, fields] = useForm({
 		id: recipe?.id ? `recipe-form-${recipe.id}` : "new-recipe-form",
 		lastResult: state,
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: updateRecipeSchema });
+			return parseWithZod(formData, {
+				schema: recipeFormSchema,
+			});
 		},
 		defaultValue: {
-			name: recipe.name,
-			description: recipe.description,
-			preparationMethod: recipe.preparationMethod,
-			dilutionTarget: recipe.dilutionTarget,
-			glassware: recipe.glassware,
-			garnish: recipe.garnish,
-			style: recipe.style,
+			recipe,
+			specs: recipe.specs.map((spec) => ({
+				quantity: spec.quantity?.toString() ?? null,
+				unit: spec.unit,
+				ingredientId: spec.ingredientId,
+			})),
 		},
 	});
+
+	const recipeFields = fields.recipe.getFieldset();
+
+	const formRef = useRef<HTMLFormElement>(null);
 
 	return (
 		<FormProvider context={form.context}>
 			<form
 				action={formAction}
+				ref={formRef}
 				id={form.id}
 				onSubmit={form.onSubmit}
 				noValidate
+				className={styles.form}
 			>
+				<input type="hidden" name="recipe.id" value={recipe.id} />
+
 				<Grid gap={4}>
 					<TextField
 						label="Name"
-						name="name"
+						name="recipe.name"
 						required
-						defaultValue={fields.name.initialValue}
+						defaultValue={recipeFields.name.initialValue}
 					/>
 
 					<SelectCocktailStyle
 						label="Style"
-						name="style"
-						defaultValue={fields.style.initialValue}
+						name="recipe.style"
+						defaultValue={recipeFields.style.initialValue}
 					/>
 
 					<TextField
 						as="textarea"
 						label="Description"
-						name="description"
-						defaultValue={fields.description.initialValue}
+						name="recipe.description"
+						defaultValue={recipeFields.description.initialValue}
+						helperText="Brief information about the recipe"
+					/>
+
+					<TextField
+						as="textarea"
+						label="Instructions"
+						name="recipe.instructions"
+						defaultValue={recipeFields.instructions.initialValue}
+						helperText="Preparation instructions and notes"
 					/>
 
 					<SelectPreparationMethod
 						label="Preparation method"
-						name="preparationMethod"
-						defaultValue={fields.preparationMethod.initialValue}
+						name="recipe.preparationMethod"
+						defaultValue={recipeFields.preparationMethod.initialValue}
 						selectProps={{
 							onSelectedItemChange: ({ selectedItem }) => {
 								if (!selectedItem) {
@@ -82,25 +100,28 @@ export function RecipeForm({ recipe }: Props) {
 								}
 
 								form.update({
-									name: "dilutionTarget",
+									name: "recipe.dilutionTarget",
 									value: METHOD_TO_DEFAULT_DILUTION.get(selectedItem.value),
 								});
 							},
 						}}
 					/>
 
-					<SelectDilution name="dilutionTarget" />
+					<SelectDilution
+						name="recipe.dilutionTarget"
+						defaultValue={recipeFields.dilutionTarget.initialValue}
+					/>
 
 					<SelectGlassware
 						label="Glassware"
-						name="glassware"
-						defaultValue={fields.glassware.initialValue}
+						name="recipe.glassware"
+						defaultValue={recipeFields.glassware.initialValue}
 					/>
 
 					<TextField
 						label="Garnish"
-						name="garnish"
-						defaultValue={fields.garnish.initialValue}
+						name="recipe.garnish"
+						defaultValue={recipeFields.garnish.initialValue}
 					/>
 
 					<div>
@@ -110,6 +131,10 @@ export function RecipeForm({ recipe }: Props) {
 						</SubmitButton>
 					</div>
 				</Grid>
+
+				<aside>
+					<PreviewDraftRecipe formRef={formRef} />
+				</aside>
 			</form>
 		</FormProvider>
 	);

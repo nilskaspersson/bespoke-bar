@@ -1,0 +1,7 @@
+@layer feature {
+	.form {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: var(--gap--large);
+	}
+}

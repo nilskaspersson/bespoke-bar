@@ -1,5 +1,5 @@
 import { readIngredients } from "@/features/ingredients/actions/readIngredients";
-import { createRecipesFromSpecs } from "@/features/recipes/actions/createRecipeFromSpecs";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/actions/upsertRecipeWithSpecs";
 import { BulkDraftInfo } from "@/features/recipes/components/BulkDraftInfo";
 import { BulkDraftRecipes } from "@/features/recipes/components/BulkDraftRecipes";
 
@@ -8,9 +8,9 @@ export default async function BulkCreateRecipePage() {
 
 	return (
 		<BulkDraftRecipes
-			createRecipes={createRecipesFromSpecs}
 			ingredients={ingredients}
 			empty={<BulkDraftInfo />}
+			createRecipes={createRecipesWithSpecsFromData}
 		/>
 	);
 }

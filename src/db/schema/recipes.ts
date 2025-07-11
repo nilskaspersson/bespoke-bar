@@ -32,6 +32,7 @@ export const RecipesTable = pgTable(
 			.$defaultFn(() => nanoid(10)),
 		name: varchar("name", { length: 100 }),
 		description: varchar("description", { length: 5000 }),
+		instructions: varchar("instructions", { length: 5000 }),
 		preparationMethod: preparationMethodEnum("preparation_method"),
 		dilutionTarget: real("dilution_target"),
 		glassware: glasswareEnum("glassware"),
@@ -78,7 +79,14 @@ export type BaseRecipe = Identity<
 	Partial<
 		Pick<
 			Recipe,
-			"name" | "description" | "preparationMethod" | "dilutionTarget"
+			| "description"
+			| "dilutionTarget"
+			| "garnish"
+			| "glassware"
+			| "instructions"
+			| "name"
+			| "preparationMethod"
+			| "style"
 		>
 	> & {
 		specs?: Keyed<DraftSpecWithDraftIngredient>[];

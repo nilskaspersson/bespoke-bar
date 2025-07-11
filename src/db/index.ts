@@ -34,3 +34,7 @@ const db = onVercel
 	: drizzlePostgres(process.env.DATABASE_URL, { schema });
 
 export { db };
+
+export type DatabaseTransaction = Parameters<
+	Parameters<typeof db.transaction>[0]
+>[0];
