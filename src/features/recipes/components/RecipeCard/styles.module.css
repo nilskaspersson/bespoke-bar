@@ -19,6 +19,7 @@
 		@container (width > 350px) {
 			padding-right: var(--gap--large);
 		}
+
 		@container (width <= 350px) {
 			padding-bottom: var(--gap--small);
 		}

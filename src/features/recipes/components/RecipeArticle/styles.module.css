@@ -1,20 +1,16 @@
 @layer feature {
 	.article {
 		display: grid;
-		justify-items: center;
 		container: article / inline-size;
+		gap: var(--gap--large);
 	}
 
 	.header {
-		display: grid;
-		gap: var(--gap);
-		justify-items: center;
-		padding-block: var(--space-9);
-		text-align: center;
+		padding-top: var(--app-inset);
 	}
 
-	.description {
-		margin-top: var(--gap);
+	.author {
+		margin-top: var(--space-1);
 	}
 
 	.divider {
@@ -34,19 +30,8 @@
 
 	.tools {
 		display: flex;
-		gap: var(--gap--small) var(--gap--large);
-		word-break: break-word;
-
-		@container (width > 350px) {
-			flex-direction: column;
-			text-align: right;
-			max-width: 10ch;
-		}
-
-		@container (width <= 350px) {
-			/* biome-ignore lint/suspicious/noDuplicateProperties: False positive */
-			flex-direction: row;
-			flex-wrap: wrap;
-		}
+		justify-content: center;
+		flex-wrap: wrap;
+		gap: var(--gap) var(--gap--large);
 	}
 }

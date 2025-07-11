@@ -1,0 +1,9 @@
+@layer feature {
+	.actions {
+		justify-self: center;
+		padding: var(--space-4) var(--space-6);
+		box-shadow: var(--shadow);
+		background-color: var(--mauve-2);
+		border-radius: var(--radius--full);
+	}
+}

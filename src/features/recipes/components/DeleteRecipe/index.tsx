@@ -29,9 +29,9 @@ export function DeleteRecipe({
 			description={
 				<Text as="p">
 					You are about to delete{" "}
-					<i>
+					<Text serif italic>
 						<RecipeName recipe={recipe} />
-					</i>
+					</Text>
 					. Do you want to continue?
 				</Text>
 			}
