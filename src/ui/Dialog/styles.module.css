@@ -65,7 +65,6 @@
 		}
 
 		&:has(.dialog[open]) {
-			height: 100dvh;
 			overflow: hidden;
 
 			> * {
