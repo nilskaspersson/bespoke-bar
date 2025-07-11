@@ -1,3 +1,4 @@
+import type { RecipeFormData } from "@/db/schema/composite";
 import {
 	type Ingredient,
 	type InsertIngredient,
@@ -70,7 +71,7 @@ export function validateRecipes(
  * Extracts new ingredients from user input
  */
 export function extractIngredientsToCreate(
-	userInputRecipes: BaseRecipe[],
+	userInputRecipes: RecipeFormData[],
 	userId: string,
 	orgId: string,
 ): Map<Ingredient["name"], InsertIngredient> {

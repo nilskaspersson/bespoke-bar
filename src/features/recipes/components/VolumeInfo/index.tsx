@@ -45,8 +45,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 						diluted ? recipeMetrics.finalVolume : recipeMetrics.originalVolume,
 						convertUnits,
 					)}
-				</Text>{" "}
-				({diluted ? "diluted" : "undiluted"})
+				</Text>
 			</Text>
 
 			<Grid gap={2} justifyItems="start">

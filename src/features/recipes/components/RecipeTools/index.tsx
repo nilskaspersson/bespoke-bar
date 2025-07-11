@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import {
 	COCKTAIL_STYLE_TO_LABEL,
 	GLASSWARE_TO_LABEL,
@@ -10,7 +10,7 @@ import { Text } from "@/ui/Text";
 export function RecipeTools({
 	recipe,
 	...props
-}: { recipe: RecipeWithSpecs } & Omit<ComponentProps<"dl">, "children">) {
+}: { recipe: BaseRecipe } & Omit<ComponentProps<"dl">, "children">) {
 	return (
 		<dl {...props}>
 			<div>

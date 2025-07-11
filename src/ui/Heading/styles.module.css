@@ -14,5 +14,9 @@
 		& > a:hover {
 			color: var(--iris-11);
 		}
+
+		&.serif {
+			font-family: var(--font-serif);
+		}
 	}
 }

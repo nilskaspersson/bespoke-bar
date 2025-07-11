@@ -18,7 +18,7 @@ export function SpecsList<T extends DraftSpecWithDraftIngredient>({
 } & Omit<ComponentProps<"div">, "children">) {
 	return (
 		<div {...props}>
-			<Grid as="ul" gap={1} className={styles.list}>
+			<Grid as="ul" gap={2} className={styles.list}>
 				{specs.map((spec) => (
 					<li key={getKey(spec)}>
 						<SpecEntry

@@ -7,7 +7,13 @@ import { ControlLabel } from "@/ui/ControlLabel";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-export function SelectDilution({ name }: { name: string }) {
+export function SelectDilution({
+	name,
+	defaultValue,
+}: {
+	name: string;
+	defaultValue?: string;
+}) {
 	const { percentageFormatter } = useContext(FormatterContext);
 	const [field] = useField<string>(name);
 	const markersId = useId();
@@ -29,8 +35,8 @@ export function SelectDilution({ name }: { name: string }) {
 		>
 			<input
 				type="range"
-				name="dilutionTarget"
-				defaultValue={field.value}
+				name={name}
+				defaultValue={defaultValue}
 				aria-describedby={`${field.id}-helper`}
 				min={0}
 				max={1}

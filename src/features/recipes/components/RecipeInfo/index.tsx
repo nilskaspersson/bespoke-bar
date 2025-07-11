@@ -1,28 +1,33 @@
 "use client";
 
-import { type ReactNode, useDeferredValue, useState } from "react";
+import { type ReactNode, useContext, useDeferredValue, useState } from "react";
 import z from "zod/v4";
 import type { BaseRecipe } from "@/db/schema/recipes";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";
+import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
+import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
+import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Text } from "@/ui/Text";
 import { times } from "@/utils";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends BaseRecipe>({
+	children,
 	recipe,
-	header,
-	tools,
 }: {
+	children?: ReactNode;
 	recipe: T;
-	header?: ReactNode;
-	tools?: ReactNode;
 }) {
+	const { quantityFormatter } = useContext(FormatterContext);
+
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
 
@@ -34,72 +39,104 @@ export function RecipeInfo<T extends BaseRecipe>({
 	}
 
 	return (
-		<>
-			<RecipeCard
-				recipe={recipe}
-				header={header}
-				tools={tools}
-				servings={deferredServings}
-				withConversionSystem={withConversionSystem}
-				className={styles.card}
-			/>
+		<div className={styles.base}>
+			<section className={styles.primary}>
+				<div className={styles.card}>
+					<Heading level="h2" size={4} className={styles.heading}>
+						<RecipeName recipe={recipe} />
+						<Icon name="martini-glass" className={styles.icon} size={3} />
+					</Heading>
 
-			<aside className={styles.aside}>
-				<SelectUnitConversion
-					name="withConversionSystem"
-					defaultValue={withConversionSystem}
-					onChange={setWithConversionSystem}
-				/>
+					<Grid gap={6}>
+						<SpecsList
+							specs={recipe.specs}
+							servings={servings}
+							convertUnits={withConversionSystem}
+						/>
 
-				<div className={styles.servings}>
-					<Text size={2} compact heavy as="div">
-						Servings:
-					</Text>
+						{recipe.instructions ? (
+							<Text as="p" size={3} serif>
+								{recipe.instructions}
+							</Text>
+						) : null}
 
-					<Flex gap={1} alignItems="center">
-						{times(4).map((i) => (
-							<Button
-								key={i}
-								size="tiny"
-								icon
-								variant={deferredServings === i + 1 ? "solid" : "outline"}
-								color={deferredServings === i + 1 ? "heavy" : "light"}
-								onClick={() => setServings(i + 1)}
-							>
-								{i + 1}
-							</Button>
-						))}
-
-						<div>
-							<Input
-								name="servings"
-								placeholder="5…"
-								type="number"
-								pill
-								min={1}
-								max={1000000000}
-								onChange={(event) => {
-									const parsedValue = z.coerce
-										.number()
-										.min(1)
-										.max(1000000000)
-										.safeParse(event.target.value);
-
-									if (parsedValue.success) {
-										setServings(parsedValue.data);
-									}
-								}}
-							/>
-						</div>
-					</Flex>
+						<Text
+							as="div"
+							size={1}
+							align="right"
+							fullWidth
+							className={styles.count}
+						>
+							Servings: {quantityFormatter.format(servings)}
+						</Text>
+					</Grid>
 				</div>
 
-				<RecipeMetrics
-					recipe={recipe}
-					servings={deferredServings}
-					convertUnits={withConversionSystem}
-				/>
+				{children}
+			</section>
+
+			<aside className={styles.card}>
+				<Heading level="h2" size={4} className={styles.heading}>
+					Stats & Settings
+				</Heading>
+
+				<Grid gap={4}>
+					<SelectUnitConversion
+						name="withConversionSystem"
+						defaultValue={withConversionSystem}
+						onChange={setWithConversionSystem}
+					/>
+
+					<div className={styles.servings}>
+						<Text size={2} compact heavy as="div">
+							Servings:
+						</Text>
+
+						<Flex gap={1} alignItems="center">
+							{times(4).map((i) => (
+								<Button
+									key={i}
+									size="tiny"
+									icon
+									variant={deferredServings === i + 1 ? "solid" : "outline"}
+									color={deferredServings === i + 1 ? "heavy" : "light"}
+									onClick={() => setServings(i + 1)}
+								>
+									{i + 1}
+								</Button>
+							))}
+
+							<div>
+								<Input
+									name="servings"
+									placeholder="5…"
+									type="number"
+									pill
+									min={1}
+									max={1000000000}
+									onChange={(event) => {
+										const parsedValue = z.coerce
+											.number()
+											.min(1)
+											.max(1000000000)
+											.safeParse(event.target.value);
+
+										if (parsedValue.success) {
+											setServings(parsedValue.data);
+										}
+									}}
+								/>
+							</div>
+						</Flex>
+					</div>
+
+					<RecipeMetrics
+						recipe={recipe}
+						servings={deferredServings}
+						convertUnits={withConversionSystem}
+					/>
+				</Grid>
 			</aside>
-		</>
+		</div>
 	);
 }

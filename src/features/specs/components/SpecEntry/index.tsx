@@ -24,7 +24,13 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	const formatSpecMeasure = useFormatSpecMeasure();
 
 	return (
-		<Text as="div" compact className={clsx(styles.entry, className)} {...props}>
+		<Text
+			as="div"
+			compact
+			serif
+			className={clsx(styles.entry, className)}
+			{...props}
+		>
 			{spec.quantity != null || spec.unit != null ? (
 				<span className={styles.node}>
 					{formatSpecMeasure({ spec, servings, convertUnits })}
