@@ -7,6 +7,7 @@ import styles from "./styles.module.css";
 type Props = {
 	level: HeadingLevel;
 	size?: Scale;
+	serif?: boolean;
 };
 
 export const HEADING_LEVEL_TO_SCALE = new Map<HeadingLevel, Scale>([
@@ -22,13 +23,16 @@ export function Heading({
 	children,
 	level,
 	size,
+	serif,
 	...props
 }: Props & HTMLAttributes<HTMLHeadingElement>) {
 	return createElement(
 		level,
 		{
 			...props,
-			className: clsx(props.className, styles.heading),
+			className: clsx(props.className, styles.heading, {
+				[styles.serif]: serif,
+			}),
 			style: mergeStyleSources(
 				props.style,
 				toCSSVars({

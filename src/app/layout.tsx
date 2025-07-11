@@ -1,7 +1,7 @@
 import "./theme";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
-import { Figtree } from "next/font/google";
+import { Figtree, Newsreader } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 import { AppFooter } from "@/app/components/AppFooter";
@@ -16,6 +16,12 @@ const sans = Figtree({
 	display: "swap",
 });
 
+const serif = Newsreader({
+	subsets: ["latin"],
+	variable: "--font-serif",
+	display: "swap",
+});
+
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html
@@ -25,7 +31,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 			 */
 			suppressHydrationWarning
 		>
-			<body className={clsx(sans.variable, styles.body)}>
+			<body className={clsx(sans.variable, serif.variable, styles.body)}>
 				<ScrollFix />
 
 				<ThemeProvider>
