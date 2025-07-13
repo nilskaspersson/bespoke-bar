@@ -1,7 +1,5 @@
 @layer component {
 	.base {
-		--spacing: var(--space-2);
-
 		min-width: var(--control-width--small);
 		width: 100%;
 		max-width: min(var(--control-width), 100dvw);
@@ -9,26 +7,44 @@
 
 	.contain {
 		align-self: stretch;
+		width: fit-content;
 	}
 
 	.input {
-		padding-right: calc(var(--control-inset) + var(--control-height));
+		--h: var(--control-height);
+		padding-right: var(--h);
+
+		&.compact {
+			--h: var(--control-height--small);
+		}
 	}
 
 	.actions {
 		position: absolute;
 		inset: 1px 1px 1px auto;
 		display: flex;
+		align-items: stretch;
+		gap: var(--space-2);
 	}
 
 	.toggle {
+		--r: var(--radius);
 		border-left: 1px solid var(--mauve-6);
-		width: var(--control-height);
-		border-radius: 0 var(--radius) var(--radius) 0;
+		flex: 0 0 auto;
+		aspect-ratio: 1 / 1;
+		border-radius: 0 var(--r) var(--r) 0;
 
 		&:hover {
 			color: var(--mauve-12);
 			background-color: var(--mauve-3);
+		}
+
+		&.rounded {
+			--r: var(--radius--full);
+		}
+
+		&.compact {
+			text-indent: -0.2em;
 		}
 	}
 
@@ -42,14 +58,21 @@
 	}
 
 	.clear {
-		color: var(--mauve-11);
+		--o: 0.2;
+		align-self: center;
+		backdrop-filter: blur(2px);
+		background-color: hsl(from var(--mauve-12) h s l / var(--o));
+		border: 1px solid hsl(from var(--mauve-12) h s l / calc(var(--o) * 1.1));
+		color: var(--mauve-12);
+		width: 1rem;
+		height: 1rem;
 
 		&:hover {
-			color: var(--mauve-12);
+			--o: 0.3;
 		}
 
 		&:active:hover {
-			opacity: 0.5;
+			opacity: 0.8;
 		}
 	}
 }

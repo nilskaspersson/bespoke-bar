@@ -15,6 +15,7 @@ type BaseProps = {
 
 type InputProps = BaseProps & {
 	as?: "input";
+	type?: "text" | "search" | "number";
 } & ComponentProps<"input">;
 
 type TextareaProps = BaseProps & {
@@ -36,12 +37,17 @@ export function Input({
 	return createElement(as, {
 		type: isTextArea ? undefined : "text",
 		...props,
-		className: clsx(props.className, formControlStyles.control, {
-			[styles.textarea]: isTextArea,
-			[styles.pill]: pill,
-			[formControlStyles.compact]: compact,
-			[formControlStyles.fullWidth]: fullWidth,
-			[formControlStyles.rounded]: rounded,
-		}),
+		className: clsx(
+			props.className,
+			formControlStyles.reset,
+			formControlStyles.control,
+			{
+				[styles.textarea]: isTextArea,
+				[styles.pill]: pill,
+				[formControlStyles.compact]: compact,
+				[formControlStyles.fullWidth]: fullWidth,
+				[formControlStyles.rounded]: rounded,
+			},
+		),
 	});
 }

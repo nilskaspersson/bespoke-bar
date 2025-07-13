@@ -23,20 +23,22 @@ export function ControlLabel({
 }: Props) {
 	return (
 		<div className={clsx(styles.base, className)}>
-			<Text
-				{...props}
-				id={id}
-				as="label"
-				size={2}
-				weight={500}
-				compact
-				htmlFor={htmlFor}
-				className={clsx(styles.label, {
-					required,
-				})}
-			>
-				<span className={styles.text}>{label}</span>
-			</Text>
+			{label ? (
+				<Text
+					{...props}
+					id={id}
+					as="label"
+					size={2}
+					weight={500}
+					compact
+					htmlFor={htmlFor}
+					className={clsx(styles.label, {
+						required,
+					})}
+				>
+					<span className={styles.text}>{label}</span>
+				</Text>
+			) : null}
 
 			{children}
 		</div>

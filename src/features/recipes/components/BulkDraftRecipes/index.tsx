@@ -95,7 +95,6 @@ export function BulkDraftRecipes({
 			</div>
 
 			<Lightbox
-				translucent
 				className={clsx(styles.act, { [styles.isExpanded]: isExpanded })}
 			>
 				<div className={styles.actions}>

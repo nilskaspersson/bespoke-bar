@@ -1,18 +1,17 @@
 @layer ui {
 	.lightbox {
 		--r: var(--radius--large);
-		--bg-from: var(--red-4);
-		--bg-to: var(--iris-4);
 
 		border-radius: var(--r);
 		box-shadow: var(--shadow--high);
 
-		border-top: 1px solid var(--shine);
-		border-left: 1px solid var(--shine);
+		border: 1px solid hsl(0 0 100% / 0.15);
+		backdrop-filter: blur(var(--size-1));
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
 
-		background-image: linear-gradient(-45deg, var(--bg-from), var(--bg-to));
-
-		background-origin: border-box;
+		@supports (not (backdrop-filter: blur(var(--size-1)))) {
+			background-color: var(--mauve-1);
+		}
 
 		transition-property: opacity, transform;
 		transition-duration: var(--transition-duration);
@@ -30,14 +29,6 @@
 
 		&.rounded {
 			--r: var(--radius--full);
-		}
-
-		&.translucent {
-			@supports (backdrop-filter: blur(var(--size-1))) {
-				--bg-from: hsl(from var(--red-10) h s l / 20%);
-				--bg-to: hsl(from var(--iris-10) h s l / 20%);
-				backdrop-filter: blur(var(--size-0));
-			}
 		}
 	}
 }

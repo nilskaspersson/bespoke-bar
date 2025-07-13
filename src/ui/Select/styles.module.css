@@ -13,6 +13,7 @@
 		width: 100%;
 		text-align: left;
 		justify-content: flex-start;
+		cursor: text;
 
 		&:not(.hasValue) {
 			color: var(--mauve-10);

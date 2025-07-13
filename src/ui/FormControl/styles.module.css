@@ -1,4 +1,14 @@
 @layer base {
+	.reset {
+		font-family: inherit;
+		font-size: max(1rem, 16px);
+		font-weight: 600;
+		border: none;
+		outline: none;
+		background-color: transparent;
+		color: var(--mauve-12);
+	}
+
 	.control {
 		--r: var(--radius);
 		--w: var(--control-width);
@@ -6,14 +16,11 @@
 
 		width: var(--w);
 		height: var(--h);
+		min-width: var(--control-min-width);
 		max-width: 100%;
-		color: var(--mauve-12);
 		background-color: var(--mauve-2);
 		padding-inline: var(--control-inset);
 		border-radius: var(--r);
-		font-family: inherit;
-		font-size: max(1rem, 16px);
-		font-weight: 600;
 		border: 1px solid var(--mauve-6);
 		outline: var(--space-0) solid transparent;
 		outline-offset: 0;
@@ -45,7 +52,8 @@
 				border-color: var(--mauve-8);
 			}
 
-			&:focus {
+			&:focus,
+			&:focus-within {
 				outline-color: var(--iris-11);
 				border-color: var(--iris-11);
 			}
@@ -62,6 +70,7 @@
 		&.compact {
 			--h: var(--control-height--small);
 			--w: var(--control-width--small);
+			padding-inline: var(--control-inset--compact);
 		}
 
 		&.rounded {

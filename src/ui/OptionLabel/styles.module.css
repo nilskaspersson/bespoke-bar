@@ -1,0 +1,6 @@
+@layer ui {
+	.description {
+		opacity: 0.75;
+		margin-top: var(--space-0);
+	}
+}

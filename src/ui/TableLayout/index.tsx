@@ -72,12 +72,7 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 				) : null}
 
 				{!disableSearch ? (
-					<Lightbox
-						rounded
-						translucent
-						className={styles.search}
-						forceTheme="light"
-					>
+					<Lightbox rounded className={styles.search} forceTheme="light">
 						<form ref={formRef}>
 							<Input
 								type="search"

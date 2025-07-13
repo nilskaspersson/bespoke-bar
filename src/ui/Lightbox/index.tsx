@@ -5,7 +5,6 @@ import styles from "./styles.module.css";
 type Props = {
 	rounded?: boolean;
 	forceTheme?: "light" | "dark";
-	translucent?: boolean;
 };
 
 export function Lightbox({
@@ -13,7 +12,6 @@ export function Lightbox({
 	className,
 	rounded,
 	forceTheme,
-	translucent,
 	...props
 }: ComponentProps<"div"> & Props) {
 	return (
@@ -21,7 +19,6 @@ export function Lightbox({
 			data-theme={forceTheme}
 			className={clsx(styles.lightbox, className, {
 				[styles.rounded]: rounded,
-				[styles.translucent]: translucent,
 			})}
 			{...props}
 		>
