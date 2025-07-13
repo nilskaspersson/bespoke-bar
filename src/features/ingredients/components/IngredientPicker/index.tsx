@@ -24,7 +24,10 @@ export function IngredientPicker({
 
 	const getItemLabel = useCallback(
 		(item: Ingredient) => {
-			const category = CATEGORY_TO_LABEL.get(item.category);
+			const category = item.category
+				? CATEGORY_TO_LABEL.get(item.category)
+				: null;
+
 			const abv = item.abv ? percentageFormatter.format(item.abv) : null;
 
 			return (
