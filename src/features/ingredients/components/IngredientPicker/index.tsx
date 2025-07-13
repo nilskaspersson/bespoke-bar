@@ -1,60 +1,53 @@
 "use client";
 
-import { useCallback, useId, useRef, useState } from "react";
-import type { Spec } from "@/db/schema/specs";
-import { formatIngredient } from "@/features/ingredients/utils/parseIngredient";
-import { Popover } from "@/ui/Popover";
-import styles from "./styles.module.css";
+import { type ComponentProps, useCallback, useContext, useMemo } from "react";
+import type { Ingredient } from "@/db/schema/ingredients";
+import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
+import { FormatterContext } from "@/hooks/useFormatter";
+import { Combobox } from "@/ui/Combobox";
+import { OptionLabel } from "@/ui/OptionLabel";
+import { collator } from "@/utils/collator";
+
+const itemToString = (item: Ingredient | null) => (!item ? "" : item.name);
+const getItemValue = (item: Ingredient) => item.id;
 
 export function IngredientPicker({
-	onChange,
-	ingredient,
-}: {
-	onChange: (ingredientId: Spec["ingredientId"]) => void;
-	ingredient: Spec["ingredientId"] | undefined;
+	ingredients,
+	...props
+}: Omit<
+	ComponentProps<typeof Combobox<Ingredient>>,
+	"items" | "itemToString" | "getItemValue" | "getItemLabel"
+> & {
+	ingredients: Ingredient[];
 }) {
-	const id = useId();
-	const anchorRef = useRef<HTMLButtonElement>(null);
-	const [value, setValue] = useState<string>(ingredient ?? "");
+	const { percentageFormatter } = useContext(FormatterContext);
 
-	const handleChange = useCallback(
-		(ingredient: string) => {
-			const formattedIngredient = formatIngredient(ingredient);
+	const getItemLabel = useCallback(
+		(item: Ingredient) => {
+			const category = CATEGORY_TO_LABEL.get(item.category);
+			const abv = item.abv ? percentageFormatter.format(item.abv) : null;
 
-			if (formattedIngredient == null) {
-				return null;
-			}
-
-			onChange(formattedIngredient);
-			setValue(formattedIngredient);
+			return (
+				<OptionLabel description={[category, abv].filter(Boolean).join(", ")}>
+					{item.name}
+				</OptionLabel>
+			);
 		},
-		[onChange],
+		[percentageFormatter],
 	);
 
-	if (ingredient == null) {
-		return null;
-	}
+	const options = useMemo(
+		() => ingredients.sort((a, b) => collator.compare(a.name, b.name)),
+		[ingredients],
+	);
 
 	return (
-		<div>
-			<button
-				type="button"
-				popoverTarget={id}
-				ref={anchorRef}
-				className={styles.button}
-			>
-				{ingredient}
-			</button>
-
-			<Popover id={id} anchorRef={anchorRef}>
-				<input
-					type="text"
-					name="ingredient"
-					value={value}
-					onChange={(event) => setValue(event.target.value)}
-					onBlur={() => handleChange(value)}
-				/>
-			</Popover>
-		</div>
+		<Combobox
+			items={options}
+			itemToString={itemToString}
+			getItemValue={getItemValue}
+			getItemLabel={getItemLabel}
+			{...props}
+		/>
 	);
 }

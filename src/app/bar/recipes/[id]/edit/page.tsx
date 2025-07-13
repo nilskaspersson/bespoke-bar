@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { readIngredients } from "@/features/ingredients/actions/readIngredients";
 import { readRecipe } from "@/features/recipes/actions/readRecipe";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { getRecipeUrl } from "@/features/recipes/utils";
@@ -15,7 +16,10 @@ type Props = {
 
 export default async function EditRecipePage({ params: paramsPromise }: Props) {
 	const { id } = await paramsPromise;
-	const recipe = await readRecipe(id);
+	const [recipe, ingredients] = await Promise.all([
+		readRecipe(id),
+		readIngredients(),
+	]);
 
 	if (!recipe) {
 		notFound();
@@ -24,18 +28,23 @@ export default async function EditRecipePage({ params: paramsPromise }: Props) {
 	return (
 		<Container as="article" className={styles.container}>
 			<Grid gap={4}>
-				<nav>
-					<LinkButton href={getRecipeUrl(recipe)} variant="text" color="accent">
-						<Icon name="angle-left" />
-						Back to recipe
-					</LinkButton>
-				</nav>
-
 				<header>
+					<nav>
+						<LinkButton
+							href={getRecipeUrl(recipe)}
+							variant="text"
+							color="accent"
+							size="small"
+						>
+							<Icon name="angle-left" />
+							Back to recipe
+						</LinkButton>
+					</nav>
+
 					<Heading level="h1">Edit recipe</Heading>
 				</header>
 
-				<RecipeForm recipe={recipe} />
+				<RecipeForm recipe={recipe} ingredients={ingredients} />
 			</Grid>
 		</Container>
 	);

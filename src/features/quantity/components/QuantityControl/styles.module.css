@@ -1,0 +1,25 @@
+@layer feature {
+	.base {
+		display: flex;
+		gap: var(--space-1);
+		align-items: center;
+		flex: 0 0 auto;
+		width: fit-content;
+		padding: var(--space-0);
+
+		&[data-invalid="true"] {
+			border-color: var(--red-11);
+
+			&:focus-within {
+				outline-color: var(--red-11);
+			}
+		}
+
+		.input {
+			text-align: center;
+			width: 4ch;
+			align-self: stretch;
+			font-variant-numeric: tabular-nums;
+		}
+	}
+}

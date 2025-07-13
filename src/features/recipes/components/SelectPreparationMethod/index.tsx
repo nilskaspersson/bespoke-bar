@@ -10,8 +10,8 @@ import {
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { OptionLabel } from "@/ui/OptionLabel";
 import { Select } from "@/ui/Select";
-import { Text } from "@/ui/Text";
 import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
@@ -41,21 +41,17 @@ export function SelectPreparationMethod(
 					withKey({
 						value: item,
 						label: (
-							<>
-								<Text as="div" heavy weight={600}>
-									{METHOD_TO_LABEL.get(item) ?? item}
-								</Text>
-
-								{METHOD_TO_DEFAULT_DILUTION.has(item) ? (
-									<Text size={1} compact>
-										Default dilution:{" "}
-										{percentageFormatter.format(
-											METHOD_TO_DEFAULT_DILUTION.get(item) ?? 0,
-										)}
-										.
-									</Text>
-								) : null}
-							</>
+							<OptionLabel
+								description={
+									METHOD_TO_DEFAULT_DILUTION.has(item)
+										? `Default dilution: ${percentageFormatter.format(
+												METHOD_TO_DEFAULT_DILUTION.get(item) ?? 0,
+											)}`
+										: null
+								}
+							>
+								{METHOD_TO_LABEL.get(item) ?? item}
+							</OptionLabel>
 						),
 					}),
 				)

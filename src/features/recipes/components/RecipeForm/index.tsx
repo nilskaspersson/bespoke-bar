@@ -4,14 +4,16 @@ import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useActionState, useRef } from "react";
 import { recipeFormSchema } from "@/db/schema/composite";
+import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { upsertRecipeWithSpecsAction } from "@/features/recipes/actions/upsertRecipeWithSpecs";
-import { PreviewDraftRecipe } from "@/features/recipes/components/PreviewDraftRecipe";
+import { EditRecipeSpecs } from "@/features/recipes/components/EditRecipeSpecs";
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
+import { ControlLabel } from "@/ui/ControlLabel";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
@@ -20,9 +22,10 @@ import styles from "./styles.module.css";
 
 type Props = {
 	recipe: RecipeWithSpecs;
+	ingredients: Ingredient[];
 };
 
-export function RecipeForm({ recipe }: Props) {
+export function RecipeForm({ recipe, ingredients }: Props) {
 	const [state, formAction] = useActionState(upsertRecipeWithSpecsAction, null);
 
 	const [form, fields] = useForm({
@@ -39,6 +42,9 @@ export function RecipeForm({ recipe }: Props) {
 				quantity: spec.quantity?.toString() ?? null,
 				unit: spec.unit,
 				ingredientId: spec.ingredientId,
+				ingredient: {
+					name: spec.ingredient.name,
+				},
 			})),
 		},
 	});
@@ -57,26 +63,39 @@ export function RecipeForm({ recipe }: Props) {
 				noValidate
 				className={styles.form}
 			>
-				<input type="hidden" name="recipe.id" value={recipe.id} />
+				<input type="hidden" name={recipeFields.id.name} value={recipe.id} />
 
 				<Grid gap={4}>
 					<TextField
 						label="Name"
-						name="recipe.name"
+						name={recipeFields.name.name}
 						required
 						defaultValue={recipeFields.name.initialValue}
 					/>
 
+					<ControlLabel
+						htmlFor={fields.specs.name}
+						id={fields.specs.id}
+						label="Specs"
+						required
+					>
+						<EditRecipeSpecs
+							id={fields.specs.id}
+							name="specs"
+							ingredients={ingredients}
+						/>
+					</ControlLabel>
+
 					<SelectCocktailStyle
 						label="Style"
-						name="recipe.style"
+						name={recipeFields.style.name}
 						defaultValue={recipeFields.style.initialValue}
 					/>
 
 					<TextField
 						as="textarea"
 						label="Description"
-						name="recipe.description"
+						name={recipeFields.description.name}
 						defaultValue={recipeFields.description.initialValue}
 						helperText="Brief information about the recipe"
 					/>
@@ -84,14 +103,14 @@ export function RecipeForm({ recipe }: Props) {
 					<TextField
 						as="textarea"
 						label="Instructions"
-						name="recipe.instructions"
+						name={recipeFields.instructions.name}
 						defaultValue={recipeFields.instructions.initialValue}
 						helperText="Preparation instructions and notes"
 					/>
 
 					<SelectPreparationMethod
 						label="Preparation method"
-						name="recipe.preparationMethod"
+						name={recipeFields.preparationMethod.name}
 						defaultValue={recipeFields.preparationMethod.initialValue}
 						selectProps={{
 							onSelectedItemChange: ({ selectedItem }) => {
@@ -108,19 +127,19 @@ export function RecipeForm({ recipe }: Props) {
 					/>
 
 					<SelectDilution
-						name="recipe.dilutionTarget"
+						name={recipeFields.dilutionTarget.name}
 						defaultValue={recipeFields.dilutionTarget.initialValue}
 					/>
 
 					<SelectGlassware
 						label="Glassware"
-						name="recipe.glassware"
+						name={recipeFields.glassware.name}
 						defaultValue={recipeFields.glassware.initialValue}
 					/>
 
 					<TextField
 						label="Garnish"
-						name="recipe.garnish"
+						name={recipeFields.garnish.name}
 						defaultValue={recipeFields.garnish.initialValue}
 					/>
 
@@ -131,10 +150,6 @@ export function RecipeForm({ recipe }: Props) {
 						</SubmitButton>
 					</div>
 				</Grid>
-
-				<aside>
-					<PreviewDraftRecipe formRef={formRef} />
-				</aside>
 			</form>
 		</FormProvider>
 	);
