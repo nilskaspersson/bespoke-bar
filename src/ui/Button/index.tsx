@@ -11,6 +11,7 @@ type Props = {
 	color?: SystemColor;
 	size?: "tiny" | "small" | "default" | "large";
 	fullWidth?: boolean;
+	rounded?: boolean;
 };
 
 export function Button({
@@ -21,6 +22,7 @@ export function Button({
 	variant = "base",
 	size = "default",
 	fullWidth,
+	rounded,
 	...props
 }: Props & Omit<ComponentProps<"button">, "color">) {
 	return (
@@ -36,6 +38,7 @@ export function Button({
 				{
 					[styles.icon]: icon,
 					[styles.fullWidth]: fullWidth,
+					[styles.rounded]: rounded,
 				},
 			)}
 		>

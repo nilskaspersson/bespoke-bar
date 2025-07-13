@@ -3,8 +3,8 @@
 import { clsx } from "clsx";
 import { type UseSelectProps, useSelect } from "downshift";
 import { type ComponentProps, useId } from "react";
-import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
+import formControlStyles from "@/ui/FormControl/styles.module.css";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
@@ -13,15 +13,17 @@ import styles from "./styles.module.css";
 
 type Props<T> = {
 	className?: string;
+	compact?: boolean;
 	defaultValue?: string;
 	footer?: React.ReactNode;
 	getItemLabel?: (item: Keyed<T>) => React.ReactNode;
 	getItemValue: (item: Keyed<T>) => string;
+	helperText?: React.ReactNode;
 	items: Keyed<T>[];
 	itemToString: (item: Keyed<T> | null) => string;
 	name: string;
 	placeholder?: React.ReactNode;
-	helperText?: React.ReactNode;
+	rounded?: boolean;
 	selectProps?: Partial<UseSelectProps<Keyed<T>>>;
 };
 
@@ -40,15 +42,17 @@ type Props<T> = {
  */
 export function Select<T>({
 	className,
+	compact = false,
 	defaultValue,
 	footer,
 	getItemLabel,
 	getItemValue,
+	helperText,
 	items,
 	itemToString,
 	name,
+	rounded,
 	placeholder,
-	helperText,
 	selectProps,
 	...props
 }: Props<T> & Partial<ComponentProps<typeof ControlLabel>>) {
@@ -81,18 +85,23 @@ export function Select<T>({
 			aria-describedby={helperText ? helperTextId : undefined}
 		>
 			<div className={styles.contain}>
-				<Button
-					variant="outline"
-					color="light"
+				<button
 					{...getToggleButtonProps()}
-					className={clsx(styles.button, {
-						[styles.hasValue]: Boolean(selectedItem),
-					})}
+					className={clsx(
+						styles.button,
+						formControlStyles.reset,
+						formControlStyles.control,
+						{
+							[styles.hasValue]: Boolean(selectedItem),
+							[formControlStyles.compact]: compact,
+							[formControlStyles.rounded]: rounded,
+						},
+					)}
 				>
 					{selectedItem
 						? itemToString(selectedItem)
 						: (placeholder ?? "Select…")}
-				</Button>
+				</button>
 
 				<div {...getMenuProps()}>
 					<input

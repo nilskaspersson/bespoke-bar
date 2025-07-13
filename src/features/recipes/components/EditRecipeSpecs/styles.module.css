@@ -1,0 +1,29 @@
+@layer feature {
+	.item {
+		--gap: var(--space-1);
+
+		display: flex;
+		gap: var(--gap);
+		padding: var(--gap);
+		border-radius: var(--radius--full);
+		background-color: var(--mauve-5);
+	}
+
+	.unit {
+		min-width: 0;
+		width: 9ch;
+		flex: 0 0 auto;
+		text-align: center;
+	}
+
+	.ingredient {
+		flex: 0 1 fit-content;
+	}
+
+	.remove {
+		position: absolute;
+		left: calc(100% + var(--gap));
+		flex: 0 0 auto;
+		align-self: center;
+	}
+}

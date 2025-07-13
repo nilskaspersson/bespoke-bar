@@ -23,7 +23,7 @@ export function Alert({
 	...props
 }: ComponentPropsWithoutRef<typeof Dialog> & {
 	actions?: ReactNode;
-	notice: ReactNode;
+	notice?: ReactNode;
 	heading?: ReactNode;
 }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
@@ -39,8 +39,12 @@ export function Alert({
 
 	return (
 		<Dialog ref={dialogRef} {...props}>
-			<Lightbox className={clsx(className, styles.lightbox)} forceTheme="light">
-				<div className={styles.contain}>
+			<Lightbox className={clsx(className, styles.lightbox)}>
+				<div
+					className={clsx(styles.contain, {
+						[styles.hasNotice]: Boolean(notice),
+					})}
+				>
 					{heading ? (
 						<Heading level="h6" className={styles.heading}>
 							{heading}

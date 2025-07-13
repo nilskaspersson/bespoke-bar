@@ -1,7 +1,9 @@
-export function handleKey(
+import type { KeyboardEvent } from "react";
+
+export function handleKey<T = unknown>(
 	args: [
-		key: KeyboardEvent["key"],
-		fn: ((event: KeyboardEvent) => unknown) | undefined,
+		key: string,
+		fn: ((event: KeyboardEvent) => T) | undefined,
 		onCondition?: (event: KeyboardEvent) => boolean,
 	][],
 ) {

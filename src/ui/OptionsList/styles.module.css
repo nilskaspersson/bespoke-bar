@@ -6,6 +6,7 @@
 		top: calc(100% + var(--spacing));
 		left: 0;
 		width: 100%;
+		min-width: var(--control-width--small);
 		z-index: var(--z-popover);
 		text-align: initial;
 		padding-inline: var(--spacing);

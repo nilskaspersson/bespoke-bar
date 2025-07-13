@@ -54,10 +54,13 @@
 			}
 		}
 
+		&:where(:not(.base)) {
+			font-size: var(--button-font-size);
+		}
+
 		&:where(:not(.base, .text)) {
 			padding-inline: var(--button-inset);
 			height: var(--button-height);
-			font-size: var(--button-font-size);
 			border-radius: var(--radius--large);
 
 			/**
@@ -201,11 +204,16 @@
 		aspect-ratio: 1 / 1;
 		padding: 0;
 		border-radius: var(--radius--full);
+		line-height: 0;
 	}
 
 	.fullWidth {
 		width: 100%;
 		flex: 1 1 auto;
+	}
+
+	.rounded {
+		border-radius: var(--radius--full);
 	}
 
 	@keyframes shadowPulse {

@@ -10,7 +10,7 @@
 		color: var(--mauve-12);
 
 		&.isHighlighted {
-			background-color: hsl(from var(--mauve-1) h s l / 50%);
+			background-color: var(--iris-6);
 		}
 	}
 

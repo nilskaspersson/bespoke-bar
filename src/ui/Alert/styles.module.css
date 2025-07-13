@@ -15,12 +15,18 @@
 
 	.contain {
 		grid-area: alert;
-		background-color: var(--mauve-2);
-		border-top-left-radius: inherit;
-		border-top-right-radius: inherit;
+		background-color: var(--mauve-3);
+		border-radius: inherit;
 		overflow: auto;
 		min-height: 0;
 		box-shadow: var(--shadow--low);
+		border: 1px solid var(--mauve-6);
+
+		&.hasNotice {
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+			border-bottom-color: var(--mauve-2);
+		}
 	}
 
 	.heading {

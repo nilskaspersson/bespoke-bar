@@ -67,7 +67,9 @@
 	--control-height--large: var(--space-8);
 	--control-width: 35ch;
 	--control-width--small: 20ch;
+	--control-min-width: 6ch;
 	--control-inset: var(--space-4);
+	--control-inset--compact: var(--space-3);
 
 	/**
 	 * Colors

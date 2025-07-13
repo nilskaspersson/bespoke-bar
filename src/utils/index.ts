@@ -16,6 +16,10 @@ export function omit<T, K extends keyof T>(o: T, ...keys: K[]): Omit<T, K> {
 	return result;
 }
 
+export function clamp(n: number, min: number, max: number): number {
+	return Math.min(Math.max(n, min), max);
+}
+
 export function pick<T extends Record<PropertyKey, unknown>, K extends keyof T>(
 	o: T,
 	...keys: K[]

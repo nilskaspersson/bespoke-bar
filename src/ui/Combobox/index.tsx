@@ -1,8 +1,14 @@
 "use client";
 
 import { clsx } from "clsx";
-import { useCombobox } from "downshift";
-import { useDeferredValue, useId, useMemo, useState } from "react";
+import { type UseComboboxProps, useCombobox } from "downshift";
+import {
+	type ComponentProps,
+	useDeferredValue,
+	useId,
+	useMemo,
+	useState,
+} from "react";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Icon } from "@/ui/Icon";
@@ -15,6 +21,7 @@ import styles from "./styles.module.css";
 
 type Props<T> = {
 	className?: string;
+	clearable?: boolean;
 	footer?: React.ReactNode;
 	defaultValue?: string;
 	getItemLabel?: (item: Keyed<T>) => React.ReactNode;
@@ -25,20 +32,28 @@ type Props<T> = {
 	label?: React.ReactNode;
 	name: string;
 	helperText?: React.ReactNode;
+	comboboxProps?: Partial<UseComboboxProps<Keyed<T>>>;
+	inputProps?: Pick<
+		ComponentProps<typeof Input>,
+		"className" | "compact" | "pill" | "rounded"
+	>;
 };
 
 export function Combobox<T>({
 	className,
+	clearable = true,
+	comboboxProps,
 	defaultValue,
 	footer,
 	getItemLabel,
 	getItemValue,
 	header,
+	helperText,
+	inputProps,
 	items,
 	itemToString,
 	label,
 	name,
-	helperText,
 }: Props<T>) {
 	const helperTextId = useId();
 
@@ -76,7 +91,10 @@ export function Combobox<T>({
 			: undefined,
 		scrollIntoView: (node) =>
 			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
+		...comboboxProps,
 	});
+
+	const comboboxInputProps = getInputProps();
 
 	return (
 		<ControlLabel
@@ -85,24 +103,36 @@ export function Combobox<T>({
 			className={clsx(styles.base, className)}
 		>
 			<div className={styles.contain}>
-				<Input {...getInputProps()} type="search" className={styles.input} />
+				<Input
+					{...inputProps}
+					{...comboboxInputProps}
+					title={comboboxInputProps.value}
+					type="search"
+					className={clsx(styles.input, inputProps?.className, {
+						[styles.compact]: inputProps?.compact,
+					})}
+				/>
 
 				<menu className={styles.actions}>
-					{deferredInputValue ? (
+					{deferredInputValue && clearable ? (
 						<Button
 							variant="base"
 							icon
+							size="tiny"
 							onClick={reset}
 							className={styles.clear}
 						>
-							<Icon name="xmark" />
+							<Icon name="xmark" size={1} />
 						</Button>
 					) : null}
 
 					<Button
 						variant="base"
 						{...getToggleButtonProps()}
-						className={styles.toggle}
+						className={clsx(styles.toggle, {
+							[styles.rounded]: inputProps?.rounded,
+							[styles.compact]: inputProps?.compact,
+						})}
 					>
 						<Icon
 							name="angle-down"
