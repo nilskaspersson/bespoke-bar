@@ -12,6 +12,8 @@
 		border-top: 1px solid var(--mauve-6);
 		padding-top: var(--inset);
 		padding-bottom: calc(var(--inset) + var(--label-offset));
+		transition-property: background-color;
+		transition-duration: var(--transition-duration--short);
 	}
 
 	.label {

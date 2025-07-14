@@ -6,8 +6,8 @@ import {
 	MEASUREMENT_TO_DESCRIPTION,
 	MEASUREMENT_TO_LABEL,
 } from "@/features/ingredients/constants";
+import { OptionLabel } from "@/ui/OptionLabel";
 import { Select } from "@/ui/Select";
-import { Text } from "@/ui/Text";
 import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
@@ -24,17 +24,9 @@ const OPTIONS = supportedMeasurements.options
 		withKey({
 			value: item,
 			label: (
-				<>
-					<Text as="div" heavy>
-						{MEASUREMENT_TO_LABEL.get(item) ?? item}
-					</Text>
-
-					{MEASUREMENT_TO_DESCRIPTION.has(item) ? (
-						<Text size={1} compact>
-							{MEASUREMENT_TO_DESCRIPTION.get(item)}
-						</Text>
-					) : null}
-				</>
+				<OptionLabel description={MEASUREMENT_TO_DESCRIPTION.get(item)}>
+					{MEASUREMENT_TO_LABEL.get(item) ?? item}
+				</OptionLabel>
 			),
 		}),
 	)

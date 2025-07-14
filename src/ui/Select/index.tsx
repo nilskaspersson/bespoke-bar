@@ -87,6 +87,7 @@ export function Select<T>({
 			<div className={styles.contain}>
 				<button
 					{...getToggleButtonProps()}
+					type="button"
 					className={clsx(
 						styles.button,
 						formControlStyles.reset,

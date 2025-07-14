@@ -9,6 +9,8 @@
 		line-height: var(--line-height--compact);
 		font-weight: 900;
 		word-break: break-word;
+		transition-property: color;
+		transition-duration: var(--transition-duration--short);
 		/* text-box: trim-both cap alphabetic; */
 
 		& > a:hover {
