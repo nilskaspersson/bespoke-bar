@@ -24,6 +24,7 @@ type Props<T> = {
 	name: string;
 	placeholder?: React.ReactNode;
 	rounded?: boolean;
+	buttonProps?: ComponentProps<"button">;
 	selectProps?: Partial<UseSelectProps<Keyed<T>>>;
 };
 
@@ -54,6 +55,7 @@ export function Select<T>({
 	rounded,
 	placeholder,
 	selectProps,
+	buttonProps,
 	...props
 }: Props<T> & Partial<ComponentProps<typeof ControlLabel>>) {
 	const helperTextId = useId();
@@ -86,9 +88,11 @@ export function Select<T>({
 		>
 			<div className={styles.contain}>
 				<button
+					{...buttonProps}
 					{...getToggleButtonProps()}
 					type="button"
 					className={clsx(
+						buttonProps?.className,
 						styles.button,
 						formControlStyles.reset,
 						formControlStyles.control,
