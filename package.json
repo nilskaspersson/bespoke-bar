@@ -18,8 +18,8 @@
 		"knip": "knip"
 	},
 	"dependencies": {
-		"@clerk/nextjs": "6.25.2",
-		"@clerk/themes": "2.3.1",
+		"@clerk/nextjs": "6.25.3",
+		"@clerk/themes": "2.3.2",
 		"@conform-to/react": "1.8.2",
 		"@conform-to/zod": "1.8.2",
 		"@neondatabase/serverless": "1.0.1",
