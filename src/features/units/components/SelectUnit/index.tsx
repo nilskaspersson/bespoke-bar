@@ -2,18 +2,20 @@
 
 import type { ComponentProps } from "react";
 import { supportedUnits, type Unit } from "@/db/schema/units";
+import { UNIT_TO_LABEL } from "@/features/units/constants";
+import { isValidUnit } from "@/features/units/utils";
 import { Select } from "@/ui/Select";
 import { collator } from "@/utils/collator";
 import { type Keyed, withKey } from "@/utils/withKey";
 
 type Option = {
 	value: Unit | "";
-	label: React.ReactNode;
+	label: string;
 };
 
 const getItemValue = (item: Option) => item.value;
 const getItemLabel = (item: Option) => item.label;
-const itemToString = (item: Option | null) => (!item ? "" : item.value);
+const itemToString = (item: Option | null) => (!item ? "" : item.label);
 
 const OPTIONS: Keyed<Option>[] = [
 	withKey({ value: "", label: "None" }),
@@ -21,7 +23,7 @@ const OPTIONS: Keyed<Option>[] = [
 		.map((item) =>
 			withKey({
 				value: item,
-				label: item,
+				label: isValidUnit(item) ? (UNIT_TO_LABEL.get(item) ?? item) : item,
 			}),
 		)
 		.sort((a, b) => collator.compare(itemToString(a), itemToString(b))),

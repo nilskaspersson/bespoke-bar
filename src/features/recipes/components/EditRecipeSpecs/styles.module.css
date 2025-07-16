@@ -39,7 +39,7 @@
 
 	.unit {
 		min-width: 0;
-		width: 9ch;
+		width: 12ch;
 		flex: 1 1 auto;
 		text-align: center;
 		margin-left: -1px;

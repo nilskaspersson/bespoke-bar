@@ -4,7 +4,6 @@
 
 		height: auto;
 		resize: none;
-		max-width: 100%;
 		padding-block: var(--inset);
 		line-height: var(--line-height);
 		field-sizing: content;
