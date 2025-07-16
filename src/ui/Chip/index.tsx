@@ -1,17 +1,32 @@
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
+import { Text } from "@/ui/Text";
+import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
 export function Chip({
 	label,
+	color = "accent",
 	children,
 	className,
+	size = 2,
+	style,
 	...props
-}: ComponentProps<"div"> & { label?: ReactNode }) {
+}: ComponentProps<typeof Text<"div">> & {
+	label?: ReactNode;
+	color?: SystemColor;
+}) {
 	return (
-		<div className={clsx(styles.chip, className)} {...props}>
+		<Text
+			as="div"
+			className={clsx(styles.chip, styles[color], className)}
+			compact
+			size={size}
+			weight={600}
+			{...props}
+		>
 			{label ? <span className={styles.label}>{label}</span> : null}
 			{children}
-		</div>
+		</Text>
 	);
 }

@@ -1,20 +1,41 @@
 @layer ui {
 	.chip {
+		--inset: min(calc(var(--jsxFontSize, 0) / 2), var(--gap--large));
+
 		display: inline-block;
-		background-color: var(--iris-1);
-		color: var(--iris-12);
-		padding: var(--space-3) var(--space-4);
+		padding: calc(var(--inset) / 2) var(--inset);
+
+		color: var(--c);
+		background-color: var(--bgc);
 		border-radius: var(--radius--large);
 		box-shadow: var(--shadow);
-		font-weight: 600;
-		font-size: var(--size-5);
-		line-height: var(--line-height--compact);
 		text-align: left;
+	}
+
+	.accent {
+		--c: var(--iris-12);
+		--bgc: var(--iris-8);
+	}
+
+	.regular,
+	.light {
+		--c: var(--mauve-12);
+		--bgc: var(--mauve-8);
+	}
+
+	.red {
+		--c: var(--red-12);
+		--bgc: var(--red-8);
+	}
+
+	.heavy {
+		--c: var(--mauve-1);
+		--bgc: var(--mauve-12);
 	}
 
 	.label {
 		display: block;
-		font-size: var(--size-1);
-		color: var(--iris-11);
+		font-size: 0.75em;
+		color: hsl(from var(--c) h s l / 0.8);
 	}
 }
