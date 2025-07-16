@@ -4,6 +4,11 @@
 		gap: var(--space-2);
 		flex-direction: column;
 		align-items: flex-start;
+
+		&.inline {
+			flex-direction: row;
+			align-items: baseline;
+		}
 	}
 
 	.label {

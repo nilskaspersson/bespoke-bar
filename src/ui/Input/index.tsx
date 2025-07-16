@@ -8,6 +8,7 @@ type BaseProps = {
 	id?: string;
 	readOnly?: boolean;
 	compact?: boolean;
+	inline?: boolean;
 	pill?: boolean;
 	fullWidth?: boolean;
 	rounded?: boolean;
@@ -30,6 +31,7 @@ export function Input({
 	pill,
 	fullWidth,
 	rounded,
+	inline,
 	...props
 }: InputProps | TextareaProps): React.ReactNode {
 	const isTextArea = as === "textarea";
@@ -47,6 +49,7 @@ export function Input({
 				[formControlStyles.compact]: compact,
 				[formControlStyles.fullWidth]: fullWidth,
 				[formControlStyles.rounded]: rounded,
+				[formControlStyles.inline]: inline,
 			},
 		),
 	});
