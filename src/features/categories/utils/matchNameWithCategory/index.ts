@@ -1,4 +1,4 @@
-import type { SystemCategory } from "@/db/schema/categories";
+import { type SystemCategory, systemCategories } from "@/db/schema/categories";
 import { CATEGORY_ALIASES } from "@/features/categories/constants";
 import { invertMapToLookup, normalizeInput } from "@/utils";
 
@@ -97,4 +97,8 @@ export function matchNameWithCategory(name: string): SystemCategory | null {
 
 	const normalizedInput = normalizeInput(name);
 	return findBestMatch(normalizedInput);
+}
+
+export function isSystemCategory(name: unknown): name is SystemCategory {
+	return systemCategories.safeParse(name).success;
 }

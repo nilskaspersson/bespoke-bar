@@ -1,5 +1,4 @@
 import { clsx } from "clsx";
-import type { GetItemPropsReturnValue } from "downshift";
 import type { ComponentProps } from "react";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
@@ -10,11 +9,10 @@ export function OptionItem({
 	isHighlighted,
 	isSelected,
 	...props
-}: ComponentProps<"li"> &
-	GetItemPropsReturnValue & {
-		isHighlighted: boolean;
-		isSelected: boolean;
-	}) {
+}: ComponentProps<"li"> & {
+	isHighlighted?: boolean;
+	isSelected?: boolean;
+}) {
 	return (
 		<li
 			className={clsx(styles.item, className, {

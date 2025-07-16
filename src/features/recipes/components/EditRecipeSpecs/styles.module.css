@@ -1,12 +1,34 @@
 @layer feature {
-	.item {
-		--gap: var(--space-1);
+	.fieldset {
+		--g: var(--space-1);
+		--h: var(--space-7);
+	}
 
+	.item {
+		display: grid;
+		gap: var(--gap--tiny);
+	}
+
+	.line {
 		display: flex;
-		gap: var(--gap);
-		padding: var(--gap);
-		border-radius: var(--radius--full);
+		align-items: start;
+		gap: var(--g);
+	}
+
+	.inner {
+		display: flex;
+	}
+
+	.card {
+		padding: var(--g);
+		min-height: var(--h);
+		border-radius: calc(var(--h) / 2);
 		background-color: var(--mauve-5);
+	}
+
+	.quantity {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
 	}
 
 	.unit {
@@ -14,16 +36,44 @@
 		width: 9ch;
 		flex: 0 0 auto;
 		text-align: center;
+		margin-inline: -1px;
+	}
+
+	.unitButton {
+		border-radius: 0;
 	}
 
 	.ingredient {
 		flex: 0 1 fit-content;
 	}
 
-	.remove {
-		position: absolute;
-		left: calc(100% + var(--gap));
+	.ingredientInput {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+	}
+
+	.ingredientName {
+		word-break: break-all;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
 		flex: 0 0 auto;
-		align-self: center;
+		height: var(--h);
+	}
+
+	.add {
+		margin-right: calc(var(--space-6) + var(--g));
+	}
+
+	.newInfo {
+		display: grid;
+		gap: var(--gap);
+		padding: var(--g) var(--gap--small);
+	}
+
+	.ingredientFields {
+		padding: var(--gap--tiny);
 	}
 }

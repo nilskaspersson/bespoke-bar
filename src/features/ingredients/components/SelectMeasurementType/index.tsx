@@ -33,16 +33,19 @@ const OPTIONS = supportedMeasurements.options
 	.sort((a, b) => collator.compare(itemToString(a), itemToString(b)));
 
 export function SelectMeasurementType(
-	props: Partial<ComponentProps<typeof Select<Option>>>,
+	props: Omit<
+		ComponentProps<typeof Select<Option>>,
+		"items" | "itemToString" | "getItemValue" | "getItemLabel"
+	>,
 ) {
 	return (
 		<Select
 			label="Measurement type"
-			name="measurementType"
 			items={OPTIONS}
 			itemToString={itemToString}
 			getItemValue={getItemValue}
 			getItemLabel={getItemLabel}
+			helperText={`Used for unit conversion and cost calculations. Choose "Volume" for liquids, "Mass" for solids, or "Pieces" for individual items (f.e., cherries, umbrellas).`}
 			{...props}
 		/>
 	);

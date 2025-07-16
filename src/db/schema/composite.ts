@@ -2,6 +2,7 @@ import { z } from "zod/v4";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
 import { insertRecipeSchema } from "@/db/schema/recipes";
 import { insertSpecsSchema } from "@/db/schema/specs";
+import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 
 export const upsertRecipeSchema = insertRecipeSchema
 	.omit({
@@ -17,6 +18,12 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
+const ingredientFormDataSchema = draftIngredientSchema
+	.extend({
+		abv: percentageToRatioSchema.optional(),
+	})
+	.optional();
+
 export const upsertSpecSchema = insertSpecsSchema
 	.omit({
 		id: true,
@@ -26,7 +33,7 @@ export const upsertSpecSchema = insertSpecsSchema
 	.extend({
 		id: z.string().optional(),
 		ingredientId: z.string().optional(),
-		ingredient: draftIngredientSchema.optional(),
+		ingredient: ingredientFormDataSchema,
 	})
 	.refine((data) => data.ingredientId || data.ingredient, {
 		message: "Either ingredientId or ingredient data must be provided",
@@ -39,3 +46,5 @@ export const recipeFormSchema = z.object({
 });
 
 export type RecipeFormData = z.infer<typeof recipeFormSchema>;
+
+export type IngredientFormData = z.infer<typeof ingredientFormDataSchema>;

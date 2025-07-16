@@ -8,7 +8,6 @@ import { RecipeActions } from "@/features/recipes/components/RecipeActions";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { isValidRecipeParams } from "@/features/recipes/utils";
 import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
 import styles from "./page.module.css";
 
 type Props = {
@@ -33,12 +32,10 @@ export default async function RecipePage({ params }: Props) {
 	}
 
 	return (
-		<Container asChild className={styles.container}>
-			<Grid gap={9}>
-				<RecipeArticle recipe={recipe}>
-					<RecipeActions recipe={recipe} />
-				</RecipeArticle>
-			</Grid>
+		<Container className={styles.container}>
+			<RecipeArticle recipe={recipe}>
+				<RecipeActions recipe={recipe} />
+			</RecipeArticle>
 		</Container>
 	);
 }

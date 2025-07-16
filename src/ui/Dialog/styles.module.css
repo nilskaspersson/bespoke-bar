@@ -1,6 +1,5 @@
 @layer ui {
 	.dialog {
-		display: grid;
 		place-items: center;
 		width: 100dvw;
 		height: 100dvh;
@@ -14,6 +13,10 @@
 		z-index: var(--z-modal);
 		border: none;
 		padding: var(--gap);
+
+		&[open] {
+			display: grid;
+		}
 
 		&::backdrop {
 			display: none;
@@ -67,7 +70,7 @@
 		&:has(.dialog[open]) {
 			overflow: hidden;
 
-			> * {
+			> :not(.dialog) {
 				filter: blur(3px);
 
 				@supports (not (filter: blur(3px))) {

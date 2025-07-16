@@ -1,4 +1,4 @@
-@layer feature {
+@layer component {
 	.base {
 		display: flex;
 		gap: var(--space-1);

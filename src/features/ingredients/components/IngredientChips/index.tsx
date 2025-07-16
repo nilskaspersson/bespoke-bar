@@ -4,6 +4,7 @@ import { useContext } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
+import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
@@ -26,7 +27,9 @@ export function IngredientChips({
 
 			<Chip label="Brand">{ingredient.brand ?? "-"}</Chip>
 
-			<Chip label="Unit cost">
+			<Chip
+				label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType)}`}
+			>
 				{ingredient.unitCost && ingredient.measurementType
 					? formatIngredientUnitCost(
 							ingredient.unitCost,

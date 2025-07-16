@@ -20,14 +20,16 @@
 	}
 
 	.header {
+		display: grid;
 		margin-inline: var(--spacing);
 		border-bottom: 1px solid var(--mauve-6);
-		padding-block: calc(var(--spacing) * 2);
+		padding-block: calc(var(--spacing));
 	}
 
 	.footer {
+		display: grid;
 		margin-inline: var(--spacing);
 		border-top: 1px solid var(--mauve-6);
-		padding-block: calc(var(--spacing) * 2);
+		padding-block: calc(var(--spacing));
 	}
 }
