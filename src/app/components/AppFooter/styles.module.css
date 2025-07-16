@@ -22,4 +22,13 @@
 		display: flex;
 		gap: var(--gap--huge);
 	}
+
+	.commit {
+		user-select: all;
+		cursor: text;
+
+		&:not(:hover) {
+			color: var(--mauve-6);
+		}
+	}
 }
