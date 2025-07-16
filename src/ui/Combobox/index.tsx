@@ -22,20 +22,33 @@ import styles from "./styles.module.css";
 type Props<T> = {
 	className?: string;
 	clearable?: boolean;
-	footer?: React.ReactNode;
 	defaultValue?: string;
 	getItemLabel?: (item: Keyed<T>) => React.ReactNode;
 	getItemValue: (item: Keyed<T>) => string;
+	renderEmptyListItem?: ({
+		closeMenu,
+		inputValue,
+	}: {
+		closeMenu: () => void;
+		inputValue: string;
+	}) => React.ReactNode;
 	header?: React.ReactNode;
 	items: Keyed<T>[];
 	itemToString: (item: Keyed<T> | null) => string;
 	label?: React.ReactNode;
 	name: string;
+	value?: string;
 	helperText?: React.ReactNode;
 	comboboxProps?: Partial<UseComboboxProps<Keyed<T>>>;
 	inputProps?: Pick<
 		ComponentProps<typeof Input>,
-		"className" | "compact" | "pill" | "rounded"
+		| "className"
+		| "compact"
+		| "pill"
+		| "rounded"
+		| "name"
+		| "placeholder"
+		| "value"
 	>;
 };
 
@@ -44,7 +57,6 @@ export function Combobox<T>({
 	clearable = true,
 	comboboxProps,
 	defaultValue,
-	footer,
 	getItemLabel,
 	getItemValue,
 	header,
@@ -54,6 +66,8 @@ export function Combobox<T>({
 	itemToString,
 	label,
 	name,
+	renderEmptyListItem,
+	value,
 }: Props<T>) {
 	const helperTextId = useId();
 
@@ -71,21 +85,43 @@ export function Combobox<T>({
 	}, [deferredInputValue, items, itemToString]);
 
 	const {
-		isOpen,
-		getToggleButtonProps,
+		closeMenu,
+		getInputProps,
+		getItemProps,
 		getLabelProps,
 		getMenuProps,
-		getInputProps,
+		getToggleButtonProps,
 		highlightedIndex,
-		getItemProps,
-		selectedItem,
+		isOpen,
+		openMenu,
 		reset,
+		selectedItem,
+		selectItem,
 	} = useCombobox({
-		onInputValueChange({ inputValue }) {
+		onInputValueChange({ inputValue, type }) {
+			/**
+			 * Clear the selection on input. This enables a "free" input mode, where the search
+			 * can be used as a member of the form.
+			 */
+			if (
+				type === useCombobox.stateChangeTypes.InputChange &&
+				Boolean(selectedItem) &&
+				inputValue !== itemToString(selectedItem)
+			) {
+				selectItem(null);
+			}
+
 			setInputValue(inputValue.trim().toLowerCase());
 		},
 		items: filteredItems,
 		itemToString,
+		/**
+		 * Fallback to null to avoid switching between controlled/uncontrolled state.
+		 */
+		selectedItem:
+			value !== undefined
+				? (items.find((o) => getItemValue(o) === value) ?? null)
+				: undefined,
 		defaultSelectedItem: defaultValue
 			? items.find((o) => getItemValue(o) === defaultValue)
 			: undefined,
@@ -148,8 +184,25 @@ export function Combobox<T>({
 						value={selectedItem ? getItemValue(selectedItem) : ""}
 					/>
 
-					{isOpen && filteredItems.length > 0 ? (
-						<OptionsList footer={footer} header={header}>
+					{isOpen ? (
+						<OptionsList
+							footer={
+								items.length > filteredItems.length ? (
+									<Button
+										variant="outline"
+										size="tiny"
+										className={styles.reset}
+										onClick={() => {
+											reset();
+											openMenu();
+										}}
+									>
+										Clear filters
+									</Button>
+								) : null
+							}
+							header={header}
+						>
 							{filteredItems.map((item, index) => (
 								<OptionItem
 									key={getKey(item)}
@@ -170,6 +223,13 @@ export function Combobox<T>({
 									)}
 								</OptionItem>
 							))}
+
+							{filteredItems.length === 0
+								? renderEmptyListItem?.({
+										closeMenu,
+										inputValue: comboboxInputProps.value,
+									})
+								: null}
 						</OptionsList>
 					) : null}
 				</div>

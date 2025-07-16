@@ -25,6 +25,11 @@
 		display: flex;
 		align-items: stretch;
 		gap: var(--space-2);
+
+		.base:hover &,
+		.base:focus-within & {
+			z-index: 1;
+		}
 	}
 
 	.toggle {
@@ -73,6 +78,30 @@
 
 		&:active:hover {
 			opacity: 0.8;
+		}
+	}
+
+	.reset {
+		justify-self: center;
+	}
+
+	.create {
+		display: flex;
+		width: 100%;
+		justify-content: start;
+		padding: var(--space-1) var(--space-2);
+		font-weight: 500;
+		color: var(--mauve-12);
+		text-align: left;
+		line-height: var(--line-height--compact);
+
+		border-radius: var(--radius);
+		transition: background-color, color;
+		transition-duration: var(--transition-duration--short);
+
+		&:hover,
+		&:focus-visible {
+			background-color: var(--iris-6);
 		}
 	}
 }
