@@ -6,6 +6,7 @@ import { useFormStatus } from "react-dom";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Input } from "@/ui/Input";
 import { Text } from "@/ui/Text";
+import styles from "./styles.module.css";
 
 export function TextField({
 	as,
@@ -13,8 +14,9 @@ export function TextField({
 	disabled,
 	label,
 	helperText,
+	id,
 	...inputProps
-}: Omit<ComponentProps<typeof Input>, "id"> & {
+}: ComponentProps<typeof Input> & {
 	as?: "input" | "textarea";
 	label: React.ReactNode;
 	compact?: boolean;
@@ -29,25 +31,33 @@ export function TextField({
 	return (
 		<ControlLabel
 			className={className}
-			htmlFor={inputId}
+			htmlFor={id ?? inputId}
 			id={labelId}
 			label={label}
 			required={inputProps.required}
+			inline={inputProps.inline}
 		>
-			<Input
-				as={as}
-				{...inputProps}
-				aria-disabled={disabled || pending}
-				id={inputId}
-				aria-describedby={helperText ? helperTextId : undefined}
-				readOnly={pending}
-			/>
+			<div className={styles.contain}>
+				<Input
+					as={as}
+					{...inputProps}
+					aria-disabled={disabled || pending}
+					id={id ?? inputId}
+					aria-describedby={helperText ? helperTextId : undefined}
+					readOnly={inputProps.readOnly || pending}
+				/>
 
-			{helperText ? (
-				<Text size={1} id={helperTextId}>
-					{helperText}
-				</Text>
-			) : null}
+				{helperText ? (
+					<Text
+						as="div"
+						size={1}
+						id={helperTextId}
+						className={styles.helperText}
+					>
+						{helperText}
+					</Text>
+				) : null}
+			</div>
 		</ControlLabel>
 	);
 }

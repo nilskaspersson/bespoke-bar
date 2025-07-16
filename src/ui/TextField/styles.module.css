@@ -1,0 +1,15 @@
+@layer ui {
+	/**
+	 * This node mostly exists to support straight helperText layouts with
+	 * the `inline` prop.
+	 */
+	.contain {
+		display: grid;
+		gap: var(--space-1);
+		flex: 0 1 auto;
+	}
+
+	.helperText {
+		width: fit-content;
+	}
+}
