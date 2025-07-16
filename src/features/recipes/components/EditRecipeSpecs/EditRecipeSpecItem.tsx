@@ -97,7 +97,7 @@ export function EditRecipeSpecItem({
 									rounded: true,
 									className: styles.ingredientInput,
 								}}
-								renderEmptyListItem={({ closeMenu, inputValue }) => (
+								renderCreateListItem={({ closeMenu, inputValue }) => (
 									<OptionItem
 										onClick={() => {
 											closeMenu?.();

@@ -25,7 +25,7 @@ type Props<T> = {
 	defaultValue?: string;
 	getItemLabel?: (item: Keyed<T>) => React.ReactNode;
 	getItemValue: (item: Keyed<T>) => string;
-	renderEmptyListItem?: ({
+	renderCreateListItem?: ({
 		closeMenu,
 		inputValue,
 	}: {
@@ -67,7 +67,7 @@ export function Combobox<T>({
 	itemToString,
 	label,
 	name,
-	renderEmptyListItem,
+	renderCreateListItem,
 	toggleButtonProps,
 	value,
 }: Props<T>) {
@@ -227,8 +227,8 @@ export function Combobox<T>({
 								</OptionItem>
 							))}
 
-							{filteredItems.length === 0
-								? renderEmptyListItem?.({
+							{Boolean(comboboxInputProps.value) && renderCreateListItem
+								? renderCreateListItem({
 										closeMenu,
 										inputValue: comboboxInputProps.value,
 									})
