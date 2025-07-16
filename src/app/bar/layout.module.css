@@ -18,6 +18,7 @@
 		flex: 0 0 auto;
 		padding-right: env(safe-area-inset-right);
 		padding-left: env(safe-area-inset-left);
+		z-index: var(--z-navigation);
 
 		@media (min-width: 814px) {
 			display: none;

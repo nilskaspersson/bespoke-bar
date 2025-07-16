@@ -61,30 +61,36 @@ export function EditRecipeSpecItem({
 			<div className={styles.line}>
 				<div className={styles.card}>
 					<div className={styles.inner}>
-						<QuantityControl
-							name={spec.quantity.name}
-							defaultValue={spec.quantity.defaultValue}
-							compact
-							className={styles.quantity}
-						/>
+						<div className={styles.meta}>
+							<QuantityControl
+								name={spec.quantity.name}
+								defaultValue={spec.quantity.defaultValue}
+								compact
+								className={styles.quantity}
+							/>
 
-						<SelectUnit
-							name={spec.unit.name}
-							defaultValue={spec.unit.defaultValue}
-							placeholder="Unit"
-							compact
-							className={styles.unit}
-							buttonProps={{
-								className: styles.unitButton,
-							}}
-						/>
+							<SelectUnit
+								name={spec.unit.name}
+								defaultValue={spec.unit.defaultValue}
+								placeholder="Unit"
+								compact
+								rounded
+								className={styles.unit}
+								buttonProps={{
+									className: styles.unitButton,
+								}}
+							/>
+						</div>
 
-						<div>
+						<div className={styles.ingredient}>
 							<IngredientPicker
-								className={styles.ingredient}
+								className={styles.ingredientPicker}
 								ingredients={ingredients}
 								name={spec.ingredientId.name}
 								defaultValue={spec.ingredientId.defaultValue}
+								toggleButtonProps={{
+									className: styles.ingredientInput,
+								}}
 								inputProps={{
 									name: searchName,
 									compact: true,

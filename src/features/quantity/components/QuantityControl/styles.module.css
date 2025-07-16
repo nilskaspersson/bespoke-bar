@@ -16,6 +16,7 @@
 		}
 
 		.input {
+			flex: 1 1 auto;
 			text-align: center;
 			width: 4ch;
 			align-self: stretch;

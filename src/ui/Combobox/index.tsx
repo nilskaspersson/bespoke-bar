@@ -39,6 +39,7 @@ type Props<T> = {
 	name: string;
 	value?: string;
 	helperText?: React.ReactNode;
+	toggleButtonProps?: ComponentProps<typeof Button>;
 	comboboxProps?: Partial<UseComboboxProps<Keyed<T>>>;
 	inputProps?: Pick<
 		ComponentProps<typeof Input>,
@@ -67,6 +68,7 @@ export function Combobox<T>({
 	label,
 	name,
 	renderEmptyListItem,
+	toggleButtonProps,
 	value,
 }: Props<T>) {
 	const helperTextId = useId();
@@ -165,7 +167,8 @@ export function Combobox<T>({
 					<Button
 						variant="base"
 						{...getToggleButtonProps()}
-						className={clsx(styles.toggle, {
+						{...toggleButtonProps}
+						className={clsx(styles.toggle, toggleButtonProps?.className, {
 							[styles.rounded]: inputProps?.rounded,
 							[styles.compact]: inputProps?.compact,
 						})}

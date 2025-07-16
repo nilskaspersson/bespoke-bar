@@ -7,12 +7,12 @@
 
 	.contain {
 		align-self: stretch;
-		width: fit-content;
 	}
 
 	.input {
 		--h: var(--control-height);
 		padding-right: var(--h);
+		max-width: 100%;
 
 		&.compact {
 			--h: var(--control-height--small);
@@ -45,7 +45,7 @@
 		}
 
 		&.rounded {
-			--r: var(--radius--full);
+			--r: calc(var(--button-height) / 2);
 		}
 
 		&.compact {

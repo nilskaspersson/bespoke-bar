@@ -2,6 +2,7 @@
 	.fieldset {
 		--g: var(--space-1);
 		--h: var(--space-7);
+		max-width: var(--control-width--large);
 	}
 
 	.item {
@@ -16,40 +17,83 @@
 	}
 
 	.inner {
+		/**
+		 * This is super brittle. How can we detect if the node is wrapping?
+		 */
+		@media (min-width: 526px) {
+			display: flex;
+		}
+	}
+
+	.meta {
 		display: flex;
 	}
 
 	.card {
+		flex: 1 1 auto;
 		padding: var(--g);
 		min-height: var(--h);
 		border-radius: calc(var(--h) / 2);
 		background-color: var(--mauve-5);
 	}
 
-	.quantity {
-		border-top-right-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-
 	.unit {
 		min-width: 0;
 		width: 9ch;
-		flex: 0 0 auto;
+		flex: 1 1 auto;
 		text-align: center;
-		margin-inline: -1px;
-	}
+		margin-left: -1px;
 
-	.unitButton {
-		border-radius: 0;
+		@media (min-width: 526px) {
+			margin-right: -1px;
+		}
 	}
 
 	.ingredient {
-		flex: 0 1 fit-content;
+		flex: 1 1 auto;
+
+		@media (max-width: 525px) {
+			margin-top: -1px;
+		}
+	}
+
+	.quantity {
+		flex: 1 0 auto;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+
+		@media (max-width: 525px) {
+			border-bottom-left-radius: 0;
+		}
+	}
+
+	.unitButton {
+		@media (min-width: 526px) {
+			border-radius: 0;
+		}
+
+		@media (max-width: 525px) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
 	}
 
 	.ingredientInput {
-		border-top-left-radius: 0;
-		border-bottom-left-radius: 0;
+		@media (min-width: 526px) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		@media (max-width: 525px) {
+			border-top-right-radius: 0;
+			border-top-left-radius: 0;
+		}
+	}
+
+	.ingredientPicker {
+		width: auto;
+		max-width: none;
 	}
 
 	.ingredientName {

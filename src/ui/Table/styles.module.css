@@ -23,27 +23,23 @@
 			display: grid;
 			gap: var(--table-gap);
 		}
-
-		@container table (width < 400px) {
-			grid-template-columns: [body] 1fr [header] auto;
-			justify-content: space-between;
-			align-items: start;
-		}
 	}
 
 	.thead {
-		position: sticky;
-		top: var(--table-gap);
-		z-index: 1;
+		@container table (width >= 400px) {
+			position: sticky;
+			top: var(--table-gap);
+			z-index: 1;
+		}
 
 		@container table (400px <= width < 750px) {
 			display: flex;
 			justify-content: center;
 		}
 
-		@container table (width < 400px) {
-			grid-area: header;
-			text-align: right;
+		@container table (width <= 400px) {
+			/* biome-ignore lint/suspicious/noDuplicateProperties: TODO: Something better? */
+			display: none;
 		}
 	}
 
@@ -69,11 +65,6 @@
 			justify-content: center;
 			gap: var(--gap);
 		}
-
-		@container table (width < 400px) {
-			flex-direction: column;
-			border-radius: var(--radius--large);
-		}
 	}
 
 	.tbody {
@@ -96,13 +87,6 @@
 			background-color: var(--table-background-color);
 			border-radius: var(--table-radius);
 			border: 1px solid var(--iris-6);
-		}
-	}
-
-	.tbody {
-		@container table (width < 400px) {
-			grid-area: body;
-			justify-content: start;
 		}
 	}
 
@@ -139,19 +123,9 @@
 		@container table (width < 750px) {
 			width: 100%;
 
-			/* display: flex;
-			align-items: center;
-			gap: var(--gap--small);
-
-			&::before {
-				content: attr(data-label);
-				display: block;
-				flex: 0 0 auto;
-				font-weight: 600;
-				text-align: right;
-				width: 8ch;
-				font-size: var(--size-1);
-			} */
+			&:empty {
+				display: none;
+			}
 		}
 	}
 

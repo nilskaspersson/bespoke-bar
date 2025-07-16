@@ -15,8 +15,8 @@
 		--w: var(--control-width);
 		--h: var(--control-height);
 
-		max-width: 100%;
-		width: var(--w);
+		width: 100%;
+		max-width: var(--w);
 		min-width: var(--control-min-width);
 
 		transition-property: border-color, outline-color;
@@ -93,7 +93,7 @@
 			}
 
 			&.rounded {
-				--r: var(--radius--full);
+				--r: calc(var(--h) / 2);
 			}
 		}
 
