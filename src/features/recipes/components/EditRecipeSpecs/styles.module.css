@@ -1,29 +1,123 @@
 @layer feature {
-	.item {
-		--gap: var(--space-1);
+	.fieldset {
+		--g: var(--space-1);
+		--h: var(--space-7);
+		max-width: var(--control-width--large);
+	}
 
+	.item {
+		display: grid;
+		gap: var(--gap--tiny);
+	}
+
+	.line {
 		display: flex;
-		gap: var(--gap);
-		padding: var(--gap);
-		border-radius: var(--radius--full);
+		align-items: start;
+		gap: var(--g);
+	}
+
+	.inner {
+		/**
+		 * This is super brittle. How can we detect if the node is wrapping?
+		 */
+		@media (min-width: 526px) {
+			display: flex;
+		}
+	}
+
+	.meta {
+		display: flex;
+	}
+
+	.card {
+		flex: 1 1 auto;
+		padding: var(--g);
+		min-height: var(--h);
+		border-radius: calc(var(--h) / 2);
 		background-color: var(--mauve-5);
 	}
 
 	.unit {
 		min-width: 0;
-		width: 9ch;
-		flex: 0 0 auto;
+		width: 12ch;
+		flex: 1 1 auto;
 		text-align: center;
+		margin-left: -1px;
+
+		@media (min-width: 526px) {
+			margin-right: -1px;
+		}
 	}
 
 	.ingredient {
-		flex: 0 1 fit-content;
+		flex: 1 1 auto;
+
+		@media (max-width: 525px) {
+			margin-top: -1px;
+		}
 	}
 
-	.remove {
-		position: absolute;
-		left: calc(100% + var(--gap));
+	.quantity {
+		flex: 1 0 auto;
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+
+		@media (max-width: 525px) {
+			border-bottom-left-radius: 0;
+		}
+	}
+
+	.unitButton {
+		@media (min-width: 526px) {
+			border-radius: 0;
+		}
+
+		@media (max-width: 525px) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+
+	.ingredientInput {
+		@media (min-width: 526px) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+
+		@media (max-width: 525px) {
+			border-top-right-radius: 0;
+			border-top-left-radius: 0;
+		}
+	}
+
+	.ingredientPicker {
+		width: auto;
+		max-width: none;
+	}
+
+	.ingredientName {
+		word-break: break-all;
+	}
+
+	.actions {
+		display: flex;
+		align-items: center;
 		flex: 0 0 auto;
-		align-self: center;
+		height: var(--h);
+	}
+
+	.add {
+		margin-right: calc(var(--space-6) + var(--g));
+	}
+
+	.newInfo {
+		display: grid;
+		gap: var(--gap);
+		padding: var(--g) var(--gap--small);
+	}
+
+	.ingredientFields {
+		padding: var(--gap--tiny);
 	}
 }

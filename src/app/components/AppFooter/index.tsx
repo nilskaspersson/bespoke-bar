@@ -72,9 +72,17 @@ export function AppFooter({
 					</Grid>
 				</nav>
 
-				<Text size={1} light>
-					Copyright © {new Date().getFullYear()} Bespoke Bar
-				</Text>
+				<div>
+					<Text as="div" size={1} light>
+						Copyright © {new Date().getFullYear()} Bespoke Bar
+					</Text>
+
+					{process.env.VERCEL_GIT_COMMIT_SHA ? (
+						<Text as="div" size={1} light className={styles.commit} id="commit">
+							{process.env.VERCEL_GIT_COMMIT_SHA}
+						</Text>
+					) : null}
+				</div>
 			</Grid>
 		</footer>
 	);

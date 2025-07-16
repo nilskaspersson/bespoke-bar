@@ -2,29 +2,61 @@
 	.nav {
 		--label-offset: var(--space-4);
 		--inset: var(--space-2);
+		display: grid;
 	}
 
 	.list {
 		display: flex;
 		justify-content: center;
-		gap: var(--space-6);
 		background-color: var(--mauve-1);
 		border-top: 1px solid var(--mauve-6);
-		padding-top: var(--inset);
-		padding-bottom: calc(var(--inset) + var(--label-offset));
+		transition-property: background-color;
+		transition-duration: var(--transition-duration--short);
+	}
+
+	.item {
+		display: grid;
 	}
 
 	.label {
-		position: absolute;
-		inset: calc(100% + 2ex) 0 auto;
-		display: flex;
 		justify-content: center;
 		text-align: center;
-		color: var(--iris-11);
 		font-size: var(--size-0);
 	}
 
-	.button {
-		height: 2rem;
+	.link {
+		display: grid;
+		padding-block: var(--space-2);
+		place-items: center;
+		gap: var(--space-1);
+		aspect-ratio: 1 / 1;
+		width: var(--bar-navigation--height);
+		color: var(--mauve-11);
+		transition-property: color, background-color, font-weight;
+		contain: strict;
+		font-weight: 500;
+
+		&.isCurrent {
+			background-color: var(--iris-2);
+			color: var(--iris-11);
+		}
+
+		&:hover:not(.isCurrent) {
+			background-color: var(--mauve-2);
+			color: var(--mauve-12);
+		}
+
+		&[aria-disabled="true"] {
+			opacity: 0.5;
+		}
+	}
+
+	.icon {
+		display: block;
+		top: 0.1rem;
+
+		.isCurrent & {
+			fill: var(--iris-11);
+		}
 	}
 }

@@ -1,4 +1,4 @@
-@layer feature {
+@layer component {
 	.base {
 		display: flex;
 		gap: var(--space-1);
@@ -16,6 +16,7 @@
 		}
 
 		.input {
+			flex: 1 1 auto;
 			text-align: center;
 			width: 4ch;
 			align-self: stretch;

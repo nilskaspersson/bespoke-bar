@@ -51,7 +51,10 @@ export default async function EditIngredientPage({
 				<Heading level="h1">Edit ingredient</Heading>
 
 				<form action={formAction}>
-					<IngredientForm ingredient={ingredient} organisation={organisation} />
+					<IngredientForm
+						ingredient={ingredient}
+						currency={organisation.currency}
+					/>
 				</form>
 			</Grid>
 		</Container>

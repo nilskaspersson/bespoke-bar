@@ -1,5 +1,7 @@
 @layer layout {
 	.container {
+		display: grid;
+		gap: var(--gap--huge);
 		padding-bottom: var(--gap--huge);
 	}
 }

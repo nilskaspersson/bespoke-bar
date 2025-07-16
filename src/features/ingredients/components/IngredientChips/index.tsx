@@ -4,9 +4,11 @@ import { useContext } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
+import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
+import styles from "./styles.module.css";
 
 export function IngredientChips({
 	ingredient,
@@ -20,13 +22,20 @@ export function IngredientChips({
 
 	return (
 		<Flex gap={2} wrap justifyContent="center">
-			<Chip label={<Abv />}>
+			<Chip label={<Abv />} size={3} color="regular" className={styles.chip}>
 				{ingredient.abv ? percentageFormatter.format(ingredient.abv) : "-"}
 			</Chip>
 
-			<Chip label="Brand">{ingredient.brand ?? "-"}</Chip>
+			<Chip label="Brand" size={3} color="regular" className={styles.chip}>
+				{ingredient.brand ?? "-"}
+			</Chip>
 
-			<Chip label="Unit cost">
+			<Chip
+				label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType)}`}
+				size={3}
+				color="regular"
+				className={styles.chip}
+			>
 				{ingredient.unitCost && ingredient.measurementType
 					? formatIngredientUnitCost(
 							ingredient.unitCost,
@@ -35,7 +44,9 @@ export function IngredientChips({
 					: "-"}
 			</Chip>
 
-			<Chip label="Recipes">{recipesCount}</Chip>
+			<Chip label="Recipes" size={3} color="regular" className={styles.chip}>
+				{recipesCount}
+			</Chip>
 		</Flex>
 	);
 }

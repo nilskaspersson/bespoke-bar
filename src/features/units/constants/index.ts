@@ -138,3 +138,22 @@ export const BARTENDING_UNITS = new Set<BartendingUnits>([
 	"float",
 	"spray",
 ]);
+
+export const UNIT_TO_LABEL = new Map<Unit, string>([
+	["cl", "cl"],
+	["cup", "cup"],
+	["dl", "dl"],
+	["fl_oz", "fl oz"],
+	["l", "liter"],
+	["ml", "ml"],
+	["tbsp", "tbsp"],
+	["tsp", "tsp"],
+	["gal", "gal"],
+	["qt", "qt"],
+	["dash", "Dash"],
+	["barspoon", "Bar spoon"],
+	["rinse", "Rinse"],
+	["drop", "Drop"],
+	["float", "Float"],
+	["spray", "Spray"],
+]);

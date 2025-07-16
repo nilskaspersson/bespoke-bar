@@ -24,6 +24,8 @@
 
 		text-wrap: pretty;
 		line-height: var(--line-height);
+		transition-property: color;
+		transition-duration: var(--transition-duration--short);
 
 		&:not(.fullWidth) {
 			max-width: var(--line-length);

@@ -2,5 +2,6 @@
 	.range {
 		font-size: 1rem;
 		width: var(--control-width);
+		max-width: 100%;
 	}
 }

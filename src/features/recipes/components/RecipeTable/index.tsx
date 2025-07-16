@@ -15,10 +15,7 @@ import { getIngredientUrl } from "@/features/ingredients/utils";
 import { UserChip } from "@/features/organisation/components/UserChip";
 import type { UserIdMap } from "@/features/organisation/types";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
-import {
-	COCKTAIL_STYLE_TO_LABEL,
-	METHOD_TO_LABEL,
-} from "@/features/recipes/constants";
+import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
@@ -70,40 +67,32 @@ export function RecipeTable({
 					id: "specs",
 					header: "Specs",
 					enableSorting: false,
-					cell: (info) => (
-						<ul>
-							{info.row.original.specs.map((spec) => (
-								<li key={spec.id} className={styles.spec}>
-									{spec.quantity} {getFormattedUnit(spec.unit, spec.quantity)}{" "}
-									<Link
-										href={getIngredientUrl(spec.ingredient)}
-										prefetch={false}
-										className={styles.ingredient}
-										title={spec.ingredient.name}
-									>
-										{spec.ingredient.name}
-									</Link>
-								</li>
-							))}
-						</ul>
-					),
+					cell: (info) =>
+						info.row.original.specs.length > 0 ? (
+							<ul className={styles.specs}>
+								{info.row.original.specs.map((spec) => (
+									<li key={spec.id} className={styles.spec}>
+										{spec.quantity} {getFormattedUnit(spec.unit, spec.quantity)}{" "}
+										<Link
+											href={getIngredientUrl(spec.ingredient)}
+											prefetch={false}
+											className={styles.ingredient}
+											title={spec.ingredient.name}
+										>
+											{spec.ingredient.name}
+										</Link>
+									</li>
+								))}
+							</ul>
+						) : null,
 				},
 			),
 			columnHelper.accessor("style", {
 				header: "Style",
 				cell: (info) =>
 					info.row.original.style ? (
-						<Text size={2}>
+						<Text size={2} className={styles.hiddenSmall}>
 							{COCKTAIL_STYLE_TO_LABEL.get(info.row.original.style)}
-						</Text>
-					) : null,
-			}),
-			columnHelper.accessor("preparationMethod", {
-				header: "Method",
-				cell: (info) =>
-					info.row.original.preparationMethod ? (
-						<Text size={2}>
-							{METHOD_TO_LABEL.get(info.row.original.preparationMethod)}
 						</Text>
 					) : null,
 			}),

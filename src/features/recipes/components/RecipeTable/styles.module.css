@@ -11,11 +11,12 @@
 		}
 	}
 
+	.specs {
+		min-width: 20ch;
+	}
+
 	.spec {
 		font-size: var(--size-2);
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		overflow: hidden;
 	}
 
 	.ingredient {
@@ -23,6 +24,12 @@
 
 		&:hover {
 			color: var(--iris-11);
+		}
+	}
+
+	@container (width < 750px) {
+		.hiddenSmall {
+			display: none;
 		}
 	}
 }

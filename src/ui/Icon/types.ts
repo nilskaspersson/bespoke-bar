@@ -9,6 +9,7 @@ export type IconName =
 	| "arrow-right-to-bracket"
 	| "arrow-rotate-right"
 	| "arrow-up-right-from-square"
+	| "ban"
 	| "bars"
 	| "book"
 	| "bookmark-slash"

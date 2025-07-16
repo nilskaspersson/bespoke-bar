@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/style/noDescendingSpecificity: Disable broken rule */
 @layer base {
 	.reset {
 		font-family: inherit;
@@ -14,30 +15,12 @@
 		--w: var(--control-width);
 		--h: var(--control-height);
 
-		width: var(--w);
-		height: var(--h);
+		width: 100%;
+		max-width: var(--w);
 		min-width: var(--control-min-width);
-		max-width: 100%;
-		background-color: var(--mauve-2);
-		padding-inline: var(--control-inset);
-		border-radius: var(--r);
-		border: 1px solid var(--mauve-6);
-		outline: var(--space-0) solid transparent;
-		outline-offset: 0;
+
 		transition-property: border-color, outline-color;
 		transition-duration: var(--transition-duration);
-
-		&.regular {
-			--h: var(--control-height);
-		}
-
-		&.small {
-			--h: var(--control-height--small);
-		}
-
-		&.large {
-			--h: var(--control-height--large);
-		}
 
 		&:user-invalid {
 			border-color: var(--red-11);
@@ -47,20 +30,10 @@
 			}
 		}
 
-		&:not([aria-disabled="true"]):not(:user-invalid) {
-			&:hover {
-				border-color: var(--mauve-8);
-			}
-
-			&:focus,
-			&:focus-within {
-				outline-color: var(--iris-11);
-				border-color: var(--iris-11);
-			}
-		}
-
-		&[aria-disabled="true"] {
-			cursor: not-allowed;
+		&:hover,
+		&:focus,
+		&:focus-within {
+			z-index: 1;
 		}
 
 		&.fullWidth {
@@ -68,13 +41,75 @@
 		}
 
 		&.compact {
-			--h: var(--control-height--small);
 			--w: var(--control-width--small);
-			padding-inline: var(--control-inset--compact);
 		}
 
-		&.rounded {
-			--r: var(--radius--full);
+		&:not(.inline) {
+			height: var(--h);
+			background-color: var(--mauve-2);
+			padding-inline: var(--control-inset);
+			border-radius: var(--r);
+			border: 1px solid var(--mauve-6);
+			outline: var(--space-0) solid transparent;
+			outline-offset: 0;
+
+			&.regular {
+				--h: var(--control-height);
+			}
+
+			&.small {
+				--h: var(--control-height--small);
+			}
+
+			&.large {
+				--h: var(--control-height--large);
+			}
+
+			&[readonly] {
+				cursor: not-allowed;
+				color: var(--mauve-11);
+				background-color: var(--mauve-3);
+			}
+
+			&:not([aria-disabled="true"], [readonly], :user-invalid) {
+				&:hover {
+					border-color: var(--mauve-8);
+				}
+
+				&:focus,
+				&:focus-within {
+					outline-color: var(--iris-11);
+					border-color: var(--iris-11);
+				}
+			}
+
+			&[aria-disabled="true"] {
+				cursor: not-allowed;
+			}
+
+			&.compact {
+				--h: var(--control-height--small);
+				padding-inline: var(--control-inset--compact);
+			}
+
+			&.rounded {
+				--r: calc(var(--h) / 2);
+			}
+		}
+
+		&.inline {
+			border-bottom: 1px solid var(--mauve-8);
+
+			&:not([aria-disabled="true"]):not(:user-invalid) {
+				&:hover {
+					border-color: var(--mauve-10);
+				}
+
+				&:focus,
+				&:focus-within {
+					border-color: var(--iris-11);
+				}
+			}
 		}
 	}
 }

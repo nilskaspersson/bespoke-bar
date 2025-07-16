@@ -12,8 +12,8 @@
 	.button {
 		width: 100%;
 		text-align: left;
-		justify-content: flex-start;
 		cursor: text;
+		line-height: var(--line-height--compact);
 
 		&:not(.hasValue) {
 			color: var(--mauve-10);

@@ -1,9 +1,9 @@
 "use client";
 
 import { clsx } from "clsx";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
-import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -17,64 +17,68 @@ export function BarNavigation({
 	return (
 		<nav className={clsx(styles.nav, className)} {...props}>
 			<ul className={styles.list}>
-				<li>
-					<LinkButton
+				<li className={styles.item}>
+					<Link
 						href="/bar"
-						icon
-						color="accent"
-						variant={pathname === "/bar" ? "solid" : "outline"}
 						inert={pathname === "/bar"}
-						className={styles.button}
+						className={clsx(styles.link, {
+							[styles.isCurrent]: pathname === "/bar",
+						})}
 					>
-						<Icon name="duotone-shop" size={3} />
+						<Icon name="duotone-shop" size={5} className={styles.icon} />
 
 						<Text className={styles.label}>Overview</Text>
-					</LinkButton>
+					</Link>
 				</li>
 
-				<li>
-					<LinkButton
+				<li className={styles.item}>
+					<Link
 						href="/bar/lists"
-						icon
-						color="accent"
-						variant={pathname === "/bar/lists" ? "solid" : "outline"}
-						inert={pathname === "/bar/lists"}
-						className={styles.button}
+						// inert={pathname === "/bar/lists"}
+						inert
+						aria-disabled
+						className={clsx(styles.link, {
+							[styles.isCurrent]: pathname.startsWith("/bar/lists"),
+						})}
 					>
-						<Icon name="duotone-memo-pad" size={3} />
+						<Icon name="duotone-memo-pad" size={5} className={styles.icon} />
 
-						<Text className={styles.label}>Lists</Text>
-					</LinkButton>
+						<Text className={styles.label}>
+							<s>Lists</s>
+						</Text>
+					</Link>
 				</li>
 
-				<li>
-					<LinkButton
+				<li className={styles.item}>
+					<Link
 						href="/bar/recipes"
-						icon
-						color="accent"
-						variant={pathname === "/bar/recipes" ? "solid" : "outline"}
 						inert={pathname === "/bar/recipes"}
-						className={styles.button}
+						className={clsx(styles.link, {
+							[styles.isCurrent]: pathname.startsWith("/bar/recipes"),
+						})}
 					>
-						<Icon name="duotone-martini-glass" size={3} />
+						<Icon
+							name="duotone-martini-glass"
+							size={5}
+							className={styles.icon}
+						/>
 
 						<Text className={styles.label}>Recipes</Text>
-					</LinkButton>
+					</Link>
 				</li>
 
-				<li>
-					<LinkButton
+				<li className={styles.item}>
+					<Link
 						href="/bar/ingredients"
-						icon
-						color="accent"
-						variant={pathname === "/bar/ingredients" ? "solid" : "outline"}
 						inert={pathname === "/bar/ingredients"}
-						className={styles.button}
+						className={clsx(styles.link, {
+							[styles.isCurrent]: pathname.startsWith("/bar/ingredients"),
+						})}
 					>
-						<Icon name="duotone-wine-bottle" size={3} />
+						<Icon name="duotone-wine-bottle" size={5} className={styles.icon} />
 
 						<Text className={styles.label}>Ingredients</Text>
-					</LinkButton>
+					</Link>
 				</li>
 			</ul>
 		</nav>

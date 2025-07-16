@@ -1,8 +1,13 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { DialogHTMLAttributes } from "react";
+import type { DialogHTMLAttributes, KeyboardEvent, MouseEvent } from "react";
+import { handleKey } from "@/utils/handleKey";
 import styles from "./styles.module.css";
+
+type DialogEvent =
+	| MouseEvent<HTMLDialogElement>
+	| KeyboardEvent<HTMLDialogElement>;
 
 export function Dialog({
 	children,
@@ -13,6 +18,15 @@ export function Dialog({
 	onClose?: () => void;
 	ref: React.RefObject<HTMLDialogElement | null>;
 }) {
+	const handleClose = (event: DialogEvent) => {
+		if (
+			event.target instanceof HTMLDialogElement &&
+			event.target.nodeName === "DIALOG"
+		) {
+			event.target.close("dismiss");
+		}
+	};
+
 	return (
 		<dialog
 			ref={ref}
@@ -20,20 +34,8 @@ export function Dialog({
 			/**
 			 * Close on backdrop clicks
 			 */
-			onClick={({ target: dialog }) => {
-				if (
-					dialog instanceof HTMLDialogElement &&
-					dialog.nodeName === "DIALOG"
-				) {
-					dialog.close("dismiss");
-				}
-			}}
-			onKeyDown={(event) => {
-				if (event.key === "Escape") {
-					event.preventDefault();
-					ref.current?.close();
-				}
-			}}
+			onClick={handleClose}
+			onKeyDown={handleKey([["Escape", handleClose]])}
 			{...props}
 		>
 			{children}

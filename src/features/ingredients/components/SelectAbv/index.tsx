@@ -13,10 +13,11 @@ export function SelectAbv({
 
 	return (
 		<TextField
-			{...props}
 			defaultValue={
 				ingredient?.abv ? percentageFormatter.format(ingredient.abv) : undefined
 			}
+			helperText="Percentage value from 0-100%. Up to two decimal places."
+			{...props}
 		/>
 	);
 }

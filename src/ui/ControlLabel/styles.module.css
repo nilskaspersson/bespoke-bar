@@ -3,12 +3,18 @@
 		display: flex;
 		gap: var(--space-2);
 		flex-direction: column;
-		align-items: flex-start;
+		align-items: stretch;
+
+		&.inline {
+			flex-direction: row;
+			align-items: baseline;
+		}
 	}
 
 	.label {
 		color: var(--mauve-12);
 		font-variant-numeric: tabular-nums;
+		align-self: start;
 
 		.base:has(:user-invalid) > & > .text {
 			text-decoration: underline wavy var(--red-9);

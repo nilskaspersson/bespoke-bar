@@ -19,6 +19,10 @@ export const FormatterContext = createContext({
 	quantityFormatter: createQuantityFormatter("en-GB"),
 	relativeTimeFormatter: createRelativeTimeFormatter("en-GB"),
 	volumeFormatter: createVolumeFormatter("en-GB"),
+	options: {
+		currency: "EUR",
+		locale: "en-GB",
+	},
 });
 
 export function FormatterContextProvider({
@@ -39,6 +43,10 @@ export function FormatterContextProvider({
 			quantityFormatter: createQuantityFormatter(locale),
 			relativeTimeFormatter: createRelativeTimeFormatter(locale),
 			volumeFormatter: createVolumeFormatter(locale),
+			options: {
+				currency,
+				locale,
+			},
 		}),
 		[currency, locale],
 	);

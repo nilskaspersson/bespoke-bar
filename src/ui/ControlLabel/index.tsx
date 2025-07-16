@@ -9,6 +9,7 @@ type Props = {
 	children: React.ReactNode;
 	required?: boolean;
 	htmlFor: string;
+	inline?: boolean;
 	id: string;
 } & ComponentProps<"label">;
 
@@ -19,10 +20,15 @@ export function ControlLabel({
 	required,
 	htmlFor,
 	id,
+	inline,
 	...props
 }: Props) {
 	return (
-		<div className={clsx(styles.base, className)}>
+		<div
+			className={clsx(styles.base, className, {
+				[styles.inline]: inline,
+			})}
+		>
 			{label ? (
 				<Text
 					{...props}

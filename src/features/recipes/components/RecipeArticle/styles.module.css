@@ -1,6 +1,7 @@
 @layer feature {
 	.article {
 		display: grid;
+		align-content: start;
 		container: article / inline-size;
 		gap: var(--gap--large);
 	}

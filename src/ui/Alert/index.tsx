@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import {
-	type ComponentPropsWithoutRef,
+	type ComponentProps,
 	type ReactNode,
 	useLayoutEffect,
 	useRef,
@@ -20,8 +20,9 @@ export function Alert({
 	className,
 	heading,
 	notice,
+	ref,
 	...props
-}: ComponentPropsWithoutRef<typeof Dialog> & {
+}: Partial<ComponentProps<typeof Dialog>> & {
 	actions?: ReactNode;
 	notice?: ReactNode;
 	heading?: ReactNode;
@@ -29,16 +30,18 @@ export function Alert({
 	const dialogRef = useRef<HTMLDialogElement>(null);
 
 	useLayoutEffect(() => {
-		if (dialogRef) {
-			/**
-			 * Dialogs must be opened with `showModal`, or they don't render ::backdrop
-			 */
-			dialogRef.current?.showModal();
+		/**
+		 * Dialogs must be opened with `showModal`, or they don't render ::backdrop.
+		 * Don't act if an external ref is provided, assume it's handled by the
+		 * implementing component.
+		 */
+		if (dialogRef.current && !ref) {
+			dialogRef.current.showModal();
 		}
-	}, []);
+	}, [ref]);
 
 	return (
-		<Dialog ref={dialogRef} {...props}>
+		<Dialog ref={ref ?? dialogRef} {...props}>
 			<Lightbox className={clsx(className, styles.lightbox)}>
 				<div
 					className={clsx(styles.contain, {

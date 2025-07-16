@@ -32,6 +32,8 @@
 		color: var(--mauve-11);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+		transition-property: background-color, color;
+		transition-duration: var(--transition-duration--short);
 	}
 
 	/**
@@ -109,10 +111,6 @@
 
 	abbr {
 		cursor: help;
-	}
-
-	:is(h1, h2, h3, h4, h5, h6) {
-		text-box: trim-both ex alphabetic;
 	}
 
 	::selection {

@@ -7,9 +7,11 @@
 		 * min-height to respect safe-area-inset-top
 		 */
 		min-height: var(--app-header--height);
-		background-color: var(--mauve-3);
 		border-bottom: 1px solid var(--mauve-5);
 		contain: strict;
+		background-color: var(--mauve-3);
+		transition-property: background-color;
+		transition-duration: var(--transition-duration--short);
 	}
 
 	.container {

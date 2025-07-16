@@ -86,6 +86,9 @@ export function extractIngredientsToCreate(
 			 * No spec ingredientId but a defined ingredient object + name = new ingredient
 			 */
 			if (!spec.ingredientId && spec.ingredient?.name) {
+				/**
+				 * Avoid creating the same ingredient twice, if used multiple times in the tx
+				 */
 				if (uniqueIngredientsToCreate.has(spec.ingredient.name)) {
 					return;
 				}

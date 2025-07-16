@@ -23,11 +23,13 @@ const getItemValue = (item: Option) => item.value;
 const itemToString = (item: Option | null) => item?.label ?? "";
 
 export function SelectCategory(
-	props: Partial<ComponentProps<typeof Combobox<Option>>>,
+	props: Omit<
+		ComponentProps<typeof Combobox<Option>>,
+		"items" | "itemToString" | "getItemValue" | "getItemLabel"
+	>,
 ) {
 	return (
 		<Combobox
-			name="category"
 			label="Category"
 			items={OPTIONS}
 			getItemLabel={getItemLabel}

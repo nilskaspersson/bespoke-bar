@@ -26,7 +26,7 @@ export function CreateIngredientForm({
 
 	return (
 		<form {...props} action={formAction}>
-			<IngredientForm organisation={organisation} />
+			<IngredientForm currency={organisation.currency} />
 		</form>
 	);
 }
