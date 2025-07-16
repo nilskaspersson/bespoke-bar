@@ -44,6 +44,7 @@
 	.link {
 		display: flex;
 		align-items: center;
+		gap: 0.33ch;
 
 		padding-inline: calc(var(--gap) / 2);
 		margin-bottom: -1px;
@@ -66,7 +67,11 @@
 			}
 		}
 
-		&:hover:not(.isActive) {
+		&[aria-disabled="true"] {
+			opacity: 0.5;
+		}
+
+		&:hover:not(.isActive, [aria-disabled="true"]) {
 			color: var(--iris-12);
 		}
 	}

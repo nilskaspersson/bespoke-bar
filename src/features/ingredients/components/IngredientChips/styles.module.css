@@ -1,0 +1,5 @@
+@layer component {
+	.chip {
+		padding: var(--gap--small) var(--gap);
+	}
+}

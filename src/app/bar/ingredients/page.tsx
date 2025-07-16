@@ -5,6 +5,7 @@ import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
+import { Icon } from "@/ui/Icon";
 import styles from "./page.module.css";
 
 export default async function IngredientsPage() {
@@ -28,6 +29,7 @@ export default async function IngredientsPage() {
 					size="small"
 				>
 					Create Ingredient
+					<Icon name="duotone-wine-bottle" />
 				</LinkButton>
 			</Flex>
 

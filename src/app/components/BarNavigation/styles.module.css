@@ -45,6 +45,10 @@
 			background-color: var(--mauve-2);
 			color: var(--mauve-12);
 		}
+
+		&[aria-disabled="true"] {
+			opacity: 0.5;
+		}
 	}
 
 	.icon {

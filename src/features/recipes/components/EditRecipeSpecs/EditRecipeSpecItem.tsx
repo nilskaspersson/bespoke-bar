@@ -147,10 +147,10 @@ export function EditRecipeSpecItem({
 					{isNewIngredient ? (
 						<details className={styles.newInfo}>
 							<Text as="summary" size={1} compact>
-								<span className={styles.ingredientName}>
+								<Text className={styles.ingredientName} heavy>
 									New ingredient: <b>{newIngredientName}</b>
-								</span>{" "}
-								<Chip size={0} color="accent">
+								</Text>{" "}
+								<Chip size={0} color="regular">
 									New
 								</Chip>
 							</Text>

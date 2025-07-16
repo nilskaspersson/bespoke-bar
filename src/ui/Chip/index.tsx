@@ -18,7 +18,7 @@ export function Chip({
 }) {
 	return (
 		<Text
-			as="div"
+			as="span"
 			className={clsx(styles.chip, styles[color], className)}
 			compact
 			size={size}

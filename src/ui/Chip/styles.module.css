@@ -14,28 +14,37 @@
 
 	.accent {
 		--c: var(--iris-12);
+		--lc: var(--iris-11);
 		--bgc: var(--iris-8);
 	}
 
-	.regular,
+	.regular {
+		--c: var(--iris-12);
+		--lc: var(--iris-11);
+		--bgc: var(--iris-2);
+	}
+
 	.light {
 		--c: var(--mauve-12);
+		--lc: var(--mauve-11);
 		--bgc: var(--mauve-8);
 	}
 
 	.red {
 		--c: var(--red-12);
+		--lc: var(--red-11);
 		--bgc: var(--red-8);
 	}
 
 	.heavy {
 		--c: var(--mauve-1);
+		--lc: var(--mauve-2);
 		--bgc: var(--mauve-12);
 	}
 
 	.label {
 		display: block;
-		font-size: 0.75em;
-		color: hsl(from var(--c) h s l / 0.8);
+		font-size: max(0.5em, 11px);
+		color: var(--lc);
 	}
 }

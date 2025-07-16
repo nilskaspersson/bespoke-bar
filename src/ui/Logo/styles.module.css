@@ -8,4 +8,8 @@
 			font-size: var(--size-5);
 		}
 	}
+
+	.beta {
+		vertical-align: super;
+	}
 }

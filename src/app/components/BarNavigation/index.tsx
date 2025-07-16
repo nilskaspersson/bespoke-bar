@@ -34,14 +34,18 @@ export function BarNavigation({
 				<li className={styles.item}>
 					<Link
 						href="/bar/lists"
-						inert={pathname === "/bar/lists"}
+						// inert={pathname === "/bar/lists"}
+						inert
+						aria-disabled
 						className={clsx(styles.link, {
 							[styles.isCurrent]: pathname.startsWith("/bar/lists"),
 						})}
 					>
 						<Icon name="duotone-memo-pad" size={5} className={styles.icon} />
 
-						<Text className={styles.label}>Lists</Text>
+						<Text className={styles.label}>
+							<s>Lists</s>
+						</Text>
 					</Link>
 				</li>
 

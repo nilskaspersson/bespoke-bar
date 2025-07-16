@@ -22,7 +22,7 @@ export default async function Layout({
 					size="small"
 				>
 					Create Recipe
-					<Icon name="pen" />
+					<Icon name="duotone-martini-glass" />
 				</LinkButton>
 			</header>
 
