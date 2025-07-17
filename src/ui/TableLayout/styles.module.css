@@ -5,6 +5,7 @@
 		grid-template-rows: 1fr auto;
 		width: 100%;
 		margin-inline: auto;
+		scroll-margin-top: var(--gap--small);
 	}
 
 	.search {
@@ -42,9 +43,15 @@
 		}
 	}
 
-	.status {
+	.statusContainer {
+		display: flex;
+		justify-content: center;
+		contain: inline-size;
+		padding-inline: var(--gap);
 		text-align: center;
-		justify-self: center;
+	}
+
+	.status {
 		padding: var(--space-1) var(--space-2);
 		background-color: var(--mauve-2);
 		border-radius: var(--radius--full);
@@ -52,6 +59,5 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		max-width: 100%;
 	}
 }

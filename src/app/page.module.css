@@ -38,4 +38,11 @@
 	.icon {
 		fill: var(--bgc);
 	}
+
+	.actions {
+		display: flex;
+		justify-content: flex-end;
+		flex: 1 0 auto;
+		place-self: flex-end;
+	}
 }

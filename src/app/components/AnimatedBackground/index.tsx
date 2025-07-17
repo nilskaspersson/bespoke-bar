@@ -12,9 +12,9 @@ export function AnimatedBackground({
 			aria-hidden="true"
 			{...props}
 		>
-			<div className={clsx(styles.bgA, styles.bg)} />
-			<div className={clsx(styles.bgB, styles.bg)} />
-			<div className={clsx(styles.bgC, styles.bg)} />
+			<div className={clsx(styles.bg, styles.back)} />
+			<div className={clsx(styles.bg, styles.middle)} />
+			<div className={clsx(styles.bg, styles.front)} />
 		</div>
 	);
 }

@@ -18,7 +18,7 @@ export default async function LandingPage() {
 					<Icon name="glass-citrus" size={5} className={styles.icon} />
 				</Flex>
 
-				<Flex gap={6} justifyContent="space-between" alignItems="flex-end">
+				<Flex gap={5} justifyContent="space-between" wrap>
 					<Grid as="header" gap={4}>
 						<Heading level="h2" size={8} className={styles.heading}>
 							Hello!
@@ -31,7 +31,7 @@ export default async function LandingPage() {
 						</Text>
 					</Grid>
 
-					<div>
+					<div className={styles.actions}>
 						<LinkButton href="/bar" variant="outline" color="heavy">
 							To the bar <Icon name="arrow-right" size={4} />
 						</LinkButton>

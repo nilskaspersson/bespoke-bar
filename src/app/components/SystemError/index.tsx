@@ -1,4 +1,5 @@
 import { Container } from "@/ui/Container";
+import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -10,17 +11,23 @@ export function SystemError(props: {
 	return (
 		<Container className={styles.base}>
 			<div className={styles.container}>
-				<Text as="h1" compact align="center" heavy weight={900}>
-					<Text size={9} as="div" compact>
-						{props.code}
-					</Text>
-
-					<Text size={6} as="div" compact>
-						{props.message}
-					</Text>
-				</Text>
+				<Heading level="h1" size={9}>
+					{props.code}
+				</Heading>
 
 				{props.children}
+
+				{props.message ? (
+					<details className={styles.details}>
+						<Text as="summary" compact>
+							Show error details
+						</Text>
+
+						<Text as="div" compact>
+							{props.message}
+						</Text>
+					</details>
+				) : null}
 			</div>
 		</Container>
 	);

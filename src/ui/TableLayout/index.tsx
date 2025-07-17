@@ -1,6 +1,6 @@
 import type { Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
-import { type ComponentProps, useRef } from "react";
+import { type ComponentPropsWithRef, useRef } from "react";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -18,12 +18,13 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 	searchPlaceholder,
 	disableSearch,
 	...props
-}: ComponentProps<"section"> & {
+}: ComponentPropsWithRef<"section"> & {
 	table: Table<T>;
 	searchPlaceholder?: string;
 	disableSearch?: boolean;
 }) {
 	const formRef = useRef<HTMLFormElement>(null);
+	const baseRef = useRef<HTMLDivElement>(null);
 
 	const hasActiveFilter = Boolean(table.getState().globalFilter);
 	const isFilteredEmpty =
@@ -37,7 +38,7 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 	};
 
 	return (
-		<section className={clsx(className, styles.base)} {...props}>
+		<section ref={baseRef} className={clsx(className, styles.base)} {...props}>
 			<Grid gap={3}>
 				{!isFilteredEmpty ? (
 					children
@@ -65,15 +66,26 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 
 			<aside className={styles.sticky}>
 				{hasActiveFilter ? (
-					<Text as="div" size={0} compact className={styles.status} heavy>
-						{table.getRowCount()} {table.getRowCount() === 1 ? "row" : "rows"}{" "}
-						matching "{table.getState().globalFilter}"
-					</Text>
+					<div className={styles.statusContainer}>
+						<Text as="div" size={0} compact className={styles.status} heavy>
+							{table.getRowCount()} {table.getRowCount() === 1 ? "row" : "rows"}{" "}
+							matching "{table.getState().globalFilter}"
+						</Text>
+					</div>
 				) : null}
 
 				{!disableSearch ? (
 					<Lightbox rounded className={styles.search} forceTheme="light">
-						<form ref={formRef}>
+						<form
+							ref={formRef}
+							onSubmit={(e) => {
+								e.preventDefault();
+								baseRef.current?.scrollIntoView({
+									behavior: "smooth",
+									block: "start",
+								});
+							}}
+						>
 							<Input
 								type="search"
 								rounded
