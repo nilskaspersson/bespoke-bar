@@ -5,9 +5,27 @@ const PATTERN_INT_INPUT = /^\d{1,3}$/;
 const PATTERN_NUMERIC_INPUT = /^(\d+\.?\d*|\.\d+)$/;
 
 export const percentageToRatioSchema = z
-	.union([z.string(), z.null(), z.undefined()])
+	.union([z.string(), z.number(), z.null(), z.undefined()])
 	.transform((input, ctx) => {
-		if (!input || typeof input !== "string") {
+		if (!input && input !== 0) {
+			return null;
+		}
+
+		if (typeof input === "number") {
+			if (input >= 0 && input <= 1) {
+				return input;
+			}
+
+			ctx.addIssue({
+				code: "custom",
+				message: "Percentage must be between 0 and 100",
+				input,
+			});
+
+			return z.NEVER;
+		}
+
+		if (typeof input !== "string") {
 			return null;
 		}
 
