@@ -1,5 +1,6 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { BarNavigation } from "@/app/components/BarNavigation";
 import { Providers } from "@/app/components/Providers";
 import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
@@ -19,6 +20,10 @@ export default async function Layout({
 	}
 
 	const organisation = await getOrCreateLocalOrganisation();
+
+	if (!organisation) {
+		return redirect("/bar/create");
+	}
 
 	return (
 		<>
