@@ -8,6 +8,10 @@
 	.container {
 		display: grid;
 		place-items: center;
-		gap: var(--space-6);
+		gap: var(--gap);
+	}
+
+	.details {
+		margin-top: var(--gap--large);
 	}
 }

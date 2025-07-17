@@ -14,7 +14,7 @@ export default function ErrorPage({
 }) {
 	return (
 		<SystemError code={500} message={error.message}>
-			<Text>An unexpected error occurred.</Text>
+			<Text as="p">An unexpected error occurred.</Text>
 
 			<Button variant="solid" color="heavy" onClick={reset}>
 				Refresh
