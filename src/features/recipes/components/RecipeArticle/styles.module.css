@@ -1,13 +1,15 @@
 @layer feature {
 	.article {
+		--g: var(--gap--large);
+
 		display: grid;
 		align-content: start;
 		container: article / inline-size;
-		gap: var(--gap--large);
+		gap: var(--g);
 	}
 
 	.header {
-		padding-top: var(--app-inset);
+		padding-block: calc(var(--g) + var(--gap--large)) var(--gap--large);
 	}
 
 	.author {
