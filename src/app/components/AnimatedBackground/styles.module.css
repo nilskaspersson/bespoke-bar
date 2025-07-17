@@ -10,46 +10,43 @@
 		position: absolute;
 		filter: blur(60px);
 		opacity: 0.75;
+		pointer-events: none;
 	}
 
-	.bgA {
-		border-radius: 100%;
+	.back,
+	.front {
+		border-radius: 50%;
+		animation: aura 30s linear infinite;
+		transform: rotate(0) translate(20%) rotate(0);
+	}
+
+	.back {
 		width: 250%;
 		height: 100%;
 		background-color: var(--iris-9);
 		left: -25%;
 		top: -25%;
-		animation: fly 30s linear infinite;
-		transform: rotate(0) translate(20%) rotate(0);
 	}
 
-	.bgB {
+	.middle {
 		height: 70%;
 		bottom: -20%;
 		inset-inline: -20%;
 		background-color: var(--iris-9);
 	}
 
-	.bgC {
-		border-radius: 100%;
+	.front {
 		width: 80%;
 		height: 120%;
 		bottom: -20%;
 		right: -25%;
 		background-color: var(--iris-4);
-		animation: flyPlus 25s linear infinite;
-		transform: rotate(0) translate(20%) rotate(0);
+		animation-direction: reverse;
 	}
 
-	@keyframes fly {
+	@keyframes aura {
 		100% {
-			transform: translate(20%) rotate(-1turn);
-		}
-	}
-
-	@keyframes flyPlus {
-		100% {
-			transform: rotate(-1turn) translate(20%) rotate(1turn);
+			transform: rotate(1turn) translate(20%) rotate(-1turn);
 		}
 	}
 }
