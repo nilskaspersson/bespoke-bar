@@ -1,10 +1,26 @@
+import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { forbidden, redirect } from "next/navigation";
 import { db } from "@/db";
 import { OrganisationsTable } from "@/db/schema/organisations";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function getOrCreateLocalOrganisation() {
-	const { userId, orgId } = await authOrForbidden();
+	const { userId, orgId } = await auth();
+
+	/**
+	 * No user, no org.
+	 */
+	if (!userId) {
+		forbidden();
+	}
+
+	/**
+	 * If there's no Clerk org id, we can't create a local org. Return null, then
+	 * implementing component can decide what to do.
+	 */
+	if (!orgId) {
+		redirect("/bar/create");
+	}
 
 	const [existingOrganisation] = await db
 		.select()

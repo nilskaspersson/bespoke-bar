@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { ThemePicker } from "@/app/components/ThemePicker";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -72,13 +72,21 @@ export function AppFooter({
 					</Grid>
 				</nav>
 
+				<ThemePicker />
+
 				<div>
 					<Text as="div" size={1} light>
 						Copyright © {new Date().getFullYear()} Bespoke Bar
 					</Text>
 
 					{process.env.VERCEL_GIT_COMMIT_SHA ? (
-						<Text as="div" size={1} light className={styles.commit} id="commit">
+						<Text
+							as="div"
+							size={1}
+							className={styles.commit}
+							id="commit"
+							aria-hidden="true"
+						>
 							{process.env.VERCEL_GIT_COMMIT_SHA}
 						</Text>
 					) : null}

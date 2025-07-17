@@ -8,6 +8,7 @@
 @layer composition {
 	.footer {
 		background-color: var(--mauve-2);
+		color: var(--mauve-10);
 		border-top: 1px solid var(--mauve-6);
 		padding-right: env(safe-area-inset-right);
 		padding-left: env(safe-area-inset-left);
@@ -21,14 +22,22 @@
 	.nav {
 		display: flex;
 		gap: var(--gap--huge);
+
+		a {
+			&:hover,
+			&:focus {
+				color: var(--mauve-12);
+			}
+		}
 	}
 
 	.commit {
 		user-select: all;
 		cursor: text;
+		word-break: break-all;
 
 		&:not(:hover) {
-			color: var(--mauve-6);
+			color: var(--mauve-7);
 		}
 	}
 }

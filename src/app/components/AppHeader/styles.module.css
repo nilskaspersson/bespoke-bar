@@ -12,6 +12,13 @@
 		background-color: var(--mauve-3);
 		transition-property: background-color;
 		transition-duration: var(--transition-duration--short);
+
+		&.overlay {
+			position: absolute;
+			inset: 0 0 auto;
+			z-index: var(--z-navigation);
+			background-color: hsl(from var(--mauve-3) h s l / 0.5);
+		}
 	}
 
 	.container {

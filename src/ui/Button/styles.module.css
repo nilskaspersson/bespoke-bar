@@ -171,7 +171,6 @@
 	.outline {
 		border: 1px solid var(--button-color);
 		color: var(--button-color);
-		background-color: hsl(from var(--button-color) h s l / 10%);
 
 		&.light {
 			color: hsl(from var(--button-color) h s var(--text-lightness));

@@ -3,6 +3,7 @@
 		--label-offset: var(--space-4);
 		--inset: var(--space-2);
 		display: grid;
+		contain: strict;
 	}
 
 	.list {
@@ -32,13 +33,26 @@
 		aspect-ratio: 1 / 1;
 		width: var(--bar-navigation--height);
 		color: var(--mauve-11);
-		transition-property: color, background-color, font-weight;
-		contain: strict;
+		transition-property: color, background-color;
 		font-weight: 500;
 
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			inset: auto 0 100%;
+			height: 1px;
+			transition-property: background-color;
+			transition-duration: var(--transition-duration);
+		}
+
 		&.isCurrent {
-			background-color: var(--iris-2);
+			background-color: var(--iris-3);
 			color: var(--iris-11);
+
+			&::before {
+				background-color: var(--iris-6);
+			}
 		}
 
 		&:hover:not(.isCurrent) {

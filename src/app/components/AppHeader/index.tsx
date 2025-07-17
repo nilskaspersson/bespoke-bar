@@ -7,9 +7,9 @@ import {
 } from "@clerk/nextjs";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import { ThemePicker } from "@/app/components/ThemePicker";
 import { Button } from "@/ui/Button";
 import { Logo } from "@/ui/Logo";
+import { HeaderBar } from "./HeaderBar";
 import styles from "./styles.module.css";
 
 export function AppHeader({
@@ -17,13 +17,11 @@ export function AppHeader({
 	...props
 }: Omit<ComponentProps<"header">, "children">) {
 	return (
-		<header className={clsx(styles.header, className)} {...props}>
+		<HeaderBar className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>
 				<Logo />
 
 				<div className={styles.grid}>
-					<ThemePicker />
-
 					<SignedOut>
 						<SignUpButton mode="modal">
 							<Button variant="ghost" size="tiny">
@@ -43,6 +41,6 @@ export function AppHeader({
 					</SignedIn>
 				</div>
 			</div>
-		</header>
+		</HeaderBar>
 	);
 }

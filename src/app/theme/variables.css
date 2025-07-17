@@ -111,6 +111,7 @@
 	--radius: 6px;
 	--radius--small: calc(var(--radius) / 2);
 	--radius--large: calc(var(--radius) * 2);
+	--radius--huge: calc(var(--radius) * 4);
 	--radius--full: 9999px;
 	--shine: oklch(100% 0 0 / 0.075);
 
