@@ -5,6 +5,7 @@
 		grid-template-rows: 1fr auto;
 		width: 100%;
 		margin-inline: auto;
+		scroll-margin-top: var(--gap--small);
 	}
 
 	.search {
