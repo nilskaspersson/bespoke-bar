@@ -34,13 +34,13 @@ export async function RecipeArticle({
 					{getFullName(author) ?? <i>{FALLBACK_USER_NAME}</i>},{" "}
 					<Time date={recipe.createdAt} relativeThreshold={0} />
 				</Text>
-			</header>
 
-			{recipe.description ? (
-				<Text as="p" heavy serif>
-					{recipe.description}
-				</Text>
-			) : null}
+				{recipe.description ? (
+					<Text as="p" heavy serif className={styles.description}>
+						{recipe.description}
+					</Text>
+				) : null}
+			</header>
 
 			<RecipeInfo recipe={recipe}>
 				<RecipeTools recipe={recipe} className={styles.tools} />

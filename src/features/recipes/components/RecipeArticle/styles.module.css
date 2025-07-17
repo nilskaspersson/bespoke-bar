@@ -3,13 +3,17 @@
 		--g: var(--gap--large);
 
 		display: grid;
-		align-content: start;
+		grid-template-rows: 1fr auto;
 		container: article / inline-size;
 		gap: var(--g);
 	}
 
 	.header {
 		padding-block: calc(var(--g) + var(--gap--large)) var(--gap--large);
+	}
+
+	.description {
+		margin-top: var(--gap--large);
 	}
 
 	.author {
