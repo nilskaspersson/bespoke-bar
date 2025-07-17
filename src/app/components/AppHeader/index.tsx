@@ -23,17 +23,17 @@ export function AppHeader({
 
 				<div className={styles.grid}>
 					<SignedOut>
-						<SignUpButton mode="modal">
-							<Button variant="ghost" size="tiny">
-								Sign up
-							</Button>
-						</SignUpButton>
-
 						<SignInButton mode="modal">
-							<Button variant="solid" size="tiny" color="heavy">
+							<Button variant="ghost" size="tiny">
 								Sign in
 							</Button>
 						</SignInButton>
+
+						<SignUpButton mode="modal">
+							<Button variant="solid" size="tiny" color="heavy">
+								Sign up
+							</Button>
+						</SignUpButton>
 					</SignedOut>
 
 					<SignedIn>
