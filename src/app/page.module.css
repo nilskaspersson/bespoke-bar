@@ -1,17 +1,41 @@
 @layer layout {
-	.main {
-		display: grid;
-		place-items: center;
+	.base {
+		padding-top: var(--app-header--height);
 	}
 
 	.content {
+		--bgc: hsl(from var(--mauve-2) h s l / 0.85);
+		color: var(--mauve-12);
 		display: grid;
-		text-align: center;
-		gap: var(--space-8);
+		gap: var(--gap);
+		grid-area: content;
+		background-color: var(--bgc);
+		border-radius: var(--radius--huge);
+		padding: var(--gap--large);
+		box-shadow: var(--shadow--high);
+		transition-property: background-color, color;
+		transition-duration: var(--transition-duration);
 	}
 
 	.heading {
-		text-align: center;
-		font-size: var(--size-9);
+		color: inherit;
+	}
+
+	.divider {
+		max-width: 100%;
+	}
+
+	.nav {
+		display: grid;
+		gap: var(--gap--small);
+	}
+
+	.icons {
+		position: absolute;
+		inset: auto var(--space-8) 100% auto;
+	}
+
+	.icon {
+		fill: var(--bgc);
 	}
 }

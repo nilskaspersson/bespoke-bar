@@ -9,6 +9,7 @@ export type TextProps<E extends ElementType> = {
 	align?: "center" | "left" | "right";
 	as?: E;
 	asChild?: boolean;
+	balance?: boolean;
 	className?: string;
 	compact?: boolean;
 	fullWidth?: boolean;
@@ -26,6 +27,7 @@ export function Text<E extends ElementType = "span">({
 	align,
 	as = "span",
 	asChild,
+	balance,
 	children,
 	compact,
 	fullWidth,
@@ -52,6 +54,7 @@ export function Text<E extends ElementType = "span">({
 				[styles.truncate]: truncate,
 				[styles.fullWidth]: fullWidth,
 				[styles.list]: list,
+				[styles.balance]: balance,
 			}),
 			style: mergeStyleSources(
 				slotProps.style,

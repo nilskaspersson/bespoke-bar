@@ -1,0 +1,46 @@
+@layer composition {
+	.main {
+		display: grid;
+		grid-template:
+			"hero" 1fr
+			"content" auto;
+		min-height: 100dvh;
+		padding: var(--gap);
+
+		@media (min-width: 600px) {
+			padding: var(--gap--large);
+		}
+	}
+
+	.hero {
+		display: grid;
+		align-items: center;
+		grid-area: hero;
+		padding-block: var(--gap--huge);
+	}
+
+	.content {
+		grid-area: content;
+	}
+
+	.tagline {
+		font-weight: 500;
+	}
+
+	.lower {
+		color: var(--iris-11);
+	}
+
+	.heading {
+		max-width: 20ch;
+		text-wrap: balance;
+		font-weight: 300;
+		color: var(--iris-12);
+		font-size: var(--size-8);
+		line-height: 1;
+
+		@media (min-width: 600px) {
+			font-size: var(--size-9);
+		}
+	}
+}

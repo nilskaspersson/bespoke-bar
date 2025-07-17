@@ -1,27 +1,43 @@
+import { LandingPageHero } from "@/app/components/LandingPageHero";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
-import { GradientText } from "@/ui/GradientText";
+import { Flex } from "@/ui/Flex";
+import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+import { Text } from "@/ui/Text";
 import styles from "./page.module.css";
 
-export default async function Home() {
+export default async function LandingPage() {
 	return (
-		<Container as="article" className={styles.main}>
-			<div className={styles.content}>
-				<Heading level="h1" className={styles.heading}>
-					Mise en place,
-					<br />
-					<GradientText>beyond your bar</GradientText>
-				</Heading>
+		<LandingPageHero className={styles.base}>
+			<Container className={styles.content} as="section">
+				<Flex gap={2} aria-hidden="true" className={styles.icons}>
+					<Icon name="wine-glass" size={5} className={styles.icon} />
+					<Icon name="martini-glass" size={5} className={styles.icon} />
+					<Icon name="glass-citrus" size={5} className={styles.icon} />
+				</Flex>
 
-				<div>
-					<LinkButton href="/bar" variant="outline" color="heavy" size="large">
-						Get started
-						<Icon name="martini-glass" size={3} />
-					</LinkButton>
-				</div>
-			</div>
-		</Container>
+				<Flex gap={6} justifyContent="space-between" alignItems="flex-end">
+					<Grid as="header" gap={4}>
+						<Heading level="h2" size={8} className={styles.heading}>
+							Hello!
+						</Heading>
+
+						<Text as="p" balance>
+							Bespoke Bar has <strong>tools for cocktail recipes.</strong>{" "}
+							Create, calculate, and collaborate on recipes and lists with your
+							team.
+						</Text>
+					</Grid>
+
+					<div>
+						<LinkButton href="/bar" variant="outline" color="heavy">
+							To the bar <Icon name="arrow-right" size={4} />
+						</LinkButton>
+					</div>
+				</Flex>
+			</Container>
+		</LandingPageHero>
 	);
 }

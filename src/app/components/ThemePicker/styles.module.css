@@ -13,6 +13,7 @@
 		gap: 2px;
 		padding: 2px;
 		transition: border-color var(--transition-duration);
+		width: fit-content;
 
 		&:has(input:focus-visible) {
 			outline: 2px solid var(--iris-11);

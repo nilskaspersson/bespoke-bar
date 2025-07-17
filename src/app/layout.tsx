@@ -37,9 +37,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 				<ThemeProvider>
 					<AuthProvider>
 						<AppHeader className={styles.header} />
-
 						<main className={styles.main}>{children}</main>
-
 						<AppFooter className={styles.footer} />
 					</AuthProvider>
 				</ThemeProvider>

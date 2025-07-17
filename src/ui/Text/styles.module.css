@@ -73,6 +73,10 @@
 		overflow: hidden;
 	}
 
+	.balance {
+		text-wrap: balance;
+	}
+
 	.compact {
 		line-height: var(--line-height--compact);
 	}

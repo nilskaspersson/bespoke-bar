@@ -4,6 +4,7 @@ import { useTheme } from "next-themes";
 import { type ChangeEventHandler, useEffect, useState } from "react";
 import { Icon } from "@/ui/Icon";
 import type { IconName } from "@/ui/Icon/types";
+import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 const THEME_OPTIONS = new Map<string, { icon: IconName; label: string }>([
@@ -27,7 +28,9 @@ export function ThemePicker() {
 
 	return (
 		<fieldset className={styles.fieldset}>
-			<legend className="sr-only">Choose theme</legend>
+			<Text as="legend" size={2} weight={500} className="sr-only">
+				Choose theme
+			</Text>
 
 			<div
 				role="radiogroup"
