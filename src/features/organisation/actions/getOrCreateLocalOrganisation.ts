@@ -1,6 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { forbidden } from "next/navigation";
+import { forbidden, redirect } from "next/navigation";
 import { db } from "@/db";
 import { OrganisationsTable } from "@/db/schema/organisations";
 
@@ -19,7 +19,7 @@ export async function getOrCreateLocalOrganisation() {
 	 * implementing component can decide what to do.
 	 */
 	if (!orgId) {
-		return null;
+		redirect("/bar/create");
 	}
 
 	const [existingOrganisation] = await db
