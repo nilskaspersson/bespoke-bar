@@ -1,6 +1,12 @@
 "use client";
 
-import { type ReactNode, useContext, useDeferredValue, useState } from "react";
+import {
+	type ReactNode,
+	useContext,
+	useDeferredValue,
+	useId,
+	useState,
+} from "react";
 import z from "zod/v4";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";
@@ -10,6 +16,7 @@ import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
+import { ControlLabel } from "@/ui/ControlLabel";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -30,6 +37,7 @@ export function RecipeInfo<T extends BaseRecipe>({
 
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
+	const servingsId = useId();
 
 	const [withConversionSystem, setWithConversionSystem] =
 		useState<UnitSystems | null>(null);
@@ -88,46 +96,45 @@ export function RecipeInfo<T extends BaseRecipe>({
 					/>
 
 					<div className={styles.servings}>
-						<Text size={2} compact heavy as="div">
-							Servings:
-						</Text>
+						<ControlLabel label="Servings" htmlFor={servingsId}>
+							<Flex gap={1} alignItems="center">
+								{times(4).map((i) => (
+									<Button
+										key={i}
+										size="tiny"
+										icon
+										variant={deferredServings === i + 1 ? "solid" : "outline"}
+										color={deferredServings === i + 1 ? "heavy" : "light"}
+										onClick={() => setServings(i + 1)}
+									>
+										{i + 1}
+									</Button>
+								))}
 
-						<Flex gap={1} alignItems="center">
-							{times(4).map((i) => (
-								<Button
-									key={i}
-									size="tiny"
-									icon
-									variant={deferredServings === i + 1 ? "solid" : "outline"}
-									color={deferredServings === i + 1 ? "heavy" : "light"}
-									onClick={() => setServings(i + 1)}
-								>
-									{i + 1}
-								</Button>
-							))}
+								<div>
+									<Input
+										name="servings"
+										id={servingsId}
+										placeholder="5…"
+										type="number"
+										pill
+										min={1}
+										max={1000000000}
+										onChange={(event) => {
+											const parsedValue = z.coerce
+												.number()
+												.min(1)
+												.max(1000000000)
+												.safeParse(event.target.value);
 
-							<div>
-								<Input
-									name="servings"
-									placeholder="5…"
-									type="number"
-									pill
-									min={1}
-									max={1000000000}
-									onChange={(event) => {
-										const parsedValue = z.coerce
-											.number()
-											.min(1)
-											.max(1000000000)
-											.safeParse(event.target.value);
-
-										if (parsedValue.success) {
-											setServings(parsedValue.data);
-										}
-									}}
-								/>
-							</div>
-						</Flex>
+											if (parsedValue.success) {
+												setServings(parsedValue.data);
+											}
+										}}
+									/>
+								</div>
+							</Flex>
+						</ControlLabel>
 					</div>
 
 					<RecipeMetrics

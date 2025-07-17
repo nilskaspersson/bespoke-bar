@@ -66,10 +66,12 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 
 			<aside className={styles.sticky}>
 				{hasActiveFilter ? (
-					<Text as="div" size={0} compact className={styles.status} heavy>
-						{table.getRowCount()} {table.getRowCount() === 1 ? "row" : "rows"}{" "}
-						matching "{table.getState().globalFilter}"
-					</Text>
+					<div className={styles.statusContainer}>
+						<Text as="div" size={0} compact className={styles.status} heavy>
+							{table.getRowCount()} {table.getRowCount() === 1 ? "row" : "rows"}{" "}
+							matching "{table.getState().globalFilter}"
+						</Text>
+					</div>
 				) : null}
 
 				{!disableSearch ? (

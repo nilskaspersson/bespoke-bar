@@ -10,7 +10,7 @@ type Props = {
 	required?: boolean;
 	htmlFor: string;
 	inline?: boolean;
-	id: string;
+	id?: string;
 } & ComponentProps<"label">;
 
 export function ControlLabel({
