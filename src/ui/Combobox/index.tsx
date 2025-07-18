@@ -32,6 +32,7 @@ type Props<T> = {
 		closeMenu: () => void;
 		inputValue: string;
 	}) => React.ReactNode;
+	error?: boolean;
 	header?: React.ReactNode;
 	items: Keyed<T>[];
 	itemToString: (item: Keyed<T> | null) => string;
@@ -50,6 +51,7 @@ type Props<T> = {
 		| "name"
 		| "placeholder"
 		| "value"
+		| "aria-invalid"
 	>;
 };
 

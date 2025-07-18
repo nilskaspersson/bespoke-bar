@@ -22,14 +22,6 @@
 		transition-property: border-color, outline-color;
 		transition-duration: var(--transition-duration);
 
-		&:user-invalid {
-			border-color: var(--red-11);
-
-			&:focus {
-				outline-color: var(--red-11);
-			}
-		}
-
 		&:hover,
 		&:focus,
 		&:focus-within {
@@ -53,6 +45,15 @@
 			outline: var(--space-0) solid transparent;
 			outline-offset: 0;
 
+			&:user-invalid,
+			&[aria-invalid="true"] {
+				border-color: var(--red-11);
+
+				&:focus {
+					outline-color: var(--red-11);
+				}
+			}
+
 			&.regular {
 				--h: var(--control-height);
 			}
@@ -71,7 +72,12 @@
 				background-color: var(--mauve-3);
 			}
 
-			&:not([aria-disabled="true"], [readonly], :user-invalid) {
+			&:not(
+					[aria-disabled="true"],
+					[readonly],
+					:user-invalid,
+					[aria-invalid="true"]
+				) {
 				&:hover {
 					border-color: var(--mauve-8);
 				}
@@ -100,7 +106,7 @@
 		&.inline {
 			border-bottom: 1px solid var(--mauve-8);
 
-			&:not([aria-disabled="true"]):not(:user-invalid) {
+			&:not([aria-disabled="true"], :user-invalid, [aria-invalid="true"]) {
 				&:hover {
 					border-color: var(--mauve-10);
 				}
