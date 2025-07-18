@@ -2,10 +2,11 @@
 
 import { type FieldName, useField } from "@conform-to/react";
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
+import { type ComponentProps, useState } from "react";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Button } from "@/ui/Button";
+import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { EditRecipeSpecItem } from "./EditRecipeSpecItem";
@@ -23,8 +24,11 @@ export function EditRecipeSpecs({
 	name: FieldName<Spec, RecipeFormData>;
 } & ComponentProps<"fieldset">) {
 	const [fields, form] = useField(name);
-
 	const specs = fields.getFieldList();
+
+	const [optional, setOptional] = useState(
+		specs.some((spec) => spec.getFieldset().optional.value),
+	);
 
 	return (
 		<Grid
@@ -56,6 +60,7 @@ export function EditRecipeSpecs({
 							</Button>
 						}
 						ingredients={ingredients}
+						withOptional={optional}
 					/>
 				))}
 			</Grid>
@@ -73,6 +78,7 @@ export function EditRecipeSpecs({
 							quantity: "1",
 							unit: "cl",
 							ingredientId: undefined,
+							optional: false,
 							ingredient: {
 								name: "",
 								description: "",
@@ -88,6 +94,14 @@ export function EditRecipeSpecs({
 					Add additional spec
 				</Button>
 			</div>
+
+			<Checkbox
+				label="Enable optional specs"
+				checked={optional}
+				onChange={(e) => {
+					setOptional(e.target.checked);
+				}}
+			/>
 		</Grid>
 	);
 }

@@ -74,7 +74,10 @@ export type InsertIngredient = Omit<
 >;
 
 const ingredientsConstraintsSchema = {
-	name: z.string().min(1, "Name is required"),
+	name: z
+		.string("Ingredient must have a name")
+		.min(1, "Ingredient must have a name")
+		.max(100, "Name must be 100 characters or less"),
 	category: z.preprocess(nullifyEmptyField, systemCategories.nullable()),
 	abv: z.preprocess(
 		nullifyEmptyField,

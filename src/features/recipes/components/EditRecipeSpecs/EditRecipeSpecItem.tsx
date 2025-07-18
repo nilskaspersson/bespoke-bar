@@ -15,6 +15,7 @@ import { isValidUnit } from "@/features/units/utils";
 import { getMeasurementFromUnit } from "@/features/units/utils/getMeasurementFromUnit";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
+import { Checkbox } from "@/ui/Checkbox";
 import { Chip } from "@/ui/Chip";
 import { Grid } from "@/ui/Grid";
 import { OptionItem } from "@/ui/OptionItem";
@@ -28,10 +29,12 @@ export function EditRecipeSpecItem({
 	name,
 	actions,
 	ingredients,
+	withOptional,
 }: {
 	name: FieldName<Spec, RecipeFormData>;
 	actions?: ReactNode;
 	ingredients: Ingredient[];
+	withOptional?: boolean;
 }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const { percentageFormatter } = useContext(FormatterContext);
@@ -96,6 +99,7 @@ export function EditRecipeSpecItem({
 									compact: true,
 									rounded: true,
 									className: styles.ingredientInput,
+									"aria-invalid": !ingredient.name.valid,
 								}}
 								renderCreateListItem={({ closeMenu, inputValue }) => (
 									<OptionItem
@@ -191,6 +195,17 @@ export function EditRecipeSpecItem({
 
 				{actions ? <div className={styles.actions}>{actions}</div> : null}
 			</div>
+
+			{withOptional ? (
+				<Checkbox
+					name={spec.optional.name}
+					defaultChecked={spec.optional.defaultChecked}
+					id={spec.optional.id}
+					label="Optional"
+					size="small"
+					className={styles.optional}
+				/>
+			) : null}
 		</li>
 	);
 }

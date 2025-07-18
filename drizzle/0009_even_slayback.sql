@@ -1,0 +1,1 @@
+ALTER TABLE "specs" ADD COLUMN "optional" boolean DEFAULT false;
