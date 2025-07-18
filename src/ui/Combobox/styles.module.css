@@ -1,8 +1,13 @@
 @layer component {
 	.base {
+		--h: var(--control-height);
 		min-width: var(--control-width--small);
 		width: 100%;
 		max-width: min(var(--control-width), 100dvw);
+
+		&.compact {
+			--h: var(--control-height--small);
+		}
 	}
 
 	.contain {
@@ -10,13 +15,8 @@
 	}
 
 	.input {
-		--h: var(--control-height);
 		padding-right: var(--h);
 		max-width: 100%;
-
-		&.compact {
-			--h: var(--control-height--small);
-		}
 	}
 
 	.actions {
@@ -36,8 +36,8 @@
 		--r: var(--radius);
 		border-left: 1px solid var(--mauve-6);
 		flex: 0 0 auto;
-		aspect-ratio: 1 / 1;
 		border-radius: 0 var(--r) var(--r) 0;
+		width: var(--h);
 
 		&:hover {
 			color: var(--mauve-12);

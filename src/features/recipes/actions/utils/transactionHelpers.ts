@@ -107,6 +107,7 @@ export async function replaceSpecsInTransaction(
 			recipeId,
 			quantity: spec.quantity,
 			unit: spec.unit,
+			optional: spec.optional,
 			ingredientId,
 		};
 	});

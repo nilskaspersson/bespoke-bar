@@ -52,6 +52,10 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 					{spec.ingredient.name}
 				</Link>
 			)}
+
+			{spec.optional ? (
+				<span className={clsx(styles.node, styles.optional)}>(optional)</span>
+			) : null}
 		</Text>
 	);
 }

@@ -6,7 +6,7 @@ import type { Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
 type Props = {
-	alignItems?: "flex-start" | "flex-end" | "center" | "stretch";
+	alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
 	as?: React.ElementType;
 	asChild?: boolean;
 	wrap?: boolean;

@@ -4,13 +4,13 @@
 
 		display: grid;
 		gap: var(--gap--large);
-		align-items: start;
 		contain: layout;
 		container-type: inline-size;
 		margin-inline: calc(var(--o) * -1);
 
 		@container (width > 700px) {
 			grid-template-columns: 1fr 1fr;
+			align-items: end;
 		}
 
 		@container (width > 850px) {
@@ -21,6 +21,8 @@
 	.primary {
 		display: grid;
 		gap: var(--gap);
+		position: sticky;
+		bottom: var(--gap);
 	}
 
 	.card {

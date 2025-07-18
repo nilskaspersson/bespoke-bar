@@ -12,6 +12,7 @@ type BaseProps = {
 	pill?: boolean;
 	fullWidth?: boolean;
 	rounded?: boolean;
+	"aria-invalid"?: boolean;
 };
 
 type InputProps = BaseProps & {

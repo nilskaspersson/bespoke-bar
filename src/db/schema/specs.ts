@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+	boolean,
 	check,
 	index,
 	pgTable,
@@ -30,6 +31,7 @@ export const SpecsTable = pgTable(
 			.notNull()
 			.references(() => IngredientsTable.id, { onDelete: "restrict" }),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
+		optional: boolean("optional").default(false),
 	},
 	(table) => [
 		check(
@@ -64,7 +66,7 @@ export type InsertSpec = Omit<
  * The fields users can provide to create a spec.
  */
 export type DraftSpec = Identity<
-	Partial<Pick<Spec, "quantity" | "unit" | "ingredientId">>
+	Partial<Pick<Spec, "quantity" | "unit" | "ingredientId" | "optional">>
 >;
 
 export type SpecWithIngredient = Spec & {

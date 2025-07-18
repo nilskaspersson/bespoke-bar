@@ -16,8 +16,10 @@
 		font-variant-numeric: tabular-nums;
 		align-self: start;
 
-		.base:has(:user-invalid) > & > .text {
-			text-decoration: underline wavy var(--red-9);
+		.base:has(:user-invalid, [aria-invalid="true"]) {
+			> & > .text {
+				text-decoration: underline wavy var(--red-9);
+			}
 		}
 	}
 }

@@ -4,6 +4,8 @@
 		gap: 0.5ch;
 		font-size: var(--size-4);
 		font-variant-numeric: tabular-nums;
+		align-items: baseline;
+		flex-wrap: wrap;
 	}
 
 	.node {
@@ -29,5 +31,11 @@
 		padding: var(--space-0);
 		background-color: var(--iris-7);
 		border-radius: var(--radius--small);
+	}
+
+	.optional {
+		color: var(--mauve-10);
+		font-family: var(--font-sans-serif);
+		font-size: var(--size-2);
 	}
 }

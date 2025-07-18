@@ -18,11 +18,9 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-const ingredientFormDataSchema = draftIngredientSchema
-	.extend({
-		abv: percentageToRatioSchema.optional(),
-	})
-	.optional();
+const ingredientFormDataSchema = draftIngredientSchema.extend({
+	abv: percentageToRatioSchema.optional(),
+});
 
 export const upsertSpecSchema = insertSpecsSchema
 	.omit({
@@ -33,7 +31,7 @@ export const upsertSpecSchema = insertSpecsSchema
 	.extend({
 		id: z.string().optional(),
 		ingredientId: z.string().optional(),
-		ingredient: ingredientFormDataSchema,
+		ingredient: ingredientFormDataSchema.optional(),
 	})
 	.refine((data) => data.ingredientId || data.ingredient, {
 		message: "Either ingredientId or ingredient data must be provided",

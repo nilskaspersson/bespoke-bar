@@ -32,6 +32,7 @@ type Props<T> = {
 		closeMenu: () => void;
 		inputValue: string;
 	}) => React.ReactNode;
+	error?: boolean;
 	header?: React.ReactNode;
 	items: Keyed<T>[];
 	itemToString: (item: Keyed<T> | null) => string;
@@ -50,6 +51,7 @@ type Props<T> = {
 		| "name"
 		| "placeholder"
 		| "value"
+		| "aria-invalid"
 	>;
 };
 
@@ -138,7 +140,9 @@ export function Combobox<T>({
 		<ControlLabel
 			{...getLabelProps()}
 			label={label}
-			className={clsx(styles.base, className)}
+			className={clsx(styles.base, className, {
+				[styles.compact]: inputProps?.compact,
+			})}
 		>
 			<div className={styles.contain}>
 				<Input
@@ -146,9 +150,7 @@ export function Combobox<T>({
 					{...comboboxInputProps}
 					title={comboboxInputProps.value}
 					type="search"
-					className={clsx(styles.input, inputProps?.className, {
-						[styles.compact]: inputProps?.compact,
-					})}
+					className={clsx(styles.input, inputProps?.className)}
 				/>
 
 				<menu className={styles.actions}>
@@ -168,6 +170,7 @@ export function Combobox<T>({
 						variant="base"
 						{...getToggleButtonProps()}
 						{...toggleButtonProps}
+						icon
 						className={clsx(styles.toggle, toggleButtonProps?.className, {
 							[styles.rounded]: inputProps?.rounded,
 							[styles.compact]: inputProps?.compact,

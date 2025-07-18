@@ -120,4 +120,8 @@
 	.ingredientFields {
 		padding: var(--gap--tiny);
 	}
+
+	.optional {
+		margin-left: var(--gap);
+	}
 }
