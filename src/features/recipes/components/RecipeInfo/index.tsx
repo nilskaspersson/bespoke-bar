@@ -13,10 +13,12 @@ import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { SpecsList } from "@/features/specs/components/SpecsList";
+import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
+import { CopyToClipboard } from "@/ui/CopyToClipboard/inded";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -41,6 +43,8 @@ export function RecipeInfo<T extends BaseRecipe>({
 
 	const [withConversionSystem, setWithConversionSystem] =
 		useState<UnitSystems | null>(null);
+
+	const getSpecsToText = useGetSpecsToText(servings, withConversionSystem);
 
 	if (!recipe.specs || recipe.specs.length === 0) {
 		return null;
@@ -68,15 +72,16 @@ export function RecipeInfo<T extends BaseRecipe>({
 							</Text>
 						) : null}
 
-						<Text
-							as="div"
-							size={1}
-							align="right"
-							fullWidth
-							className={styles.count}
-						>
-							Servings: {quantityFormatter.format(servings)}
-						</Text>
+						<Flex gap={1} justifyContent="space-between" alignItems="baseline">
+							<Text as="div" size={1} fullWidth className={styles.count}>
+								Servings: {quantityFormatter.format(servings)}
+							</Text>
+
+							<CopyToClipboard
+								getValue={() => getSpecsToText(recipe.specs)}
+								size={2}
+							/>
+						</Flex>
 					</Grid>
 				</div>
 
