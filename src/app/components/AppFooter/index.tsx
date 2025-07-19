@@ -14,7 +14,7 @@ export function AppFooter({
 	return (
 		<footer
 			className={clsx(styles.footer, className)}
-			data-theme="dark"
+			data-force-theme="dark"
 			{...props}
 		>
 			<Grid className={styles.contain} gap={6}>
