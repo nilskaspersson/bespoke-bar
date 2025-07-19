@@ -66,6 +66,7 @@ export function LinkButton({
 				className,
 				styles.reset,
 				styles.button,
+				styles.link,
 				styles[variant],
 				styles[color],
 				styles[size],

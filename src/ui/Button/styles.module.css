@@ -160,8 +160,14 @@
 		transition-duration: var(--transition-duration);
 		color: var(--button-color);
 
-		&:not([aria-disabled="true"]):hover {
-			color: var(--mauve-12);
+		&:not([aria-disabled="true"]) {
+			&.link:hover {
+				color: var(--iris-9);
+			}
+
+			&:hover {
+				color: var(--mauve-12);
+			}
 		}
 	}
 
