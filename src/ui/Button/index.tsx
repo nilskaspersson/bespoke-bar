@@ -31,6 +31,7 @@ export function Button({
 			{...props}
 			className={clsx(
 				className,
+				styles.reset,
 				styles.button,
 				styles[variant],
 				styles[color],
@@ -63,7 +64,9 @@ export function LinkButton({
 			{...props}
 			className={clsx(
 				className,
+				styles.reset,
 				styles.button,
+				styles.link,
 				styles[variant],
 				styles[color],
 				styles[size],

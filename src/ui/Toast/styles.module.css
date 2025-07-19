@@ -1,0 +1,105 @@
+@layer ui {
+	.toaster {
+		display: contents;
+	}
+
+	.toast {
+		--p: var(--space-4);
+
+		display: grid;
+		grid-template:
+			"status content" 1fr
+			"actions actions" auto
+			/ auto 1fr;
+		align-items: center;
+		/**
+		 * Necessary to keep the toast looking uniform when it collapses behind other toast
+		 */
+		align-content: end;
+		width: 100%;
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-1);
+		font-size: var(--size-2);
+		box-shadow: var(--shadow--high);
+		padding-top: var(--p);
+		gap: var(--p);
+	}
+
+	.loader {
+		position: relative;
+	}
+
+	.icon {
+		grid-area: status;
+		display: inline-flex;
+		align-self: start;
+		place-items: center;
+		place-content: center;
+		border-radius: var(--radius--full);
+		width: 2rem;
+		height: 2rem;
+		margin-left: var(--p);
+		color: var(--mauve-12);
+		transition: opacity var(--transition-duration--short);
+
+		.success & {
+			background-color: var(--iris-3);
+			color: var(--iris-11);
+		}
+
+		.error & {
+			background-color: var(--red-3);
+			color: var(--red-11);
+		}
+
+		[data-front="false"][data-expanded="false"] & {
+			opacity: 0;
+		}
+	}
+
+	.content {
+		grid-area: content;
+		display: grid;
+		gap: var(--space-2);
+		line-height: var(--line-height--compact);
+		margin-right: var(--p);
+	}
+
+	.title {
+		color: var(--mauve-12);
+		font-weight: 600;
+		text-wrap: balance;
+	}
+
+	.description {
+		color: var(--mauve-11);
+	}
+
+	.closeButton {
+		--length: var(--space-5);
+		width: var(--length);
+		height: var(--length);
+		position: absolute;
+		inset: var(--space-0) var(--space-0) auto auto;
+		color: var(--mauve-10);
+		border-radius: var(--radius--full);
+		z-index: var(--z-index);
+
+		&:focus,
+		&:hover {
+			color: var(--mauve-12);
+		}
+	}
+
+	.actions {
+		grid-area: actions;
+		display: flex;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--p);
+		border-top: 1px solid var(--mauve-4);
+		color: var(--mauve-12);
+		background-color: var(--mauve-3);
+		border-bottom-left-radius: inherit;
+		border-bottom-right-radius: inherit;
+	}
+}

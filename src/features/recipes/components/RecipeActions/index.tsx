@@ -4,11 +4,12 @@ import {
 	unarchiveRecipe,
 } from "@/features/recipes/actions/archiveRecipe";
 import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
+import { ArchiveRecipeButton } from "@/features/recipes/components/ArchiveRecipeButton";
 import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
+import { UnarchiveRecipeButton } from "@/features/recipes/components/UnarchiveRecipeButton";
 import { LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
 import styles from "./styles.module.css";
 
 export function RecipeActions({ recipe }: { recipe: RecipeWithSpecs }) {
@@ -24,22 +25,27 @@ export function RecipeActions({ recipe }: { recipe: RecipeWithSpecs }) {
 			</LinkButton>
 
 			{recipe.archivedAt ? (
-				<form action={unarchiveRecipe.bind(null, { id: recipe.id })}>
-					<SubmitButton variant="solid" color="heavy" size="small">
-						Unarchive
-					</SubmitButton>
-				</form>
-			) : (
-				<form
-					action={archiveRecipe.bind(null, {
-						id: recipe.id,
-						redirectTo: "/bar/recipes",
-					})}
+				<UnarchiveRecipeButton
+					recipe={recipe}
+					actionUnarchive={unarchiveRecipe}
+					actionArchive={archiveRecipe}
+					variant="ghost"
+					color="light"
+					size="small"
 				>
-					<SubmitButton variant="ghost" color="light" size="small">
-						Archive
-					</SubmitButton>
-				</form>
+					Unarchive
+				</UnarchiveRecipeButton>
+			) : (
+				<ArchiveRecipeButton
+					recipe={recipe}
+					actionArchive={archiveRecipe}
+					actionUnarchive={unarchiveRecipe}
+					variant="ghost"
+					color="light"
+					size="small"
+				>
+					Archive
+				</ArchiveRecipeButton>
 			)}
 
 			<DeleteRecipe

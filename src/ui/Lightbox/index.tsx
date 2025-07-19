@@ -16,7 +16,7 @@ export function Lightbox({
 }: ComponentProps<"div"> & Props) {
 	return (
 		<div
-			data-theme={forceTheme}
+			data-force-theme={forceTheme}
 			className={clsx(styles.lightbox, className, {
 				[styles.rounded]: rounded,
 			})}

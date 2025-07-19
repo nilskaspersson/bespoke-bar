@@ -12,18 +12,19 @@ import z from "zod/v4";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
-
 import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
+import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
-import { isEmptyDraftRecipe } from "@/features/recipes/utils";
+import { getRecipeUrl, isEmptyDraftRecipe } from "@/features/recipes/utils";
 import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { Button } from "@/ui/Button";
+import { Button, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Lightbox } from "@/ui/Lightbox";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
+import { ToastActions, toast } from "@/ui/Toast";
 import { getKey, type Keyed, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
@@ -61,8 +62,72 @@ export function BulkDraftRecipes({
 			})),
 		);
 
-		await createRecipes(data);
-		setInputValue("");
+		const promise = createRecipes(data).then((recipes) => {
+			setInputValue("");
+			return recipes;
+		});
+
+		const toastId = Date.now().toString();
+
+		toast.promise(promise, {
+			id: toastId,
+			loading: "Creating recipes…",
+			success: (recipes) => ({
+				message:
+					recipes.length === 1
+						? "Recipe created"
+						: `${recipes.length} recipes created`,
+				description:
+					recipes.length === 1 ? (
+						"Visit the recipe page to continue adding details."
+					) : (
+						<Text as="ul" list>
+							{recipes.map((recipe) => (
+								<li key={getKey(recipe)}>
+									<LinkButton
+										variant="text"
+										size="tiny"
+										color="heavy"
+										href={getRecipeUrl(recipe)}
+										prefetch={true}
+										onClick={() => toast.dismiss(toastId)}
+									>
+										<RecipeName recipe={recipe} />
+									</LinkButton>
+								</li>
+							))}
+						</Text>
+					),
+				action: (
+					<ToastActions>
+						<LinkButton
+							size="tiny"
+							href="/bar/recipes"
+							variant="ghost"
+							color="heavy"
+							prefetch={false}
+						>
+							All recipes
+						</LinkButton>
+
+						{recipes.length === 1 ? (
+							<LinkButton
+								size="tiny"
+								href={getRecipeUrl(recipes[0])}
+								variant="solid"
+								color="accent"
+								prefetch={true}
+								onClick={() => toast.dismiss(toastId)}
+							>
+								View recipe
+								<Icon name="angles-right" size={0} />
+							</LinkButton>
+						) : null}
+					</ToastActions>
+				),
+			}),
+			error: () => "Recipe could not be created",
+		});
 	};
 
 	return (

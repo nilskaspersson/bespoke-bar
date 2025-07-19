@@ -1,5 +1,5 @@
-@layer ui {
-	.button {
+@layer base {
+	.reset {
 		all: unset;
 		box-sizing: border-box;
 		cursor: pointer;
@@ -16,6 +16,12 @@
 		user-select: none;
 		box-shadow: 0 0 0 transparent;
 
+		touch-action: manipulation;
+	}
+}
+
+@layer ui {
+	.button {
 		&:not(:active) {
 			transition-property: background-color, border-color, color, transform;
 			transition-duration: var(--transition-duration);
@@ -75,11 +81,13 @@
 			transition: opacity var(--transition-duration);
 		}
 
-		[data-theme="dark"] & {
+		[data-theme="dark"] &,
+		[data-theme] [data-force-theme="dark"] & {
 			--text-lightness: 0%;
 		}
 
-		[data-theme="light"] & {
+		[data-theme="light"] &,
+		[data-theme] [data-force-theme="light"] & {
 			--text-lightness: 90%;
 		}
 	}
@@ -92,12 +100,14 @@
 	}
 
 	.light {
-		[data-theme="dark"] & {
+		[data-theme="dark"] &,
+		[data-theme] [data-force-theme="dark"] & {
 			--button-color: var(--mauve-7);
 			--text-lightness: 90%;
 		}
 
-		[data-theme="light"] & {
+		[data-theme="light"] &,
+		[data-theme] [data-force-theme="light"] & {
 			--button-color: var(--mauve-7);
 			--text-lightness: 0%;
 		}
@@ -150,8 +160,14 @@
 		transition-duration: var(--transition-duration);
 		color: var(--button-color);
 
-		&:not([aria-disabled="true"]):hover {
-			color: var(--mauve-12);
+		&:not([aria-disabled="true"]) {
+			&.link:hover {
+				color: var(--iris-9);
+			}
+
+			&:hover {
+				color: var(--mauve-12);
+			}
 		}
 	}
 
