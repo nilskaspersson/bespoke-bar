@@ -27,44 +27,22 @@ export function RecipeActions({ recipe }: { recipe: RecipeWithSpecs }) {
 			{recipe.archivedAt ? (
 				<UnarchiveRecipeButton
 					recipe={recipe}
-					action={unarchiveRecipe}
+					actionUnarchive={unarchiveRecipe}
+					actionArchive={archiveRecipe}
 					variant="ghost"
 					color="light"
 					size="small"
-					toastActions={
-						<ArchiveRecipeButton
-							recipe={recipe}
-							action={archiveRecipe}
-							variant="ghost"
-							color="red"
-							size="tiny"
-							key="undo-unarchive"
-						>
-							Undo
-						</ArchiveRecipeButton>
-					}
 				>
 					Unarchive
 				</UnarchiveRecipeButton>
 			) : (
 				<ArchiveRecipeButton
 					recipe={recipe}
-					action={archiveRecipe}
+					actionArchive={archiveRecipe}
+					actionUnarchive={unarchiveRecipe}
 					variant="ghost"
 					color="light"
 					size="small"
-					toastActions={
-						<UnarchiveRecipeButton
-							recipe={recipe}
-							action={unarchiveRecipe}
-							variant="ghost"
-							color="red"
-							size="tiny"
-							key="undo-archive"
-						>
-							Undo
-						</UnarchiveRecipeButton>
-					}
 				>
 					Archive
 				</ArchiveRecipeButton>

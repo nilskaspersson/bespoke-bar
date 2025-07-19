@@ -21,7 +21,7 @@ const defaultConfig = {
 
 type PromiseToast<T> = typeof sonnerToast.promise<T>;
 
-export function toast<T>(
+export function toastPromise<T>(
 	promise: Parameters<PromiseToast<T>>[0],
 	options: Parameters<PromiseToast<T>>[1],
 ): ReturnType<PromiseToast<T>> {
@@ -30,6 +30,11 @@ export function toast<T>(
 		...options,
 	});
 }
+
+export const toast = {
+	...sonnerToast,
+	promise: toastPromise,
+};
 
 export function ToastActions({ className, children }: ComponentProps<"div">) {
 	return <nav className={clsx(className, styles.actions)}>{children}</nav>;

@@ -1,6 +1,7 @@
 "use client";
 
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { UnarchiveRecipeButton } from "@/features/recipes/components/UnarchiveRecipeButton";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -9,30 +10,44 @@ import { ToastActions, toast } from "@/ui/Toast";
 
 export function ArchiveRecipeButton({
 	recipe,
-	action,
-	toastActions,
+	actionArchive,
+	actionUnarchive,
 	children,
 	...buttonProps
 }: {
 	recipe: RecipeWithSpecs;
-	action: (args: { id: string }) => Promise<void>;
-	toastActions?: React.ReactNode;
+	actionArchive: (args: { id: string }) => Promise<void>;
+	actionUnarchive: (args: { id: string }) => Promise<void>;
 } & ButtonProps) {
-	const { action: archiveRecipe } = useServerAction(action);
+	const { action: archiveRecipe } = useServerAction(actionArchive);
 
 	const handleArchive = async () => {
 		const promise = archiveRecipe({
 			id: recipe.id,
 		});
 
-		toast(promise, {
+		const toastId = Date.now().toString();
+
+		toast.promise(promise, {
+			id: toastId,
 			loading: "Archiving…",
 			success: () => ({
 				message: "Recipe archived",
 				description: "Archived Recipes can be found in the archive.",
 				action: (
 					<ToastActions>
-						{toastActions}
+						<UnarchiveRecipeButton
+							recipe={recipe}
+							actionUnarchive={actionUnarchive}
+							actionArchive={actionArchive}
+							variant="ghost"
+							color="red"
+							size="tiny"
+							key="undo-archive"
+							onClick={() => toast.dismiss(toastId)}
+						>
+							Undo
+						</UnarchiveRecipeButton>
 
 						<LinkButton
 							size="tiny"
@@ -40,6 +55,7 @@ export function ArchiveRecipeButton({
 							variant="ghost"
 							color="heavy"
 							prefetch={false}
+							onClick={() => toast.dismiss(toastId)}
 						>
 							View archive
 							<Icon name="angles-right" size={0} />
@@ -47,7 +63,7 @@ export function ArchiveRecipeButton({
 					</ToastActions>
 				),
 			}),
-			error: () => "Recipe could not be archived",
+			error: () => "Could not archive recipe. Please try again later.",
 		});
 	};
 
