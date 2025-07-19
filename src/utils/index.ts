@@ -95,3 +95,7 @@ export function invertMapToLookup<K, V>(map: Map<K, V[]>): Map<V, K> {
 export function times(n: number): number[] {
 	return Array.from({ length: n }, (_, i) => i);
 }
+
+export function sleep(ms: number): Promise<void> {
+	return new Promise((resolve) => setTimeout(resolve, ms));
+}
