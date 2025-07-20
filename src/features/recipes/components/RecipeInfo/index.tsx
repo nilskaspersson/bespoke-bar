@@ -79,7 +79,8 @@ export function RecipeInfo<T extends BaseRecipe>({
 
 							<CopyToClipboard
 								getValue={() => getSpecsToText(recipe.specs)}
-								size={2}
+								iconSize={2}
+								icon
 							/>
 						</Flex>
 					</Grid>

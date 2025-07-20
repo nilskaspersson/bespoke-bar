@@ -41,7 +41,7 @@ export default async function IngredientPage({ params }: Props) {
 
 	return (
 		<Container as="article" className={styles.container}>
-			<Grid gap={4} justifyContent="center">
+			<Grid gap={4} justifyContent="center" className={styles.content}>
 				<header>
 					{ingredient.category ? (
 						<Text as="div" size={2} compact>
@@ -115,6 +115,7 @@ export default async function IngredientPage({ params }: Props) {
 					<RecipeTable
 						recipes={recipesUsingIngredient}
 						members={members}
+						defaultView="card"
 						disableSearch
 					/>
 				</Grid>

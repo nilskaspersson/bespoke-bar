@@ -12,6 +12,8 @@
 	}
 
 	.specs {
+		display: grid;
+		gap: var(--space-0);
 		min-width: 20ch;
 	}
 

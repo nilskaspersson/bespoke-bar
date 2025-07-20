@@ -6,8 +6,8 @@
 		padding-bottom: var(--gap);
 		grid-template:
 			"header" auto
-			"actions" auto
-			"table" 1fr;
+			"navigation" auto
+			"page" 1fr;
 	}
 
 	.header {
@@ -15,11 +15,11 @@
 		display: flex;
 		gap: var(--gap) var(--gap--large);
 		justify-content: space-between;
-		align-items: center;
+		align-items: end;
 		flex-wrap: wrap;
 	}
 
-	.actions {
-		grid-area: actions;
+	.navigation {
+		grid-area: navigation;
 	}
 }
