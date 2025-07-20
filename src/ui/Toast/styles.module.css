@@ -43,13 +43,13 @@
 		transition: opacity var(--transition-duration--short);
 
 		.success & {
-			background-color: var(--iris-3);
-			color: var(--iris-11);
+			background-color: var(--iris-6);
+			color: var(--iris-12);
 		}
 
 		.error & {
-			background-color: var(--red-3);
-			color: var(--red-11);
+			background-color: var(--red-6);
+			color: var(--red-12);
 		}
 
 		[data-front="false"][data-expanded="false"] & {

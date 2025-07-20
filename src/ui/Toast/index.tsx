@@ -21,11 +21,23 @@ const defaultConfig = {
 
 type PromiseToast<T> = typeof sonnerToast.promise<T>;
 
-export function toastPromise<T>(
+function toastPromise<T>(
 	promise: Parameters<PromiseToast<T>>[0],
-	options: Parameters<PromiseToast<T>>[1],
+	options?: Parameters<PromiseToast<T>>[1],
 ): ReturnType<PromiseToast<T>> {
 	return sonnerToast.promise(promise, {
+		...defaultConfig,
+		...options,
+	});
+}
+
+type SuccessToast = typeof sonnerToast.success;
+
+function toastSuccess(
+	message: Parameters<SuccessToast>[0],
+	options?: Parameters<SuccessToast>[1],
+): ReturnType<SuccessToast> {
+	return sonnerToast.success(message, {
 		...defaultConfig,
 		...options,
 	});
@@ -34,6 +46,7 @@ export function toastPromise<T>(
 export const toast = {
 	...sonnerToast,
 	promise: toastPromise,
+	success: toastSuccess,
 };
 
 export function ToastActions({ className, children }: ComponentProps<"div">) {
