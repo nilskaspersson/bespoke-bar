@@ -9,12 +9,15 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import Link from "next/link";
+import { useQueryState } from "nuqs";
 import { type ComponentProps, useMemo, useState } from "react";
+import { listViewParser, type ViewType } from "@/app/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { UserChip } from "@/features/organisation/components/UserChip";
 import type { UserIdMap } from "@/features/organisation/types";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
@@ -29,6 +32,7 @@ type Props = {
 	recipes: RecipeWithSpecs[] | undefined | null;
 	members: UserIdMap;
 	disableSearch?: boolean;
+	defaultView?: ViewType;
 };
 
 const columnHelper = createColumnHelper<RecipeWithSpecs>();
@@ -38,11 +42,17 @@ export function RecipeTable({
 	recipes,
 	members,
 	disableSearch,
+	defaultView = "list",
 	...props
 }: Props & ComponentProps<"section">) {
+	/**
+	 * TODO: Adapt nuqs
+	 */
 	const [sorting, setSorting] = useState<SortingState>([
 		{ id: "createdAt", desc: true },
 	]);
+
+	const [view] = useQueryState("view", listViewParser.withDefault(defaultView));
 
 	const columns = useMemo(
 		() => [
@@ -84,7 +94,11 @@ export function RecipeTable({
 									</li>
 								))}
 							</ul>
-						) : null,
+						) : (
+							<Text size={2} italic light>
+								No specs
+							</Text>
+						),
 				},
 			),
 			columnHelper.accessor("style", {
@@ -147,10 +161,16 @@ export function RecipeTable({
 			disableSearch={disableSearch}
 			{...props}
 		>
-			<Table>
-				<TableHeader getHeaderGroups={table.getHeaderGroups} />
-				<TableBody getRowModel={table.getRowModel} />
-			</Table>
+			{view === "table" ? (
+				<Table>
+					<TableHeader getHeaderGroups={table.getHeaderGroups} />
+					<TableBody getRowModel={table.getRowModel} />
+				</Table>
+			) : null}
+
+			{view === "list" || view === "card" ? (
+				<RecipesList getRowModel={table.getRowModel} view={view} />
+			) : null}
 		</TableLayout>
 	);
 }

@@ -1,4 +1,4 @@
-@layer composition {
+@layer ui {
 	.fieldset {
 		display: block;
 		flex: 0 0 auto;
@@ -10,13 +10,12 @@
 		border: 1px solid var(--mauve-6);
 		background-color: var(--mauve-2);
 		box-shadow: inset 0 0 1em var(--mauve-5);
-		gap: 2px;
-		padding: 2px;
+		padding: var(--space-0);
 		transition: border-color var(--transition-duration);
 		width: fit-content;
 
 		&:has(input:focus-visible) {
-			outline: 2px solid var(--iris-11);
+			outline: var(--space-0) solid var(--iris-11);
 			outline-offset: 1px;
 		}
 	}
@@ -24,13 +23,16 @@
 	.label {
 		display: flex;
 		flex: 1 0 auto;
+		gap: var(--space-1);
 		place-items: center;
-		aspect-ratio: 1 / 1;
-		color: var(--mauve-10);
-		padding: var(--space-1);
-		border-radius: 50%;
+		color: var(--mauve-11);
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius--full);
 		transition-duration: var(--transition-duration);
 		transition-property: box-shadow, background-color, color;
+		font-size: var(--size-2);
+		font-weight: 600;
+		user-select: none;
 
 		&:hover {
 			color: var(--mauve-12);
@@ -38,6 +40,14 @@
 
 		&:not(:has(input:checked)) {
 			cursor: pointer;
+
+			&:active:hover {
+				&,
+				.icon {
+					color: var(--mauve-10);
+					transition: none;
+				}
+			}
 		}
 
 		&:has(input:checked) {

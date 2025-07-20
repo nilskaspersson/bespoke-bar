@@ -1,6 +1,8 @@
+import { SwitchListView } from "@/app/components/SwitchListView";
 import { StatLinks } from "@/features/recipes/components/StatLinks";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
+import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import styles from "./layout.module.css";
@@ -26,7 +28,22 @@ export default async function Layout({
 				</LinkButton>
 			</header>
 
-			<StatLinks className={styles.actions} />
+			<Flex
+				as="aside"
+				wrap
+				gap={4}
+				justifyContent="space-between"
+				alignItems="center"
+				className={styles.navigation}
+			>
+				<StatLinks />
+
+				<menu>
+					<li>
+						<SwitchListView />
+					</li>
+				</menu>
+			</Flex>
 
 			{children}
 		</Container>

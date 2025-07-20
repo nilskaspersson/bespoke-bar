@@ -21,7 +21,7 @@ export function RecipeActions({ recipe }: { recipe: RecipeWithSpecs }) {
 				color="heavy"
 				size="small"
 			>
-				<Icon name="pen" /> Edit
+				<Icon name="pen-to-square" /> Edit
 			</LinkButton>
 
 			{recipe.archivedAt ? (

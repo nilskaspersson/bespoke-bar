@@ -47,7 +47,7 @@
 			> .label {
 				display: inline-flex;
 				align-items: center;
-				gap: var(--space-2);
+				gap: 0.5em;
 			}
 
 			&:not([aria-disabled="true"]):active {
@@ -162,7 +162,7 @@
 
 		&:not([aria-disabled="true"]) {
 			&.link:hover {
-				color: var(--iris-9);
+				color: var(--iris-12);
 			}
 
 			&:hover {

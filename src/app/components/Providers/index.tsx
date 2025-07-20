@@ -1,5 +1,6 @@
 "use client";
 
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type { Organisation } from "@/db/schema/organisations";
 import { FormatterContextProvider } from "@/hooks/useFormatter";
 
@@ -15,7 +16,7 @@ export function Providers({
 			currency={organisation.currency}
 			locale={organisation.defaultLocale}
 		>
-			{children}
+			<NuqsAdapter>{children}</NuqsAdapter>
 		</FormatterContextProvider>
 	);
 }

@@ -71,6 +71,7 @@ export type IconName =
 	| "sort"
 	| "star"
 	| "sun-bright"
+	| "table-list"
 	| "tag"
 	| "tags"
 	| "trash"

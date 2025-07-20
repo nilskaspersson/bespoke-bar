@@ -1,3 +1,5 @@
+"use client";
+
 import type { Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import { type ComponentPropsWithRef, useRef } from "react";

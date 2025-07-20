@@ -87,7 +87,7 @@ export function BulkDraftRecipes({
 									<LinkButton
 										variant="text"
 										size="tiny"
-										color="heavy"
+										color="accent"
 										href={getRecipeUrl(recipe)}
 										prefetch={true}
 										onClick={() => toast.dismiss(toastId)}
