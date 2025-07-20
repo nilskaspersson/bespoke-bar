@@ -16,9 +16,9 @@ export function TableBody<T>({
 	}
 
 	return (
-		<tbody className={clsx(styles.tbody, className)} {...props}>
+		<tbody className={className} {...props}>
 			{getRowModel().rows.map((row) => (
-				<tr key={row.id} className={styles.row}>
+				<tr key={row.id}>
 					{row.getVisibleCells().map((cell) => (
 						<td
 							key={cell.id}
