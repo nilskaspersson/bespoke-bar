@@ -1,32 +1,23 @@
 @layer ui {
 	.texture {
-		mask-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
 		contain: strict;
 
 		&,
-		&::before,
 		&::after {
+			display: block;
 			position: absolute;
 			inset: 0;
-			border-radius: inherit;
 			pointer-events: none;
 			user-select: none;
+			border-radius: inherit;
 		}
 
-		&::before,
 		&::after {
 			content: "";
-			display: block;
-		}
-
-		&::before {
-			background-color: var(--mauve-1);
-		}
-
-		&::after {
 			background-image: url("/noise.png");
 			background-repeat: repeat;
-			opacity: 0.2;
+			opacity: 0.333;
+			mask: linear-gradient(rgba(0, 0, 0, 0.333), rgba(0, 0, 0, 0.333));
 		}
 	}
 }
