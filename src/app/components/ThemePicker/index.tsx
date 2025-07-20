@@ -2,16 +2,25 @@
 
 import { useTheme } from "next-themes";
 import { type ChangeEventHandler, useEffect, useState } from "react";
-import { Icon } from "@/ui/Icon";
 import type { IconName } from "@/ui/Icon/types";
-import { Text } from "@/ui/Text";
-import styles from "./styles.module.css";
+import { OptionsSwitch } from "@/ui/OptionsSwitch";
+import { withKey } from "@/utils/withKey";
 
-const THEME_OPTIONS = new Map<string, { icon: IconName; label: string }>([
-	["light", { icon: "sun-bright", label: "Light mode" }],
-	["dark", { icon: "moon", label: "Dark mode" }],
-	["system", { icon: "display", label: "Use system setting" }],
-]);
+const THEME_OPTIONS = (
+	[
+		{
+			value: "light",
+			label: "Light",
+			icon: "sun-bright" satisfies IconName,
+		},
+		{ value: "dark", label: "Dark", icon: "moon" satisfies IconName },
+		{
+			value: "system",
+			label: "System",
+			icon: "display" satisfies IconName,
+		},
+	] as const
+).map(withKey);
 
 export function ThemePicker() {
 	const { setTheme, theme } = useTheme();
@@ -27,35 +36,13 @@ export function ThemePicker() {
 	};
 
 	return (
-		<fieldset className={styles.fieldset}>
-			<Text as="legend" size={2} weight={500} className="sr-only">
-				Choose theme
-			</Text>
-
-			<div
-				role="radiogroup"
-				aria-label="Theme selection"
-				aria-live="polite"
-				className={styles.group}
-			>
-				{Array.from(THEME_OPTIONS.entries(), ([value, { icon, label }]) => (
-					<label key={value} className={styles.label}>
-						<input
-							type="radio"
-							name="theme"
-							value={value}
-							aria-label={label}
-							title={label}
-							checked={isMounted && theme === value}
-							onChange={handleThemeChange}
-							disabled={!isMounted}
-							className="sr-only"
-						/>
-
-						<Icon name={icon} />
-					</label>
-				))}
-			</div>
-		</fieldset>
+		<OptionsSwitch
+			name="theme"
+			options={THEME_OPTIONS}
+			legend="Choose theme"
+			value={theme}
+			disabled={!isMounted}
+			onChange={handleThemeChange}
+		/>
 	);
 }
