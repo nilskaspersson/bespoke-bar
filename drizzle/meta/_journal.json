@@ -71,6 +71,13 @@
       "when": 1752826102180,
       "tag": "0009_even_slayback",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1753203388997,
+      "tag": "0010_blue_mastermind",
+      "breakpoints": true
     }
   ]
 }
