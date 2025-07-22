@@ -32,7 +32,7 @@ export async function updateRecipe(
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)))
 		.returning();
 
-	revalidateRecipePaths(id);
+	revalidateRecipePaths([id]);
 
 	return result;
 }

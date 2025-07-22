@@ -6,8 +6,8 @@ import { getFullName } from "@/features/organisation/utils";
 import { readRecipe } from "@/features/recipes/actions/readRecipe";
 import { RecipeActions } from "@/features/recipes/components/RecipeActions";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
-import { isValidRecipeParams } from "@/features/recipes/utils";
 import { Container } from "@/ui/Container";
+import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 
 type Props = {
@@ -21,7 +21,7 @@ type Props = {
 export default async function RecipePage({ params }: Props) {
 	const { id, slug } = await params;
 
-	if (!isValidRecipeParams(id, slug)) {
+	if (!isValidPageUrl(id, slug)) {
 		notFound();
 	}
 

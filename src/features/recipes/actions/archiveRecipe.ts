@@ -1,4 +1,4 @@
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
@@ -19,12 +19,12 @@ export async function archiveRecipe({
 	await db
 		.update(RecipesTable)
 		.set({
-			archivedAt: new Date(),
+			archivedAt: sql`NOW()`,
 			archivedBy: userId,
 		})
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
-	revalidateRecipePaths(id);
+	revalidateRecipePaths([id]);
 
 	if (redirectTo) {
 		redirect(redirectTo);
@@ -48,11 +48,11 @@ export async function unarchiveRecipe({
 			archivedAt: null,
 			archivedBy: null,
 			updatedBy: userId,
-			updatedAt: new Date(),
+			updatedAt: sql`NOW()`,
 		})
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
-	revalidateRecipePaths(id);
+	revalidateRecipePaths([id]);
 
 	if (redirectTo) {
 		redirect(redirectTo);

@@ -18,7 +18,7 @@ export function SelectDilution({
 	const [field] = useField<string>(name);
 	const markersId = useId();
 
-	const displayValue = field.value || field.initialValue;
+	const displayValue = field.value || field.defaultValue;
 
 	return (
 		<ControlLabel

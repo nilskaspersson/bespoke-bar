@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useActionState, useContext, useRef } from "react";
+import { useActionState, useRef } from "react";
 import { recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
@@ -13,15 +13,11 @@ import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Button } from "@/ui/Button";
-import { Callout } from "@/ui/Callout";
 import { ControlLabel } from "@/ui/ControlLabel";
+import { FormErrors } from "@/ui/FormErrors";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
-import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
-import { focusFieldByName } from "@/utils/form";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -31,7 +27,6 @@ type Props = {
 
 export function RecipeForm({ recipe, ingredients }: Props) {
 	const [state, formAction] = useActionState(upsertRecipeWithSpecsAction, null);
-	const { percentageFormatter } = useContext(FormatterContext);
 
 	const [form, fields] = useForm({
 		id: recipe?.id ? `recipe-form-${recipe.id}` : "new-recipe-form",
@@ -46,7 +41,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 		defaultValue: {
 			recipe: {
 				...recipe,
-				dilutionTarget: recipe.dilutionTarget ?? percentageFormatter.format(0),
+				dilutionTarget: recipe.dilutionTarget ?? 0,
 			},
 			specs: recipe.specs.map((spec) => ({
 				quantity: spec.quantity?.toString() ?? null,
@@ -56,9 +51,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 				ingredient: {
 					name: spec.ingredient.name,
 					description: spec.ingredient.description,
-					abv: spec.ingredient.abv
-						? percentageFormatter.format(spec.ingredient.abv)
-						: undefined,
+					abv: spec.ingredient.abv,
 					brand: spec.ingredient.brand,
 					category: spec.ingredient.category,
 					measurementType: spec.ingredient.measurementType,
@@ -157,7 +150,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 
 				<SelectDilution
 					name={recipeFields.dilutionTarget.name}
-					defaultValue={recipeFields.dilutionTarget.initialValue}
+					defaultValue={recipeFields.dilutionTarget.defaultValue}
 				/>
 
 				<SelectGlassware
@@ -173,24 +166,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 					defaultValue={recipeFields.garnish.initialValue}
 				/>
 
-				{Object.keys(form.allErrors).length > 0 ? (
-					<Callout color="red" size={2} heading="Issues">
-						<Text list as="ul">
-							{Object.entries(form.allErrors).map(([field, error]) => (
-								<li key={field}>
-									<Button
-										variant="base"
-										onClick={() => {
-											focusFieldByName(formRef.current, field);
-										}}
-									>
-										{error}
-									</Button>
-								</li>
-							))}
-						</Text>
-					</Callout>
-				) : null}
+				<FormErrors formRef={formRef} />
 
 				<div>
 					<SubmitButton variant="solid" color="accent" form={form.id}>
