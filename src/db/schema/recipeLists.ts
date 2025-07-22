@@ -14,6 +14,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
+import z from "zod/v4";
 import {
 	RecipeListEntriesTable,
 	type RecipeListEntry,
@@ -21,8 +22,8 @@ import {
 import type { Recipe } from "@/db/schema/recipes";
 import { sqlNormalizedString } from "@/db/utils";
 
-export const ListsTable = pgTable(
-	"lists",
+export const RecipeListsTable = pgTable(
+	"recipe_lists",
 	{
 		id: text("id")
 			.primaryKey()
@@ -50,32 +51,44 @@ export const ListsTable = pgTable(
 	],
 );
 
-export const listsRelations = relations(ListsTable, ({ many }) => ({
+export const listsRelations = relations(RecipeListsTable, ({ many }) => ({
 	entries: many(RecipeListEntriesTable),
 }));
 
-export type List = typeof ListsTable.$inferSelect;
+export type RecipeList = typeof RecipeListsTable.$inferSelect;
 
-export type ListWithRecipeCount = List & {
+export type RecipeListWithRecipeCount = RecipeList & {
 	recipeCount: number;
 };
 
-export type ListWithRecipes = List & {
+export type RecipeListWithRecipes = RecipeList & {
 	entries: (RecipeListEntry & {
 		recipe: Recipe;
 	})[];
 };
 
-export type InsertList = Omit<
-	typeof ListsTable.$inferInsert,
+export type InsertRecipeList = Omit<
+	typeof RecipeListsTable.$inferInsert,
 	"id" | "createdAt" | "updatedAt" | "createdBy" | "orgId"
 >;
 
-export type UpdateList = Pick<
-	typeof ListsTable.$inferInsert,
+export type UpdateRecipeList = Pick<
+	typeof RecipeListsTable.$inferInsert,
 	"name" | "description" | "isPublic" | "updatedAt" | "updatedBy"
 >;
 
-export const selectListSchema = createSelectSchema(ListsTable);
-export const insertListSchema = createInsertSchema(ListsTable);
-export const updateListSchema = createUpdateSchema(ListsTable);
+export const selectRecipeListSchema = createSelectSchema(RecipeListsTable);
+export const insertRecipeListSchema = createInsertSchema(RecipeListsTable);
+export const updateRecipeListSchema = createUpdateSchema(RecipeListsTable);
+
+export const recipeListFormSchema = insertRecipeListSchema
+	.pick({
+		name: true,
+		description: true,
+		isPublic: true,
+	})
+	.extend({
+		name: z.string().optional(),
+	});
+
+export type RecipeListFormData = z.infer<typeof recipeListFormSchema>;

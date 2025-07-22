@@ -14,7 +14,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { type List, ListsTable } from "@/db/schema/lists";
+import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 
 export const RecipeListEntriesTable = pgTable(
@@ -25,7 +25,7 @@ export const RecipeListEntriesTable = pgTable(
 			.$defaultFn(() => nanoid(10)),
 		listId: text("list_id")
 			.notNull()
-			.references(() => ListsTable.id, { onDelete: "cascade" }),
+			.references(() => RecipeListsTable.id, { onDelete: "cascade" }),
 		recipeId: text("recipe_id")
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
@@ -55,9 +55,9 @@ export const RecipeListEntriesTable = pgTable(
 export const recipeListEntriesRelations = relations(
 	RecipeListEntriesTable,
 	({ one }) => ({
-		list: one(ListsTable, {
+		list: one(RecipeListsTable, {
 			fields: [RecipeListEntriesTable.listId],
-			references: [ListsTable.id],
+			references: [RecipeListsTable.id],
 		}),
 		recipe: one(RecipesTable, {
 			fields: [RecipeListEntriesTable.recipeId],
@@ -73,12 +73,12 @@ export type RecipeListEntryWithRecipe = RecipeListEntry & {
 };
 
 export type RecipeListEntryWithList = RecipeListEntry & {
-	list: List;
+	list: RecipeList;
 };
 
 export type RecipeListEntryWithBoth = RecipeListEntry & {
 	recipe: Recipe;
-	list: List;
+	list: RecipeList;
 };
 
 export type InsertRecipeListEntry = Omit<

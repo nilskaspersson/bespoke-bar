@@ -5,9 +5,10 @@ import * as categories from "./schema/categories";
 import * as cocktailStyles from "./schema/cocktailStyles";
 import * as glassware from "./schema/glassware";
 import * as ingredients from "./schema/ingredients";
-import * as lists from "./schema/lists";
 import * as organisations from "./schema/organisations";
 import * as preparationMethods from "./schema/preparationMethods";
+import * as recipeListEntries from "./schema/recipeListEntries";
+import * as recipeLists from "./schema/recipeLists";
 import * as recipes from "./schema/recipes";
 import * as specs from "./schema/specs";
 import * as units from "./schema/units";
@@ -20,7 +21,8 @@ const schema = {
 	...categories,
 	...cocktailStyles,
 	...ingredients,
-	...lists,
+	...recipeLists,
+	...recipeListEntries,
 	...organisations,
 	...preparationMethods,
 	...glassware,
