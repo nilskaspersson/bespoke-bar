@@ -31,10 +31,12 @@ export const RecipeListsTable = pgTable(
 		name: varchar("name", { length: 100 }).notNull(),
 		description: varchar("description", { length: 1000 }),
 		isPublic: boolean("is_public").default(false).notNull(),
+		isFeatured: boolean("is_featured").default(false).notNull(),
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 		createdBy: text("created_by").notNull(),
 		updatedAt: timestamp("updated_at"),
 		updatedBy: text("updated_by"),
+		featuredAt: timestamp("featured_at"),
 		orgId: text("org_id").notNull(),
 	},
 	(table) => [
@@ -42,6 +44,7 @@ export const RecipeListsTable = pgTable(
 			sqlNormalizedString(table.name),
 			table.orgId,
 		),
+		index("idx_lists_featured_org").on(table.orgId, table.isFeatured),
 		index("idx_lists_org").on(table.orgId, table.createdAt.desc()),
 		index("idx_lists_org_public").on(
 			table.orgId,
@@ -69,7 +72,13 @@ export type RecipeListWithRecipes = RecipeList & {
 
 export type InsertRecipeList = Omit<
 	typeof RecipeListsTable.$inferInsert,
-	"id" | "createdAt" | "updatedAt" | "createdBy" | "orgId"
+	| "id"
+	| "createdAt"
+	| "updatedAt"
+	| "createdBy"
+	| "orgId"
+	| "featuredAt"
+	| "isFeatured"
 >;
 
 export type UpdateRecipeList = Pick<
