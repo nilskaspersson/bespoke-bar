@@ -8,11 +8,7 @@ import {
 	uniqueIndex,
 	varchar,
 } from "drizzle-orm/pg-core";
-import {
-	createInsertSchema,
-	createSelectSchema,
-	createUpdateSchema,
-} from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import z from "zod/v4";
 import {
@@ -88,10 +84,10 @@ export type UpdateRecipeList = Pick<
 
 export const selectRecipeListSchema = createSelectSchema(RecipeListsTable);
 export const insertRecipeListSchema = createInsertSchema(RecipeListsTable);
-export const updateRecipeListSchema = createUpdateSchema(RecipeListsTable);
 
 export const recipeListFormSchema = insertRecipeListSchema
 	.pick({
+		id: true,
 		name: true,
 		description: true,
 		isPublic: true,

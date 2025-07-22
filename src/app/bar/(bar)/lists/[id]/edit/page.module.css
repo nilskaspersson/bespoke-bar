@@ -1,0 +1,5 @@
+@layer layout {
+	.container {
+		padding-block: var(--gap--large);
+	}
+}

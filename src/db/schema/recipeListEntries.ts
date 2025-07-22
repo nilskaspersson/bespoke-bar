@@ -5,7 +5,6 @@ import {
 	pgTable,
 	real,
 	text,
-	timestamp,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import {
@@ -32,10 +31,6 @@ export const RecipeListEntriesTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		sortOrder: integer("sort_order").notNull(),
 		price: real("price"),
-		addedAt: timestamp("added_at").defaultNow().notNull(),
-		addedBy: text("added_by").notNull(),
-		updatedAt: timestamp("updated_at"),
-		updatedBy: text("updated_by"),
 	},
 	(table) => [
 		// A recipe can only appear once per list
@@ -84,12 +79,12 @@ export type RecipeListEntryWithBoth = RecipeListEntry & {
 
 export type InsertRecipeListEntry = Omit<
 	typeof RecipeListEntriesTable.$inferInsert,
-	"id" | "addedAt" | "addedBy" | "updatedAt" | "updatedBy"
+	"id"
 >;
 
 export type UpdateRecipeListEntry = Pick<
 	typeof RecipeListEntriesTable.$inferInsert,
-	"sortOrder" | "price" | "updatedAt" | "updatedBy"
+	"sortOrder" | "price"
 >;
 
 export const selectRecipeListEntrySchema = createSelectSchema(

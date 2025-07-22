@@ -6,7 +6,7 @@ import { useActionState, useRef } from "react";
 import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
 import type { Recipe } from "@/db/schema/recipes";
-import { createRecipeListWithEntriesAction } from "@/features/lists/actions/createRecipeListWithEntries";
+import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
 import { Button } from "@/ui/Button";
 import { FormErrors } from "@/ui/FormErrors";
@@ -20,9 +20,9 @@ type Props = {
 	recipes?: Recipe[];
 };
 
-export function RecipeListForm({ recipes }: Props) {
+export function RecipeListForm({ recipes, recipeList }: Props) {
 	const [state, formAction] = useActionState(
-		createRecipeListWithEntriesAction,
+		upsertRecipeListWithEntriesAction,
 		null,
 	);
 
@@ -31,11 +31,16 @@ export function RecipeListForm({ recipes }: Props) {
 		lastResult: state,
 		defaultValue: {
 			recipeList: {
-				name: "",
-				description: "",
-				isPublic: false,
+				id: recipeList?.id ?? "",
+				name: recipeList?.name ?? "",
+				description: recipeList?.description ?? "",
+				isPublic: recipeList?.isPublic ?? false,
 			},
-			entries: [],
+			entries: recipeList?.entries.map((entry) => ({
+				sortOrder: entry.sortOrder ?? "",
+				price: entry.price ?? "",
+				recipeId: entry.recipeId,
+			})),
 		},
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
@@ -60,6 +65,12 @@ export function RecipeListForm({ recipes }: Props) {
 			>
 				<input type="submit" hidden form={form.id} />
 
+				<input
+					type="hidden"
+					name={recipeListFields.id.name}
+					value={recipeListFields.id.defaultValue}
+				/>
+
 				<Grid gap={4}>
 					<TextField
 						label="Name"
@@ -83,6 +94,12 @@ export function RecipeListForm({ recipes }: Props) {
 							return (
 								<li key={entry.key}>
 									<fieldset>
+										<input
+											type="hidden"
+											name={entryFields.sortOrder.name}
+											value={entryFields.sortOrder.defaultValue}
+										/>
+
 										<SelectRecipe
 											name={entryFields.recipeId.name}
 											defaultValue={entryFields.recipeId.defaultValue}

@@ -1,6 +1,7 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
@@ -38,6 +39,8 @@ export async function createRecipeList(
 		.insert(RecipeListsTable)
 		.values(validatedList)
 		.returning();
+
+	revalidatePath("/bar/lists", "page");
 
 	return list;
 }

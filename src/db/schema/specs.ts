@@ -8,7 +8,7 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema, createUpdateSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod/v4";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
@@ -82,9 +82,5 @@ const specsConstraintsSchema = {
 };
 
 export const insertSpecsSchema = createInsertSchema(SpecsTable).extend(
-	specsConstraintsSchema,
-);
-
-export const updateSpecsSchema = createUpdateSchema(SpecsTable).extend(
 	specsConstraintsSchema,
 );
