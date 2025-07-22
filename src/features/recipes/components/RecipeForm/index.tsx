@@ -13,14 +13,11 @@ import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
-import { Button } from "@/ui/Button";
-import { Callout } from "@/ui/Callout";
 import { ControlLabel } from "@/ui/ControlLabel";
+import { FormErrors } from "@/ui/FormErrors";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
-import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
-import { focusFieldByName } from "@/utils/form";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -169,24 +166,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 					defaultValue={recipeFields.garnish.initialValue}
 				/>
 
-				{Object.keys(form.allErrors).length > 0 ? (
-					<Callout color="red" size={2} heading="Issues">
-						<Text list as="ul">
-							{Object.entries(form.allErrors).map(([field, error]) => (
-								<li key={field}>
-									<Button
-										variant="base"
-										onClick={() => {
-											focusFieldByName(formRef.current, field);
-										}}
-									>
-										{error}
-									</Button>
-								</li>
-							))}
-						</Text>
-					</Callout>
-				) : null}
+				<FormErrors formRef={formRef} />
 
 				<div>
 					<SubmitButton variant="solid" color="accent" form={form.id}>
