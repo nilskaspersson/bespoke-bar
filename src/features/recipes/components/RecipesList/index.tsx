@@ -70,6 +70,19 @@ export function RecipesList<T extends RecipeWithSpecs>({
 								<LinkButton
 									variant="ghost"
 									size="tiny"
+									href={getRecipeUrl(row.original)}
+									className={styles.link}
+									color="accent"
+								>
+									<Icon name="arrow-right" size={1} />
+									View recipe
+								</LinkButton>
+							</li>
+
+							<li>
+								<LinkButton
+									variant="ghost"
+									size="tiny"
 									href={`/bar/recipes/${row.original.id}/edit`}
 									className={styles.link}
 									prefetch={false}
@@ -91,19 +104,6 @@ export function RecipesList<T extends RecipeWithSpecs>({
 								>
 									Copy
 								</CopyToClipboard>
-							</li>
-
-							<li>
-								<LinkButton
-									variant="ghost"
-									size="tiny"
-									href={getRecipeUrl(row.original)}
-									className={styles.link}
-									color="accent"
-								>
-									<Icon name="arrow-right" size={1} />
-									View recipe
-								</LinkButton>
 							</li>
 						</menu>
 					</li>
