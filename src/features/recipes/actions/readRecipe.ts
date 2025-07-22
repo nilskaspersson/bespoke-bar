@@ -1,9 +1,26 @@
 "use server";
 
-import { and, eq, or } from "drizzle-orm";
+import { and, eq, or, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 import { authOrForbidden } from "@/utils/auth";
+
+const preparedReadRecipe = db.query.RecipesTable.findFirst({
+	where: and(
+		eq(RecipesTable.id, sql.placeholder("recipeId")),
+		or(
+			eq(RecipesTable.createdBy, sql.placeholder("userId")),
+			eq(RecipesTable.orgId, sql.placeholder("orgId")),
+		),
+	),
+	with: {
+		specs: {
+			with: {
+				ingredient: true,
+			},
+		},
+	},
+}).prepare("readRecipe");
 
 export async function readRecipe(id: string | undefined) {
 	if (!id) {
@@ -12,18 +29,10 @@ export async function readRecipe(id: string | undefined) {
 
 	const { userId, orgId } = await authOrForbidden();
 
-	const recipe = await db.query.RecipesTable.findFirst({
-		where: and(
-			eq(RecipesTable.id, id),
-			or(eq(RecipesTable.createdBy, userId), eq(RecipesTable.orgId, orgId)),
-		),
-		with: {
-			specs: {
-				with: {
-					ingredient: true,
-				},
-			},
-		},
+	const recipe = await preparedReadRecipe.execute({
+		recipeId: id,
+		userId,
+		orgId,
 	});
 
 	return recipe;
