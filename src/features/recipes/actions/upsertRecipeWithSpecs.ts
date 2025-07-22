@@ -13,6 +13,7 @@ import {
 } from "@/features/recipes/actions/utils/transactionHelpers";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
+import { revalidateRecipePaths } from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
@@ -65,6 +66,8 @@ async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 
 		return processedRecipes;
 	});
+
+	revalidateRecipePaths(result.map((r) => r.id));
 
 	return result;
 }

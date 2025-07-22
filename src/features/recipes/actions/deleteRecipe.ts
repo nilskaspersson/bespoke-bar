@@ -1,3 +1,5 @@
+"use server";
+
 import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
@@ -12,15 +14,13 @@ export async function deleteRecipe({
 	id: Recipe["id"];
 	redirectTo?: string;
 }): Promise<void> {
-	"use server";
-
 	const { orgId } = await authOrForbidden();
 
 	await db
 		.delete(RecipesTable)
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
-	revalidateRecipePaths(id);
+	revalidateRecipePaths([id]);
 
 	if (redirectTo) {
 		redirect(redirectTo);
