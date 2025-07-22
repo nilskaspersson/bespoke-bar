@@ -42,7 +42,7 @@ export const IngredientsTable = pgTable(
 		updatedBy: text("updated_by"),
 	},
 	(table) => [
-		uniqueIndex("unique_name_case_insensitive").on(
+		uniqueIndex("unique_ingredient_name_case_insensitive").on(
 			sqlNormalizedString(table.name),
 			table.orgId,
 		),
