@@ -1,9 +1,14 @@
 import { z } from "zod/v4";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
+import { recipeListEntryFormSchema } from "@/db/schema/recipeListEntries";
+import { recipeListFormSchema } from "@/db/schema/recipeLists";
 import { insertRecipeSchema } from "@/db/schema/recipes";
 import { insertSpecsSchema } from "@/db/schema/specs";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 
+/**
+ * Recipes with specs and ingredients
+ */
 export const upsertRecipeSchema = insertRecipeSchema
 	.omit({
 		id: true,
@@ -46,3 +51,15 @@ export const recipeFormSchema = z.object({
 export type RecipeFormData = z.infer<typeof recipeFormSchema>;
 
 export type IngredientFormData = z.infer<typeof ingredientFormDataSchema>;
+
+/**
+ * Recipe lists with entries
+ */
+export const recipeListWithEntriesFormSchema = z.object({
+	recipeList: recipeListFormSchema,
+	entries: z.array(recipeListEntryFormSchema),
+});
+
+export type RecipeListWithEntriesFormData = z.infer<
+	typeof recipeListWithEntriesFormSchema
+>;

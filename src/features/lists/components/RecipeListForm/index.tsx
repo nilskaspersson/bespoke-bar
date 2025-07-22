@@ -3,32 +3,51 @@
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useActionState, useRef } from "react";
-import { recipeListFormSchema } from "@/db/schema/recipeLists";
-import { createRecipeListAction } from "@/features/lists/actions/createRecipeList";
+import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
+import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
+import type { Recipe } from "@/db/schema/recipes";
+import { createRecipeListWithEntriesAction } from "@/features/lists/actions/createRecipeListWithEntries";
+import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
+import { Button } from "@/ui/Button";
+import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 
-export function RecipeListForm() {
-	const [state, formAction] = useActionState(createRecipeListAction, null);
+type Props = {
+	recipeList?: RecipeListWithRecipes;
+	recipes?: Recipe[];
+};
+
+export function RecipeListForm({ recipes }: Props) {
+	const [state, formAction] = useActionState(
+		createRecipeListWithEntriesAction,
+		null,
+	);
 
 	const [form, fields] = useForm({
 		id: "list-form",
 		lastResult: state,
 		defaultValue: {
-			name: "",
-			description: "",
-			isPublic: false,
+			recipeList: {
+				name: "",
+				description: "",
+				isPublic: false,
+			},
+			entries: [],
 		},
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
-				schema: recipeListFormSchema,
+				schema: recipeListWithEntriesFormSchema,
 			});
 		},
 	});
 
 	const formRef = useRef<HTMLFormElement>(null);
+
+	const recipeListFields = fields.recipeList.getFieldset();
+	const entries = fields.entries.getFieldList();
 
 	return (
 		<FormProvider context={form.context}>
@@ -39,21 +58,62 @@ export function RecipeListForm() {
 				onSubmit={form.onSubmit}
 				noValidate
 			>
+				<input type="submit" hidden form={form.id} />
+
 				<Grid gap={4}>
 					<TextField
 						label="Name"
-						name={fields.name.name}
-						defaultValue={fields.name.defaultValue}
-						id={fields.name.id}
+						name={recipeListFields.name.name}
+						defaultValue={recipeListFields.name.defaultValue}
+						id={recipeListFields.name.id}
 					/>
 
 					<TextField
 						as="textarea"
 						label="Description"
-						name={fields.description.name}
-						id={fields.description.id}
-						defaultValue={fields.description.defaultValue}
+						name={recipeListFields.description.name}
+						id={recipeListFields.description.id}
+						defaultValue={recipeListFields.description.defaultValue}
 					/>
+
+					<ul>
+						{entries?.map((entry) => {
+							const entryFields = entry.getFieldset();
+
+							return (
+								<li key={entry.key}>
+									<fieldset>
+										<SelectRecipe
+											name={entryFields.recipeId.name}
+											defaultValue={entryFields.recipeId.defaultValue}
+											recipes={recipes}
+										/>
+									</fieldset>
+								</li>
+							);
+						})}
+					</ul>
+
+					<div>
+						<Button
+							type="submit"
+							variant="solid"
+							color="accent"
+							rounded
+							{...form.insert.getButtonProps({
+								name: fields.entries.name,
+								defaultValue: {
+									price: "",
+									recipeId: "",
+									sortOrder: entries.length,
+								},
+							})}
+						>
+							Add Recipe
+						</Button>
+					</div>
+
+					<FormErrors formRef={formRef} />
 
 					<div>
 						<SubmitButton variant="solid" color="accent" form={form.id}>

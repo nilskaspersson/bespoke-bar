@@ -14,6 +14,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
+import type { z } from "zod/v4";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 
@@ -100,3 +101,16 @@ export const insertRecipeListEntrySchema = createInsertSchema(
 export const updateRecipeListEntrySchema = createUpdateSchema(
 	RecipeListEntriesTable,
 );
+
+export const recipeListEntryFormSchema = insertRecipeListEntrySchema
+	.pick({
+		price: true,
+		recipeId: true,
+		sortOrder: true,
+	})
+	.partial({
+		price: true,
+		sortOrder: true,
+	});
+
+export type RecipeListEntryFormData = z.infer<typeof recipeListEntryFormSchema>;
