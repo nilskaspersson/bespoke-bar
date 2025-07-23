@@ -1,0 +1,116 @@
+@layer feature {
+	.base {
+		--badge-length: var(--space-7);
+		container: card / inline-size;
+		contain: layout;
+	}
+
+	.bevel {
+		display: grid;
+		justify-content: center;
+		gap: var(--gap);
+		padding: var(--gap--large) var(--gap);
+		border: 1px solid var(--mauve-5);
+		transition: border-color var(--transition-duration);
+
+		@container card (width > 400px) {
+			padding-inline: var(--gap--large);
+		}
+	}
+
+	.card {
+		display: block;
+		text-align: center;
+		box-shadow: var(--shadow--low);
+		background-color: var(--mauve-2);
+		padding: var(--gap--large) var(--gap--large) var(--gap);
+		border-radius: var(--radius--small);
+		transition-property: box-shadow, background-color;
+		transition-duration: var(--transition-duration);
+
+		&:hover,
+		&:focus {
+			&:not(:active) {
+				box-shadow: var(--shadow);
+			}
+		}
+
+		&:active {
+			opacity: 1;
+			transition: none;
+
+			> .bevel {
+				opacity: 0.5;
+				transition: none;
+			}
+		}
+	}
+
+	.badge {
+		display: flex;
+		position: absolute;
+		inset: calc(var(--badge-length) * -0.5) 0 auto;
+		margin-inline: auto;
+		width: var(--badge-length);
+		height: var(--badge-length);
+		border-radius: 50%;
+		background-color: inherit;
+		padding: var(--space-1);
+		transition-property: background-color, border-color;
+		transition-duration: var(--transition-duration);
+	}
+
+	.icon {
+		flex: 1 1 auto;
+		display: flex;
+		place-items: center;
+		place-content: center;
+		border-radius: inherit;
+		background-color: var(--mauve-2);
+		border: 1px solid var(--mauve-5);
+		color: var(--mauve-7);
+		transition-property: border-color, background-color;
+		transition-duration: var(--transition-duration);
+
+		&.isFeatured {
+			color: var(--amber-6);
+		}
+	}
+
+	.name {
+		font-size: var(--size-6);
+		font-weight: 600;
+	}
+
+	.count {
+		margin-block: var(--space-0);
+		display: inline-block;
+		justify-self: center;
+		color: var(--amber-12);
+		background-color: var(--amber-5);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius--small);
+		font-weight: 500;
+		transition-property: background-color, border-color, color;
+		transition-duration: var(--transition-duration);
+	}
+
+	.stats {
+		display: inline-flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		justify-self: center;
+		padding-top: var(--gap--small);
+		font-style: italic;
+	}
+
+	.stat {
+		&:has(+ .stat) {
+			&::after {
+				content: "•";
+				margin-inline: var(--space-1);
+			}
+		}
+	}
+}

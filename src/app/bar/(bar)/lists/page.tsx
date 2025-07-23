@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { readBarRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
-import { getRecipeListUrl } from "@/features/lists/utils";
+import { RecipeListCard } from "@/features/lists/components/RecipeListCard";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./page.module.css";
 
 export default async function ListsPage() {
@@ -36,14 +34,10 @@ export default async function ListsPage() {
 				</LinkButton>
 			</Flex>
 
-			<Grid as="ul" gap={4}>
+			<Grid as="ul" gap={8}>
 				{lists.map((list) => (
 					<li key={list.id}>
-						<Link href={getRecipeListUrl(list)}>{list.name}</Link>
-						<br />
-						<Text size={2} light>
-							Recipes: {list.recipeCount}
-						</Text>
+						<RecipeListCard list={list} />
 					</li>
 				))}
 			</Grid>

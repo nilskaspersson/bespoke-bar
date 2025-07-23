@@ -56,6 +56,7 @@ export type IconName =
 	| "magnifying-glass"
 	| "markdown"
 	| "martini-glass"
+	| "memo-pad"
 	| "memo"
 	| "minus"
 	| "moon"
