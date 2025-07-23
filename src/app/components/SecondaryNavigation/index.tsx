@@ -5,7 +5,6 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { HTMLAttributes } from "react";
-import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -37,13 +36,10 @@ export function SecondaryNavigation({
 					<li className={styles.item}>
 						<Link
 							href="/bar/lists"
-							inert
-							aria-disabled
 							className={clsx(styles.link, {
 								[styles.isActive]: pathname.startsWith("/bar/lists"),
 							})}
 						>
-							<Icon name="ban" size={1} />
 							Lists
 						</Link>
 					</li>
