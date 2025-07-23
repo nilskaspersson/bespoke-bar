@@ -1,3 +1,5 @@
+"use server";
+
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";

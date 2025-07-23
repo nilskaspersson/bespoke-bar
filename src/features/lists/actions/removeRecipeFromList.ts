@@ -1,3 +1,5 @@
+"use server";
+
 import { and, eq, exists } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";

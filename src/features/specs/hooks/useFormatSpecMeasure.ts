@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback } from "react";
 import type { DraftSpec } from "@/db/schema/specs";
 import { useGetSpecMeasure } from "@/features/specs/hooks/useGetSpecMeasure";
