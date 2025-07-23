@@ -14,8 +14,8 @@ import {
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import type { z } from "zod/v4";
-import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
-import { type Recipe, RecipesTable } from "@/db/schema/recipes";
+import { RecipeListsTable } from "@/db/schema/recipeLists";
+import { RecipesTable, type RecipeWithSpecs } from "@/db/schema/recipes";
 
 export const RecipeListEntriesTable = pgTable(
 	"recipe_list_entries",
@@ -64,19 +64,6 @@ export const recipeListEntriesRelations = relations(
 
 export type RecipeListEntry = typeof RecipeListEntriesTable.$inferSelect;
 
-export type RecipeListEntryWithRecipe = RecipeListEntry & {
-	recipe: Recipe;
-};
-
-export type RecipeListEntryWithList = RecipeListEntry & {
-	list: RecipeList;
-};
-
-export type RecipeListEntryWithBoth = RecipeListEntry & {
-	recipe: Recipe;
-	list: RecipeList;
-};
-
 export type InsertRecipeListEntry = Omit<
 	typeof RecipeListEntriesTable.$inferInsert,
 	"id"
@@ -86,6 +73,10 @@ export type UpdateRecipeListEntry = Pick<
 	typeof RecipeListEntriesTable.$inferInsert,
 	"sortOrder" | "price"
 >;
+
+export type RecipeListEntryWithRecipe = RecipeListEntry & {
+	recipe: RecipeWithSpecs;
+};
 
 export const selectRecipeListEntrySchema = createSelectSchema(
 	RecipeListEntriesTable,

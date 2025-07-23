@@ -8,7 +8,7 @@
 		color: var(--c);
 		background-color: var(--bgc);
 		border-radius: var(--radius--large);
-		box-shadow: var(--shadow);
+		box-shadow: var(--shadow--low);
 		text-align: left;
 	}
 
@@ -25,9 +25,9 @@
 	}
 
 	.light {
-		--c: var(--mauve-12);
+		--c: var(--mauve-11);
 		--lc: var(--mauve-11);
-		--bgc: var(--mauve-8);
+		--bgc: var(--mauve-3);
 	}
 
 	.red {

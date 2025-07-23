@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { readBarRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
-import { RecipeListCard } from "@/features/lists/components/RecipeListCard";
+import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
+import { getRecipeListUrl } from "@/features/lists/utils";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
@@ -37,7 +38,11 @@ export default async function ListsPage() {
 			<Grid as="ul" gap={8}>
 				{lists.map((list) => (
 					<li key={list.id}>
-						<RecipeListCard list={list} />
+						<RecipeListFrame
+							list={list}
+							href={getRecipeListUrl(list)}
+							recipeCount={list.recipeCount}
+						/>
 					</li>
 				))}
 			</Grid>
