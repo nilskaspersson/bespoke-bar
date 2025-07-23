@@ -1,3 +1,5 @@
+"use client";
+
 import { useCallback, useContext } from "react";
 import { FormatterContext } from "@/hooks/useFormatter";
 

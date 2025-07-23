@@ -71,10 +71,10 @@ export function RecipesList<T extends RecipeWithSpecs>({
 									variant="ghost"
 									size="tiny"
 									href={getRecipeUrl(row.original)}
-									className={styles.link}
+									className={styles.action}
 									color="accent"
 								>
-									<Icon name="arrow-right" size={1} />
+									<Icon name="arrow-right" size={0} />
 									View recipe
 								</LinkButton>
 							</li>
@@ -84,11 +84,11 @@ export function RecipesList<T extends RecipeWithSpecs>({
 									variant="ghost"
 									size="tiny"
 									href={`/bar/recipes/${row.original.id}/edit`}
-									className={styles.link}
+									className={styles.action}
 									prefetch={false}
 									color="accent"
 								>
-									<Icon name="pen-to-square" size={1} />
+									<Icon name="pen-to-square" size={0} />
 									Edit
 								</LinkButton>
 							</li>
@@ -101,6 +101,8 @@ export function RecipesList<T extends RecipeWithSpecs>({
 									}}
 									variant="ghost"
 									size="tiny"
+									iconSize={0}
+									className={styles.action}
 								>
 									Copy
 								</CopyToClipboard>
