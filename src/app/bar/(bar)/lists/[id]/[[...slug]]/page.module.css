@@ -3,14 +3,6 @@
 		display: grid;
 		gap: var(--gap--large);
 		padding-block: var(--app-inset) var(--gap--huge);
-	}
-
-	.recipes {
-		display: grid;
-		gap: var(--space-7);
-		color: var(--mauve-11);
-		margin-top: var(--gap--large);
-		padding-top: var(--gap--large);
-		border-top: 1px dashed var(--mauve-6);
+		align-content: start;
 	}
 }

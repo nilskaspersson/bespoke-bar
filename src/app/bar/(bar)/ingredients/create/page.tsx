@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import { PageHeader } from "@/app/components/PageHeader";
 import { CreateIngredientForm } from "@/features/ingredients/components/CreateIngredientForm";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
 import styles from "./page.module.css";
 
 export default async function CreateIngredientPage() {
@@ -12,7 +12,7 @@ export default async function CreateIngredientPage() {
 	return (
 		<Container as="article" className={styles.container}>
 			<Grid gap={4}>
-				<Heading level="h1">Create Ingredient</Heading>
+				<PageHeader heading="Create Ingredient" />
 
 				<CreateIngredientForm organisation={organisation} />
 			</Grid>

@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
+import { PageHeader } from "@/app/components/PageHeader";
 import { readIngredients } from "@/features/ingredients/actions/readIngredients";
 import { IngredientTable } from "@/features/ingredients/components/IngredientsTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
-import { Flex } from "@/ui/Flex";
-import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import styles from "./page.module.css";
 
@@ -13,25 +12,20 @@ export default async function IngredientsPage() {
 
 	return (
 		<Container as="article" className={styles.container}>
-			<Flex
-				as="header"
-				justifyContent="space-between"
-				alignItems="center"
-				wrap
-				gap={4}
-			>
-				<Heading level="h1">Ingredients</Heading>
-
-				<LinkButton
-					href="/bar/ingredients/create"
-					variant="solid"
-					color="accent"
-					size="small"
-				>
-					Create Ingredient
-					<Icon name="duotone-wine-bottle" />
-				</LinkButton>
-			</Flex>
+			<PageHeader
+				heading="Ingredients"
+				actions={
+					<LinkButton
+						href="/bar/ingredients/create"
+						variant="solid"
+						color="accent"
+						size="small"
+					>
+						Create Ingredient
+						<Icon name="duotone-wine-bottle" />
+					</LinkButton>
+				}
+			/>
 
 			<IngredientTable ingredients={ingredients} />
 		</Container>

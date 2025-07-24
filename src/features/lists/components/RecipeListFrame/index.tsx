@@ -13,6 +13,7 @@ function OptionalLink({
 	children,
 	className,
 	href,
+	...linkProps
 }: Partial<ComponentProps<typeof Link>>) {
 	if (href) {
 		return (
@@ -20,6 +21,7 @@ function OptionalLink({
 				href={href}
 				className={clsx(styles.link, className)}
 				prefetch="auto"
+				{...linkProps}
 			>
 				{children}
 			</Link>
@@ -43,7 +45,11 @@ export function RecipeListFrame({
 	level?: HeadingLevel;
 } & ComponentProps<"section">) {
 	return (
-		<OptionalLink href={href} className={clsx(styles.card, className)}>
+		<OptionalLink
+			href={href}
+			className={clsx(styles.card, className)}
+			aria-label={`View list ${list.name}`}
+		>
 			<div aria-hidden="true" className={styles.badge}>
 				<div
 					className={clsx(styles.icon, {

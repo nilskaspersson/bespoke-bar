@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { PageHeader } from "@/app/components/PageHeader";
 import { clearFeaturedList } from "@/features/lists/actions/clearFeaturedList";
 import { readRecipeList } from "@/features/lists/actions/readRecipeList";
 import { setFeaturedList } from "@/features/lists/actions/setFeaturedList";
 import { ClearFeaturedListButton } from "@/features/lists/components/ClearFeaturedListButton";
-import { RecipeListEntry } from "@/features/lists/components/RecipeListEntry";
+import { RecipeEntryList } from "@/features/lists/components/RecipeEntryList";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { SetFeaturedListButton } from "@/features/lists/components/SetFeaturedListButton";
 import { Container } from "@/ui/Container";
-import { Flex } from "@/ui/Flex";
-import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
@@ -37,51 +36,42 @@ export default async function RecipeListPage({ params }: Props) {
 
 	return (
 		<Container as="article" className={styles.container}>
-			<Flex wrap gap={4} justifyContent="space-between" alignItems="center">
-				<Heading level="h1" serif>
-					{recipeList.name}
-				</Heading>
-
-				{recipeList.isFeatured ? (
-					<ClearFeaturedListButton
-						list={recipeList}
-						actionSetFeatured={setFeaturedList}
-						actionClearFeatured={clearFeaturedList}
-						variant="outline"
-						color="amber"
-						size="small"
-					>
-						Remove from Featured
-					</ClearFeaturedListButton>
-				) : (
-					<SetFeaturedListButton
-						list={recipeList}
-						actionSetFeatured={setFeaturedList}
-						actionClearFeatured={clearFeaturedList}
-						variant="solid"
-						color="amber"
-						size="small"
-					>
-						<Icon name="star" />
-						Set as Featured List
-					</SetFeaturedListButton>
-				)}
-			</Flex>
+			<PageHeader
+				heading={recipeList.name}
+				actions={
+					recipeList.isFeatured ? (
+						<ClearFeaturedListButton
+							list={recipeList}
+							actionSetFeatured={setFeaturedList}
+							actionClearFeatured={clearFeaturedList}
+							variant="outline"
+							color="light"
+							size="small"
+						>
+							Remove from Featured
+						</ClearFeaturedListButton>
+					) : (
+						<SetFeaturedListButton
+							list={recipeList}
+							actionSetFeatured={setFeaturedList}
+							actionClearFeatured={clearFeaturedList}
+							variant="solid"
+							color="amber"
+							size="small"
+						>
+							<Icon name="star" />
+							Set as Featured List
+						</SetFeaturedListButton>
+					)
+				}
+			/>
 
 			<RecipeListFrame
 				level="h2"
 				list={recipeList}
 				recipeCount={recipeList.entries.length}
 			>
-				{recipeList.entries.length > 0 ? (
-					<ul className={styles.recipes}>
-						{recipeList.entries.map((entry) => (
-							<li key={entry.id}>
-								<RecipeListEntry entry={entry} />
-							</li>
-						))}
-					</ul>
-				) : null}
+				<RecipeEntryList entries={recipeList.entries} />
 			</RecipeListFrame>
 		</Container>
 	);
