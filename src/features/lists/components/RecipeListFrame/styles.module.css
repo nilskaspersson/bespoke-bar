@@ -28,6 +28,12 @@
 		justify-content: center;
 		gap: var(--gap);
 		text-align: center;
+
+		&:not(:last-child) {
+			margin-bottom: var(--gap--large);
+			padding-bottom: var(--gap--large);
+			border-bottom: 1px dashed var(--mauve-6);
+		}
 	}
 
 	.link {

@@ -20,13 +20,6 @@
 		top: calc(50% - 0.5rem);
 	}
 
-	.empty {
-		padding: var(--gap);
-		border: 2px dashed var(--iris-7);
-		border-radius: var(--radius--large);
-		text-align: center;
-	}
-
 	.sticky {
 		--offset: calc(var(--gap) + var(--bar-navigation--height));
 

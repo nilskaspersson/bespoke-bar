@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import { type ComponentPropsWithRef, useRef } from "react";
+import { EmptyArea } from "@/app/components/EmptyArea";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -45,13 +46,7 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 				{!isFilteredEmpty ? (
 					children
 				) : (
-					<Grid
-						as="aside"
-						gap={4}
-						className={styles.empty}
-						justifyContent="center"
-						justifyItems="center"
-					>
+					<EmptyArea color="accent">
 						<Heading level="h6">Nothing matches your search</Heading>
 
 						<Button
@@ -62,7 +57,7 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 						>
 							Clear search
 						</Button>
-					</Grid>
+					</EmptyArea>
 				)}
 			</Grid>
 

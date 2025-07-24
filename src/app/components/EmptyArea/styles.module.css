@@ -1,0 +1,32 @@
+@layer component {
+	.empty {
+		padding: var(--gap);
+		border: 2px dashed var(--bc);
+		border-radius: var(--radius--large);
+		text-align: center;
+	}
+
+	.accent {
+		--bc: var(--iris-7);
+	}
+
+	.amber {
+		--bc: var(--amber-8);
+	}
+
+	.red {
+		--bc: var(--red-7);
+	}
+
+	.light {
+		--bc: var(--mauve-6);
+	}
+
+	.regular {
+		--bc: var(--mauve-10);
+	}
+
+	.heavy {
+		--bc: var(--mauve-12);
+	}
+}
