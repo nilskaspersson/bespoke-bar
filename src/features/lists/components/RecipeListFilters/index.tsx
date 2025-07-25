@@ -7,18 +7,23 @@ import {
 	useState,
 } from "react";
 import { EmptyArea } from "@/app/components/EmptyArea";
+import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
 import { RecipeEntryList } from "@/features/lists/components/RecipeEntryList";
+import { Button, LinkButton } from "@/ui/Button";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
 import { Input } from "@/ui/Input";
-import { Text } from "@/ui/Text";
 import { normalizeInput } from "@/utils";
 
 export function RecipeListFilters({
-	entries,
+	list,
 	...props
-}: ComponentProps<typeof RecipeEntryList>) {
+}: ComponentProps<typeof Grid> & { list: RecipeListWithRecipes }) {
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
+
+	const { entries } = list;
 
 	const filteredEntries = useMemo(() => {
 		const normalizedSearch = normalizeInput(deferredSearch);
@@ -48,9 +53,33 @@ export function RecipeListFilters({
 
 			{filteredEntries.length === 0 && entries.length > 0 ? (
 				<EmptyArea color="light">
-					<Text size={4} heavy weight={600}>
+					<Heading level="h3" size={4}>
 						No recipes found
-					</Text>
+					</Heading>
+
+					<Flex as="menu" gap={2} wrap justifyContent="center">
+						<li>
+							<LinkButton
+								href={`/bar/lists/${list.id}/edit`}
+								variant="outline"
+								color="light"
+								size="small"
+							>
+								Add recipes
+							</LinkButton>
+						</li>
+
+						<li>
+							<Button
+								variant="outline"
+								color="light"
+								size="small"
+								onClick={() => setSearch("")}
+							>
+								Clear search
+							</Button>
+						</li>
+					</Flex>
 				</EmptyArea>
 			) : (
 				<RecipeEntryList entries={filteredEntries} {...props} />

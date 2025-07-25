@@ -1,13 +1,16 @@
 import { flexRender, type Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import { EntityActions } from "@/app/components/EntityActions";
+import { ShareAction } from "@/app/components/ShareAction";
 import type { ViewType } from "@/app/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
 import { LinkButton } from "@/ui/Button";
-import { CopyToClipboard } from "@/ui/CopyToClipboard/inded";
+import { CopyToClipboard } from "@/ui/CopyToClipboard";
 import { Icon } from "@/ui/Icon";
+import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
 
 export function RecipesList<T extends RecipeWithSpecs>({
@@ -65,49 +68,59 @@ export function RecipesList<T extends RecipeWithSpecs>({
 							</div>
 						</section>
 
-						<menu className={styles.actions}>
-							<li>
-								<LinkButton
-									variant="ghost"
-									size="tiny"
-									href={getRecipeUrl(row.original)}
-									className={styles.action}
-									color="accent"
-								>
-									<Icon name="arrow-right" size={0} />
-									View recipe
-								</LinkButton>
-							</li>
+						<EntityActions>
+							{(actionProps) => (
+								<>
+									<li>
+										<LinkButton
+											{...actionProps}
+											href={getRecipeUrl(row.original)}
+											color="accent"
+										>
+											<Icon name="arrow-right" size={1} />
+											View
+										</LinkButton>
+									</li>
 
-							<li>
-								<LinkButton
-									variant="ghost"
-									size="tiny"
-									href={`/bar/recipes/${row.original.id}/edit`}
-									className={styles.action}
-									prefetch={false}
-									color="accent"
-								>
-									<Icon name="pen-to-square" size={0} />
-									Edit
-								</LinkButton>
-							</li>
+									<li>
+										<LinkButton
+											{...actionProps}
+											href={`/bar/recipes/${row.original.id}/edit`}
+											prefetch={false}
+											color="accent"
+										>
+											<Icon name="pen-to-square" size={1} />
+											Edit
+										</LinkButton>
+									</li>
 
-							<li>
-								<CopyToClipboard
-									getValue={() => {
-										const specsText = getSpecsToText(row.original.specs);
-										return `${row.original.name}${specsText ? `\n${specsText}` : ""}`;
-									}}
-									variant="ghost"
-									size="tiny"
-									iconSize={0}
-									className={styles.action}
-								>
-									Copy
-								</CopyToClipboard>
-							</li>
-						</menu>
+									<li>
+										<CopyToClipboard
+											{...actionProps}
+											getValue={() => {
+												const specsText = getSpecsToText(row.original.specs);
+												return `${row.original.name}${specsText ? `\n${specsText}` : ""}`;
+											}}
+											iconSize={1}
+										>
+											Copy
+										</CopyToClipboard>
+									</li>
+
+									<li>
+										<ShareAction
+											{...actionProps}
+											value={new URL(
+												getRecipeUrl(row.original),
+												getServerSideBaseURL(),
+											).toString()}
+										>
+											Share link
+										</ShareAction>
+									</li>
+								</>
+							)}
+						</EntityActions>
 					</li>
 				);
 			})}

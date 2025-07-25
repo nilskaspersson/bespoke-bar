@@ -14,6 +14,7 @@ import z from "zod/v4";
 import {
 	RecipeListEntriesTable,
 	type RecipeListEntry,
+	type RecipeListEntryWithRecipe,
 } from "@/db/schema/recipeListEntries";
 import type { Recipe } from "@/db/schema/recipes";
 import { sqlNormalizedString } from "@/db/utils";
@@ -61,9 +62,7 @@ export type RecipeListWithRecipeCount = RecipeList & {
 };
 
 export type RecipeListWithRecipes = RecipeList & {
-	entries: (RecipeListEntry & {
-		recipe: Recipe;
-	})[];
+	entries: RecipeListEntryWithRecipe[];
 };
 
 export type InsertRecipeList = Omit<

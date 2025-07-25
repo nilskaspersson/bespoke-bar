@@ -1,6 +1,8 @@
 import { EmptyArea } from "@/app/components/EmptyArea";
+import { EntityActions } from "@/app/components/EntityActions";
 import { PageHeader } from "@/app/components/PageHeader";
 import { readFeaturedList } from "@/features/lists/actions/readFeaturedList";
+import { ListItemActions } from "@/features/lists/components/ListItemActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { LinkButton } from "@/ui/Button";
@@ -15,17 +17,31 @@ export default async function BarPage() {
 
 	return (
 		<Container as="article" className={styles.container}>
-			<PageHeader heading="Bar" />
+			{/* <PageHeader heading="Overview" /> */}
+
+			<header className={styles.welcome}>
+				<Heading level="h1" size={8}>
+					Welcome back, Nils!
+				</Heading>
+			</header>
 
 			<Grid as="section" gap={6}>
 				{featuredList ? (
-					<RecipeListFrame
-						list={featuredList}
-						recipeCount={featuredList.entries.length}
-						className={styles.featuredList}
-					>
-						<RecipeListFilters entries={featuredList.entries} />
-					</RecipeListFrame>
+					<div>
+						<RecipeListFrame
+							list={featuredList}
+							recipeCount={featuredList.entries.length}
+							className={styles.featuredList}
+						>
+							<RecipeListFilters list={featuredList} />
+						</RecipeListFrame>
+
+						<EntityActions className={styles.featuredListActions}>
+							{(actionProps) => (
+								<ListItemActions {...actionProps} list={featuredList} />
+							)}
+						</EntityActions>
+					</div>
 				) : (
 					<EmptyArea color="amber">
 						<Heading level="h3" size={6}>

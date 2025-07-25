@@ -2,7 +2,7 @@
 	.base {
 		min-width: var(--control-width--small);
 		width: 100%;
-		max-width: min(var(--control-width), 100dvw);
+		max-width: min(var(--control-width), 100svw);
 	}
 
 	.contain {

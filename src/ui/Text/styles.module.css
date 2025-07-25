@@ -1,19 +1,16 @@
 @layer ui {
 	@property --jsxFontSize {
-		syntax: "<length>";
-		initial-value: inherit;
+		syntax: "*";
 		inherits: false;
 	}
 
 	@property --jsxFontWeight {
-		syntax: "<number>";
-		initial-value: inherit;
+		syntax: "*";
 		inherits: false;
 	}
 
 	@property --jsxTextAlign {
-		syntax: "<text-align>";
-		initial-value: inherit;
+		syntax: "*";
 		inherits: false;
 	}
 

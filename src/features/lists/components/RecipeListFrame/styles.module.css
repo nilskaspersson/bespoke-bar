@@ -3,6 +3,10 @@
 		padding: var(--gap--large) var(--gap);
 		border: 1px solid var(--mauve-5);
 		transition: border-color var(--transition-duration);
+
+		@container card (width > 350px) {
+			padding-inline: var(--gap--large);
+		}
 	}
 
 	.card {
@@ -73,7 +77,7 @@
 		border-radius: inherit;
 		background-color: var(--mauve-2);
 		border: 1px solid var(--mauve-5);
-		color: var(--mauve-7);
+		color: var(--mauve-8);
 		transition-property: border-color, background-color;
 		transition-duration: var(--transition-duration);
 

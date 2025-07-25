@@ -1,8 +1,8 @@
 @layer ui {
 	.dialog {
 		place-items: center;
-		width: 100dvw;
-		height: 100dvh;
+		width: 100lvw;
+		height: 100lvh;
 		max-width: none;
 		max-height: none;
 		contain: strict;

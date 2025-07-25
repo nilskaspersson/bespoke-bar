@@ -40,11 +40,11 @@ export default async function EditRecipeListPage({
 							size="small"
 						>
 							<Icon name="angle-left" />
-							Back to list
+							Back to List
 						</LinkButton>
 					</nav>
 
-					<Heading level="h1">Edit recipe</Heading>
+					<Heading level="h1">Edit List</Heading>
 				</header>
 
 				<RecipeListForm recipeList={recipeList} recipes={recipes} />

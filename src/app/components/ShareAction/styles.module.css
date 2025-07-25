@@ -1,0 +1,5 @@
+@layer component {
+	.unmounted {
+		opacity: 0;
+	}
+}

@@ -3,7 +3,7 @@
 		--h: var(--control-height);
 		min-width: var(--control-width--small);
 		width: 100%;
-		max-width: min(var(--control-width), 100dvw);
+		max-width: min(var(--control-width), 100svw);
 
 		&.compact {
 			--h: var(--control-height--small);

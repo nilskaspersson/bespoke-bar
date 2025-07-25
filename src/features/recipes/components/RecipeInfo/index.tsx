@@ -18,7 +18,7 @@ import type { UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
-import { CopyToClipboard } from "@/ui/CopyToClipboard/inded";
+import { CopyToClipboard } from "@/ui/CopyToClipboard";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";

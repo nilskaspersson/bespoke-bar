@@ -72,7 +72,7 @@ export default async function RecipeListPage({ params }: Props) {
 				recipeCount={recipeList.entries.length}
 				className={styles.list}
 			>
-				<RecipeListFilters entries={recipeList.entries} />
+				<RecipeListFilters list={recipeList} />
 			</RecipeListFrame>
 		</Container>
 	);
