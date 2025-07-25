@@ -13,6 +13,7 @@ type Props = {
 	heading?: ReactNode;
 	icon?: IconName;
 	size?: Scale;
+	variant?: "solid" | "inset";
 };
 
 export function Callout({
@@ -23,12 +24,18 @@ export function Callout({
 	icon,
 	size = 3,
 	style,
+	variant = "solid",
 	...props
 }: Props & ComponentProps<"div">) {
 	return (
 		<div
 			{...props}
-			className={clsx(styles.callout, className, styles[color])}
+			className={clsx(
+				styles.callout,
+				className,
+				styles[color],
+				styles[variant],
+			)}
 			style={mergeStyleSources(
 				style,
 				toCSSVars({

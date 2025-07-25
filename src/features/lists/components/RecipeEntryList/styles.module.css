@@ -1,0 +1,7 @@
+@layer feature {
+	.recipes {
+		display: grid;
+		gap: var(--space-7);
+		color: var(--mauve-11);
+	}
+}

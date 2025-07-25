@@ -1,5 +1,5 @@
+import { PageHeader } from "@/app/components/PageHeader";
 import { Container } from "@/ui/Container";
-import { Heading } from "@/ui/Heading";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -9,9 +9,7 @@ export default async function Layout({
 }) {
 	return (
 		<Container as="article" className={styles.container}>
-			<header className={styles.header}>
-				<Heading level="h1">Create Recipe</Heading>
-			</header>
+			<PageHeader heading="Create Recipe" />
 
 			{children}
 		</Container>

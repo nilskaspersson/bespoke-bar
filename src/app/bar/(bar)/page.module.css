@@ -1,23 +1,18 @@
 @layer layout {
 	.container {
 		display: grid;
-		gap: var(--gap--large);
-		padding-block: var(--app-inset) var(--gap--huge);
+		padding-bottom: var(--gap--huge);
+		align-content: start;
 		container-type: inline-size;
-		grid-template:
-			"header" auto
-			"table" 1fr;
 	}
 
-	.list {
-		margin-top: var(--gap--large);
-
+	.featuredList {
 		@container (width < 450px) {
 			margin-inline: calc(var(--app-inset) * -1);
 		}
 	}
 
-	.actions {
+	.featuredListActions {
 		justify-content: center;
 		margin-top: var(--gap--tiny);
 	}

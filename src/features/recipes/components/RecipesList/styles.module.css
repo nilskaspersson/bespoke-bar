@@ -10,14 +10,17 @@
 			padding-inline: var(--app-inset);
 			padding-bottom: var(--gap);
 			scroll-snap-type: x mandatory;
-			mask-image: linear-gradient(
-				to right,
-				transparent 0px,
-				black var(--app-inset),
-				black calc(100% - var(--app-inset)),
-				transparent 100%
-			);
-			mask-repeat: no-repeat;
+
+			@media (min-width: 860px) {
+				mask-image: linear-gradient(
+					to right,
+					transparent 0px,
+					black var(--app-inset),
+					black calc(100% - var(--app-inset)),
+					transparent 100%
+				);
+				mask-repeat: no-repeat;
+			}
 		}
 	}
 
@@ -32,26 +35,8 @@
 		box-shadow: var(--shadow--low);
 
 		.cardLayout & {
-			max-width: 100cqw;
+			max-width: calc(100cqw - var(--app-inset) * 2);
 			flex: 1 0 auto;
-		}
-	}
-
-	.actions {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--space-0);
-		align-items: center;
-		margin-left: calc(var(--space-2) * -1);
-	}
-
-	.action {
-		display: flex;
-		align-items: center;
-		font-size: var(--size-1);
-
-		&:not(:hover, :focus) {
-			color: var(--mauve-11);
 		}
 	}
 

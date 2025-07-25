@@ -3,14 +3,13 @@
 		display: grid;
 		gap: var(--gap--large);
 		padding-block: var(--app-inset) var(--gap--huge);
+		align-content: start;
+		container-type: inline-size;
 	}
 
-	.recipes {
-		display: grid;
-		gap: var(--space-7);
-		color: var(--mauve-11);
-		margin-top: var(--gap--large);
-		padding-top: var(--gap--large);
-		border-top: 1px dashed var(--mauve-6);
+	.list {
+		@container (width < 450px) {
+			margin-inline: calc(var(--app-inset) * -1);
+		}
 	}
 }

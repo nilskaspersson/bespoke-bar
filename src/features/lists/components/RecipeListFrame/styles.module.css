@@ -4,7 +4,7 @@
 		border: 1px solid var(--mauve-5);
 		transition: border-color var(--transition-duration);
 
-		@container card (width > 400px) {
+		@container card (width > 350px) {
 			padding-inline: var(--gap--large);
 		}
 	}
@@ -28,6 +28,12 @@
 		justify-content: center;
 		gap: var(--gap);
 		text-align: center;
+
+		&:not(:last-child) {
+			margin-bottom: var(--gap--large);
+			padding-bottom: var(--gap--large);
+			border-bottom: 1px dashed var(--mauve-6);
+		}
 	}
 
 	.link {
@@ -71,7 +77,7 @@
 		border-radius: inherit;
 		background-color: var(--mauve-2);
 		border: 1px solid var(--mauve-5);
-		color: var(--mauve-7);
+		color: var(--mauve-8);
 		transition-property: border-color, background-color;
 		transition-duration: var(--transition-duration);
 

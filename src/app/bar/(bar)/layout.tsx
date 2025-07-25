@@ -1,8 +1,9 @@
-import { auth, clerkClient } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import { BarNavigation } from "@/app/components/BarNavigation";
 import { Providers } from "@/app/components/Providers";
 import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
+import { getClerkOrganization } from "@/features/organisation/actions/getClerkOrganization";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
 import { Toaster } from "@/ui/Toast/Toaster";
@@ -39,19 +40,13 @@ export default async function Layout({
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-	const { orgId } = await auth();
+	const organization = await getClerkOrganization();
 
-	if (!orgId) {
+	if (!organization) {
 		return {
 			title: "Unknown bar",
 		};
 	}
-
-	const client = await clerkClient();
-
-	const organization = await client.organizations.getOrganization({
-		organizationId: orgId,
-	});
 
 	const organizationName = organization.name || FALLBACK_BAR_NAME;
 

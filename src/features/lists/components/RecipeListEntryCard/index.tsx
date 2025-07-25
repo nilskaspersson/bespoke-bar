@@ -27,7 +27,7 @@ type Props = {
 	className?: string;
 };
 
-export function RecipeListEntry({ entry, className }: Props) {
+export function RecipeListEntryCard({ entry, className }: Props) {
 	const metrics = calculateRecipeMetrics(entry.recipe);
 
 	const { currencyFormatter, percentageFormatter } =

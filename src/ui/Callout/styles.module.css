@@ -2,17 +2,23 @@
 	.callout {
 		--inset: min(calc(var(--jsxSize, 0) / 2), var(--gap--large));
 
-		padding: var(--inset);
+		display: inline-flex;
+		column-gap: var(--inset);
+		width: fit-content;
+		max-width: var(--line-length);
+	}
 
+	.solid {
+		padding: var(--inset);
 		background-color: var(--bgc);
 		border: 1px solid var(--bc);
 		color: var(--c);
-
-		display: inline-flex;
-		column-gap: var(--inset);
 		border-radius: var(--radius);
-		width: fit-content;
-		max-width: var(--line-length);
+	}
+
+	.inset {
+		border-left: var(--space-1) solid var(--bc);
+		padding-left: var(--inset);
 	}
 
 	.icon {
@@ -58,5 +64,11 @@
 		--bgc: var(--red-4);
 		--bc: var(--red-7);
 		--c: var(--red-12);
+	}
+
+	.amber {
+		--bgc: var(--amber-4);
+		--bc: var(--amber-7);
+		--c: var(--amber-12);
 	}
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { type ChangeEventHandler, useEffect, useState } from "react";
+import type { ChangeEventHandler } from "react";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import type { IconName } from "@/ui/Icon/types";
 import { OptionsSwitch } from "@/ui/OptionsSwitch";
 import { withKey } from "@/utils/withKey";
@@ -24,11 +25,7 @@ const THEME_OPTIONS = (
 
 export function ThemePicker() {
 	const { setTheme, theme } = useTheme();
-	const [isMounted, setIsMounted] = useState(false);
-
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
+	const isMounted = useIsMounted();
 
 	const handleThemeChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const selectedTheme = event.target.value;

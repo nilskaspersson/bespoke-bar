@@ -10,15 +10,6 @@
 			"page" 1fr;
 	}
 
-	.header {
-		grid-area: header;
-		display: flex;
-		gap: var(--gap) var(--gap--large);
-		justify-content: space-between;
-		align-items: end;
-		flex-wrap: wrap;
-	}
-
 	.navigation {
 		grid-area: navigation;
 	}
