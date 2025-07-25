@@ -40,10 +40,6 @@ export default async function ListsPage() {
 						Time for a new Cocktail List?
 					</Heading>
 
-					<Text as="p" size={3} italic>
-						You have come to the right place!
-					</Text>
-
 					<Text as="p" size={3}>
 						With{" "}
 						<Text as="strong" heavy weight={600}>

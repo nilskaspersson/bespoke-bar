@@ -4,6 +4,7 @@
 		gap: var(--gap--large);
 		padding-block: var(--app-inset) var(--gap--huge);
 		container-type: inline-size;
+		align-items: start;
 		grid-template:
 			"header" auto
 			"table" 1fr;
