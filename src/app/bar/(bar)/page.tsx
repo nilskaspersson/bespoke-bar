@@ -1,4 +1,3 @@
-import { useId } from "react";
 import { EmptyArea } from "@/app/components/EmptyArea";
 import { PageHeader } from "@/app/components/PageHeader";
 import { readFeaturedList } from "@/features/lists/actions/readFeaturedList";
@@ -12,19 +11,13 @@ import { Text } from "@/ui/Text";
 import styles from "./page.module.css";
 
 export default async function BarPage() {
-	const featuredListHeadingId = useId();
-
 	const featuredList = await readFeaturedList();
 
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader heading="Bar" />
 
-			<Grid as="section" gap={6} aria-labelledby={featuredListHeadingId}>
-				<Heading level="h2" id={featuredListHeadingId}>
-					Featured List
-				</Heading>
-
+			<Grid as="section" gap={6}>
 				{featuredList ? (
 					<RecipeListFrame
 						list={featuredList}
