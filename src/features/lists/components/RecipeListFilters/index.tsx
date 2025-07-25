@@ -18,17 +18,23 @@ export function RecipeListFilters({
 	...props
 }: ComponentProps<typeof RecipeEntryList>) {
 	const [search, setSearch] = useState("");
-	const deferredSearch = useDeferredValue(normalizeInput(search));
+	const deferredSearch = useDeferredValue(search);
 
-	const filteredEntries = useMemo(
-		() =>
-			deferredSearch
-				? entries.filter((entry) =>
-						normalizeInput(entry.recipe.name ?? "").includes(deferredSearch),
-					)
-				: entries,
-		[entries, deferredSearch],
-	);
+	const filteredEntries = useMemo(() => {
+		const normalizedSearch = normalizeInput(deferredSearch);
+
+		if (!normalizedSearch) {
+			return entries;
+		}
+
+		return entries.filter(
+			(entry) =>
+				normalizeInput(entry.recipe.name ?? "").includes(normalizedSearch) ||
+				normalizeInput(
+					entry.recipe.specs.map((spec) => spec.ingredient.name).join(" "),
+				).includes(normalizedSearch),
+		);
+	}, [entries, deferredSearch]);
 
 	return (
 		<Grid gap={6}>
