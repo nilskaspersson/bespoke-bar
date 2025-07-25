@@ -36,6 +36,7 @@ export default async function ListsPage() {
 							list={list}
 							href={getRecipeListUrl(list)}
 							recipeCount={list.recipeCount}
+							className={styles.list}
 						/>
 					</li>
 				))}

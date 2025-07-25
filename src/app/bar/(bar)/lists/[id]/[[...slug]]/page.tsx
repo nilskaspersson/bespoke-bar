@@ -5,7 +5,7 @@ import { clearFeaturedList } from "@/features/lists/actions/clearFeaturedList";
 import { readRecipeList } from "@/features/lists/actions/readRecipeList";
 import { setFeaturedList } from "@/features/lists/actions/setFeaturedList";
 import { ClearFeaturedListButton } from "@/features/lists/components/ClearFeaturedListButton";
-import { RecipeEntryList } from "@/features/lists/components/RecipeEntryList";
+import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { SetFeaturedListButton } from "@/features/lists/components/SetFeaturedListButton";
 import { Container } from "@/ui/Container";
@@ -70,8 +70,9 @@ export default async function RecipeListPage({ params }: Props) {
 				level="h2"
 				list={recipeList}
 				recipeCount={recipeList.entries.length}
+				className={styles.list}
 			>
-				<RecipeEntryList entries={recipeList.entries} />
+				<RecipeListFilters entries={recipeList.entries} />
 			</RecipeListFrame>
 		</Container>
 	);

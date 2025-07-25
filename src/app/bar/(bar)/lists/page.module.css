@@ -3,8 +3,15 @@
 		display: grid;
 		gap: var(--gap--large);
 		padding-block: var(--app-inset) var(--gap--huge);
+		container-type: inline-size;
 		grid-template:
 			"header" auto
 			"table" 1fr;
+	}
+
+	.list {
+		@container (width < 450px) {
+			margin-inline: calc(var(--app-inset) * -1);
+		}
 	}
 }

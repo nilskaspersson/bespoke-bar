@@ -4,5 +4,12 @@
 		gap: var(--gap--large);
 		padding-block: var(--app-inset) var(--gap--huge);
 		align-content: start;
+		container-type: inline-size;
+	}
+
+	.list {
+		@container (width < 450px) {
+			margin-inline: calc(var(--app-inset) * -1);
+		}
 	}
 }
