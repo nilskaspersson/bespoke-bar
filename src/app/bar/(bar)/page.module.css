@@ -1,18 +1,9 @@
 @layer layout {
 	.container {
 		display: grid;
-		gap: var(--gap--large);
 		padding-bottom: var(--gap--huge);
 		align-content: start;
 		container-type: inline-size;
-	}
-
-	.welcome {
-		display: grid;
-		place-items: center;
-		place-content: center;
-		text-align: center;
-		padding-block: var(--gap--huge);
 	}
 
 	.featuredList {

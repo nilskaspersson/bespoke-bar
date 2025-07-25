@@ -1,0 +1,9 @@
+@layer component {
+	.welcome {
+		display: grid;
+		place-items: center;
+		place-content: center;
+		text-align: center;
+		padding-block: var(--gap--huge);
+	}
+}

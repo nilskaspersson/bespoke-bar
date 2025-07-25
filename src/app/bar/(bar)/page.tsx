@@ -1,6 +1,6 @@
 import { EmptyArea } from "@/app/components/EmptyArea";
 import { EntityActions } from "@/app/components/EntityActions";
-import { PageHeader } from "@/app/components/PageHeader";
+import { WelcomeMessage } from "@/app/components/WelcomeMessage";
 import { readFeaturedList } from "@/features/lists/actions/readFeaturedList";
 import { ListItemActions } from "@/features/lists/components/ListItemActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
@@ -17,13 +17,7 @@ export default async function BarPage() {
 
 	return (
 		<Container as="article" className={styles.container}>
-			{/* <PageHeader heading="Overview" /> */}
-
-			<header className={styles.welcome}>
-				<Heading level="h1" size={8}>
-					Welcome back, Nils!
-				</Heading>
-			</header>
+			<WelcomeMessage />
 
 			<Grid as="section" gap={6}>
 				{featuredList ? (
