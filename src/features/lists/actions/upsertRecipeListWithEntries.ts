@@ -34,6 +34,7 @@ export async function upsertRecipeListWithEntries(
 			tx,
 			list.id,
 			userInputList.entries,
+			orgId,
 		);
 
 		return list;

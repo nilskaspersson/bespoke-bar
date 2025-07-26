@@ -46,6 +46,7 @@ export async function addRecipeToList(
 	const validatedEntry = insertRecipeListEntrySchema.parse({
 		listId,
 		recipeId,
+		orgId,
 		sortOrder: nextSortOrder,
 		price: price ?? null,
 	} satisfies InsertRecipeListEntry);

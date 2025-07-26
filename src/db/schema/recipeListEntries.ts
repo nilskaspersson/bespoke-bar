@@ -23,6 +23,7 @@ export const RecipeListEntriesTable = pgTable(
 		id: text("id")
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
+		orgId: text("org_id").notNull(),
 		listId: text("list_id")
 			.notNull()
 			.references(() => RecipeListsTable.id, { onDelete: "cascade" }),
@@ -33,6 +34,8 @@ export const RecipeListEntriesTable = pgTable(
 		price: real("price"),
 	},
 	(table) => [
+		index("idx_recipe_list_entries_org").on(table.orgId),
+		index("idx_recipe_list_entries_org_list").on(table.orgId, table.listId),
 		// A recipe can only appear once per list
 		uniqueIndex("idx_recipe_list_entries_unique").on(
 			table.listId,

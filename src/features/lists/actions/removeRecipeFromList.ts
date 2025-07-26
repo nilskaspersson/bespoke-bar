@@ -1,10 +1,9 @@
 "use server";
 
-import { and, eq, exists } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
-import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function removeRecipeFromList(
@@ -17,23 +16,9 @@ export async function removeRecipeFromList(
 		.delete(RecipeListEntriesTable)
 		.where(
 			and(
+				eq(RecipeListEntriesTable.orgId, orgId),
 				eq(RecipeListEntriesTable.listId, listId),
 				eq(RecipeListEntriesTable.recipeId, recipeId),
-				/**
-				 * We don't store orgId on the entry, so we need another query to check for list
-				 * ownership.
-				 */
-				exists(
-					db
-						.select()
-						.from(RecipeListsTable)
-						.where(
-							and(
-								eq(RecipeListsTable.id, listId),
-								eq(RecipeListsTable.orgId, orgId),
-							),
-						),
-				),
 			),
 		)
 		.returning();

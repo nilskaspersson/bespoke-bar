@@ -62,13 +62,19 @@ export async function replaceRecipeListEntriesInTransaction(
 	tx: DatabaseTransaction,
 	listId: string,
 	entries: RecipeListWithEntriesFormData["entries"],
+	orgId: string,
 ): Promise<void> {
 	/**
 	 * Delete all existing entries
 	 */
 	await tx
 		.delete(RecipeListEntriesTable)
-		.where(eq(RecipeListEntriesTable.listId, listId));
+		.where(
+			and(
+				eq(RecipeListEntriesTable.orgId, orgId),
+				eq(RecipeListEntriesTable.listId, listId),
+			),
+		);
 
 	/**
 	 * Insert all provided entries
@@ -80,6 +86,7 @@ export async function replaceRecipeListEntriesInTransaction(
 				recipeId: entry.recipeId,
 				price: entry.price,
 				sortOrder: entry.sortOrder ?? index,
+				orgId,
 			}),
 		);
 
