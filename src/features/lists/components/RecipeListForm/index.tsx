@@ -2,12 +2,13 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useActionState, useRef } from "react";
+import { useActionState, useContext, useRef } from "react";
 import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
@@ -18,9 +19,10 @@ import { TextField } from "@/ui/TextField";
 type Props = {
 	recipeList?: RecipeListWithRecipes;
 	recipes?: Recipe[];
+	currency: string;
 };
 
-export function RecipeListForm({ recipes, recipeList }: Props) {
+export function RecipeListForm({ recipes, recipeList, currency }: Props) {
 	const [state, formAction] = useActionState(
 		upsertRecipeListWithEntriesAction,
 		null,
@@ -50,6 +52,8 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 	});
 
 	const formRef = useRef<HTMLFormElement>(null);
+
+	const { currencyDisplayName } = useContext(FormatterContext);
 
 	const recipeListFields = fields.recipeList.getFieldset();
 	const entries = fields.entries.getFieldList();
@@ -93,7 +97,7 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 
 							return (
 								<li key={entry.key}>
-									<fieldset>
+									<Grid as="fieldset" gap={2}>
 										<input
 											type="hidden"
 											name={entryFields.sortOrder.name}
@@ -105,7 +109,15 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 											defaultValue={entryFields.recipeId.defaultValue}
 											recipes={recipes}
 										/>
-									</fieldset>
+
+										<TextField
+											label="Price"
+											name={entryFields.price.name}
+											id={entryFields.price.id}
+											defaultValue={entryFields.price.defaultValue}
+											helperText={`In ${currencyDisplayName.of(currency)} (${currency})`}
+										/>
+									</Grid>
 								</li>
 							);
 						})}
