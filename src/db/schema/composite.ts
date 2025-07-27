@@ -32,6 +32,7 @@ export const upsertSpecSchema = insertSpecsSchema
 		id: true,
 		createdAt: true,
 		recipeId: true,
+		ingredientId: true,
 	})
 	.extend({
 		id: z.string().optional(),
@@ -41,7 +42,27 @@ export const upsertSpecSchema = insertSpecsSchema
 	.refine((data) => data.ingredientId || data.ingredient, {
 		message: "Either ingredientId or ingredient data must be provided",
 		path: ["ingredientId"],
-	});
+	})
+	.refine(
+		(data) => {
+			/**
+			 * Ingredient must pass validation if we're not using an existing ingredient.
+			 */
+			if (!data.ingredientId || data.ingredientId.trim() === "") {
+				return (
+					data.ingredient &&
+					ingredientFormDataSchema.safeParse(data.ingredient).success
+				);
+			}
+
+			return true;
+		},
+		{
+			message:
+				"Ingredient data is required when not using an existing ingredient.",
+			path: ["ingredient"],
+		},
+	);
 
 export const recipeFormSchema = z.object({
 	recipe: upsertRecipeSchema.optional(),
