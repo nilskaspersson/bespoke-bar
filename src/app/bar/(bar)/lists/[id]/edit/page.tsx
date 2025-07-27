@@ -2,7 +2,6 @@ import { notFound } from "next/navigation";
 import { readRecipeList } from "@/features/lists/actions/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
-import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
 import { readBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
@@ -20,10 +19,9 @@ export default async function EditRecipeListPage({
 }: Props) {
 	const { id } = await paramsPromise;
 
-	const [recipeList, recipes, organisation] = await Promise.all([
+	const [recipeList, recipes] = await Promise.all([
 		readRecipeList(id),
 		readBarRecipes(),
-		getOrCreateLocalOrganisation(),
 	]);
 
 	if (!recipeList) {
@@ -49,11 +47,7 @@ export default async function EditRecipeListPage({
 					<Heading level="h1">Edit List</Heading>
 				</header>
 
-				<RecipeListForm
-					recipeList={recipeList}
-					recipes={recipes}
-					currency={organisation.currency}
-				/>
+				<RecipeListForm recipeList={recipeList} recipes={recipes} />
 			</Grid>
 		</Container>
 	);

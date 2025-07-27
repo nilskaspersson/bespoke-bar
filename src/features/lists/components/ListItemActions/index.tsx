@@ -1,6 +1,10 @@
 import type { ActionProps } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
 import type { RecipeList } from "@/db/schema/recipeLists";
+import { clearFeaturedList } from "@/features/lists/actions/clearFeaturedList";
+import { setFeaturedList } from "@/features/lists/actions/setFeaturedList";
+import { ClearFeaturedListButton } from "@/features/lists/components/ClearFeaturedListButton";
+import { SetFeaturedListButton } from "@/features/lists/components/SetFeaturedListButton";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -8,8 +12,9 @@ import { getServerSideBaseURL } from "@/utils/url";
 
 export function ListItemActions({
 	list,
+	hasFeaturedList,
 	...props
-}: ActionProps & { list: RecipeList }) {
+}: ActionProps & { list: RecipeList; hasFeaturedList?: boolean }) {
 	return (
 		<>
 			<li>
@@ -40,6 +45,33 @@ export function ListItemActions({
 				>
 					Share link
 				</ShareAction>
+			</li>
+
+			<li>
+				{list.isFeatured ? (
+					<ClearFeaturedListButton
+						{...props}
+						list={list}
+						actionSetFeatured={setFeaturedList}
+						actionClearFeatured={clearFeaturedList}
+						color="amber"
+					>
+						<Icon name="circle-xmark" />
+						Remove Featured
+					</ClearFeaturedListButton>
+				) : (
+					<SetFeaturedListButton
+						{...props}
+						list={list}
+						hasFeaturedList={hasFeaturedList}
+						actionSetFeatured={setFeaturedList}
+						actionClearFeatured={clearFeaturedList}
+						color="amber"
+					>
+						<Icon name="star" />
+						Set Featured
+					</SetFeaturedListButton>
+				)}
 			</li>
 		</>
 	);

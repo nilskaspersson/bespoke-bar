@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useContext } from "react";
+import { EntityActions } from "@/app/components/EntityActions";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
@@ -13,25 +13,26 @@ import {
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { SpecsList } from "@/features/specs/components/SpecsList";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { LinkButton } from "@/ui/Button";
+import { useFormatter } from "@/hooks/useFormatter";
+import { Button, LinkButton } from "@/ui/Button";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {
 	entry: RecipeListEntryWithRecipe;
 	className?: string;
+	editable?: boolean;
 };
 
-export function RecipeListEntryCard({ entry, className }: Props) {
+export function RecipeListEntryCard({ entry, className, editable }: Props) {
 	const metrics = calculateRecipeMetrics(entry.recipe);
 
-	const { currencyFormatter, percentageFormatter } =
-		useContext(FormatterContext);
+	const { currencyFormatter, percentageFormatter } = useFormatter();
 
 	return (
 		<Grid gap={4} className={className}>
@@ -45,11 +46,11 @@ export function RecipeListEntryCard({ entry, className }: Props) {
 
 					<span className={styles.dots} />
 
-					{entry.price != null ? (
-						<Text heavy weight={800} size={2}>
-							{currencyFormatter.format(entry.price)}
-						</Text>
-					) : null}
+					<Text heavy weight={800} size={2} align="right">
+						{typeof entry.price === "number"
+							? currencyFormatter.format(entry.price)
+							: "No price data"}
+					</Text>
 				</div>
 
 				<Flex as="div" wrap gap={1}>
@@ -84,19 +85,58 @@ export function RecipeListEntryCard({ entry, className }: Props) {
 					<Text as="p" size={2} italic light compact>
 						No specs yet
 					</Text>
-
-					<div>
-						<LinkButton
-							href={`/bar/recipes/${entry.recipe.id}/edit`}
-							variant="solid"
-							size="tiny"
-							color="accent"
-						>
-							Add specs
-						</LinkButton>
-					</div>
 				</Grid>
 			)}
+
+			{entry.recipe.instructions || entry.recipe.garnish ? (
+				<div>
+					{entry.recipe.instructions ? (
+						<Text as="p" size={3} serif>
+							{entry.recipe.instructions}
+						</Text>
+					) : null}
+
+					{entry.recipe.garnish ? (
+						<Text as="p" size={3} serif>
+							<Text as="span" heavy>
+								Garnish:
+							</Text>{" "}
+							{entry.recipe.garnish}
+						</Text>
+					) : null}
+				</div>
+			) : null}
+
+			{editable ? (
+				<EntityActions
+					gap={2}
+					actionProps={{ variant: "outline", color: "light" }}
+				>
+					{(actionProps) => (
+						<>
+							<li>
+								<Button {...actionProps}>Update price</Button>
+							</li>
+
+							<li>
+								<LinkButton
+									{...actionProps}
+									href={`/bar/recipes/${entry.recipe.id}/edit`}
+								>
+									Edit recipe
+								</LinkButton>
+							</li>
+
+							<li>
+								<Button {...actionProps} aria-disabled="true">
+									<Icon name="xmark" />
+									Remove from list
+								</Button>
+							</li>
+						</>
+					)}
+				</EntityActions>
+			) : null}
 		</Grid>
 	);
 }

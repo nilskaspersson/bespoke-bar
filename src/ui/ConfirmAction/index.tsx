@@ -5,24 +5,27 @@ import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
 import { Alert } from "@/ui/Alert";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
+import type { IconName } from "@/ui/Icon/types";
 import { SubmitButton } from "@/ui/SubmitButton";
 
-export function ConfirmDelete({
+export function ConfirmAction({
 	action,
 	actionLabel,
 	children,
 	className,
 	description,
+	iconName,
 	notice,
-	...props
+	buttonProps,
 }: PropsWithChildren<{
 	action: () => Promise<void>;
-	className?: string;
 	actionLabel: string;
-	notice: React.ReactNode;
+	className?: string;
+	notice?: React.ReactNode;
 	description: React.ReactNode;
-}> &
-	ButtonProps) {
+	iconName?: IconName;
+	buttonProps?: ButtonProps;
+}>) {
 	const {
 		isPending,
 		confirmSubmit,
@@ -33,7 +36,7 @@ export function ConfirmDelete({
 
 	return (
 		<form className={className} onSubmit={confirmSubmit}>
-			<SubmitButton variant="outline" color="red" size="small" {...props}>
+			<SubmitButton variant="outline" size="small" {...buttonProps}>
 				{children}
 			</SubmitButton>
 
@@ -42,6 +45,7 @@ export function ConfirmDelete({
 					onClose={rejectAction}
 					heading={actionLabel}
 					notice={notice}
+					color={buttonProps?.color}
 					actions={
 						<>
 							<Button
@@ -54,14 +58,16 @@ export function ConfirmDelete({
 							</Button>
 
 							<Button
-								onClick={props["aria-disabled"] ? undefined : resolveAction}
-								aria-disabled={props["aria-disabled"]}
+								onClick={
+									buttonProps?.["aria-disabled"] ? undefined : resolveAction
+								}
+								aria-disabled={buttonProps?.["aria-disabled"]}
 								disabled={isSubmitting}
 								variant="solid"
 								size="small"
-								color="red"
+								color={buttonProps?.color}
 							>
-								<Icon name="trash" />
+								{iconName ? <Icon name={iconName} /> : null}
 
 								{actionLabel}
 							</Button>

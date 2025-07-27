@@ -3,26 +3,32 @@
 import type { PropsWithChildren } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { ButtonProps } from "@/ui/Button";
-import { ConfirmDelete } from "@/ui/ConfirmDelete";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Text } from "@/ui/Text";
 
 export function DeleteIngredient({
 	action,
 	children,
+	className,
 	ingredient,
-	disabledReason,
+	notice,
 	...props
 }: PropsWithChildren<{
 	action: () => Promise<void>;
 	ingredient: Ingredient;
-	disabledReason?: React.ReactNode;
+	notice?: React.ReactNode;
 }> &
 	ButtonProps) {
 	return (
-		<ConfirmDelete
-			{...props}
+		<ConfirmAction
+			className={className}
 			action={action}
 			actionLabel="Delete Ingredient"
+			iconName="trash"
+			buttonProps={{
+				color: "red",
+				...props,
+			}}
 			description={
 				<Text as="p">
 					You are about to delete <i>{ingredient.name}</i>. Do you want to
@@ -30,7 +36,7 @@ export function DeleteIngredient({
 				</Text>
 			}
 			notice={
-				disabledReason ?? (
+				notice ?? (
 					<>
 						This action is <strong>permanent</strong>. It cannot be undone.
 					</>
@@ -38,6 +44,6 @@ export function DeleteIngredient({
 			}
 		>
 			{children}
-		</ConfirmDelete>
+		</ConfirmAction>
 	);
 }

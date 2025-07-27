@@ -18,8 +18,12 @@ import { normalizeInput } from "@/utils";
 
 export function RecipeListFilters({
 	list,
+	editable,
 	...props
-}: ComponentProps<typeof Grid> & { list: RecipeListWithRecipes }) {
+}: ComponentProps<typeof Grid> & {
+	list: RecipeListWithRecipes;
+	editable?: boolean;
+}) {
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
 
@@ -82,7 +86,11 @@ export function RecipeListFilters({
 					</Flex>
 				</EmptyArea>
 			) : (
-				<RecipeEntryList entries={filteredEntries} {...props} />
+				<RecipeEntryList
+					entries={filteredEntries}
+					editable={editable}
+					{...props}
+				/>
 			)}
 		</Grid>
 	);

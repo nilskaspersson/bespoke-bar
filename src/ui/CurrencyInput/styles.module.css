@@ -1,0 +1,13 @@
+@layer ui {
+	.adornment {
+		display: inline-block;
+		font-weight: 600;
+		text-align: center;
+		color: var(--mauve-12);
+		width: var(--control-height);
+	}
+
+	.compact {
+		width: var(--control-height--small);
+	}
+}

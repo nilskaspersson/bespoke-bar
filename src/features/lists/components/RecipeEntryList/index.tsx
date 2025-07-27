@@ -4,8 +4,10 @@ import styles from "./styles.module.css";
 
 export function RecipeEntryList({
 	entries,
+	editable,
 }: {
 	entries: RecipeListEntryWithRecipe[];
+	editable?: boolean;
 }) {
 	if (entries.length === 0) {
 		return null;
@@ -15,7 +17,7 @@ export function RecipeEntryList({
 		<ul className={styles.recipes}>
 			{entries.map((entry) => (
 				<li key={entry.id}>
-					<RecipeListEntryCard entry={entry} />
+					<RecipeListEntryCard entry={entry} editable={editable} />
 				</li>
 			))}
 		</ul>

@@ -2,14 +2,14 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useActionState, useContext, useRef } from "react";
+import { useActionState, useRef } from "react";
 import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
-import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
+import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
@@ -19,10 +19,9 @@ import { TextField } from "@/ui/TextField";
 type Props = {
 	recipeList?: RecipeListWithRecipes;
 	recipes?: Recipe[];
-	currency: string;
 };
 
-export function RecipeListForm({ recipes, recipeList, currency }: Props) {
+export function RecipeListForm({ recipes, recipeList }: Props) {
 	const [state, formAction] = useActionState(
 		upsertRecipeListWithEntriesAction,
 		null,
@@ -52,8 +51,6 @@ export function RecipeListForm({ recipes, recipeList, currency }: Props) {
 	});
 
 	const formRef = useRef<HTMLFormElement>(null);
-
-	const { currencyDisplayName } = useContext(FormatterContext);
 
 	const recipeListFields = fields.recipeList.getFieldset();
 	const entries = fields.entries.getFieldList();
@@ -110,12 +107,11 @@ export function RecipeListForm({ recipes, recipeList, currency }: Props) {
 											recipes={recipes}
 										/>
 
-										<TextField
+										<CurrencyInput
 											label="Price"
 											name={entryFields.price.name}
 											id={entryFields.price.id}
 											defaultValue={entryFields.price.defaultValue}
-											helperText={`In ${currencyDisplayName.of(currency)} (${currency})`}
 										/>
 									</Grid>
 								</li>

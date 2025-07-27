@@ -17,6 +17,8 @@ import styles from "./page.module.css";
 export default async function ListsPage() {
 	const lists = await readBarRecipeLists();
 
+	const hasFeaturedList = lists.some((list) => list.isFeatured);
+
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -63,7 +65,11 @@ export default async function ListsPage() {
 
 						<EntityActions className={styles.actions}>
 							{(actionProps) => (
-								<ListItemActions {...actionProps} list={list} />
+								<ListItemActions
+									{...actionProps}
+									list={list}
+									hasFeaturedList={hasFeaturedList}
+								/>
 							)}
 						</EntityActions>
 					</li>

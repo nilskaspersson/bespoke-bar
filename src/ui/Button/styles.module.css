@@ -102,14 +102,24 @@
 	.light {
 		[data-theme="dark"] &,
 		[data-theme] [data-force-theme="dark"] & {
+			--text-lightness: 80%;
 			--button-color: var(--mauve-7);
-			--text-lightness: 90%;
+
+			&[aria-disabled="true"] {
+				--text-lightness: 50%;
+				--button-color: var(--mauve-5);
+			}
 		}
 
 		[data-theme="light"] &,
 		[data-theme] [data-force-theme="light"] & {
-			--button-color: var(--mauve-7);
 			--text-lightness: 0%;
+			--button-color: var(--mauve-7);
+
+			&[aria-disabled="true"] {
+				--text-lightness: 80%;
+				--button-color: var(--mauve-5);
+			}
 		}
 	}
 

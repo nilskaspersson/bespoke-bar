@@ -25,6 +25,13 @@ export function Dialog({
 		) {
 			event.target.close("dismiss");
 		}
+
+		if (
+			event.target instanceof HTMLButtonElement &&
+			event.target.nodeName === "BUTTON"
+		) {
+			event.target.closest("dialog")?.close("dismiss");
+		}
 	};
 
 	return (

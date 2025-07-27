@@ -32,7 +32,11 @@ export default async function BarPage() {
 
 						<EntityActions className={styles.featuredListActions}>
 							{(actionProps) => (
-								<ListItemActions {...actionProps} list={featuredList} />
+								<ListItemActions
+									{...actionProps}
+									list={featuredList}
+									hasFeaturedList
+								/>
 							)}
 						</EntityActions>
 					</div>

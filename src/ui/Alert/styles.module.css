@@ -8,6 +8,7 @@
 
 		max-height: 100%;
 		min-height: 0;
+		font-size: var(--size-3);
 		word-wrap: break-word;
 		padding: var(--gap--tiny);
 		color: var(--mauve-11);
@@ -47,12 +48,45 @@
 		align-items: baseline;
 		gap: var(--gap--small);
 		padding: var(--gap--small) var(--gap) calc(var(--gap--small) + 2px);
-		background-color: var(--red-4);
-		color: var(--red-12);
-		border-top: 1px solid var(--red-5);
 		border-bottom-right-radius: inherit;
 		border-bottom-left-radius: inherit;
 		box-shadow: var(--shadow--low);
+	}
+
+	.red {
+		color: var(--red-12);
+		background-color: var(--red-4);
+		border-top: 1px solid var(--red-5);
+	}
+
+	.amber {
+		color: var(--amber-12);
+		background-color: var(--amber-4);
+		border-top: 1px solid var(--amber-5);
+	}
+
+	.accent {
+		color: var(--iris-12);
+		background-color: var(--iris-4);
+		border-top: 1px solid var(--iris-5);
+	}
+
+	.light {
+		color: var(--mauve-12);
+		background-color: var(--mauve-6);
+		border-top: 1px solid var(--mauve-7);
+	}
+
+	.heavy {
+		color: var(--mauve-12);
+		background-color: var(--mauve-3);
+		border-top: 1px solid var(--mauve-4);
+	}
+
+	.regular {
+		color: var(--mauve-12);
+		background-color: var(--mauve-6);
+		border-top: 1px solid var(--mauve-7);
 	}
 
 	.icon {

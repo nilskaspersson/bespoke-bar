@@ -44,7 +44,7 @@ export function Flex({
 				toCSSVars({
 					jsxAlignItems: alignItems,
 					jsxJustifyContent: justifyContent,
-					jsxGap: gap ? `var(--space-${gap})` : 0,
+					jsxGap: gap != null ? `var(--space-${gap})` : 0,
 				}),
 			),
 		},

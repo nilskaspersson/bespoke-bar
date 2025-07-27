@@ -1,9 +1,8 @@
 @layer component {
 	.actions {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		margin-inline: calc(var(--space-2) * -1);
+		&.withOffset {
+			margin-inline: calc(var(--space-2) * -1);
+		}
 	}
 
 	.action {
@@ -11,7 +10,7 @@
 		align-items: center;
 		font-size: var(--size-1);
 
-		&:not(:hover, :focus) {
+		&:not(:hover, :focus, [aria-disabled="true"]) {
 			color: var(--mauve-11);
 		}
 	}

@@ -4,18 +4,21 @@ import type { RecipeList } from "@/db/schema/recipeLists";
 import { ClearFeaturedListButton } from "@/features/lists/components/ClearFeaturedListButton";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
+import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
 
 export function SetFeaturedListButton({
 	list,
+	hasFeaturedList,
 	actionSetFeatured,
 	actionClearFeatured,
 	children,
 	...buttonProps
 }: {
 	list: RecipeList;
+	hasFeaturedList?: boolean;
 	actionSetFeatured: (listId: string) => Promise<void>;
 	actionClearFeatured: () => Promise<void>;
 } & ButtonProps) {
@@ -69,8 +72,30 @@ export function SetFeaturedListButton({
 	};
 
 	return (
-		<form action={handleSetFeaturedList}>
-			<SubmitButton {...buttonProps}>{children}</SubmitButton>
-		</form>
+		<ConfirmAction
+			action={handleSetFeaturedList}
+			actionLabel="Set as Featured List"
+			iconName="star"
+			buttonProps={{
+				...buttonProps,
+				color: "amber",
+			}}
+			description={
+				<Text as="p" size={2}>
+					You are about to set <em>{list.name}</em> as the Featured List. Do you
+					want to continue?
+				</Text>
+			}
+			notice={
+				hasFeaturedList ? (
+					<>
+						The current Featured List{" "}
+						<strong>will no longer be Featured.</strong>
+					</>
+				) : null
+			}
+		>
+			{children}
+		</ConfirmAction>
 	);
 }
