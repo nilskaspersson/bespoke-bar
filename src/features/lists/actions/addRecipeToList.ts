@@ -38,7 +38,7 @@ export async function addRecipeToList(
 
 	const maxSortOrder =
 		list.entries.length > 0
-			? Math.max(...list.entries.map((entry) => entry.sortOrder))
+			? Math.max(...list.entries.map((entry) => entry.sortOrder ?? 0))
 			: 0;
 
 	const nextSortOrder = maxSortOrder + 1;

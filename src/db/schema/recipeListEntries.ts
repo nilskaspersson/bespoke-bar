@@ -30,7 +30,7 @@ export const RecipeListEntriesTable = pgTable(
 		recipeId: text("recipe_id")
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
-		sortOrder: integer("sort_order").notNull(),
+		sortOrder: integer("sort_order"),
 		price: real("price"),
 	},
 	(table) => [
@@ -74,7 +74,7 @@ export type InsertRecipeListEntry = Omit<
 
 export type UpdateRecipeListEntry = Pick<
 	typeof RecipeListEntriesTable.$inferInsert,
-	"sortOrder" | "price"
+	"sortOrder" | "price" | "recipeId"
 >;
 
 export type RecipeListEntryWithRecipe = RecipeListEntry & {
@@ -84,9 +84,11 @@ export type RecipeListEntryWithRecipe = RecipeListEntry & {
 export const selectRecipeListEntrySchema = createSelectSchema(
 	RecipeListEntriesTable,
 );
+
 export const insertRecipeListEntrySchema = createInsertSchema(
 	RecipeListEntriesTable,
 );
+
 export const updateRecipeListEntrySchema = createUpdateSchema(
 	RecipeListEntriesTable,
 );

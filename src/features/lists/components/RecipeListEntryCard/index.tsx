@@ -4,6 +4,7 @@ import Link from "next/link";
 import { EntityActions } from "@/app/components/EntityActions";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { Abv } from "@/features/ingredients/components/Abv";
+import { UpdateRecipeEntryButton } from "@/features/lists/components/UpdateRecipeEntry";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
 	COCKTAIL_STYLE_TO_LABEL,
@@ -89,7 +90,7 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 			)}
 
 			{entry.recipe.instructions || entry.recipe.garnish ? (
-				<div>
+				<Grid gap={2}>
 					{entry.recipe.instructions ? (
 						<Text as="p" size={3} serif>
 							{entry.recipe.instructions}
@@ -104,7 +105,7 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 							{entry.recipe.garnish}
 						</Text>
 					) : null}
-				</div>
+				</Grid>
 			) : null}
 
 			{editable ? (
@@ -115,7 +116,9 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 					{(actionProps) => (
 						<>
 							<li>
-								<Button {...actionProps}>Update price</Button>
+								<UpdateRecipeEntryButton {...actionProps} entry={entry}>
+									Update price
+								</UpdateRecipeEntryButton>
 							</li>
 
 							<li>

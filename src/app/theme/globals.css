@@ -138,4 +138,25 @@
 			opacity: 0.5;
 		}
 	}
+
+	del,
+	ins {
+		display: inline-block;
+		padding: 0 var(--space-0);
+		border-radius: var(--radius--small);
+		border: 1px solid transparent;
+	}
+
+	del {
+		color: var(--red-12);
+		background-color: var(--red-4);
+		border-color: var(--red-5);
+	}
+
+	ins {
+		color: var(--grass-12);
+		background-color: var(--grass-4);
+		border-color: var(--grass-5);
+		text-decoration: none;
+	}
 }

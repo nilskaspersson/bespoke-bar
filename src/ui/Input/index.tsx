@@ -4,10 +4,11 @@ import formControlStyles from "@/ui/FormControl/styles.module.css";
 import styles from "./styles.module.css";
 
 type BaseProps = {
-	as?: "input" | "textarea";
+	className?: string;
 	id?: string;
 	readOnly?: boolean;
 	compact?: boolean;
+	large?: boolean;
 	inline?: boolean;
 	pill?: boolean;
 	fullWidth?: boolean;
@@ -15,43 +16,30 @@ type BaseProps = {
 	"aria-invalid"?: boolean;
 };
 
-type InputProps = BaseProps & {
-	as?: "input";
-	type?: "text" | "search" | "number";
-} & ComponentProps<"input">;
+export type InputProps = BaseProps & ComponentProps<"input">;
+export type TextareaProps = BaseProps & ComponentProps<"textarea">;
 
-type TextareaProps = BaseProps & {
-	as?: "textarea";
-} & ComponentProps<"textarea">;
+const propsToClassName = (props: BaseProps) =>
+	clsx(props.className, formControlStyles.reset, formControlStyles.control, {
+		[styles.pill]: props.pill,
+		[formControlStyles.compact]: props.compact,
+		[formControlStyles.fullWidth]: props.fullWidth,
+		[formControlStyles.rounded]: props.rounded,
+		[formControlStyles.inline]: props.inline,
+		[formControlStyles.large]: props.large,
+	});
 
-export function Input(props: InputProps): React.ReactNode;
-export function Input(props: TextareaProps): React.ReactNode;
-export function Input({
-	as = "input",
-	compact,
-	pill,
-	fullWidth,
-	rounded,
-	inline,
-	...props
-}: InputProps | TextareaProps): React.ReactNode {
-	const isTextArea = as === "textarea";
-
-	return createElement(as, {
-		type: isTextArea ? undefined : "text",
+export function Input(props: InputProps): React.ReactNode {
+	return createElement("input", {
+		type: "text",
 		...props,
-		className: clsx(
-			props.className,
-			formControlStyles.reset,
-			formControlStyles.control,
-			{
-				[styles.textarea]: isTextArea,
-				[styles.pill]: pill,
-				[formControlStyles.compact]: compact,
-				[formControlStyles.fullWidth]: fullWidth,
-				[formControlStyles.rounded]: rounded,
-				[formControlStyles.inline]: inline,
-			},
-		),
+		className: propsToClassName(props),
+	});
+}
+
+export function TextArea(props: TextareaProps) {
+	return createElement("textarea", {
+		...props,
+		className: clsx(propsToClassName(props), styles.textarea),
 	});
 }

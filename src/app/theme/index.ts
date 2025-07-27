@@ -14,6 +14,7 @@ import "./colors/mauve.css";
 import "./colors/red.css";
 import "./colors/iris.css";
 import "./colors/amber.css";
+import "./colors/grass.css";
 
 /**
  * Color aliases, scaling, resets, and misc assignments

@@ -44,7 +44,7 @@ export default async function ListsPage() {
 
 					<Text as="p" size={3}>
 						With{" "}
-						<Text as="strong" heavy weight={600}>
+						<Text as="dfn" heavy weight={600}>
 							Lists
 						</Text>
 						, you can further organize your recipes, set and calculate Recipe

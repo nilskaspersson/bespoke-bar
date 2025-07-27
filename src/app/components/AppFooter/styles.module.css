@@ -17,6 +17,7 @@
 
 	.contain {
 		padding: var(--app-inset);
+		padding-top: var(--gap--huge);
 	}
 
 	.nav {

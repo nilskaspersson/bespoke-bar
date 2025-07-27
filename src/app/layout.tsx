@@ -8,6 +8,7 @@ import { AppFooter } from "@/app/components/AppFooter";
 import { AppHeader } from "@/app/components/AppHeader";
 import { AuthProvider } from "@/app/components/AuthProvider";
 import { ScrollFix } from "@/app/components/ScrollFix";
+import { Toaster } from "@/ui/Toast/Toaster";
 import styles from "./layout.module.css";
 
 const sans = Figtree({
@@ -36,10 +37,14 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 
 				<ThemeProvider>
 					<AuthProvider>
-						<AppHeader className={styles.header} />
-						<main className={styles.main}>{children}</main>
-						<AppFooter className={styles.footer} />
+						<div className={styles.layout} id="root">
+							<AppHeader className={styles.header} />
+							<main className={styles.main}>{children}</main>
+							<AppFooter className={styles.footer} />
+						</div>
 					</AuthProvider>
+
+					<Toaster />
 				</ThemeProvider>
 			</body>
 		</html>

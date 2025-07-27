@@ -24,7 +24,6 @@ export function CurrencyInput(props: ComponentProps<typeof TextField>) {
 
 	return (
 		<TextField
-			{...props}
 			adornment={
 				<span
 					className={clsx(styles.adornment, {
@@ -35,6 +34,7 @@ export function CurrencyInput(props: ComponentProps<typeof TextField>) {
 				</span>
 			}
 			helperText={`In ${currencyDisplayName.of(currency)} (${currency})`}
+			{...props}
 		/>
 	);
 }

@@ -4,31 +4,42 @@ import { clsx } from "clsx";
 import { type ComponentProps, useId } from "react";
 import { useFormStatus } from "react-dom";
 import { ControlLabel } from "@/ui/ControlLabel";
-import { Input } from "@/ui/Input";
+import { Input, TextArea } from "@/ui/Input";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function TextField({
-	as,
 	adornment,
 	className,
 	disabled,
 	label,
 	helperText,
 	id,
-	...inputProps
-}: ComponentProps<typeof Input> & {
-	as?: "input" | "textarea";
-	adornment?: React.ReactNode;
-	label: React.ReactNode;
-	compact?: boolean;
-	helperText?: React.ReactNode;
-}) {
+	...props
+}: ComponentProps<typeof Input> &
+	ComponentProps<typeof TextArea> & {
+		as?: "input" | "textarea";
+		adornment?: React.ReactNode;
+		label: React.ReactNode;
+		compact?: boolean;
+		helperText?: React.ReactNode;
+	}) {
 	const { pending } = useFormStatus();
 
 	const labelId = useId();
 	const inputId = useId();
 	const helperTextId = useId();
+
+	const inputProps = {
+		"aria-disabled": disabled || pending,
+		"aria-describedby": helperText ? helperTextId : undefined,
+		...props,
+		id: id ?? inputId,
+		readOnly: props.readOnly || pending,
+		className: clsx({
+			[styles.hasAdornment]: Boolean(adornment),
+		}),
+	} as const;
 
 	return (
 		<ControlLabel
@@ -50,17 +61,11 @@ export function TextField({
 					</label>
 				) : null}
 
-				<Input
-					as={as}
-					{...inputProps}
-					aria-disabled={disabled || pending}
-					id={id ?? inputId}
-					aria-describedby={helperText ? helperTextId : undefined}
-					readOnly={inputProps.readOnly || pending}
-					className={clsx({
-						[styles.hasAdornment]: Boolean(adornment),
-					})}
-				/>
+				{inputProps.as === "textarea" ? (
+					<TextArea {...(inputProps as ComponentProps<typeof TextArea>)} />
+				) : (
+					<Input {...inputProps} />
+				)}
 			</div>
 
 			{helperText ? (

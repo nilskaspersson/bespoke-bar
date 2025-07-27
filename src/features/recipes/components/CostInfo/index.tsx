@@ -100,7 +100,7 @@ export function CostInfo<T extends BaseRecipe>({
 				</Text>
 
 				{isIncomplete ? (
-					<Callout color="red" size={1} icon="triangle-exclamation">
+					<Callout color="amber" size={1} icon="triangle-exclamation">
 						Some ingredients are missing price information.
 					</Callout>
 				) : null}

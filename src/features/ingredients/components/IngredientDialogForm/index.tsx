@@ -22,7 +22,7 @@ export function IngredientDialogForm({
 	onClose,
 	name,
 	...props
-}: ComponentProps<typeof Dialog> & {
+}: Omit<ComponentProps<typeof Dialog>, "color"> & {
 	name: FieldName<IngredientFormData, RecipeFormData>;
 }) {
 	const [field] = useField(name);

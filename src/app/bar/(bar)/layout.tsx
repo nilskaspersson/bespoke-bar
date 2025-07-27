@@ -6,7 +6,6 @@ import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
 import { getClerkOrganization } from "@/features/organisation/actions/getClerkOrganization";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
-import { Toaster } from "@/ui/Toast/Toaster";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -33,8 +32,6 @@ export default async function Layout({
 			</div>
 
 			<BarNavigation className={styles.barNavigation} />
-
-			<Toaster />
 		</>
 	);
 }

@@ -1,0 +1,5 @@
+@layer feature {
+	.negative {
+		color: var(--red-11);
+	}
+}
