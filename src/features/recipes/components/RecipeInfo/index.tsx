@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	type ReactNode,
-	useContext,
-	useDeferredValue,
-	useId,
-	useState,
-} from "react";
+import { type ReactNode, useDeferredValue, useId, useState } from "react";
 import z from "zod/v4";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";
@@ -15,7 +9,7 @@ import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitCo
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useFormatter } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { CopyToClipboard } from "@/ui/CopyToClipboard";
@@ -35,7 +29,7 @@ export function RecipeInfo<T extends BaseRecipe>({
 	children?: ReactNode;
 	recipe: T;
 }) {
-	const { quantityFormatter } = useContext(FormatterContext);
+	const { quantityFormatter } = useFormatter();
 
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);

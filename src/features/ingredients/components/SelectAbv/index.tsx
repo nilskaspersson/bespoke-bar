@@ -1,15 +1,15 @@
 "use client";
 
-import { type ComponentProps, useContext } from "react";
+import type { ComponentProps } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useFormatter } from "@/hooks/useFormatter";
 import { TextField } from "@/ui/TextField";
 
 export function SelectAbv({
 	ingredient,
 	...props
 }: { ingredient: Ingredient | undefined } & ComponentProps<typeof TextField>) {
-	const { percentageFormatter } = useContext(FormatterContext);
+	const { percentageFormatter } = useFormatter();
 
 	return (
 		<TextField

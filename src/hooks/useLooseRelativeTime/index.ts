@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useContext } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useCallback } from "react";
+import { useFormatter } from "@/hooks/useFormatter";
 
 export function formatLooseRelativeTime(
 	date: Date,
@@ -44,8 +44,7 @@ export function formatLooseRelativeTime(
 }
 
 export function useLooseRelativeTime() {
-	const { dateTimeFormatter, relativeTimeFormatter } =
-		useContext(FormatterContext);
+	const { dateTimeFormatter, relativeTimeFormatter } = useFormatter();
 
 	return useCallback(
 		(date: Date, relativeThreshold = 30, now = new Date()) =>

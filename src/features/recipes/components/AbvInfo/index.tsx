@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { type ComponentProps, useContext } from "react";
+import type { ComponentProps } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { specIsDraft } from "@/features/specs/utils";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useFormatter } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
@@ -20,7 +20,7 @@ export function AbvInfo<T extends BaseRecipe>({
 	ComponentProps<"details">,
 	"children"
 >) {
-	const { percentageFormatter } = useContext(FormatterContext);
+	const { percentageFormatter } = useFormatter();
 
 	const recipeMetrics = calculateRecipeMetrics(recipe);
 

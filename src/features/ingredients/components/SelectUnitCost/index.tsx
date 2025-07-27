@@ -1,7 +1,7 @@
 "use client";
 
-import { type ComponentProps, useContext } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
+import type { ComponentProps } from "react";
+import { useFormatter } from "@/hooks/useFormatter";
 import { TextField } from "@/ui/TextField";
 
 export function SelectUnitCost({
@@ -10,7 +10,7 @@ export function SelectUnitCost({
 }: {
 	currency: string;
 } & ComponentProps<typeof TextField>) {
-	const { currencyDisplayName } = useContext(FormatterContext);
+	const { currencyDisplayName } = useFormatter();
 
 	return (
 		<TextField

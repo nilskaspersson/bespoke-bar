@@ -1,14 +1,14 @@
 "use client";
 
 import { type FieldName, useField } from "@conform-to/react";
-import { type ComponentProps, useCallback, useContext } from "react";
+import { type ComponentProps, useCallback } from "react";
 import type { IngredientFormData, RecipeFormData } from "@/db/schema/composite";
 import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useFormatter } from "@/hooks/useFormatter";
 import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
 import type { Dialog } from "@/ui/Dialog";
@@ -28,7 +28,7 @@ export function IngredientDialogForm({
 	const [field] = useField(name);
 
 	const ingredient = field.getFieldset();
-	const { options } = useContext(FormatterContext);
+	const { options } = useFormatter();
 
 	const handleClose = useCallback(() => {
 		ref.current?.close();
