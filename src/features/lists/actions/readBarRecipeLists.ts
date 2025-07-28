@@ -1,6 +1,6 @@
 "use server";
 
-import { count, desc, eq, getTableColumns, sql } from "drizzle-orm";
+import { and, count, desc, eq, getTableColumns, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import {
@@ -17,7 +17,10 @@ const preparedReadBarRecipeLists = db
 	.from(RecipeListsTable)
 	.leftJoin(
 		RecipeListEntriesTable,
-		eq(RecipeListsTable.id, RecipeListEntriesTable.listId),
+		and(
+			eq(RecipeListEntriesTable.orgId, sql.placeholder("orgId")),
+			eq(RecipeListsTable.id, RecipeListEntriesTable.listId),
+		),
 	)
 	.where(eq(RecipeListsTable.orgId, sql.placeholder("orgId")))
 	.groupBy(RecipeListsTable.id)

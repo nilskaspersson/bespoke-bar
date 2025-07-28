@@ -86,7 +86,7 @@ export default async function IngredientPage({ params }: Props) {
 				<DeleteIngredient
 					ingredient={ingredient}
 					aria-disabled={recipesUsingIngredient.length > 0}
-					disabledReason={
+					notice={
 						recipesUsingIngredient.length > 0 ? (
 							<>
 								This ingredient is used in recipes and{" "}

@@ -20,7 +20,7 @@ import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRec
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Button, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
+import { TextArea } from "@/ui/Input";
 import { Lightbox } from "@/ui/Lightbox";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
@@ -190,8 +190,7 @@ export function BulkDraftRecipes({
 					</SubmitButton>
 				</div>
 
-				<Input
-					as="textarea"
+				<TextArea
 					name="draft"
 					rows={3}
 					value={inputValue}

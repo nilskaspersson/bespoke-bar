@@ -17,14 +17,14 @@ export async function deleteRecipeList({
 }): Promise<void> {
 	const { orgId } = await authOrForbidden();
 
-	const result = await db
+	const [result] = await db
 		.delete(RecipeListsTable)
 		.where(and(eq(RecipeListsTable.id, id), eq(RecipeListsTable.orgId, orgId)))
 		.returning();
 
 	revalidateRecipeListPaths(id);
 
-	if (result.some((o) => o.isFeatured)) {
+	if (result.isFeatured) {
 		revalidatePath("/bar", "page");
 	}
 

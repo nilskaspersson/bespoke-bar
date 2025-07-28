@@ -93,6 +93,8 @@ export async function upsertRecipeWithSpecsAction(
 	try {
 		result = await upsertRecipesWithSpecs(data);
 	} catch (_error) {
+		console.error(_error);
+
 		return submission.reply({
 			formErrors: ["Failed to upsert recipe"],
 		});

@@ -1,8 +1,10 @@
 "use client";
+
 import { useTransition } from "react";
 
 export function useServerAction<T extends unknown[], R>(
 	fn: (...args: T) => Promise<R>,
+	cb?: (result: R) => void,
 ) {
 	const [isPending, startTransition] = useTransition();
 
@@ -11,6 +13,7 @@ export function useServerAction<T extends unknown[], R>(
 			startTransition(async () => {
 				try {
 					const result = await fn(...args);
+					cb?.(result);
 					resolve(result);
 				} catch (error) {
 					reject(error);

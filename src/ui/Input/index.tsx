@@ -4,10 +4,11 @@ import formControlStyles from "@/ui/FormControl/styles.module.css";
 import styles from "./styles.module.css";
 
 type BaseProps = {
-	as?: "input" | "textarea";
+	className?: string;
 	id?: string;
 	readOnly?: boolean;
 	compact?: boolean;
+	large?: boolean;
 	inline?: boolean;
 	pill?: boolean;
 	fullWidth?: boolean;
@@ -15,42 +16,62 @@ type BaseProps = {
 	"aria-invalid"?: boolean;
 };
 
-type InputProps = BaseProps & {
-	as?: "input";
-	type?: "text" | "search" | "number";
-} & ComponentProps<"input">;
+export type InputProps = BaseProps & ComponentProps<"input">;
+export type TextareaProps = BaseProps & ComponentProps<"textarea">;
 
-type TextareaProps = BaseProps & {
-	as?: "textarea";
-} & ComponentProps<"textarea">;
-
-export function Input(props: InputProps): React.ReactNode;
-export function Input(props: TextareaProps): React.ReactNode;
 export function Input({
-	as = "input",
+	className,
 	compact,
-	pill,
 	fullWidth,
-	rounded,
 	inline,
+	large,
+	pill,
+	rounded,
 	...props
-}: InputProps | TextareaProps): React.ReactNode {
-	const isTextArea = as === "textarea";
-
-	return createElement(as, {
-		type: isTextArea ? undefined : "text",
+}: InputProps): React.ReactNode {
+	return createElement("input", {
+		type: "text",
 		...props,
 		className: clsx(
-			props.className,
+			className,
 			formControlStyles.reset,
 			formControlStyles.control,
 			{
-				[styles.textarea]: isTextArea,
 				[styles.pill]: pill,
 				[formControlStyles.compact]: compact,
 				[formControlStyles.fullWidth]: fullWidth,
 				[formControlStyles.rounded]: rounded,
 				[formControlStyles.inline]: inline,
+				[formControlStyles.large]: large,
+			},
+		),
+	});
+}
+
+export function TextArea({
+	className,
+	compact,
+	fullWidth,
+	inline,
+	large,
+	pill,
+	rounded,
+	...props
+}: TextareaProps) {
+	return createElement("textarea", {
+		...props,
+		className: clsx(
+			className,
+			formControlStyles.reset,
+			formControlStyles.control,
+			styles.textarea,
+			{
+				[styles.pill]: pill,
+				[formControlStyles.compact]: compact,
+				[formControlStyles.fullWidth]: fullWidth,
+				[formControlStyles.rounded]: rounded,
+				[formControlStyles.inline]: inline,
+				[formControlStyles.large]: large,
 			},
 		),
 	});

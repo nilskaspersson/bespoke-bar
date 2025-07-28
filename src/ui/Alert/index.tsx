@@ -12,6 +12,7 @@ import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Lightbox } from "@/ui/Lightbox";
 import { Text } from "@/ui/Text";
+import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
 export function Alert({
@@ -20,12 +21,14 @@ export function Alert({
 	className,
 	heading,
 	notice,
+	color = "regular",
 	ref,
 	...props
 }: Partial<ComponentProps<typeof Dialog>> & {
 	actions?: ReactNode;
 	notice?: ReactNode;
 	heading?: ReactNode;
+	color?: SystemColor;
 }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 
@@ -58,9 +61,14 @@ export function Alert({
 				</div>
 
 				{notice ? (
-					<Text as="div" fullWidth compact size={2} className={styles.notice}>
+					<Text
+						as="div"
+						fullWidth
+						compact
+						size={2}
+						className={clsx(styles.notice, styles[color])}
+					>
 						<Icon name="circle-exclamation" className={styles.icon} />
-
 						<span>{notice}</span>
 					</Text>
 				) : null}

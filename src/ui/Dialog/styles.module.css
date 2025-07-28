@@ -23,43 +23,9 @@
 		}
 	}
 
-	@property --from {
-		syntax: "<color>";
-		inherits: false;
-		initial-value: color(display-p3 0.354 0.445 0.866);
-	}
-
-	@property --to {
-		syntax: "<color>";
-		inherits: false;
-		initial-value: color(display-p3 0.864 0.364 0.539);
-	}
-
-	@keyframes gradient {
-		to {
-			--from: color(display-p3 0.862 0.415 0.298);
-			--to: color(display-p3 0.426 0.694 0.426);
-		}
-	}
-
-	@media (prefers-reduced-motion: no-preference) and (min-width: 750px) {
-		:global(html) {
-			background-image: linear-gradient(
-				to right in oklab,
-				var(--from),
-				var(--to)
-			);
-			animation: gradient 2s linear infinite alternate;
-
-			&:not(:has(.dialog[open])) {
-				animation-play-state: paused;
-			}
-		}
-	}
-
-	:global(body) {
+	:global(#root) {
 		@media (prefers-reduced-motion: no-preference) {
-			transition-property: scale, filter, opacity, background-color;
+			transition-property: filter, opacity, background-color;
 			transition-duration: var(--transition-duration);
 
 			> * {
@@ -68,8 +34,6 @@
 		}
 
 		&:has(.dialog[open]) {
-			overflow: hidden;
-
 			> :not(.dialog) {
 				filter: blur(3px);
 
@@ -79,10 +43,7 @@
 			}
 
 			@media (prefers-reduced-motion: no-preference) and (min-width: 750px) {
-				contain: strict; /* Hack to enforce hiding overflow under border-radius */
-				scale: 0.98;
 				filter: brightness(0.9);
-				border-radius: var(--radius--large);
 			}
 		}
 	}

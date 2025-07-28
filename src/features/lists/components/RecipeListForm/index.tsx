@@ -9,6 +9,7 @@ import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
 import { Button } from "@/ui/Button";
+import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
@@ -93,7 +94,7 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 
 							return (
 								<li key={entry.key}>
-									<fieldset>
+									<Grid as="fieldset" gap={2}>
 										<input
 											type="hidden"
 											name={entryFields.sortOrder.name}
@@ -105,7 +106,14 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 											defaultValue={entryFields.recipeId.defaultValue}
 											recipes={recipes}
 										/>
-									</fieldset>
+
+										<CurrencyInput
+											label="Price"
+											name={entryFields.price.name}
+											id={entryFields.price.id}
+											defaultValue={entryFields.price.defaultValue}
+										/>
+									</Grid>
 								</li>
 							);
 						})}

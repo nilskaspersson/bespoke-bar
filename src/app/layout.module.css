@@ -1,6 +1,11 @@
 @layer layout {
 	.body {
 		display: grid;
+	}
+
+	.layout {
+		display: grid;
+		min-height: 100lvh;
 		grid-template:
 			"header" auto
 			"main" 1fr

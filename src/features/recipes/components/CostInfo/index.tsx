@@ -1,13 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { type ComponentProps, useContext } from "react";
+import type { ComponentProps } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { getRecipeCost } from "@/features/recipes/utils/getRecipeCost";
 import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
 import { getSpecCost } from "@/features/specs/utils/getSpecCost";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useFormatter } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
@@ -24,7 +24,7 @@ export function CostInfo<T extends BaseRecipe>({
 >) {
 	const { cost, isIncomplete } = getRecipeCost(recipe);
 
-	const { currencyFormatter, quantityFormatter } = useContext(FormatterContext);
+	const { currencyFormatter, quantityFormatter } = useFormatter();
 	const formatSpecMeasure = useFormatSpecMeasure();
 
 	return (
@@ -100,7 +100,7 @@ export function CostInfo<T extends BaseRecipe>({
 				</Text>
 
 				{isIncomplete ? (
-					<Callout color="red" size={1} icon="triangle-exclamation">
+					<Callout color="amber" size={1} icon="triangle-exclamation">
 						Some ingredients are missing price information.
 					</Callout>
 				) : null}

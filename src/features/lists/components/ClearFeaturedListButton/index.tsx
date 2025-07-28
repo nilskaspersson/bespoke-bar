@@ -4,8 +4,9 @@ import type { RecipeList } from "@/db/schema/recipeLists";
 import { SetFeaturedListButton } from "@/features/lists/components/SetFeaturedListButton";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
+import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
 
 export function ClearFeaturedListButton({
@@ -67,8 +68,27 @@ export function ClearFeaturedListButton({
 	};
 
 	return (
-		<form action={handleClearFeaturedList}>
-			<SubmitButton {...buttonProps}>{children}</SubmitButton>
-		</form>
+		<ConfirmAction
+			action={handleClearFeaturedList}
+			actionLabel="Clear Featured List"
+			iconName="circle-xmark"
+			buttonProps={{
+				...buttonProps,
+				color: "amber",
+			}}
+			description={
+				<Text as="p" size={2}>
+					You are about to clear <em>{list.name}</em> as the Featured List. Do
+					you want to continue?
+				</Text>
+			}
+			notice={
+				<>
+					This list <strong>will no longer be Featured.</strong>
+				</>
+			}
+		>
+			{children}
+		</ConfirmAction>
 	);
 }

@@ -17,6 +17,8 @@ import styles from "./page.module.css";
 export default async function ListsPage() {
 	const lists = await readBarRecipeLists();
 
+	const hasFeaturedList = lists.some((list) => list.isFeatured);
+
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -40,13 +42,9 @@ export default async function ListsPage() {
 						Time for a new Cocktail List?
 					</Heading>
 
-					<Text as="p" size={3} italic>
-						You have come to the right place!
-					</Text>
-
 					<Text as="p" size={3}>
 						With{" "}
-						<Text as="strong" heavy weight={600}>
+						<Text as="dfn" heavy weight={600}>
 							Lists
 						</Text>
 						, you can further organize your recipes, set and calculate Recipe
@@ -67,7 +65,11 @@ export default async function ListsPage() {
 
 						<EntityActions className={styles.actions}>
 							{(actionProps) => (
-								<ListItemActions {...actionProps} list={list} />
+								<ListItemActions
+									{...actionProps}
+									list={list}
+									hasFeaturedList={hasFeaturedList}
+								/>
 							)}
 						</EntityActions>
 					</li>

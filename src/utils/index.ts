@@ -99,3 +99,24 @@ export function times(n: number): number[] {
 export function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }
+
+export function isObject(o: unknown): o is Record<PropertyKey, unknown> {
+	return typeof o === "object" && o !== null && !Array.isArray(o);
+}
+
+export function getDifferentKeys<T extends Record<PropertyKey, unknown>>(
+	a: T,
+	b: T,
+): (keyof T)[] {
+	const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+
+	const diff: (keyof T)[] = [];
+
+	for (const k of keys) {
+		if (a[k] !== b[k]) {
+			diff.push(k);
+		}
+	}
+
+	return diff;
+}

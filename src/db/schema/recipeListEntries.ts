@@ -23,16 +23,19 @@ export const RecipeListEntriesTable = pgTable(
 		id: text("id")
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
+		orgId: text("org_id").notNull(),
 		listId: text("list_id")
 			.notNull()
 			.references(() => RecipeListsTable.id, { onDelete: "cascade" }),
 		recipeId: text("recipe_id")
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
-		sortOrder: integer("sort_order").notNull(),
+		sortOrder: integer("sort_order"),
 		price: real("price"),
 	},
 	(table) => [
+		index("idx_recipe_list_entries_org").on(table.orgId),
+		index("idx_recipe_list_entries_org_list").on(table.orgId, table.listId),
 		// A recipe can only appear once per list
 		uniqueIndex("idx_recipe_list_entries_unique").on(
 			table.listId,
@@ -71,7 +74,7 @@ export type InsertRecipeListEntry = Omit<
 
 export type UpdateRecipeListEntry = Pick<
 	typeof RecipeListEntriesTable.$inferInsert,
-	"sortOrder" | "price"
+	"sortOrder" | "price" | "recipeId"
 >;
 
 export type RecipeListEntryWithRecipe = RecipeListEntry & {
@@ -81,9 +84,11 @@ export type RecipeListEntryWithRecipe = RecipeListEntry & {
 export const selectRecipeListEntrySchema = createSelectSchema(
 	RecipeListEntriesTable,
 );
+
 export const insertRecipeListEntrySchema = createInsertSchema(
 	RecipeListEntriesTable,
 );
+
 export const updateRecipeListEntrySchema = createUpdateSchema(
 	RecipeListEntriesTable,
 );

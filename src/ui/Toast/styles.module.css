@@ -43,8 +43,8 @@
 		transition: opacity var(--transition-duration--short);
 
 		.success & {
-			background-color: var(--iris-6);
-			color: var(--iris-12);
+			background-color: var(--grass-6);
+			color: var(--grass-12);
 		}
 
 		.error & {

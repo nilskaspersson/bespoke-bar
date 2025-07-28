@@ -1,16 +1,29 @@
 @layer ui {
-	/**
-	 * This node mostly exists to support straight helperText layouts with
-	 * the `inline` prop.
-	 */
 	.contain {
-		display: grid;
-		gap: var(--space-1);
+		display: flex;
 		flex: 0 1 auto;
-		align-self: stretch;
+		max-width: var(--control-width);
 	}
 
 	.helperText {
 		width: fit-content;
+	}
+
+	.adornment {
+		display: flex;
+		place-content: center;
+		place-items: center;
+		flex: 0 0 auto;
+
+		background-color: var(--mauve-3);
+		border-top-left-radius: var(--radius);
+		border-bottom-left-radius: var(--radius);
+		border: 1px solid var(--mauve-6);
+		border-right: none;
+	}
+
+	.hasAdornment {
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
 	}
 }

@@ -1,12 +1,12 @@
 "use client";
 
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import type { DraftSpec } from "@/db/schema/specs";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { FormatterContext } from "@/hooks/useFormatter";
+import { useFormatter } from "@/hooks/useFormatter";
 
 export function useGetSpecMeasure<T extends DraftSpec>() {
-	const { quantityFormatter } = useContext(FormatterContext);
+	const { quantityFormatter } = useFormatter();
 
 	return useCallback(
 		(spec: T, servings: number) => {
