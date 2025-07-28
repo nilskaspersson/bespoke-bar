@@ -15,4 +15,10 @@
 		border-bottom: 2px dotted var(--mauve-6);
 		min-width: 3ch;
 	}
+
+	.profit {
+		position: absolute;
+		top: 100%;
+		right: 0;
+	}
 }

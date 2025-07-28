@@ -19,27 +19,60 @@ type BaseProps = {
 export type InputProps = BaseProps & ComponentProps<"input">;
 export type TextareaProps = BaseProps & ComponentProps<"textarea">;
 
-const propsToClassName = (props: BaseProps) =>
-	clsx(props.className, formControlStyles.reset, formControlStyles.control, {
-		[styles.pill]: props.pill,
-		[formControlStyles.compact]: props.compact,
-		[formControlStyles.fullWidth]: props.fullWidth,
-		[formControlStyles.rounded]: props.rounded,
-		[formControlStyles.inline]: props.inline,
-		[formControlStyles.large]: props.large,
-	});
-
-export function Input(props: InputProps): React.ReactNode {
+export function Input({
+	className,
+	compact,
+	fullWidth,
+	inline,
+	large,
+	pill,
+	rounded,
+	...props
+}: InputProps): React.ReactNode {
 	return createElement("input", {
 		type: "text",
 		...props,
-		className: propsToClassName(props),
+		className: clsx(
+			className,
+			formControlStyles.reset,
+			formControlStyles.control,
+			{
+				[styles.pill]: pill,
+				[formControlStyles.compact]: compact,
+				[formControlStyles.fullWidth]: fullWidth,
+				[formControlStyles.rounded]: rounded,
+				[formControlStyles.inline]: inline,
+				[formControlStyles.large]: large,
+			},
+		),
 	});
 }
 
-export function TextArea(props: TextareaProps) {
+export function TextArea({
+	className,
+	compact,
+	fullWidth,
+	inline,
+	large,
+	pill,
+	rounded,
+	...props
+}: TextareaProps) {
 	return createElement("textarea", {
 		...props,
-		className: clsx(propsToClassName(props), styles.textarea),
+		className: clsx(
+			className,
+			formControlStyles.reset,
+			formControlStyles.control,
+			styles.textarea,
+			{
+				[styles.pill]: pill,
+				[formControlStyles.compact]: compact,
+				[formControlStyles.fullWidth]: fullWidth,
+				[formControlStyles.rounded]: rounded,
+				[formControlStyles.inline]: inline,
+				[formControlStyles.large]: large,
+			},
+		),
 	});
 }

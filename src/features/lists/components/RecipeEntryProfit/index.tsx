@@ -1,14 +1,13 @@
 "use client";
 
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { RecipeEntryProfitLabel } from "@/features/lists/components/RecipeEntryProfitLabel";
 import { getRecipeCost } from "@/features/recipes/utils/getRecipeCost";
 import { useFormatter } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
-import styles from "./styles.module.css";
 
 export function RecipeEntryProfit<T extends BaseRecipe>({
 	recipe,
@@ -30,16 +29,13 @@ export function RecipeEntryProfit<T extends BaseRecipe>({
 					? "Profit per serving: "
 					: `Total profit (${quantityFormatter.format(servings)} servings): `}
 
-				<Text
+				<RecipeEntryProfitLabel
 					heavy
 					weight={600}
-					className={clsx({
-						[styles.negative]: price - cost < 0,
-					})}
-				>
-					{currencyFormatter.format((price - cost) * servings)}
-					{isIncomplete ? "*" : null}
-				</Text>
+					cost={cost}
+					price={price}
+					servings={servings}
+				/>
 			</Text>
 
 			<Grid gap={2} justifyItems="start">
@@ -88,18 +84,15 @@ export function RecipeEntryProfit<T extends BaseRecipe>({
 								Profit per serving
 							</Text>
 
-							<Text
+							<RecipeEntryProfitLabel
 								as="td"
 								heavy
 								weight={600}
 								align="right"
-								className={clsx({
-									[styles.negative]: price - cost < 0,
-								})}
-							>
-								{currencyFormatter.format(price - cost)}
-								{isIncomplete ? "*" : null}
-							</Text>
+								cost={cost}
+								price={price}
+								servings={1}
+							/>
 						</tr>
 
 						{servings > 1 ? (
@@ -108,18 +101,15 @@ export function RecipeEntryProfit<T extends BaseRecipe>({
 									Total profit ({quantityFormatter.format(servings)} servings)
 								</Text>
 
-								<Text
+								<RecipeEntryProfitLabel
 									as="td"
 									heavy
 									weight={600}
 									align="right"
-									className={clsx({
-										[styles.negative]: price - cost < 0,
-									})}
-								>
-									{currencyFormatter.format((price - cost) * servings)}
-									{isIncomplete ? "*" : null}
-								</Text>
+									cost={cost}
+									price={price}
+									servings={servings}
+								/>
 							</tr>
 						) : null}
 					</tfoot>

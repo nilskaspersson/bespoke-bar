@@ -4,6 +4,7 @@ import Link from "next/link";
 import { EntityActions } from "@/app/components/EntityActions";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { Abv } from "@/features/ingredients/components/Abv";
+import { RecipeEntryProfitLabel } from "@/features/lists/components/RecipeEntryProfitLabel";
 import { UpdateRecipeEntryButton } from "@/features/lists/components/UpdateRecipeEntry";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
+import { getRecipeCost } from "@/features/recipes/utils/getRecipeCost";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import { useFormatter } from "@/hooks/useFormatter";
 import { Button, LinkButton } from "@/ui/Button";
@@ -34,6 +36,7 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 	const metrics = calculateRecipeMetrics(entry.recipe);
 
 	const { currencyFormatter, percentageFormatter } = useFormatter();
+	const { cost, isIncomplete } = getRecipeCost(entry.recipe);
 
 	return (
 		<Grid gap={4} className={className}>
@@ -47,11 +50,23 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 
 					<span className={styles.dots} />
 
-					<Text heavy weight={800} size={2} align="right">
-						{typeof entry.price === "number"
-							? currencyFormatter.format(entry.price)
-							: "No price data"}
-					</Text>
+					<div>
+						<Text as="div" heavy weight={800} size={2} align="right">
+							{typeof entry.price === "number"
+								? currencyFormatter.format(entry.price)
+								: "No price data"}
+						</Text>
+
+						<RecipeEntryProfitLabel
+							as="div"
+							size={0}
+							align="right"
+							price={entry.price}
+							cost={cost}
+							isIncomplete={isIncomplete}
+							className={styles.profit}
+						/>
+					</div>
 				</div>
 
 				<Flex as="div" wrap gap={1}>

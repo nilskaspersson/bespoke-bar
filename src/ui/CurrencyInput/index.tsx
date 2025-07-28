@@ -24,6 +24,8 @@ export function CurrencyInput(props: ComponentProps<typeof TextField>) {
 
 	return (
 		<TextField
+			type="number"
+			min={0}
 			adornment={
 				<span
 					className={clsx(styles.adornment, {
