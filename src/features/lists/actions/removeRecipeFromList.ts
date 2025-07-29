@@ -1,12 +1,13 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
 	RecipeListEntriesTable,
 	type RecipeListEntry,
 } from "@/db/schema/recipeListEntries";
+import { RecipeListsTable } from "@/db/schema/recipeLists";
+import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function removeRecipeFromList(
@@ -14,21 +15,38 @@ export async function removeRecipeFromList(
 ): Promise<RecipeListEntry> {
 	const { orgId } = await authOrForbidden();
 
-	const [deletedEntry] = await db
-		.delete(RecipeListEntriesTable)
-		.where(
-			and(
-				eq(RecipeListEntriesTable.orgId, orgId),
-				eq(RecipeListEntriesTable.id, entryId),
-			),
-		)
-		.returning();
+	const deletedEntry = await db.transaction(async (tx) => {
+		const [entry] = await db
+			.delete(RecipeListEntriesTable)
+			.where(
+				and(
+					eq(RecipeListEntriesTable.id, entryId),
+					eq(RecipeListEntriesTable.orgId, orgId),
+				),
+			)
+			.returning();
+
+		await tx
+			.update(RecipeListsTable)
+			.set({ updatedAt: sql`NOW()` })
+			.where(
+				and(
+					eq(RecipeListsTable.id, entry.listId),
+					eq(RecipeListsTable.orgId, orgId),
+				),
+			);
+
+		return entry;
+	});
 
 	if (!deletedEntry) {
 		throw new Error("Recipe not found, or access denied");
 	}
 
-	revalidatePath(`/bar/lists/${deletedEntry.listId}`, "layout");
+	revalidateRecipeListPaths({
+		id: deletedEntry.listId,
+		shouldRevalidateBar: true,
+	});
 
 	return deletedEntry;
 }

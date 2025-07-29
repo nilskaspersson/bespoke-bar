@@ -1,7 +1,6 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
 	type InsertRecipeListEntry,
@@ -11,6 +10,7 @@ import {
 	type RecipeListEntryFormData,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
+import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function addRecipeToList(
@@ -60,12 +60,29 @@ export async function addRecipeToList(
 			sortOrder: maxSortOrder + 1,
 		});
 
-	const [entry] = await db
-		.insert(RecipeListEntriesTable)
-		.values(validatedEntry)
-		.returning();
+	const entry = await db.transaction(async (tx) => {
+		const [newEntry] = await tx
+			.insert(RecipeListEntriesTable)
+			.values(validatedEntry)
+			.returning();
 
-	revalidatePath(`/bar/lists/${listId}`, "layout");
+		await tx
+			.update(RecipeListsTable)
+			.set({ updatedAt: sql`NOW()` })
+			.where(
+				and(
+					eq(RecipeListsTable.id, newEntry.listId),
+					eq(RecipeListsTable.orgId, orgId),
+				),
+			);
+
+		return newEntry;
+	});
+
+	revalidateRecipeListPaths({
+		id: listId,
+		shouldRevalidateBar: list.isFeatured,
+	});
 
 	return entry;
 }
