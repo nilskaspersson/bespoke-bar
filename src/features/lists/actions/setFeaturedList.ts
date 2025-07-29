@@ -1,7 +1,6 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
@@ -35,6 +34,8 @@ export async function setFeaturedList(listId: string) {
 			);
 	});
 
-	revalidatePath("/bar", "page");
-	revalidateRecipeListPaths(listId);
+	revalidateRecipeListPaths({
+		id: listId,
+		shouldRevalidateBar: true,
+	});
 }

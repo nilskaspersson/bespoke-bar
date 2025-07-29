@@ -1,7 +1,6 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
@@ -40,11 +39,10 @@ export async function upsertRecipeListWithEntries(
 		return list;
 	});
 
-	revalidateRecipeListPaths(result.id);
-
-	if (result.isFeatured) {
-		revalidatePath("/bar", "page");
-	}
+	revalidateRecipeListPaths({
+		id: result.id,
+		shouldRevalidateBar: result.isFeatured,
+	});
 
 	return result;
 }
