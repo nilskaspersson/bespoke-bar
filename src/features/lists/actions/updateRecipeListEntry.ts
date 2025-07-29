@@ -32,7 +32,10 @@ export async function updateRecipeListEntry(
 		)
 		.returning();
 
-	revalidateRecipeListPaths(result.listId);
+	revalidateRecipeListPaths({
+		id: result.listId,
+		shouldRevalidateBar: true,
+	});
 
 	/**
 	 * This technically only needs to happen if the list it's part of is featured, but

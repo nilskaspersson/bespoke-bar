@@ -1,7 +1,6 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
@@ -22,11 +21,10 @@ export async function deleteRecipeList({
 		.where(and(eq(RecipeListsTable.id, id), eq(RecipeListsTable.orgId, orgId)))
 		.returning();
 
-	revalidateRecipeListPaths(id);
-
-	if (result.isFeatured) {
-		revalidatePath("/bar", "page");
-	}
+	revalidateRecipeListPaths({
+		id,
+		shouldRevalidateBar: result.isFeatured,
+	});
 
 	if (redirectTo) {
 		redirect(redirectTo);

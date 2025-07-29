@@ -1,7 +1,6 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
@@ -24,6 +23,8 @@ export async function clearFeaturedList() {
 		)
 		.returning();
 
-	revalidatePath("/bar", "page");
-	revalidateRecipeListPaths(list.id);
+	revalidateRecipeListPaths({
+		id: list.id,
+		shouldRevalidateBar: true,
+	});
 }
