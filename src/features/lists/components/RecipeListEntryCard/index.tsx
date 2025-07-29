@@ -4,7 +4,10 @@ import Link from "next/link";
 import { EntityActions } from "@/app/components/EntityActions";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { Abv } from "@/features/ingredients/components/Abv";
+import { addRecipeToList } from "@/features/lists/actions/addRecipeToList";
+import { removeRecipeFromList } from "@/features/lists/actions/removeRecipeFromList";
 import { RecipeEntryProfitLabel } from "@/features/lists/components/RecipeEntryProfitLabel";
+import { RemoveListEntryButton } from "@/features/lists/components/RemoveListEntryButton";
 import { UpdateRecipeEntryButton } from "@/features/lists/components/UpdateRecipeEntry";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
@@ -17,7 +20,7 @@ import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipe
 import { getRecipeCost } from "@/features/recipes/utils/getRecipeCost";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import { useFormatter } from "@/hooks/useFormatter";
-import { Button, LinkButton } from "@/ui/Button";
+import { LinkButton } from "@/ui/Button";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
@@ -146,10 +149,15 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 							</li>
 
 							<li>
-								<Button {...actionProps} aria-disabled="true">
+								<RemoveListEntryButton
+									{...actionProps}
+									entry={entry}
+									actionRemove={removeRecipeFromList}
+									actionAdd={addRecipeToList.bind(null, entry.listId)}
+								>
 									<Icon name="xmark" />
 									Remove from list
-								</Button>
+								</RemoveListEntryButton>
 							</li>
 						</>
 					)}

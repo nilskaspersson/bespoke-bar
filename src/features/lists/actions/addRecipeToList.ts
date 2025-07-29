@@ -7,16 +7,29 @@ import {
 	type InsertRecipeListEntry,
 	insertRecipeListEntrySchema,
 	RecipeListEntriesTable,
+	type RecipeListEntry,
+	type RecipeListEntryFormData,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function addRecipeToList(
 	listId: string,
-	recipeId: string,
-	price?: number,
-): Promise<void> {
+	userInput: RecipeListEntryFormData,
+): Promise<RecipeListEntry> {
 	const { orgId } = await authOrForbidden();
+
+	/**
+	 * Validate early to avoid querying the list. We will validate again later once we
+	 * have a sort order.
+	 */
+	const validatedInput: InsertRecipeListEntry =
+		insertRecipeListEntrySchema.parse({
+			listId,
+			recipeId: userInput.recipeId,
+			orgId,
+			price: userInput.price ?? null,
+		});
 
 	const list = await db.query.RecipeListsTable.findFirst({
 		where: and(
@@ -41,17 +54,18 @@ export async function addRecipeToList(
 			? Math.max(...list.entries.map((entry) => entry.sortOrder ?? 0))
 			: 0;
 
-	const nextSortOrder = maxSortOrder + 1;
+	const validatedEntry: InsertRecipeListEntry =
+		insertRecipeListEntrySchema.parse({
+			...validatedInput,
+			sortOrder: maxSortOrder + 1,
+		});
 
-	const validatedEntry = insertRecipeListEntrySchema.parse({
-		listId,
-		recipeId,
-		orgId,
-		sortOrder: nextSortOrder,
-		price: price ?? null,
-	} satisfies InsertRecipeListEntry);
-
-	await db.insert(RecipeListEntriesTable).values(validatedEntry);
+	const [entry] = await db
+		.insert(RecipeListEntriesTable)
+		.values(validatedEntry)
+		.returning();
 
 	revalidatePath(`/bar/lists/${listId}`, "layout");
+
+	return entry;
 }
