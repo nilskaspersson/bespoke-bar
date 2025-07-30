@@ -9,7 +9,16 @@ type DialogEvent =
 	| MouseEvent<HTMLDialogElement>
 	| KeyboardEvent<HTMLDialogElement>;
 
-const handleClose = (event: DialogEvent) => {
+const handleClickClose = (event: DialogEvent) => {
+	if (
+		event.target instanceof HTMLDialogElement &&
+		event.target.nodeName === "DIALOG"
+	) {
+		event.target.close("dismiss");
+	}
+};
+
+const handleKeyboardClose = (event: DialogEvent) => {
 	if (
 		event.target instanceof HTMLDialogElement &&
 		event.target.nodeName === "DIALOG"
@@ -17,14 +26,12 @@ const handleClose = (event: DialogEvent) => {
 		event.target.close("dismiss");
 	}
 
-	// Why did I ever add this?
-	// Maybe it makes sense if we also check for type="submit"?
-	// if (
-	// 	event.target instanceof HTMLButtonElement &&
-	// 	event.target.nodeName === "BUTTON"
-	// ) {
-	// 	event.target.closest("dialog")?.close("dismiss");
-	// }
+	if (
+		event.target instanceof HTMLButtonElement &&
+		event.target.nodeName === "BUTTON"
+	) {
+		event.target.closest("dialog")?.close("dismiss");
+	}
 };
 
 export function Dialog({
@@ -43,8 +50,8 @@ export function Dialog({
 			/**
 			 * Close on backdrop clicks
 			 */
-			onClick={handleClose}
-			onKeyDown={handleKey([["Escape", handleClose]])}
+			onClick={handleClickClose}
+			onKeyDown={handleKey([["Escape", handleKeyboardClose]])}
 			{...props}
 		>
 			{children}
