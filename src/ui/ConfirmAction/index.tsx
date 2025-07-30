@@ -2,6 +2,7 @@
 
 import type { PropsWithChildren } from "react";
 import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
+import { useGracePeriod } from "@/hooks/useGracePeriod";
 import { Alert } from "@/ui/Alert";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -57,7 +58,7 @@ export function ConfirmAction({
 								Cancel
 							</Button>
 
-							<Button
+							<ConfirmButton
 								onClick={
 									buttonProps?.["aria-disabled"] ? undefined : resolveAction
 								}
@@ -70,7 +71,7 @@ export function ConfirmAction({
 								{iconName ? <Icon name={iconName} /> : null}
 
 								{actionLabel}
-							</Button>
+							</ConfirmButton>
 						</>
 					}
 				>
@@ -78,5 +79,19 @@ export function ConfirmAction({
 				</Alert>
 			) : null}
 		</form>
+	);
+}
+
+function ConfirmButton({ children, ...props }: ButtonProps) {
+	const isInGracePeriod = useGracePeriod(1000);
+
+	return (
+		<Button
+			{...props}
+			disabled={props.disabled || isInGracePeriod}
+			aria-disabled={props["aria-disabled"] || isInGracePeriod}
+		>
+			{children}
+		</Button>
 	);
 }

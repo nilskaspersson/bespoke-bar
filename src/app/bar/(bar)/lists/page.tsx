@@ -70,6 +70,7 @@ export default async function ListsPage() {
 								<ListItemActions
 									{...actionProps}
 									list={list}
+									recipeCount={list.recipeCount}
 									hasFeaturedList={hasFeaturedList}
 								/>
 							)}

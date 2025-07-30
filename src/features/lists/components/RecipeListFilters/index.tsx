@@ -47,13 +47,15 @@ export function RecipeListFilters({
 
 	return (
 		<Grid gap={6}>
-			<Input
-				type="search"
-				value={search}
-				placeholder="Search in List…"
-				fullWidth
-				onChange={(e) => setSearch(e.target.value)}
-			/>
+			{entries.length > 0 ? (
+				<Input
+					type="search"
+					value={search}
+					placeholder="Search in List…"
+					fullWidth
+					onChange={(e) => setSearch(e.target.value)}
+				/>
+			) : null}
 
 			{filteredEntries.length === 0 && entries.length > 0 ? (
 				<EmptyArea color="light">
