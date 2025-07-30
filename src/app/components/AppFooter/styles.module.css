@@ -32,6 +32,12 @@
 		}
 	}
 
+	.settings {
+		padding: var(--gap);
+		border-radius: var(--radius);
+		border: 1px dashed var(--mauve-6);
+	}
+
 	.commit {
 		user-select: all;
 		cursor: text;
