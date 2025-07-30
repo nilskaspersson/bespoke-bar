@@ -1,4 +1,3 @@
-import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import { clsx } from "clsx";
 import { createElement, type ElementType } from "react";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
@@ -8,7 +7,6 @@ import styles from "./styles.module.css";
 export type TextProps<E extends ElementType> = {
 	align?: "center" | "left" | "right";
 	as?: E;
-	asChild?: boolean;
 	balance?: boolean;
 	className?: string;
 	compact?: boolean;
@@ -20,13 +18,14 @@ export type TextProps<E extends ElementType> = {
 	serif?: boolean;
 	size?: Scale;
 	truncate?: boolean;
+	noWrap?: boolean;
+	numeric?: boolean;
 	weight?: FontWeight;
 };
 
 export function Text<E extends ElementType = "span">({
 	align,
 	as = "span",
-	asChild,
 	balance,
 	children,
 	compact,
@@ -38,14 +37,16 @@ export function Text<E extends ElementType = "span">({
 	serif,
 	size,
 	truncate,
+	noWrap,
+	numeric,
 	weight,
-	...slotProps
-}: PolymorphicProps<E> & TextProps<E> & SlotProps) {
+	...props
+}: PolymorphicProps<E> & TextProps<E>) {
 	return createElement(
-		asChild ? Slot : as,
+		as,
 		{
-			...slotProps,
-			className: clsx(slotProps.className, styles.text, {
+			...props,
+			className: clsx(props.className, styles.text, {
 				[styles.compact]: compact,
 				[styles.italic]: italic,
 				[styles.light]: light,
@@ -55,9 +56,11 @@ export function Text<E extends ElementType = "span">({
 				[styles.fullWidth]: fullWidth,
 				[styles.list]: list,
 				[styles.balance]: balance,
+				[styles.noWrap]: noWrap,
+				[styles.numeric]: numeric,
 			}),
 			style: mergeStyleSources(
-				slotProps.style,
+				props.style,
 				toCSSVars({
 					jsxFontSize:
 						typeof size === "number" ? `var(--size-${size})` : undefined,

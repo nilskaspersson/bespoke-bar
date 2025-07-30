@@ -2,12 +2,14 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useActionState, useRef } from "react";
+import { useCallback, useRef } from "react";
+import { mutate } from "swr";
 import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
+import { useServerAction } from "@/hooks/useServerAction";
 import { Button } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
@@ -15,6 +17,7 @@ import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
+import { toast } from "@/ui/Toast";
 
 type Props = {
 	recipeList?: RecipeListWithRecipes;
@@ -22,14 +25,14 @@ type Props = {
 };
 
 export function RecipeListForm({ recipes, recipeList }: Props) {
-	const [state, formAction] = useActionState(
-		upsertRecipeListWithEntriesAction,
-		null,
-	);
+	const { action } = useServerAction(upsertRecipeListWithEntriesAction, () => {
+		mutate("/api/lists", undefined, {
+			revalidate: true,
+		});
+	});
 
 	const [form, fields] = useForm({
 		id: "list-form",
-		lastResult: state,
 		defaultValue: {
 			recipeList: {
 				id: recipeList?.id ?? "",
@@ -50,6 +53,26 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 		},
 	});
 
+	const handleSubmit = useCallback(
+		async (formData: FormData) => {
+			try {
+				const promise = action(formData);
+
+				toast.promise(promise, {
+					loading: "Creating list…",
+					success: () => ({
+						message: "List created",
+					}),
+					error: () => ({
+						message: "Could not create list",
+						description: "Try again later.",
+					}),
+				});
+			} catch (_e) {}
+		},
+		[action],
+	);
+
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const recipeListFields = fields.recipeList.getFieldset();
@@ -58,7 +81,7 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 	return (
 		<FormProvider context={form.context}>
 			<form
-				action={formAction}
+				action={handleSubmit}
 				ref={formRef}
 				id={form.id}
 				onSubmit={form.onSubmit}

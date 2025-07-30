@@ -1,6 +1,7 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
@@ -8,13 +9,16 @@ import {
 	recipeListWithEntriesFormSchema,
 } from "@/db/schema/composite";
 import type { RecipeList } from "@/db/schema/recipeLists";
-import { getRecipeListUrl } from "@/features/lists/utils";
-import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
-import { authOrForbidden } from "@/utils/auth";
 import {
 	replaceRecipeListEntriesInTransaction,
 	upsertRecipeListInTransaction,
-} from "./utils/transactionHelpers";
+} from "@/features/lists/actions/utils/transactionHelpers";
+import { getRecipeListUrl } from "@/features/lists/utils";
+import {
+	getRecipeListCacheTag,
+	revalidateRecipeListPaths,
+} from "@/features/lists/utils/server";
+import { authOrForbidden } from "@/utils/auth";
 
 export async function upsertRecipeListWithEntries(
 	userInputList: RecipeListWithEntriesFormData,
@@ -44,13 +48,12 @@ export async function upsertRecipeListWithEntries(
 		shouldRevalidateBar: result.isFeatured,
 	});
 
+	revalidateTag(getRecipeListCacheTag(orgId));
+
 	return result;
 }
 
-export async function upsertRecipeListWithEntriesAction(
-	_prevState: unknown,
-	formData: FormData,
-) {
+export async function upsertRecipeListWithEntriesAction(formData: FormData) {
 	const submission = parseWithZod(formData, {
 		schema: recipeListWithEntriesFormSchema,
 	});

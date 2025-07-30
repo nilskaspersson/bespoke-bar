@@ -1,14 +1,12 @@
-import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import { clsx } from "clsx";
-import { createElement } from "react";
+import { createElement, type ElementType } from "react";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
-import type { Scale } from "@/utils/types";
+import type { PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-type Props = {
+type Props<E extends ElementType> = {
 	alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
-	as?: React.ElementType;
-	asChild?: boolean;
+	as?: E;
 	wrap?: boolean;
 	direction?: "row" | "column";
 	gap?: Scale;
@@ -20,19 +18,18 @@ type Props = {
 		| "space-between";
 };
 
-export function Flex({
+export function Flex<E extends ElementType = "div">({
 	alignItems = "flex-start",
 	as = "div",
-	asChild,
 	children,
 	direction = "row",
 	gap,
 	justifyContent,
 	wrap,
 	...slotProps
-}: Props & SlotProps) {
+}: PolymorphicProps<E> & Props<E>) {
 	return createElement(
-		asChild ? Slot : as,
+		as,
 		{
 			...slotProps,
 			className: clsx(slotProps.className, styles.flex, {

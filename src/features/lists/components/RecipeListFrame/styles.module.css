@@ -91,19 +91,6 @@
 		font-weight: 600;
 	}
 
-	.count {
-		margin-block: var(--space-0);
-		display: inline-block;
-		justify-self: center;
-		color: var(--amber-12);
-		background-color: var(--amber-5);
-		padding: var(--space-1) var(--space-2);
-		border-radius: var(--radius--small);
-		font-weight: 500;
-		transition-property: background-color, border-color, color;
-		transition-duration: var(--transition-duration);
-	}
-
 	.stats {
 		display: flex;
 		flex-wrap: wrap;

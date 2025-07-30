@@ -8,7 +8,7 @@ import { addRecipeToList } from "@/features/lists/actions/addRecipeToList";
 import { removeRecipeFromList } from "@/features/lists/actions/removeRecipeFromList";
 import { RecipeEntryProfitLabel } from "@/features/lists/components/RecipeEntryProfitLabel";
 import { RemoveListEntryButton } from "@/features/lists/components/RemoveListEntryButton";
-import { UpdateRecipeEntryButton } from "@/features/lists/components/UpdateRecipeEntry";
+import { UpdateRecipeEntryFormDialog } from "@/features/lists/components/UpdateRecipeEntryFormDialog";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
 	COCKTAIL_STYLE_TO_LABEL,
@@ -27,6 +27,7 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { ToggleModalButton } from "@/ui/ToggleModalButton";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -54,10 +55,10 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 					<span className={styles.dots} />
 
 					<div>
-						<Text as="div" heavy weight={800} size={2} align="right">
+						<Text as="div" heavy weight={800} size={2} align="right" numeric>
 							{typeof entry.price === "number"
 								? currencyFormatter.format(entry.price)
-								: "No price data"}
+								: "No price"}
 						</Text>
 
 						<RecipeEntryProfitLabel
@@ -134,9 +135,9 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 					{(actionProps) => (
 						<>
 							<li>
-								<UpdateRecipeEntryButton {...actionProps} entry={entry}>
-									Update price
-								</UpdateRecipeEntryButton>
+								<ToggleModalButton {...actionProps} label="Update price">
+									<UpdateRecipeEntryFormDialog entry={entry} />
+								</ToggleModalButton>
 							</li>
 
 							<li>
@@ -153,7 +154,7 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 									{...actionProps}
 									entry={entry}
 									actionRemove={removeRecipeFromList}
-									actionAdd={addRecipeToList.bind(null, entry.listId)}
+									actionAdd={addRecipeToList}
 								>
 									<Icon name="xmark" />
 									Remove from list

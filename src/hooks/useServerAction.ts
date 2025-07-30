@@ -1,14 +1,15 @@
 "use client";
 
+import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { useTransition } from "react";
 
 export function useServerAction<T extends unknown[], R>(
 	fn: (...args: T) => Promise<R>,
-	cb?: (result: R) => void,
+	cb?: (result: R | undefined) => void,
 ) {
 	const [isPending, startTransition] = useTransition();
 
-	const action = async (...args: T): Promise<R> => {
+	const action = async (...args: T): Promise<R | undefined> => {
 		return new Promise((resolve, reject) => {
 			startTransition(async () => {
 				try {
@@ -16,7 +17,12 @@ export function useServerAction<T extends unknown[], R>(
 					cb?.(result);
 					resolve(result);
 				} catch (error) {
-					reject(error);
+					if (isRedirectError(error)) {
+						cb?.(undefined);
+						resolve(undefined);
+					} else {
+						reject(error);
+					}
 				}
 			});
 		});

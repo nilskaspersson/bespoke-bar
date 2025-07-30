@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import type { RecipeList } from "@/db/schema/recipeLists";
+import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
@@ -72,9 +73,7 @@ export function RecipeListFrame({
 						</Text>
 					) : null}
 
-					<Text as="span" heavy compact size={2} className={styles.count}>
-						{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}
-					</Text>
+					<RecipesCountBadge count={recipeCount} color="amber" />
 				</div>
 
 				{children}

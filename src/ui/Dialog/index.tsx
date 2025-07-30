@@ -9,6 +9,24 @@ type DialogEvent =
 	| MouseEvent<HTMLDialogElement>
 	| KeyboardEvent<HTMLDialogElement>;
 
+const handleClose = (event: DialogEvent) => {
+	if (
+		event.target instanceof HTMLDialogElement &&
+		event.target.nodeName === "DIALOG"
+	) {
+		event.target.close("dismiss");
+	}
+
+	// Why did I ever add this?
+	// Maybe it makes sense if we also check for type="submit"?
+	// if (
+	// 	event.target instanceof HTMLButtonElement &&
+	// 	event.target.nodeName === "BUTTON"
+	// ) {
+	// 	event.target.closest("dialog")?.close("dismiss");
+	// }
+};
+
 export function Dialog({
 	children,
 	className,
@@ -18,22 +36,6 @@ export function Dialog({
 	onClose?: () => void;
 	ref: React.RefObject<HTMLDialogElement | null>;
 }) {
-	const handleClose = (event: DialogEvent) => {
-		if (
-			event.target instanceof HTMLDialogElement &&
-			event.target.nodeName === "DIALOG"
-		) {
-			event.target.close("dismiss");
-		}
-
-		if (
-			event.target instanceof HTMLButtonElement &&
-			event.target.nodeName === "BUTTON"
-		) {
-			event.target.closest("dialog")?.close("dismiss");
-		}
-	};
-
 	return (
 		<dialog
 			ref={ref}

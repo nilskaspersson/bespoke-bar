@@ -20,7 +20,7 @@ export function RecipeListFilters({
 	list,
 	editable,
 	...props
-}: ComponentProps<typeof Grid> & {
+}: Omit<ComponentProps<typeof Grid>, "list"> & {
 	list: RecipeListWithRecipes;
 	editable?: boolean;
 }) {

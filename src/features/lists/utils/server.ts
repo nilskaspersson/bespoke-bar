@@ -15,3 +15,11 @@ export function revalidateRecipeListPaths({
 		revalidatePath("/bar", "page");
 	}
 }
+
+export function getRecipeListCacheKey(orgId: string): string[] {
+	return ["recipe-lists", orgId];
+}
+
+export function getRecipeListCacheTag(orgId: string): string {
+	return `org:${orgId}:recipe-lists`;
+}

@@ -93,4 +93,12 @@
 	.heavy {
 		color: var(--mauve-12);
 	}
+
+	.noWrap {
+		white-space: nowrap;
+	}
+
+	.numeric {
+		font-variant-numeric: tabular-nums;
+	}
 }

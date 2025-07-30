@@ -12,10 +12,12 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 export default async function ListsPage() {
-	const lists = await readBarRecipeLists();
+	const { orgId } = await authOrForbidden();
+	const lists = await readBarRecipeLists(orgId);
 
 	const hasFeaturedList = lists.some((list) => list.isFeatured);
 

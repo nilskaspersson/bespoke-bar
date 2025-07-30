@@ -2,7 +2,10 @@
 	.contain {
 		display: flex;
 		flex: 0 1 auto;
-		max-width: var(--control-width);
+
+		&:not(.fullWidth) {
+			max-width: var(--control-width);
+		}
 	}
 
 	.helperText {

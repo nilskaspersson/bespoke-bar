@@ -1,0 +1,44 @@
+@layer component {
+	.count {
+		margin-block: var(--space-0);
+		display: inline-block;
+		justify-self: center;
+		color: var(--mauve-12);
+		background-color: var(--mauve-5);
+		padding: var(--scale-1) var(--scale-2);
+		border-radius: var(--radius--small);
+		font-weight: 500;
+		transition-property: background-color, border-color, color;
+		transition-duration: var(--transition-duration);
+	}
+
+	.amber {
+		color: var(--amber-12);
+		background-color: var(--amber-5);
+	}
+
+	.red {
+		color: var(--red-12);
+		background-color: var(--red-5);
+	}
+
+	.accent {
+		color: var(--accent-12);
+		background-color: var(--accent-5);
+	}
+
+	.light {
+		color: var(--mauve-10);
+		background-color: var(--mauve-5);
+	}
+
+	.heavy {
+		color: var(--mauve-12);
+		background-color: var(--mauve-3);
+	}
+
+	.regular {
+		color: var(--mauve-11);
+		background-color: var(--mauve-4);
+	}
+}

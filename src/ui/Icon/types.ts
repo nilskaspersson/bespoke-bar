@@ -5,6 +5,7 @@ export type IconName =
 	| "angle-up"
 	| "angles-right"
 	| "angles-up-down"
+	| "arrow-down-long"
 	| "arrow-left"
 	| "arrow-right-from-bracket"
 	| "arrow-right-to-bracket"
