@@ -39,6 +39,8 @@ type Props<T> = {
 	label?: React.ReactNode;
 	name: string;
 	value?: string;
+	required?: boolean;
+	fullWidth?: boolean;
 	helperText?: React.ReactNode;
 	toggleButtonProps?: ComponentProps<typeof Button>;
 	comboboxProps?: Partial<UseComboboxProps<Keyed<T>>>;
@@ -50,6 +52,8 @@ type Props<T> = {
 		| "rounded"
 		| "name"
 		| "placeholder"
+		| "large"
+		| "fullWidth"
 		| "value"
 		| "aria-invalid"
 	>;
@@ -70,6 +74,7 @@ export function Combobox<T>({
 	label,
 	name,
 	renderCreateListItem,
+	required,
 	toggleButtonProps,
 	value,
 }: Props<T>) {
@@ -140,8 +145,11 @@ export function Combobox<T>({
 		<ControlLabel
 			{...getLabelProps()}
 			label={label}
+			required={required}
 			className={clsx(styles.base, className, {
 				[styles.compact]: inputProps?.compact,
+				[styles.fullWidth]: inputProps?.fullWidth,
+				[styles.large]: inputProps?.large,
 			})}
 		>
 			<div className={styles.contain}>

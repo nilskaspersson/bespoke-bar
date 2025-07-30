@@ -1,35 +1,32 @@
-import { Slot, type SlotProps } from "@radix-ui/react-slot";
 import { clsx } from "clsx";
-import { createElement } from "react";
+import { createElement, type ElementType } from "react";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
-import type { Scale } from "@/utils/types";
+import type { PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-type Props = {
+type Props<E extends ElementType> = {
 	alignContent?: "start" | "end" | "center" | "stretch" | "space-between";
 	alignItems?: "start" | "end" | "center" | "stretch";
-	as?: React.ElementType;
-	asChild?: boolean;
+	as?: E;
 	gap?: Scale;
 	inline?: boolean;
 	justifyContent?: "start" | "end" | "center" | "stretch" | "space-between";
 	justifyItems?: "start" | "end" | "center" | "stretch" | "baseline";
 };
 
-export function Grid({
+export function Grid<E extends ElementType = "div">({
 	alignContent,
 	alignItems,
 	as = "div",
-	asChild,
 	children,
 	gap = 0,
 	inline,
 	justifyContent,
 	justifyItems,
 	...slotProps
-}: Props & SlotProps) {
+}: PolymorphicProps<E> & Props<E>) {
 	return createElement(
-		asChild ? Slot : as,
+		as,
 		{
 			...slotProps,
 			className: clsx(slotProps.className, styles.grid, {

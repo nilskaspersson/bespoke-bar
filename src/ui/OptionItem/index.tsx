@@ -17,6 +17,7 @@ export function OptionItem({
 		<li
 			className={clsx(styles.item, className, {
 				[styles.isHighlighted]: isHighlighted,
+				[styles.isSelected]: isSelected,
 			})}
 			{...props}
 		>

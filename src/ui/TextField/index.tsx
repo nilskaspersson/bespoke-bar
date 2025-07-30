@@ -50,7 +50,11 @@ export function TextField({
 			required={inputProps.required}
 			inline={inputProps.inline}
 		>
-			<div className={styles.contain}>
+			<div
+				className={clsx(styles.contain, {
+					[styles.fullWidth]: props.fullWidth,
+				})}
+			>
 				{adornment ? (
 					<label
 						aria-hidden="true"
