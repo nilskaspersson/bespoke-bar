@@ -18,6 +18,7 @@ export function UndoEntryChangesButton({
 		onClick?.(event);
 
 		const promise = updateRecipeListEntry(entry.id, {
+			listId: entry.listId,
 			price: entry.price,
 			sortOrder: entry.sortOrder,
 			recipeId: entry.recipeId,

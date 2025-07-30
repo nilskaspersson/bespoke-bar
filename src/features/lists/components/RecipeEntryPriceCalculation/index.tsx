@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useId, useState } from "react";
 import z from "zod/v4";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { CostInfo } from "@/features/recipes/components/CostInfo";
@@ -12,15 +12,18 @@ type Props = {
 	price: unknown;
 	recipe: RecipeWithSpecs;
 	className?: string;
+	priceInputId: string;
 };
 
 export function RecipeEntryPriceCalculation({
 	price,
 	recipe,
 	className,
+	priceInputId,
 }: Props) {
 	const [servings, setServings] = useState(1);
 	const parsedPrice = currencySchema.safeParse(price);
+	const servingsId = useId();
 
 	const priceValue = parsedPrice.success ? parsedPrice.data : 0;
 
@@ -32,6 +35,7 @@ export function RecipeEntryPriceCalculation({
 
 			<TextField
 				inline
+				id={servingsId}
 				name="servings"
 				label="Servings"
 				type="number"
@@ -51,7 +55,7 @@ export function RecipeEntryPriceCalculation({
 				}}
 			/>
 
-			<Grid as="output" gap={1}>
+			<Grid as="output" gap={1} htmlFor={`${priceInputId} ${servingsId}`}>
 				<RecipeEntryProfit
 					recipe={recipe}
 					price={priceValue}

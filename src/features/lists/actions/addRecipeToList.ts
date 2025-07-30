@@ -1,5 +1,6 @@
 "use server";
 
+import { parseWithZod } from "@conform-to/zod/v4";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
@@ -8,13 +9,13 @@ import {
 	RecipeListEntriesTable,
 	type RecipeListEntry,
 	type RecipeListEntryFormData,
+	recipeListEntryFormSchema,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function addRecipeToList(
-	listId: string,
 	userInput: RecipeListEntryFormData,
 ): Promise<RecipeListEntry> {
 	const { orgId } = await authOrForbidden();
@@ -25,7 +26,7 @@ export async function addRecipeToList(
 	 */
 	const validatedInput: InsertRecipeListEntry =
 		insertRecipeListEntrySchema.parse({
-			listId,
+			listId: userInput.listId,
 			recipeId: userInput.recipeId,
 			orgId,
 			price: userInput.price ?? null,
@@ -33,12 +34,13 @@ export async function addRecipeToList(
 
 	const list = await db.query.RecipeListsTable.findFirst({
 		where: and(
-			eq(RecipeListsTable.id, listId),
+			eq(RecipeListsTable.id, validatedInput.listId),
 			eq(RecipeListsTable.orgId, orgId),
 		),
 		with: {
 			entries: {
 				columns: {
+					recipeId: true,
 					sortOrder: true,
 				},
 			},
@@ -47,6 +49,12 @@ export async function addRecipeToList(
 
 	if (!list) {
 		throw new Error("List not found or access denied");
+	}
+
+	if (
+		list.entries.some((entry) => entry.recipeId === validatedInput.recipeId)
+	) {
+		throw new Error("Recipe is already in list");
 	}
 
 	const maxSortOrder =
@@ -71,7 +79,7 @@ export async function addRecipeToList(
 			.set({ updatedAt: sql`NOW()` })
 			.where(
 				and(
-					eq(RecipeListsTable.id, newEntry.listId),
+					eq(RecipeListsTable.id, list.id),
 					eq(RecipeListsTable.orgId, orgId),
 				),
 			);
@@ -80,9 +88,21 @@ export async function addRecipeToList(
 	});
 
 	revalidateRecipeListPaths({
-		id: listId,
+		id: list.id,
 		shouldRevalidateBar: list.isFeatured,
 	});
 
 	return entry;
 }
+
+export const addRecipeToListAction = async (formData: FormData) => {
+	const submission = parseWithZod(formData, {
+		schema: recipeListEntryFormSchema,
+	});
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	return await addRecipeToList(submission.value);
+};

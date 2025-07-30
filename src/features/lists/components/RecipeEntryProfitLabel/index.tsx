@@ -27,6 +27,8 @@ export function RecipeEntryProfitLabel({
 
 	return (
 		<Text
+			noWrap
+			numeric
 			{...props}
 			className={clsx(className, {
 				[styles.negative]: Math.round(profit) <= 0,

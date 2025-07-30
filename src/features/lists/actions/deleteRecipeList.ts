@@ -1,10 +1,14 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
-import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
+import {
+	getRecipeListCacheTag,
+	revalidateRecipeListPaths,
+} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function deleteRecipeList({
@@ -25,6 +29,8 @@ export async function deleteRecipeList({
 		id,
 		shouldRevalidateBar: result.isFeatured,
 	});
+
+	revalidateTag(getRecipeListCacheTag(orgId));
 
 	if (redirectTo) {
 		redirect(redirectTo);

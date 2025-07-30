@@ -12,6 +12,7 @@ import { RecipeEntryDiff } from "@/features/lists/components/RecipeEntryDiff";
 import { RecipeEntryPriceCalculation } from "@/features/lists/components/RecipeEntryPriceCalculation";
 import { UndoEntryChangesButton } from "@/features/lists/components/UndoEntryChangesButton";
 import { isRecipeListEntry } from "@/features/lists/utils";
+import { useModalContext } from "@/hooks/useModal";
 import { useServerAction } from "@/hooks/useServerAction";
 import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
@@ -23,11 +24,11 @@ import { ToastActions, toast } from "@/ui/Toast";
 
 type Props = {
 	entry: RecipeListEntryWithRecipe;
-	handleClose: () => void;
 };
 
-export function UpdateRecipeEntryFormDialog({ entry, handleClose }: Props) {
+export function UpdateRecipeEntryFormDialog({ entry }: Props) {
 	const formRef = useRef<HTMLFormElement>(null);
+	const { handleClose } = useModalContext();
 
 	const { action: handleUpdateRecipeListEntry } = useServerAction(
 		updateRecipeListEntryAction.bind(null, entry.id),
@@ -45,6 +46,7 @@ export function UpdateRecipeEntryFormDialog({ entry, handleClose }: Props) {
 			price: entry.price,
 			sortOrder: entry.sortOrder,
 			recipeId: entry.recipeId,
+			listId: entry.listId,
 		},
 	});
 
@@ -63,21 +65,21 @@ export function UpdateRecipeEntryFormDialog({ entry, handleClose }: Props) {
 						description: isRecipeListEntry(result) ? (
 							<RecipeEntryDiff a={entry} b={result} />
 						) : null,
+						action: (
+							<ToastActions>
+								<UndoEntryChangesButton
+									entry={entry}
+									onClick={() => toast.dismiss(toastId)}
+								>
+									Undo
+								</UndoEntryChangesButton>
+							</ToastActions>
+						),
 					}),
 					error: () => ({
 						message: "List entry could not be updated.",
 						description: "Try again later.",
 					}),
-					action: (
-						<ToastActions>
-							<UndoEntryChangesButton
-								entry={entry}
-								onClick={() => toast.dismiss(toastId)}
-							>
-								Undo
-							</UndoEntryChangesButton>
-						</ToastActions>
-					),
 				});
 			} catch (_e) {}
 		},
@@ -86,7 +88,12 @@ export function UpdateRecipeEntryFormDialog({ entry, handleClose }: Props) {
 
 	return (
 		<FormProvider context={form.context}>
-			<form ref={formRef} action={handleSubmit} id={form.id}>
+			<form
+				ref={formRef}
+				action={handleSubmit}
+				id={form.id}
+				onSubmit={form.onSubmit}
+			>
 				<Alert
 					onClose={handleClose}
 					heading="Update list entry"
@@ -112,13 +119,20 @@ export function UpdateRecipeEntryFormDialog({ entry, handleClose }: Props) {
 					<input
 						type="hidden"
 						name={fields.recipeId.name}
-						value={fields.recipeId.defaultValue}
+						value={fields.recipeId.value}
 						id={fields.recipeId.id}
+					/>
+
+					<input
+						type="hidden"
+						name={fields.listId.name}
+						value={fields.listId.value}
+						id={fields.listId.id}
 					/>
 
 					<Grid gap={6}>
 						<CurrencyInput
-							label="Price"
+							label="Sales price"
 							large
 							name={fields.price.name}
 							id={fields.price.id}
@@ -130,6 +144,7 @@ export function UpdateRecipeEntryFormDialog({ entry, handleClose }: Props) {
 						<RecipeEntryPriceCalculation
 							price={fields.price.value}
 							recipe={entry.recipe}
+							priceInputId={fields.price.id}
 						/>
 					</Grid>
 				</Alert>

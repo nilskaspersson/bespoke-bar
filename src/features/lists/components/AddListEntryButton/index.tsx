@@ -24,7 +24,7 @@ export function AddListEntryButton({
 } & ButtonProps) {
 	const { action: addRecipe } = useServerAction(actionAdd);
 
-	const handleRemove = async () => {
+	const action = async () => {
 		const promise = addRecipe(entry);
 		const toastId = Date.now().toString();
 
@@ -34,7 +34,7 @@ export function AddListEntryButton({
 			success: (result) => ({
 				message: "Recipe added to list",
 				description: "View the list to set sales price and more.",
-				action: (
+				action: result ? (
 					<ToastActions>
 						{typeof actionRemove === "function" ? (
 							<RemoveListEntryButton
@@ -75,14 +75,14 @@ export function AddListEntryButton({
 							<Icon name="angles-right" size={0} />
 						</LinkButton>
 					</ToastActions>
-				),
+				) : null,
 			}),
 			error: () => "Could not remove recipe from list. Try again later.",
 		});
 	};
 
 	return (
-		<form action={handleRemove}>
+		<form action={action}>
 			<SubmitButton {...buttonProps}>{children}</SubmitButton>
 		</form>
 	);

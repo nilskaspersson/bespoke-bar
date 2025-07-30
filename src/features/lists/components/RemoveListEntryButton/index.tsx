@@ -33,7 +33,7 @@ export function RemoveListEntryButton({
 			loading: "Removing…",
 			success: (result) => ({
 				message: "Recipe removed from list",
-				action: (
+				action: result ? (
 					<ToastActions>
 						{typeof actionAdd === "function" ? (
 							<AddListEntryButton
@@ -73,7 +73,7 @@ export function RemoveListEntryButton({
 							<Icon name="angles-right" size={0} />
 						</LinkButton>
 					</ToastActions>
-				),
+				) : null,
 			}),
 			error: () => "Could not remove recipe from list. Try again later.",
 		});

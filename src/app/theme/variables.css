@@ -49,6 +49,17 @@
 	--size-8: calc(1rem * var(--size-scale-8));
 	--size-9: calc(1rem * var(--size-scale-9));
 
+	--scale-0: calc(1em * var(--space-scale-0));
+	--scale-1: calc(1em * var(--space-scale-1));
+	--scale-2: calc(1em * var(--space-scale-2));
+	--scale-3: calc(1em * var(--space-scale-3));
+	--scale-4: calc(1em * var(--space-scale-4));
+	--scale-5: calc(1em * var(--space-scale-5));
+	--scale-6: calc(1em * var(--space-scale-6));
+	--scale-7: calc(1em * var(--space-scale-7));
+	--scale-8: calc(1em * var(--space-scale-8));
+	--scale-9: calc(1em * var(--space-scale-9));
+
 	--golden-ratio: 1.618;
 
 	/**

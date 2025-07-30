@@ -5,11 +5,13 @@ import { EntityActions } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
 import type { ViewType } from "@/app/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { CreateRecipeEntryDialog } from "@/features/lists/components/CreateRecipeEntryDialog";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
 import { LinkButton } from "@/ui/Button";
 import { CopyToClipboard } from "@/ui/CopyToClipboard";
 import { Icon } from "@/ui/Icon";
+import { ToggleModalButton } from "@/ui/ToggleModalButton";
 import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
 
@@ -92,6 +94,19 @@ export function RecipesList<T extends RecipeWithSpecs>({
 											<Icon name="pen-to-square" size={1} />
 											Edit
 										</LinkButton>
+									</li>
+
+									<li>
+										<ToggleModalButton
+											{...actionProps}
+											label={
+												<>
+													<Icon name="plus" size={1} /> Add to list
+												</>
+											}
+										>
+											<CreateRecipeEntryDialog recipe={row.original} />
+										</ToggleModalButton>
 									</li>
 
 									<li>

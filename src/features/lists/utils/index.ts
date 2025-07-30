@@ -1,6 +1,10 @@
 import type { RecipeListEntry } from "@/db/schema/recipeListEntries";
-import type { RecipeList } from "@/db/schema/recipeLists";
+import {
+	type RecipeList,
+	recipeListWithCountSchema,
+} from "@/db/schema/recipeLists";
 import { isObject } from "@/utils";
+import { createFetcher } from "@/utils/api";
 import { namedEntityToUrlSlug } from "@/utils/url";
 
 export function generateDefaultRecipeListName() {
@@ -18,3 +22,7 @@ export function isRecipeListEntry(entry: unknown): entry is RecipeListEntry {
 		Object.hasOwn(entry, "listId")
 	);
 }
+
+export const recipeListFetcher = createFetcher(
+	recipeListWithCountSchema.array().optional(),
+);

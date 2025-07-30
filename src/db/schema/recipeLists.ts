@@ -53,6 +53,9 @@ export const listsRelations = relations(RecipeListsTable, ({ many }) => ({
 	entries: many(RecipeListEntriesTable),
 }));
 
+export const selectRecipeListSchema = createSelectSchema(RecipeListsTable);
+export const insertRecipeListSchema = createInsertSchema(RecipeListsTable);
+
 export type RecipeList = typeof RecipeListsTable.$inferSelect;
 
 export type RecipeListWithRecipeCount = RecipeList & {
@@ -62,6 +65,15 @@ export type RecipeListWithRecipeCount = RecipeList & {
 export type RecipeListWithRecipes = RecipeList & {
 	entries: RecipeListEntryWithRecipe[];
 };
+
+export const recipeListWithCountSchema = selectRecipeListSchema.extend({
+	recipeCount: z.number(),
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date().nullable(),
+	featuredAt: z.coerce.date().nullable(),
+});
+
+export type RecipeListWithCount = z.infer<typeof recipeListWithCountSchema>;
 
 export type InsertRecipeList = Omit<
 	typeof RecipeListsTable.$inferInsert,
@@ -78,9 +90,6 @@ export type UpdateRecipeList = Pick<
 	typeof RecipeListsTable.$inferInsert,
 	"name" | "description" | "isPublic" | "updatedAt" | "updatedBy"
 >;
-
-export const selectRecipeListSchema = createSelectSchema(RecipeListsTable);
-export const insertRecipeListSchema = createInsertSchema(RecipeListsTable);
 
 export const recipeListFormSchema = insertRecipeListSchema
 	.pick({

@@ -1,13 +1,17 @@
 "use server";
 
 import { and, count, desc, eq, getTableColumns, sql } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import { db } from "@/db";
 import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import {
 	RecipeListsTable,
 	type RecipeListWithRecipeCount,
 } from "@/db/schema/recipeLists";
-import { authOrForbidden } from "@/utils/auth";
+import {
+	getRecipeListCacheKey,
+	getRecipeListCacheTag,
+} from "@/features/lists/utils/server";
 
 const preparedReadBarRecipeLists = db
 	.select({
@@ -27,11 +31,19 @@ const preparedReadBarRecipeLists = db
 	.orderBy(desc(RecipeListsTable.createdAt))
 	.prepare("readBarRecipeLists");
 
-export async function readBarRecipeLists(): Promise<
-	RecipeListWithRecipeCount[]
-> {
-	const { orgId } = await authOrForbidden();
+export async function readBarRecipeLists(
+	orgId: string,
+): Promise<RecipeListWithRecipeCount[]> {
+	return preparedReadBarRecipeLists.execute({ orgId });
+}
 
-	const lists = await preparedReadBarRecipeLists.execute({ orgId });
-	return lists;
+export async function getCachedRecipeLists(orgId: string) {
+	return unstable_cache(
+		() => readBarRecipeLists(orgId),
+		getRecipeListCacheKey(orgId),
+		{
+			revalidate: false,
+			tags: [getRecipeListCacheTag(orgId)],
+		},
+	)();
 }

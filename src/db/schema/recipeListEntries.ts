@@ -13,7 +13,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import type { z } from "zod/v4";
+import { z } from "zod/v4";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { RecipesTable, type RecipeWithSpecs } from "@/db/schema/recipes";
 
@@ -74,7 +74,7 @@ export type InsertRecipeListEntry = Omit<
 
 export type UpdateRecipeListEntry = Pick<
 	typeof RecipeListEntriesTable.$inferInsert,
-	"sortOrder" | "price" | "recipeId"
+	"sortOrder" | "price" | "recipeId" | "listId"
 >;
 
 export type RecipeListEntryWithRecipe = RecipeListEntry & {
@@ -96,8 +96,12 @@ export const updateRecipeListEntrySchema = createUpdateSchema(
 export const recipeListEntryFormSchema = insertRecipeListEntrySchema
 	.pick({
 		price: true,
+		listId: true,
 		recipeId: true,
 		sortOrder: true,
+	})
+	.extend({
+		listId: z.string({ message: "Please select a list" }),
 	})
 	.partial({
 		price: true,
