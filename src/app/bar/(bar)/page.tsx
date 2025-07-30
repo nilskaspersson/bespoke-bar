@@ -35,6 +35,7 @@ export default async function BarPage() {
 								<ListItemActions
 									{...actionProps}
 									list={featuredList}
+									recipeCount={featuredList.entries.length}
 									hasFeaturedList
 								/>
 							)}
