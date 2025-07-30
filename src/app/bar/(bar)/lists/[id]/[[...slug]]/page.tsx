@@ -55,6 +55,7 @@ export default async function RecipeListPage({ params }: Props) {
 						list={recipeList}
 						recipeCount={recipeList.entries.length}
 						hasFeaturedList={Boolean(featuredList)}
+						deleteRedirectTo={"/bar/lists"}
 					/>
 				)}
 			</EntityActions>

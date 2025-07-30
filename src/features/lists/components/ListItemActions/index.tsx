@@ -16,11 +16,13 @@ export function ListItemActions({
 	list,
 	hasFeaturedList,
 	recipeCount,
+	deleteRedirectTo,
 	...props
 }: ActionProps & {
 	list: RecipeList;
 	recipeCount: number;
 	hasFeaturedList?: boolean;
+	deleteRedirectTo?: string;
 }) {
 	return (
 		<>
@@ -89,6 +91,7 @@ export function ListItemActions({
 					recipeCount={recipeCount}
 					action={deleteRecipeList.bind(null, {
 						id: list.id,
+						redirectTo: deleteRedirectTo,
 					})}
 				>
 					<Icon name="trash" />
