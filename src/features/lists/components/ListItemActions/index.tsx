@@ -2,8 +2,10 @@ import type { ActionProps } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
 import type { RecipeList } from "@/db/schema/recipeLists";
 import { clearFeaturedList } from "@/features/lists/actions/clearFeaturedList";
+import { deleteRecipeList } from "@/features/lists/actions/deleteRecipeList";
 import { setFeaturedList } from "@/features/lists/actions/setFeaturedList";
 import { ClearFeaturedListButton } from "@/features/lists/components/ClearFeaturedListButton";
+import { DeleteRecipeListButton } from "@/features/lists/components/DeleteRecipeListButton";
 import { SetFeaturedListButton } from "@/features/lists/components/SetFeaturedListButton";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { LinkButton } from "@/ui/Button";
@@ -13,8 +15,13 @@ import { getServerSideBaseURL } from "@/utils/url";
 export function ListItemActions({
 	list,
 	hasFeaturedList,
+	recipeCount,
 	...props
-}: ActionProps & { list: RecipeList; hasFeaturedList?: boolean }) {
+}: ActionProps & {
+	list: RecipeList;
+	recipeCount: number;
+	hasFeaturedList?: boolean;
+}) {
 	return (
 		<>
 			<li>
@@ -72,6 +79,21 @@ export function ListItemActions({
 						Set Featured
 					</SetFeaturedListButton>
 				)}
+			</li>
+
+			<li>
+				<DeleteRecipeListButton
+					{...props}
+					color="red"
+					list={list}
+					recipeCount={recipeCount}
+					action={deleteRecipeList.bind(null, {
+						id: list.id,
+					})}
+				>
+					<Icon name="trash" />
+					Delete
+				</DeleteRecipeListButton>
 			</li>
 		</>
 	);

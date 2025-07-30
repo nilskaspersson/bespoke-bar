@@ -81,13 +81,13 @@ export function RecipeListFrame({
 
 			<footer className={styles.stats}>
 				<Text size={1} light className={styles.stat}>
-					Created <Time date={list.createdAt} />
+					Created: <Time date={list.createdAt} />
 				</Text>
 
 				{list.updatedAt ? (
 					<Text size={1} light className={styles.stat}>
 						{" "}
-						Updated <Time date={list.updatedAt} />
+						Updated: <Time date={list.updatedAt} />
 					</Text>
 				) : null}
 			</footer>

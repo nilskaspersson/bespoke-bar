@@ -11,7 +11,7 @@ import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
 
-export function AddListEntryButton({
+export function UndoRemoveListEntryButton({
 	actionAdd,
 	actionRemove,
 	children,
@@ -30,10 +30,9 @@ export function AddListEntryButton({
 
 		toast.promise(promise, {
 			id: toastId,
-			loading: "Adding…",
+			loading: "Restoring…",
 			success: (result) => ({
-				message: "Recipe added to list",
-				description: "View the list to set sales price and more.",
+				message: "Recipe restored to list",
 				action: result ? (
 					<ToastActions>
 						{typeof actionRemove === "function" ? (
@@ -77,7 +76,12 @@ export function AddListEntryButton({
 					</ToastActions>
 				) : null,
 			}),
-			error: () => "Could not remove recipe from list. Try again later.",
+			error: (error) => ({
+				message:
+					error instanceof Error
+						? error.message
+						: "Recipe could not be added to list.",
+			}),
 		});
 	};
 

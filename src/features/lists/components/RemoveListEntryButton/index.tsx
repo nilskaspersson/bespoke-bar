@@ -4,7 +4,7 @@ import type {
 	RecipeListEntry,
 	RecipeListEntryFormData,
 } from "@/db/schema/recipeListEntries";
-import { AddListEntryButton } from "@/features/lists/components/AddListEntryButton";
+import { UndoRemoveListEntryButton } from "@/features/lists/components/UndoRemoveListEntryButton";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -36,7 +36,7 @@ export function RemoveListEntryButton({
 				action: result ? (
 					<ToastActions>
 						{typeof actionAdd === "function" ? (
-							<AddListEntryButton
+							<UndoRemoveListEntryButton
 								entry={result}
 								actionAdd={actionAdd}
 								variant="ghost"
@@ -46,7 +46,7 @@ export function RemoveListEntryButton({
 								onClick={() => toast.dismiss(toastId)}
 							>
 								Undo
-							</AddListEntryButton>
+							</UndoRemoveListEntryButton>
 						) : null}
 
 						<LinkButton
