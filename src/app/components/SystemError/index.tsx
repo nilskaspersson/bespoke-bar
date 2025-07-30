@@ -17,7 +17,13 @@ export function SystemError(props: {
 
 				{props.children}
 
-				{props.message ? (
+				{props.code === 404 ? (
+					<Text as="p" compact>
+						{props.message}
+					</Text>
+				) : null}
+
+				{props.code !== 404 && props.message ? (
 					<details className={styles.details}>
 						<Text as="summary" compact>
 							Show error details
