@@ -1,9 +1,13 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
+import {
+	getRecipeListCacheTag,
+	revalidateRecipeListPaths,
+} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function setFeaturedList(listId: string) {
@@ -38,4 +42,6 @@ export async function setFeaturedList(listId: string) {
 		id: listId,
 		shouldRevalidateBar: true,
 	});
+
+	revalidateTag(getRecipeListCacheTag(orgId));
 }

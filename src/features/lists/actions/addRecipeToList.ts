@@ -2,6 +2,7 @@
 
 import { parseWithZod } from "@conform-to/zod/v4";
 import { and, eq, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import {
 	type InsertRecipeListEntry,
@@ -12,7 +13,10 @@ import {
 	recipeListEntryFormSchema,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
+import {
+	getRecipeListCacheTag,
+	revalidateRecipeListPaths,
+} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function addRecipeToList(
@@ -91,6 +95,8 @@ export async function addRecipeToList(
 		id: list.id,
 		shouldRevalidateBar: list.isFeatured,
 	});
+
+	revalidateTag(getRecipeListCacheTag(orgId));
 
 	return entry;
 }

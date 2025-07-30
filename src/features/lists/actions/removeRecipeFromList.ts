@@ -1,13 +1,17 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import {
 	RecipeListEntriesTable,
 	type RecipeListEntry,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import { revalidateRecipeListPaths } from "@/features/lists/utils/server";
+import {
+	getRecipeListCacheTag,
+	revalidateRecipeListPaths,
+} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function removeRecipeFromList(
@@ -47,6 +51,8 @@ export async function removeRecipeFromList(
 		id: deletedEntry.listId,
 		shouldRevalidateBar: true,
 	});
+
+	revalidateTag(getRecipeListCacheTag(orgId));
 
 	return deletedEntry;
 }
