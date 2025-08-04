@@ -1,3 +1,5 @@
+"use server";
+
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { forbidden, redirect } from "next/navigation";

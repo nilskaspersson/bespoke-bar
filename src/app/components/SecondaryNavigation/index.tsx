@@ -1,10 +1,10 @@
 "use client";
 
-import { OrganizationSwitcher } from "@clerk/nextjs";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { HTMLAttributes } from "react";
+import { OrganisationSwitcher } from "@/app/components/OrganisationSwitcher";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -18,7 +18,7 @@ export function SecondaryNavigation({
 		<nav className={clsx(styles.nav, className)} {...props}>
 			<div className={styles.container}>
 				<div className={styles.bar}>
-					<OrganizationSwitcher hidePersonal hideSlug />
+					<OrganisationSwitcher />
 				</div>
 
 				<Text as="ul" size={2} compact className={styles.list}>
