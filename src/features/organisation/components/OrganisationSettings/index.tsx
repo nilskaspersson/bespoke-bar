@@ -1,0 +1,132 @@
+import { useForm } from "@conform-to/react";
+import { useCallback } from "react";
+import { mutate } from "swr";
+import useSWRImmutable from "swr/immutable";
+import type { Organisation } from "@/db/schema/organisations";
+import { updateLocalOrganisationAction } from "@/features/organisation/actions/updateLocalOrganisation";
+import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
+import { SelectLocale } from "@/features/organisation/components/SelectLocale";
+import { useServerAction } from "@/hooks/useServerAction";
+import { Callout } from "@/ui/Callout";
+import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { SkeletonScreen } from "@/ui/Skeleton";
+import { SubmitButton } from "@/ui/SubmitButton";
+import { TextFieldSkeleton } from "@/ui/TextField";
+import { toast } from "@/ui/Toast";
+import { fetcher } from "@/utils/api";
+import styles from "./styles.module.css";
+
+export function OrganisationSettings() {
+	const { data: organisation, isLoading } = useSWRImmutable<
+		Organisation | undefined
+	>("/api/organisation", fetcher);
+
+	return (
+		<article className={styles.settings}>
+			<Heading level="h1" className={styles.heading}>
+				Settings
+			</Heading>
+
+			{organisation ? (
+				<OrganisationSettingsForm organisation={organisation} />
+			) : isLoading ? (
+				<OrganisationSettingsSkeleton />
+			) : null}
+		</article>
+	);
+}
+
+function OrganisationSettingsForm({
+	organisation,
+}: {
+	organisation: Organisation;
+}) {
+	const [form, fields] = useForm({
+		id: "organization-settings-form",
+		defaultValue: {
+			currency: organisation.currency,
+			defaultLocale: organisation.defaultLocale,
+		},
+	});
+
+	const { action } = useServerAction(updateLocalOrganisationAction, () => {
+		mutate("/api/organisation", undefined, {
+			revalidate: true,
+		});
+	});
+
+	const handleSubmit = useCallback(
+		async (formData: FormData) => {
+			try {
+				const promise = action(formData);
+				const toastId = Date.now().toString();
+
+				toast.promise(promise, {
+					id: toastId,
+					loading: "Updating organisation settings…",
+					success: () => ({
+						message: "Organisation settings updated",
+					}),
+					error: () => ({
+						message: "Could not update organisation settings",
+						description: "Try again later.",
+					}),
+				});
+			} catch (_e) {}
+		},
+		[action],
+	);
+
+	return (
+		<Grid
+			as="form"
+			gap={6}
+			action={handleSubmit}
+			onSubmit={form.onSubmit}
+			id={form.id}
+		>
+			<SelectCurrency
+				name={fields.currency.name}
+				label="Currency"
+				helperText="The currency used for cost and price in the app."
+				defaultValue={fields.currency.defaultValue}
+			/>
+
+			<Grid gap={2}>
+				<SelectLocale
+					name={fields.defaultLocale.name}
+					label="Locale formatting"
+					helperText="Used to format dates, numbers, and more."
+					defaultValue={fields.defaultLocale.defaultValue}
+				/>
+
+				<Callout size={1} color="accent" heading="Note:">
+					This does <strong>not</strong> change the language of the app.
+				</Callout>
+			</Grid>
+
+			<div>
+				<SubmitButton
+					form={form.id}
+					variant="solid"
+					color="accent"
+					size="small"
+				>
+					Apply changes
+				</SubmitButton>
+			</div>
+		</Grid>
+	);
+}
+
+function OrganisationSettingsSkeleton() {
+	return (
+		<SkeletonScreen>
+			<Grid gap={6}>
+				<TextFieldSkeleton />
+				<TextFieldSkeleton />
+			</Grid>
+		</SkeletonScreen>
+	);
+}

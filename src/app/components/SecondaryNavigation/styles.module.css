@@ -1,8 +1,8 @@
 @layer composition {
 	.nav {
 		display: grid;
-		background-color: var(--mauve-4);
-		border-bottom: 1px solid var(--mauve-5);
+		border-bottom: 1px solid hsl(from var(--mauve-5) h s l / 0.5);
+		background-color: hsl(from var(--mauve-5) h s l / 0.25);
 		padding-bottom: 1px;
 		contain: strict;
 		height: var(--app-navigation--height);
@@ -21,7 +21,7 @@
 
 		@media (min-width: 814px) {
 			padding-right: calc(var(--gap) - var(--clerk-button-inset));
-			border-right: 1px solid var(--mauve-6);
+			border-right: 1px solid hsl(from var(--mauve-5) h s l / 0.5);
 		}
 	}
 

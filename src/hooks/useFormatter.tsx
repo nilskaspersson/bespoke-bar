@@ -11,17 +11,20 @@ import {
 	createVolumeFormatter,
 } from "@/utils/formatting";
 
+export const DEFAULT_LOCALE = "en-GB";
+export const DEFAULT_CURRENCY = "EUR";
+
 export const FormatterContext = createContext({
-	currencyFormatter: createCurrencyFormatter("en-GB", "EUR"),
-	currencyDisplayName: createCurrencyDisplayName("en-GB"),
-	dateTimeFormatter: createDateTimeFormatter("en-GB"),
-	percentageFormatter: createPercentageFormatter("en-GB"),
-	quantityFormatter: createQuantityFormatter("en-GB"),
-	relativeTimeFormatter: createRelativeTimeFormatter("en-GB"),
-	volumeFormatter: createVolumeFormatter("en-GB"),
+	currencyFormatter: createCurrencyFormatter(DEFAULT_LOCALE, DEFAULT_CURRENCY),
+	currencyDisplayName: createCurrencyDisplayName(DEFAULT_LOCALE),
+	dateTimeFormatter: createDateTimeFormatter(DEFAULT_LOCALE),
+	percentageFormatter: createPercentageFormatter(DEFAULT_LOCALE),
+	quantityFormatter: createQuantityFormatter(DEFAULT_LOCALE),
+	relativeTimeFormatter: createRelativeTimeFormatter(DEFAULT_LOCALE),
+	volumeFormatter: createVolumeFormatter(DEFAULT_LOCALE),
 	options: {
-		currency: "EUR",
-		locale: "en-GB",
+		currency: DEFAULT_CURRENCY,
+		locale: DEFAULT_LOCALE,
 	},
 });
 

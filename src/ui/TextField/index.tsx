@@ -4,7 +4,9 @@ import { clsx } from "clsx";
 import { type ComponentProps, useId } from "react";
 import { useFormStatus } from "react-dom";
 import { ControlLabel } from "@/ui/ControlLabel";
+import { Grid } from "@/ui/Grid";
 import { Input, TextArea } from "@/ui/Input";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -78,5 +80,15 @@ export function TextField({
 				</Text>
 			) : null}
 		</ControlLabel>
+	);
+}
+
+export function TextFieldSkeleton() {
+	return (
+		<Grid gap={2}>
+			<Skeleton variant="text" height="17px" width="60px" />
+			<Skeleton variant="input" />
+			<Skeleton variant="text" height="17px" width="270px" />
+		</Grid>
 	);
 }

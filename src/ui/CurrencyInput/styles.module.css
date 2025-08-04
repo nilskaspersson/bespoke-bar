@@ -10,4 +10,8 @@
 	.compact {
 		width: var(--control-height--small);
 	}
+
+	.helperText {
+		text-transform: capitalize;
+	}
 }

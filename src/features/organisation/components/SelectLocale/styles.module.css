@@ -1,0 +1,5 @@
+@layer component {
+	.code {
+		font-family: monospace;
+	}
+}

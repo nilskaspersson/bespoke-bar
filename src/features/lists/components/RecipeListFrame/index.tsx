@@ -48,15 +48,13 @@ export function RecipeListFrame({
 	return (
 		<OptionalLink
 			href={href}
-			className={clsx(styles.card, className)}
+			className={clsx(styles.card, className, {
+				[styles.isFeatured]: list.isFeatured,
+			})}
 			aria-label={`View list ${list.name}`}
 		>
 			<div aria-hidden="true" className={styles.badge}>
-				<div
-					className={clsx(styles.icon, {
-						[styles.isFeatured]: list.isFeatured,
-					})}
-				>
+				<div className={styles.icon}>
 					<Icon name={list.isFeatured ? "star" : "memo-pad"} size={5} />
 				</div>
 			</div>

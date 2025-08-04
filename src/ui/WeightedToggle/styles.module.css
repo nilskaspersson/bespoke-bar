@@ -15,7 +15,7 @@
 		border: 1px solid var(--mauve-6);
 		padding: var(--space-0);
 		gap: var(--space-0);
-		background-color: var(--mauve-1);
+		background-color: hsl(from var(--mauve-1) h s l / 0.25);
 		color: var(--mauve-12);
 		flex: 0 0 auto;
 	}

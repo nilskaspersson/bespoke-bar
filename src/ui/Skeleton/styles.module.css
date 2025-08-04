@@ -1,0 +1,40 @@
+@layer ui {
+	@keyframes pulse {
+		from {
+			opacity: 0.4;
+		}
+
+		to {
+			opacity: 0.7;
+		}
+	}
+
+	.skeleton {
+		display: inline-block;
+		vertical-align: inherit;
+		background-color: var(--mauve-6);
+		animation: pulse 1s ease-in-out infinite alternate;
+	}
+
+	.fade {
+		mask-image: linear-gradient(to top, transparent 0%, black 100%);
+	}
+
+	.block {
+		border-radius: var(--radius--small);
+		width: var(--jsxWidth, 100%);
+		height: var(--jsxHeight, 100%);
+	}
+
+	.text {
+		border-radius: var(--radius--full);
+		width: var(--jsxWidth, 100%);
+		height: var(--jsxHeight, 100%);
+	}
+
+	.input {
+		border-radius: var(--radius);
+		width: var(--control-width);
+		height: var(--control-height);
+	}
+}
