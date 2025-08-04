@@ -87,11 +87,16 @@ export function Combobox<T>({
 		const normalizeLabel = (item: Keyed<T>) => itemToString(item).toLowerCase();
 
 		return deferredInputValue
-			? items.filter((o) =>
-					normalizeLabel(o).includes(deferredInputValue ?? ""),
-				)
+			? items.filter((o) => {
+					return (
+						normalizeLabel(o).includes(deferredInputValue ?? "") ||
+						getItemValue(o)
+							.toLowerCase()
+							.includes(deferredInputValue ?? "")
+					);
+				})
 			: items;
-	}, [deferredInputValue, items, itemToString]);
+	}, [deferredInputValue, items, itemToString, getItemValue]);
 
 	const {
 		closeMenu,

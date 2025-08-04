@@ -7,9 +7,8 @@
 	.group {
 		display: flex;
 		border-radius: var(--radius--full);
-		border: 1px solid var(--mauve-6);
-		background-color: var(--mauve-2);
-		box-shadow: inset 0 0 1em var(--mauve-5);
+		border: 1px solid hsl(from var(--mauve-6) h s l / 0.5);
+		box-shadow: inset 0 0 1em hsl(from var(--mauve-5) h s l / 0.5);
 		padding: var(--space-0);
 		transition: border-color var(--transition-duration);
 		width: fit-content;

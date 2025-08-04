@@ -1,6 +1,31 @@
 @layer layout {
 	.body {
 		display: grid;
+
+		background-size: 100% 100lvh;
+		background-repeat: no-repeat;
+		background-color: var(--mauve-3);
+		background-image:
+			radial-gradient(
+				ellipse 120% 80% at 70% 20%,
+				var(--iris-2),
+				transparent 50%
+			),
+			radial-gradient(
+				ellipse 100% 60% at 30% 10%,
+				var(--red-2),
+				transparent 60%
+			),
+			radial-gradient(
+				ellipse 90% 70% at 50% 0%,
+				var(--amber-3),
+				transparent 65%
+			),
+			radial-gradient(
+				ellipse 110% 50% at 80% 30%,
+				var(--grass-3),
+				transparent 40%
+			);
 	}
 
 	.layout {

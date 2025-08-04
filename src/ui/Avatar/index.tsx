@@ -4,6 +4,12 @@ import Image from "next/image";
 import type { ComponentProps } from "react";
 import styles from "./styles.module.css";
 
+const params = new URLSearchParams();
+
+params.set("height", "56");
+params.set("width", "56");
+params.set("quality", "100");
+
 export function Avatar({
 	user,
 	className,
@@ -15,10 +21,12 @@ export function Avatar({
 		return null;
 	}
 
+	const src = `${user.imageUrl}?${params.toString()}`;
+
 	return (
 		<Image
 			className={clsx(styles.avatar, className)}
-			src={user.imageUrl}
+			src={src}
 			alt={`${user.firstName} ${user.lastName}`}
 			width={28}
 			height={28}

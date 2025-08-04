@@ -61,15 +61,17 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 								: "No price"}
 						</Text>
 
-						<RecipeEntryProfitLabel
-							as="div"
-							size={0}
-							align="right"
-							price={entry.price}
-							cost={cost}
-							isIncomplete={isIncomplete}
-							className={styles.profit}
-						/>
+						{editable ? (
+							<RecipeEntryProfitLabel
+								as="div"
+								size={0}
+								align="right"
+								price={entry.price}
+								cost={cost}
+								isIncomplete={isIncomplete}
+								className={styles.profit}
+							/>
+						) : null}
 					</div>
 				</div>
 

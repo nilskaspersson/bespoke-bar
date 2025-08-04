@@ -7,9 +7,9 @@
 		 * min-height to respect safe-area-inset-top
 		 */
 		min-height: var(--app-header--height);
-		border-bottom: 1px solid var(--mauve-5);
 		contain: strict;
-		background-color: var(--mauve-3);
+		background-color: hsl(from var(--mauve-4) h s l / 0.25);
+		border-bottom: 1px solid hsl(from var(--mauve-5) h s l / 0.5);
 		transition-property: background-color;
 		transition-duration: var(--transition-duration--short);
 
@@ -17,7 +17,7 @@
 			position: absolute;
 			inset: 0 0 auto;
 			z-index: var(--z-navigation);
-			background-color: hsl(from var(--mauve-3) h s l / 0.5);
+			border-bottom-color: hsl(from var(--mauve-5) h s l / 0.2);
 		}
 	}
 

@@ -35,7 +35,11 @@ export function CurrencyInput(props: ComponentProps<typeof TextField>) {
 					{symbol}
 				</span>
 			}
-			helperText={`In ${currencyDisplayName.of(currency)} (${currency})`}
+			helperText={
+				<span className={styles.helperText}>
+					{currencyDisplayName.of(currency)} ({currency})
+				</span>
+			}
 			{...props}
 		/>
 	);
