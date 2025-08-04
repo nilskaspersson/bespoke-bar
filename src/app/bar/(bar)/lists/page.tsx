@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { EntityActions } from "@/app/components/EntityActions";
 import { PageHeader } from "@/app/components/PageHeader";
 import { readBarRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
@@ -16,11 +17,6 @@ import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 export default async function ListsPage() {
-	const { orgId } = await authOrForbidden();
-	const lists = await readBarRecipeLists(orgId);
-
-	const hasFeaturedList = lists.some((list) => list.isFeatured);
-
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -55,30 +51,45 @@ export default async function ListsPage() {
 				</Grid>
 			</Callout>
 
-			<Grid as="ul" gap={6}>
-				{lists.map((list) => (
-					<li key={list.id}>
-						<RecipeListFrame
-							list={list}
-							href={getRecipeListUrl(list)}
-							recipeCount={list.recipeCount}
-							className={styles.list}
-						/>
-
-						<EntityActions className={styles.actions}>
-							{(actionProps) => (
-								<ListItemActions
-									{...actionProps}
-									list={list}
-									recipeCount={list.recipeCount}
-									hasFeaturedList={hasFeaturedList}
-								/>
-							)}
-						</EntityActions>
-					</li>
-				))}
-			</Grid>
+			<Suspense fallback={<div>Loading lists...</div>}>
+				<RecipeListData />
+			</Suspense>
 		</Container>
+	);
+}
+
+async function RecipeListData() {
+	const { orgId } = await authOrForbidden();
+	const lists = await readBarRecipeLists(orgId);
+
+	const hasFeaturedList = lists.some((list) => list.isFeatured);
+
+	return (
+		<Grid as="ul" gap={6}>
+			{lists.map((list) => (
+				<li key={list.id}>
+					<RecipeListFrame
+						list={list}
+						href={getRecipeListUrl(list)}
+						recipeCount={list.recipeCount}
+						className={styles.list}
+					/>
+
+					<EntityActions className={styles.actions}>
+						{(actionProps) => (
+							<ListItemActions
+								{...actionProps}
+								list={list}
+								recipeCount={list.recipeCount}
+								hasFeaturedList={hasFeaturedList}
+							/>
+						)}
+					</EntityActions>
+				</li>
+			))}
+
+			<li></li>
+		</Grid>
 	);
 }
 

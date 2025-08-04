@@ -15,7 +15,7 @@ import {
 	generateDefaultRecipeListName,
 	getRecipeListUrl,
 } from "@/features/lists/utils";
-import { getRecipeListCacheTag } from "@/features/lists/utils/server";
+import { getRecipeListsCacheTag } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function createRecipeList(
@@ -42,7 +42,7 @@ export async function createRecipeList(
 		.returning();
 
 	revalidatePath("/bar/lists", "page");
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 
 	return list;
 }

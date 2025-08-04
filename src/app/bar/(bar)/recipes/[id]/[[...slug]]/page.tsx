@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { getUserById } from "@/features/organisation/actions/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
@@ -19,6 +20,16 @@ type Props = {
  * improved readability of links.
  */
 export default async function RecipePage({ params }: Props) {
+	return (
+		<Container className={styles.container}>
+			<Suspense fallback={<div>Loading...</div>}>
+				<RecipeContent params={params} />
+			</Suspense>
+		</Container>
+	);
+}
+
+async function RecipeContent({ params }: Props) {
 	const { id, slug } = await params;
 
 	if (!isValidPageUrl(id, slug)) {
@@ -32,11 +43,9 @@ export default async function RecipePage({ params }: Props) {
 	}
 
 	return (
-		<Container className={styles.container}>
-			<RecipeArticle recipe={recipe}>
-				<RecipeActions recipe={recipe} />
-			</RecipeArticle>
-		</Container>
+		<RecipeArticle recipe={recipe}>
+			<RecipeActions recipe={recipe} />
+		</RecipeArticle>
 	);
 }
 

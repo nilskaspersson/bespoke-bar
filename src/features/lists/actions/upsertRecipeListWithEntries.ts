@@ -15,7 +15,7 @@ import {
 } from "@/features/lists/actions/utils/transactionHelpers";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import {
-	getRecipeListCacheTag,
+	getRecipeListsCacheTag,
 	revalidateRecipeListPaths,
 } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
@@ -48,7 +48,7 @@ export async function upsertRecipeListWithEntries(
 		shouldRevalidateBar: result.isFeatured,
 	});
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 
 	return result;
 }

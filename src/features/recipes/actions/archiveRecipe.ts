@@ -1,8 +1,12 @@
 import { and, eq, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
-import { revalidateRecipePaths } from "@/features/recipes/utils/server";
+import {
+	getRecipesCacheTag,
+	revalidateRecipePaths,
+} from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function archiveRecipe({
@@ -24,6 +28,7 @@ export async function archiveRecipe({
 		})
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
+	revalidateTag(getRecipesCacheTag(orgId));
 	revalidateRecipePaths([id]);
 
 	if (redirectTo) {
@@ -52,6 +57,7 @@ export async function unarchiveRecipe({
 		})
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
+	revalidateTag(getRecipesCacheTag(orgId));
 	revalidateRecipePaths([id]);
 
 	if (redirectTo) {

@@ -16,10 +16,6 @@ export function revalidateRecipeListPaths({
 	}
 }
 
-export function getRecipeListCacheKey(orgId: string): string[] {
-	return ["recipe-lists", orgId];
-}
-
-export function getRecipeListCacheTag(orgId: string): string {
+export function getRecipeListsCacheTag(orgId: string): string {
 	return `org:${orgId}:recipe-lists`;
 }

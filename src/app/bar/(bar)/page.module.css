@@ -5,15 +5,4 @@
 		align-content: start;
 		container-type: inline-size;
 	}
-
-	.featuredList {
-		@container (width < 450px) {
-			margin-inline: calc(var(--app-inset) * -1);
-		}
-	}
-
-	.featuredListActions {
-		justify-content: center;
-		margin-top: var(--gap--tiny);
-	}
 }

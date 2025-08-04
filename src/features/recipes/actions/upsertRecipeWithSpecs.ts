@@ -1,6 +1,7 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import z from "zod/v4";
 import { db } from "@/db";
@@ -13,7 +14,10 @@ import {
 } from "@/features/recipes/actions/utils/transactionHelpers";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
-import { revalidateRecipePaths } from "@/features/recipes/utils/server";
+import {
+	getRecipesCacheTag,
+	revalidateRecipePaths,
+} from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
@@ -68,6 +72,7 @@ async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 	});
 
 	revalidateRecipePaths(result.map((r) => r.id));
+	revalidateTag(getRecipesCacheTag(orgId));
 
 	return result;
 }

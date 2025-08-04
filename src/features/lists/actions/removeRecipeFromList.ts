@@ -9,7 +9,7 @@ import {
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import {
-	getRecipeListCacheTag,
+	getRecipeListsCacheTag,
 	revalidateRecipeListPaths,
 } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
@@ -52,7 +52,7 @@ export async function removeRecipeFromList(
 		shouldRevalidateBar: true,
 	});
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 
 	return deletedEntry;
 }

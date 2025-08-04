@@ -8,6 +8,8 @@ import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/ge
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
 import styles from "./layout.module.css";
 
+export const experimental_ppr = true;
+
 export default async function Layout({
 	children,
 }: {

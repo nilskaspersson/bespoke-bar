@@ -7,7 +7,7 @@ import { IngredientChips } from "@/features/ingredients/components/IngredientChi
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
-import { readBarRecipes } from "@/features/recipes/actions/readBarRecipes";
+import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
@@ -16,6 +16,7 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 type Props = {
@@ -24,9 +25,12 @@ type Props = {
 
 export default async function IngredientPage({ params }: Props) {
 	const { id } = await params;
+
+	const { orgId } = await authOrForbidden();
+
 	const [ingredient, recipes, members] = await Promise.all([
 		readIngredient(id),
-		readBarRecipes(),
+		getCachedBarRecipes(orgId),
 		readOrganisationMembers(),
 	]);
 

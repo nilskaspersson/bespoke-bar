@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
 import {
-	getRecipeListCacheTag,
+	getRecipeListsCacheTag,
 	revalidateRecipeListPaths,
 } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
@@ -30,7 +30,7 @@ export async function deleteRecipeList({
 		shouldRevalidateBar: result.isFeatured,
 	});
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 
 	if (redirectTo) {
 		redirect(redirectTo);

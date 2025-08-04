@@ -2,6 +2,7 @@
 
 import { parseWithZod } from "@conform-to/zod/v4";
 import { and, eq, sql } from "drizzle-orm";
+import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
@@ -11,7 +12,10 @@ import {
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import { revalidateRecipePaths } from "@/features/recipes/utils/server";
+import {
+	getRecipesCacheTag,
+	revalidateRecipePaths,
+} from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function updateRecipe(
@@ -33,6 +37,7 @@ export async function updateRecipe(
 		.returning();
 
 	revalidateRecipePaths([id]);
+	revalidateTag(getRecipesCacheTag(orgId));
 
 	return result;
 }

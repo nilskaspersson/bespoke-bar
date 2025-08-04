@@ -14,7 +14,7 @@ import {
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import {
-	getRecipeListCacheTag,
+	getRecipeListsCacheTag,
 	revalidateRecipeListPaths,
 } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
@@ -96,7 +96,7 @@ export async function addRecipeToList(
 		shouldRevalidateBar: list.isFeatured,
 	});
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 
 	return entry;
 }

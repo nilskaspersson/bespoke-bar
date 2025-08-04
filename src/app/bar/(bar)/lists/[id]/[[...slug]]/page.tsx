@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 import { EntityActions } from "@/app/components/EntityActions";
 import { PageHeader } from "@/app/components/PageHeader";
 import { readFeaturedList } from "@/features/lists/actions/readFeaturedList";
@@ -20,6 +21,18 @@ type Props = {
  * improved readability of links.
  */
 export default async function RecipeListPage({ params }: Props) {
+	return (
+		<Container as="article" className={styles.container}>
+			<PageHeader heading="Recipe List" />
+
+			<Suspense fallback={<div>Loading...</div>}>
+				<RecipeListContent params={params} />
+			</Suspense>
+		</Container>
+	);
+}
+
+async function RecipeListContent({ params }: Props) {
 	const { id, slug } = await params;
 
 	if (!isValidPageUrl(id, slug)) {
@@ -36,9 +49,7 @@ export default async function RecipeListPage({ params }: Props) {
 	}
 
 	return (
-		<Container as="article" className={styles.container}>
-			<PageHeader heading={recipeList.name} />
-
+		<>
 			<RecipeListFrame
 				level="h2"
 				list={recipeList}
@@ -59,7 +70,7 @@ export default async function RecipeListPage({ params }: Props) {
 					/>
 				)}
 			</EntityActions>
-		</Container>
+		</>
 	);
 }
 

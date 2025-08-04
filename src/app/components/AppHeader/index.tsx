@@ -6,7 +6,7 @@ import {
 	UserButton,
 } from "@clerk/nextjs";
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
+import { type ComponentProps, Suspense } from "react";
 import { Button } from "@/ui/Button";
 import { Logo } from "@/ui/Logo";
 import { HeaderBar } from "./HeaderBar";
@@ -22,23 +22,25 @@ export function AppHeader({
 				<Logo />
 
 				<div className={styles.grid}>
-					<SignedOut>
-						<SignInButton mode="modal">
-							<Button variant="ghost" size="tiny">
-								Sign in
-							</Button>
-						</SignInButton>
+					<Suspense>
+						<SignedOut>
+							<SignInButton mode="modal">
+								<Button variant="ghost" size="tiny">
+									Sign in
+								</Button>
+							</SignInButton>
 
-						<SignUpButton mode="modal">
-							<Button variant="solid" size="tiny" color="heavy">
-								Sign up
-							</Button>
-						</SignUpButton>
-					</SignedOut>
+							<SignUpButton mode="modal">
+								<Button variant="solid" size="tiny" color="heavy">
+									Sign up
+								</Button>
+							</SignUpButton>
+						</SignedOut>
 
-					<SignedIn>
-						<UserButton />
-					</SignedIn>
+						<SignedIn>
+							<UserButton />
+						</SignedIn>
+					</Suspense>
 				</div>
 			</div>
 		</HeaderBar>

@@ -5,7 +5,7 @@ import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import {
-	getRecipeListCacheTag,
+	getRecipeListsCacheTag,
 	revalidateRecipeListPaths,
 } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
@@ -43,5 +43,5 @@ export async function setFeaturedList(listId: string) {
 		shouldRevalidateBar: true,
 	});
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 }

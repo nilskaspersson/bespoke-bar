@@ -8,3 +8,7 @@ export function revalidateRecipePaths(ids: Recipe["id"][]) {
 		revalidatePath(`/bar/recipes/${id}`, "layout");
 	});
 }
+
+export function getRecipesCacheTag(orgId: string): string {
+	return `org:${orgId}:recipes`;
+}
