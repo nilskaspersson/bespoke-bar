@@ -5,3 +5,7 @@ export function revalidateIngredientPaths(id: Ingredient["id"]) {
 	revalidatePath("/bar/ingredients", "page");
 	revalidatePath(`/bar/ingredients/${id}`, "layout");
 }
+
+export function getIngredientsCacheTag(orgId: string): string {
+	return `org:${orgId}:ingredients`;
+}

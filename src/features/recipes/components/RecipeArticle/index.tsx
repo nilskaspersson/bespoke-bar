@@ -8,6 +8,7 @@ import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipeTools } from "@/features/recipes/components/RecipeTools";
 import { Heading } from "@/ui/Heading";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { Time } from "@/ui/Time";
 import styles from "./styles.module.css";
@@ -50,3 +51,31 @@ export async function RecipeArticle({
 		</article>
 	);
 }
+
+RecipeArticle.Skeleton = function RecipeArticleSkeleton() {
+	return (
+		<SkeletonScreen className={styles.article}>
+			<div className={styles.header}>
+				<Skeleton className={styles.name} width="400px" height="74px" />
+
+				<div>
+					<Skeleton
+						className={styles.author}
+						variant="text"
+						width="200px"
+						height="15px"
+					/>
+				</div>
+
+				<div>
+					<Skeleton
+						className={styles.description}
+						variant="text"
+						width="200px"
+						height="24px"
+					/>
+				</div>
+			</div>
+		</SkeletonScreen>
+	);
+};

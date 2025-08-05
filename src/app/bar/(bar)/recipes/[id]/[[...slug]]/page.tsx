@@ -4,10 +4,11 @@ import { Suspense } from "react";
 import { getUserById } from "@/features/organisation/actions/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
-import { readRecipe } from "@/features/recipes/actions/readRecipe";
+import { getCachedRecipe } from "@/features/recipes/actions/readRecipe";
 import { RecipeActions } from "@/features/recipes/components/RecipeActions";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { Container } from "@/ui/Container";
+import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 
@@ -22,7 +23,7 @@ type Props = {
 export default async function RecipePage({ params }: Props) {
 	return (
 		<Container className={styles.container}>
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<RecipeArticle.Skeleton />}>
 				<RecipeContent params={params} />
 			</Suspense>
 		</Container>
@@ -32,11 +33,13 @@ export default async function RecipePage({ params }: Props) {
 async function RecipeContent({ params }: Props) {
 	const { id, slug } = await params;
 
-	if (!isValidPageUrl(id, slug)) {
+	if (!isValidPageUrl(id, slug) || !id) {
 		notFound();
 	}
 
-	const recipe = await readRecipe(id);
+	const { orgId } = await authOrForbidden();
+
+	const recipe = await getCachedRecipe(orgId, id);
 
 	if (!recipe) {
 		notFound();
@@ -51,7 +54,15 @@ async function RecipeContent({ params }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { id } = await params;
-	const recipe = await readRecipe(id);
+
+	if (!id) {
+		return {
+			title: "Recipe not found",
+		};
+	}
+
+	const { orgId } = await authOrForbidden();
+	const recipe = await getCachedRecipe(orgId, id);
 
 	if (!recipe) {
 		return {

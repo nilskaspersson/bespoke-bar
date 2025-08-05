@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { EntityActions } from "@/app/components/EntityActions";
 import { PageHeader } from "@/app/components/PageHeader";
 import { readBarRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
-import { ListItemActions } from "@/features/lists/components/ListItemActions";
-import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
-import { getRecipeListUrl } from "@/features/lists/utils";
+import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
 import { LinkButton } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
 import { Container } from "@/ui/Container";
@@ -51,7 +48,7 @@ export default async function ListsPage() {
 				</Grid>
 			</Callout>
 
-			<Suspense fallback={<div>Loading lists...</div>}>
+			<Suspense fallback={<RecipeListTable.Skeleton />}>
 				<RecipeListData />
 			</Suspense>
 		</Container>
@@ -62,35 +59,7 @@ async function RecipeListData() {
 	const { orgId } = await authOrForbidden();
 	const lists = await readBarRecipeLists(orgId);
 
-	const hasFeaturedList = lists.some((list) => list.isFeatured);
-
-	return (
-		<Grid as="ul" gap={6}>
-			{lists.map((list) => (
-				<li key={list.id}>
-					<RecipeListFrame
-						list={list}
-						href={getRecipeListUrl(list)}
-						recipeCount={list.recipeCount}
-						className={styles.list}
-					/>
-
-					<EntityActions className={styles.actions}>
-						{(actionProps) => (
-							<ListItemActions
-								{...actionProps}
-								list={list}
-								recipeCount={list.recipeCount}
-								hasFeaturedList={hasFeaturedList}
-							/>
-						)}
-					</EntityActions>
-				</li>
-			))}
-
-			<li></li>
-		</Grid>
-	);
+	return <RecipeListTable lists={lists} />;
 }
 
 export const metadata: Metadata = {

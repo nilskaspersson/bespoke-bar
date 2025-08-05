@@ -45,7 +45,6 @@ const nextConfig: NextConfig = {
 		useLightningcss: true,
 		authInterrupts: true,
 		useCache: true,
-		cacheComponents: true,
 	},
 };
 

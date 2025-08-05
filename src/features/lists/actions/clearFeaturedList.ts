@@ -32,5 +32,5 @@ export async function clearFeaturedList() {
 		shouldRevalidateBar: true,
 	});
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	revalidateTag(getRecipeListsCacheTag(orgId));
 }

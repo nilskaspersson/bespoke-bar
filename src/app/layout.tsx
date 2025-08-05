@@ -39,12 +39,10 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 
 				<ThemeProvider>
 					<div className={styles.layout} id="root">
-						<Suspense>
-							<AuthProvider>
-								<AppHeader className={styles.header} />
-								<main className={styles.main}>{children}</main>
-							</AuthProvider>
-						</Suspense>
+						<AuthProvider>
+							<AppHeader className={styles.header} />
+							<main className={styles.main}>{children}</main>
+						</AuthProvider>
 
 						<AppFooter className={styles.footer} />
 					</div>

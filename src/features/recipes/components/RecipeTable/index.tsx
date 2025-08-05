@@ -21,6 +21,8 @@ import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
+import { Grid } from "@/ui/Grid";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
 import { TableLayout } from "@/ui/TableLayout";
 import { Text } from "@/ui/Text";
@@ -172,5 +174,20 @@ export function RecipeTable({
 				<RecipesList getRowModel={table.getRowModel} view={view} />
 			) : null}
 		</TableLayout>
+	);
+}
+
+/**
+ * Direct property assignment doesn't work in client components.
+ */
+export function RecipeTableSkeleton() {
+	return (
+		<SkeletonScreen>
+			<Grid gap={4}>
+				<Skeleton width="100%" height="147px" />
+				<Skeleton width="100%" height="147px" />
+				<Skeleton width="100%" height="147px" />
+			</Grid>
+		</SkeletonScreen>
 	);
 }

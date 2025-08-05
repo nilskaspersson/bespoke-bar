@@ -1,17 +1,16 @@
 "use server";
 
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
-import { authOrForbidden } from "@/utils/auth";
+import { getRecipeIdCacheTag } from "@/features/recipes/utils/server";
 
 const preparedReadRecipe = db.query.RecipesTable.findFirst({
 	where: and(
 		eq(RecipesTable.id, sql.placeholder("recipeId")),
-		or(
-			eq(RecipesTable.createdBy, sql.placeholder("userId")),
-			eq(RecipesTable.orgId, sql.placeholder("orgId")),
-		),
+
+		eq(RecipesTable.orgId, sql.placeholder("orgId")),
 	),
 	with: {
 		specs: {
@@ -22,18 +21,17 @@ const preparedReadRecipe = db.query.RecipesTable.findFirst({
 	},
 }).prepare("readRecipe");
 
-export async function readRecipe(id: string | undefined) {
-	if (!id) {
-		return undefined;
-	}
-
-	const { userId, orgId } = await authOrForbidden();
-
+export async function readRecipe(orgId: string, id: string) {
 	const recipe = await preparedReadRecipe.execute({
 		recipeId: id,
-		userId,
 		orgId,
 	});
 
 	return recipe;
+}
+
+export async function getCachedRecipe(orgId: string, id: string) {
+	"use cache";
+	cacheTag(getRecipeIdCacheTag(orgId, id));
+	return await readRecipe(orgId, id);
 }

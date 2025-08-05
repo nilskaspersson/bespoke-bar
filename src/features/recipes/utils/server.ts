@@ -12,3 +12,7 @@ export function revalidateRecipePaths(ids: Recipe["id"][]) {
 export function getRecipesCacheTag(orgId: string): string {
 	return `org:${orgId}:recipes`;
 }
+
+export function getRecipeIdCacheTag(orgId: string, id: string): string {
+	return `org:${orgId}:recipes:${id}`;
+}

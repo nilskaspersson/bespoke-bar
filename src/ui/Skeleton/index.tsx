@@ -35,7 +35,11 @@ export function SkeletonScreen({
 	...props
 }: ComponentProps<"div">) {
 	return (
-		<div {...props} className={clsx(className, styles.fade)}>
+		<div
+			{...props}
+			role="presentation"
+			className={clsx(className, styles.fade)}
+		>
 			{children}
 		</div>
 	);

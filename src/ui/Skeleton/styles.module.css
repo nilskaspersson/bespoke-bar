@@ -17,11 +17,12 @@
 	}
 
 	.fade {
+		align-self: flex-start;
 		mask-image: linear-gradient(to top, transparent 0%, black 100%);
 	}
 
 	.block {
-		border-radius: var(--radius--small);
+		border-radius: var(--radius);
 		width: var(--jsxWidth, 100%);
 		height: var(--jsxHeight, 100%);
 	}
