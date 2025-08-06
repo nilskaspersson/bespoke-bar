@@ -3,12 +3,13 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EntityActions } from "@/app/components/EntityActions";
 import { PageHeader } from "@/app/components/PageHeader";
-import { readFeaturedList } from "@/features/lists/actions/readFeaturedList";
-import { readRecipeList } from "@/features/lists/actions/readRecipeList";
+import { getCachedFeaturedList } from "@/features/lists/actions/readFeaturedList";
+import { getCachedRecipeList } from "@/features/lists/actions/readRecipeList";
 import { ListItemActions } from "@/features/lists/components/ListItemActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { Container } from "@/ui/Container";
+import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 
@@ -35,13 +36,15 @@ export default async function RecipeListPage({ params }: Props) {
 async function RecipeListContent({ params }: Props) {
 	const { id, slug } = await params;
 
-	if (!isValidPageUrl(id, slug)) {
+	if (!isValidPageUrl(id, slug) || !id) {
 		notFound();
 	}
 
+	const { orgId } = await authOrForbidden();
+
 	const [recipeList, featuredList] = await Promise.all([
-		readRecipeList(id),
-		readFeaturedList(),
+		getCachedRecipeList(orgId, id),
+		getCachedFeaturedList(orgId),
 	]);
 
 	if (!recipeList) {
@@ -50,12 +53,7 @@ async function RecipeListContent({ params }: Props) {
 
 	return (
 		<>
-			<RecipeListFrame
-				level="h2"
-				list={recipeList}
-				recipeCount={recipeList.entries.length}
-				className={styles.frame}
-			>
+			<RecipeListFrame level="h2" list={recipeList} className={styles.frame}>
 				<RecipeListFilters list={recipeList} editable />
 			</RecipeListFrame>
 
@@ -64,7 +62,6 @@ async function RecipeListContent({ params }: Props) {
 					<ListItemActions
 						{...actionProps}
 						list={recipeList}
-						recipeCount={recipeList.entries.length}
 						hasFeaturedList={Boolean(featuredList)}
 						deleteRedirectTo={"/bar/lists"}
 					/>
@@ -76,7 +73,15 @@ async function RecipeListContent({ params }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { id } = await params;
-	const recipeList = await readRecipeList(id);
+
+	if (!id) {
+		return {
+			title: "List not found",
+		};
+	}
+
+	const { orgId } = await authOrForbidden();
+	const recipeList = await getCachedRecipeList(orgId, id);
 
 	if (!recipeList) {
 		return {

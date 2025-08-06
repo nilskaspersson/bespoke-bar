@@ -1,6 +1,5 @@
 import { useForm } from "@conform-to/react";
 import { useCallback } from "react";
-import { mutate } from "swr";
 import useSWRImmutable from "swr/immutable";
 import type { Organisation } from "@/db/schema/organisations";
 import { updateLocalOrganisationAction } from "@/features/organisation/actions/updateLocalOrganisation";
@@ -15,6 +14,7 @@ import { SubmitButton } from "@/ui/SubmitButton";
 import { TextFieldSkeleton } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
 import { fetcher } from "@/utils/api";
+import { mutateSWROrganisationCache } from "@/utils/swrCache";
 import styles from "./styles.module.css";
 
 export function OrganisationSettings() {
@@ -50,11 +50,10 @@ function OrganisationSettingsForm({
 		},
 	});
 
-	const { action } = useServerAction(updateLocalOrganisationAction, () => {
-		mutate("/api/organisation", undefined, {
-			revalidate: true,
-		});
-	});
+	const { action } = useServerAction(
+		updateLocalOrganisationAction,
+		mutateSWROrganisationCache,
+	);
 
 	const handleSubmit = useCallback(
 		async (formData: FormData) => {

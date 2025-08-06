@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
-import { readIngredient } from "@/features/ingredients/actions/readIngredient";
+import { getCachedIngredient } from "@/features/ingredients/actions/readIngredient";
 import { DeleteIngredient } from "@/features/ingredients/components/DeleteIngredient";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
@@ -26,10 +26,14 @@ type Props = {
 export default async function IngredientPage({ params }: Props) {
 	const { id } = await params;
 
+	if (!id) {
+		notFound();
+	}
+
 	const { orgId } = await authOrForbidden();
 
 	const [ingredient, recipes, members] = await Promise.all([
-		readIngredient(id),
+		getCachedIngredient(orgId, id),
 		getCachedBarRecipes(orgId),
 		readOrganisationMembers(),
 	]);
@@ -130,11 +134,19 @@ export default async function IngredientPage({ params }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { id } = await params;
-	const ingredient = await readIngredient(id);
+
+	if (!id) {
+		return {
+			title: "Ingredient not found",
+		};
+	}
+
+	const { orgId } = await authOrForbidden();
+	const ingredient = await getCachedIngredient(orgId, id);
 
 	if (!ingredient) {
 		return {
-			title: "Mystery ingredient",
+			title: "Ingredient not found",
 		};
 	}
 

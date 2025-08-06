@@ -1,7 +1,15 @@
 import { z } from "zod/v4";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
-import { recipeListEntryFormSchema } from "@/db/schema/recipeListEntries";
-import { recipeListFormSchema } from "@/db/schema/recipeLists";
+import {
+	type RecipeListEntryWithRecipe,
+	recipeListEntryFormSchema,
+	selectRecipeListEntrySchema,
+} from "@/db/schema/recipeListEntries";
+import {
+	type RecipeList,
+	recipeListFormSchema,
+	selectRecipeListSchema,
+} from "@/db/schema/recipeLists";
 import { insertRecipeSchema } from "@/db/schema/recipes";
 import { insertSpecsSchema } from "@/db/schema/specs";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
@@ -84,3 +92,16 @@ export const recipeListWithEntriesFormSchema = z.object({
 export type RecipeListWithEntriesFormData = z.infer<
 	typeof recipeListWithEntriesFormSchema
 >;
+
+export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
+	entries: z.array(selectRecipeListEntrySchema),
+	createdAt: z.coerce.date(),
+	updatedAt: z.coerce.date().nullable(),
+	featuredAt: z.coerce.date().nullable(),
+});
+
+export type RecipeListWithEntries = z.infer<typeof recipeListWithEntriesSchema>;
+
+export type RecipeListWithRecipes = RecipeList & {
+	entries: RecipeListEntryWithRecipe[];
+};

@@ -4,7 +4,7 @@ import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
-import { getRecipesCacheTag } from "@/features/recipes/utils/server";
+import { cacheTags } from "@/utils/cache";
 
 const preparedReadBarRecipes = db.query.RecipesTable.findMany({
 	where: and(
@@ -27,6 +27,6 @@ export async function readBarRecipes(orgId: string) {
 
 export async function getCachedBarRecipes(orgId: string) {
 	"use cache";
-	cacheTag(getRecipesCacheTag(orgId));
+	cacheTag(...cacheTags.barRecipes(orgId));
 	return await readBarRecipes(orgId);
 }

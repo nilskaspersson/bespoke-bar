@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageHeader } from "@/app/components/PageHeader";
-import { readBarRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
+import { getCachedRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
 import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
 import { LinkButton } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
@@ -57,7 +57,7 @@ export default async function ListsPage() {
 
 async function RecipeListData() {
 	const { orgId } = await authOrForbidden();
-	const lists = await readBarRecipeLists(orgId);
+	const lists = await getCachedRecipeLists(orgId);
 
 	return <RecipeListTable lists={lists} />;
 }

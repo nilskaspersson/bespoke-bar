@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { readRecipeList } from "@/features/lists/actions/readRecipeList";
+import { getCachedRecipeList } from "@/features/lists/actions/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
@@ -20,10 +20,14 @@ export default async function EditRecipeListPage({
 }: Props) {
 	const { id } = await paramsPromise;
 
+	if (!id) {
+		notFound();
+	}
+
 	const { orgId } = await authOrForbidden();
 
 	const [recipeList, recipes] = await Promise.all([
-		readRecipeList(id),
+		getCachedRecipeList(orgId, id),
 		getCachedBarRecipes(orgId),
 	]);
 

@@ -1,12 +1,13 @@
 import { notFound, redirect } from "next/navigation";
 import { updateIngredientSchema } from "@/db/schema/ingredients";
-import { readIngredient } from "@/features/ingredients/actions/readIngredient";
+import { getCachedIngredient } from "@/features/ingredients/actions/readIngredient";
 import { updateIngredient } from "@/features/ingredients/actions/updateIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 type Props = {
@@ -17,7 +18,13 @@ export default async function EditIngredientPage({
 	params: paramsPromise,
 }: Props) {
 	const { id } = await paramsPromise;
-	const ingredient = await readIngredient(id);
+
+	if (!id) {
+		notFound();
+	}
+
+	const { orgId } = await authOrForbidden();
+	const ingredient = await getCachedIngredient(orgId, id);
 
 	if (!ingredient) {
 		notFound();

@@ -38,7 +38,6 @@ async function RecipeContent({ params }: Props) {
 	}
 
 	const { orgId } = await authOrForbidden();
-
 	const recipe = await getCachedRecipe(orgId, id);
 
 	if (!recipe) {

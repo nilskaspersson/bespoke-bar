@@ -1,6 +1,6 @@
 import type { ActionProps } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
-import type { RecipeList } from "@/db/schema/recipeLists";
+import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { clearFeaturedList } from "@/features/lists/actions/clearFeaturedList";
 import { deleteRecipeList } from "@/features/lists/actions/deleteRecipeList";
 import { setFeaturedList } from "@/features/lists/actions/setFeaturedList";
@@ -15,12 +15,10 @@ import { getServerSideBaseURL } from "@/utils/url";
 export function ListItemActions({
 	list,
 	hasFeaturedList,
-	recipeCount,
 	deleteRedirectTo,
 	...props
 }: ActionProps & {
-	list: RecipeList;
-	recipeCount: number;
+	list: RecipeListWithEntries;
 	hasFeaturedList?: boolean;
 	deleteRedirectTo?: string;
 }) {
@@ -88,7 +86,6 @@ export function ListItemActions({
 					{...props}
 					color="red"
 					list={list}
-					recipeCount={recipeCount}
 					action={deleteRecipeList.bind(null, {
 						id: list.id,
 						redirectTo: deleteRedirectTo,

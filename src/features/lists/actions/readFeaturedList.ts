@@ -1,9 +1,10 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import { authOrForbidden } from "@/utils/auth";
+import { cacheTags } from "@/utils/cache";
 
 const readFeaturedListPrepared = db.query.RecipeListsTable.findFirst({
 	where: and(
@@ -27,9 +28,13 @@ const readFeaturedListPrepared = db.query.RecipeListsTable.findFirst({
 	},
 }).prepare("readFeaturedList");
 
-export async function readFeaturedList() {
-	const { orgId } = await authOrForbidden();
+export async function readFeaturedList(orgId: string) {
+	return await readFeaturedListPrepared.execute({ orgId });
+}
 
-	const featuredList = await readFeaturedListPrepared.execute({ orgId });
-	return featuredList;
+export async function getCachedFeaturedList(orgId: string) {
+	"use cache";
+	const list = await readFeaturedList(orgId);
+	cacheTag(...cacheTags.recipeListWithRecipes(orgId, list?.id));
+	return list;
 }

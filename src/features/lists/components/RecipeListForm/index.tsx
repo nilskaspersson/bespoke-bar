@@ -3,9 +3,10 @@
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useRef } from "react";
-import { mutate } from "swr";
-import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
-import type { RecipeListWithRecipes } from "@/db/schema/recipeLists";
+import {
+	type RecipeListWithRecipes,
+	recipeListWithEntriesFormSchema,
+} from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
@@ -18,6 +19,7 @@ import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
+import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
 
 type Props = {
 	recipeList?: RecipeListWithRecipes;
@@ -25,11 +27,10 @@ type Props = {
 };
 
 export function RecipeListForm({ recipes, recipeList }: Props) {
-	const { action } = useServerAction(upsertRecipeListWithEntriesAction, () => {
-		mutate("/api/lists", undefined, {
-			revalidate: true,
-		});
-	});
+	const { action } = useServerAction(
+		upsertRecipeListWithEntriesAction,
+		mutateSWRRecipeListsCache,
+	);
 
 	const [form, fields] = useForm({
 		id: "list-form",

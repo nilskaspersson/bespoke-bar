@@ -11,10 +11,7 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import z from "zod/v4";
-import {
-	RecipeListEntriesTable,
-	type RecipeListEntryWithRecipe,
-} from "@/db/schema/recipeListEntries";
+import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import { sqlNormalizedString } from "@/db/utils";
 
 export const RecipeListsTable = pgTable(
@@ -57,23 +54,6 @@ export const selectRecipeListSchema = createSelectSchema(RecipeListsTable);
 export const insertRecipeListSchema = createInsertSchema(RecipeListsTable);
 
 export type RecipeList = typeof RecipeListsTable.$inferSelect;
-
-export type RecipeListWithRecipeCount = RecipeList & {
-	recipeCount: number;
-};
-
-export type RecipeListWithRecipes = RecipeList & {
-	entries: RecipeListEntryWithRecipe[];
-};
-
-export const recipeListWithCountSchema = selectRecipeListSchema.extend({
-	recipeCount: z.number(),
-	createdAt: z.coerce.date(),
-	updatedAt: z.coerce.date().nullable(),
-	featuredAt: z.coerce.date().nullable(),
-});
-
-export type RecipeListWithCount = z.infer<typeof recipeListWithCountSchema>;
 
 export type InsertRecipeList = Omit<
 	typeof RecipeListsTable.$inferInsert,

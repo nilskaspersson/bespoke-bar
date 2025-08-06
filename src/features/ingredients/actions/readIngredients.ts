@@ -4,7 +4,7 @@ import { eq, sql } from "drizzle-orm";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { db } from "@/db";
 import { IngredientsTable } from "@/db/schema/ingredients";
-import { getIngredientsCacheTag } from "@/features/ingredients/utils/server";
+import { cacheTags } from "@/utils/cache";
 
 const preparedReadIngredients = db.query.IngredientsTable.findMany({
 	where: eq(IngredientsTable.orgId, sql.placeholder("orgId")),
@@ -16,6 +16,6 @@ export async function readIngredients(orgId: string) {
 
 export async function getCachedIngredients(orgId: string) {
 	"use cache";
-	cacheTag(getIngredientsCacheTag(orgId));
+	cacheTag(...cacheTags.ingredientsList(orgId));
 	return await readIngredients(orgId);
 }

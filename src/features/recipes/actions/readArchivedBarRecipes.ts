@@ -1,9 +1,10 @@
 "use server";
 
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
-import { authOrForbidden } from "@/utils/auth";
+import { cacheTags } from "@/utils/cache";
 
 const preparedReadArchivedBarRecipes = db.query.RecipesTable.findMany({
 	where: and(
@@ -20,9 +21,12 @@ const preparedReadArchivedBarRecipes = db.query.RecipesTable.findMany({
 	orderBy: [desc(RecipesTable.archivedAt)],
 }).prepare("readArchivedBarRecipes");
 
-export async function readArchivedBarRecipes() {
-	const { orgId } = await authOrForbidden();
+export async function readArchivedBarRecipes(orgId: string) {
+	return await preparedReadArchivedBarRecipes.execute({ orgId });
+}
 
-	const recipes = await preparedReadArchivedBarRecipes.execute({ orgId });
-	return recipes;
+export async function getCachedArchivedBarRecipes(orgId: string) {
+	"use cache";
+	cacheTag(...cacheTags.barRecipes(orgId));
+	return await readArchivedBarRecipes(orgId);
 }

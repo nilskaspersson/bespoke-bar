@@ -1,7 +1,6 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import z from "zod/v4";
 import { db } from "@/db";
@@ -14,11 +13,8 @@ import {
 } from "@/features/recipes/actions/utils/transactionHelpers";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
-import {
-	getRecipesCacheTag,
-	revalidateRecipePaths,
-} from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 	const { userId, orgId } = await authOrForbidden();
@@ -41,13 +37,13 @@ async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 		/**
 		 * Step 2: Create or update each recipe
 		 */
-		const processedRecipes: Recipe[] = [];
+		const processedRecipes: [Recipe, boolean][] = [];
 
 		for (const o of userInputRecipes) {
 			/**
 			 * Step 3: Upsert the recipe
 			 */
-			const processedRecipe = await upsertRecipeInTransaction(
+			const [processedRecipe, isNew] = await upsertRecipeInTransaction(
 				tx,
 				o.recipe,
 				userId,
@@ -65,16 +61,21 @@ async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 				createdIngredientNamesToId,
 			);
 
-			processedRecipes.push(processedRecipe);
+			processedRecipes.push([processedRecipe, isNew]);
 		}
 
 		return processedRecipes;
 	});
 
-	revalidateRecipePaths(result.map((r) => r.id));
-	revalidateTag(getRecipesCacheTag(orgId));
+	result.forEach(([recipe, isNew]) => {
+		if (isNew) {
+			cacheEvents.recipe.create.emit(orgId);
+		} else {
+			cacheEvents.recipe.update.emit(orgId, recipe.id);
+		}
+	});
 
-	return result;
+	return result.map(([recipe]) => recipe);
 }
 
 export async function upsertRecipeWithSpecsAction(

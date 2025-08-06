@@ -1,6 +1,6 @@
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/app/components/EntityActions";
-import type { RecipeListWithRecipeCount } from "@/db/schema/recipeLists";
+import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { ListItemActions } from "@/features/lists/components/ListItemActions";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { getRecipeListUrl } from "@/features/lists/utils";
@@ -9,7 +9,7 @@ import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
 
 type Props = {
-	lists: RecipeListWithRecipeCount[];
+	lists: RecipeListWithEntries[];
 };
 
 export function RecipeListTable({
@@ -25,7 +25,6 @@ export function RecipeListTable({
 					<RecipeListFrame
 						list={list}
 						href={getRecipeListUrl(list)}
-						recipeCount={list.recipeCount}
 						className={styles.frame}
 					/>
 
@@ -34,7 +33,6 @@ export function RecipeListTable({
 							<ListItemActions
 								{...actionProps}
 								list={list}
-								recipeCount={list.recipeCount}
 								hasFeaturedList={hasFeaturedList}
 							/>
 						)}

@@ -1,15 +1,18 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { countArchivedBarRecipes } from "@/features/recipes/actions/countArchivedBarRecipes";
-import { countBarRecipes } from "@/features/recipes/actions/countBarRecipes";
+import { getCachedCountArchivedBarRecipes } from "@/features/recipes/actions/countArchivedBarRecipes";
+import { getCachedCountBarRecipes } from "@/features/recipes/actions/countBarRecipes";
 import { Flex } from "@/ui/Flex";
 import { Text } from "@/ui/Text";
+import { authOrForbidden } from "@/utils/auth";
 import styles from "./styles.module.css";
 
 export async function StatLinks(props: ComponentProps<"nav">) {
+	const { orgId } = await authOrForbidden();
+
 	const [recipesCount, archivedRecipesCount] = await Promise.all([
-		countBarRecipes(),
-		countArchivedBarRecipes(),
+		getCachedCountBarRecipes(orgId),
+		getCachedCountArchivedBarRecipes(orgId),
 	]);
 
 	return (
