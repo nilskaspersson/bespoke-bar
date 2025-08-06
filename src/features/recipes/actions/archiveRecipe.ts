@@ -2,8 +2,8 @@ import { and, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
-import { revalidateRecipePaths } from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function archiveRecipe({
 	id,
@@ -24,7 +24,7 @@ export async function archiveRecipe({
 		})
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
-	revalidateRecipePaths([id]);
+	cacheEvents.recipe.update.emit(orgId, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);
@@ -52,7 +52,7 @@ export async function unarchiveRecipe({
 		})
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
 
-	revalidateRecipePaths([id]);
+	cacheEvents.recipe.update.emit(orgId, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);

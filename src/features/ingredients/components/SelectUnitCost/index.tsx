@@ -4,18 +4,13 @@ import type { ComponentProps } from "react";
 import { useFormatter } from "@/hooks/useFormatter";
 import { TextField } from "@/ui/TextField";
 
-export function SelectUnitCost({
-	currency,
-	...props
-}: {
-	currency: string;
-} & ComponentProps<typeof TextField>) {
-	const { currencyDisplayName } = useFormatter();
+export function SelectUnitCost(props: ComponentProps<typeof TextField>) {
+	const { currencyDisplayName, options } = useFormatter();
 
 	return (
 		<TextField
 			{...props}
-			helperText={`In ${currencyDisplayName.of(currency)} (${currency})`}
+			helperText={`${currencyDisplayName.of(options.currency)} (${options.currency})`}
 		/>
 	);
 }

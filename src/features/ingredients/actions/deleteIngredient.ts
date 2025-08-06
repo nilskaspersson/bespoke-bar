@@ -4,8 +4,8 @@ import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
-import { revalidateIngredientPaths } from "@/features/ingredients/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function deleteIngredient({
 	id,
@@ -20,7 +20,7 @@ export async function deleteIngredient({
 		.delete(IngredientsTable)
 		.where(and(eq(IngredientsTable.id, id), eq(IngredientsTable.orgId, orgId)));
 
-	revalidateIngredientPaths(id);
+	cacheEvents.ingredient.delete.emit(orgId, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);

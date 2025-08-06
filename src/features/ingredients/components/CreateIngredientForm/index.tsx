@@ -1,14 +1,10 @@
 import type { ComponentProps } from "react";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
-import type { Organisation } from "@/db/schema/organisations";
 import { createIngredient } from "@/features/ingredients/actions/createIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 
-export function CreateIngredientForm({
-	organisation,
-	...props
-}: ComponentProps<"form"> & { organisation: Organisation }) {
+export function CreateIngredientForm(props: ComponentProps<"form">) {
 	const formAction = async (formData: FormData) => {
 		"use server";
 
@@ -26,7 +22,7 @@ export function CreateIngredientForm({
 
 	return (
 		<form {...props} action={formAction}>
-			<IngredientForm currency={organisation.currency} />
+			<IngredientForm />
 		</form>
 	);
 }

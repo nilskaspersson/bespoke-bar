@@ -9,17 +9,4 @@
 			"header" auto
 			"table" 1fr;
 	}
-
-	.list {
-		margin-top: var(--gap--large);
-
-		@container (width < 450px) {
-			margin-inline: calc(var(--app-inset) * -1);
-		}
-	}
-
-	.actions {
-		justify-content: center;
-		margin-top: var(--gap--tiny);
-	}
 }

@@ -8,6 +8,7 @@ import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
+import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
 
 export function ClearFeaturedListButton({
 	list,
@@ -17,10 +18,13 @@ export function ClearFeaturedListButton({
 	...buttonProps
 }: {
 	list: RecipeList;
-	actionSetFeatured: (listId: string) => Promise<void>;
-	actionClearFeatured: () => Promise<void>;
+	actionSetFeatured: (listId: string) => Promise<unknown>;
+	actionClearFeatured: () => Promise<unknown>;
 } & ButtonProps) {
-	const { action: clearFeaturedList } = useServerAction(actionClearFeatured);
+	const { action: clearFeaturedList } = useServerAction(
+		actionClearFeatured,
+		mutateSWRRecipeListsCache,
+	);
 
 	const handleClearFeaturedList = async () => {
 		const promise = clearFeaturedList();

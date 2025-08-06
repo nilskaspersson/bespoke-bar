@@ -3,7 +3,7 @@ import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { ThemeProvider } from "next-themes";
-import type { PropsWithChildren } from "react";
+import { type PropsWithChildren, Suspense } from "react";
 import { AppFooter } from "@/app/components/AppFooter";
 import { AppHeader } from "@/app/components/AppHeader";
 import { AuthProvider } from "@/app/components/AuthProvider";
@@ -33,16 +33,19 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 			suppressHydrationWarning
 		>
 			<body className={clsx(sans.variable, serif.variable, styles.body)}>
-				<ScrollFix />
+				<Suspense>
+					<ScrollFix />
+				</Suspense>
 
 				<ThemeProvider>
-					<AuthProvider>
-						<div className={styles.layout} id="root">
+					<div className={styles.layout} id="root">
+						<AuthProvider>
 							<AppHeader className={styles.header} />
 							<main className={styles.main}>{children}</main>
-							<AppFooter className={styles.footer} />
-						</div>
-					</AuthProvider>
+						</AuthProvider>
+
+						<AppFooter className={styles.footer} />
+					</div>
 
 					<Toaster />
 				</ThemeProvider>

@@ -4,8 +4,8 @@ import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useRef } from "react";
 import useSWRImmutable from "swr/immutable";
+import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { recipeListEntryFormSchema } from "@/db/schema/recipeListEntries";
-import type { RecipeListWithCount } from "@/db/schema/recipeLists";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { addRecipeToListAction } from "@/features/lists/actions/addRecipeToList";
 import { removeRecipeFromList } from "@/features/lists/actions/removeRecipeFromList";
@@ -35,7 +35,7 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 	const { handleClose } = useModalContext();
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const { data: lists } = useSWRImmutable<RecipeListWithCount[] | undefined>(
+	const { data: lists } = useSWRImmutable<RecipeListWithEntries[] | undefined>(
 		"/api/lists",
 		recipeListFetcher,
 	);

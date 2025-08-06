@@ -2,7 +2,6 @@
 
 import { parseWithZod } from "@conform-to/zod/v4";
 import { and, eq, sql } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import {
 	type InsertRecipeListEntry,
@@ -13,11 +12,8 @@ import {
 	recipeListEntryFormSchema,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import {
-	getRecipeListCacheTag,
-	revalidateRecipeListPaths,
-} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function addRecipeToList(
 	userInput: RecipeListEntryFormData,
@@ -91,12 +87,7 @@ export async function addRecipeToList(
 		return newEntry;
 	});
 
-	revalidateRecipeListPaths({
-		id: list.id,
-		shouldRevalidateBar: list.isFeatured,
-	});
-
-	revalidateTag(getRecipeListCacheTag(orgId));
+	cacheEvents.recipeList.update.emit(orgId, list.id);
 
 	return entry;
 }

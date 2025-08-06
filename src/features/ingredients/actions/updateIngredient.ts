@@ -5,8 +5,8 @@ import {
 	IngredientsTable,
 	updateIngredientSchema,
 } from "@/db/schema/ingredients";
-import { revalidateIngredientPaths } from "@/features/ingredients/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function updateIngredient(
 	id: string,
@@ -29,7 +29,7 @@ export async function updateIngredient(
 		.where(and(eq(IngredientsTable.id, id), eq(IngredientsTable.orgId, orgId)))
 		.returning();
 
-	revalidateIngredientPaths(id);
+	cacheEvents.ingredient.update.emit(orgId, id);
 
 	return result;
 }

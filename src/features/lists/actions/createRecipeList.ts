@@ -1,7 +1,6 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
@@ -15,8 +14,8 @@ import {
 	generateDefaultRecipeListName,
 	getRecipeListUrl,
 } from "@/features/lists/utils";
-import { getRecipeListCacheTag } from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function createRecipeList(
 	userInputList: RecipeListFormData,
@@ -41,8 +40,7 @@ export async function createRecipeList(
 		.values(validatedList)
 		.returning();
 
-	revalidatePath("/bar/lists", "page");
-	revalidateTag(getRecipeListCacheTag(orgId));
+	cacheEvents.recipeList.create.emit(orgId);
 
 	return list;
 }

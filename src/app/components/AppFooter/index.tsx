@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { ThemePicker } from "@/app/components/ThemePicker";
@@ -9,7 +10,7 @@ import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-export function AppFooter({
+export async function AppFooter({
 	className,
 	...props
 }: Omit<ComponentProps<"footer">, "children">) {
@@ -82,9 +83,7 @@ export function AppFooter({
 				</Flex>
 
 				<div>
-					<Text as="div" size={1} light>
-						Copyright © {new Date().getFullYear()} Bespoke Bar
-					</Text>
+					<Copyright />
 
 					{process.env.VERCEL_GIT_COMMIT_SHA ? (
 						<Text
@@ -100,5 +99,16 @@ export function AppFooter({
 				</div>
 			</Grid>
 		</footer>
+	);
+}
+
+async function Copyright() {
+	"use cache";
+	cacheTag("current-year");
+
+	return (
+		<Text as="div" size={1} light>
+			Copyright © {new Date().getFullYear()} Bespoke Bar
+		</Text>
 	);
 }

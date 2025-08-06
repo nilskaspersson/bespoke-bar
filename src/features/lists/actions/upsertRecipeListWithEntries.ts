@@ -1,7 +1,6 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
@@ -14,19 +13,16 @@ import {
 	upsertRecipeListInTransaction,
 } from "@/features/lists/actions/utils/transactionHelpers";
 import { getRecipeListUrl } from "@/features/lists/utils";
-import {
-	getRecipeListCacheTag,
-	revalidateRecipeListPaths,
-} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function upsertRecipeListWithEntries(
 	userInputList: RecipeListWithEntriesFormData,
 ): Promise<RecipeList> {
 	const { userId, orgId } = await authOrForbidden();
 
-	const result = await db.transaction(async (tx) => {
-		const list = await upsertRecipeListInTransaction(
+	const [result, isNew] = await db.transaction(async (tx) => {
+		const [list, isNew] = await upsertRecipeListInTransaction(
 			tx,
 			userInputList.recipeList,
 			userId,
@@ -40,15 +36,14 @@ export async function upsertRecipeListWithEntries(
 			orgId,
 		);
 
-		return list;
+		return [list, isNew];
 	});
 
-	revalidateRecipeListPaths({
-		id: result.id,
-		shouldRevalidateBar: result.isFeatured,
-	});
-
-	revalidateTag(getRecipeListCacheTag(orgId));
+	if (isNew) {
+		cacheEvents.recipeList.create.emit(orgId);
+	} else {
+		cacheEvents.recipeList.update.emit(orgId, result.id);
+	}
 
 	return result;
 }

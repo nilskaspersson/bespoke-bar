@@ -1,17 +1,15 @@
 "use server";
 
-import { and, eq, or, sql } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
-import { RecipeListsTable } from "@/db/schema/recipeLists";
-import { authOrForbidden } from "@/utils/auth";
+import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
+import { cacheTags } from "@/utils/cache";
 
 const preparedReadRecipeList = db.query.RecipeListsTable.findFirst({
 	where: and(
 		eq(RecipeListsTable.id, sql.placeholder("listId")),
-		or(
-			eq(RecipeListsTable.createdBy, sql.placeholder("userId")),
-			eq(RecipeListsTable.orgId, sql.placeholder("orgId")),
-		),
+		eq(RecipeListsTable.orgId, sql.placeholder("orgId")),
 	),
 	with: {
 		entries: {
@@ -30,18 +28,17 @@ const preparedReadRecipeList = db.query.RecipeListsTable.findFirst({
 	},
 }).prepare("readRecipeList");
 
-export async function readRecipeList(id: string | undefined) {
-	if (!id) {
-		return undefined;
-	}
-
-	const { userId, orgId } = await authOrForbidden();
-
+export async function readRecipeList(orgId: string, id: RecipeList["id"]) {
 	const list = await preparedReadRecipeList.execute({
 		listId: id,
-		userId,
 		orgId,
 	});
 
 	return list;
+}
+
+export async function getCachedRecipeList(orgId: string, id: RecipeList["id"]) {
+	"use cache";
+	cacheTag(...cacheTags.recipeListWithRecipes(orgId, id));
+	return await readRecipeList(orgId, id);
 }

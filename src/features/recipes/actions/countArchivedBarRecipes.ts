@@ -1,13 +1,12 @@
 "use server";
 
 import { and, count, eq, isNotNull } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
-import { authOrForbidden } from "@/utils/auth";
+import { cacheTags } from "@/utils/cache";
 
-export async function countArchivedBarRecipes() {
-	const { orgId } = await authOrForbidden();
-
+export async function countArchivedBarRecipes(orgId: string) {
 	const [result] = await db
 		.select({ count: count() })
 		.from(RecipesTable)
@@ -16,4 +15,10 @@ export async function countArchivedBarRecipes() {
 		);
 
 	return result.count;
+}
+
+export async function getCachedCountArchivedBarRecipes(orgId: string) {
+	"use cache";
+	cacheTag(...cacheTags.barRecipes(orgId));
+	return await countArchivedBarRecipes(orgId);
 }

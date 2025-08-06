@@ -1,18 +1,14 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import {
 	RecipeListEntriesTable,
 	type RecipeListEntry,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import {
-	getRecipeListCacheTag,
-	revalidateRecipeListPaths,
-} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function removeRecipeFromList(
 	entryId: string,
@@ -47,12 +43,7 @@ export async function removeRecipeFromList(
 		throw new Error("Recipe not found, or access denied");
 	}
 
-	revalidateRecipeListPaths({
-		id: deletedEntry.listId,
-		shouldRevalidateBar: true,
-	});
-
-	revalidateTag(getRecipeListCacheTag(orgId));
+	cacheEvents.recipeList.update.emit(orgId, deletedEntry.listId);
 
 	return deletedEntry;
 }

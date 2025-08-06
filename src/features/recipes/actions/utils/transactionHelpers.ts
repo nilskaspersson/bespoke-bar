@@ -16,7 +16,7 @@ export async function upsertRecipeInTransaction(
 	recipe: RecipeFormData["recipe"],
 	userId: string,
 	orgId: string,
-): Promise<Recipe> {
+): Promise<[Recipe, boolean]> {
 	/**
 	 * Update existing recipe if request includes a recipe with an id
 	 */
@@ -31,7 +31,7 @@ export async function upsertRecipeInTransaction(
 			.where(and(eq(RecipesTable.id, recipe.id), eq(RecipesTable.orgId, orgId)))
 			.returning();
 
-		return updatedRecipe;
+		return [updatedRecipe, false];
 	}
 
 	/**
@@ -46,7 +46,7 @@ export async function upsertRecipeInTransaction(
 		})
 		.returning();
 
-	return newRecipe;
+	return [newRecipe, true];
 }
 
 export async function insertIngredientsInTransaction(

@@ -11,8 +11,8 @@ import {
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import { revalidateRecipePaths } from "@/features/recipes/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function updateRecipe(
 	id: Recipe["id"],
@@ -32,7 +32,7 @@ export async function updateRecipe(
 		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)))
 		.returning();
 
-	revalidateRecipePaths([id]);
+	cacheEvents.recipe.update.emit(orgId, id);
 
 	return result;
 }

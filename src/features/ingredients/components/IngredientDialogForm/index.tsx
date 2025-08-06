@@ -8,7 +8,6 @@ import { SelectCategory } from "@/features/ingredients/components/SelectCategory
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
-import { useFormatter } from "@/hooks/useFormatter";
 import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
 import type { Dialog } from "@/ui/Dialog";
@@ -28,7 +27,6 @@ export function IngredientDialogForm({
 	const [field] = useField(name);
 
 	const ingredient = field.getFieldset();
-	const { options } = useFormatter();
 
 	const handleClose = useCallback(() => {
 		ref.current?.close();
@@ -88,7 +86,6 @@ export function IngredientDialogForm({
 					label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType.value)}`}
 					name={ingredient.unitCost.name}
 					defaultValue={ingredient.unitCost.defaultValue}
-					currency={options.currency}
 				/>
 
 				<TextField

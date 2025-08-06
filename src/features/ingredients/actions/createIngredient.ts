@@ -6,6 +6,7 @@ import {
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 /**
  * Create a new ingredient in the database.
@@ -29,6 +30,8 @@ export async function createIngredient(
 		.insert(IngredientsTable)
 		.values(validatedUserInputIngredient)
 		.returning();
+
+	cacheEvents.ingredient.create.emit(orgId);
 
 	return ingredient;
 }

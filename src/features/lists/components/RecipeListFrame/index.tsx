@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import type { RecipeList } from "@/db/schema/recipeLists";
+import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
@@ -34,14 +34,12 @@ function OptionalLink({
 
 export function RecipeListFrame({
 	list,
-	recipeCount,
 	children,
 	className,
 	href,
 	level = "h3",
 }: {
-	list: RecipeList;
-	recipeCount: number;
+	list: RecipeListWithEntries;
 	href?: string;
 	level?: HeadingLevel;
 } & ComponentProps<"section">) {
@@ -71,7 +69,7 @@ export function RecipeListFrame({
 						</Text>
 					) : null}
 
-					<RecipesCountBadge count={recipeCount} color="amber" />
+					<RecipesCountBadge count={list.entries.length} color="amber" />
 				</div>
 
 				{children}

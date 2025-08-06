@@ -1,9 +1,10 @@
 "use server";
 
 import { and, eq, sql } from "drizzle-orm";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
-import { IngredientsTable } from "@/db/schema/ingredients";
-import { authOrForbidden } from "@/utils/auth";
+import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
+import { cacheTags } from "@/utils/cache";
 
 const preparedReadIngredient = db.query.IngredientsTable.findFirst({
 	where: and(
@@ -12,17 +13,15 @@ const preparedReadIngredient = db.query.IngredientsTable.findFirst({
 	),
 }).prepare("readIngredient");
 
-export async function readIngredient(id: string | undefined) {
-	if (!id) {
-		return undefined;
-	}
-
-	const { orgId } = await authOrForbidden();
-
-	const ingredient = await preparedReadIngredient.execute({
+export async function readIngredient(orgId: string, id: Ingredient["id"]) {
+	return await preparedReadIngredient.execute({
 		orgId,
 		ingredientId: id,
 	});
+}
 
-	return ingredient;
+export async function getCachedIngredient(orgId: string, id: Ingredient["id"]) {
+	"use cache";
+	cacheTag(...cacheTags.ingredient(orgId, id));
+	return await readIngredient(orgId, id);
 }

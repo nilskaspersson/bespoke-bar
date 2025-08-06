@@ -1,8 +1,6 @@
+import { recipeListWithEntriesSchema } from "@/db/schema/composite";
 import type { RecipeListEntry } from "@/db/schema/recipeListEntries";
-import {
-	type RecipeList,
-	recipeListWithCountSchema,
-} from "@/db/schema/recipeLists";
+import type { RecipeList } from "@/db/schema/recipeLists";
 import { isObject } from "@/utils";
 import { createFetcher } from "@/utils/api";
 import { namedEntityToUrlSlug } from "@/utils/url";
@@ -24,5 +22,5 @@ export function isRecipeListEntry(entry: unknown): entry is RecipeListEntry {
 }
 
 export const recipeListFetcher = createFetcher(
-	recipeListWithCountSchema.array().optional(),
+	recipeListWithEntriesSchema.array().optional(),
 );

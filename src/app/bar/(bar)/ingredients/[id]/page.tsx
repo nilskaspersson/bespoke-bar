@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
-import { readIngredient } from "@/features/ingredients/actions/readIngredient";
+import { getCachedIngredient } from "@/features/ingredients/actions/readIngredient";
 import { DeleteIngredient } from "@/features/ingredients/components/DeleteIngredient";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
-import { readBarRecipes } from "@/features/recipes/actions/readBarRecipes";
+import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
@@ -16,6 +16,7 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 type Props = {
@@ -24,9 +25,16 @@ type Props = {
 
 export default async function IngredientPage({ params }: Props) {
 	const { id } = await params;
+
+	if (!id) {
+		notFound();
+	}
+
+	const { orgId } = await authOrForbidden();
+
 	const [ingredient, recipes, members] = await Promise.all([
-		readIngredient(id),
-		readBarRecipes(),
+		getCachedIngredient(orgId, id),
+		getCachedBarRecipes(orgId),
 		readOrganisationMembers(),
 	]);
 
@@ -126,11 +134,19 @@ export default async function IngredientPage({ params }: Props) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { id } = await params;
-	const ingredient = await readIngredient(id);
+
+	if (!id) {
+		return {
+			title: "Ingredient not found",
+		};
+	}
+
+	const { orgId } = await authOrForbidden();
+	const ingredient = await getCachedIngredient(orgId, id);
 
 	if (!ingredient) {
 		return {
-			title: "Mystery ingredient",
+			title: "Ingredient not found",
 		};
 	}
 

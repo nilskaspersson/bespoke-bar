@@ -1,14 +1,10 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
-import {
-	getRecipeListCacheTag,
-	revalidateRecipeListPaths,
-} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function clearFeaturedList() {
 	const { orgId } = await authOrForbidden();
@@ -27,10 +23,7 @@ export async function clearFeaturedList() {
 		)
 		.returning();
 
-	revalidateRecipeListPaths({
-		id: list.id,
-		shouldRevalidateBar: true,
-	});
+	cacheEvents.recipeList.update.emit(orgId, list.id);
 
-	revalidateTag(getRecipeListCacheTag(orgId));
+	return list;
 }

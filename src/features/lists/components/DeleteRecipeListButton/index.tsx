@@ -1,7 +1,7 @@
 "use client";
 
 import { type PropsWithChildren, useCallback } from "react";
-import type { RecipeList } from "@/db/schema/recipeLists";
+import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { useServerAction } from "@/hooks/useServerAction";
 import type { ButtonProps } from "@/ui/Button";
@@ -9,22 +9,24 @@ import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
 import { toast } from "@/ui/Toast";
+import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
 import styles from "./styles.module.css";
 
 export function DeleteRecipeListButton({
 	action,
 	children,
 	list,
-	recipeCount,
 	...buttonProps
 }: PropsWithChildren<{
 	action: () => Promise<void>;
 	className?: string;
-	list: RecipeList;
-	recipeCount: number;
+	list: RecipeListWithEntries;
 }> &
 	ButtonProps) {
-	const { action: deleteList } = useServerAction(action);
+	const { action: deleteList } = useServerAction(
+		action,
+		mutateSWRRecipeListsCache,
+	);
 
 	const handleSubmit = useCallback(async () => {
 		const promise = deleteList();
@@ -65,11 +67,7 @@ export function DeleteRecipeListButton({
 						.
 					</Text>
 
-					<RecipeListFrame
-						list={list}
-						recipeCount={recipeCount}
-						className={styles.card}
-					/>
+					<RecipeListFrame list={list} className={styles.card} />
 				</Grid>
 			}
 		>

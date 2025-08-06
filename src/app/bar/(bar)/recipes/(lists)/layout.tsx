@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { PageHeader } from "@/app/components/PageHeader";
 import { SwitchListView } from "@/app/components/SwitchListView";
 import { StatLinks } from "@/features/recipes/components/StatLinks";
@@ -37,13 +38,13 @@ export default async function Layout({
 				alignItems="center"
 				className={styles.navigation}
 			>
-				<StatLinks />
+				<Suspense>
+					<StatLinks />
+				</Suspense>
 
-				<menu>
-					<li>
-						<SwitchListView />
-					</li>
-				</menu>
+				<div>
+					<SwitchListView />
+				</div>
 			</Flex>
 
 			{children}

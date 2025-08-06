@@ -14,7 +14,7 @@ export async function upsertRecipeListInTransaction(
 	recipeListData: RecipeListWithEntriesFormData["recipeList"],
 	userId: string,
 	orgId: string,
-): Promise<RecipeList> {
+): Promise<[RecipeList, boolean]> {
 	/**
 	 * Update existing list if it has an ID
 	 */
@@ -39,7 +39,7 @@ export async function upsertRecipeListInTransaction(
 			throw new Error("List not found or access denied");
 		}
 
-		return updatedList;
+		return [updatedList, false];
 	}
 
 	const [newList] = await tx
@@ -52,7 +52,7 @@ export async function upsertRecipeListInTransaction(
 		})
 		.returning();
 
-	return newList;
+	return [newList, true];
 }
 
 /**

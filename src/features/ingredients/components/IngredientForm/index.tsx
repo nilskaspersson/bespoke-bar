@@ -9,13 +9,7 @@ import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 
-export function IngredientForm({
-	currency,
-	ingredient,
-}: {
-	currency: string;
-	ingredient?: Ingredient;
-}) {
+export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 	return (
 		<Grid gap={5}>
 			<TextField
@@ -52,7 +46,6 @@ export function IngredientForm({
 			/>
 
 			<SelectUnitCost
-				currency={currency}
 				label={`Cost per ${getMeasurementPriceUnit(ingredient?.measurementType)}`}
 				name="unitCost"
 				defaultValue={ingredient?.unitCost ?? undefined}

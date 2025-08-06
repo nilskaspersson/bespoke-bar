@@ -1,15 +1,11 @@
 "use server";
 
 import { and, eq } from "drizzle-orm";
-import { revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
-import {
-	getRecipeListCacheTag,
-	revalidateRecipeListPaths,
-} from "@/features/lists/utils/server";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function deleteRecipeList({
 	id,
@@ -20,17 +16,11 @@ export async function deleteRecipeList({
 }): Promise<void> {
 	const { orgId } = await authOrForbidden();
 
-	const [result] = await db
+	await db
 		.delete(RecipeListsTable)
-		.where(and(eq(RecipeListsTable.id, id), eq(RecipeListsTable.orgId, orgId)))
-		.returning();
+		.where(and(eq(RecipeListsTable.id, id), eq(RecipeListsTable.orgId, orgId)));
 
-	revalidateRecipeListPaths({
-		id,
-		shouldRevalidateBar: result.isFeatured,
-	});
-
-	revalidateTag(getRecipeListCacheTag(orgId));
+	cacheEvents.recipeList.delete.emit(orgId, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);
