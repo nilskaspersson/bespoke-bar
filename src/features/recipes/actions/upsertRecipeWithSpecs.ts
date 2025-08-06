@@ -25,49 +25,51 @@ async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 		orgId,
 	);
 
-	const result = await db.transaction(async (tx) => {
-		/**
-		 * Step 1: Insert all new ingredients once and create a name-to-id mapping
-		 */
-		const createdIngredientNamesToId = await insertIngredientsInTransaction(
-			tx,
-			Array.from(ingredientsToCreate.values()),
-		);
-
-		/**
-		 * Step 2: Create or update each recipe
-		 */
-		const processedRecipes: [Recipe, boolean][] = [];
-
-		for (const o of userInputRecipes) {
+	const [recipes, createdIngredientNamesToId] = await db.transaction(
+		async (tx) => {
 			/**
-			 * Step 3: Upsert the recipe
+			 * Step 1: Insert all new ingredients once and create a name-to-id mapping
 			 */
-			const [processedRecipe, isNew] = await upsertRecipeInTransaction(
+			const createdIngredientNamesToId = await insertIngredientsInTransaction(
 				tx,
-				o.recipe,
-				userId,
-				orgId,
+				Array.from(ingredientsToCreate.values()),
 			);
 
 			/**
-			 * Step 4: Replace all specs for the recipe with provided specs
-			 * TODO: Merge with `processedRecipe` for a more complete return value?
+			 * Step 2: Create or update each recipe
 			 */
-			await replaceSpecsInTransaction(
-				tx,
-				processedRecipe.id,
-				o.specs,
-				createdIngredientNamesToId,
-			);
+			const processedRecipes: [Recipe, boolean][] = [];
 
-			processedRecipes.push([processedRecipe, isNew]);
-		}
+			for (const o of userInputRecipes) {
+				/**
+				 * Step 3: Upsert the recipe
+				 */
+				const [processedRecipe, isNew] = await upsertRecipeInTransaction(
+					tx,
+					o.recipe,
+					userId,
+					orgId,
+				);
 
-		return processedRecipes;
-	});
+				/**
+				 * Step 4: Replace all specs for the recipe with provided specs
+				 * TODO: Merge with `processedRecipe` for a more complete return value?
+				 */
+				await replaceSpecsInTransaction(
+					tx,
+					processedRecipe.id,
+					o.specs,
+					createdIngredientNamesToId,
+				);
 
-	result.forEach(([recipe, isNew]) => {
+				processedRecipes.push([processedRecipe, isNew]);
+			}
+
+			return [processedRecipes, createdIngredientNamesToId];
+		},
+	);
+
+	recipes.forEach(([recipe, isNew]) => {
 		if (isNew) {
 			cacheEvents.recipe.create.emit(orgId);
 		} else {
@@ -75,7 +77,11 @@ async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 		}
 	});
 
-	return result.map(([recipe]) => recipe);
+	if (createdIngredientNamesToId.size > 0) {
+		cacheEvents.ingredient.create.emit(orgId);
+	}
+
+	return recipes.map(([recipe]) => recipe);
 }
 
 export async function upsertRecipeWithSpecsAction(
