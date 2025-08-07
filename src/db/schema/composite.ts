@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
 import {
 	type RecipeListEntryWithRecipe,

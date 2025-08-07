@@ -1,4 +1,4 @@
-import type { z } from "zod/v4";
+import type { z } from "zod";
 
 export async function fetcher<T>(
 	...args: Parameters<typeof fetch>

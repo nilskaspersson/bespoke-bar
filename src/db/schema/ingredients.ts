@@ -15,7 +15,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { z } from "zod/v4";
+import { z } from "zod";
 import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes, supportedMeasurements } from "@/db/schema/units";

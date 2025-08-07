@@ -2,7 +2,7 @@
 
 import { parseWithZod } from "@conform-to/zod/v4";
 import { redirect } from "next/navigation";
-import z from "zod/v4";
+import z from "zod";
 import { db } from "@/db";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";

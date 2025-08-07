@@ -13,7 +13,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { z } from "zod/v4";
+import { z } from "zod";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { RecipesTable, type RecipeWithSpecs } from "@/db/schema/recipes";
 

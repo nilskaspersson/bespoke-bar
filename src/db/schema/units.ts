@@ -1,6 +1,6 @@
 import { pgEnum } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
-import type { z } from "zod/v4";
+import type { z } from "zod";
 
 /**
  * These are some of the volume units from `convert-units`. We are likely going to

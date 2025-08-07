@@ -1,4 +1,4 @@
-import z from "zod/v4";
+import z from "zod";
 
 const CURRENCY_PATTERN = /[^0-9.-]/g;
 

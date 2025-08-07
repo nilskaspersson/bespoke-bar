@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import z from "zod/v4";
+import z from "zod";
 import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import { sqlNormalizedString } from "@/db/utils";
 

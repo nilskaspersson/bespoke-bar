@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useDeferredValue, useId, useState } from "react";
-import z from "zod/v4";
+import z from "zod";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";

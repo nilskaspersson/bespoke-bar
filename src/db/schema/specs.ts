@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { z } from "zod/v4";
+import { z } from "zod";
 import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import { RecipesTable } from "@/db/schema/recipes";
 import { unitEnum } from "@/db/schema/units";

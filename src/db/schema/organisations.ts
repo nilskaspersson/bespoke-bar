@@ -1,7 +1,7 @@
 import { index, pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
 import { createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import type z from "zod/v4";
+import type z from "zod";
 
 export const OrganisationsTable = pgTable(
 	"organisations",
