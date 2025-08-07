@@ -8,6 +8,7 @@ import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
@@ -54,7 +55,12 @@ export default async function EditRecipeListPage({
 					<Heading level="h1">Edit List</Heading>
 				</header>
 
-				<RecipeListForm recipeList={recipeList} recipes={recipes} />
+				<RecipeListForm recipeList={recipeList} recipes={recipes}>
+					<SubmitButton variant="solid" color="accent">
+						<Icon name="pen" />
+						Save changes
+					</SubmitButton>
+				</RecipeListForm>
 			</Grid>
 		</Container>
 	);

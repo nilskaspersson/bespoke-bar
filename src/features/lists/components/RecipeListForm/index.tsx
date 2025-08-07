@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useRef } from "react";
+import { type ReactNode, useCallback, useRef } from "react";
 import {
 	type RecipeListWithRecipes,
 	recipeListWithEntriesFormSchema,
@@ -15,8 +15,6 @@ import { Button } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
 import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
@@ -24,9 +22,10 @@ import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
 type Props = {
 	recipeList?: RecipeListWithRecipes;
 	recipes?: Recipe[];
+	children: ReactNode;
 };
 
-export function RecipeListForm({ recipes, recipeList }: Props) {
+export function RecipeListForm({ recipes, recipeList, children }: Props) {
 	const { action } = useServerAction(
 		upsertRecipeListWithEntriesAction,
 		mutateSWRRecipeListsCache,
@@ -164,12 +163,7 @@ export function RecipeListForm({ recipes, recipeList }: Props) {
 
 					<FormErrors formRef={formRef} />
 
-					<div>
-						<SubmitButton variant="solid" color="accent" form={form.id}>
-							<Icon name="pen" />
-							Create list
-						</SubmitButton>
-					</div>
+					<div>{children}</div>
 				</Grid>
 			</form>
 		</FormProvider>
