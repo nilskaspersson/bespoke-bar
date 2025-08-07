@@ -2,18 +2,23 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useRef } from "react";
+import { Fragment, useCallback, useId, useRef, useState } from "react";
 import useSWRImmutable from "swr/immutable";
-import type { RecipeListWithEntries } from "@/db/schema/composite";
-import { recipeListEntryFormSchema } from "@/db/schema/recipeListEntries";
+import {
+	type RecipeListWithEntries,
+	recipeListWithEntriesFormSchema,
+} from "@/db/schema/composite";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { addRecipeToListAction } from "@/features/lists/actions/addRecipeToList";
+import { appendRecipeListEntryAction } from "@/features/lists/actions/appendRecipeListEntry";
 import { removeRecipeFromList } from "@/features/lists/actions/removeRecipeFromList";
 import { RecipeEntryPriceCalculation } from "@/features/lists/components/RecipeEntryPriceCalculation";
 import { RecipeListEntryCard } from "@/features/lists/components/RecipeListEntryCard";
 import { RemoveListEntryButton } from "@/features/lists/components/RemoveListEntryButton";
 import { SelectRecipeList } from "@/features/lists/components/SelectRecipeList";
-import { isRecipeListEntry, recipeListFetcher } from "@/features/lists/utils";
+import {
+	isRecipeListWithEntries,
+	recipeListFetcher,
+} from "@/features/lists/utils";
 import { useModalContext } from "@/hooks/useModal";
 import { useServerAction } from "@/hooks/useServerAction";
 import { Alert } from "@/ui/Alert";
@@ -22,7 +27,10 @@ import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
+import { OptionItem } from "@/ui/OptionItem";
 import { SubmitButton } from "@/ui/SubmitButton";
+import { Text } from "@/ui/Text";
+import { TextField } from "@/ui/TextField";
 import { ToastActions, toast } from "@/ui/Toast";
 import { currencySchema } from "@/utils/currencySchema";
 import styles from "./styles.module.css";
@@ -34,28 +42,39 @@ type Props = {
 export function CreateRecipeEntryDialog({ recipe }: Props) {
 	const { handleClose } = useModalContext();
 	const formRef = useRef<HTMLFormElement>(null);
+	const [withNewList, setWithNewList] = useState(false);
 
 	const { data: lists } = useSWRImmutable<RecipeListWithEntries[] | undefined>(
 		"/api/lists",
 		recipeListFetcher,
 	);
 
-	const { action } = useServerAction(addRecipeToListAction, handleClose);
+	const { action } = useServerAction(appendRecipeListEntryAction, handleClose);
 
 	const [form, fields] = useForm({
 		id: `create-recipe-entry-${recipe.id}`,
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
-				schema: recipeListEntryFormSchema,
+				schema: recipeListWithEntriesFormSchema,
 			});
 		},
 		defaultValue: {
-			recipeId: recipe.id,
-			price: "",
-			sortOrder: "",
-			listId: "",
+			recipeList: {
+				id: "",
+				name: "",
+			},
+			entries: [
+				{
+					recipeId: recipe.id,
+					price: "",
+					sortOrder: "",
+				},
+			],
 		},
 	});
+
+	const entries = fields.entries.getFieldList();
+	const recipeList = fields.recipeList.getFieldset();
 
 	const handleSubmit = useCallback(
 		async (formData: FormData) => {
@@ -66,17 +85,17 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 
 				toast.promise(promise, {
 					id: toastId,
-					loading: "Adding to list…",
+					loading: withNewList ? "Creating list…" : "Adding to list…",
 					success: (result) => ({
-						message: "Recipe added",
-						action: isRecipeListEntry(result) ? (
+						message: withNewList ? "List created" : "Recipe added to List",
+						action: isRecipeListWithEntries(result) ? (
 							<ToastActions>
 								<RemoveListEntryButton
 									size="tiny"
 									variant="ghost"
 									color="heavy"
 									actionRemove={removeRecipeFromList}
-									entry={result}
+									entry={result.entries[0]}
 									onClick={() => toast.dismiss(toastId)}
 								>
 									Undo
@@ -84,13 +103,13 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 
 								<LinkButton
 									size="tiny"
-									href={`/bar/lists/${result.listId}`}
+									href={`/bar/lists/${result.id}`}
 									variant="ghost"
 									color="heavy"
 									prefetch={false}
 									onClick={() => toast.dismiss(toastId)}
 								>
-									View list
+									View List
 									<Icon name="angles-right" size={0} />
 								</LinkButton>
 							</ToastActions>
@@ -100,15 +119,14 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 						message:
 							error instanceof Error
 								? error.message
-								: "Recipe could not be added to list.",
+								: "Recipe could not be added to List.",
 					}),
 				});
 			} catch (_e) {}
 		},
-		[action],
+		[action, withNewList],
 	);
-
-	const parsedPrice = currencySchema.safeParse(fields.price.value);
+	const selectId = useId();
 
 	return (
 		<FormProvider context={form.context}>
@@ -132,63 +150,149 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 								Cancel
 							</Button>
 
-							<SubmitButton variant="solid" color="heavy" size="small">
-								Add
+							<SubmitButton
+								variant="solid"
+								color="heavy"
+								size="small"
+								disabled={!recipeList.name.value && !recipeList.id.value}
+							>
+								{recipeList.name.value
+									? "Create List with Recipe"
+									: "Add Recipe to List"}
 							</SubmitButton>
 						</>
 					}
 				>
 					<input type="submit" hidden form={form.id} />
 
-					<input
-						type="hidden"
-						name={fields.recipeId.name}
-						value={fields.recipeId.value}
-					/>
+					<Grid gap={4}>
+						<Grid gap={2}>
+							{withNewList ? (
+								<TextField
+									label="New List name"
+									name={recipeList.name.name}
+									defaultValue={recipeList.name.defaultValue}
+									id={recipeList.name.id}
+									required
+									large
+									fullWidth
+									autoFocus
+								/>
+							) : (
+								<SelectRecipeList
+									label="List"
+									lists={lists}
+									id={selectId}
+									name={recipeList.id.name}
+									defaultValue={recipeList.id.defaultValue}
+									required
+									inputProps={{
+										large: true,
+										fullWidth: true,
+									}}
+									comboboxProps={{
+										initialInputValue: recipeList.name.value,
+									}}
+									renderCreateListItem={({ closeMenu, inputValue }) => (
+										<OptionItem
+											onClick={() => {
+												form.update({
+													name: recipeList.name.name,
+													value: inputValue.trim(),
+												});
 
-					<Grid gap={4} className={styles.grid}>
-						<RecipeListEntryCard
-							className={styles.card}
-							entry={{
-								id: "",
-								orgId: "",
-								recipe,
-								recipeId: recipe.id,
-								listId: fields.listId.value ?? "",
-								price: parsedPrice.success ? parsedPrice.data : null,
-								sortOrder: null,
-							}}
-						/>
+												setWithNewList(true);
+												closeMenu?.();
+											}}
+										>
+											Create new List
+										</OptionItem>
+									)}
+								/>
+							)}
 
-						<Icon name="arrow-down-long" size={6} className={styles.arrow} />
+							<div>
+								<Button
+									variant="outline"
+									color="light"
+									size="tiny"
+									onClick={() => {
+										const searchValue = document
+											.getElementById(selectId)
+											?.querySelector<HTMLInputElement>(
+												"input[type='search']",
+											)?.value;
 
-						<SelectRecipeList
-							label="List"
-							lists={lists}
-							name={fields.listId.name}
-							defaultValue={fields.listId.defaultValue}
-							required
-							inputProps={{
-								large: true,
-								fullWidth: true,
-							}}
-						/>
+										if (searchValue) {
+											form.update({
+												name: recipeList.name.name,
+												value: searchValue.trim(),
+											});
+										}
 
-						<Grid gap={5} className={styles.price}>
-							<CurrencyInput
-								label="Sales price"
-								name={fields.price.name}
-								defaultValue={fields.price.defaultValue}
-								id={fields.price.id}
-								compact
-							/>
+										setWithNewList((prev) => !prev);
+									}}
+								>
+									{withNewList ? "Use existing List" : "Create new List"}
+								</Button>
+							</div>
 
-							<RecipeEntryPriceCalculation
-								price={fields.price.value}
-								recipe={recipe}
-								priceInputId={fields.price.id}
-							/>
+							<Icon name="arrow-up-long" size={6} className={styles.arrow} />
 						</Grid>
+
+						{entries.map((entry) => {
+							const entryFields = entry.getFieldset();
+							const parsedPrice = currencySchema.safeParse(
+								entryFields.price.value,
+							);
+
+							return (
+								<Fragment key={entry.id}>
+									<input
+										type="hidden"
+										name={entryFields.recipeId.name}
+										defaultValue={entryFields.recipeId.defaultValue}
+									/>
+
+									<Grid className={styles.grid}>
+										<RecipeListEntryCard
+											className={styles.card}
+											entry={{
+												id: "",
+												orgId: "",
+												recipe,
+												recipeId: recipe.id,
+												listId: recipeList.id.value ?? "",
+												price: parsedPrice.success ? parsedPrice.data : null,
+												sortOrder: null,
+											}}
+										>
+											<details>
+												<Text as="summary" size={2}>
+													Set sales price
+												</Text>
+
+												<Grid as="fieldset" gap={5} className={styles.price}>
+													<CurrencyInput
+														label="Sales price"
+														name={entryFields.price.name}
+														defaultValue={entryFields.price.defaultValue}
+														id={entryFields.price.id}
+														compact
+													/>
+
+													<RecipeEntryPriceCalculation
+														price={entryFields.price.value}
+														recipe={recipe}
+														priceInputId={entryFields.price.id}
+													/>
+												</Grid>
+											</details>
+										</RecipeListEntryCard>
+									</Grid>
+								</Fragment>
+							);
+						})}
 
 						<FormErrors formRef={formRef} />
 					</Grid>

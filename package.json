@@ -31,7 +31,7 @@
 		"drizzle-orm": "0.44.4",
 		"drizzle-zod": "0.8.2",
 		"nanoid": "5.1.5",
-		"next": "15.4.2-canary.29",
+		"next": "15.4.2-canary.31",
 		"next-themes": "0.4.6",
 		"nuqs": "2.4.3",
 		"pg": "8.16.3",
@@ -57,12 +57,12 @@
 		"vite-tsconfig-paths": "5.1.4",
 		"vitest": "3.2.4"
 	},
-  "overrides": {
-    "@clerk/nextjs": {
-      "next": "$next"
-    },
-    "nuqs": {
-      "next": "$next"
-    }
-  }
+	"overrides": {
+		"@clerk/nextjs": {
+			"next": "$next"
+		},
+		"nuqs": {
+			"next": "$next"
+		}
+	}
 }

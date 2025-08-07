@@ -86,7 +86,7 @@ export type IngredientFormData = z.infer<typeof ingredientFormDataSchema>;
  */
 export const recipeListWithEntriesFormSchema = z.object({
 	recipeList: recipeListFormSchema,
-	entries: z.array(recipeListEntryFormSchema),
+	entries: z.array(recipeListEntryFormSchema.omit({ listId: true })),
 });
 
 export type RecipeListWithEntriesFormData = z.infer<
