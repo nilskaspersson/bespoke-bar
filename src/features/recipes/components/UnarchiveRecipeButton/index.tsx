@@ -1,6 +1,7 @@
 "use client";
 
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { unarchiveRecipe } from "@/features/recipes/actions/archiveRecipe";
 import { ArchiveRecipeButton } from "@/features/recipes/components/ArchiveRecipeButton";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
@@ -10,19 +11,15 @@ import { ToastActions, toast } from "@/ui/Toast";
 
 export function UnarchiveRecipeButton({
 	recipe,
-	actionUnarchive,
-	actionArchive,
 	children,
 	...buttonProps
 }: {
 	recipe: RecipeWithSpecs;
-	actionUnarchive: (args: { id: string }) => Promise<void>;
-	actionArchive: (args: { id: string }) => Promise<void>;
 } & ButtonProps) {
-	const { action: unarchiveRecipe } = useServerAction(actionUnarchive);
+	const { action: actionUnarchiveRecipe } = useServerAction(unarchiveRecipe);
 
 	const handleUnarchive = async () => {
-		const promise = unarchiveRecipe({
+		const promise = actionUnarchiveRecipe({
 			id: recipe.id,
 		});
 
@@ -37,8 +34,6 @@ export function UnarchiveRecipeButton({
 					<ToastActions>
 						<ArchiveRecipeButton
 							recipe={recipe}
-							actionArchive={actionArchive}
-							actionUnarchive={actionUnarchive}
 							variant="ghost"
 							color="red"
 							size="tiny"
@@ -62,7 +57,7 @@ export function UnarchiveRecipeButton({
 					</ToastActions>
 				),
 			}),
-			error: "Could not restore recipe. Please try again later.",
+			error: "Could not restore recipe. Try again later.",
 		});
 	};
 

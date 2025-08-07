@@ -1,44 +1,119 @@
-import { clsx } from "clsx";
+import Link from "next/link";
 import type { ReactNode } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
+import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { Abv } from "@/features/ingredients/components/Abv";
+import { RecipeName } from "@/features/recipes/components/RecipeName";
+import {
+	COCKTAIL_STYLE_TO_LABEL,
+	GLASSWARE_TO_LABEL,
+	METHOD_TO_LABEL,
+} from "@/features/recipes/constants";
+import { getRecipeUrl } from "@/features/recipes/utils";
+import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { useFormatter } from "@/hooks/useFormatter";
+import { Chip } from "@/ui/Chip";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-export function RecipeCard<T extends BaseRecipe>({
-	recipe,
-	header,
-	tools,
-	servings,
-	withConversionSystem,
-	className,
-}: {
-	recipe: T;
-	header?: ReactNode;
-	tools?: ReactNode;
-	servings?: number;
-	withConversionSystem?: UnitSystems | null;
+type Props = {
+	recipe: RecipeWithSpecs;
 	className?: string;
-}) {
-	if (!recipe.specs || recipe.specs.length === 0) {
-		return null;
-	}
+	nameAdornment?: ReactNode;
+	children?: ReactNode;
+	servings?: number;
+	convertUnits?: UnitSystems | null;
+};
+
+export function RecipeCard({
+	recipe,
+	className,
+	nameAdornment,
+	children,
+	servings,
+	convertUnits,
+}: Props) {
+	const metrics = calculateRecipeMetrics(recipe);
+	const { percentageFormatter } = useFormatter();
 
 	return (
-		<div className={clsx(styles.base, className)}>
-			<Grid className={styles.card} gap={3}>
-				{header}
+		<Grid gap={4} className={className}>
+			<Grid as="header" gap={1}>
+				<div className={styles.line}>
+					<Heading level="h3" serif size={5} className={styles.recipeName}>
+						<Link href={getRecipeUrl(recipe)}>
+							<RecipeName recipe={recipe} />
+						</Link>
+					</Heading>
 
-				<SpecsList
-					specs={recipe.specs}
-					className={styles.specs}
-					servings={servings}
-					convertUnits={withConversionSystem}
-				/>
+					<span className={styles.dots} />
+
+					{nameAdornment}
+				</div>
+
+				<Flex as="div" wrap gap={1}>
+					{recipe.style ? (
+						<Chip color="light" size={1}>
+							{COCKTAIL_STYLE_TO_LABEL.get(recipe.style)}
+						</Chip>
+					) : null}
+
+					{recipe.preparationMethod ? (
+						<Chip color="light" size={1}>
+							{METHOD_TO_LABEL.get(recipe.preparationMethod)}
+						</Chip>
+					) : null}
+
+					<Chip color="light" size={1}>
+						{percentageFormatter.format(metrics.abv)} <Abv />
+					</Chip>
+
+					{recipe.glassware ? (
+						<Chip color="light" size={1}>
+							{GLASSWARE_TO_LABEL.get(recipe.glassware)}
+						</Chip>
+					) : null}
+				</Flex>
 			</Grid>
 
-			{tools ? <aside className={styles.tools}>{tools}</aside> : null}
-		</div>
+			{recipe.specs.length > 0 ? (
+				<SpecsList
+					specs={recipe.specs}
+					servings={servings}
+					convertUnits={convertUnits}
+				/>
+			) : (
+				<Grid gap={4}>
+					<Text as="p" size={2} italic light compact>
+						No specs yet
+					</Text>
+				</Grid>
+			)}
+
+			{recipe.instructions || recipe.garnish ? (
+				<Grid gap={2}>
+					{recipe.instructions ? (
+						<Text as="p" size={3} serif>
+							{recipe.instructions}
+						</Text>
+					) : null}
+
+					{recipe.garnish ? (
+						<Text as="p" size={3} serif>
+							<Text as="span" heavy>
+								Garnish:
+							</Text>{" "}
+							{recipe.garnish}
+						</Text>
+					) : null}
+				</Grid>
+			) : null}
+
+			{children}
+		</Grid>
 	);
 }

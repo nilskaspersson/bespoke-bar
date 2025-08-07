@@ -17,6 +17,7 @@ export type IconName =
 	| "book"
 	| "bookmark-slash"
 	| "bookmark"
+	| "box-archive"
 	| "calendar"
 	| "check"
 	| "circle-check"

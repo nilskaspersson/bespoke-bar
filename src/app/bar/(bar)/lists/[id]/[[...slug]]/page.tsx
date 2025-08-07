@@ -5,7 +5,7 @@ import { EntityActions } from "@/app/components/EntityActions";
 import { PageHeader } from "@/app/components/PageHeader";
 import { getCachedFeaturedList } from "@/features/lists/actions/readFeaturedList";
 import { getCachedRecipeList } from "@/features/lists/actions/readRecipeList";
-import { ListItemActions } from "@/features/lists/components/ListItemActions";
+import { RecipeListActions } from "@/features/lists/components/RecipeListActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { Container } from "@/ui/Container";
@@ -59,7 +59,7 @@ async function RecipeListContent({ params }: Props) {
 
 			<EntityActions className={styles.actions}>
 				{(actionProps) => (
-					<ListItemActions
+					<RecipeListActions
 						{...actionProps}
 						list={recipeList}
 						hasFeaturedList={Boolean(featuredList)}

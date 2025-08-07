@@ -6,7 +6,6 @@ import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { RecipeTools } from "@/features/recipes/components/RecipeTools";
 import { Heading } from "@/ui/Heading";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
@@ -43,11 +42,7 @@ export async function RecipeArticle({
 				) : null}
 			</header>
 
-			<RecipeInfo recipe={recipe}>
-				<RecipeTools recipe={recipe} className={styles.tools} />
-
-				{children}
-			</RecipeInfo>
+			<RecipeInfo recipe={recipe}>{children}</RecipeInfo>
 		</article>
 	);
 }

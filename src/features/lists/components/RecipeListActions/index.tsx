@@ -12,24 +12,28 @@ import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { getServerSideBaseURL } from "@/utils/url";
 
-export function ListItemActions({
+export function RecipeListActions({
 	list,
 	hasFeaturedList,
 	deleteRedirectTo,
+	withLink,
 	...props
 }: ActionProps & {
 	list: RecipeListWithEntries;
 	hasFeaturedList?: boolean;
 	deleteRedirectTo?: string;
+	withLink?: boolean;
 }) {
 	return (
 		<>
-			<li>
-				<LinkButton {...props} href={getRecipeListUrl(list)} color="accent">
-					<Icon name="arrow-right" size={1} />
-					View
-				</LinkButton>
-			</li>
+			{withLink ? (
+				<li>
+					<LinkButton {...props} href={getRecipeListUrl(list)} color="accent">
+						<Icon name="arrow-right" size={1} />
+						View
+					</LinkButton>
+				</li>
+			) : null}
 
 			<li>
 				<LinkButton

@@ -1,55 +1,18 @@
 @layer feature {
-	.base {
+	.recipeName {
+		font-weight: 600;
+	}
+
+	.line {
 		display: flex;
-		border-radius: var(--radius--large);
-		background-image: radial-gradient(
-			circle at top right,
-			var(--iris-4),
-			var(--iris-2)
-		);
-		box-shadow: var(--shadow);
-
-		@container (width <= 350px) {
-			flex-direction: column;
-			width: 100%;
-		}
+		gap: var(--space-2);
+		align-items: baseline;
+		justify-content: space-between;
 	}
 
-	.specs {
-		@container (width > 350px) {
-			padding-right: var(--gap--large);
-		}
-
-		@container (width <= 350px) {
-			padding-bottom: var(--gap--small);
-		}
-	}
-
-	.tools {
-		padding: var(--gap);
-		border-top-right-radius: var(--radius--large);
-		border-bottom-right-radius: var(--radius--large);
-		flex: 0 0 auto;
-	}
-
-	.card {
-		padding: var(--gap);
-		background-color: var(--iris-2);
-		border-radius: var(--radius--large);
-		flex: 1 0 auto;
-		color: var(--iris-12);
-		padding-inline: var(--gap--large);
-
-		&:has(+ .tools) {
-			border: 1px dashed transparent;
-
-			@container (width > 350px) {
-				border-right-color: var(--iris-6);
-			}
-
-			@container (width <= 350px) {
-				border-bottom-color: var(--iris-6);
-			}
-		}
+	.dots {
+		flex: 1 1 auto;
+		border-bottom: 2px dotted var(--mauve-6);
+		min-width: 3ch;
 	}
 }
