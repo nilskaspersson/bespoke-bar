@@ -15,7 +15,8 @@ export function SubmitButton({
 		<Button
 			{...props}
 			type="submit"
-			aria-disabled={props["aria-disabled"] || pending}
+			disabled={disabled || pending}
+			aria-disabled={props["aria-disabled"] || disabled || pending}
 		>
 			{children}
 		</Button>

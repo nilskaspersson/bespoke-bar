@@ -34,9 +34,15 @@ type Props = {
 	entry: RecipeListEntryWithRecipe;
 	className?: string;
 	editable?: boolean;
+	children?: React.ReactNode;
 };
 
-export function RecipeListEntryCard({ entry, className, editable }: Props) {
+export function RecipeListEntryCard({
+	entry,
+	className,
+	editable,
+	children,
+}: Props) {
 	const metrics = calculateRecipeMetrics(entry.recipe);
 
 	const { currencyFormatter, percentageFormatter } = useFormatter();
@@ -166,6 +172,8 @@ export function RecipeListEntryCard({ entry, className, editable }: Props) {
 					)}
 				</EntityActions>
 			) : null}
+
+			{children}
 		</Grid>
 	);
 }

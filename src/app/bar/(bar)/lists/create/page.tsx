@@ -3,6 +3,8 @@ import { PageHeader } from "@/app/components/PageHeader";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { Container } from "@/ui/Container";
+import { Icon } from "@/ui/Icon";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
@@ -13,7 +15,13 @@ export default async function CreateListPage() {
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader heading="Create List" />
-			<RecipeListForm recipes={recipes} />
+
+			<RecipeListForm recipes={recipes}>
+				<SubmitButton variant="solid" color="accent">
+					<Icon name="plus" />
+					Create List
+				</SubmitButton>
+			</RecipeListForm>
 		</Container>
 	);
 }

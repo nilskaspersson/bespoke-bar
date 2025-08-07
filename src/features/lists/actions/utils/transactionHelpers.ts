@@ -5,6 +5,7 @@ import {
 	type InsertRecipeListEntry,
 	insertRecipeListEntrySchema,
 	RecipeListEntriesTable,
+	type RecipeListEntry,
 } from "@/db/schema/recipeListEntries";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
 import { generateDefaultRecipeListName } from "@/features/lists/utils";
@@ -23,7 +24,6 @@ export async function upsertRecipeListInTransaction(
 			.update(RecipeListsTable)
 			.set({
 				...recipeListData,
-				name: recipeListData.name || generateDefaultRecipeListName(),
 				updatedAt: sql`NOW()`,
 				updatedBy: userId,
 			})
@@ -96,4 +96,33 @@ export async function replaceRecipeListEntriesInTransaction(
 
 		await tx.insert(RecipeListEntriesTable).values(validatedEntries);
 	}
+}
+
+export async function appendRecipeListEntriesInTransaction(
+	tx: DatabaseTransaction,
+	listId: string,
+	entries: RecipeListWithEntriesFormData["entries"],
+	orgId: string,
+): Promise<RecipeListEntry[]> {
+	if (entries.length === 0) {
+		return [];
+	}
+
+	const entriesToInsert: InsertRecipeListEntry[] = entries.map((entry) => ({
+		listId,
+		recipeId: entry.recipeId,
+		price: entry.price,
+		sortOrder: entry.sortOrder ?? 0,
+		orgId,
+	}));
+
+	const validatedEntries = insertRecipeListEntrySchema
+		.array()
+		.parse(entriesToInsert);
+
+	return await tx
+		.insert(RecipeListEntriesTable)
+		.values(validatedEntries)
+		.onConflictDoNothing()
+		.returning();
 }

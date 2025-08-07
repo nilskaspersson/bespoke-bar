@@ -1,6 +1,5 @@
 @layer feature {
 	.grid {
-		min-height: 20rem;
 		width: var(--control-width--large);
 		max-width: 100%;
 	}
@@ -9,18 +8,18 @@
 		padding: var(--gap);
 		border-radius: var(--radius);
 		background-color: var(--mauve-2);
+		z-index: 1;
 	}
 
 	.arrow {
-		justify-self: center;
+		place-self: center;
 		color: var(--mauve-12);
-		margin-bottom: calc(var(--gap--large) * -1);
+		margin-top: calc(var(--space-5) * -1);
 	}
 
 	.price {
 		padding: var(--gap);
 		border: 1px dashed var(--mauve-7);
 		border-radius: var(--radius);
-		margin-top: var(--gap--large);
 	}
 }
