@@ -9,7 +9,9 @@
 		transition-duration: var(--transition-duration--short);
 		color: var(--mauve-12);
 
-		&.isHighlighted {
+		&.isHighlighted,
+		&:hover,
+		&:focus {
 			background-color: hsl(from var(--iris-7) h s l / 0.25);
 		}
 

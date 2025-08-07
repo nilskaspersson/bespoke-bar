@@ -28,6 +28,7 @@ import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { OptionItem } from "@/ui/OptionItem";
+import { OptionLabel } from "@/ui/OptionLabel";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
@@ -205,7 +206,9 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 												closeMenu?.();
 											}}
 										>
-											Create new List
+											<OptionLabel description={<i>"{inputValue.trim()}"</i>}>
+												Create new List
+											</OptionLabel>
 										</OptionItem>
 									)}
 								/>
