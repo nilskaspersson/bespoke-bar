@@ -31,7 +31,7 @@
 		place-items: center;
 		gap: var(--space-1);
 		aspect-ratio: 1 / 1;
-		width: var(--bar-navigation--height);
+		width: var(--size-8);
 		color: var(--mauve-11);
 		transition-property: color, background-color;
 		font-weight: 500;

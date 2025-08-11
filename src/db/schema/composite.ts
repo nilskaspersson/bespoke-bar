@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
 import {
 	type RecipeListEntryWithRecipe,
@@ -31,7 +31,7 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-const ingredientFormDataSchema = draftIngredientSchema.extend({
+export const ingredientFormDataSchema = draftIngredientSchema.extend({
 	abv: percentageToRatioSchema.optional(),
 });
 

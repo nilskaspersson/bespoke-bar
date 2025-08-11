@@ -9,7 +9,6 @@ import { clsx } from "clsx";
 import { type ComponentProps, Suspense } from "react";
 import { Button } from "@/ui/Button";
 import { Logo } from "@/ui/Logo";
-import { HeaderBar } from "./HeaderBar";
 import styles from "./styles.module.css";
 
 export function AppHeader({
@@ -17,7 +16,7 @@ export function AppHeader({
 	...props
 }: Omit<ComponentProps<"header">, "children">) {
 	return (
-		<HeaderBar className={clsx(styles.header, className)} {...props}>
+		<header className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>
 				<Logo />
 
@@ -43,6 +42,6 @@ export function AppHeader({
 					</Suspense>
 				</div>
 			</div>
-		</HeaderBar>
+		</header>
 	);
 }

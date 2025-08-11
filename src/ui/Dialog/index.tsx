@@ -24,11 +24,13 @@ const handleKeyboardClose = (event: DialogEvent) => {
 		event.target.nodeName === "DIALOG"
 	) {
 		event.target.close("dismiss");
+		return;
 	}
 
 	if (
-		event.target instanceof HTMLButtonElement &&
-		event.target.nodeName === "BUTTON"
+		(event.target instanceof HTMLButtonElement &&
+			event.target.nodeName === "BUTTON") ||
+		(event.target instanceof HTMLAnchorElement && event.target.nodeName === "A")
 	) {
 		event.target.closest("dialog")?.close("dismiss");
 	}

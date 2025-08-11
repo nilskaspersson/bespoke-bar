@@ -6,6 +6,7 @@ import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { Chip } from "@/ui/Chip";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -39,12 +40,15 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 				</span>
 			) : null}
 
-			{isDraftIngredient ? (
+			{isDraftIngredient && spec.ingredient.name ? (
 				<>
 					<span className={clsx(styles.node, styles.name)}>
 						{spec.ingredient.name}
 					</span>
-					<span className={clsx(styles.node, styles.new)}>New</span>
+
+					<Chip size={0} className={clsx(styles.node, styles.new)}>
+						New
+					</Chip>
 				</>
 			) : (
 				<Link

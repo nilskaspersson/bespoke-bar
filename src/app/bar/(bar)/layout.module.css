@@ -1,34 +1,82 @@
 @layer layout {
 	.container {
 		display: grid;
-		grid-template:
-			"navigation" auto
-			"main" 1fr;
+		grid-template-areas: "navigation main";
+		grid-template-columns: auto 1fr;
 		flex: 1 1 auto;
 	}
 
 	.navigation {
 		grid-area: navigation;
-	}
-
-	.barNavigation {
-		height: var(--bar-navigation--height);
-		position: sticky;
-		bottom: 0;
-		flex: 0 0 auto;
-		padding-right: env(safe-area-inset-right);
-		padding-left: env(safe-area-inset-left);
+		min-width: var(--app-sidebar--width);
 		z-index: var(--z-navigation);
+		padding-left: env(safe-area-inset-left);
 
-		@media (min-width: 814px) {
-			display: none;
+		@media (max-width: 800px) {
+			position: fixed;
+			inset: 0 100% 0 auto;
+			transition-property: transform, backdrop-filter, opacity;
+			transition-duration: var(--transition-duration);
+			transition-timing-function: var(--swift-in);
+
+			&:focus-within {
+				transform: translateX(var(--app-sidebar--width));
+				backdrop-filter: blur(var(--space-2));
+			}
+
+			.container:has(&:focus-within) {
+				&::after {
+					content: "";
+					display: block;
+					position: fixed;
+					inset: 0;
+					background-color: hsl(from var(--mauve-1) h s l / 0.5);
+					z-index: calc(var(--z-navigation) - 1);
+					cursor: pointer;
+					transition-property: opacity;
+					transition-duration: var(--transition-duration);
+					transition-behavior: allow-discrete;
+
+					@starting-style {
+						opacity: 0;
+					}
+				}
+			}
 		}
 	}
 
 	.main {
 		display: grid;
 		grid-area: main;
-		padding-left: env(safe-area-inset-left);
 		padding-right: env(safe-area-inset-right);
+		padding-bottom: var(--app-inset);
+
+		@media (max-width: 800px) {
+			padding-left: env(safe-area-inset-left);
+		}
+	}
+
+	.toggle {
+		display: flex;
+		align-items: center;
+		position: absolute;
+		top: 50%;
+		left: 100%;
+		cursor: pointer;
+		padding: var(--space-3) calc(var(--space-3) / 2);
+		border-radius: 0 var(--radius) var(--radius) 0;
+		box-shadow: var(--shadow--high);
+		color: var(--mauve-12);
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+		border: 1px solid hsl(from var(--mauve-4) h s l / 0.5);
+		border-left: none;
+
+		.navigation:focus-within & {
+			opacity: 0;
+		}
+
+		@media (min-width: 801px) {
+			display: none;
+		}
 	}
 }

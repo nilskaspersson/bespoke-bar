@@ -23,7 +23,7 @@ export function OptionsSwitch<T extends string>({
 	options: Keyed<{
 		label?: string;
 		value: T;
-		icon: IconName;
+		icon?: IconName;
 	}>[];
 } & Omit<ComponentProps<"input">, "type" | "value" | "className">) {
 	return (
@@ -48,7 +48,7 @@ export function OptionsSwitch<T extends string>({
 							{...inputProps}
 						/>
 
-						<Icon name={icon} className={styles.icon} />
+						{icon ? <Icon name={icon} className={styles.icon} /> : null}
 
 						{label ? label : null}
 					</label>

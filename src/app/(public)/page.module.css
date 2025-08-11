@@ -1,8 +1,4 @@
 @layer layout {
-	.base {
-		padding-top: var(--app-header--height);
-	}
-
 	.content {
 		--bgc: hsl(from var(--mauve-2) h s l / 0.85);
 		color: var(--mauve-12);

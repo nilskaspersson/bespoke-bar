@@ -7,15 +7,21 @@
 
 		color: var(--c);
 		background-color: var(--bgc);
+		border: 1px solid var(--bgc);
 		border-radius: var(--radius--large);
-		box-shadow: var(--shadow--low);
 		text-align: left;
+		font-family: var(--font-sans-serif);
+
+		&:has(input:not(:checked)) {
+			background-color: transparent;
+			border-color: var(--bgc);
+		}
 	}
 
 	.accent {
 		--c: var(--iris-12);
 		--lc: var(--iris-11);
-		--bgc: var(--iris-8);
+		--bgc: var(--iris-6);
 	}
 
 	.regular {
@@ -34,6 +40,12 @@
 		--c: var(--red-12);
 		--lc: var(--red-11);
 		--bgc: var(--red-8);
+	}
+
+	.amber {
+		--c: var(--amber-12);
+		--lc: var(--amber-11);
+		--bgc: var(--amber-8);
 	}
 
 	.heavy {
