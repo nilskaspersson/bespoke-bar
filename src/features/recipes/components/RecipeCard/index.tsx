@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@/db/schema/recipes";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
@@ -8,7 +8,7 @@ import {
 	GLASSWARE_TO_LABEL,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
-import { getRecipeUrl } from "@/features/recipes/utils";
+import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
 import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
@@ -20,23 +20,25 @@ import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-type Props = {
-	recipe: RecipeWithSpecs;
+type Props<T> = {
+	recipe: T;
 	className?: string;
 	nameAdornment?: ReactNode;
 	children?: ReactNode;
 	servings?: number;
 	convertUnits?: UnitSystems | null;
+	withLink?: boolean;
 };
 
-export function RecipeCard({
+export function RecipeCard<T extends BaseRecipe>({
 	recipe,
 	className,
 	nameAdornment,
 	children,
 	servings,
 	convertUnits,
-}: Props) {
+	withLink = true,
+}: Props<T>) {
 	const metrics = calculateRecipeMetrics(recipe);
 	const { percentageFormatter } = useFormatter();
 
@@ -45,14 +47,21 @@ export function RecipeCard({
 			<Grid as="header" gap={1}>
 				<div className={styles.line}>
 					<Heading level="h3" serif size={5} className={styles.recipeName}>
-						<Link href={getRecipeUrl(recipe)}>
+						{withLink && isRecipe(recipe) ? (
+							<Link href={getRecipeUrl(recipe)}>
+								<RecipeName recipe={recipe} />
+							</Link>
+						) : (
 							<RecipeName recipe={recipe} />
-						</Link>
+						)}
 					</Heading>
 
-					<span className={styles.dots} />
-
-					{nameAdornment}
+					{nameAdornment ? (
+						<>
+							<span className={styles.dots} />
+							{nameAdornment}
+						</>
+					) : null}
 				</div>
 
 				<Flex as="div" wrap gap={1}>
@@ -80,7 +89,7 @@ export function RecipeCard({
 				</Flex>
 			</Grid>
 
-			{recipe.specs.length > 0 ? (
+			{recipe.specs && recipe.specs.length > 0 ? (
 				<SpecsList
 					specs={recipe.specs}
 					servings={servings}

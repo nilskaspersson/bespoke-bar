@@ -83,7 +83,7 @@ export function RecipeTable({
 						info.row.original.specs.length > 0 ? (
 							<ul className={styles.specs}>
 								{info.row.original.specs.map((spec) => (
-									<li key={spec.id} className={styles.spec}>
+									<li key={spec.id}>
 										{spec.quantity} {getFormattedUnit(spec.unit, spec.quantity)}{" "}
 										<Link
 											href={getIngredientUrl(spec.ingredient)}

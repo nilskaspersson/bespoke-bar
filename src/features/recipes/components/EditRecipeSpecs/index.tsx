@@ -9,6 +9,7 @@ import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
+import { Text } from "@/ui/Text";
 import { EditRecipeSpecItem } from "./EditRecipeSpecItem";
 import styles from "./styles.module.css";
 
@@ -37,63 +38,71 @@ export function EditRecipeSpecs({
 			className={clsx(className, styles.fieldset)}
 			{...props}
 		>
-			<Grid as="ul" gap={2}>
-				{specs.map((field, index) => (
-					<EditRecipeSpecItem
-						key={field.key}
-						name={field.name}
-						actions={
-							<Button
-								variant="ghost"
-								color="red"
-								size="small"
-								icon
-								type="submit"
-								aria-label="Remove spec"
-								title="Remove spec"
-								{...form.remove.getButtonProps({
-									name: fields.name,
-									index,
-								})}
-							>
-								<Icon name="xmark" size={3} />
-							</Button>
-						}
-						ingredients={ingredients}
-						withOptional={optional}
-					/>
-				))}
-			</Grid>
+			<Grid gap={2} className={styles.specs}>
+				{specs.length > 0 ? (
+					<Grid as="ul" gap={2}>
+						{specs.map((field, index) => (
+							<EditRecipeSpecItem
+								key={field.key}
+								name={field.name}
+								actions={
+									<Button
+										variant="ghost"
+										color="red"
+										size="small"
+										icon
+										type="submit"
+										aria-label="Remove spec"
+										title="Remove spec"
+										className={styles.remove}
+										{...form.remove.getButtonProps({
+											name: fields.name,
+											index,
+										})}
+									>
+										<Icon name="xmark" size={3} />
+									</Button>
+								}
+								ingredients={ingredients}
+								withOptional={optional}
+							/>
+						))}
+					</Grid>
+				) : (
+					<Text>No specs</Text>
+				)}
 
-			<div className={clsx(styles.card, styles.add)}>
-				<Button
-					type="submit"
-					variant="solid"
-					rounded
-					fullWidth
-					color="light"
-					{...form.insert.getButtonProps({
-						name: fields.name,
-						defaultValue: {
-							quantity: "1",
-							unit: "cl",
-							ingredientId: undefined,
-							optional: false,
-							ingredient: {
-								name: "",
-								description: "",
-								abv: undefined,
-								brand: "",
-								category: "",
-								measurementType: "volume",
-								unitCost: "",
+				<div className={clsx(styles.card, styles.add)}>
+					<Button
+						type="submit"
+						variant="solid"
+						rounded
+						fullWidth
+						color="light"
+						className={styles.addButton}
+						{...form.insert.getButtonProps({
+							name: fields.name,
+							defaultValue: {
+								quantity: "1",
+								unit: "cl",
+								ingredientId: undefined,
+								optional: false,
+								ingredient: {
+									name: "",
+									description: "",
+									abv: undefined,
+									brand: "",
+									category: "",
+									measurementType: "volume",
+									unitCost: "",
+								},
 							},
-						},
-					})}
-				>
-					Add additional spec
-				</Button>
-			</div>
+						})}
+					>
+						Add additional spec
+					</Button>
+				</div>
+			</Grid>
 
 			<Checkbox
 				label="Enable optional specs"
@@ -102,6 +111,11 @@ export function EditRecipeSpecs({
 					setOptional(e.target.checked);
 				}}
 			/>
+
+			<Text as="div" size={1} compact>
+				Create new <Text as="dfn">Ingredients</Text> on the fly by typing a
+				name.
+			</Text>
 		</Grid>
 	);
 }

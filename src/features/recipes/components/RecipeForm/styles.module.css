@@ -1,6 +1,27 @@
 @layer feature {
-	.form {
+	.container {
 		display: grid;
 		gap: var(--gap--large);
+		margin-inline: calc(var(--app-inset) * -1);
+		padding-inline: var(--app-inset);
+	}
+
+	.fieldset {
+		padding: var(--gap);
+		border: 1px dashed var(--mauve-9);
+		border-radius: var(--radius);
+	}
+
+	.submit {
+		position: sticky;
+		bottom: var(--gap);
+		justify-self: end;
+		z-index: 10;
+		margin-top: var(--gap--large);
+	}
+
+	.hr {
+		border-top: 1px solid var(--mauve-6);
+		margin: 0;
 	}
 }

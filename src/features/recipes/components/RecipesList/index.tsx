@@ -1,9 +1,10 @@
-import { flexRender, type Table } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import type { ViewType } from "@/app/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/components/RecipeActions";
+import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
@@ -22,48 +23,28 @@ export function RecipesList<T extends RecipeWithSpecs>({
 
 	return (
 		<ul
+			{...props}
 			className={clsx(styles.list, className, {
 				[styles.cardLayout]: view === "card",
 			})}
-			{...props}
 		>
-			{getRowModel().rows.map((row) => {
-				const name = row
-					.getVisibleCells()
-					.find((cell) => cell.column.id === "name");
+			{getRowModel().rows.map((row) => (
+				<li key={row.id} className={styles.card}>
+					<RecipeCard
+						recipe={row.original}
+						className={styles.content}
+						nameAdornment={
+							<Icon
+								name="duotone-martini-glass"
+								size={3}
+								className={styles.icon}
+							/>
+						}
+					/>
 
-				const specs = row
-					.getVisibleCells()
-					.find((cell) => cell.column.id === "specs");
-
-				return (
-					<li key={row.id} className={styles.card}>
-						<section className={styles.content}>
-							<div className={styles.primary}>
-								<div>
-									{name
-										? flexRender(name.column.columnDef.cell, name.getContext())
-										: null}
-								</div>
-
-								{specs
-									? flexRender(specs.column.columnDef.cell, specs.getContext())
-									: null}
-							</div>
-
-							<div>
-								<Icon
-									name="duotone-martini-glass"
-									size={3}
-									className={styles.icon}
-								/>
-							</div>
-						</section>
-
-						<RecipeActions recipe={row.original} withLink />
-					</li>
-				);
-			})}
+					<RecipeActions recipe={row.original} withLink />
+				</li>
+			))}
 		</ul>
 	);
 }

@@ -3,6 +3,7 @@
 		display: grid;
 		gap: var(--gap);
 		padding-top: var(--app-inset);
+		container-type: inline-size;
 		grid-template:
 			"header" auto
 			"content" 1fr;
