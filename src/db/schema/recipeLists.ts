@@ -80,6 +80,10 @@ export const recipeListFormSchema = insertRecipeListSchema
 	})
 	.extend({
 		name: z.string().optional(),
+	})
+	.refine((data) => data.id || data.name, {
+		message: "Select a list or provide a new list name",
+		path: ["name"],
 	});
 
 export type RecipeListFormData = z.infer<typeof recipeListFormSchema>;

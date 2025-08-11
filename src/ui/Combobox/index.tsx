@@ -39,6 +39,7 @@ type Props<T> = {
 	label?: React.ReactNode;
 	name: string;
 	value?: string;
+	id?: string;
 	required?: boolean;
 	fullWidth?: boolean;
 	helperText?: React.ReactNode;
@@ -68,6 +69,7 @@ export function Combobox<T>({
 	getItemValue,
 	header,
 	helperText,
+	id,
 	inputProps,
 	items,
 	itemToString,
@@ -159,7 +161,7 @@ export function Combobox<T>({
 				[styles.large]: inputProps?.large,
 			})}
 		>
-			<div className={styles.contain}>
+			<div className={styles.contain} id={id}>
 				<Input
 					{...inputProps}
 					{...comboboxInputProps}

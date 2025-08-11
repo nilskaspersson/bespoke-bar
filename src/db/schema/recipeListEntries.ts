@@ -101,7 +101,7 @@ export const recipeListEntryFormSchema = insertRecipeListEntrySchema
 		sortOrder: true,
 	})
 	.extend({
-		listId: z.string({ message: "Please select a list" }),
+		listId: z.string({ message: "Select a list" }),
 	})
 	.partial({
 		price: true,
