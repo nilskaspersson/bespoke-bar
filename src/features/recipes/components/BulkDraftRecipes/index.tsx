@@ -8,7 +8,7 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import z from "zod/v4";
+import z from "zod";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe, Recipe } from "@/db/schema/recipes";

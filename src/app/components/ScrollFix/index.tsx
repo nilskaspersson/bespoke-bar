@@ -32,6 +32,15 @@ export function ScrollFix() {
 	useEffect(() => {
 		if (!isStatePopped.current) {
 			window.scrollTo(0, 0);
+
+			/**
+			 * The small-screen navigation sidebar depends on focus to determine open state.
+			 * By blurring the active element here, we get to close it automatically on
+			 * navigation.
+			 */
+			if (document.activeElement instanceof HTMLElement) {
+				document.activeElement.blur();
+			}
 		} else {
 			isStatePopped.current = false;
 		}

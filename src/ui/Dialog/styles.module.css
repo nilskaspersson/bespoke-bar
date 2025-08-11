@@ -19,31 +19,12 @@
 		}
 
 		&::backdrop {
-			display: none;
-		}
-	}
+			backdrop-filter: blur(var(--space-1));
+			transition: opacity var(--transition-duration);
+			transition-behavior: allow-discrete;
 
-	:global(#root) {
-		@media (prefers-reduced-motion: no-preference) {
-			transition-property: filter, opacity, background-color;
-			transition-duration: var(--transition-duration);
-
-			> * {
-				transition: filter var(--transition-duration);
-			}
-		}
-
-		&:has(.dialog[open]) {
-			> :not(.dialog) {
-				filter: blur(3px);
-
-				@supports (not (filter: blur(3px))) {
-					opacity: 0.5;
-				}
-			}
-
-			@media (prefers-reduced-motion: no-preference) and (min-width: 750px) {
-				filter: brightness(0.9);
+			@starting-style {
+				opacity: 0;
 			}
 		}
 	}

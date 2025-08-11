@@ -94,11 +94,20 @@ export function EditRecipeSpecItem({
 								toggleButtonProps={{
 									className: styles.ingredientInput,
 								}}
+								comboboxProps={{
+									onInputValueChange: ({ inputValue }) => {
+										form.update({
+											name: ingredient.name.name,
+											value: inputValue.trim(),
+										});
+									},
+								}}
 								inputProps={{
 									name: searchName,
 									compact: true,
 									rounded: true,
 									className: styles.ingredientInput,
+									placeholder: "Ingredient",
 									"aria-invalid": !ingredient.name.valid,
 								}}
 								renderCreateListItem={({ closeMenu, inputValue }) => (

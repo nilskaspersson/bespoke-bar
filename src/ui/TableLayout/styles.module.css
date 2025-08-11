@@ -21,7 +21,7 @@
 	}
 
 	.sticky {
-		--offset: calc(var(--gap) + var(--bar-navigation--height));
+		--offset: var(--gap);
 
 		margin-inline: calc(var(--app-inset) / 2 * -1);
 		justify-self: center;
@@ -30,10 +30,6 @@
 		gap: var(--space-1);
 		position: sticky;
 		bottom: var(--offset);
-
-		@media (min-width: 814px) {
-			--offset: var(--gap);
-		}
 	}
 
 	.statusContainer {

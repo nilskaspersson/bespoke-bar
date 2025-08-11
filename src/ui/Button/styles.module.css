@@ -41,14 +41,14 @@
 			outline-offset: 1px;
 		}
 
+		> .label {
+			display: inline-flex;
+			align-items: center;
+			gap: 0.5em;
+		}
+
 		&:where(:not(.base)) {
 			font-weight: 600;
-
-			> .label {
-				display: inline-flex;
-				align-items: center;
-				gap: 0.5em;
-			}
 
 			&:not([aria-disabled="true"]):active {
 				transition: none;
@@ -88,7 +88,7 @@
 
 		[data-theme="light"] &,
 		[data-theme] [data-force-theme="light"] & {
-			--text-lightness: 90%;
+			--text-lightness: 95%;
 		}
 	}
 
@@ -189,8 +189,6 @@
 		background-color: var(--button-color);
 		color: hsl(from var(--button-color) h s var(--text-lightness));
 		border: 1px solid var(--button-color);
-		border-top-color: color-mix(in srgb, var(--button-color) 90%, white);
-		border-left-color: color-mix(in srgb, var(--button-color) 90%, white);
 
 		&:not([aria-disabled="true"]):active:hover {
 			box-shadow: inset 0 0 1rem

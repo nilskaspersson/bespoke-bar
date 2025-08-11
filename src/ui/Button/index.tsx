@@ -57,6 +57,8 @@ export function LinkButton({
 	icon,
 	variant = "base",
 	size = "default",
+	fullWidth,
+	rounded,
 	...props
 }: Props & { href: Route } & ComponentProps<typeof Link>) {
 	return (
@@ -72,6 +74,8 @@ export function LinkButton({
 				styles[size],
 				{
 					[styles.icon]: icon,
+					[styles.fullWidth]: fullWidth,
+					[styles.rounded]: rounded,
 				},
 			)}
 		>

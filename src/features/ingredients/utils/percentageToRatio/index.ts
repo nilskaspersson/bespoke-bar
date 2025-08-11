@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 
 const PATTERN_GLOBAL_PERCENTAGE = /%/g;
 const PATTERN_INT_INPUT = /^\d{1,3}$/;
@@ -16,7 +16,7 @@ export const percentageToRatioSchema = z
 				return input;
 			}
 
-			ctx.addIssue({
+			ctx.issues.push({
 				code: "custom",
 				message: "Percentage must be between 0 and 100",
 				input,
@@ -42,7 +42,7 @@ export const percentageToRatioSchema = z
 			const num = parseInt(text, 10);
 
 			if (num > 100) {
-				ctx.addIssue({
+				ctx.issues.push({
 					code: "custom",
 					message: "Percentage must be between 0 and 100",
 					input,
@@ -55,7 +55,7 @@ export const percentageToRatioSchema = z
 		}
 
 		if (!PATTERN_NUMERIC_INPUT.test(text)) {
-			ctx.addIssue({
+			ctx.issues.push({
 				code: "custom",
 				message: "Must be a valid percentage format (e.g., 40, 37.5%, 12.25%)",
 				input,
@@ -67,7 +67,7 @@ export const percentageToRatioSchema = z
 		const parsed = parseFloat(text);
 
 		if (Number.isNaN(parsed) || parsed < 0 || parsed > 100) {
-			ctx.addIssue({
+			ctx.issues.push({
 				code: "custom",
 				message: "Percentage must be between 0 and 100",
 				input,

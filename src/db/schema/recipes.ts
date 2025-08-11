@@ -79,6 +79,7 @@ export type BaseRecipe = Identity<
 	Partial<
 		Pick<
 			Recipe,
+			| "id"
 			| "description"
 			| "dilutionTarget"
 			| "garnish"

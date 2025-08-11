@@ -1,5 +1,5 @@
 import { useId, useState } from "react";
-import z from "zod/v4";
+import z from "zod";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { CostInfo } from "@/features/recipes/components/CostInfo";
 import { Grid } from "@/ui/Grid";

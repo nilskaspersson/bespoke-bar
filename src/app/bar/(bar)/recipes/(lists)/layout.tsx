@@ -19,7 +19,7 @@ export default async function Layout({
 				heading="Recipes"
 				actions={
 					<LinkButton
-						href="/bar/recipes/create/bulk"
+						href="/bar/recipes/create"
 						variant="solid"
 						color="accent"
 						size="small"

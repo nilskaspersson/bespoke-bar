@@ -16,7 +16,7 @@
 
 	.contain {
 		grid-area: alert;
-		background-color: var(--mauve-3);
+		background-color: var(--mauve-1);
 		border-radius: inherit;
 		overflow: auto;
 		min-height: 0;

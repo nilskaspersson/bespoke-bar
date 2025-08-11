@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import { type ComponentProps, useCallback, useState } from "react";
-import z from "zod/v4";
+import z from "zod";
 import { Button } from "@/ui/Button";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
 import { Icon } from "@/ui/Icon";

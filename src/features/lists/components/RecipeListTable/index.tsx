@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/app/components/EntityActions";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
-import { ListItemActions } from "@/features/lists/components/ListItemActions";
+import { RecipeListActions } from "@/features/lists/components/RecipeListActions";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { Grid } from "@/ui/Grid";
@@ -30,10 +30,11 @@ export function RecipeListTable({
 
 					<EntityActions className={styles.actions}>
 						{(actionProps) => (
-							<ListItemActions
+							<RecipeListActions
 								{...actionProps}
 								list={list}
 								hasFeaturedList={hasFeaturedList}
+								withLink
 							/>
 						)}
 					</EntityActions>

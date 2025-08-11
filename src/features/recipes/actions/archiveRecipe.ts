@@ -1,3 +1,5 @@
+"use server";
+
 import { and, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "@/db";
@@ -12,8 +14,6 @@ export async function archiveRecipe({
 	id: Recipe["id"];
 	redirectTo?: string;
 }): Promise<void> {
-	"use server";
-
 	const { userId, orgId } = await authOrForbidden();
 
 	await db
@@ -38,8 +38,6 @@ export async function unarchiveRecipe({
 	id: Recipe["id"];
 	redirectTo?: string;
 }): Promise<void> {
-	"use server";
-
 	const { userId, orgId } = await authOrForbidden();
 
 	await db

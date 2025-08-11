@@ -1,18 +1,15 @@
 "use client";
 
 import { type ReactNode, useDeferredValue, useId, useState } from "react";
-import z from "zod/v4";
-import type { BaseRecipe } from "@/db/schema/recipes";
+import z from "zod";
+import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/components/RecipeMetrics";
-import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
-import { SpecsList } from "@/features/specs/components/SpecsList";
-import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { useFormatter } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
-import { CopyToClipboard } from "@/ui/CopyToClipboard";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -22,7 +19,7 @@ import { Text } from "@/ui/Text";
 import { times } from "@/utils";
 import styles from "./styles.module.css";
 
-export function RecipeInfo<T extends BaseRecipe>({
+export function RecipeInfo<T extends RecipeWithSpecs>({
 	children,
 	recipe,
 }: {
@@ -38,8 +35,6 @@ export function RecipeInfo<T extends BaseRecipe>({
 	const [withConversionSystem, setWithConversionSystem] =
 		useState<UnitSystems | null>(null);
 
-	const getSpecsToText = useGetSpecsToText(servings, withConversionSystem);
-
 	if (!recipe.specs || recipe.specs.length === 0) {
 		return null;
 	}
@@ -47,40 +42,21 @@ export function RecipeInfo<T extends BaseRecipe>({
 	return (
 		<div className={styles.base}>
 			<section className={styles.primary}>
-				<div className={styles.card}>
-					<Heading level="h2" size={4} className={styles.heading}>
-						<RecipeName recipe={recipe} />
+				<RecipeCard
+					recipe={recipe}
+					className={styles.card}
+					servings={servings}
+					convertUnits={withConversionSystem}
+					nameAdornment={
 						<Icon name="martini-glass" className={styles.icon} size={3} />
-					</Heading>
+					}
+				>
+					<Text as="div" size={1} fullWidth className={styles.count}>
+						Servings: {quantityFormatter.format(servings)}
+					</Text>
 
-					<Grid gap={6}>
-						<SpecsList
-							specs={recipe.specs}
-							servings={servings}
-							convertUnits={withConversionSystem}
-						/>
-
-						{recipe.instructions ? (
-							<Text as="p" size={3} serif>
-								{recipe.instructions}
-							</Text>
-						) : null}
-
-						<Flex gap={1} justifyContent="space-between" alignItems="baseline">
-							<Text as="div" size={1} fullWidth className={styles.count}>
-								Servings: {quantityFormatter.format(servings)}
-							</Text>
-
-							<CopyToClipboard
-								getValue={() => getSpecsToText(recipe.specs)}
-								iconSize={2}
-								icon
-							/>
-						</Flex>
-					</Grid>
-				</div>
-
-				{children}
+					{children}
+				</RecipeCard>
 			</section>
 
 			<aside className={styles.card}>

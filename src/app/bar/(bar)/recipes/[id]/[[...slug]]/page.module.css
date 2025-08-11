@@ -4,4 +4,10 @@
 		gap: var(--gap--huge);
 		padding-bottom: var(--app-inset);
 	}
+
+	.actions {
+		border-top: 1px solid var(--mauve-4);
+		padding-top: var(--space-3);
+		margin-top: var(--space-4);
+	}
 }

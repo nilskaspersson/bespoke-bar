@@ -46,7 +46,7 @@ async function RecipeContent({ params }: Props) {
 
 	return (
 		<RecipeArticle recipe={recipe}>
-			<RecipeActions recipe={recipe} />
+			<RecipeActions recipe={recipe} className={styles.actions} />
 		</RecipeArticle>
 	);
 }

@@ -1,0 +1,34 @@
+@layer component {
+	.base {
+		display: flex;
+		gap: var(--space-1);
+	}
+
+	.label {
+		--length: var(--space-7);
+		width: var(--length);
+		height: var(--length);
+		border-radius: 50%;
+		display: flex;
+		place-items: center;
+		place-content: center;
+		cursor: pointer;
+		user-select: none;
+		font-size: var(--size-5);
+		font-weight: 700;
+		border: 1px solid var(--mauve-6);
+		transition-property: border-color, background-color, color, opacity;
+		transition-duration: var(--transition-duration);
+
+		&:has(input:checked) {
+			border-color: var(--iris-6);
+			background-color: var(--iris-6);
+			color: var(--iris-12);
+		}
+
+		&:active:hover {
+			opacity: 0.75;
+			transition: none;
+		}
+	}
+}

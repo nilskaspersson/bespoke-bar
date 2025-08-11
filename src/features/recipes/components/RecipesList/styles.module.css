@@ -5,6 +5,7 @@
 
 		&.cardLayout {
 			display: flex;
+			align-items: start;
 			overflow: auto;
 			margin-inline: calc(var(--app-inset) * -1);
 			padding-inline: var(--app-inset);
@@ -35,29 +36,19 @@
 		box-shadow: var(--shadow--low);
 
 		.cardLayout & {
-			max-width: calc(100cqw - var(--app-inset) * 2);
+			max-width: min(calc(100cqw - var(--app-inset) * 2), 100%, 40ch);
 			flex: 1 0 auto;
 		}
 	}
 
 	.content {
-		display: flex;
-		flex: 1 1 auto;
-		align-items: start;
-		gap: var(--space-3);
 		border-bottom: 1px solid var(--mauve-4);
 		padding-bottom: var(--space-3);
 		margin-bottom: var(--space-2);
 		transition: border-color var(--transition-duration);
 	}
 
-	.primary {
-		display: grid;
-		gap: var(--space-3);
-		flex: 1 1 auto;
-	}
-
 	.icon {
-		color: var(--mauve-7);
+		color: var(--mauve-8);
 	}
 }

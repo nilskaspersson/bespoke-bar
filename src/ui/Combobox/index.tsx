@@ -114,6 +114,7 @@ export function Combobox<T>({
 		selectedItem,
 		selectItem,
 	} = useCombobox({
+		...comboboxProps,
 		onInputValueChange({ inputValue, type }) {
 			/**
 			 * Clear the selection on input. This enables a "free" input mode, where the search
@@ -128,6 +129,8 @@ export function Combobox<T>({
 			}
 
 			setInputValue(inputValue.trim().toLowerCase());
+
+			comboboxProps?.onInputValueChange?.({ inputValue, type });
 		},
 		items: filteredItems,
 		itemToString,
@@ -143,7 +146,6 @@ export function Combobox<T>({
 			: undefined,
 		scrollIntoView: (node) =>
 			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
-		...comboboxProps,
 	});
 
 	const comboboxInputProps = getInputProps();

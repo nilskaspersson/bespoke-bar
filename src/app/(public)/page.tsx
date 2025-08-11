@@ -10,7 +10,7 @@ import styles from "./page.module.css";
 
 export default async function LandingPage() {
 	return (
-		<LandingPageHero className={styles.base}>
+		<LandingPageHero>
 			<Container className={styles.content} as="section">
 				<Flex gap={2} aria-hidden="true" className={styles.icons}>
 					<Icon name="wine-glass" size={5} className={styles.icon} />

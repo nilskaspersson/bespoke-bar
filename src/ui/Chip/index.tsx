@@ -12,7 +12,7 @@ export function Chip({
 	size = 2,
 	style,
 	...props
-}: ComponentProps<typeof Text<"div">> & {
+}: Omit<ComponentProps<typeof Text>, "color"> & {
 	label?: ReactNode;
 	color?: SystemColor;
 }) {

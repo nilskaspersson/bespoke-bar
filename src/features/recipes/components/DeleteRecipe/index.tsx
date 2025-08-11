@@ -12,21 +12,21 @@ export function DeleteRecipe({
 	className,
 	children,
 	recipe,
-	...buttonProps
+	buttonProps,
 }: PropsWithChildren<{
 	action: () => Promise<void>;
 	className?: string;
 	recipe: Recipe;
-}> &
-	ButtonProps) {
+	buttonProps?: ButtonProps;
+}>) {
 	return (
 		<ConfirmAction
 			action={action}
 			className={className}
 			iconName="trash"
 			buttonProps={{
-				color: "red",
 				...buttonProps,
+				color: "red",
 			}}
 			actionLabel="Delete Recipe"
 			notice={
@@ -35,7 +35,7 @@ export function DeleteRecipe({
 				</>
 			}
 			description={
-				<Text as="p">
+				<Text as="p" heavy>
 					You are about to delete{" "}
 					<Text serif italic>
 						<RecipeName recipe={recipe} />
