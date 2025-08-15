@@ -1,6 +1,7 @@
 "use client";
 
 import { parseAsStringLiteral, useQueryState } from "nuqs";
+import { startTransition } from "react";
 import type { IconName } from "@/ui/Icon/types";
 import { OptionsSwitch } from "@/ui/OptionsSwitch";
 import { withKey } from "@/utils/withKey";
@@ -38,6 +39,12 @@ const VIEW_OPTIONS = (
 export function SwitchListView() {
 	const [view, setView] = useQueryState("view", listViewParser);
 
+	const handleViewChange = (newView: ViewType | null) => {
+		startTransition(() => {
+			setView(newView);
+		});
+	};
+
 	return (
 		<OptionsSwitch
 			name="view-type"
@@ -45,7 +52,7 @@ export function SwitchListView() {
 			options={VIEW_OPTIONS}
 			value={view}
 			onChange={(e) => {
-				setView(listViewParser.parse(e.target.value));
+				handleViewChange(listViewParser.parse(e.target.value));
 			}}
 		/>
 	);

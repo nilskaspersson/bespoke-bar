@@ -40,11 +40,15 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
+	devIndicators: false,
+	poweredByHeader: false,
 	experimental: {
-		inlineCss: true,
-		useLightningcss: true,
 		authInterrupts: true,
+		inlineCss: true,
+		reactCompiler: true,
 		useCache: true,
+		useLightningcss: true,
+		viewTransition: true,
 	},
 };
 

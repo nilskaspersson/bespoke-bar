@@ -1,4 +1,4 @@
-@layer layout {
+@layer component {
 	.nav {
 		display: grid;
 
@@ -29,8 +29,7 @@
 		transition-duration: var(--transition-duration);
 		transition-timing-function: var(--swift-in);
 
-		&:focus,
-		&:hover {
+		&:has(:hover, :focus-visible) {
 			&:not([inert]) {
 				z-index: 1;
 				border-color: var(--iris-11);

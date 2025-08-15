@@ -5,4 +5,14 @@
 		align-content: start;
 		container-type: inline-size;
 	}
+
+	.snap {
+		scroll-snap-align: start;
+		scroll-margin-top: var(--app-inset);
+	}
+
+	.subheading {
+		text-align: center;
+		font-size: var(--size-6);
+	}
 }

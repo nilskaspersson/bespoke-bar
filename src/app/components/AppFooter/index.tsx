@@ -86,6 +86,7 @@ export async function AppFooter({
 					<Copyright />
 
 					{process.env.VERCEL_GIT_COMMIT_SHA ? (
+						// biome-ignore lint/correctness/useUniqueElementIds: Stable reference wanted
 						<Text
 							as="div"
 							size={1}

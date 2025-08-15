@@ -47,6 +47,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 					className={styles.card}
 					servings={servings}
 					convertUnits={withConversionSystem}
+					withLink={false}
 					nameAdornment={
 						<Icon name="martini-glass" className={styles.icon} size={3} />
 					}

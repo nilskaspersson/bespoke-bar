@@ -5,5 +5,6 @@
 		place-content: center;
 		text-align: center;
 		padding-block: var(--gap--huge);
+		min-height: 33.333lvh;
 	}
 }

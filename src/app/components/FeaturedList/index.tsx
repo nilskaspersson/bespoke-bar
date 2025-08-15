@@ -1,3 +1,4 @@
+import type { ComponentProps } from "react";
 import { EmptyArea } from "@/app/components/EmptyArea";
 import { EntityActions } from "@/app/components/EntityActions";
 import { getCachedFeaturedList } from "@/features/lists/actions/readFeaturedList";
@@ -11,12 +12,14 @@ import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./styles.module.css";
 
-export async function FeaturedList() {
+export async function FeaturedList(
+	props: Omit<ComponentProps<typeof Grid>, "children">,
+) {
 	const { orgId } = await authOrForbidden();
 	const featuredList = await getCachedFeaturedList(orgId);
 
 	return (
-		<Grid as="section" gap={6}>
+		<Grid as="section" gap={6} {...props}>
 			{featuredList ? (
 				<div>
 					<RecipeListFrame list={featuredList} className={styles.list}>
