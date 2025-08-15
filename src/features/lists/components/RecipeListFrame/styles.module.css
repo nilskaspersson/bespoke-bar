@@ -1,4 +1,17 @@
 @layer feature {
+	.card {
+		--badge-length: var(--space-7);
+		container: card / inline-size;
+		contain: layout;
+		display: block;
+		box-shadow: var(--shadow--low);
+		background-color: var(--mauve-2);
+		padding: var(--gap--large) var(--gap--large) var(--gap);
+		border-radius: var(--radius--small);
+		transition-property: box-shadow, background-color;
+		transition-duration: var(--transition-duration);
+	}
+
 	.bevel {
 		padding: var(--gap--large) var(--gap);
 		border: 1px solid var(--mauve-5);
@@ -7,20 +20,6 @@
 		@container card (width > 350px) {
 			padding-inline: var(--gap--large);
 		}
-	}
-
-	.card {
-		--badge-length: var(--space-7);
-		container: card / inline-size;
-		contain: layout;
-
-		display: block;
-		box-shadow: var(--shadow--low);
-		background-color: var(--mauve-2);
-		padding: var(--gap--large) var(--gap--large) var(--gap);
-		border-radius: var(--radius--small);
-		transition-property: box-shadow, background-color;
-		transition-duration: var(--transition-duration);
 	}
 
 	.inner {

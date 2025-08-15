@@ -2,6 +2,7 @@
 	.list {
 		display: grid;
 		gap: var(--gap);
+		will-change: display;
 
 		&.cardLayout {
 			display: flex;
@@ -28,6 +29,7 @@
 	.card {
 		scroll-snap-align: center;
 		display: flex;
+		contain: layout;
 		flex-direction: column;
 		padding: var(--gap) var(--gap) var(--gap--tiny);
 		background-color: var(--mauve-2);

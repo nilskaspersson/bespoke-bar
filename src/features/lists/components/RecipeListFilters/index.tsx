@@ -24,10 +24,10 @@ export function RecipeListFilters({
 	list: RecipeListWithRecipes;
 	editable?: boolean;
 }) {
+	const { entries } = list;
+
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
-
-	const { entries } = list;
 
 	const filteredEntries = useMemo(() => {
 		const normalizedSearch = normalizeInput(deferredSearch);
