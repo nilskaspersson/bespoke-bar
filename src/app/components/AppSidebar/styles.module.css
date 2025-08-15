@@ -42,7 +42,9 @@
 
 	:global(.cl-userButtonBox) {
 		.sidebar & {
+			/* biome-ignore lint/complexity/noImportantStyles: Necessary to override Clerk component internals */
 			flex-direction: row-reverse !important;
+			/* biome-ignore lint/complexity/noImportantStyles: Necessary to override Clerk component internals */
 			gap: 0 !important;
 		}
 	}
