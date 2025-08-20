@@ -17,3 +17,10 @@ export function createFetcher<T>(schema: z.ZodSchema<T>) {
 			}
 		});
 }
+
+export function errorMessageOrFallback(
+	error: unknown,
+	fallback: string,
+): string {
+	return (error instanceof Error ? error.message : fallback) ?? fallback;
+}

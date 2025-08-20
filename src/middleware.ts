@@ -1,13 +1,34 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import {
+	checkRateLimit,
+	createRateLimitMiddlewareResponse,
+	shouldRateLimitRequest,
+} from "@/rateLimit";
 
 const isProtectedRoute = createRouteMatcher(["/bar(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
 	/**
-	 * Eagerly redirect away from authenticated routes
+	 * Handle protected routes
 	 */
 	if (isProtectedRoute(req)) {
-		await auth.protect();
+		const { userId } = await auth.protect();
+
+		/**
+		 * Rate limit server actions on protected routes.
+		 */
+		if (shouldRateLimitRequest(req)) {
+			const rateLimitResponse = await checkRateLimit(
+				userId,
+				createRateLimitMiddlewareResponse,
+			);
+
+			const isRateLimited = Boolean(rateLimitResponse);
+
+			if (isRateLimited) {
+				return rateLimitResponse;
+			}
+		}
 	}
 });
 
