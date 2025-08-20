@@ -24,6 +24,8 @@
 		"@conform-to/zod": "1.8.2",
 		"@neondatabase/serverless": "1.0.1",
 		"@tanstack/react-table": "8.21.3",
+		"@upstash/ratelimit": "2.0.6",
+		"@upstash/redis": "1.35.3",
 		"babel-plugin-react-compiler": "19.1.0-rc.2",
 		"clsx": "2.1.1",
 		"convert-units": "3.0.0-beta.7",
