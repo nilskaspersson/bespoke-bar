@@ -8,6 +8,7 @@ import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
+import { errorMessageOrFallback } from "@/utils/api";
 
 export function ArchiveRecipeButton({
 	recipe,
@@ -58,7 +59,10 @@ export function ArchiveRecipeButton({
 					</ToastActions>
 				),
 			}),
-			error: () => "Could not archive recipe. Please try again later.",
+			error: (e) => ({
+				message: "Could not archive Recipe",
+				description: errorMessageOrFallback(e, "Try again later."),
+			}),
 		});
 	};
 

@@ -8,6 +8,7 @@ import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
+import { errorMessageOrFallback } from "@/utils/api";
 
 export function UnarchiveRecipeButton({
 	recipe,
@@ -57,7 +58,10 @@ export function UnarchiveRecipeButton({
 					</ToastActions>
 				),
 			}),
-			error: "Could not restore recipe. Try again later.",
+			error: (e) => ({
+				message: "Could not restore Recipe",
+				description: errorMessageOrFallback(e, "Try again later."),
+			}),
 		});
 	};
 
