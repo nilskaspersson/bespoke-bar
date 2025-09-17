@@ -32,6 +32,13 @@ export function IngredientTable({
 	ingredients,
 	...props
 }: Props & ComponentProps<"section">) {
+	/**
+	 * TanStack Table uses some strange re-rendering patterns behind the scenes that
+	 * are incompatible with React Compiler.
+	 * https://github.com/TanStack/table/issues/5567
+	 */
+	"use no memo";
+
 	const { percentageFormatter } = useFormatter();
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
 

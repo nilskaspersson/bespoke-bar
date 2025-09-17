@@ -1,5 +1,4 @@
 import type { RecipeListEntry } from "@/db/schema/recipeListEntries";
-import { useFormatter } from "@/hooks/useFormatter";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
@@ -20,8 +19,6 @@ const LABELS = {
 } as const;
 
 export function RecipeEntryDiff({ a, b }: Props) {
-	const { currencyFormatter } = useFormatter();
-
 	const diff = getDifferentKeys(pick(a, ...ENTRY_KEYS), pick(b, ...ENTRY_KEYS));
 
 	return (
@@ -38,19 +35,9 @@ export function RecipeEntryDiff({ a, b }: Props) {
 
 						<Text as="dd" compact size={1} weight={500}>
 							<Flex gap={1} alignItems="center">
-								<del>
-									{key === "price" && typeof valueA === "number"
-										? currencyFormatter.format(valueA)
-										: valueA}
-								</del>
-
+								<del>{valueA}</del>
 								<Icon name="arrow-right" size={0} />
-
-								<ins>
-									{key === "price" && typeof valueB === "number"
-										? currencyFormatter.format(valueB)
-										: valueB}
-								</ins>
+								<ins>{valueB}</ins>
 							</Flex>
 						</Text>
 					</Flex>

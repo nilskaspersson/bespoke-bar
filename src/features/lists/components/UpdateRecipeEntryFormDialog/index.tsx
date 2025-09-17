@@ -61,7 +61,7 @@ export function UpdateRecipeEntryFormDialog({ entry }: Props) {
 					id: toastId,
 					loading: "Saving…",
 					success: (result) => ({
-						message: "Entry updated",
+						message: `${entry.recipe.name} updated`,
 						description: isRecipeListEntry(result) ? (
 							<RecipeEntryDiff a={entry} b={result} />
 						) : null,
@@ -96,7 +96,7 @@ export function UpdateRecipeEntryFormDialog({ entry }: Props) {
 			>
 				<Alert
 					onClose={handleClose}
-					heading="Update list entry"
+					heading="Update sales price"
 					actions={
 						<>
 							<Button

@@ -18,8 +18,12 @@
 			display: grid;
 		}
 
+		/**
+		 * NOTE: Backdrop blur will always cover the rest of the app—including
+		 * notifications, and other static elements we may want to keep in the foreground.
+		 * For that reason, we blur the #root instead.
+		 */
 		&::backdrop {
-			backdrop-filter: blur(var(--space-1));
 			transition: opacity var(--transition-duration);
 			transition-behavior: allow-discrete;
 
@@ -27,5 +31,10 @@
 				opacity: 0;
 			}
 		}
+	}
+
+	:global(#root:has(dialog[open])) {
+		filter: blur(var(--space-1));
+		transition: filter var(--transition-duration);
 	}
 }
