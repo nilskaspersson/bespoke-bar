@@ -11,6 +11,7 @@
 		box-shadow: var(--shadow--high);
 		transition-property: background-color, color;
 		transition-duration: var(--transition-duration);
+		position: relative;
 	}
 
 	.heading {

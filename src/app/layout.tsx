@@ -37,7 +37,8 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 				</Suspense>
 
 				<ThemeProvider>
-					<div className={styles.layout}>
+					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
+					<div className={styles.layout} id="root">
 						<AuthProvider>
 							<main className={styles.main}>{children}</main>
 						</AuthProvider>

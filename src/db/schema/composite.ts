@@ -31,9 +31,16 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-export const ingredientFormDataSchema = draftIngredientSchema.extend({
-	abv: percentageToRatioSchema.optional(),
-});
+export const ingredientFormDataSchema = draftIngredientSchema
+	/**
+	 * This is for user form. Users will type a percentage value, but we store a ratio.
+	 * Remove existing constraints first, then add another schema. It may be a better
+	 * idea to not try and derive any shapes from the draft schema in the form?
+	 */
+	.omit({ abv: true })
+	.extend({
+		abv: percentageToRatioSchema.optional(),
+	});
 
 export const upsertSpecSchema = insertSpecsSchema
 	.omit({

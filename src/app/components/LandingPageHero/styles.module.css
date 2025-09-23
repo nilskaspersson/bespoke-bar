@@ -17,6 +17,7 @@
 		align-items: center;
 		grid-area: hero;
 		padding-block: var(--gap--huge);
+		position: relative;
 	}
 
 	.content {

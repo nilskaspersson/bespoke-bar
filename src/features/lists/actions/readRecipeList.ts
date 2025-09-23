@@ -1,8 +1,9 @@
 "use server";
 
-import { and, eq, sql } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/db";
+import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
 import { cacheTags } from "@/utils/cache";
 
@@ -13,6 +14,7 @@ const preparedReadRecipeList = db.query.RecipeListsTable.findFirst({
 	),
 	with: {
 		entries: {
+			orderBy: [asc(RecipeListEntriesTable.sortOrder)],
 			with: {
 				recipe: {
 					with: {

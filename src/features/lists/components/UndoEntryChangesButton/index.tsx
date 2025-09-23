@@ -5,6 +5,7 @@ import type { RecipeListEntry } from "@/db/schema/recipeListEntries";
 import { updateRecipeListEntry } from "@/features/lists/actions/updateRecipeListEntry";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { toast } from "@/ui/Toast";
+import { errorMessageOrFallback } from "@/utils/api";
 
 export function UndoEntryChangesButton({
 	entry,
@@ -26,8 +27,11 @@ export function UndoEntryChangesButton({
 
 		toast.promise(promise, {
 			loading: "Undoing…",
-			success: "Changes undone",
-			error: "Changes could not be undone",
+			success: "Reverted price change",
+			error: (e) => ({
+				message: "Could not revert price change",
+				description: errorMessageOrFallback(e, "Try again later."),
+			}),
 		});
 	};
 

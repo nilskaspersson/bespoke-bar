@@ -32,7 +32,7 @@ export function Toaster() {
 				isMounted ? (resolvedTheme === "dark" ? "light" : "dark") : undefined
 			}
 		>
-			<SonnerToaster position="top-center" closeButton icons={ICONS_MAP} />
+			<SonnerToaster position="top-right" closeButton icons={ICONS_MAP} />
 		</div>
 	);
 }
