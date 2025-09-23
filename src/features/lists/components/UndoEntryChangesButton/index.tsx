@@ -18,16 +18,12 @@ export function UndoEntryChangesButton({
 	const handleUndo: MouseEventHandler<HTMLButtonElement> = async (event) => {
 		onClick?.(event);
 
-		const promise = updateRecipeListEntry(
-			entry.id,
-			{
-				listId: entry.listId,
-				price: entry.price,
-				sortOrder: entry.sortOrder,
-				recipeId: entry.recipeId,
-			},
-			true,
-		);
+		const promise = updateRecipeListEntry(entry.id, {
+			listId: entry.listId,
+			price: entry.price,
+			sortOrder: entry.sortOrder,
+			recipeId: entry.recipeId,
+		});
 
 		toast.promise(promise, {
 			loading: "Undoing…",
