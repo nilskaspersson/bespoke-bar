@@ -42,13 +42,12 @@ const nextConfig: NextConfig = {
 	},
 	devIndicators: false,
 	poweredByHeader: false,
+	reactCompiler: true,
 	experimental: {
 		authInterrupts: true,
 		inlineCss: true,
-		reactCompiler: true,
 		useCache: true,
 		useLightningcss: true,
-		viewTransition: true,
 	},
 };
 
