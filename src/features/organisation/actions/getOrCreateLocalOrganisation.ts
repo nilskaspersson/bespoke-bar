@@ -1,7 +1,7 @@
 "use server";
 
 import { eq } from "drizzle-orm";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { cacheTag } from "next/cache";
 import { forbidden, redirect } from "next/navigation";
 import { db } from "@/db";
 import { OrganisationsTable } from "@/db/schema/organisations";
