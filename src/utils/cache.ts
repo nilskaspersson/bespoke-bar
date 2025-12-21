@@ -1,10 +1,10 @@
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeList } from "@/db/schema/recipeLists";
 import type { Recipe } from "@/db/schema/recipes";
 
 /**
- * We use cacheTag and revalidateTag as an event system; Every mutating action
+ * We use cacheTag and updateTag as an event system; Every mutating action
  * emits a related revalidation.
  *
  * Cached functions "subscribe" to these events by calling `cacheTag` over the
@@ -13,21 +13,21 @@ import type { Recipe } from "@/db/schema/recipes";
 export const cacheEvents = {
 	recipe: {
 		create: {
-			emit: (orgId: string) => revalidateTag(`${orgId}:create-recipe`),
+			emit: (orgId: string) => updateTag(`${orgId}:create-recipe`),
 			tag: (orgId: string) => `${orgId}:create-recipe`,
 		},
 		update: {
 			emit: (orgId: string, id: Recipe["id"]) => {
-				revalidateTag(`${orgId}:update-recipe`);
-				revalidateTag(`${orgId}:update-recipe:${id}`);
+				updateTag(`${orgId}:update-recipe`);
+				updateTag(`${orgId}:update-recipe:${id}`);
 			},
 			tag: (orgId: string, id?: Recipe["id"]) =>
 				id ? `${orgId}:update-recipe:${id}` : `${orgId}:update-recipe`,
 		},
 		delete: {
 			emit: (orgId: string, id: Recipe["id"]) => {
-				revalidateTag(`${orgId}:delete-recipe`);
-				revalidateTag(`${orgId}:delete-recipe:${id}`);
+				updateTag(`${orgId}:delete-recipe`);
+				updateTag(`${orgId}:delete-recipe:${id}`);
 			},
 			tag: (orgId: string, id?: Recipe["id"]) =>
 				id ? `${orgId}:delete-recipe:${id}` : `${orgId}:delete-recipe`,
@@ -35,13 +35,13 @@ export const cacheEvents = {
 	},
 	recipeList: {
 		create: {
-			emit: (orgId: string) => revalidateTag(`${orgId}:create-recipe-list`),
+			emit: (orgId: string) => updateTag(`${orgId}:create-recipe-list`),
 			tag: (orgId: string) => `${orgId}:create-recipe-list`,
 		},
 		update: {
 			emit: (orgId: string, id: RecipeList["id"]) => {
-				revalidateTag(`${orgId}:update-recipe-list`);
-				revalidateTag(`${orgId}:update-recipe-list:${id}`);
+				updateTag(`${orgId}:update-recipe-list`);
+				updateTag(`${orgId}:update-recipe-list:${id}`);
 			},
 			tag: (orgId: string, id?: RecipeList["id"]) =>
 				id
@@ -50,8 +50,8 @@ export const cacheEvents = {
 		},
 		delete: {
 			emit: (orgId: string, id: RecipeList["id"]) => {
-				revalidateTag(`${orgId}:delete-recipe-list`);
-				revalidateTag(`${orgId}:delete-recipe-list:${id}`);
+				updateTag(`${orgId}:delete-recipe-list`);
+				updateTag(`${orgId}:delete-recipe-list:${id}`);
 			},
 			tag: (orgId: string, id?: RecipeList["id"]) =>
 				id
@@ -61,21 +61,21 @@ export const cacheEvents = {
 	},
 	ingredient: {
 		create: {
-			emit: (orgId: string) => revalidateTag(`${orgId}:create-ingredient`),
+			emit: (orgId: string) => updateTag(`${orgId}:create-ingredient`),
 			tag: (orgId: string) => `${orgId}:create-ingredient`,
 		},
 		update: {
 			emit: (orgId: string, id: Ingredient["id"]) => {
-				revalidateTag(`${orgId}:update-ingredient`);
-				revalidateTag(`${orgId}:update-ingredient:${id}`);
+				updateTag(`${orgId}:update-ingredient`);
+				updateTag(`${orgId}:update-ingredient:${id}`);
 			},
 			tag: (orgId: string, id?: Ingredient["id"]) =>
 				id ? `${orgId}:update-ingredient:${id}` : `${orgId}:update-ingredient`,
 		},
 		delete: {
 			emit: (orgId: string, id: Ingredient["id"]) => {
-				revalidateTag(`${orgId}:delete-ingredient`);
-				revalidateTag(`${orgId}:delete-ingredient:${id}`);
+				updateTag(`${orgId}:delete-ingredient`);
+				updateTag(`${orgId}:delete-ingredient:${id}`);
 			},
 			tag: (orgId: string, id?: Ingredient["id"]) =>
 				id ? `${orgId}:delete-ingredient:${id}` : `${orgId}:delete-ingredient`,

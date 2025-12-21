@@ -1,5 +1,4 @@
 import { clsx } from "clsx";
-import { unstable_ViewTransition as ViewTransition } from "react";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { RecipeListEntryCard } from "@/features/lists/components/RecipeListEntryCard";
 import styles from "./styles.module.css";
@@ -18,14 +17,12 @@ export function RecipeEntryList({
 	}
 
 	return (
-		<ViewTransition>
-			<ul className={clsx(styles.recipes, className)}>
-				{entries.map((entry) => (
-					<li key={entry.id}>
-						<RecipeListEntryCard entry={entry} editable={editable} />
-					</li>
-				))}
-			</ul>
-		</ViewTransition>
+		<ul className={clsx(styles.recipes, className)}>
+			{entries.map((entry) => (
+				<li key={entry.id}>
+					<RecipeListEntryCard entry={entry} editable={editable} />
+				</li>
+			))}
+		</ul>
 	);
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { and, asc, eq, sql } from "drizzle-orm";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
