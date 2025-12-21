@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+import { cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { ThemePicker } from "@/app/components/ThemePicker";

@@ -24,6 +24,9 @@
 			"recommended": true,
 			"suspicious": {
 				"noDuplicateCustomProperties": "off"
+			},
+			"style": {
+				"useComponentExportOnlyModules": "off"
 			}
 		},
 		"domains": {
