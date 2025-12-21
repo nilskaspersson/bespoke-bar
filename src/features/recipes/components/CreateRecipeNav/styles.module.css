@@ -84,11 +84,6 @@
 		}
 	}
 
-	.soon {
-		position: absolute;
-		inset: var(--space-3) var(--space-3) auto auto;
-	}
-
 	.link {
 		&::before {
 			content: "";
@@ -99,7 +94,7 @@
 
 	.text {
 		display: grid;
-		gap: var(--space-1);
+		gap: var(--space-2);
 	}
 
 	.icon {

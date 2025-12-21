@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
+		"dev": "next dev --turbo",
 		"build": "next build",
 		"start": "next start",
 		"lint": "biome check",
@@ -22,6 +22,7 @@
 		"@clerk/themes": "2.4.46",
 		"@conform-to/react": "1.15.1",
 		"@conform-to/zod": "1.15.1",
+		"@google-cloud/vision": "5.3.4",
 		"@neondatabase/serverless": "1.0.2",
 		"@tanstack/react-table": "8.21.3",
 		"@upstash/ratelimit": "2.0.7",

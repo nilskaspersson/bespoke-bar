@@ -7,6 +7,7 @@ import styles from "./styles.module.css";
 
 type Props = {
 	icon?: boolean;
+	className?: string;
 	variant?: "solid" | "outline" | "base" | "ghost" | "text";
 	color?: SystemColor;
 	size?: "tiny" | "small" | "default" | "large";
@@ -17,10 +18,10 @@ type Props = {
 export function Button({
 	children,
 	className,
-	color = "regular",
+	variant,
+	color,
+	size,
 	icon,
-	variant = "base",
-	size = "default",
 	fullWidth,
 	rounded,
 	...props
@@ -29,19 +30,15 @@ export function Button({
 		<button
 			type="button"
 			{...props}
-			className={clsx(
+			className={generateButtonClassName({
 				className,
-				styles.reset,
-				styles.button,
-				styles[variant],
-				styles[color],
-				styles[size],
-				{
-					[styles.icon]: icon,
-					[styles.fullWidth]: fullWidth,
-					[styles.rounded]: rounded,
-				},
-			)}
+				variant,
+				color,
+				size,
+				icon,
+				fullWidth,
+				rounded,
+			})}
 		>
 			<span className={styles.label}>{children}</span>
 		</button>
@@ -53,10 +50,10 @@ export type ButtonProps = ComponentProps<typeof Button>;
 export function LinkButton({
 	children,
 	className,
-	color = "light",
+	color,
 	icon,
-	variant = "base",
-	size = "default",
+	variant,
+	size,
 	fullWidth,
 	rounded,
 	...props
@@ -64,22 +61,42 @@ export function LinkButton({
 	return (
 		<Link
 			{...props}
-			className={clsx(
+			className={generateButtonClassName({
 				className,
-				styles.reset,
-				styles.button,
-				styles.link,
-				styles[variant],
-				styles[color],
-				styles[size],
-				{
-					[styles.icon]: icon,
-					[styles.fullWidth]: fullWidth,
-					[styles.rounded]: rounded,
-				},
-			)}
+				variant,
+				color,
+				size,
+				icon,
+				fullWidth,
+				rounded,
+			})}
 		>
 			<span className={styles.label}>{children}</span>
 		</Link>
+	);
+}
+
+export function generateButtonClassName({
+	className,
+	variant = "base",
+	color = "light",
+	size = "default",
+	icon,
+	fullWidth,
+	rounded,
+}: Props) {
+	return clsx(
+		className,
+		styles.reset,
+		styles.button,
+		styles.link,
+		styles[variant],
+		styles[color],
+		styles[size],
+		{
+			[styles.icon]: icon,
+			[styles.fullWidth]: fullWidth,
+			[styles.rounded]: rounded,
+		},
 	);
 }
