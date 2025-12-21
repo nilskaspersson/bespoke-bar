@@ -22,7 +22,8 @@
 	}
 
 	.icon {
-		top: calc((1lh - 1cap) / 2);
+		position: relative;
+		top: calc((1lh - 1cap) / 3);
 		flex: 0 0 auto;
 		margin-inline: calc(var(--inset) / 2);
 	}

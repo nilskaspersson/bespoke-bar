@@ -1,0 +1,11 @@
+@layer ui {
+	.label {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+	}
+
+	.file {
+		display: none;
+	}
+}
