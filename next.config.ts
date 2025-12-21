@@ -49,6 +49,12 @@ const nextConfig: NextConfig = {
 		useCache: true,
 		useLightningcss: true,
 		viewTransition: true,
+		serverActions: {
+			/**
+			 * TODO: Remove once parseTextFromImage is migrated to API route.
+			 */
+			bodySizeLimit: "10mb",
+		},
 	},
 };
 

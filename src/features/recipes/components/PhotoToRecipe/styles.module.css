@@ -1,0 +1,71 @@
+@layer feature {
+	.base {
+		container-type: inline-size;
+		container-name: photo-to-recipe;
+	}
+
+	.upload {
+		justify-items: center;
+		padding: var(--space-6);
+		border: 1px dashed var(--mauve-6);
+		border-radius: var(--radius);
+	}
+
+	.flow {
+		display: flex;
+		align-items: stretch;
+		gap: var(--space-4);
+
+		@container (width < 500px) {
+			flex-direction: column;
+			justify-content: center;
+			align-content: center;
+		}
+	}
+
+	.arrow {
+		align-self: center;
+		flex: 0 0 auto;
+		color: var(--mauve-12);
+
+		@container (width < 500px) {
+			transform: rotate(90deg);
+		}
+	}
+
+	.previewContainer {
+		display: grid;
+		flex: 0 0 auto;
+		position: relative;
+	}
+
+	.changeImage {
+		margin-top: var(--space-2);
+
+		@container (width >= 500px) {
+			position: absolute;
+			inset: 100% 0 auto 0;
+		}
+	}
+
+	.preview {
+		height: 150px;
+		width: auto;
+		aspect-ratio: 1 / 1;
+		object-fit: cover;
+		border-radius: var(--radius);
+		border: 1px solid var(--mauve-6);
+		margin: auto;
+	}
+
+	.draftRecipeText {
+		width: 100%;
+		max-width: none;
+	}
+
+	.initialUpload {
+		&.withData {
+			display: none;
+		}
+	}
+}
