@@ -77,8 +77,6 @@ export function PhotoToRecipe({
 				const parsedFile = await promise;
 
 				if (parsedFile?.success) {
-					console.log(parsedFile.text);
-
 					setDraftRecipeText(parsedFile.text);
 					setOcrText(parsedFile.text);
 				}
