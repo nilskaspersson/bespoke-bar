@@ -1,4 +1,4 @@
-export function getGCPClientCredentials() {
+export function getGCPCredentials() {
 	return process.env.GCP_PRIVATE_KEY
 		? {
 				credentials: {
