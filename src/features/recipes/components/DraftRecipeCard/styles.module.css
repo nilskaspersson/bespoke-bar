@@ -1,4 +1,4 @@
-@layer feature {
+@layer composition {
 	.card {
 		background-color: var(--mauve-3);
 		padding: var(--space-5);
@@ -8,5 +8,21 @@
 	.icon {
 		fill: var(--mauve-8);
 		flex: 0 0 auto;
+	}
+
+	.specs {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		gap: var(--space-2) var(--space-4);
+	}
+
+	.spec {
+		display: grid;
+		grid-column: 1 / -1;
+		grid-template-columns: subgrid;
+	}
+
+	.entry {
+		display: contents;
 	}
 }

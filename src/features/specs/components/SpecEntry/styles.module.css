@@ -17,12 +17,20 @@
 		text-wrap: balance;
 		word-break: break-word;
 
-		&:not(:is(a)) {
+		&.isNew {
 			color: var(--mauve-12);
 		}
 	}
 
-	.new {
+	.link {
+		color: var(--iris-11);
+
+		&:hover {
+			text-decoration: underline;
+		}
+	}
+
+	.badge {
 		align-self: start;
 	}
 
@@ -30,5 +38,6 @@
 		color: var(--mauve-10);
 		font-family: var(--font-sans-serif);
 		font-size: var(--size-2);
+		margin-left: 0.5ch;
 	}
 }

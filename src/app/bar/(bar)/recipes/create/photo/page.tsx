@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
-import { PhotoToRecipe } from "@/features/recipes/components/PhotoToRecipe";
+import { PhotoToRecipe } from "@/features/recipes/photo/components/PhotoToRecipe";
 import { authOrForbidden } from "@/utils/auth";
 
 export default async function PhotoToRecipePage() {

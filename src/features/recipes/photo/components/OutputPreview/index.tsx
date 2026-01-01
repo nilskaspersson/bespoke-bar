@@ -1,0 +1,116 @@
+"use client";
+
+import clsx from "clsx";
+import {
+	Activity,
+	type ChangeEventHandler,
+	type ComponentProps,
+	useState,
+} from "react";
+import { EmptyArea } from "@/app/components/EmptyArea";
+import type { BaseRecipe } from "@/db/schema/recipes";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/actions/upsertRecipeWithSpecs";
+import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
+import { useCreateBulkDraftRecipes } from "@/features/recipes/hooks/useCreateBulkDraftRecipes";
+import {
+	type DisplayMode,
+	DisplayModeSwitch,
+} from "@/features/recipes/photo/components/DisplayModeSwitch";
+import { Button } from "@/ui/Button";
+import { Flex } from "@/ui/Flex";
+import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { TextArea } from "@/ui/Input";
+import { getKey, type Keyed } from "@/utils/withKey";
+import styles from "./styles.module.css";
+
+export function OutputPreview({
+	className,
+	disabled,
+	draftRecipes,
+	draftRecipesText,
+	onChangeDraftRecipesText,
+	...props
+}: ComponentProps<"section"> & {
+	disabled?: boolean;
+	draftRecipes: Keyed<BaseRecipe>[];
+	draftRecipesText: string;
+	onChangeDraftRecipesText: ChangeEventHandler<HTMLTextAreaElement>;
+}) {
+	const [displayMode, setDisplayMode] = useState<DisplayMode>("PREVIEW");
+
+	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
+		draftRecipes,
+		createRecipesWithSpecsFromData,
+	);
+
+	const hasDraftRecipes = draftRecipes.length > 0;
+
+	return (
+		<section {...props} className={clsx(className, styles.base)}>
+			<Grid gap={4}>
+				<Flex gap={4} justifyContent="space-between" alignItems="center">
+					<Heading level="h2" size={4}>
+						Extracted {draftRecipes.length > 1 ? "recipes" : "recipe"}
+					</Heading>
+
+					<DisplayModeSwitch
+						name="displayMode"
+						value={displayMode}
+						onChange={setDisplayMode}
+					/>
+				</Flex>
+			</Grid>
+
+			<Activity mode={displayMode === "PREVIEW" ? "visible" : "hidden"}>
+				{!hasDraftRecipes ? (
+					<EmptyArea color="light">
+						<Heading level="h3" size={3}>
+							No recipes
+						</Heading>
+					</EmptyArea>
+				) : (
+					<ul className={styles.recipes}>
+						{draftRecipes.map((recipe) => (
+							<li key={getKey(recipe)} className={styles.recipe}>
+								<DraftRecipeCard recipe={recipe} convertUnits={null} />
+							</li>
+						))}
+					</ul>
+				)}
+			</Activity>
+
+			<Activity mode={displayMode === "EDIT" ? "visible" : "hidden"}>
+				<TextArea
+					name="draftRecipeText"
+					value={draftRecipesText}
+					onChange={onChangeDraftRecipesText}
+					rows={5}
+					fullWidth
+					readOnly={disabled}
+				/>
+			</Activity>
+
+			<Flex justifyContent="flex-end">
+				<form action={submitBulkRecipesAction}>
+					<Button
+						type="submit"
+						variant="solid"
+						color={hasDraftRecipes ? "accent" : "light"}
+						size="small"
+						disabled={!hasDraftRecipes}
+					>
+						{hasDraftRecipes ? (
+							<>
+								Create {draftRecipes.length}{" "}
+								{draftRecipes.length > 1 ? "recipes" : "recipe"}
+							</>
+						) : (
+							"Create"
+						)}
+					</Button>
+				</form>
+			</Flex>
+		</section>
+	);
+}

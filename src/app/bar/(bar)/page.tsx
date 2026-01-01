@@ -11,7 +11,7 @@ import styles from "./page.module.css";
 export default async function BarPage() {
 	return (
 		<Container as="article" className={styles.container}>
-			<WelcomeMessage className={styles.snap} />
+			<WelcomeMessage />
 
 			<Grid gap={8}>
 				<hr />
@@ -30,7 +30,7 @@ export default async function BarPage() {
 						Featured List
 					</Heading>
 
-					<FeaturedList className={styles.snap} />
+					<FeaturedList />
 				</Suspense>
 
 				<hr />
@@ -39,7 +39,7 @@ export default async function BarPage() {
 					Create a Recipe
 				</Heading>
 
-				<CreateRecipeNav className={styles.snap} />
+				<CreateRecipeNav />
 			</Grid>
 		</Container>
 	);

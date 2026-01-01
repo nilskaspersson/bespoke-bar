@@ -1,9 +1,9 @@
 "use server";
 
 import z from "zod";
-import { ACCEPTED_IMAGE_TYPES } from "@/features/recipes/constants";
+import { ACCEPTED_IMAGE_TYPES } from "@/constants";
+import { findRecipeInTextWithLLM } from "@/features/recipes/photo/utils/findRecipeInTextWithLLM";
 import { authOrForbidden } from "@/utils/auth";
-import { findRecipeInTextWithLLM } from "@/utils/llm";
 import { parseTextFromImage } from "@/utils/vision";
 
 const fileSchema = z.file();
@@ -15,9 +15,19 @@ fileSchema.mime(ACCEPTED_IMAGE_TYPES);
  * next.config.ts).
  */
 export async function parseTextFromImageAction(formData: FormData) {
-	const file = fileSchema.parse(formData.get("image"));
-
 	await authOrForbidden();
+
+	const imageEntries = formData.getAll("image");
+
+	const validFile = imageEntries
+		.filter((entry): entry is File => entry instanceof File)
+		.find((file) => file.size > 0);
+
+	if (!validFile) {
+		throw new Error("No valid image file provided");
+	}
+
+	const file = fileSchema.parse(validFile);
 
 	/**
 	 * Do OCR with Google Vision API. This will find ALL text in the image.
@@ -38,6 +48,7 @@ export async function parseTextFromImageAction(formData: FormData) {
 
 	return {
 		success: true,
-		text: recipeText,
+		rawOcrText: ocrResult.fullTextAnnotation?.text,
+		extractedText: recipeText,
 	};
 }

@@ -32,13 +32,17 @@ export function DraftRecipeCard<T extends BaseRecipe>(props: {
 
 			{props.recipe.specs && props.recipe.specs.length > 0 ? (
 				<>
-					<Grid as="ul" gap={1}>
+					<ul className={styles.specs}>
 						{props.recipe.specs.map((spec) => (
-							<li key={getKey(spec)}>
-								<SpecEntry spec={spec} convertUnits={props.convertUnits} />
+							<li key={getKey(spec)} className={styles.spec}>
+								<SpecEntry
+									className={styles.entry}
+									spec={spec}
+									convertUnits={props.convertUnits}
+								/>
 							</li>
 						))}
-					</Grid>
+					</ul>
 
 					<Grid gap={1}>
 						<AbvInfo recipe={props.recipe} />
