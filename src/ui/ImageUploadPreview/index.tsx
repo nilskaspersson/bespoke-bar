@@ -7,12 +7,13 @@ export function ImageUploadPreview({
 	alt,
 	src,
 	className,
-}: Omit<ComponentProps<"img">, "src" | "alt"> & {
+	...props
+}: Omit<ComponentProps<"div">, "src" | "alt"> & {
 	alt: string;
 	src: string | null;
 }) {
 	return (
-		<div className={clsx(styles.container, className)}>
+		<div {...props} className={clsx(styles.container, className)}>
 			{src ? (
 				<img src={src} className={styles.image} alt={alt} />
 			) : (

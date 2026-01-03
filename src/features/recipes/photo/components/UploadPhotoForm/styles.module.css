@@ -1,6 +1,7 @@
 @layer feature {
-	.inset {
+	.base {
 		padding: var(--space-6);
+		background-color: var(--mauve-2);
 	}
 
 	.separator {

@@ -21,6 +21,7 @@
 		place-items: center;
 		gap: var(--space-4);
 		padding: var(--space-5) var(--space-4);
+		background-color: var(--mauve-2);
 		text-align: center;
 		text-wrap: balance;
 		border: var(--border-width) solid var(--mauve-8);

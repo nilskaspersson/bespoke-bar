@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import type { ChangeEventHandler, ComponentProps } from "react";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPhotoAction";
@@ -12,6 +13,7 @@ import styles from "./styles.module.css";
 export function UploadPhotoForm({
 	onSuccess,
 	onChange,
+	className,
 	...props
 }: Omit<ComponentProps<"form">, "onChange" | "children" | "action"> & {
 	onSuccess: (extractedText: string) => void;
@@ -35,8 +37,12 @@ export function UploadPhotoForm({
 	};
 
 	return (
-		<form {...props} action={submitPhotoAction}>
-			<Grid gap={6} justifyItems="center" className={styles.inset}>
+		<form
+			{...props}
+			action={submitPhotoAction}
+			className={clsx(styles.base, className)}
+		>
+			<Grid gap={6} justifyItems="center">
 				<Heading level="h2" size={4}>
 					Upload an image of a recipe
 				</Heading>

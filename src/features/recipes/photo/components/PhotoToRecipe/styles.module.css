@@ -12,7 +12,6 @@
 	.step {
 		border: 1px var(--borderStyle) var(--borderColor);
 		border-radius: var(--radius);
-		background-color: var(--mauve-2);
 		transition: border-color var(--transition-duration);
 	}
 
