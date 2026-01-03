@@ -49,7 +49,9 @@ export function AppSidebar({
 							</Button>
 						</SignUpButton>
 					</SignedOut>
+				</Suspense>
 
+				<Suspense>
 					<SignedIn>
 						<UserButton showName />
 					</SignedIn>

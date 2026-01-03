@@ -35,7 +35,9 @@ export function AppHeader({
 								</Button>
 							</SignUpButton>
 						</SignedOut>
+					</Suspense>
 
+					<Suspense>
 						<SignedIn>
 							<UserButton />
 						</SignedIn>
