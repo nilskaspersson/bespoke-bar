@@ -38,14 +38,14 @@ Include:
 - Ingredient lists with measurements
 
 Exclude:
-- Watermarks, logos, decorative text, unrelated notes, background text
+- Watermarks, logos, decorative text, unrelated notes, background text, references to pages
 
 Formatting rules:
 - Convert all-caps text to regular capitalization
 - Correct OCR errors in fractions (e.g., 134 → 1¾, 12 → 1/2). Valid fractions: ${Object.keys(FRACTION_MAP).join(", ")}
 - Convert fractions to decimals (e.g., 1½ → 1.5)
-- Separate multiple recipes with exactly TWO newlines
-- Keep original units unchanged (do not convert or round)
+- Separate multiple recipes with exactly 2 newlines
+- Do NOT convert or round any units
 
 Expected output format:
 [Recipe Name]
