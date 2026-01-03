@@ -3,6 +3,7 @@ import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { getCachedIngredient } from "@/features/ingredients/actions/readIngredient";
 import { updateIngredient } from "@/features/ingredients/actions/updateIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
+import { getIngredientUrl } from "@/features/ingredients/utils";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -45,7 +46,7 @@ export default async function EditIngredientPage({
 
 		await updateIngredient(ingredient.id, values);
 
-		redirect(`/bar/ingredients/${id}`);
+		redirect(getIngredientUrl(ingredient));
 	};
 
 	return (

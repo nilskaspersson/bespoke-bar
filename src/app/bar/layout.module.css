@@ -8,7 +8,7 @@
 
 	.navigation {
 		grid-area: navigation;
-		min-width: var(--app-sidebar--width);
+		width: var(--app-sidebar--width);
 		z-index: var(--z-navigation);
 		padding-left: env(safe-area-inset-left);
 

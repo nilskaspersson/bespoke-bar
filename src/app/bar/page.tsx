@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { FeaturedList } from "@/app/components/FeaturedList";
-import { WelcomeMessage } from "@/app/components/WelcomeMessage";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -11,8 +10,6 @@ import styles from "./page.module.css";
 export default async function BarPage() {
 	return (
 		<Container as="article" className={styles.container}>
-			<WelcomeMessage />
-
 			<Grid gap={8}>
 				<hr />
 

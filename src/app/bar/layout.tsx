@@ -1,9 +1,14 @@
 import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
+import { AppSidebar } from "@/app/components/AppSidebar";
 import { Providers } from "@/app/components/Providers";
+import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
 import { getClerkOrganization } from "@/features/organisation/actions/getClerkOrganization";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
+import { Button } from "@/ui/Button";
+import { Icon } from "@/ui/Icon";
+import styles from "./layout.module.css";
 
 export default async function Layout({
 	children,
@@ -18,7 +23,24 @@ export default async function Layout({
 
 	const organisation = await getOrCreateLocalOrganisation(orgId, userId);
 
-	return <Providers organisation={organisation}>{children}</Providers>;
+	return (
+		<Providers organisation={organisation}>
+			<div className={styles.container}>
+				<AppSidebar
+					className={styles.navigation}
+					toggle={
+						<Button variant="base" size="tiny" className={styles.toggle}>
+							<Icon name="bars" size={2} />
+						</Button>
+					}
+				>
+					<SecondaryNavigation />
+				</AppSidebar>
+
+				<div className={styles.main}>{children}</div>
+			</div>
+		</Providers>
+	);
 }
 
 export async function generateMetadata(): Promise<Metadata> {
