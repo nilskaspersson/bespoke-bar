@@ -40,12 +40,12 @@ Include:
 Exclude:
 - Watermarks, logos, decorative text, unrelated notes, background text, references to pages
 
-Formatting rules:
+Do formatting in the following order:
+- Separate multiple recipes with exactly 2 newlines. Expect the first bare-text words to be the recipe name. Note that some recipes may not have a name, and some recipes may have ingredients without a unit and amount.
 - Convert all-caps text to regular capitalization
+- Keep the EXACT units and amounts from the original text (if text says "tsp", output "tsp").
 - Correct OCR errors in fractions (e.g., 134 → 1¾, 12 → 1/2). Valid fractions: ${Object.keys(FRACTION_MAP).join(", ")}
 - Convert fractions to decimals (e.g., 1½ → 1.5)
-- Separate multiple recipes with exactly 2 newlines
-- Do NOT convert or round any units
 
 Expected output format:
 [Recipe Name]
