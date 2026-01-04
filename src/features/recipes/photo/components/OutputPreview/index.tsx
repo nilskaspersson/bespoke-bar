@@ -50,7 +50,7 @@ export function OutputPreview({
 	return (
 		<section {...props} className={clsx(className, styles.base)}>
 			<Grid gap={4}>
-				<Flex gap={4} justifyContent="space-between" alignItems="center">
+				<Flex gap={4} justifyContent="space-between" alignItems="center" wrap>
 					<Heading level="h2" size={4}>
 						Extracted {draftRecipes.length > 1 ? "recipes" : "recipe"}
 					</Heading>
@@ -92,13 +92,17 @@ export function OutputPreview({
 				/>
 			</Activity>
 
-			<Flex justifyContent="space-between" alignItems="center" gap={4}>
-				<Callout size={1} icon="circle-exclamation" variant="inset">
-					Text extraction can be inaccurate. Double-check the extracted recipes
-					and make sure they are correct.
+			<Flex justifyContent="space-between" alignItems="center" gap={4} wrap>
+				<Callout
+					size={1}
+					icon="circle-exclamation"
+					variant="inset"
+					className={styles.headsup}
+				>
+					Text extraction can be inaccurate. Double-check extracted recipes.
 				</Callout>
 
-				<form action={submitBulkRecipesAction}>
+				<form action={submitBulkRecipesAction} className={styles.create}>
 					<Button
 						type="submit"
 						variant="solid"

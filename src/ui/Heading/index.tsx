@@ -5,6 +5,7 @@ import type { HeadingLevel, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
 type Props = {
+	align?: "center" | "left" | "right";
 	level: HeadingLevel;
 	size?: Scale;
 	serif?: boolean;
@@ -21,6 +22,7 @@ export const HEADING_LEVEL_TO_SCALE = new Map<HeadingLevel, Scale>([
 
 export function Heading({
 	children,
+	align,
 	level,
 	size,
 	serif,
@@ -37,6 +39,7 @@ export function Heading({
 				props.style,
 				toCSSVars({
 					jsxFontSize: `var(--size-${size ? size : HEADING_LEVEL_TO_SCALE.get(level)})`,
+					jsxTextAlign: align,
 				}),
 			),
 		},

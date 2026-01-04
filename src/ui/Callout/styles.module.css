@@ -19,6 +19,7 @@
 	.inset {
 		border-left: var(--space-1) solid var(--bc);
 		padding-left: var(--inset);
+		padding-block: var(--space-0);
 	}
 
 	.icon {
