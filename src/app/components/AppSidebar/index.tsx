@@ -1,14 +1,7 @@
-import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	SignUpButton,
-	UserButton,
-} from "@clerk/nextjs";
 import { clsx } from "clsx";
-import { type ComponentProps, type ReactNode, Suspense } from "react";
-import { OrganisationSwitcher } from "@/app/components/OrganisationSwitcher";
-import { Button } from "@/ui/Button";
+import type { ComponentProps, ReactNode } from "react";
+import { OrganisationSwitcher } from "@/features/organisation/components/OrganisationSwitcher";
+import { UserOrSignup } from "@/features/organisation/components/UserOrSignup";
 import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
 
@@ -35,27 +28,7 @@ export function AppSidebar({
 			<div className={clsx(styles.block, styles.overscroll)}>{children}</div>
 
 			<div className={clsx(styles.block, styles.footer)}>
-				<Suspense>
-					<SignedOut>
-						<SignInButton mode="modal">
-							<Button variant="ghost" size="tiny">
-								Sign in
-							</Button>
-						</SignInButton>
-
-						<SignUpButton mode="modal">
-							<Button variant="solid" size="tiny" color="heavy">
-								Sign up
-							</Button>
-						</SignUpButton>
-					</SignedOut>
-				</Suspense>
-
-				<Suspense>
-					<SignedIn>
-						<UserButton showName />
-					</SignedIn>
-				</Suspense>
+				<UserOrSignup />
 			</div>
 		</aside>
 	);
