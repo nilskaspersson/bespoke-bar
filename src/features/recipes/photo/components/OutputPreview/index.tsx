@@ -17,6 +17,7 @@ import {
 	DisplayModeSwitch,
 } from "@/features/recipes/photo/components/DisplayModeSwitch";
 import { Button } from "@/ui/Button";
+import { Callout } from "@/ui/Callout";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -91,7 +92,12 @@ export function OutputPreview({
 				/>
 			</Activity>
 
-			<Flex justifyContent="flex-end">
+			<Flex justifyContent="space-between" alignItems="center" gap={4}>
+				<Callout size={1} icon="circle-exclamation" variant="inset">
+					Text extraction can be inaccurate. Double-check the extracted recipes
+					and make sure they are correct.
+				</Callout>
+
 				<form action={submitBulkRecipesAction}>
 					<Button
 						type="submit"

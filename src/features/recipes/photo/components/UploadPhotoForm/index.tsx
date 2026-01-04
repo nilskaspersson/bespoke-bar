@@ -1,8 +1,15 @@
 import clsx from "clsx";
+import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
+import {
+	checkOCRConsent,
+	storeOCRConsent,
+} from "@/features/consent/ocrConsent";
 import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPhotoAction";
+import { useConfirm } from "@/hooks/useConfirm";
 import { Callout } from "@/ui/Callout";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { FileInput } from "@/ui/FileInput";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -22,11 +29,34 @@ export function UploadPhotoForm({
 	const { action: submitPhotoAction, isPending: isParsingPhotoText } =
 		useSubmitPhotoAction({ onSuccess });
 
+	const {
+		confirmAction: confirmOCRConsent,
+		isPending: isConfirmingOCRConsent,
+		resolveAction: acceptOCRConsentPrompt,
+		rejectAction: rejectOCRConsentPrompt,
+	} = useConfirm();
+
 	const fileInputProps: Partial<ComponentProps<typeof FileInput>> = {
 		name: "image",
 		accept: ACCEPTED_IMAGE_TYPES.join(","),
 		disabled: isParsingPhotoText,
-		onChange: (event) => {
+		onChange: async (event) => {
+			const isOCRConsentConfirmed = await checkOCRConsent();
+
+			if (!isOCRConsentConfirmed) {
+				const confirmed = await confirmOCRConsent();
+
+				if (!confirmed) {
+					return;
+				}
+
+				try {
+					await storeOCRConsent();
+				} catch (error) {
+					console.error(error);
+				}
+			}
+
 			onChange?.(event);
 
 			/**
@@ -75,9 +105,39 @@ export function UploadPhotoForm({
 				</Grid>
 
 				<Callout variant="solid" color="regular" icon="circle-info" size={2}>
-					Any number of recipes can be extracted from one image.
+					Multiple recipes can be extracted from an image.
 				</Callout>
 			</Grid>
+
+			{isConfirmingOCRConsent ? (
+				<ConfirmAction.Alert
+					heading="Image Processing"
+					acceptLabel="I understand and accept"
+					description={
+						<Grid gap={3}>
+							<Text as="p">
+								Images are processed by Google for text extraction. Bespoke Bar
+								does not store these images.
+							</Text>
+
+							<Callout
+								variant="solid"
+								color="regular"
+								icon="circle-info"
+								size={2}
+							>
+								Read the full <Link href="/privacy">privacy policy</Link> and{" "}
+								<Link href="/terms">terms & conditions</Link>.
+							</Callout>
+						</Grid>
+					}
+					onClose={rejectOCRConsentPrompt}
+					resolveAction={acceptOCRConsentPrompt}
+					buttonProps={{
+						color: "accent",
+					}}
+				/>
+			) : null}
 		</form>
 	);
 }
