@@ -5,6 +5,7 @@ import { OCR_CONSENT_VERSION } from "@/features/consent/constants";
 import { authOrForbidden } from "@/utils/auth";
 
 const OCR_CONSENT_KEY = "ocrConsentVersion";
+const OCR_CONSENT_DATE_KEY = "ocrConsentDate";
 
 export async function checkOCRConsent(): Promise<boolean> {
 	const user = await currentUser();
@@ -21,6 +22,7 @@ export async function storeOCRConsent(): Promise<void> {
 	await client.users.updateUserMetadata(userId, {
 		publicMetadata: {
 			[OCR_CONSENT_KEY]: OCR_CONSENT_VERSION,
+			[OCR_CONSENT_DATE_KEY]: new Date().toISOString(),
 		},
 	});
 }
