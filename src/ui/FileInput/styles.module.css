@@ -2,10 +2,21 @@
 	.label {
 		display: inline-flex;
 		align-items: center;
-		gap: 0.5em;
+		gap: var(--scale-2);
+
+		&:focus-within:has(:focus-visible) {
+			outline: var(--space-0) solid hsl(from var(--button-color) h s l / 80%);
+			outline-offset: 1px;
+		}
 	}
 
 	.file {
-		display: none;
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
 	}
 }
