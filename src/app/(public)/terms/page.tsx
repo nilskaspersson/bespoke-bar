@@ -1,4 +1,4 @@
-import { TERMS_CONDITIONS_VERSION } from "@/constants";
+import { TERMS_CONDITIONS_VERSION } from "@/features/consent/constants";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
