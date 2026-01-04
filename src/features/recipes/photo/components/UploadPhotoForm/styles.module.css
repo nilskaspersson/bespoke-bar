@@ -1,0 +1,22 @@
+@layer feature {
+	.base {
+		padding: var(--space-6);
+		background-color: var(--mauve-2);
+	}
+
+	.separator {
+		display: grid;
+		align-items: center;
+		grid-template-columns: 1fr auto 1fr;
+		width: 20ch;
+		gap: var(--space-2);
+
+		&::before,
+		&::after {
+			content: "";
+			display: inline-block;
+			height: 1px;
+			background-color: var(--mauve-6);
+		}
+	}
+}

@@ -42,45 +42,72 @@ export function ConfirmAction({
 			</SubmitButton>
 
 			{isPending ? (
-				<Alert
+				<ConfirmAction.Alert
 					onClose={rejectAction}
 					heading={actionLabel}
 					notice={notice}
-					color={buttonProps?.color}
-					actions={
-						<>
-							<Button
-								onClick={rejectAction}
-								autoFocus
-								size="small"
-								variant="ghost"
-							>
-								Cancel
-							</Button>
-
-							<ConfirmButton
-								onClick={
-									buttonProps?.["aria-disabled"] ? undefined : resolveAction
-								}
-								aria-disabled={buttonProps?.["aria-disabled"]}
-								disabled={isSubmitting}
-								variant="solid"
-								size="small"
-								color={buttonProps?.color}
-							>
-								{iconName ? <Icon name={iconName} /> : null}
-
-								{actionLabel}
-							</ConfirmButton>
-						</>
-					}
-				>
-					{description}
-				</Alert>
+					description={description}
+					iconName={iconName}
+					buttonProps={buttonProps}
+					resolveAction={resolveAction}
+					isSubmitting={isSubmitting}
+				/>
 			) : null}
 		</form>
 	);
 }
+
+ConfirmAction.Alert = function ConfirmActionAlert({
+	onClose,
+	heading,
+	acceptLabel,
+	notice,
+	description,
+	iconName,
+	buttonProps,
+	resolveAction,
+	isSubmitting,
+}: {
+	onClose?: () => void;
+	heading: string;
+	acceptLabel?: string;
+	notice?: React.ReactNode;
+	description: React.ReactNode;
+	iconName?: IconName;
+	buttonProps?: ButtonProps;
+	resolveAction?: () => void;
+	isSubmitting?: boolean;
+}) {
+	return (
+		<Alert
+			onClose={onClose}
+			heading={heading}
+			notice={notice}
+			color={buttonProps?.color}
+			actions={
+				<>
+					<Button onClick={onClose} autoFocus size="small" variant="ghost">
+						Cancel
+					</Button>
+
+					<ConfirmButton
+						{...buttonProps}
+						onClick={buttonProps?.["aria-disabled"] ? undefined : resolveAction}
+						aria-disabled={buttonProps?.["aria-disabled"]}
+						disabled={isSubmitting}
+						variant="solid"
+						size="small"
+					>
+						{iconName ? <Icon name={iconName} /> : null}
+						{acceptLabel ?? heading}
+					</ConfirmButton>
+				</>
+			}
+		>
+			{description}
+		</Alert>
+	);
+};
 
 function ConfirmButton({ children, ...props }: ButtonProps) {
 	const isInGracePeriod = useGracePeriod(1000);

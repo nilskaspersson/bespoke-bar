@@ -19,6 +19,7 @@
 
 	.contain {
 		align-self: stretch;
+		position: relative;
 	}
 
 	.input {

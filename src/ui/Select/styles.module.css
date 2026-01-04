@@ -3,6 +3,7 @@
 		min-width: var(--control-width--small);
 		width: 100%;
 		max-width: min(var(--control-width), 100svw);
+		position: relative;
 	}
 
 	.contain {

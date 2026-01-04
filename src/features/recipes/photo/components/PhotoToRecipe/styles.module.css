@@ -1,0 +1,69 @@
+@layer feature {
+	.base {
+		--previewImageLength: 135px;
+		--borderStyle: dashed;
+		--borderColor: var(--mauve-7);
+		--borderColorActive: var(--iris-11);
+
+		container-type: inline-size;
+		container-name: photo-to-recipe;
+	}
+
+	.step {
+		border: 1px var(--borderStyle) var(--borderColor);
+		border-radius: var(--radius);
+		transition: border-color var(--transition-duration);
+	}
+
+	.stepUpload {
+		&.hasImagePreview {
+			--borderStyle: solid;
+			--borderColor: var(--borderColorActive);
+		}
+	}
+
+	.stepPreview {
+		width: var(--previewImageLength);
+		margin-inline: auto;
+
+		&.hasImagePreview {
+			--borderColor: var(--borderColorActive);
+		}
+
+		&.hasParsedText {
+			--borderStyle: solid;
+			box-shadow: var(--shadow--high);
+		}
+	}
+
+	.stepOutput {
+		background-color: var(--mauve-3);
+		border-radius: var(--radius);
+		border: 1px dashed var(--borderColor);
+		transition-property: border-color, border-style, background-color;
+		transition-duration: var(--transition-duration);
+
+		&.hasParsedText {
+			border-color: var(--borderColorActive);
+			background-color: var(--mauve-2);
+		}
+
+		&.hasDraftRecipes {
+			border-style: solid;
+		}
+	}
+
+	.divider {
+		border: none;
+		border-left: 1px dashed var(--borderColor);
+		transition: border-color var(--transition-duration);
+		width: 1px;
+		height: 60px;
+		margin-inline: auto;
+
+		&.solid {
+			border-left-color: var(--borderColorActive);
+			border-left-style: solid;
+		}
+	}
+}

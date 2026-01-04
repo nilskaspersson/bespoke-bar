@@ -1,7 +1,9 @@
+import { redirect } from "next/navigation";
 import type { ComponentProps } from "react";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
 import { createIngredient } from "@/features/ingredients/actions/createIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
+import { getIngredientUrl } from "@/features/ingredients/utils";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 
 export function CreateIngredientForm(props: ComponentProps<"form">) {
@@ -17,7 +19,9 @@ export function CreateIngredientForm(props: ComponentProps<"form">) {
 			unitCost: formData.get("unitCost") || null,
 		});
 
-		await createIngredient(values);
+		const ingredient = await createIngredient(values);
+
+		redirect(getIngredientUrl(ingredient));
 	};
 
 	return (

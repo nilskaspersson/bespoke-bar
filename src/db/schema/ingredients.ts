@@ -98,7 +98,7 @@ type IngredientRefinementInput = Partial<
 	>
 >;
 
-const ingredientsRefinements: [
+export const ingredientsRefinements: [
 	(data: IngredientRefinementInput) => boolean,
 	{ message: string; path: string[] },
 ] = [
@@ -111,11 +111,15 @@ const ingredientsRefinements: [
 
 export const selectIngredientSchema = createSelectSchema(IngredientsTable);
 
-export const insertIngredientSchema = createInsertSchema(IngredientsTable)
-	.extend(ingredientsConstraintsSchema)
-	.refine(...ingredientsRefinements);
+const baseIngredientSchema = createInsertSchema(IngredientsTable).extend(
+	ingredientsConstraintsSchema,
+);
 
-export const draftIngredientSchema = createInsertSchema(IngredientsTable)
+export const insertIngredientSchema = baseIngredientSchema.refine(
+	...ingredientsRefinements,
+);
+
+export const draftIngredientSchema = baseIngredientSchema
 	.omit({
 		id: true,
 		orgId: true,
@@ -124,7 +128,6 @@ export const draftIngredientSchema = createInsertSchema(IngredientsTable)
 		createdAt: true,
 		updatedAt: true,
 	})
-	.extend(ingredientsConstraintsSchema)
 	.refine(...ingredientsRefinements);
 
 export const updateIngredientSchema = createUpdateSchema(IngredientsTable)

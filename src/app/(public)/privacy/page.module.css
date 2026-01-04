@@ -1,0 +1,5 @@
+@layer layout {
+	.article {
+		padding-top: var(--gap--huge);
+	}
+}

@@ -10,7 +10,13 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
 	const appearance: ComponentProps<typeof ClerkProvider>["appearance"] =
 		useMemo(
-			() => (resolvedTheme === "dark" ? { baseTheme: dark } : undefined),
+			() => ({
+				baseTheme: resolvedTheme === "dark" ? dark : undefined,
+				layout: {
+					termsPageUrl: "/terms",
+					privacyPageUrl: "/privacy",
+				},
+			}),
 			[resolvedTheme],
 		);
 

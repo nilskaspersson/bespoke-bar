@@ -34,34 +34,46 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 			className={clsx(styles.entry, className)}
 			{...props}
 		>
-			{spec.quantity != null || spec.unit != null ? (
-				<span className={styles.node}>
-					{formatSpecMeasure({ spec, servings, convertUnits })}
-				</span>
-			) : null}
+			<span className={styles.node}>
+				{formatSpecMeasure({ spec, servings, convertUnits })}
+			</span>
 
 			{isDraftIngredient && spec.ingredient.name ? (
 				<>
-					<span className={clsx(styles.node, styles.name)}>
+					<span className={clsx(styles.node, styles.name, styles.isNew)}>
 						{spec.ingredient.name}
+
+						<OptionalText optional={spec.optional} />
 					</span>
 
-					<Chip size={0} className={clsx(styles.node, styles.new)}>
+					<Chip size={0} className={clsx(styles.node, styles.badge)}>
 						New
 					</Chip>
 				</>
 			) : (
-				<Link
-					href={`/bar/ingredients/${spec.ingredient.id}`}
-					className={clsx(styles.node, styles.name)}
-				>
-					{spec.ingredient.name}
-				</Link>
-			)}
+				<span className={clsx(styles.node, styles.name)}>
+					<Link
+						href={`/bar/ingredients/${spec.ingredient.id}`}
+						className={styles.link}
+					>
+						{spec.ingredient.name}
+					</Link>
 
-			{spec.optional ? (
-				<span className={clsx(styles.node, styles.optional)}>(optional)</span>
-			) : null}
+					<OptionalText optional={spec.optional} />
+				</span>
+			)}
 		</Text>
 	);
 }
+
+const OptionalText = ({
+	optional,
+}: {
+	optional: boolean | null | undefined;
+}) => {
+	if (!optional) {
+		return null;
+	}
+
+	return <span className={clsx(styles.node, styles.optional)}>(optional)</span>;
+};

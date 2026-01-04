@@ -1,5 +1,8 @@
 import { z } from "zod/v4";
-import { draftIngredientSchema } from "@/db/schema/ingredients";
+import {
+	draftIngredientSchema,
+	ingredientsRefinements,
+} from "@/db/schema/ingredients";
 import {
 	type RecipeListEntryWithRecipe,
 	recipeListEntryFormSchema,
@@ -31,7 +34,8 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-export const ingredientFormDataSchema = draftIngredientSchema
+export const ingredientFormDataSchema = z
+	.object(draftIngredientSchema.shape)
 	/**
 	 * This is for user form. Users will type a percentage value, but we store a ratio.
 	 * Remove existing constraints first, then add another schema. It may be a better
@@ -40,7 +44,8 @@ export const ingredientFormDataSchema = draftIngredientSchema
 	.omit({ abv: true })
 	.extend({
 		abv: percentageToRatioSchema.optional(),
-	});
+	})
+	.refine(...ingredientsRefinements);
 
 export const upsertSpecSchema = insertSpecsSchema
 	.omit({

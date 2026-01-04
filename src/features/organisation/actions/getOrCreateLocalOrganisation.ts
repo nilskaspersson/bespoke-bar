@@ -18,11 +18,11 @@ export async function getOrCreateLocalOrganisation(
 	}
 
 	/**
-	 * If there's no Clerk org id, we can't create a local org. Return null, then
-	 * implementing component can decide what to do.
+	 * If there's no Clerk org id, we can't create a local org. Throw a redirect to the
+	 * create org page.
 	 */
 	if (!orgId) {
-		redirect("/bar/create");
+		redirect("/org/create");
 	}
 
 	const existingOrganisation = await getCachedOrganisation(orgId);
