@@ -16,7 +16,9 @@ import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
-async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
+export async function upsertRecipesWithSpecs(
+	userInputRecipes: RecipeFormData[],
+) {
 	const { userId, orgId } = await authOrForbidden();
 
 	const ingredientsToCreate = extractIngredientsToCreate(

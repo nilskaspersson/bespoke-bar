@@ -6,6 +6,7 @@ import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { CreateRecipeEntryDialog } from "@/features/lists/components/CreateRecipeEntryDialog";
 import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
 import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
+import { DuplicateRecipeButton } from "@/features/recipes/components/DuplicateRecipeButton";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/components/ToggleFavoriteRecipeButton";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToClipboard";
@@ -13,7 +14,6 @@ import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { ToggleModalButton } from "@/ui/ToggleModalButton";
 import { getServerSideBaseURL } from "@/utils/url";
-
 import styles from "./styles.module.css";
 
 export function RecipeActions({
@@ -91,6 +91,16 @@ export function RecipeActions({
 						>
 							Copy specs
 						</CopySpecsToClipboard>
+					</li>
+
+					<li>
+						<DuplicateRecipeButton
+							{...actionProps}
+							recipe={recipe}
+							color="amber"
+						>
+							<Icon name="clone" size={1} /> Duplicate
+						</DuplicateRecipeButton>
 					</li>
 
 					<li>

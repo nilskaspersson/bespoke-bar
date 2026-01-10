@@ -1,0 +1,86 @@
+"use client";
+
+import type { Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
+import { duplicateRecipeAction } from "@/features/recipes/actions/duplicateRecipe";
+import { DeleteRecipeButton } from "@/features/recipes/components/DeleteRecipeButton";
+import { useServerAction } from "@/hooks/useServerAction";
+import { type ButtonProps, LinkButton } from "@/ui/Button";
+import { Icon } from "@/ui/Icon";
+import { SubmitButton } from "@/ui/SubmitButton";
+import { ToastActions, toast } from "@/ui/Toast";
+import { errorMessageOrFallback } from "@/utils/api";
+
+export function DuplicateRecipeButton({
+	recipe,
+	children,
+	onSuccess,
+	externalToastId,
+	...buttonProps
+}: {
+	recipe: RecipeWithSpecs;
+	onSuccess?: (newRecipe: Recipe) => void;
+	externalToastId?: string;
+} & ButtonProps) {
+	const { action: actionDuplicateRecipe } = useServerAction(
+		duplicateRecipeAction,
+	);
+
+	const handleDuplicate = async () => {
+		const toastId = externalToastId ?? Date.now().toString();
+
+		const promise = actionDuplicateRecipe(recipe.id);
+
+		toast.promise(promise, {
+			id: toastId,
+			loading: "Duplicating…",
+			success: (newRecipe) => {
+				if (!newRecipe) {
+					return {
+						message: "Could not duplicate recipe",
+						description: "Try again later.",
+					};
+				}
+
+				onSuccess?.(newRecipe);
+
+				return {
+					message: `Created "${newRecipe.name}"`,
+					action: (
+						<ToastActions>
+							<DeleteRecipeButton
+								recipe={newRecipe}
+								variant="ghost"
+								size="tiny"
+								color="red"
+								onClick={() => toast.dismiss(toastId)}
+							>
+								<Icon name="arrow-rotate-left" size={0} /> Undo
+							</DeleteRecipeButton>
+
+							<LinkButton
+								size="tiny"
+								href={`/bar/recipes/${newRecipe.id}`}
+								variant="ghost"
+								color="heavy"
+								prefetch
+								onClick={() => toast.dismiss(toastId)}
+							>
+								View recipe
+							</LinkButton>
+						</ToastActions>
+					),
+				};
+			},
+			error: (e) => ({
+				message: "Could not duplicate recipe",
+				description: errorMessageOrFallback(e, "Try again later."),
+			}),
+		});
+	};
+
+	return (
+		<form action={handleDuplicate}>
+			<SubmitButton {...buttonProps}>{children}</SubmitButton>
+		</form>
+	);
+}
