@@ -7,7 +7,7 @@ import { IngredientChips } from "@/features/ingredients/components/IngredientChi
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
-import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
+import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";

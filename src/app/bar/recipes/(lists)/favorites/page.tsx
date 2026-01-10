@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
-import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
-import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/actions/readUserFavoriteRecipeIds";
+import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
+import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { authOrForbidden } from "@/utils/auth";
 

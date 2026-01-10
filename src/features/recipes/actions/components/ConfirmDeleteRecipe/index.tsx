@@ -7,7 +7,7 @@ import type { ButtonProps } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Text } from "@/ui/Text";
 
-export function DeleteRecipe({
+export function ConfirmDeleteRecipe({
 	action,
 	className,
 	children,

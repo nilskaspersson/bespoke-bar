@@ -1,8 +1,8 @@
 "use client";
 
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { archiveRecipe } from "@/features/recipes/actions/archiveRecipe";
-import { UnarchiveRecipeButton } from "@/features/recipes/components/UnarchiveRecipeButton";
+import { ArchiveRecipeButton } from "@/features/recipes/actions/components/ArchiveRecipeButton";
+import { unarchiveRecipe } from "@/features/recipes/api/archiveRecipe";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -10,17 +10,17 @@ import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
 import { errorMessageOrFallback } from "@/utils/api";
 
-export function ArchiveRecipeButton({
+export function UnarchiveRecipeButton({
 	recipe,
 	children,
 	...buttonProps
 }: {
 	recipe: RecipeWithSpecs;
 } & ButtonProps) {
-	const { action: actionAchiveRecipe } = useServerAction(archiveRecipe);
+	const { action: actionUnarchiveRecipe } = useServerAction(unarchiveRecipe);
 
-	const handleArchive = async () => {
-		const promise = actionAchiveRecipe({
+	const handleUnarchive = async () => {
+		const promise = actionUnarchiveRecipe({
 			id: recipe.id,
 		});
 
@@ -28,22 +28,21 @@ export function ArchiveRecipeButton({
 
 		toast.promise(promise, {
 			id: toastId,
-			loading: "Archiving…",
+			loading: "Restoring…",
 			success: () => ({
-				message: "Recipe archived",
-				description: "Archived Recipes can be found in the archive.",
+				message: "Recipe restored",
 				action: (
 					<ToastActions>
-						<UnarchiveRecipeButton
+						<ArchiveRecipeButton
 							recipe={recipe}
 							variant="ghost"
 							color="red"
 							size="tiny"
-							key="undo-archive"
+							key="undo-unarchive"
 							onClick={() => toast.dismiss(toastId)}
 						>
 							Undo
-						</UnarchiveRecipeButton>
+						</ArchiveRecipeButton>
 
 						<LinkButton
 							size="tiny"
@@ -60,14 +59,14 @@ export function ArchiveRecipeButton({
 				),
 			}),
 			error: (e) => ({
-				message: "Could not archive Recipe",
+				message: "Could not restore Recipe",
 				description: errorMessageOrFallback(e, "Try again later."),
 			}),
 		});
 	};
 
 	return (
-		<form action={handleArchive}>
+		<form action={handleUnarchive}>
 			<SubmitButton {...buttonProps}>{children}</SubmitButton>
 		</form>
 	);

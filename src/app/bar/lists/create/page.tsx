@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/app/components/PageHeader";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
-import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
+import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { Container } from "@/ui/Container";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";

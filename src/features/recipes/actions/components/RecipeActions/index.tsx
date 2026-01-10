@@ -4,10 +4,10 @@ import { EntityActions } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { CreateRecipeEntryDialog } from "@/features/lists/components/CreateRecipeEntryDialog";
-import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
-import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
-import { DuplicateRecipeButton } from "@/features/recipes/components/DuplicateRecipeButton";
-import { ToggleFavoriteRecipeButton } from "@/features/recipes/components/ToggleFavoriteRecipeButton";
+import { ConfirmDeleteRecipe } from "@/features/recipes/actions/components/ConfirmDeleteRecipe";
+import { DuplicateRecipeButton } from "@/features/recipes/actions/components/DuplicateRecipeButton";
+import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
+import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToClipboard";
 import { LinkButton } from "@/ui/Button";
@@ -104,7 +104,7 @@ export function RecipeActions({
 					</li>
 
 					<li>
-						<DeleteRecipe
+						<ConfirmDeleteRecipe
 							buttonProps={actionProps}
 							recipe={recipe}
 							action={deleteRecipe.bind(null, {
@@ -113,7 +113,7 @@ export function RecipeActions({
 							})}
 						>
 							<Icon name="trash" size={1} /> Delete
-						</DeleteRecipe>
+						</ConfirmDeleteRecipe>
 					</li>
 
 					<li>

@@ -1,8 +1,8 @@
 "use client";
 
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { unarchiveRecipe } from "@/features/recipes/actions/archiveRecipe";
-import { ArchiveRecipeButton } from "@/features/recipes/components/ArchiveRecipeButton";
+import { UnarchiveRecipeButton } from "@/features/recipes/actions/components/UnarchiveRecipeButton";
+import { archiveRecipe } from "@/features/recipes/api/archiveRecipe";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -10,17 +10,17 @@ import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
 import { errorMessageOrFallback } from "@/utils/api";
 
-export function UnarchiveRecipeButton({
+export function ArchiveRecipeButton({
 	recipe,
 	children,
 	...buttonProps
 }: {
 	recipe: RecipeWithSpecs;
 } & ButtonProps) {
-	const { action: actionUnarchiveRecipe } = useServerAction(unarchiveRecipe);
+	const { action: actionAchiveRecipe } = useServerAction(archiveRecipe);
 
-	const handleUnarchive = async () => {
-		const promise = actionUnarchiveRecipe({
+	const handleArchive = async () => {
+		const promise = actionAchiveRecipe({
 			id: recipe.id,
 		});
 
@@ -28,21 +28,22 @@ export function UnarchiveRecipeButton({
 
 		toast.promise(promise, {
 			id: toastId,
-			loading: "Restoring…",
+			loading: "Archiving…",
 			success: () => ({
-				message: "Recipe restored",
+				message: "Recipe archived",
+				description: "Archived Recipes can be found in the archive.",
 				action: (
 					<ToastActions>
-						<ArchiveRecipeButton
+						<UnarchiveRecipeButton
 							recipe={recipe}
 							variant="ghost"
 							color="red"
 							size="tiny"
-							key="undo-unarchive"
+							key="undo-archive"
 							onClick={() => toast.dismiss(toastId)}
 						>
 							Undo
-						</ArchiveRecipeButton>
+						</UnarchiveRecipeButton>
 
 						<LinkButton
 							size="tiny"
@@ -59,14 +60,14 @@ export function UnarchiveRecipeButton({
 				),
 			}),
 			error: (e) => ({
-				message: "Could not restore Recipe",
+				message: "Could not archive Recipe",
 				description: errorMessageOrFallback(e, "Try again later."),
 			}),
 		});
 	};
 
 	return (
-		<form action={handleUnarchive}>
+		<form action={handleArchive}>
 			<SubmitButton {...buttonProps}>{children}</SubmitButton>
 		</form>
 	);

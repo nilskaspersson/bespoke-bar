@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import type { ViewType } from "@/app/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
-import { RecipeActions } from "@/features/recipes/components/RecipeActions";
+import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";

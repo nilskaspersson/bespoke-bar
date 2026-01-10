@@ -1,7 +1,7 @@
 "use client";
 
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { toggleRecipeFavorite } from "@/features/recipes/actions/toggleRecipeFavorite";
+import { toggleRecipeFavorite } from "@/features/recipes/api/toggleRecipeFavorite";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";

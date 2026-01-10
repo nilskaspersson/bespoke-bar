@@ -1,8 +1,8 @@
 "use client";
 
 import type { Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
-import { duplicateRecipeAction } from "@/features/recipes/actions/duplicateRecipe";
-import { DeleteRecipeButton } from "@/features/recipes/components/DeleteRecipeButton";
+import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
+import { duplicateRecipeAction } from "@/features/recipes/api/duplicateRecipe";
 import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";

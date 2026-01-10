@@ -2,8 +2,8 @@
 
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
-import { getCachedRecipe } from "@/features/recipes/actions/readRecipe";
-import { upsertRecipesWithSpecs } from "@/features/recipes/actions/upsertRecipeWithSpecs";
+import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
+import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipeWithSpecs";
 import { pick } from "@/utils";
 import { authOrForbidden } from "@/utils/auth";
 

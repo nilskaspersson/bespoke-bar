@@ -1,7 +1,7 @@
 "use client";
 
 import type { Recipe } from "@/db/schema/recipes";
-import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
+import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
 import { useServerAction } from "@/hooks/useServerAction";
 import type { ButtonProps } from "@/ui/Button";
 import { SubmitButton } from "@/ui/SubmitButton";

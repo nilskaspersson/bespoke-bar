@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { getCachedCountBarRecipes } from "@/features/recipes/actions/countBarRecipes";
-import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/actions/readUserFavoriteRecipeIds";
+import { getCachedCountBarRecipes } from "@/features/recipes/api/countBarRecipes";
+import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { Flex } from "@/ui/Flex";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";

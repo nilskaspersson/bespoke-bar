@@ -10,7 +10,7 @@ import {
 	insertIngredientsInTransaction,
 	replaceSpecsInTransaction,
 	upsertRecipeInTransaction,
-} from "@/features/recipes/actions/utils/transactionHelpers";
+} from "@/features/recipes/api/utils/transactionHelpers";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
 import { authOrForbidden } from "@/utils/auth";

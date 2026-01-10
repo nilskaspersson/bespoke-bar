@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
-import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
-import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/actions/readUserFavoriteRecipeIds";
+import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
+import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import {
 	RecipeTable,
 	RecipeTableSkeleton,

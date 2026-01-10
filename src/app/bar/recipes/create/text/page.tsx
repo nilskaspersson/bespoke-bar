@@ -1,5 +1,5 @@
 import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
-import { createRecipesWithSpecsFromData } from "@/features/recipes/actions/upsertRecipeWithSpecs";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipeWithSpecs";
 import { BulkDraftInfo } from "@/features/recipes/components/BulkDraftInfo";
 import { BulkDraftRecipes } from "@/features/recipes/components/BulkDraftRecipes";
 import { authOrForbidden } from "@/utils/auth";
