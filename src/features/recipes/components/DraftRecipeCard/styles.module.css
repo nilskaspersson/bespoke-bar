@@ -1,8 +1,5 @@
 @layer composition {
 	.card {
-		container-type: inline-size;
-		container-name: draft-recipe-card;
-
 		background-color: var(--mauve-3);
 		padding: var(--space-5);
 		border: 1px solid var(--mauve-6);
@@ -11,34 +8,5 @@
 	.icon {
 		fill: var(--mauve-8);
 		flex: 0 0 auto;
-	}
-
-	.specs {
-		display: grid;
-		grid-template-columns: auto 1fr auto;
-		gap: var(--space-1) var(--space-3);
-
-		@container draft-recipe-card (width < 25ch) {
-			grid-template-columns: 1fr;
-			row-gap: var(--space-3);
-		}
-	}
-
-	.spec {
-		display: grid;
-		grid-column: 1 / -1;
-		grid-template-columns: subgrid;
-
-		/**
-		 * "Hack" to have the NEW label not look horrible. This is not a good layout in the
-		 * first place though so expect refactor.
-		 */
-		@container draft-recipe-card (width < 25ch) {
-			place-items: start;
-		}
-	}
-
-	.entry {
-		display: contents;
 	}
 }

@@ -11,6 +11,7 @@ import { EmptyArea } from "@/app/components/EmptyArea";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/actions/upsertRecipeWithSpecs";
 import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
+import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/hooks/useCreateBulkDraftRecipes";
 import {
 	type DisplayMode,
@@ -71,13 +72,13 @@ export function OutputPreview({
 						</Heading>
 					</EmptyArea>
 				) : (
-					<ul className={styles.recipes}>
+					<OverscrollList padding={4}>
 						{draftRecipes.map((recipe) => (
-							<li key={getKey(recipe)} className={styles.recipe}>
+							<OverscrollList.Item key={getKey(recipe)}>
 								<DraftRecipeCard recipe={recipe} convertUnits={null} />
-							</li>
+							</OverscrollList.Item>
 						))}
-					</ul>
+					</OverscrollList>
 				)}
 			</Activity>
 

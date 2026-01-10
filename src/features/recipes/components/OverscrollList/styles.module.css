@@ -1,0 +1,37 @@
+@layer feature {
+	.list {
+		display: grid;
+		overflow: auto;
+		gap: var(--jsxGap);
+
+		&.horizontal {
+			scroll-snap-type: x proximity;
+			grid-auto-flow: column;
+
+			grid-auto-columns: 400px;
+			width: calc(100% + var(--jsxPadding) * 2);
+			margin-inline: calc(var(--jsxPadding) * -1);
+			padding-inline: var(--jsxPadding);
+			mask-image: linear-gradient(
+				to right,
+				transparent 0px,
+				black var(--jsxPadding),
+				black calc(100% - var(--jsxPadding)),
+				transparent 100%
+			);
+			mask-repeat: no-repeat;
+		}
+
+		&.vertical {
+			grid-auto-flow: row;
+		}
+	}
+
+	.item {
+		contain: layout;
+
+		.horizontal & {
+			scroll-snap-align: center;
+		}
+	}
+}

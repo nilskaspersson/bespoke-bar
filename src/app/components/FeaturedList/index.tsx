@@ -44,7 +44,7 @@ export async function FeaturedList(
 					</Heading>
 
 					<Text size={2}>
-						Your Featured List will be displayed here for easy access.
+						You can select a Featured List to be displayed for easy access.
 					</Text>
 
 					<LinkButton

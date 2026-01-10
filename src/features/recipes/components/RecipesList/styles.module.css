@@ -1,53 +1,15 @@
 @layer feature {
-	.list {
-		display: grid;
-		gap: var(--gap);
-		will-change: display;
-
-		&.cardLayout {
-			display: flex;
-			align-items: start;
-			overflow: auto;
-			margin-inline: calc(var(--app-inset) * -1);
-			padding-inline: var(--app-inset);
-			padding-bottom: var(--gap);
-			scroll-snap-type: x mandatory;
-
-			@media (min-width: 860px) {
-				mask-image: linear-gradient(
-					to right,
-					transparent 0px,
-					black var(--app-inset),
-					black calc(100% - var(--app-inset)),
-					transparent 100%
-				);
-				mask-repeat: no-repeat;
-			}
-		}
-	}
-
 	.card {
-		scroll-snap-align: center;
-		display: flex;
-		contain: layout;
-		flex-direction: column;
-		padding: var(--gap) var(--gap) var(--gap--tiny);
+		padding: var(--gap);
 		background-color: var(--mauve-2);
 		border-radius: var(--radius--large);
 		border: 1px solid var(--shine);
 		box-shadow: var(--shadow--low);
-
-		.cardLayout & {
-			max-width: min(calc(100cqw - var(--app-inset) * 2), 100%, 40ch);
-			flex: 1 0 auto;
-		}
+		isolation: isolate;
 	}
 
-	.content {
-		border-bottom: 1px solid var(--mauve-4);
-		padding-bottom: var(--space-3);
-		margin-bottom: var(--space-2);
-		transition: border-color var(--transition-duration);
+	.actions {
+		margin-top: var(--gap--tiny);
 	}
 
 	.icon {

@@ -1,18 +1,18 @@
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { getCachedCountArchivedBarRecipes } from "@/features/recipes/actions/countArchivedBarRecipes";
 import { getCachedCountBarRecipes } from "@/features/recipes/actions/countBarRecipes";
+import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/actions/readUserFavoriteRecipeIds";
 import { Flex } from "@/ui/Flex";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./styles.module.css";
 
 export async function StatLinks(props: ComponentProps<"nav">) {
-	const { orgId } = await authOrForbidden();
+	const { orgId, userId } = await authOrForbidden();
 
-	const [recipesCount, archivedRecipesCount] = await Promise.all([
+	const [recipesCount, favoriteRecipes] = await Promise.all([
 		getCachedCountBarRecipes(orgId),
-		getCachedCountArchivedBarRecipes(orgId),
+		getCachedUserFavoriteRecipeIds(orgId, userId),
 	]);
 
 	return (
@@ -28,16 +28,16 @@ export async function StatLinks(props: ComponentProps<"nav">) {
 			</Link>
 
 			<Link
-				href="/bar/recipes/archive"
+				href="/bar/recipes/favorites"
 				prefetch={false}
 				className={styles.link}
 			>
 				<Text as="div" size={1} compact>
-					Archive
+					Favorites
 				</Text>
 
 				<Text as="div" size={5} weight={600} compact className={styles.count}>
-					{archivedRecipesCount}
+					{favoriteRecipes.length}
 				</Text>
 			</Link>
 		</Flex>
