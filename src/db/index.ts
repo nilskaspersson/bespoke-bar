@@ -7,6 +7,7 @@ import * as glassware from "./schema/glassware";
 import * as ingredients from "./schema/ingredients";
 import * as organisations from "./schema/organisations";
 import * as preparationMethods from "./schema/preparationMethods";
+import * as recipeFavorites from "./schema/recipeFavorites";
 import * as recipeListEntries from "./schema/recipeListEntries";
 import * as recipeLists from "./schema/recipeLists";
 import * as recipes from "./schema/recipes";
@@ -20,12 +21,13 @@ if (!process.env.DATABASE_URL) {
 const schema = {
 	...categories,
 	...cocktailStyles,
+	...glassware,
 	...ingredients,
-	...recipeLists,
-	...recipeListEntries,
 	...organisations,
 	...preparationMethods,
-	...glassware,
+	...recipeFavorites,
+	...recipeListEntries,
+	...recipeLists,
 	...recipes,
 	...specs,
 	...units,
