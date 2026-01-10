@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import type { ComponentProps } from "react";
 import { draftIngredientSchema } from "@/db/schema/ingredients";
-import { createIngredient } from "@/features/ingredients/actions/createIngredient";
+import { createIngredient } from "@/features/ingredients/api/createIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";

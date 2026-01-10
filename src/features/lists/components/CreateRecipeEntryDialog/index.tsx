@@ -9,8 +9,8 @@ import {
 	recipeListWithEntriesFormSchema,
 } from "@/db/schema/composite";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { appendRecipeListEntryAction } from "@/features/lists/actions/appendRecipeListEntry";
-import { removeRecipeFromList } from "@/features/lists/actions/removeRecipeFromList";
+import { appendRecipeListEntryAction } from "@/features/lists/api/appendRecipeListEntry";
+import { removeRecipeFromList } from "@/features/lists/api/removeRecipeFromList";
 import { RecipeEntryPriceCalculation } from "@/features/lists/components/RecipeEntryPriceCalculation";
 import { RecipeListEntryCard } from "@/features/lists/components/RecipeListEntryCard";
 import { RemoveListEntryButton } from "@/features/lists/components/RemoveListEntryButton";

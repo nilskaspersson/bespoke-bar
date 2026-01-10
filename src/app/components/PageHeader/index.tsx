@@ -1,4 +1,4 @@
-import { getClerkOrganization } from "@/features/organisation/actions/getClerkOrganization";
+import { getClerkOrganization } from "@/features/organisation/api/getClerkOrganization";
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
 import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";

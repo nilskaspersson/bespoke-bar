@@ -1,4 +1,4 @@
-import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipeWithSpecs";
 import { BulkDraftInfo } from "@/features/recipes/components/BulkDraftInfo";
 import { BulkDraftRecipes } from "@/features/recipes/components/BulkDraftRecipes";

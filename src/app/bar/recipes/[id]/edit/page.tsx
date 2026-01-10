@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { getRecipeUrl } from "@/features/recipes/utils";

@@ -7,7 +7,7 @@ import {
 	type RecipeListEntryWithRecipe,
 	recipeListEntryFormSchema,
 } from "@/db/schema/recipeListEntries";
-import { updateRecipeListEntryAction } from "@/features/lists/actions/updateRecipeListEntry";
+import { updateRecipeListEntryAction } from "@/features/lists/api/updateRecipeListEntry";
 import { RecipeEntryDiff } from "@/features/lists/components/RecipeEntryDiff";
 import { RecipeEntryPriceCalculation } from "@/features/lists/components/RecipeEntryPriceCalculation";
 import { UndoEntryChangesButton } from "@/features/lists/components/UndoEntryChangesButton";

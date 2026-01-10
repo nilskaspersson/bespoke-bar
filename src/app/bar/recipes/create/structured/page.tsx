@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { authOrForbidden } from "@/utils/auth";
 

@@ -1,7 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import { updateIngredientSchema } from "@/db/schema/ingredients";
-import { getCachedIngredient } from "@/features/ingredients/actions/readIngredient";
-import { updateIngredient } from "@/features/ingredients/actions/updateIngredient";
+import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
+import { updateIngredient } from "@/features/ingredients/api/updateIngredient";
 import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";

@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
 import { EmptyArea } from "@/app/components/EmptyArea";
 import { EntityActions } from "@/app/components/EntityActions";
-import { getCachedFeaturedList } from "@/features/lists/actions/readFeaturedList";
+import { getCachedFeaturedList } from "@/features/lists/api/readFeaturedList";
 import { RecipeListActions } from "@/features/lists/components/RecipeListActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";

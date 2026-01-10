@@ -2,7 +2,7 @@
 
 import type { MouseEventHandler } from "react";
 import type { RecipeListEntry } from "@/db/schema/recipeListEntries";
-import { updateRecipeListEntry } from "@/features/lists/actions/updateRecipeListEntry";
+import { updateRecipeListEntry } from "@/features/lists/api/updateRecipeListEntry";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { toast } from "@/ui/Toast";
 import { errorMessageOrFallback } from "@/utils/api";

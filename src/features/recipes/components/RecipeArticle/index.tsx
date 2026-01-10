@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { getUserById } from "@/features/organisation/actions/getUserById";
+import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";

@@ -2,9 +2,9 @@
 
 import z from "zod";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
+import { parseTextFromImage } from "@/features/recipes/photo/api/vision";
 import { findRecipeInTextWithLLM } from "@/features/recipes/photo/utils/findRecipeInTextWithLLM";
 import { authOrForbidden } from "@/utils/auth";
-import { parseTextFromImage } from "@/utils/vision";
 
 const fileSchema = z.file();
 fileSchema.max(10 * 1024 * 1024); // 10 MB

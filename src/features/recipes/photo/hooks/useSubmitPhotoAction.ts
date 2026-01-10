@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback } from "react";
-import { parseTextFromImageAction } from "@/features/recipes/photo/actions/parseTextFromImage";
+import { parseTextFromImageAction } from "@/features/recipes/photo/api/parseTextFromImageAction";
 import { useServerAction } from "@/hooks/useServerAction";
 import { toast } from "@/ui/Toast";
 import { errorMessageOrFallback } from "@/utils/api";

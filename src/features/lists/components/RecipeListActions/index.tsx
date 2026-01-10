@@ -1,9 +1,9 @@
 import type { ActionProps } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
-import { clearFeaturedList } from "@/features/lists/actions/clearFeaturedList";
-import { deleteRecipeList } from "@/features/lists/actions/deleteRecipeList";
-import { setFeaturedList } from "@/features/lists/actions/setFeaturedList";
+import { clearFeaturedList } from "@/features/lists/api/clearFeaturedList";
+import { deleteRecipeList } from "@/features/lists/api/deleteRecipeList";
+import { setFeaturedList } from "@/features/lists/api/setFeaturedList";
 import { ClearFeaturedListButton } from "@/features/lists/components/ClearFeaturedListButton";
 import { DeleteRecipeListButton } from "@/features/lists/components/DeleteRecipeListButton";
 import { SetFeaturedListButton } from "@/features/lists/components/SetFeaturedListButton";

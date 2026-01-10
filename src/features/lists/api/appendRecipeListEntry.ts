@@ -1,24 +1,22 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { redirect } from "next/navigation";
 import { db } from "@/db";
 import {
+	type RecipeListWithEntries,
 	type RecipeListWithEntriesFormData,
 	recipeListWithEntriesFormSchema,
 } from "@/db/schema/composite";
-import type { RecipeList } from "@/db/schema/recipeLists";
 import {
-	replaceRecipeListEntriesInTransaction,
+	appendRecipeListEntriesInTransaction,
 	upsertRecipeListInTransaction,
-} from "@/features/lists/actions/utils/transactionHelpers";
-import { getRecipeListUrl } from "@/features/lists/utils";
+} from "@/features/lists/api/utils/transactionHelpers";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
-export async function upsertRecipeListWithEntries(
+export async function appendRecipeListEntry(
 	userInputList: RecipeListWithEntriesFormData,
-): Promise<RecipeList> {
+): Promise<RecipeListWithEntries> {
 	const { userId, orgId } = await authOrForbidden();
 
 	const [result, isNew] = await db.transaction(async (tx) => {
@@ -29,14 +27,14 @@ export async function upsertRecipeListWithEntries(
 			orgId,
 		);
 
-		await replaceRecipeListEntriesInTransaction(
+		const entries = await appendRecipeListEntriesInTransaction(
 			tx,
 			list.id,
 			userInputList.entries,
 			orgId,
 		);
 
-		return [list, isNew];
+		return [{ ...list, entries }, isNew];
 	});
 
 	if (isNew) {
@@ -48,7 +46,7 @@ export async function upsertRecipeListWithEntries(
 	return result;
 }
 
-export async function upsertRecipeListWithEntriesAction(formData: FormData) {
+export async function appendRecipeListEntryAction(formData: FormData) {
 	const submission = parseWithZod(formData, {
 		schema: recipeListWithEntriesFormSchema,
 	});
@@ -57,10 +55,10 @@ export async function upsertRecipeListWithEntriesAction(formData: FormData) {
 		return submission.reply();
 	}
 
-	let result: RecipeList;
+	let result: RecipeListWithEntries;
 
 	try {
-		result = await upsertRecipeListWithEntries(submission.value);
+		result = await appendRecipeListEntry(submission.value);
 	} catch (_error) {
 		console.error(_error);
 
@@ -69,5 +67,5 @@ export async function upsertRecipeListWithEntriesAction(formData: FormData) {
 		});
 	}
 
-	redirect(getRecipeListUrl(result));
+	return result;
 }

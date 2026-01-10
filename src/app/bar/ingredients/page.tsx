@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageHeader } from "@/app/components/PageHeader";
-import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { IngredientTable } from "@/features/ingredients/components/IngredientsTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";

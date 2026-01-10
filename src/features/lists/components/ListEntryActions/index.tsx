@@ -1,8 +1,8 @@
 import { EntityActions } from "@/app/components/EntityActions";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 
-import { addRecipeToList } from "@/features/lists/actions/addRecipeToList";
-import { removeRecipeFromList } from "@/features/lists/actions/removeRecipeFromList";
+import { addRecipeToList } from "@/features/lists/api/addRecipeToList";
+import { removeRecipeFromList } from "@/features/lists/api/removeRecipeFromList";
 import { RemoveListEntryButton } from "@/features/lists/components/RemoveListEntryButton";
 import { UpdateRecipeEntryFormDialog } from "@/features/lists/components/UpdateRecipeEntryFormDialog";
 
