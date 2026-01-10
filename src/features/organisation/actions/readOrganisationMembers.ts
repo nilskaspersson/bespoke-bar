@@ -1,5 +1,3 @@
-"use server";
-
 import { clerkClient } from "@clerk/nextjs/server";
 import type { UserIdMap } from "@/features/organisation/types";
 import { authOrForbidden } from "@/utils/auth";

@@ -1,5 +1,3 @@
-"use server";
-
 import { and, desc, eq, isNull, sql } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 import { db } from "@/db";
@@ -21,7 +19,7 @@ const preparedReadBarRecipes = db.query.RecipesTable.findMany({
 	orderBy: [desc(RecipesTable.createdAt)],
 }).prepare("readBarRecipes");
 
-export async function readBarRecipes(orgId: string) {
+async function readBarRecipes(orgId: string) {
 	return await preparedReadBarRecipes.execute({ orgId });
 }
 

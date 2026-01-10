@@ -1,5 +1,3 @@
-"use server";
-
 import { eq } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 import { forbidden, redirect } from "next/navigation";

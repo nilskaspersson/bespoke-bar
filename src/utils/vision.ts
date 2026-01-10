@@ -1,5 +1,3 @@
-"use server";
-
 import { ImageAnnotatorClient } from "@google-cloud/vision";
 import { getGCPCredentials } from "@/utils/gcp";
 

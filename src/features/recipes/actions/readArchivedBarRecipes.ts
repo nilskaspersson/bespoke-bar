@@ -1,5 +1,3 @@
-"use server";
-
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { cacheTag } from "next/cache";
 import { db } from "@/db";
