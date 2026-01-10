@@ -1,12 +1,12 @@
+import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/app/components/EntityActions";
 import { ShareAction } from "@/app/components/ShareAction";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { CreateRecipeEntryDialog } from "@/features/lists/components/CreateRecipeEntryDialog";
 import { deleteRecipe } from "@/features/recipes/actions/deleteRecipe";
-import { ArchiveRecipeButton } from "@/features/recipes/components/ArchiveRecipeButton";
 import { DeleteRecipe } from "@/features/recipes/components/DeleteRecipe";
-import { UnarchiveRecipeButton } from "@/features/recipes/components/UnarchiveRecipeButton";
+import { ToggleFavoriteRecipeButton } from "@/features/recipes/components/ToggleFavoriteRecipeButton";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToClipboard";
 import { LinkButton } from "@/ui/Button";
@@ -14,14 +14,18 @@ import { Icon } from "@/ui/Icon";
 import { ToggleModalButton } from "@/ui/ToggleModalButton";
 import { getServerSideBaseURL } from "@/utils/url";
 
+import styles from "./styles.module.css";
+
 export function RecipeActions({
 	recipe,
 	withLink,
+	isFavorite,
 	...props
-}: { recipe: RecipeWithSpecs; withLink?: boolean } & Omit<
-	ComponentProps<typeof EntityActions>,
-	"children"
->) {
+}: {
+	recipe: RecipeWithSpecs;
+	withLink?: boolean;
+	isFavorite?: boolean;
+} & Omit<ComponentProps<typeof EntityActions>, "children">) {
 	return (
 		<EntityActions {...props}>
 			{(actionProps) => (
@@ -38,6 +42,21 @@ export function RecipeActions({
 							</LinkButton>
 						</li>
 					) : null}
+
+					<li>
+						<ToggleFavoriteRecipeButton
+							{...actionProps}
+							recipe={recipe}
+							isFavorite={isFavorite ?? false}
+							color={isFavorite ? "red" : actionProps.color}
+							className={clsx(actionProps.className, {
+								[styles.favorite]: isFavorite,
+							})}
+						>
+							<Icon name={isFavorite ? "heart-solid" : "heart"} size={1} />
+							Favorite
+						</ToggleFavoriteRecipeButton>
+					</li>
 
 					<li>
 						<LinkButton
@@ -75,24 +94,6 @@ export function RecipeActions({
 					</li>
 
 					<li>
-						{recipe.archivedAt ? (
-							<UnarchiveRecipeButton {...actionProps} recipe={recipe}>
-								<Icon name="box-archive" size={1} />
-								Unarchive
-							</UnarchiveRecipeButton>
-						) : (
-							<ArchiveRecipeButton
-								{...actionProps}
-								color="amber"
-								recipe={recipe}
-							>
-								<Icon name="box-archive" size={1} />
-								Archive
-							</ArchiveRecipeButton>
-						)}
-					</li>
-
-					<li>
 						<DeleteRecipe
 							buttonProps={actionProps}
 							recipe={recipe}
@@ -120,27 +121,4 @@ export function RecipeActions({
 			)}
 		</EntityActions>
 	);
-
-	// return (
-	// 	<Flex gap={2} justifyContent="center" className={styles.actions}>
-	// 		<LinkButton
-	// 			href={`/bar/recipes/${recipe.id}/edit`}
-	// 			variant="outline"
-	// 			color="heavy"
-	// 			size="small"
-	// 		>
-	// 			<Icon name="pen-to-square" /> Edit
-	// 		</LinkButton>
-
-	// 		<DeleteRecipe
-	// 			recipe={recipe}
-	// 			action={deleteRecipe.bind(null, {
-	// 				id: recipe.id,
-	// 				redirectTo: "/bar/recipes",
-	// 			})}
-	// 		>
-	// 			<Icon name="trash" /> Delete
-	// 		</DeleteRecipe>
-	// 	</Flex>
-	// );
 }

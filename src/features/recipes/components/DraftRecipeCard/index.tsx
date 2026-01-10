@@ -3,13 +3,12 @@ import { AbvInfo } from "@/features/recipes/components/AbvInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { VolumeInfo } from "@/features/recipes/components/VolumeInfo";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
-import { SpecEntry } from "@/features/specs/components/SpecEntry";
+import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
-import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function DraftRecipeCard<T extends BaseRecipe>(props: {
@@ -32,17 +31,10 @@ export function DraftRecipeCard<T extends BaseRecipe>(props: {
 
 			{props.recipe.specs && props.recipe.specs.length > 0 ? (
 				<>
-					<ul className={styles.specs}>
-						{props.recipe.specs.map((spec) => (
-							<li key={getKey(spec)} className={styles.spec}>
-								<SpecEntry
-									className={styles.entry}
-									spec={spec}
-									convertUnits={props.convertUnits}
-								/>
-							</li>
-						))}
-					</ul>
+					<SpecsList
+						specs={props.recipe.specs}
+						convertUnits={props.convertUnits}
+					/>
 
 					<Grid gap={1}>
 						<AbvInfo recipe={props.recipe} />

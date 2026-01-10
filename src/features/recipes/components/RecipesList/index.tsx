@@ -1,8 +1,8 @@
 import type { Table } from "@tanstack/react-table";
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import type { ViewType } from "@/app/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeActions } from "@/features/recipes/components/RecipeActions";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { Icon } from "@/ui/Icon";
@@ -12,11 +12,13 @@ export function RecipesList<T extends RecipeWithSpecs>({
 	getRowModel,
 	className,
 	view,
+	favoriteRecipeIds,
 	...props
-}: { getRowModel: Table<T>["getRowModel"]; view: ViewType } & Omit<
-	ComponentProps<"ul">,
-	"children"
->) {
+}: {
+	getRowModel: Table<T>["getRowModel"];
+	view: ViewType;
+	favoriteRecipeIds?: string[];
+} & Omit<ComponentProps<"ul">, "children">) {
 	/**
 	 * TanStack Table uses some strange re-rendering patterns behind the scenes that
 	 * are incompatible with React Compiler.
@@ -24,22 +26,24 @@ export function RecipesList<T extends RecipeWithSpecs>({
 	 */
 	"use no memo";
 
+	const favoriteIdSet = new Set(favoriteRecipeIds);
+
 	if (getRowModel().rows.length === 0) {
 		return null;
 	}
 
 	return (
-		<ul
+		<OverscrollList
 			{...props}
-			className={clsx(styles.list, className, {
-				[styles.cardLayout]: view === "card",
-			})}
+			padding={6}
+			gap={4}
+			direction={view === "card" ? "horizontal" : "vertical"}
 		>
 			{getRowModel().rows.map((row) => (
-				<li key={row.id} className={styles.card}>
+				<OverscrollList.Item key={row.id}>
 					<RecipeCard
 						recipe={row.original}
-						className={styles.content}
+						className={styles.card}
 						nameAdornment={
 							<Icon
 								name="duotone-martini-glass"
@@ -49,9 +53,14 @@ export function RecipesList<T extends RecipeWithSpecs>({
 						}
 					/>
 
-					<RecipeActions recipe={row.original} withLink />
-				</li>
+					<RecipeActions
+						recipe={row.original}
+						withLink
+						isFavorite={favoriteIdSet.has(row.original.id)}
+						className={styles.actions}
+					/>
+				</OverscrollList.Item>
 			))}
-		</ul>
+		</OverscrollList>
 	);
 }

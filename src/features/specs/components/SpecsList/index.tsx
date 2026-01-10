@@ -17,11 +17,12 @@ export function SpecsList<T extends DraftSpecWithDraftIngredient>({
 	convertUnits?: UnitSystems | null;
 } & Omit<ComponentProps<"div">, "children">) {
 	return (
-		<div {...props}>
+		<div {...props} className={styles.specs}>
 			<Grid as="ul" gap={2} className={styles.list}>
 				{specs.map((spec) => (
-					<li key={getKey(spec)}>
+					<li key={getKey(spec)} className={styles.item}>
 						<SpecEntry
+							className={styles.entry}
 							spec={spec}
 							servings={servings}
 							convertUnits={convertUnits}

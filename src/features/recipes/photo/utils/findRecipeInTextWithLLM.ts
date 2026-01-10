@@ -1,7 +1,4 @@
-"use server";
-
 import { VertexAI } from "@google-cloud/vertexai";
-import { FRACTION_MAP } from "@/features/quantity/constants";
 import { getGCPCredentials } from "@/utils/gcp";
 
 const vertexAI = new VertexAI({
@@ -33,32 +30,37 @@ ${userText}
 <instructions>
 Extract ONLY text that appears to be cocktail recipes.
 
-Include:
-- Recipe names (only if followed by ingredients)
-- Ingredient lists with measurements
+Include: Recipe names and ingredient lists with measurements
+Exclude: Unrelated notes, page references
 
-Exclude:
-- Watermarks, logos, decorative text, unrelated notes, background text, references to pages
+RECIPE SEPARATION - CRITICAL:
+Put a blank line between different recipes.
+NO blank lines between ingredients within a recipe.
 
-Do formatting in the following order:
-- Separate multiple recipes with exactly 2 newlines. Expect the first bare-text words to be the recipe name. Note that some recipes may not have a name, and some recipes may have ingredients without a unit and amount.
-- Convert all-caps text to regular capitalization
-- Keep the EXACT units and amounts from the original text (if text says "tsp", output "tsp").
-- Correct OCR errors in fractions (e.g., 134 → 1¾, 12 → 1/2). Valid fractions: ${Object.keys(FRACTION_MAP).join(", ")}
-- Convert fractions to decimals (e.g., 1½ → 1.5)
+Example output format:
+Margarita
+2 oz tequila
+1 oz lime juice
 
-Expected output format:
-[Recipe Name]
-[Amount] [Unit] [Ingredient]
-[Amount] [Unit] [Ingredient]
+Negroni
+1 oz gin
 
-[Another Recipe Name]
-[Amount] [Unit] [Ingredient]
+APPLY THESE CHANGES:
+1. Convert ALL-CAPS to normal capitalization
+2. Convert fractions to decimals: 1½→1.5, ¾→0.75, 12→0.5
+3. Keep units exactly as written (oz, tsp, ml, etc.)
+4. NEVER convert between units
+5. Strip common prefixes from bare lines (e.g., "Garnish: Mint sprig"→"Mint sprig", "Glass: Coupe"→"Coupe")
 
-If no recipe content exists, return exactly: ${NO_RECIPES_FOUND}
+RECIPE STRUCTURE:
+- First bare line = recipe name
+- Following lines = ingredients (with or without measurements)
+- Bare ingredients like "club soda" are valid
+
+If no recipe found, return: ${NO_RECIPES_FOUND}
 </instructions>
 
-Return ONLY the filtered recipe text or ${NO_RECIPES_FOUND}. No commentary, no markdown, no explanations.`;
+Return ONLY the recipe text, or ${NO_RECIPES_FOUND}. No markdown, no commentary.`;
 
 		const result = await generativeModel.generateContent({
 			contents: [{ role: "user", parts: [{ text: prompt }] }],

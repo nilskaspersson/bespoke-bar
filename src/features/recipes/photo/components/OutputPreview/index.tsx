@@ -11,6 +11,7 @@ import { EmptyArea } from "@/app/components/EmptyArea";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/actions/upsertRecipeWithSpecs";
 import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
+import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/hooks/useCreateBulkDraftRecipes";
 import {
 	type DisplayMode,
@@ -50,7 +51,7 @@ export function OutputPreview({
 	return (
 		<section {...props} className={clsx(className, styles.base)}>
 			<Grid gap={4}>
-				<Flex gap={4} justifyContent="space-between" alignItems="center">
+				<Flex gap={4} justifyContent="space-between" alignItems="center" wrap>
 					<Heading level="h2" size={4}>
 						Extracted {draftRecipes.length > 1 ? "recipes" : "recipe"}
 					</Heading>
@@ -71,13 +72,13 @@ export function OutputPreview({
 						</Heading>
 					</EmptyArea>
 				) : (
-					<ul className={styles.recipes}>
+					<OverscrollList padding={4}>
 						{draftRecipes.map((recipe) => (
-							<li key={getKey(recipe)} className={styles.recipe}>
+							<OverscrollList.Item key={getKey(recipe)}>
 								<DraftRecipeCard recipe={recipe} convertUnits={null} />
-							</li>
+							</OverscrollList.Item>
 						))}
-					</ul>
+					</OverscrollList>
 				)}
 			</Activity>
 
@@ -92,13 +93,17 @@ export function OutputPreview({
 				/>
 			</Activity>
 
-			<Flex justifyContent="space-between" alignItems="center" gap={4}>
-				<Callout size={1} icon="circle-exclamation" variant="inset">
-					Text extraction can be inaccurate. Double-check the extracted recipes
-					and make sure they are correct.
+			<Flex justifyContent="space-between" alignItems="center" gap={4} wrap>
+				<Callout
+					size={1}
+					icon="circle-exclamation"
+					variant="inset"
+					className={styles.headsup}
+				>
+					Text extraction can be inaccurate. Double-check extracted recipes.
 				</Callout>
 
-				<form action={submitBulkRecipesAction}>
+				<form action={submitBulkRecipesAction} className={styles.create}>
 					<Button
 						type="submit"
 						variant="solid"

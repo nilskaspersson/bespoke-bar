@@ -33,6 +33,7 @@ import styles from "./styles.module.css";
 type Props = {
 	recipes: RecipeWithSpecs[] | undefined | null;
 	members: UserIdMap;
+	favoriteRecipeIds?: string[];
 	disableSearch?: boolean;
 	defaultView?: ViewType;
 };
@@ -43,6 +44,7 @@ export function RecipeTable({
 	className,
 	recipes,
 	members,
+	favoriteRecipeIds,
 	disableSearch,
 	defaultView = "list",
 	...props
@@ -178,7 +180,11 @@ export function RecipeTable({
 			) : null}
 
 			{view === "list" || view === "card" ? (
-				<RecipesList getRowModel={table.getRowModel} view={view} />
+				<RecipesList
+					getRowModel={table.getRowModel}
+					view={view}
+					favoriteRecipeIds={favoriteRecipeIds}
+				/>
 			) : null}
 		</TableLayout>
 	);

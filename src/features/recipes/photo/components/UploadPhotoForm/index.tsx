@@ -73,7 +73,7 @@ export function UploadPhotoForm({
 			className={clsx(styles.base, className)}
 		>
 			<Grid gap={6} justifyItems="center">
-				<Heading level="h2" size={4}>
+				<Heading level="h2" size={4} align="center">
 					Upload an image of a recipe
 				</Heading>
 

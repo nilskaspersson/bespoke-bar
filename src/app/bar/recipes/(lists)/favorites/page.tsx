@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
 import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/actions/readUserFavoriteRecipeIds";
-import {
-	RecipeTable,
-	RecipeTableSkeleton,
-} from "@/features/recipes/components/RecipeTable";
+import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { authOrForbidden } from "@/utils/auth";
 
-export default async function RecipesPage() {
-	return (
-		<Suspense fallback={<RecipeTableSkeleton />}>
-			<RecipeTableWithData />
-		</Suspense>
-	);
-}
-
-async function RecipeTableWithData() {
+export default async function FavoriteRecipesPage() {
 	const { orgId, userId } = await authOrForbidden();
 
 	const [recipes, members, favoriteRecipeIds] = await Promise.all([
@@ -26,9 +14,13 @@ async function RecipeTableWithData() {
 		getCachedUserFavoriteRecipeIds(orgId, userId),
 	]);
 
+	const favoriteRecipes = recipes.filter((recipe) =>
+		favoriteRecipeIds.includes(recipe.id),
+	);
+
 	return (
 		<RecipeTable
-			recipes={recipes}
+			recipes={favoriteRecipes}
 			members={members}
 			favoriteRecipeIds={favoriteRecipeIds}
 		/>
@@ -36,5 +28,5 @@ async function RecipeTableWithData() {
 }
 
 export const metadata: Metadata = {
-	title: "Recipes",
+	title: "Favorites",
 };

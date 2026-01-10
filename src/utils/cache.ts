@@ -81,6 +81,18 @@ export const cacheEvents = {
 				id ? `${orgId}:delete-ingredient:${id}` : `${orgId}:delete-ingredient`,
 		},
 	},
+	favorite: {
+		toggle: {
+			emit: (orgId: string, userId: string) => {
+				updateTag(`${orgId}:toggle-favorite`);
+				updateTag(`${orgId}:toggle-favorite:${userId}`);
+			},
+			tag: (orgId: string, userId?: string) =>
+				userId
+					? `${orgId}:toggle-favorite:${userId}`
+					: `${orgId}:toggle-favorite`,
+		},
+	},
 };
 
 /**
@@ -147,4 +159,9 @@ export const cacheTags = {
 		cacheEvents.recipe.update.tag(orgId),
 		cacheEvents.ingredient.update.tag(orgId),
 	],
+	favorite: {
+		toggle: (orgId: string, userId: string) => [
+			cacheEvents.favorite.toggle.tag(orgId, userId),
+		],
+	},
 };
