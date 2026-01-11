@@ -6,9 +6,9 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { EmptyArea } from "@/app/components/EmptyArea";
+import { EmptyArea } from "@/components/EmptyArea";
 import type { RecipeListWithRecipes } from "@/db/schema/composite";
-import { RecipeEntryList } from "@/features/lists/components/RecipeEntryList";
+import { RecipeEntryList } from "@/features/lists/entries/components/RecipeEntryList";
 import { Button, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";

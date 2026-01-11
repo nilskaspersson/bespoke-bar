@@ -1,9 +1,9 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import { EntityActions } from "@/app/components/EntityActions";
-import { ShareAction } from "@/app/components/ShareAction";
+import { EntityActions } from "@/components/EntityActions";
+import { ShareAction } from "@/components/ShareAction";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { CreateRecipeEntryDialog } from "@/features/lists/components/CreateRecipeEntryDialog";
+import { CreateRecipeEntryDialog } from "@/features/lists/entries/components/CreateRecipeEntryDialog";
 import { ConfirmDeleteRecipe } from "@/features/recipes/actions/components/ConfirmDeleteRecipe";
 import { DuplicateRecipeButton } from "@/features/recipes/actions/components/DuplicateRecipeButton";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";

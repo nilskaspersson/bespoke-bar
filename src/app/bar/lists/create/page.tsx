@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/app/components/PageHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { Container } from "@/ui/Container";

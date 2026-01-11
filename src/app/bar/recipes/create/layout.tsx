@@ -1,4 +1,4 @@
-import { PageHeader } from "@/app/components/PageHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { Container } from "@/ui/Container";
 import styles from "./layout.module.css";
 

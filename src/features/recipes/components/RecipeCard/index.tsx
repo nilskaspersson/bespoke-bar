@@ -8,8 +8,8 @@ import {
 	GLASSWARE_TO_LABEL,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
+import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
-import { calculateRecipeMetrics } from "@/features/recipes/utils/calculateRecipeMetrics";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { useFormatter } from "@/hooks/useFormatter";

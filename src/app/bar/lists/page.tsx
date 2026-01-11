@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageHeader } from "@/app/components/PageHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
 import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
 import { LinkButton } from "@/ui/Button";

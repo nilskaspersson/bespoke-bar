@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageHeader } from "@/app/components/PageHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { IngredientTable } from "@/features/ingredients/components/IngredientsTable";
 import { LinkButton } from "@/ui/Button";

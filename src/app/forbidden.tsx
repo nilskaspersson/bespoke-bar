@@ -1,4 +1,4 @@
-import { SystemError } from "@/app/components/SystemError";
+import { SystemError } from "@/components/SystemError";
 import { LinkButton } from "@/ui/Button";
 import { Text } from "@/ui/Text";
 

@@ -1,8 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
-import { AppSidebar } from "@/app/components/AppSidebar";
-import { Providers } from "@/app/components/Providers";
-import { SecondaryNavigation } from "@/app/components/SecondaryNavigation";
+import { AppSidebar } from "@/components/AppSidebar";
+import { Providers } from "@/components/Providers";
+import { SecondaryNavigation } from "@/components/SecondaryNavigation";
 import { getClerkOrganization } from "@/features/organisation/api/getClerkOrganization";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";

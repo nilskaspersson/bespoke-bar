@@ -7,12 +7,12 @@ import {
 	type ComponentProps,
 	useState,
 } from "react";
-import { EmptyArea } from "@/app/components/EmptyArea";
+import { EmptyArea } from "@/components/EmptyArea";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipeWithSpecs";
-import { DraftRecipeCard } from "@/features/recipes/components/DraftRecipeCard";
+import { DraftRecipeCard } from "@/features/recipes/bulk/components/DraftRecipeCard";
+import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
-import { useCreateBulkDraftRecipes } from "@/features/recipes/hooks/useCreateBulkDraftRecipes";
 import {
 	type DisplayMode,
 	DisplayModeSwitch,

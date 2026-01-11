@@ -3,7 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import { type ComponentPropsWithRef, useRef } from "react";
-import { EmptyArea } from "@/app/components/EmptyArea";
+import { EmptyArea } from "@/components/EmptyArea";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";

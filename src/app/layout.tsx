@@ -4,9 +4,9 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { type PropsWithChildren, Suspense } from "react";
-import { AppFooter } from "@/app/components/AppFooter";
-import { AuthProvider } from "@/app/components/AuthProvider";
-import { ScrollFix } from "@/app/components/ScrollFix";
+import { AppFooter } from "@/components/AppFooter";
+import { AuthProvider } from "@/components/AuthProvider";
+import { ScrollFix } from "@/components/ScrollFix";
 import { Toaster } from "@/ui/Toast/Toaster";
 import styles from "./layout.module.css";
 

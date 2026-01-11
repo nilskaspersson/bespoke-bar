@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { EntityActions } from "@/app/components/EntityActions";
-import { PageHeader } from "@/app/components/PageHeader";
-import { getCachedFeaturedList } from "@/features/lists/api/readFeaturedList";
+import { EntityActions } from "@/components/EntityActions";
+import { PageHeader } from "@/components/PageHeader";
+import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
-import { RecipeListActions } from "@/features/lists/components/RecipeListActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
+import { getCachedFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
 import { Container } from "@/ui/Container";
 import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";

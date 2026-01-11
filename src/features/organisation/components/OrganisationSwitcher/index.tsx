@@ -1,7 +1,7 @@
 "use client";
 
 import { OrganizationSwitcher as ClerkOrganizationSwitcher } from "@clerk/nextjs";
-import { AuthProvider } from "@/app/components/AuthProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import { OrganisationSettings } from "@/features/organisation/components/OrganisationSettings";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";

@@ -11,11 +11,11 @@ import {
 import Link from "next/link";
 import { useQueryState } from "nuqs";
 import { type ComponentProps, useMemo, useState } from "react";
-import { listViewParser, type ViewType } from "@/app/components/SwitchListView";
+import { listViewParser, type ViewType } from "@/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { getIngredientUrl } from "@/features/ingredients/utils";
-import { UserChip } from "@/features/organisation/components/UserChip";
 import type { UserIdMap } from "@/features/organisation/types";
+import { UserChip } from "@/features/organisation/user/components/UserChip";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
