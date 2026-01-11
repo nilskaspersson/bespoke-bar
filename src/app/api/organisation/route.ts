@@ -1,4 +1,4 @@
-import { getOrCreateLocalOrganisation } from "@/features/organisation/actions/getOrCreateLocalOrganisation";
+import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function GET() {

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { PageHeader } from "@/app/components/PageHeader";
-import { SwitchListView } from "@/app/components/SwitchListView";
+import { PageHeader } from "@/components/PageHeader";
+import { SwitchListView } from "@/components/SwitchListView";
 import { StatLinks } from "@/features/recipes/components/StatLinks";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";

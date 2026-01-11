@@ -10,7 +10,7 @@ import {
 	useState,
 } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/hooks/useFormatBulkDraftRecipes";
+import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { OutputPreview } from "@/features/recipes/photo/components/OutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";

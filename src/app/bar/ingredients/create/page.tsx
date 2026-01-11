@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PageHeader } from "@/app/components/PageHeader";
+import { PageHeader } from "@/components/PageHeader";
 import { CreateIngredientForm } from "@/features/ingredients/components/CreateIngredientForm";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";

@@ -7,7 +7,7 @@ import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import type { SpecWithIngredient } from "@/db/schema/specs";
-import { upsertRecipeWithSpecsAction } from "@/features/recipes/actions/upsertRecipeWithSpecs";
+import { upsertRecipeWithSpecsAction } from "@/features/recipes/api/upsertRecipeWithSpecs";
 import { EditRecipeSpecs } from "@/features/recipes/components/EditRecipeSpecs";
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";

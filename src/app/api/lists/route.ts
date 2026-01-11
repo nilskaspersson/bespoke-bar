@@ -1,4 +1,4 @@
-import { getCachedRecipeLists } from "@/features/lists/actions/readBarRecipeLists";
+import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function GET() {

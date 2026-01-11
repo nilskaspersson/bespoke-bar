@@ -1,7 +1,7 @@
-import { getCachedIngredients } from "@/features/ingredients/actions/readIngredients";
-import { createRecipesWithSpecsFromData } from "@/features/recipes/actions/upsertRecipeWithSpecs";
-import { BulkDraftInfo } from "@/features/recipes/components/BulkDraftInfo";
-import { BulkDraftRecipes } from "@/features/recipes/components/BulkDraftRecipes";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipeWithSpecs";
+import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
+import { BulkDraftRecipes } from "@/features/recipes/bulk/components/BulkDraftRecipes";
 import { authOrForbidden } from "@/utils/auth";
 
 export default async function BulkCreateRecipePage() {

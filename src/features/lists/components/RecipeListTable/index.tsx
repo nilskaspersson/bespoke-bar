@@ -1,7 +1,7 @@
 import type { ComponentProps } from "react";
-import { EntityActions } from "@/app/components/EntityActions";
+import { EntityActions } from "@/components/EntityActions";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
-import { RecipeListActions } from "@/features/lists/components/RecipeListActions";
+import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { Grid } from "@/ui/Grid";

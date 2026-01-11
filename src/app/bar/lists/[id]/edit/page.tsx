@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
-import { getCachedRecipeList } from "@/features/lists/actions/readRecipeList";
+import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
-import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
+import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";

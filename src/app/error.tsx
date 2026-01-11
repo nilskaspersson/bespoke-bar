@@ -1,6 +1,6 @@
 "use client";
 
-import { SystemError } from "@/app/components/SystemError";
+import { SystemError } from "@/components/SystemError";
 
 import { Button } from "@/ui/Button";
 import { Text } from "@/ui/Text";

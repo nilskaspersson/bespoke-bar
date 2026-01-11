@@ -2,7 +2,7 @@ import { useForm } from "@conform-to/react";
 import { useCallback } from "react";
 import useSWRImmutable from "swr/immutable";
 import type { Organisation } from "@/db/schema/organisations";
-import { updateLocalOrganisationAction } from "@/features/organisation/actions/updateLocalOrganisation";
+import { updateLocalOrganisationAction } from "@/features/organisation/api/updateLocalOrganisation";
 import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
 import { SelectLocale } from "@/features/organisation/components/SelectLocale";
 import { useServerAction } from "@/hooks/useServerAction";

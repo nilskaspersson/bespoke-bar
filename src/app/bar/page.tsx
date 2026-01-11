@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { FeaturedList } from "@/app/components/FeaturedList";
+import { FeaturedList } from "@/features/lists/featured/components/FeaturedList";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";

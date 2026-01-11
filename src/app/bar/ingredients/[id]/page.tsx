@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { deleteIngredient } from "@/features/ingredients/actions/deleteIngredient";
-import { getCachedIngredient } from "@/features/ingredients/actions/readIngredient";
-import { DeleteIngredient } from "@/features/ingredients/components/DeleteIngredient";
+import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
+import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
+import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
-import { readOrganisationMembers } from "@/features/organisation/actions/readOrganisationMembers";
-import { getCachedBarRecipes } from "@/features/recipes/actions/readBarRecipes";
+import { readOrganisationMembers } from "@/features/organisation/api/readOrganisationMembers";
+import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { RecipeTable } from "@/features/recipes/components/RecipeTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";

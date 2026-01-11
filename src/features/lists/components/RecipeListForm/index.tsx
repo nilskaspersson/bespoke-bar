@@ -8,7 +8,7 @@ import {
 	recipeListWithEntriesFormSchema,
 } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
-import { upsertRecipeListWithEntriesAction } from "@/features/lists/actions/upsertRecipeListWithEntries";
+import { upsertRecipeListWithEntriesAction } from "@/features/lists/api/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
 import { useServerAction } from "@/hooks/useServerAction";
 import { Button } from "@/ui/Button";

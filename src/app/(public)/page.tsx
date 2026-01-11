@@ -1,4 +1,4 @@
-import { LandingPageHero } from "@/app/components/LandingPageHero";
+import { LandingPageHero } from "@/features/landing-page/components/LandingPageHero";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
