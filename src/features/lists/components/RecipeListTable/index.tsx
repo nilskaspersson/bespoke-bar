@@ -31,7 +31,7 @@ export function RecipeListTable({
 					<EntityActions className={styles.actions}>
 						{(actionProps) => (
 							<RecipeListActions
-								{...actionProps}
+								actionProps={actionProps}
 								list={list}
 								hasFeaturedList={hasFeaturedList}
 								withLink

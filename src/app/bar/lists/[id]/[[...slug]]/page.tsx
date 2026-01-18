@@ -60,7 +60,7 @@ async function RecipeListContent({ params }: Props) {
 			<EntityActions className={styles.actions}>
 				{(actionProps) => (
 					<RecipeListActions
-						{...actionProps}
+						actionProps={actionProps}
 						list={recipeList}
 						hasFeaturedList={Boolean(featuredList)}
 						deleteRedirectTo={"/bar/lists"}

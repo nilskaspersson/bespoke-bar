@@ -1,0 +1,77 @@
+@layer ui {
+	.drawer {
+		--inset: calc(var(--app-inset) / 2);
+		--maxHeight: 80svh;
+
+		transition-behavior: allow-discrete;
+		transition-property: display, overlay, transform, opacity;
+		transition-duration: var(--transition-duration);
+
+		background: none;
+		box-shadow: none;
+		border: none;
+
+		inset: 0;
+		width: 100%;
+		height: fit-content;
+		max-height: var(--maxHeight);
+		max-width: var(--container);
+
+		margin: auto auto 0;
+		padding: 0 var(--inset) var(--inset);
+		overflow: hidden;
+		overscroll-behavior: contain;
+
+		&::backdrop {
+			background-color: rgb(0 0 0 / 0.5);
+			transition: opacity var(--transition-duration) allow-discrete;
+
+			@starting-style {
+				opacity: 0;
+			}
+		}
+
+		@starting-style {
+			transform: translateY(100%);
+		}
+	}
+
+	.container {
+		display: grid;
+		grid-template:
+			"header" auto
+			"content" 1fr
+			"actions" auto;
+		width: 100%;
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-1);
+		box-shadow: var(--shadow--high);
+		max-height: calc(var(--maxHeight) - var(--inset));
+	}
+
+	.header {
+		grid-area: header;
+		padding-top: var(--space-4);
+	}
+
+	.content {
+		grid-area: content;
+		overscroll-behavior: contain;
+		overflow: auto;
+		padding-block: var(--gap);
+	}
+
+	.actions {
+		grid-area: actions;
+		display: flex;
+		justify-content: space-between;
+		gap: var(--gap);
+		padding-block: var(--space-2);
+		border-top: 1px solid var(--mauve-3);
+
+		/**
+		 * Offset for ghost button alignment
+		 */
+		margin-inline: calc(var(--space-2) * -1);
+	}
+}

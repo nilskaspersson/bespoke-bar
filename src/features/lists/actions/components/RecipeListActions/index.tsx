@@ -3,6 +3,7 @@ import { ShareAction } from "@/components/ShareAction";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { ClearFeaturedListButton } from "@/features/lists/actions/components/ClearFeaturedListButton";
 import { DeleteRecipeListButton } from "@/features/lists/actions/components/DeleteRecipeListButton";
+import { ExportListButton } from "@/features/lists/actions/components/ExportListButton";
 import { SetFeaturedListButton } from "@/features/lists/actions/components/SetFeaturedListButton";
 import { deleteRecipeList } from "@/features/lists/api/deleteRecipeList";
 import { clearFeaturedList } from "@/features/lists/featured/api/clearFeaturedList";
@@ -18,7 +19,8 @@ export function RecipeListActions({
 	deleteRedirectTo,
 	withLink,
 	...props
-}: ActionProps & {
+}: {
+	actionProps: ActionProps;
 	list: RecipeListWithEntries;
 	hasFeaturedList?: boolean;
 	deleteRedirectTo?: string;
@@ -98,6 +100,10 @@ export function RecipeListActions({
 					<Icon name="trash" />
 					Delete
 				</DeleteRecipeListButton>
+			</li>
+
+			<li>
+				<ExportListButton {...props} list={list} />
 			</li>
 		</>
 	);
