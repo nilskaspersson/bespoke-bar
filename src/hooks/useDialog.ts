@@ -1,29 +1,34 @@
-import { useCallback, useRef } from "react";
+"use client";
 
-/**
- * Will I ever use this?
- * When this is sufficient, command + commandfor should also be sufficient?
- * Maybe if callbacks are needed? But then just a ref and request close works
- */
+import { useCallback, useRef, useState } from "react";
+
 export function useDialog() {
 	const dialogRef = useRef<HTMLDialogElement>(null);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const openDialog = useCallback(() => {
 		dialogRef.current?.showModal();
+		setIsOpen(true);
 	}, []);
 
 	const closeDialog = useCallback(() => {
 		dialogRef.current?.close();
+		setIsOpen(false);
 	}, []);
 
-	const toggleDialog = useCallback(() => {
-		const dialog = dialogRef.current;
-		if (dialog?.open) {
-			dialog.close();
-		} else {
-			dialog?.showModal();
-		}
+	/**
+	 * Note: MUST be assigned to the dialog, or native dismissal methods won't update
+	 * internal state.
+	 */
+	const onClose = useCallback(() => {
+		setIsOpen(false);
 	}, []);
 
-	return { dialogRef, openDialog, closeDialog, toggleDialog };
+	return {
+		dialogRef,
+		isOpen,
+		openDialog,
+		closeDialog,
+		onClose,
+	};
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { type ReactNode, use } from "react";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { ListEntryActions } from "@/features/lists/actions/components/ListEntryActions";
 import { RecipeEntryProfitLabel } from "@/features/lists/entries/components/RecipeEntryProfitLabel";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Text } from "@/ui/Text";
+
 import styles from "./styles.module.css";
 
 type Props = {
@@ -23,7 +24,7 @@ export function RecipeListEntryCard({
 	editable,
 	children,
 }: Props) {
-	const { currencyFormatter } = useFormatter();
+	const { currencyFormatter } = use(FormatterContext);
 	const { cost, isIncomplete } = getRecipeCost(entry.recipe);
 
 	return (
@@ -31,7 +32,7 @@ export function RecipeListEntryCard({
 			className={className}
 			recipe={entry.recipe}
 			nameAdornment={
-				<div>
+				<div className={styles.adornment}>
 					<Text as="div" heavy weight={800} size={2} align="right" numeric>
 						{typeof entry.price === "number"
 							? currencyFormatter.format(entry.price)

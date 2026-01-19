@@ -1,30 +1,64 @@
-import { useId } from "react";
+"use client";
+
+import { useRef } from "react";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
-import { ExportListForm } from "@/features/lists/components/ExportListForm";
+import {
+	ExportListForm,
+	type ExportListFormRef,
+} from "@/features/lists/components/ExportListForm";
+import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
+import { Icon } from "@/ui/Icon";
 
 export function ExportListButton({
 	list,
+	children,
 	...props
 }: ButtonProps & { list: RecipeListWithEntries }) {
-	const dialogId = useId();
+	/**
+	 * Note: Wanted to do progressive enhancement with commandfor, but that meant we
+	 * always mount the drawer contents, and send subsequent requests to the server.
+	 * Had also wanted to use Activity to keep form state, but that unearths an issue
+	 * where Radio buttons `defaultValue` is lost when there are Suspense boundaries.
+	 */
+	const { openDialog, onClose, dialogRef, isOpen } = useDialog();
+	const formRef = useRef<ExportListFormRef>(null);
+
+	const handleExport = () => {
+		formRef.current?.download();
+	};
 
 	return (
 		<>
-			<Button
-				{...props}
-				// @ts-expect-error - commandfor isn't typed yet
-				// https://github.com/DefinitelyTyped/DefinitelyTyped/pull/73957
-				commandfor={dialogId}
-				command="show-modal"
-			>
-				Export list
+			<Button {...props} onClick={openDialog}>
+				{children}
 			</Button>
 
-			<Drawer id={dialogId} header={<Heading level="h3">Export list</Heading>}>
-				<ExportListForm list={list} />
+			<Drawer
+				ref={dialogRef}
+				onClose={onClose}
+				header={
+					<Heading level="h3">
+						Export <em>"{list.name}"</em>
+					</Heading>
+				}
+				actions={
+					<li>
+						<Button
+							variant="solid"
+							color="accent"
+							size="tiny"
+							onClick={handleExport}
+						>
+							<Icon name="arrow-down-from-line" size={1} />
+							Export
+						</Button>
+					</li>
+				}
+			>
+				{isOpen ? <ExportListForm list={list} ref={formRef} /> : null}
 			</Drawer>
 		</>
 	);

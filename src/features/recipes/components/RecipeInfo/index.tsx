@@ -1,13 +1,13 @@
 "use client";
 
-import { type ReactNode, useDeferredValue, useId, useState } from "react";
+import { type ReactNode, use, useDeferredValue, useId, useState } from "react";
 import z from "zod";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Flex } from "@/ui/Flex";
@@ -26,7 +26,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 	children?: ReactNode;
 	recipe: T;
 }) {
-	const { quantityFormatter } = useFormatter();
+	const { quantityFormatter } = use(FormatterContext);
 
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);

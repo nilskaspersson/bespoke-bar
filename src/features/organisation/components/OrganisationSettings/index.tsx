@@ -96,7 +96,7 @@ function OrganisationSettingsForm({
 				<SelectLocale
 					name={fields.defaultLocale.name}
 					label="Locale formatting"
-					helperText="Used to format dates, numbers, and more."
+					helperText="Used to format currency, dates, numbers, and more."
 					defaultValue={fields.defaultLocale.defaultValue}
 				/>
 

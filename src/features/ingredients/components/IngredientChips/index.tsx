@@ -1,10 +1,11 @@
 "use client";
 
+import { use } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import styles from "./styles.module.css";
@@ -17,7 +18,7 @@ export function IngredientChips({
 	recipesCount: number;
 }) {
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
-	const { percentageFormatter } = useFormatter();
+	const { percentageFormatter } = use(FormatterContext);
 
 	return (
 		<Flex gap={2} wrap justifyContent="center">

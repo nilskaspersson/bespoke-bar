@@ -1,8 +1,11 @@
 @layer feature {
 	.container {
-		padding-inline: var(--app-inset);
 		max-width: var(--container);
 		width: 100%;
 		margin-inline: auto;
+
+		&.withPadding {
+			padding-inline: var(--app-inset);
+		}
 	}
 }

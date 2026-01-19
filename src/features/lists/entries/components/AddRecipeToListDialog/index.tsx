@@ -13,7 +13,7 @@ import { addRecipeToListAction } from "@/features/lists/entries/api/addRecipeToL
 import { removeRecipeFromList } from "@/features/lists/entries/api/removeRecipeFromList";
 import { RecipeEntryPriceCalculation } from "@/features/lists/entries/components/RecipeEntryPriceCalculation";
 import { RecipeListEntryCard } from "@/features/lists/entries/components/RecipeListEntryCard";
-import { isRecipeListEntry, recipeListFetcher } from "@/features/lists/utils";
+import { isRecipeListEntry, recipeListsFetcher } from "@/features/lists/utils";
 import { useModalContext } from "@/hooks/useModal";
 import { useServerAction } from "@/hooks/useServerAction";
 import { Alert } from "@/ui/Alert";
@@ -37,7 +37,7 @@ export function AddRecipeToListDialog({ recipe }: Props) {
 
 	const { data: lists } = useSWRImmutable<RecipeListWithEntries[] | undefined>(
 		"/api/lists",
-		recipeListFetcher,
+		recipeListsFetcher,
 	);
 
 	const { action } = useServerAction(addRecipeToListAction, handleClose);

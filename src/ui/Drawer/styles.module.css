@@ -5,7 +5,8 @@
 
 		transition-behavior: allow-discrete;
 		transition-property: display, overlay, transform, opacity;
-		transition-duration: var(--transition-duration);
+		transition-duration: var(--transition-duration--slow);
+		transition-timing-function: var(--spring-lazy);
 
 		background: none;
 		box-shadow: none;
@@ -23,7 +24,11 @@
 		overscroll-behavior: contain;
 
 		&::backdrop {
-			background-color: rgb(0 0 0 / 0.5);
+			background-image: linear-gradient(
+				to bottom,
+				transparent,
+				rgb(0 0 0 / 0.65)
+			);
 			transition: opacity var(--transition-duration) allow-discrete;
 
 			@starting-style {
@@ -41,33 +46,38 @@
 		grid-template:
 			"header" auto
 			"content" 1fr
-			"actions" auto;
+			"footer" auto;
 		width: 100%;
 		border-radius: var(--radius--large);
-		background-color: var(--mauve-1);
+		background-color: var(--mauve-2);
 		box-shadow: var(--shadow--high);
 		max-height: calc(var(--maxHeight) - var(--inset));
 	}
 
 	.header {
 		grid-area: header;
-		padding-top: var(--space-4);
+		padding: var(--gap) var(--app-inset);
 	}
 
 	.content {
 		grid-area: content;
 		overscroll-behavior: contain;
 		overflow: auto;
-		padding-block: var(--gap);
+		container-type: inline-size;
+		padding-bottom: var(--gap);
+		padding-inline: var(--app-inset);
+	}
+
+	.footer {
+		grid-area: footer;
+		padding: var(--space-2) var(--app-inset);
+		border-top: 1px solid var(--mauve-4);
 	}
 
 	.actions {
-		grid-area: actions;
 		display: flex;
 		justify-content: space-between;
 		gap: var(--gap);
-		padding-block: var(--space-2);
-		border-top: 1px solid var(--mauve-3);
 
 		/**
 		 * Offset for ghost button alignment

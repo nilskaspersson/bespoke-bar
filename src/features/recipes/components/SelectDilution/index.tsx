@@ -1,8 +1,8 @@
 "use client";
 
 import { useField } from "@conform-to/react";
-import { useId } from "react";
-import { useFormatter } from "@/hooks/useFormatter";
+import { use, useId } from "react";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -14,7 +14,7 @@ export function SelectDilution({
 	name: string;
 	defaultValue?: string;
 }) {
-	const { percentageFormatter } = useFormatter();
+	const { percentageFormatter } = use(FormatterContext);
 	const [field] = useField<string>(name);
 	const markersId = useId();
 

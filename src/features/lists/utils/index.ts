@@ -1,11 +1,12 @@
 import {
 	type RecipeListWithEntries,
+	type RecipeListWithRecipes,
 	recipeListWithEntriesSchema,
 } from "@/db/schema/composite";
 import type { RecipeListEntry } from "@/db/schema/recipeListEntries";
 import type { RecipeList } from "@/db/schema/recipeLists";
 import { isObject } from "@/utils";
-import { createFetcher } from "@/utils/api";
+import { createFetcher, fetcher } from "@/utils/api";
 import { namedEntityToUrlSlug } from "@/utils/url";
 
 export function generateDefaultRecipeListName() {
@@ -34,6 +35,8 @@ export function isRecipeListWithEntries(
 	return isRecipeList(o) && Object.hasOwn(o, "entries");
 }
 
-export const recipeListFetcher = createFetcher(
+export const recipeListsFetcher = createFetcher(
 	recipeListWithEntriesSchema.array().optional(),
 );
+
+export const recipeListFetcher = fetcher<RecipeListWithRecipes>;

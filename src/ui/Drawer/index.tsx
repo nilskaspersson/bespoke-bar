@@ -24,22 +24,24 @@ export function Drawer({
 			closedby="any"
 			{...props}
 		>
-			<Container className={styles.container}>
+			<Container className={styles.container} padding={false}>
 				{header ? <header className={styles.header}>{header}</header> : null}
 
 				<div className={styles.content}>{children}</div>
 
-				<menu className={styles.actions}>
-					<li>
-						<form method="dialog">
-							<Button type="submit" variant="ghost" size="tiny">
-								Cancel
-							</Button>
-						</form>
-					</li>
+				<footer className={styles.footer}>
+					<menu className={styles.actions}>
+						<li>
+							<form method="dialog">
+								<Button type="submit" variant="ghost" size="tiny">
+									Cancel
+								</Button>
+							</form>
+						</li>
 
-					{actions}
-				</menu>
+						{actions}
+					</menu>
+				</footer>
 			</Container>
 		</dialog>
 	);

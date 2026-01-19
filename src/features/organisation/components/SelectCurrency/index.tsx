@@ -1,5 +1,5 @@
-import { type ComponentProps, useCallback, useMemo } from "react";
-import { useFormatter } from "@/hooks/useFormatter";
+import { type ComponentProps, use, useCallback, useMemo } from "react";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Combobox } from "@/ui/Combobox";
 import { OptionLabel } from "@/ui/OptionLabel";
 import { Text } from "@/ui/Text";
@@ -21,7 +21,7 @@ export function SelectCurrency({
 	ComponentProps<typeof Combobox<Currency>>,
 	"items" | "itemToString" | "getItemValue" | "getItemLabel"
 >) {
-	const { currencyDisplayName } = useFormatter();
+	const { currencyDisplayName } = use(FormatterContext);
 
 	const getItemLabel = useCallback((item: Currency) => {
 		return (

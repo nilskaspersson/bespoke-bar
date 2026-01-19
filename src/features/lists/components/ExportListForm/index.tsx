@@ -1,5 +1,229 @@
-import type { RecipeListWithEntries } from "@/db/schema/composite";
+"use client";
 
-export function ExportListForm({ list }: { list: RecipeListWithEntries }) {
-	return <div>he</div>;
+import { use, useImperativeHandle, useMemo, useState } from "react";
+import useSWRImmutable from "swr/immutable";
+import type { RecipeListWithRecipes } from "@/db/schema/composite";
+import type { RecipeList } from "@/db/schema/recipeLists";
+import { recipeListFetcher } from "@/features/lists/utils";
+import {
+	type ExportOptions,
+	exportRecipeListAsJson,
+	exportRecipeListAsText,
+	getExportFilename,
+} from "@/features/lists/utils/exportRecipeList";
+import { FormatterContext } from "@/hooks/useFormatter";
+import { Checkbox } from "@/ui/Checkbox";
+import { CopyToClipboard } from "@/ui/CopyToClipboard";
+import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { RadioGroup, type RadioGroupOption } from "@/ui/RadioGroup";
+import { Text } from "@/ui/Text";
+import { downloadBlob } from "@/utils/downloadBlob";
+import type { Keyed } from "@/utils/withKey";
+import styles from "./styles.module.css";
+
+type ExportFormat = "txt" | "json";
+
+const DEFAULT_OPTIONS: ExportOptions = {
+	includeListName: true,
+	includeListDescription: true,
+	includeName: true,
+	includeDescription: true,
+	includePrice: true,
+	includeIngredients: true,
+	includeSpecs: false,
+	includeGlassware: false,
+	includeMethod: false,
+	includeGarnish: false,
+	includeInstructions: false,
+};
+
+const FORMAT_OPTIONS: Keyed<RadioGroupOption>[] = [
+	{ id: "txt", label: "Text", value: "txt" },
+	{ id: "json", label: "JSON", value: "json" },
+];
+
+const isValidFormatOption = (option: unknown): option is ExportFormat => {
+	return FORMAT_OPTIONS.some((o) => o.value === option);
+};
+
+export type ExportListFormRef = {
+	download: () => void;
+};
+
+export function ExportListForm({
+	list,
+	ref,
+}: {
+	list: Pick<RecipeList, "id">;
+	ref?: React.Ref<ExportListFormRef>;
+}) {
+	const [format, setFormat] = useState<ExportFormat>("txt");
+	const [options, setOptions] = useState<ExportOptions>(DEFAULT_OPTIONS);
+
+	const { currencyFormatter } = use(FormatterContext);
+
+	const { data } = useSWRImmutable<RecipeListWithRecipes>(
+		`/api/lists/${list.id}`,
+		recipeListFetcher,
+	);
+
+	const preview = useMemo(() => {
+		if (!data) return "";
+
+		switch (format) {
+			case "json":
+				return JSON.stringify(exportRecipeListAsJson(data, options), null, 2);
+			case "txt":
+				return exportRecipeListAsText(data, options, currencyFormatter);
+			default:
+				return "";
+		}
+	}, [data, format, options, currencyFormatter]);
+
+	useImperativeHandle(ref, () => ({
+		download: () => {
+			if (!data) return;
+
+			downloadBlob({
+				content: preview,
+				filename: getExportFilename(data, format),
+				mimeType: format === "json" ? "application/json" : "text/plain",
+			});
+		},
+	}));
+
+	const toggleOption = (key: keyof ExportOptions) => {
+		setOptions((prev) => ({ ...prev, [key]: !prev[key] }));
+	};
+
+	return (
+		<section className={styles.container}>
+			<Grid gap={4} className={styles.options}>
+				<Heading level="h5" className={styles.optionsHeader}>
+					Options
+				</Heading>
+
+				<fieldset>
+					<Grid gap={2}>
+						<Text size={2} as="legend" weight={600} compact>
+							List details
+						</Text>
+
+						<Checkbox
+							label="List name"
+							checked={options.includeListName}
+							onChange={() => toggleOption("includeListName")}
+						/>
+
+						<Checkbox
+							label="List description"
+							checked={options.includeListDescription}
+							onChange={() => toggleOption("includeListDescription")}
+						/>
+
+						<Checkbox
+							label="Recipe price"
+							checked={options.includePrice}
+							onChange={() => toggleOption("includePrice")}
+						/>
+					</Grid>
+				</fieldset>
+
+				<fieldset>
+					<Grid gap={2} alignContent="start">
+						<Text size={2} as="legend" weight={600} compact>
+							Recipe details
+						</Text>
+
+						<div className={styles.checkboxes}>
+							<Checkbox
+								label="Name"
+								checked={options.includeName}
+								onChange={() => toggleOption("includeName")}
+							/>
+
+							<Checkbox
+								label="Description"
+								checked={options.includeDescription}
+								onChange={() => toggleOption("includeDescription")}
+							/>
+
+							<Checkbox
+								label="Ingredients"
+								checked={options.includeIngredients}
+								onChange={() => toggleOption("includeIngredients")}
+							/>
+
+							<Checkbox
+								label="Specs"
+								checked={options.includeSpecs}
+								onChange={() => toggleOption("includeSpecs")}
+								disabled={!options.includeIngredients}
+							/>
+
+							<Checkbox
+								label="Glassware"
+								checked={options.includeGlassware}
+								onChange={() => toggleOption("includeGlassware")}
+							/>
+
+							<Checkbox
+								label="Method"
+								checked={options.includeMethod}
+								onChange={() => toggleOption("includeMethod")}
+							/>
+
+							<Checkbox
+								label="Garnish"
+								checked={options.includeGarnish}
+								onChange={() => toggleOption("includeGarnish")}
+							/>
+
+							<Checkbox
+								label="Instructions"
+								checked={options.includeInstructions}
+								onChange={() => toggleOption("includeInstructions")}
+							/>
+						</div>
+					</Grid>
+				</fieldset>
+
+				<RadioGroup
+					name="format"
+					legend="Format"
+					options={FORMAT_OPTIONS}
+					defaultValue={format}
+					onChange={(event) => {
+						if (isValidFormatOption(event.target.value)) {
+							setFormat(event.target.value);
+						}
+					}}
+				/>
+			</Grid>
+
+			<section className={styles.preview}>
+				<header className={styles.previewHeader}>
+					<Heading level="h5">Preview</Heading>
+
+					<CopyToClipboard
+						size="tiny"
+						variant="ghost"
+						color="light"
+						getValue={() => preview}
+						disabled={!preview}
+						iconSize={1}
+					>
+						Copy
+					</CopyToClipboard>
+				</header>
+
+				<div className={styles.previewContainer}>
+					<Text as="pre" className={styles.previewContent}>
+						{preview}
+					</Text>
+				</div>
+			</section>
+		</section>
+	);
 }

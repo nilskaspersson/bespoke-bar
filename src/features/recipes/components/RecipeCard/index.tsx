@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { type ReactNode, use } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
@@ -12,7 +12,7 @@ import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calcula
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
@@ -40,7 +40,7 @@ export function RecipeCard<T extends BaseRecipe>({
 	withLink = true,
 }: Props<T>) {
 	const metrics = calculateRecipeMetrics(recipe);
-	const { percentageFormatter } = useFormatter();
+	const { percentageFormatter } = use(FormatterContext);
 
 	return (
 		<Grid gap={4} className={className}>

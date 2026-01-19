@@ -1,12 +1,12 @@
 "use client";
 
-import type { ComponentProps } from "react";
+import { type ComponentProps, use } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { useRoundedUnit } from "@/features/units/hooks/useRoundedUnit";
 import { isBartendingUnit } from "@/features/units/utils";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
@@ -24,7 +24,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 	servings?: number;
 	convertUnits?: UnitSystems | null;
 } & Omit<ComponentProps<"details">, "children">) {
-	const { quantityFormatter, percentageFormatter } = useFormatter();
+	const { quantityFormatter, percentageFormatter } = use(FormatterContext);
 	const roundUnit = useRoundedUnit();
 
 	const recipeMetrics = calculateRecipeMetrics(recipe, { servings });

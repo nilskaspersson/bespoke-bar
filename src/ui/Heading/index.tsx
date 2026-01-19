@@ -9,6 +9,8 @@ type Props = {
 	level: HeadingLevel;
 	size?: Scale;
 	serif?: boolean;
+	truncate?: boolean;
+	noWrap?: boolean;
 };
 
 export const HEADING_LEVEL_TO_SCALE = new Map<HeadingLevel, Scale>([
@@ -26,6 +28,8 @@ export function Heading({
 	level,
 	size,
 	serif,
+	truncate,
+	noWrap,
 	...props
 }: Props & HTMLAttributes<HTMLHeadingElement>) {
 	return createElement(
@@ -34,6 +38,8 @@ export function Heading({
 			...props,
 			className: clsx(props.className, styles.heading, {
 				[styles.serif]: serif,
+				[styles.truncate]: truncate,
+				[styles.noWrap]: noWrap,
 			}),
 			style: mergeStyleSources(
 				props.style,

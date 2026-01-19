@@ -1,10 +1,10 @@
-import { useCallback } from "react";
+import { use, useCallback } from "react";
 import type { Measurement } from "@/db/schema/units";
 import { MEASUREMENT_TO_DB_INGREDIENT_UNIT } from "@/features/ingredients/constants";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 
 export function useFormatIngredientUnitCost() {
-	const { currencyFormatter } = useFormatter();
+	const { currencyFormatter } = use(FormatterContext);
 
 	return useCallback(
 		(cost: number | null, measurementType: Measurement | null) => {

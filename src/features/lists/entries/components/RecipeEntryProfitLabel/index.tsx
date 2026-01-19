@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import { useFormatter } from "@/hooks/useFormatter";
+import { use } from "react";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -17,7 +18,7 @@ export function RecipeEntryProfitLabel({
 	isIncomplete?: boolean;
 	servings?: number;
 } & ComponentProps<typeof Text>) {
-	const { currencyFormatter } = useFormatter();
+	const { currencyFormatter } = use(FormatterContext);
 
 	if (price == null) {
 		return null;

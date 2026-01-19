@@ -17,7 +17,7 @@ import { RecipeEntryPriceCalculation } from "@/features/lists/entries/components
 import { RecipeListEntryCard } from "@/features/lists/entries/components/RecipeListEntryCard";
 import {
 	isRecipeListWithEntries,
-	recipeListFetcher,
+	recipeListsFetcher,
 } from "@/features/lists/utils";
 import { useModalContext } from "@/hooks/useModal";
 import { useServerAction } from "@/hooks/useServerAction";
@@ -47,7 +47,7 @@ export function CreateRecipeEntryDialog({ recipe }: Props) {
 
 	const { data: lists } = useSWRImmutable<RecipeListWithEntries[] | undefined>(
 		"/api/lists",
-		recipeListFetcher,
+		recipeListsFetcher,
 	);
 
 	const { action } = useServerAction(appendRecipeListEntryAction, handleClose);

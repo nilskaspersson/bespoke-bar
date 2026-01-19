@@ -1,9 +1,9 @@
 "use client";
 
-import { type ComponentProps, useCallback, useMemo } from "react";
+import { type ComponentProps, use, useCallback, useMemo } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Combobox } from "@/ui/Combobox";
 import { OptionLabel } from "@/ui/OptionLabel";
 import { collator } from "@/utils/collator";
@@ -20,7 +20,7 @@ export function IngredientPicker({
 > & {
 	ingredients: Ingredient[];
 }) {
-	const { percentageFormatter } = useFormatter();
+	const { percentageFormatter } = use(FormatterContext);
 
 	const getItemLabel = useCallback(
 		(item: Ingredient) => {

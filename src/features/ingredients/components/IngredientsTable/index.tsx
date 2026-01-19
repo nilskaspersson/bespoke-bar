@@ -9,12 +9,12 @@ import {
 	useReactTable,
 } from "@tanstack/react-table";
 import Link from "next/link";
-import { type ComponentProps, useMemo, useState } from "react";
+import { type ComponentProps, use, useMemo, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
 import { getIngredientUrl } from "@/features/ingredients/utils";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
 import { TableLayout } from "@/ui/TableLayout";
 import { Text } from "@/ui/Text";
@@ -39,7 +39,7 @@ export function IngredientTable({
 	 */
 	"use no memo";
 
-	const { percentageFormatter } = useFormatter();
+	const { percentageFormatter } = use(FormatterContext);
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
 
 	const [sorting, setSorting] = useState<SortingState>([
