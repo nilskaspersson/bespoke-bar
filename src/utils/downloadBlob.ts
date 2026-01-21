@@ -4,7 +4,11 @@ type DownloadBlobOptions = {
 	mimeType: string;
 };
 
-export function downloadBlob({ content, filename, mimeType }: DownloadBlobOptions) {
+export function downloadBlob({
+	content,
+	filename,
+	mimeType,
+}: DownloadBlobOptions) {
 	const blob = new Blob([content], { type: `${mimeType};charset=utf-8` });
 	const url = URL.createObjectURL(blob);
 
