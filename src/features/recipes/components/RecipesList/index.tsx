@@ -1,4 +1,3 @@
-import type { Table } from "@tanstack/react-table";
 import type { ComponentProps } from "react";
 import type { ViewType } from "@/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
@@ -8,27 +7,19 @@ import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
-export function RecipesList<T extends RecipeWithSpecs>({
-	getRowModel,
-	className,
+export function RecipesList({
+	recipes,
 	view,
 	favoriteRecipeIds,
 	...props
 }: {
-	getRowModel: Table<T>["getRowModel"];
+	recipes: RecipeWithSpecs[];
 	view: ViewType;
 	favoriteRecipeIds?: string[];
 } & Omit<ComponentProps<"ul">, "children">) {
-	/**
-	 * TanStack Table uses some strange re-rendering patterns behind the scenes that
-	 * are incompatible with React Compiler.
-	 * https://github.com/TanStack/table/issues/5567
-	 */
-	"use no memo";
-
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 
-	if (getRowModel().rows.length === 0) {
+	if (recipes.length === 0) {
 		return null;
 	}
 
@@ -39,10 +30,10 @@ export function RecipesList<T extends RecipeWithSpecs>({
 			gap={4}
 			direction={view === "card" ? "horizontal" : "vertical"}
 		>
-			{getRowModel().rows.map((row) => (
-				<OverscrollList.Item key={row.id}>
+			{recipes.map((recipe) => (
+				<OverscrollList.Item key={recipe.id}>
 					<RecipeCard
-						recipe={row.original}
+						recipe={recipe}
 						className={styles.card}
 						nameAdornment={
 							<Icon
@@ -54,9 +45,9 @@ export function RecipesList<T extends RecipeWithSpecs>({
 					/>
 
 					<RecipeActions
-						recipe={row.original}
+						recipe={recipe}
 						withLink
-						isFavorite={favoriteIdSet.has(row.original.id)}
+						isFavorite={favoriteIdSet.has(recipe.id)}
 						className={styles.actions}
 					/>
 				</OverscrollList.Item>

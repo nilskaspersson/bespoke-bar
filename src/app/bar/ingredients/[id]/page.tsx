@@ -6,9 +6,8 @@ import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
-import { readOrganisationMembers } from "@/features/organisation/api/readOrganisationMembers";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import { RecipeTable } from "@/features/recipes/components/RecipeTable";
+import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
@@ -32,10 +31,9 @@ export default async function IngredientPage({ params }: Props) {
 
 	const { orgId } = await authOrForbidden();
 
-	const [ingredient, recipes, members] = await Promise.all([
+	const [ingredient, recipes] = await Promise.all([
 		getCachedIngredient(orgId, id),
 		getCachedBarRecipes(orgId),
-		readOrganisationMembers(),
 	]);
 
 	if (!ingredient) {
@@ -120,12 +118,7 @@ export default async function IngredientPage({ params }: Props) {
 						{ingredient.name}
 					</Heading>
 
-					<RecipeTable
-						recipes={recipesUsingIngredient}
-						members={members}
-						defaultView="card"
-						disableSearch
-					/>
+					<RecipesList recipes={recipesUsingIngredient} view="card" />
 				</Grid>
 			) : null}
 		</Container>
