@@ -1,0 +1,90 @@
+@layer ui {
+	.drawer {
+		--inset: calc(var(--app-inset) / 2);
+		--maxHeight: 80svh;
+
+		transition-behavior: allow-discrete;
+		transition-property: display, overlay, transform, opacity;
+		transition-duration: var(--transition-duration--slow);
+		transition-timing-function: var(--spring-lazy);
+
+		background: none;
+		box-shadow: none;
+		border: none;
+		text-align: initial;
+		color: var(--mauve-11);
+
+		inset: 0;
+		width: 100%;
+		height: fit-content;
+		max-height: var(--maxHeight);
+		max-width: var(--container);
+
+		margin: auto auto 0;
+		padding: 0 var(--inset) var(--inset);
+		overflow: hidden;
+		overscroll-behavior: contain;
+
+		&::backdrop {
+			background-image: linear-gradient(
+				to bottom,
+				transparent,
+				rgb(0 0 0 / 0.65)
+			);
+			transition: opacity var(--transition-duration) allow-discrete;
+
+			@starting-style {
+				opacity: 0;
+			}
+		}
+
+		@starting-style {
+			transform: translateY(100%);
+		}
+	}
+
+	.container {
+		display: grid;
+		grid-template:
+			"header" auto
+			"content" 1fr
+			"footer" auto;
+		width: 100%;
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-2);
+		box-shadow: var(--shadow--high);
+		max-height: calc(var(--maxHeight) - var(--inset));
+	}
+
+	.header {
+		grid-area: header;
+		padding: var(--gap) var(--app-inset);
+	}
+
+	.content {
+		grid-area: content;
+		overscroll-behavior: contain;
+		overflow: auto;
+		container-type: inline-size;
+		padding-bottom: var(--gap);
+		padding-inline: var(--app-inset);
+	}
+
+	.footer {
+		grid-area: footer;
+		padding: var(--space-2) var(--app-inset);
+		border-top: 1px solid var(--mauve-4);
+	}
+
+	.actions {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: var(--gap);
+
+		/**
+		 * Offset for ghost button alignment
+		 */
+		margin-inline: calc(var(--space-2) * -1);
+	}
+}

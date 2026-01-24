@@ -3,6 +3,7 @@ import { ShareAction } from "@/components/ShareAction";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { ClearFeaturedListButton } from "@/features/lists/actions/components/ClearFeaturedListButton";
 import { DeleteRecipeListButton } from "@/features/lists/actions/components/DeleteRecipeListButton";
+import { ExportListButton } from "@/features/lists/actions/components/ExportListButton";
 import { SetFeaturedListButton } from "@/features/lists/actions/components/SetFeaturedListButton";
 import { deleteRecipeList } from "@/features/lists/api/deleteRecipeList";
 import { clearFeaturedList } from "@/features/lists/featured/api/clearFeaturedList";
@@ -17,8 +18,9 @@ export function RecipeListActions({
 	hasFeaturedList,
 	deleteRedirectTo,
 	withLink,
-	...props
-}: ActionProps & {
+	actionProps,
+}: {
+	actionProps: ActionProps;
 	list: RecipeListWithEntries;
 	hasFeaturedList?: boolean;
 	deleteRedirectTo?: string;
@@ -28,7 +30,11 @@ export function RecipeListActions({
 		<>
 			{withLink ? (
 				<li>
-					<LinkButton {...props} href={getRecipeListUrl(list)} color="accent">
+					<LinkButton
+						{...actionProps}
+						href={getRecipeListUrl(list)}
+						color="accent"
+					>
 						<Icon name="arrow-right" size={1} />
 						View
 					</LinkButton>
@@ -37,7 +43,7 @@ export function RecipeListActions({
 
 			<li>
 				<LinkButton
-					{...props}
+					{...actionProps}
 					href={`/bar/lists/${list.id}/edit`}
 					color="accent"
 				>
@@ -48,7 +54,7 @@ export function RecipeListActions({
 
 			<li>
 				<ShareAction
-					{...props}
+					{...actionProps}
 					value={new URL(
 						getRecipeListUrl(list),
 						getServerSideBaseURL(),
@@ -61,7 +67,7 @@ export function RecipeListActions({
 			<li>
 				{list.isFeatured ? (
 					<ClearFeaturedListButton
-						{...props}
+						{...actionProps}
 						list={list}
 						actionSetFeatured={setFeaturedList}
 						actionClearFeatured={clearFeaturedList}
@@ -72,7 +78,7 @@ export function RecipeListActions({
 					</ClearFeaturedListButton>
 				) : (
 					<SetFeaturedListButton
-						{...props}
+						{...actionProps}
 						list={list}
 						hasFeaturedList={hasFeaturedList}
 						actionSetFeatured={setFeaturedList}
@@ -87,7 +93,7 @@ export function RecipeListActions({
 
 			<li>
 				<DeleteRecipeListButton
-					{...props}
+					{...actionProps}
 					color="red"
 					list={list}
 					action={deleteRecipeList.bind(null, {
@@ -98,6 +104,13 @@ export function RecipeListActions({
 					<Icon name="trash" />
 					Delete
 				</DeleteRecipeListButton>
+			</li>
+
+			<li>
+				<ExportListButton {...actionProps} list={list}>
+					<Icon name="arrow-down-from-line" />
+					Export list
+				</ExportListButton>
 			</li>
 		</>
 	);

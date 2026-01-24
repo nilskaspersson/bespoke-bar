@@ -1,7 +1,7 @@
-import { useCallback } from "react";
+import { use, useCallback } from "react";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 
 export function roundUnit(
 	volumeInMl: number,
@@ -53,7 +53,7 @@ export function useRoundedUnit(): (
 	volumeInMl: number,
 	unitSystem: UnitSystems | null | undefined,
 ) => string {
-	const { volumeFormatter } = useFormatter();
+	const { volumeFormatter } = use(FormatterContext);
 
 	return useCallback(
 		(volumeInMl: number, unitSystem: UnitSystems | null | undefined) =>

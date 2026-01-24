@@ -2,6 +2,8 @@ import type { CocktailStyle } from "@/db/schema/cocktailStyles";
 import type { Glassware } from "@/db/schema/glassware";
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
 
+export const DEFAULT_RECIPE_NAME = "Unnamed Recipe";
+
 export const METHOD_TO_LABEL = new Map<PreparationMethod, string>([
 	["stirred", "Stirred"],
 	["shaken", "Shaken"],

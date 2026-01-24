@@ -1,6 +1,6 @@
 "use client";
 
-import { type ComponentProps, useMemo } from "react";
+import { type ComponentProps, use, useMemo } from "react";
 import {
 	type PreparationMethod,
 	preparationMethods,
@@ -9,7 +9,7 @@ import {
 	METHOD_TO_DEFAULT_DILUTION,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { OptionLabel } from "@/ui/OptionLabel";
 import { Select } from "@/ui/Select";
 import { collator } from "@/utils/collator";
@@ -32,7 +32,7 @@ export function SelectPreparationMethod(
 		"items" | "itemToString" | "getItemValue" | "getItemLabel"
 	>,
 ) {
-	const { percentageFormatter } = useFormatter();
+	const { percentageFormatter } = use(FormatterContext);
 
 	const options = useMemo(
 		() =>

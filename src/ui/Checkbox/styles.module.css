@@ -7,10 +7,6 @@
 			opacity: 0.5;
 		}
 
-		&.regular {
-			--checkbox-length: calc(var(--control-height) / 2);
-		}
-
 		&.small {
 			--checkbox-length: var(--space-4);
 		}

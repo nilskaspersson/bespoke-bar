@@ -20,5 +20,6 @@ import "./colors/grass.css";
  * Color aliases, scaling, resets, and misc assignments
  */
 import "./variables.css";
+import "./transitions.css";
 import "./globals.css";
 import "./utils.css";

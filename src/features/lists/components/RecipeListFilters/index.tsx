@@ -19,10 +19,12 @@ import { normalizeInput } from "@/utils";
 export function RecipeListFilters({
 	list,
 	editable,
+	withActions,
 	...props
 }: Omit<ComponentProps<typeof Grid>, "list"> & {
 	list: RecipeListWithRecipes;
 	editable?: boolean;
+	withActions?: boolean;
 }) {
 	const { entries } = list;
 
@@ -91,6 +93,7 @@ export function RecipeListFilters({
 				<RecipeEntryList
 					entries={filteredEntries}
 					editable={editable}
+					withActions={withActions}
 					{...props}
 				/>
 			)}

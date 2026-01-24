@@ -1,7 +1,7 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
 	RecipeListEntriesTable,
@@ -22,7 +22,7 @@ export async function updateRecipeListEntry(
 
 	const [result] = await db
 		.update(RecipeListEntriesTable)
-		.set(validatedUserInputData)
+		.set({ ...validatedUserInputData, updatedAt: sql`NOW()` })
 		.where(
 			and(
 				eq(RecipeListEntriesTable.id, id),

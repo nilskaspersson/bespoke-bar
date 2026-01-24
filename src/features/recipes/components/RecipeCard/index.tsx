@@ -1,23 +1,24 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+
 import type { BaseRecipe } from "@/db/schema/recipes";
-import { Abv } from "@/features/ingredients/components/Abv";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
 	COCKTAIL_STYLE_TO_LABEL,
 	GLASSWARE_TO_LABEL,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
+import { AbvChip } from "@/features/recipes/metrics/components/AbvChip";
 import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
 import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { useFormatter } from "@/hooks/useFormatter";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
+
 import styles from "./styles.module.css";
 
 type Props<T> = {
@@ -40,7 +41,6 @@ export function RecipeCard<T extends BaseRecipe>({
 	withLink = true,
 }: Props<T>) {
 	const metrics = calculateRecipeMetrics(recipe);
-	const { percentageFormatter } = useFormatter();
 
 	return (
 		<Grid gap={4} className={className}>
@@ -77,9 +77,7 @@ export function RecipeCard<T extends BaseRecipe>({
 						</Chip>
 					) : null}
 
-					<Chip color="light" size={1}>
-						{percentageFormatter.format(metrics.abv)} <Abv />
-					</Chip>
+					<AbvChip abv={metrics.abv} />
 
 					{recipe.glassware ? (
 						<Chip color="light" size={1}>

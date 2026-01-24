@@ -29,7 +29,7 @@ export async function FeaturedList(
 					<EntityActions className={styles.actions}>
 						{(actionProps) => (
 							<RecipeListActions
-								{...actionProps}
+								actionProps={actionProps}
 								list={featuredList}
 								hasFeaturedList
 								withLink

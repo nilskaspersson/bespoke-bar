@@ -2,4 +2,9 @@
 	.icon {
 		top: -2.5px;
 	}
+
+	.switcher {
+		min-height: 28px; /* Aligns with the Clerk button height */
+		margin: -8px;
+	}
 }

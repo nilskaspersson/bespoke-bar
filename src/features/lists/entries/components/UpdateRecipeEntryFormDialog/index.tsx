@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useRef } from "react";
+import { use, useCallback, useId, useRef } from "react";
 import {
 	type RecipeListEntryWithRecipe,
 	recipeListEntryFormSchema,
@@ -12,13 +12,14 @@ import { updateRecipeListEntryAction } from "@/features/lists/entries/api/update
 import { RecipeEntryDiff } from "@/features/lists/entries/components/RecipeEntryDiff";
 import { RecipeEntryPriceCalculation } from "@/features/lists/entries/components/RecipeEntryPriceCalculation";
 import { isRecipeListEntry } from "@/features/lists/utils";
-import { useModalContext } from "@/hooks/useModal";
+import { DialogContext } from "@/hooks/useDialog";
 import { useServerAction } from "@/hooks/useServerAction";
-import { Alert } from "@/ui/Alert";
-import { Button } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
+import { Drawer } from "@/ui/Drawer";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
 
@@ -27,16 +28,17 @@ type Props = {
 };
 
 export function UpdateRecipeEntryFormDialog({ entry }: Props) {
+	const formId = useId();
 	const formRef = useRef<HTMLFormElement>(null);
-	const { handleClose } = useModalContext();
+	const dialog = use(DialogContext);
 
 	const { action: handleUpdateRecipeListEntry } = useServerAction(
 		updateRecipeListEntryAction.bind(null, entry.id),
-		handleClose,
+		dialog?.closeDialog,
 	);
 
 	const [form, fields] = useForm({
-		id: `update-recipe-entry-${entry.id}`,
+		id: formId,
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
 				schema: recipeListEntryFormSchema,
@@ -61,7 +63,11 @@ export function UpdateRecipeEntryFormDialog({ entry }: Props) {
 					id: toastId,
 					loading: "Saving…",
 					success: (result) => ({
-						message: `${entry.recipe.name} updated`,
+						message: (
+							<>
+								Updated: <em>{entry.recipe.name}</em>
+							</>
+						),
 						description: isRecipeListEntry(result) ? (
 							<RecipeEntryDiff a={entry} b={result} />
 						) : null,
@@ -87,32 +93,30 @@ export function UpdateRecipeEntryFormDialog({ entry }: Props) {
 	);
 
 	return (
-		<FormProvider context={form.context}>
-			<form
-				ref={formRef}
-				action={handleSubmit}
-				id={form.id}
-				onSubmit={form.onSubmit}
-			>
-				<Alert
-					onClose={handleClose}
-					heading="Update sales price"
-					actions={
-						<>
-							<Button
-								variant="outline"
-								color="light"
-								size="small"
-								onClick={handleClose}
-							>
-								Cancel
-							</Button>
-
-							<SubmitButton variant="solid" color="heavy" size="small">
-								Save
-							</SubmitButton>
-						</>
-					}
+		<Drawer
+			ref={dialog?.dialogRef}
+			onClose={dialog?.closeDialog}
+			header={
+				<HGroup overline="Update sales price">
+					<Heading level="h3" size={6}>
+						{entry.recipe.name}
+					</Heading>
+				</HGroup>
+			}
+			actions={
+				<li>
+					<SubmitButton variant="solid" color="accent" size="small">
+						Save
+					</SubmitButton>
+				</li>
+			}
+		>
+			<FormProvider context={form.context}>
+				<form
+					ref={formRef}
+					action={handleSubmit}
+					id={form.id}
+					onSubmit={form.onSubmit}
 				>
 					<input type="submit" hidden form={form.id} />
 
@@ -147,8 +151,8 @@ export function UpdateRecipeEntryFormDialog({ entry }: Props) {
 							priceInputId={fields.price.id}
 						/>
 					</Grid>
-				</Alert>
-			</form>
-		</FormProvider>
+				</form>
+			</FormProvider>
+		</Drawer>
 	);
 }

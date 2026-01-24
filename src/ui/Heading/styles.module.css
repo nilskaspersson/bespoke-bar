@@ -21,4 +21,13 @@
 			font-family: var(--font-serif);
 		}
 	}
+
+	.truncate {
+		text-overflow: ellipsis;
+		overflow: hidden;
+	}
+
+	.noWrap {
+		white-space: nowrap;
+	}
 }

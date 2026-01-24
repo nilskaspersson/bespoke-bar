@@ -2,8 +2,8 @@
 
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import { useMemo } from "react";
-import { useFormatter } from "@/hooks/useFormatter";
+import { use, useMemo } from "react";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { TextField } from "@/ui/TextField";
 import styles from "./styles.module.css";
 
@@ -12,7 +12,7 @@ export function CurrencyInput(props: ComponentProps<typeof TextField>) {
 		currencyDisplayName,
 		currencyFormatter,
 		options: { currency },
-	} = useFormatter();
+	} = use(FormatterContext);
 
 	const symbol = useMemo(
 		() =>

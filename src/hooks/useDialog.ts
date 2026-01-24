@@ -1,0 +1,44 @@
+"use client";
+
+import { createContext, useCallback, useRef, useState } from "react";
+
+type DialogContextValue = {
+	dialogRef: React.RefObject<HTMLDialogElement | null>;
+	isOpen: boolean;
+	openDialog: () => void;
+	closeDialog: () => void;
+	onClose: () => void;
+};
+
+export const DialogContext = createContext<DialogContextValue | null>(null);
+
+export function useDialog(): DialogContextValue {
+	const dialogRef = useRef<HTMLDialogElement>(null);
+	const [isOpen, setIsOpen] = useState(false);
+
+	const openDialog = useCallback(() => {
+		dialogRef.current?.showModal();
+		setIsOpen(true);
+	}, []);
+
+	const closeDialog = useCallback(() => {
+		dialogRef.current?.close();
+		setIsOpen(false);
+	}, []);
+
+	/**
+	 * Note: MUST be assigned to the dialog, or native dismissal methods won't update
+	 * internal state.
+	 */
+	const onClose = useCallback(() => {
+		setIsOpen(false);
+	}, []);
+
+	return {
+		dialogRef,
+		isOpen,
+		openDialog,
+		closeDialog,
+		onClose,
+	};
+}

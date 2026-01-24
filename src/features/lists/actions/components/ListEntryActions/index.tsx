@@ -8,7 +8,7 @@ import { UpdateRecipeEntryFormDialog } from "@/features/lists/entries/components
 
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { ToggleModalButton } from "@/ui/ToggleModalButton";
+import { ToggleDrawerButton } from "@/ui/ToggleDrawerButton";
 
 export function ListEntryActions({
 	entry,
@@ -20,9 +20,12 @@ export function ListEntryActions({
 			{(actionProps) => (
 				<>
 					<li>
-						<ToggleModalButton {...actionProps} label="Update price">
-							<UpdateRecipeEntryFormDialog entry={entry} />
-						</ToggleModalButton>
+						<ToggleDrawerButton {...actionProps} label="Update price">
+							<UpdateRecipeEntryFormDialog
+								entry={entry}
+								key={entry.updatedAt?.toISOString()}
+							/>
+						</ToggleDrawerButton>
 					</li>
 
 					<li>

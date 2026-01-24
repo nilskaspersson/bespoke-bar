@@ -1,10 +1,10 @@
 "use client";
 
-import type { ComponentProps } from "react";
+import { type ComponentProps, use } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeEntryProfitLabel } from "@/features/lists/entries/components/RecipeEntryProfitLabel";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";
-import { useFormatter } from "@/hooks/useFormatter";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
@@ -20,7 +20,7 @@ export function RecipeEntryProfit<T extends BaseRecipe>({
 >) {
 	const { cost, isIncomplete } = getRecipeCost(recipe);
 
-	const { currencyFormatter, quantityFormatter } = useFormatter();
+	const { currencyFormatter, quantityFormatter } = use(FormatterContext);
 
 	return (
 		<details {...props}>
