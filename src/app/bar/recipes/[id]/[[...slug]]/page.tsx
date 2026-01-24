@@ -7,6 +7,7 @@ import { getFullName } from "@/features/organisation/utils";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
+import { getRecipeName } from "@/features/recipes/utils";
 import { Container } from "@/ui/Container";
 import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
@@ -72,7 +73,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const author = await getUserById(recipe.createdBy);
 
 	return {
-		title: recipe.name || "Unnamed Recipe",
+		title: getRecipeName(recipe),
 		/**
 		 * We often generate links with a human-readable suffix of the recipe name. Add a
 		 * canonical reference to the plain URL with only the recipe ID.

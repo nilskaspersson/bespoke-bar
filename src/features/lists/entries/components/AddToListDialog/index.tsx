@@ -2,10 +2,13 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useRef } from "react";
+import { use, useCallback, useMemo, useRef } from "react";
 import useSWRImmutable from "swr/immutable";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
-import { recipeListEntryFormSchema } from "@/db/schema/recipeListEntries";
+import {
+	type RecipeListEntryWithRecipe,
+	recipeListEntryFormSchema,
+} from "@/db/schema/recipeListEntries";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RemoveListEntryButton } from "@/features/lists/actions/components/RemoveListEntryButton";
 import { SelectRecipeList } from "@/features/lists/components/SelectRecipeList";
@@ -13,14 +16,20 @@ import { addRecipeToListAction } from "@/features/lists/entries/api/addRecipeToL
 import { removeRecipeFromList } from "@/features/lists/entries/api/removeRecipeFromList";
 import { RecipeEntryPriceCalculation } from "@/features/lists/entries/components/RecipeEntryPriceCalculation";
 import { RecipeListEntryCard } from "@/features/lists/entries/components/RecipeListEntryCard";
-import { isRecipeListEntry, recipeListsFetcher } from "@/features/lists/utils";
-import { useModalContext } from "@/hooks/useModal";
+import {
+	createDraftRecipeListEntry,
+	isRecipeListEntry,
+	recipeListsFetcher,
+} from "@/features/lists/utils";
+import { DialogContext } from "@/hooks/useDialog";
 import { useServerAction } from "@/hooks/useServerAction";
-import { Alert } from "@/ui/Alert";
-import { Button, LinkButton } from "@/ui/Button";
+import { LinkButton } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
+import { Drawer } from "@/ui/Drawer";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
@@ -31,8 +40,8 @@ type Props = {
 	recipe: RecipeWithSpecs;
 };
 
-export function AddRecipeToListDialog({ recipe }: Props) {
-	const { handleClose } = useModalContext();
+export function AddToListDialog({ recipe }: Props) {
+	const dialog = use(DialogContext);
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const { data: lists } = useSWRImmutable<RecipeListWithEntries[] | undefined>(
@@ -40,7 +49,10 @@ export function AddRecipeToListDialog({ recipe }: Props) {
 		recipeListsFetcher,
 	);
 
-	const { action } = useServerAction(addRecipeToListAction, handleClose);
+	const { action } = useServerAction(
+		addRecipeToListAction,
+		dialog?.closeDialog,
+	);
 
 	const [form, fields] = useForm({
 		id: `create-recipe-entry-${recipe.id}`,
@@ -108,35 +120,42 @@ export function AddRecipeToListDialog({ recipe }: Props) {
 		[action],
 	);
 
-	const parsedPrice = currencySchema.safeParse(fields.price.value);
+	const draftEntry: RecipeListEntryWithRecipe | null = useMemo(
+		() =>
+			createDraftRecipeListEntry({
+				recipe,
+				recipeId: recipe.id,
+				listId: fields.listId.value ?? "",
+				price: currencySchema.safeParse(fields.price.value).data,
+			}),
+		[recipe, fields.listId.value, fields.price.value],
+	);
 
 	return (
-		<FormProvider context={form.context}>
-			<form
-				ref={formRef}
-				action={handleSubmit}
-				onSubmit={form.onSubmit}
-				id={form.id}
-			>
-				<Alert
-					onClose={handleClose}
-					heading="Add recipe to list"
-					actions={
-						<>
-							<Button
-								variant="outline"
-								color="light"
-								size="small"
-								onClick={handleClose}
-							>
-								Cancel
-							</Button>
-
-							<SubmitButton variant="solid" color="heavy" size="small">
-								Add
-							</SubmitButton>
-						</>
-					}
+		<Drawer
+			ref={dialog?.dialogRef}
+			onClose={dialog?.closeDialog}
+			header={
+				<HGroup overline="Add to list">
+					<Heading level="h3" size={6}>
+						{recipe.name}
+					</Heading>
+				</HGroup>
+			}
+			actions={
+				<li>
+					<SubmitButton variant="solid" color="accent" size="small">
+						Add
+					</SubmitButton>
+				</li>
+			}
+		>
+			<FormProvider context={form.context}>
+				<form
+					ref={formRef}
+					action={handleSubmit}
+					onSubmit={form.onSubmit}
+					id={form.id}
 				>
 					<input type="submit" hidden form={form.id} />
 
@@ -147,18 +166,9 @@ export function AddRecipeToListDialog({ recipe }: Props) {
 					/>
 
 					<Grid gap={4} className={styles.grid}>
-						<RecipeListEntryCard
-							className={styles.card}
-							entry={{
-								id: "",
-								orgId: "",
-								recipe,
-								recipeId: recipe.id,
-								listId: fields.listId.value ?? "",
-								price: parsedPrice.success ? parsedPrice.data : null,
-								sortOrder: null,
-							}}
-						/>
+						{draftEntry ? (
+							<RecipeListEntryCard className={styles.card} entry={draftEntry} />
+						) : null}
 
 						<Icon name="arrow-down-long" size={6} className={styles.arrow} />
 
@@ -192,8 +202,8 @@ export function AddRecipeToListDialog({ recipe }: Props) {
 
 						<FormErrors formRef={formRef} />
 					</Grid>
-				</Alert>
-			</form>
-		</FormProvider>
+				</form>
+			</FormProvider>
+		</Drawer>
 	);
 }

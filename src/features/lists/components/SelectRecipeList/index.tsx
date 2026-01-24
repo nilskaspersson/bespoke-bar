@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
+import { getListName } from "@/features/lists/utils";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
 import { Combobox } from "@/ui/Combobox";
 import { Icon } from "@/ui/Icon";
@@ -42,11 +43,7 @@ export function SelectRecipeList({
 				if (a.isFeatured && !b.isFeatured) return -1;
 				if (!a.isFeatured && b.isFeatured) return 1;
 
-				// Then most recently updated/created lists
-				return collator.compare(
-					(b.updatedAt ?? b.createdAt)?.toISOString() ?? "",
-					(a.updatedAt ?? a.createdAt)?.toISOString() ?? "",
-				);
+				return collator.compare(getListName(a), getListName(b));
 			}) ?? [],
 		[lists],
 	);

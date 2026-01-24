@@ -5,6 +5,7 @@ import {
 	pgTable,
 	real,
 	text,
+	timestamp,
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import {
@@ -32,6 +33,8 @@ export const RecipeListEntriesTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		sortOrder: integer("sort_order"),
 		price: real("price"),
+		createdAt: timestamp("created_at").defaultNow().notNull(),
+		updatedAt: timestamp("updated_at"),
 	},
 	(table) => [
 		index("idx_recipe_list_entries_org").on(table.orgId),

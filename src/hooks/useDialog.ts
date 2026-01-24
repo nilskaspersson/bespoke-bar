@@ -1,8 +1,18 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { createContext, useCallback, useRef, useState } from "react";
 
-export function useDialog() {
+type DialogContextValue = {
+	dialogRef: React.RefObject<HTMLDialogElement | null>;
+	isOpen: boolean;
+	openDialog: () => void;
+	closeDialog: () => void;
+	onClose: () => void;
+};
+
+export const DialogContext = createContext<DialogContextValue | null>(null);
+
+export function useDialog(): DialogContextValue {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 

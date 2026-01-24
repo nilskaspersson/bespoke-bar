@@ -1,0 +1,26 @@
+@layer feature {
+	.adornment {
+		position: relative;
+	}
+
+	.price {
+		font-weight: 800;
+		font-size: var(--size-2);
+		color: var(--mauve-12);
+
+		&.button {
+			&:not([aria-disabled="true"]) {
+				&:hover,
+				&:focus-visible {
+					color: var(--iris-11);
+				}
+			}
+		}
+	}
+
+	.profit {
+		position: absolute;
+		top: 100%;
+		right: 0;
+	}
+}

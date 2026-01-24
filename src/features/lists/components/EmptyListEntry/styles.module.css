@@ -1,0 +1,21 @@
+@layer feature {
+	.base {
+		position: relative;
+		transition-property: border-color, background-color;
+		transition-duration: var(--transition-duration);
+
+		&:hover,
+		&:focus-within {
+			border-color: var(--mauve-8);
+			background-color: var(--mauve-3);
+		}
+	}
+
+	.button {
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+		}
+	}
+}

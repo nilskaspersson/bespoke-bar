@@ -4,6 +4,7 @@ import {
 	GLASSWARE_TO_LABEL,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
+import { getRecipeName } from "@/features/recipes/utils";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 
 export type ExportOptions = {
@@ -86,7 +87,10 @@ function formatIngredient(
 }
 
 export function getExportFilename(
-	list: Pick<RecipeList, "name"> & { createdAt?: Date | string | null; updatedAt?: Date | string | null },
+	list: Pick<RecipeList, "name"> & {
+		createdAt?: Date | string | null;
+		updatedAt?: Date | string | null;
+	},
 	format: "txt" | "json",
 ): string {
 	const sanitizedName = list.name
@@ -146,7 +150,7 @@ export function exportRecipeListAsText(
 		const recipeLines: string[] = [];
 
 		if (options.includeName) {
-			recipeLines.push(recipe.name ?? "Unnamed Recipe");
+			recipeLines.push(getRecipeName(recipe));
 		}
 
 		if (options.includePrice && price != null) {
@@ -233,7 +237,7 @@ export function exportRecipeListAsJson(
 		name: options.includeListName ? list.name : undefined,
 		description: options.includeListDescription ? list.description : undefined,
 		recipes: sortedEntries.map(({ recipe, price }) => ({
-			name: options.includeName ? (recipe.name ?? "Unnamed Recipe") : undefined,
+			name: options.includeName ? getRecipeName(recipe) : undefined,
 			description:
 				options.includeDescription && recipe.description
 					? recipe.description

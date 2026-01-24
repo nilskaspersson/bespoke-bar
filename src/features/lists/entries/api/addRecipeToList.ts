@@ -1,7 +1,7 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, max, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
 	type InsertRecipeListEntry,
@@ -32,40 +32,46 @@ export async function addRecipeToList(
 			price: userInput.price ?? null,
 		});
 
-	const list = await db.query.RecipeListsTable.findFirst({
-		where: and(
-			eq(RecipeListsTable.id, validatedInput.listId),
-			eq(RecipeListsTable.orgId, orgId),
-		),
-		with: {
-			entries: {
-				columns: {
-					recipeId: true,
-					sortOrder: true,
-				},
-			},
-		},
-	});
+	const [list] = await db
+		.select({
+			id: RecipeListsTable.id,
+			existingEntryId: RecipeListEntriesTable.id,
+		})
+		.from(RecipeListsTable)
+		.leftJoin(
+			RecipeListEntriesTable,
+			and(
+				eq(RecipeListEntriesTable.listId, RecipeListsTable.id),
+				eq(RecipeListEntriesTable.recipeId, validatedInput.recipeId),
+			),
+		)
+		.where(
+			and(
+				eq(RecipeListsTable.id, validatedInput.listId),
+				eq(RecipeListsTable.orgId, orgId),
+			),
+		);
 
 	if (!list) {
 		throw new Error("List not found or access denied");
 	}
 
-	if (
-		list.entries.some((entry) => entry.recipeId === validatedInput.recipeId)
-	) {
+	if (list.existingEntryId) {
 		throw new Error("Recipe is already in list");
 	}
 
-	const maxSortOrder =
-		list.entries.length > 0
-			? Math.max(...list.entries.map((entry) => entry.sortOrder ?? 0))
-			: 0;
+	/**
+	 * Find largest current sort order
+	 */
+	const [{ maxSortOrder }] = await db
+		.select({ maxSortOrder: max(RecipeListEntriesTable.sortOrder) })
+		.from(RecipeListEntriesTable)
+		.where(eq(RecipeListEntriesTable.listId, validatedInput.listId));
 
 	const validatedEntry: InsertRecipeListEntry =
 		insertRecipeListEntrySchema.parse({
 			...validatedInput,
-			sortOrder: maxSortOrder + 1,
+			sortOrder: (maxSortOrder ?? 0) + 1,
 		});
 
 	const entry = await db.transaction(async (tx) => {

@@ -11,6 +11,8 @@
 		background: none;
 		box-shadow: none;
 		border: none;
+		text-align: initial;
+		color: var(--mauve-11);
 
 		inset: 0;
 		width: 100%;
@@ -77,6 +79,7 @@
 	.actions {
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		gap: var(--gap);
 
 		/**

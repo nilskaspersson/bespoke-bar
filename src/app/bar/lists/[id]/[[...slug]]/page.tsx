@@ -5,10 +5,12 @@ import { EntityActions } from "@/components/EntityActions";
 import { PageHeader } from "@/components/PageHeader";
 import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
+import { EmptyListEntry } from "@/features/lists/components/EmptyListEntry";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { getCachedFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
 import { Container } from "@/ui/Container";
+import { Grid } from "@/ui/Grid";
 import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
@@ -42,26 +44,29 @@ async function RecipeListContent({ params }: Props) {
 
 	const { orgId } = await authOrForbidden();
 
-	const [recipeList, featuredList] = await Promise.all([
+	const [list, featuredList] = await Promise.all([
 		getCachedRecipeList(orgId, id),
 		getCachedFeaturedList(orgId),
 	]);
 
-	if (!recipeList) {
+	if (!list) {
 		notFound();
 	}
 
 	return (
 		<>
-			<RecipeListFrame level="h2" list={recipeList} className={styles.frame}>
-				<RecipeListFilters list={recipeList} editable />
+			<RecipeListFrame level="h2" list={list} className={styles.frame}>
+				<Grid gap={8}>
+					<RecipeListFilters list={list} editable />
+					<EmptyListEntry list={list} />
+				</Grid>
 			</RecipeListFrame>
 
 			<EntityActions className={styles.actions}>
 				{(actionProps) => (
 					<RecipeListActions
 						actionProps={actionProps}
-						list={recipeList}
+						list={list}
 						hasFeaturedList={Boolean(featuredList)}
 						deleteRedirectTo={"/bar/lists"}
 					/>
@@ -81,18 +86,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	}
 
 	const { orgId } = await authOrForbidden();
-	const recipeList = await getCachedRecipeList(orgId, id);
+	const list = await getCachedRecipeList(orgId, id);
 
-	if (!recipeList) {
+	if (!list) {
 		return {
 			title: "List not found",
 		};
 	}
 
 	return {
-		title: recipeList.name || "Unnamed List",
+		title: list.name || "Unnamed List",
 		alternates: {
-			canonical: `/bar/lists/${recipeList.id}`,
+			canonical: `/bar/lists/${list.id}`,
 		},
 	};
 }

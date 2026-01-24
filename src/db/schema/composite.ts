@@ -106,7 +106,12 @@ export type RecipeListWithEntriesFormData = z.infer<
 >;
 
 export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
-	entries: z.array(selectRecipeListEntrySchema),
+	entries: z.array(
+		selectRecipeListEntrySchema.extend({
+			createdAt: z.coerce.date(),
+			updatedAt: z.coerce.date().nullable(),
+		}),
+	),
 	createdAt: z.coerce.date(),
 	updatedAt: z.coerce.date().nullable(),
 	featuredAt: z.coerce.date().nullable(),

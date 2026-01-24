@@ -5,6 +5,7 @@ import type { UnitSystems } from "@/features/units/utils/convert";
 export function useGetSpecsToText<T extends DraftSpecWithDraftIngredient>(
 	servings: number = 1,
 	convertUnits?: UnitSystems | null,
+	joiner = "\n",
 ): (specs: T[] | undefined) => string | null {
 	const formatSpecMeasure = useFormatSpecMeasure();
 
@@ -18,6 +19,6 @@ export function useGetSpecsToText<T extends DraftSpecWithDraftIngredient>(
 				(spec) =>
 					`${formatSpecMeasure({ spec, servings, convertUnits })} ${spec.ingredient.name}`,
 			)
-			.join("\n");
+			.join(joiner);
 	};
 }

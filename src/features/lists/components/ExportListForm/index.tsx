@@ -17,6 +17,7 @@ import { CopyToClipboard } from "@/ui/CopyToClipboard";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { RadioGroup, type RadioGroupOption } from "@/ui/RadioGroup";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { downloadBlob } from "@/utils/downloadBlob";
 import type { Keyed } from "@/utils/withKey";
@@ -63,7 +64,7 @@ export function ExportListForm({
 
 	const { currencyFormatter } = use(FormatterContext);
 
-	const { data } = useSWRImmutable<RecipeListWithRecipes>(
+	const { data, isLoading } = useSWRImmutable<RecipeListWithRecipes>(
 		`/api/lists/${list.id}`,
 		recipeListFetcher,
 	);
@@ -111,13 +112,13 @@ export function ExportListForm({
 						</Text>
 
 						<Checkbox
-							label="List name"
+							label="Name"
 							checked={options.includeListName}
 							onChange={() => toggleOption("includeListName")}
 						/>
 
 						<Checkbox
-							label="List description"
+							label="Description"
 							checked={options.includeListDescription}
 							onChange={() => toggleOption("includeListDescription")}
 						/>
@@ -154,38 +155,46 @@ export function ExportListForm({
 								checked={options.includeIngredients}
 								onChange={() => toggleOption("includeIngredients")}
 							/>
-
-							<Checkbox
-								label="Specs"
-								checked={options.includeSpecs}
-								onChange={() => toggleOption("includeSpecs")}
-								disabled={!options.includeIngredients}
-							/>
-
-							<Checkbox
-								label="Glassware"
-								checked={options.includeGlassware}
-								onChange={() => toggleOption("includeGlassware")}
-							/>
-
-							<Checkbox
-								label="Method"
-								checked={options.includeMethod}
-								onChange={() => toggleOption("includeMethod")}
-							/>
-
-							<Checkbox
-								label="Garnish"
-								checked={options.includeGarnish}
-								onChange={() => toggleOption("includeGarnish")}
-							/>
-
-							<Checkbox
-								label="Instructions"
-								checked={options.includeInstructions}
-								onChange={() => toggleOption("includeInstructions")}
-							/>
 						</div>
+					</Grid>
+				</fieldset>
+
+				<fieldset>
+					<Grid gap={2} alignContent="start">
+						<Text size={2} as="legend" weight={600} compact>
+							Instructions
+						</Text>
+
+						<Checkbox
+							label="Specs"
+							checked={options.includeSpecs}
+							onChange={() => toggleOption("includeSpecs")}
+							disabled={!options.includeIngredients}
+						/>
+
+						<Checkbox
+							label="Instructions"
+							checked={options.includeInstructions}
+							onChange={() => toggleOption("includeInstructions")}
+						/>
+
+						<Checkbox
+							label="Method"
+							checked={options.includeMethod}
+							onChange={() => toggleOption("includeMethod")}
+						/>
+
+						<Checkbox
+							label="Garnish"
+							checked={options.includeGarnish}
+							onChange={() => toggleOption("includeGarnish")}
+						/>
+
+						<Checkbox
+							label="Glassware"
+							checked={options.includeGlassware}
+							onChange={() => toggleOption("includeGlassware")}
+						/>
 					</Grid>
 				</fieldset>
 
@@ -219,9 +228,13 @@ export function ExportListForm({
 				</header>
 
 				<div className={styles.previewContainer}>
-					<Text as="pre" className={styles.previewContent}>
-						{preview}
-					</Text>
+					{isLoading ? (
+						<Skeleton />
+					) : (
+						<Text as="pre" className={styles.previewContent}>
+							{preview}
+						</Text>
+					)}
 				</div>
 			</section>
 		</section>

@@ -4,6 +4,7 @@
 		border: 2px dashed var(--bc);
 		border-radius: var(--radius--large);
 		text-align: center;
+		position: relative;
 	}
 
 	.accent {

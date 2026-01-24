@@ -1,11 +1,2 @@
 @layer feature {
-	.profit {
-		position: absolute;
-		top: 100%;
-		right: 0;
-	}
-
-	.adornment {
-		position: relative;
-	}
 }
