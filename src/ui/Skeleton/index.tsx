@@ -12,7 +12,7 @@ export function Skeleton({
 }: ComponentProps<"span"> & {
 	width?: string;
 	height?: string;
-	variant?: "block" | "input" | "text";
+	variant?: "block" | "circular" | "input" | "text";
 }) {
 	return (
 		<span

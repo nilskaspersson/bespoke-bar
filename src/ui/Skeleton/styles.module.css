@@ -38,4 +38,10 @@
 		width: var(--control-width);
 		height: var(--control-height);
 	}
+
+	.circular {
+		border-radius: var(--radius--full);
+		width: var(--jsxWidth, 100%);
+		height: var(--jsxHeight, 100%);
+	}
 }

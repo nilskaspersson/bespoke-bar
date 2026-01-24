@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "clsx";
 import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
