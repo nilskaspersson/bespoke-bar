@@ -1,8 +1,9 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRef } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { CreateListEntryForm } from "@/features/lists/entries/components/CreateListEntryForm";
+import { CreateListEntryFormSkeleton } from "@/features/lists/entries/components/CreateListEntryForm";
 import { getRecipeName } from "@/features/recipes/utils";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
@@ -10,6 +11,17 @@ import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
 import { SubmitButton } from "@/ui/SubmitButton";
+
+const CreateListEntryForm = dynamic(
+	() =>
+		import("@/features/lists/entries/components/CreateListEntryForm").then(
+			(m) => m.CreateListEntryForm,
+		),
+	{
+		loading: CreateListEntryFormSkeleton,
+		ssr: false,
+	},
+);
 
 type Props = ButtonProps & {
 	recipe: RecipeWithSpecs;

@@ -31,6 +31,7 @@ import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionLabel } from "@/ui/OptionLabel";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
 import { ToastActions, toast } from "@/ui/Toast";
@@ -282,3 +283,19 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 		</FormProvider>
 	);
 }
+
+export function CreateListEntryFormSkeleton() {
+	return (
+		<Grid gap={4} className={styles.grid}>
+			<Grid gap={2}>
+				<Skeleton variant="block" width="513px" height="152px" />
+			</Grid>
+
+			<Icon name="arrow-down-long" size={6} className={styles.arrow} />
+
+			<Skeleton variant="block" width="513px" height="204px" />
+		</Grid>
+	);
+}
+
+CreateListEntryForm.Skeleton = CreateListEntryFormSkeleton;
