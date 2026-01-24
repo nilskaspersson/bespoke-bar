@@ -6,10 +6,12 @@ import styles from "./styles.module.css";
 export function RecipeEntryList({
 	entries,
 	editable,
+	withActions,
 	className,
 }: {
 	entries: RecipeListEntryWithRecipe[];
 	editable?: boolean;
+	withActions?: boolean;
 	className?: string;
 }) {
 	if (entries.length === 0) {
@@ -20,7 +22,11 @@ export function RecipeEntryList({
 		<ul className={clsx(styles.recipes, className)}>
 			{entries.map((entry) => (
 				<li key={entry.id}>
-					<RecipeListEntryCard entry={entry} editable={editable} />
+					<RecipeListEntryCard
+						entry={entry}
+						editable={editable}
+						withActions={withActions}
+					/>
 				</li>
 			))}
 		</ul>

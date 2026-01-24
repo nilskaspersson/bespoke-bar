@@ -13,7 +13,6 @@ export type IconName =
 	| "arrow-right"
 	| "arrow-rotate-left"
 	| "arrow-rotate-right"
-	| "arrow-up-long"
 	| "arrow-up-right-from-square"
 	| "ban"
 	| "bars"

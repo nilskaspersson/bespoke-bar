@@ -57,7 +57,7 @@ async function RecipeListContent({ params }: Props) {
 		<>
 			<RecipeListFrame level="h2" list={list} className={styles.frame}>
 				<Grid gap={8}>
-					<RecipeListFilters list={list} editable />
+					<RecipeListFilters list={list} editable withActions />
 					<EmptyListEntry list={list} />
 				</Grid>
 			</RecipeListFrame>

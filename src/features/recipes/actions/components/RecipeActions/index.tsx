@@ -3,7 +3,7 @@ import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { CreateRecipeEntryDialog } from "@/features/lists/entries/components/CreateRecipeEntryDialog";
+import { CreateListEntryButton } from "@/features/lists/entries/components/CreateListEntryButton";
 import { ConfirmDeleteRecipe } from "@/features/recipes/actions/components/ConfirmDeleteRecipe";
 import { DuplicateRecipeButton } from "@/features/recipes/actions/components/DuplicateRecipeButton";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
@@ -12,7 +12,6 @@ import { getRecipeUrl } from "@/features/recipes/utils";
 import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToClipboard";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { ToggleModalButton } from "@/ui/ToggleModalButton";
 import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
 
@@ -71,16 +70,9 @@ export function RecipeActions({
 					</li>
 
 					<li>
-						<ToggleModalButton
-							{...actionProps}
-							label={
-								<>
-									<Icon name="plus" size={1} /> Add to list
-								</>
-							}
-						>
-							<CreateRecipeEntryDialog recipe={recipe} />
-						</ToggleModalButton>
+						<CreateListEntryButton {...actionProps} recipe={recipe}>
+							<Icon name="plus" size={1} /> Add to list
+						</CreateListEntryButton>
 					</li>
 
 					<li>
