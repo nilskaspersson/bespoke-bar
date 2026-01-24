@@ -1,13 +1,25 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useId } from "react";
 import type { RecipeList } from "@/db/schema/recipeLists";
-import { AddRecipeForm } from "@/features/lists/entries/components/AddRecipeForm";
+import { AddRecipeFormSkeleton } from "@/features/lists/entries/components/AddRecipeForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
+
+const AddRecipeForm = dynamic(
+	() =>
+		import("@/features/lists/entries/components/AddRecipeForm").then(
+			(m) => m.AddRecipeForm,
+		),
+	{
+		loading: AddRecipeFormSkeleton,
+		ssr: false,
+	},
+);
 
 type Props = ButtonProps & {
 	list: RecipeList;

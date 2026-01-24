@@ -111,23 +111,25 @@ export function ExportListForm({
 							List details
 						</Text>
 
-						<Checkbox
-							label="Name"
-							checked={options.includeListName}
-							onChange={() => toggleOption("includeListName")}
-						/>
+						<div className={styles.checkboxes}>
+							<Checkbox
+								label="Name"
+								checked={options.includeListName}
+								onChange={() => toggleOption("includeListName")}
+							/>
 
-						<Checkbox
-							label="Description"
-							checked={options.includeListDescription}
-							onChange={() => toggleOption("includeListDescription")}
-						/>
+							<Checkbox
+								label="Description"
+								checked={options.includeListDescription}
+								onChange={() => toggleOption("includeListDescription")}
+							/>
 
-						<Checkbox
-							label="Recipe price"
-							checked={options.includePrice}
-							onChange={() => toggleOption("includePrice")}
-						/>
+							<Checkbox
+								label="Recipe price"
+								checked={options.includePrice}
+								onChange={() => toggleOption("includePrice")}
+							/>
+						</div>
 					</Grid>
 				</fieldset>
 
@@ -165,36 +167,38 @@ export function ExportListForm({
 							Instructions
 						</Text>
 
-						<Checkbox
-							label="Specs"
-							checked={options.includeSpecs}
-							onChange={() => toggleOption("includeSpecs")}
-							disabled={!options.includeIngredients}
-						/>
+						<div className={styles.checkboxes}>
+							<Checkbox
+								label="Specs"
+								checked={options.includeSpecs}
+								onChange={() => toggleOption("includeSpecs")}
+								disabled={!options.includeIngredients}
+							/>
 
-						<Checkbox
-							label="Instructions"
-							checked={options.includeInstructions}
-							onChange={() => toggleOption("includeInstructions")}
-						/>
+							<Checkbox
+								label="Instructions"
+								checked={options.includeInstructions}
+								onChange={() => toggleOption("includeInstructions")}
+							/>
 
-						<Checkbox
-							label="Method"
-							checked={options.includeMethod}
-							onChange={() => toggleOption("includeMethod")}
-						/>
+							<Checkbox
+								label="Method"
+								checked={options.includeMethod}
+								onChange={() => toggleOption("includeMethod")}
+							/>
 
-						<Checkbox
-							label="Garnish"
-							checked={options.includeGarnish}
-							onChange={() => toggleOption("includeGarnish")}
-						/>
+							<Checkbox
+								label="Garnish"
+								checked={options.includeGarnish}
+								onChange={() => toggleOption("includeGarnish")}
+							/>
 
-						<Checkbox
-							label="Glassware"
-							checked={options.includeGlassware}
-							onChange={() => toggleOption("includeGlassware")}
-						/>
+							<Checkbox
+								label="Glassware"
+								checked={options.includeGlassware}
+								onChange={() => toggleOption("includeGlassware")}
+							/>
+						</div>
 					</Grid>
 				</fieldset>
 
@@ -240,3 +244,61 @@ export function ExportListForm({
 		</section>
 	);
 }
+
+export function ExportListFormSkeleton() {
+	return (
+		<section className={styles.container}>
+			<Grid gap={4} className={styles.options}>
+				<Skeleton variant="text" width="9ch" height="20px" />
+
+				<Grid gap={2}>
+					<Skeleton variant="text" width="8ch" height="16px" />
+
+					<div className={styles.checkboxes}>
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+					</div>
+				</Grid>
+
+				<Grid gap={2}>
+					<Skeleton variant="text" width="8ch" height="16px" />
+
+					<div className={styles.checkboxes}>
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+					</div>
+				</Grid>
+
+				<Grid gap={2}>
+					<Skeleton variant="text" width="8ch" height="16px" />
+
+					<div className={styles.checkboxes}>
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+					</div>
+				</Grid>
+
+				<Grid gap={2}>
+					<Skeleton variant="text" width="8ch" height="16px" />
+
+					<div className={styles.checkboxes}>
+						<Skeleton variant="block" width="100%" height="20px" />
+						<Skeleton variant="block" width="100%" height="20px" />
+					</div>
+				</Grid>
+			</Grid>
+
+			<section className={styles.preview}>
+				<Skeleton variant="text" width="9ch" height="20px" />
+				<Skeleton variant="block" width="100%" height="100%" />
+			</section>
+		</section>
+	);
+}
+
+ExportListForm.Skeleton = ExportListFormSkeleton;

@@ -3,6 +3,7 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { Checkbox } from "@/ui/Checkbox";
+import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
@@ -41,16 +42,18 @@ export function RadioGroup({
 				</Text>
 			</div>
 
-			{options?.map((option) => (
-				<Checkbox
-					key={getKey(option)}
-					type="radio"
-					label={option.label}
-					value={option.value}
-					defaultChecked={option.value === defaultValue}
-					{...inputProps}
-				/>
-			))}
+			<Grid gap={2}>
+				{options?.map((option) => (
+					<Checkbox
+						key={getKey(option)}
+						type="radio"
+						label={option.label}
+						value={option.value}
+						defaultChecked={option.value === defaultValue}
+						{...inputProps}
+					/>
+				))}
+			</Grid>
 		</fieldset>
 	);
 }

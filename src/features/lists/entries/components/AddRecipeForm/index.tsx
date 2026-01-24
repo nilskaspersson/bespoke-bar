@@ -20,6 +20,7 @@ import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { Skeleton } from "@/ui/Skeleton";
 import { toast } from "@/ui/Toast";
 import { fetcher } from "@/utils/api";
 import styles from "./styles.module.css";
@@ -144,3 +145,24 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 		</FormProvider>
 	);
 }
+
+export function AddRecipeFormSkeleton() {
+	return (
+		<div className={styles.controls}>
+			<Grid gap={4}>
+				<Skeleton variant="text" width="60px" height="20px" />
+				<Grid gap={6}>
+					<Skeleton variant="input" />
+					<Skeleton variant="input" />
+				</Grid>
+			</Grid>
+
+			<Grid gap={4}>
+				<Skeleton variant="text" width="60px" height="20px" />
+				<Skeleton variant="block" width="100%" height="180px" />
+			</Grid>
+		</div>
+	);
+}
+
+AddRecipeForm.Skeleton = AddRecipeFormSkeleton;

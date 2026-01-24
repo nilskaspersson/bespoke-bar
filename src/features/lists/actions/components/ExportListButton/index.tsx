@@ -1,16 +1,28 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useRef } from "react";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import {
-	ExportListForm,
 	type ExportListFormRef,
+	ExportListFormSkeleton,
 } from "@/features/lists/components/ExportListForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+
+const ExportListForm = dynamic(
+	() =>
+		import("@/features/lists/components/ExportListForm").then(
+			(m) => m.ExportListForm,
+		),
+	{
+		loading: ExportListFormSkeleton,
+		ssr: false,
+	},
+);
 
 export function ExportListButton({
 	list,
