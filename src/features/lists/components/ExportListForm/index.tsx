@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useImperativeHandle, useMemo, useState } from "react";
+import { type FormEvent, use, useCallback, useMemo, useState } from "react";
 import useSWRImmutable from "swr/immutable";
 import type { RecipeListWithRecipes } from "@/db/schema/composite";
 import type { RecipeList } from "@/db/schema/recipeLists";
@@ -20,6 +20,7 @@ import { RadioGroup, type RadioGroupOption } from "@/ui/RadioGroup";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { downloadBlob } from "@/utils/downloadBlob";
+import { handleKey } from "@/utils/handleKey";
 import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
@@ -48,16 +49,12 @@ const isValidFormatOption = (option: unknown): option is ExportFormat => {
 	return FORMAT_OPTIONS.some((o) => o.value === option);
 };
 
-export type ExportListFormRef = {
-	download: () => void;
-};
-
 export function ExportListForm({
 	list,
-	ref,
+	formRef,
 }: {
 	list: Pick<RecipeList, "id">;
-	ref?: React.Ref<ExportListFormRef>;
+	formRef?: React.RefObject<HTMLFormElement | null>;
 }) {
 	const [format, setFormat] = useState<ExportFormat>("txt");
 	const [options, setOptions] = useState<ExportOptions>(DEFAULT_OPTIONS);
@@ -82,8 +79,10 @@ export function ExportListForm({
 		}
 	}, [data, format, options, currencyFormatter]);
 
-	useImperativeHandle(ref, () => ({
-		download: () => {
+	const handleSubmit = useCallback(
+		(event: FormEvent<HTMLFormElement>) => {
+			event.preventDefault();
+
 			if (!data) return;
 
 			downloadBlob({
@@ -92,14 +91,20 @@ export function ExportListForm({
 				mimeType: format === "json" ? "application/json" : "text/plain",
 			});
 		},
-	}));
+		[data, preview, format],
+	);
 
 	const toggleOption = (key: keyof ExportOptions) => {
 		setOptions((prev) => ({ ...prev, [key]: !prev[key] }));
 	};
 
 	return (
-		<section className={styles.container}>
+		<form
+			ref={formRef}
+			onSubmit={handleSubmit}
+			onKeyDown={handleKey([["Enter", undefined]])}
+			className={styles.container}
+		>
 			<Grid gap={4} className={styles.options}>
 				<Heading level="h5" className={styles.optionsHeader}>
 					Options
@@ -241,7 +246,7 @@ export function ExportListForm({
 					)}
 				</div>
 			</section>
-		</section>
+		</form>
 	);
 }
 

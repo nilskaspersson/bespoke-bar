@@ -3,10 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
-import {
-	type ExportListFormRef,
-	ExportListFormSkeleton,
-} from "@/features/lists/components/ExportListForm";
+import { ExportListFormSkeleton } from "@/features/lists/components/ExportListForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
@@ -36,10 +33,10 @@ export function ExportListButton({
 	 * where Radio buttons `defaultValue` is lost when there are Suspense boundaries.
 	 */
 	const { openDialog, onClose, dialogRef, isOpen } = useDialog();
-	const formRef = useRef<ExportListFormRef>(null);
+	const formRef = useRef<HTMLFormElement>(null);
 
 	const handleExport = () => {
-		formRef.current?.download();
+		formRef.current?.requestSubmit();
 	};
 
 	return (
@@ -61,7 +58,7 @@ export function ExportListButton({
 						<Button
 							variant="solid"
 							color="accent"
-							size="tiny"
+							size="small"
 							onClick={handleExport}
 						>
 							<Icon name="arrow-down-from-line" size={1} />
@@ -70,7 +67,7 @@ export function ExportListButton({
 					</li>
 				}
 			>
-				{isOpen ? <ExportListForm list={list} ref={formRef} /> : null}
+				{isOpen ? <ExportListForm list={list} formRef={formRef} /> : null}
 			</Drawer>
 		</>
 	);
