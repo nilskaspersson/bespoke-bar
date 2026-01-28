@@ -33,7 +33,7 @@
 		}
 	}
 
-	:global(#root:has(.dialog[open])) {
+	:global(#root):has(.dialog[open]) {
 		filter: blur(var(--space-1));
 		transition: filter var(--transition-duration);
 	}
