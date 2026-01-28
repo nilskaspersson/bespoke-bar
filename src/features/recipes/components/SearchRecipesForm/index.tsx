@@ -16,7 +16,10 @@ import { EmptyArea } from "@/components/EmptyArea";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import { filterRecipes } from "@/features/recipes/utils/filterRecipes";
+import {
+	createRecipeSearchIndex,
+	filterRecipes,
+} from "@/features/recipes/utils/filterRecipes";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { LinkButton } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
@@ -53,9 +56,14 @@ export function SearchRecipesForm({
 		fetcher,
 	);
 
+	const searchIndex = useMemo(
+		() => createRecipeSearchIndex(recipes),
+		[recipes],
+	);
+
 	const filteredRecipes = useMemo(
-		() => filterRecipes(recipes, deferredSearch),
-		[deferredSearch, recipes],
+		() => filterRecipes(recipes, searchIndex, deferredSearch),
+		[deferredSearch, recipes, searchIndex],
 	);
 
 	const openFirstResult = useCallback(() => {
