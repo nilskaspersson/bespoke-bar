@@ -1,6 +1,7 @@
 @layer composition {
 	.lightbox {
 		--offset-top: 10svh;
+		--r: calc(var(--radius--huge) * 1.25);
 
 		display: grid;
 		grid-template-rows: auto 1fr auto;
@@ -12,7 +13,7 @@
 		max-height: calc(100% - var(--offset-top) - var(--gap));
 		margin-inline: auto;
 		margin-block: 0 auto;
-		border-radius: calc(var(--radius--huge) * 1.25);
+		border-radius: var(--r) var(--r) var(--radius--large) var(--radius--large);
 		padding: var(--space-2);
 	}
 
@@ -44,7 +45,7 @@
 	}
 
 	.footer {
-		padding-top: var(--gap);
+		padding-top: var(--gap--tiny);
 		border-top: 1px solid var(--mauve-6);
 	}
 

@@ -21,8 +21,10 @@ import {
 	filterRecipes,
 } from "@/features/recipes/utils/filterRecipes";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
-import { LinkButton } from "@/ui/Button";
+import { Button, LinkButton } from "@/ui/Button";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
@@ -140,30 +142,45 @@ export function SearchRecipesForm({
 						</Grid>
 					</SkeletonScreen>
 				) : filteredRecipes.length === 0 ? (
-					<EmptyArea className={styles.empty}>
-						<Text as="p" size={3} heavy>
+					<EmptyArea className={styles.empty} color="light">
+						<Heading level="h3" size={4}>
 							No recipes found
-						</Text>
+						</Heading>
+
+						<Flex as="menu" gap={2} wrap justifyContent="center">
+							<li>
+								<LinkButton
+									href="/bar/recipes/create"
+									variant="solid"
+									color="accent"
+									size="small"
+								>
+									Create recipe
+								</LinkButton>
+							</li>
+
+							<li>
+								<Button
+									variant="outline"
+									color="light"
+									size="small"
+									onClick={() => setSearch("")}
+								>
+									Clear search
+								</Button>
+							</li>
+						</Flex>
 					</EmptyArea>
 				) : (
 					<RecipesList recipes={filteredRecipes} ref={listRef} />
 				)}
 			</div>
 
-			<footer className={styles.footer}>
-				<menu className={styles.actions}>
-					{actions}
-
-					<LinkButton
-						variant="outline"
-						color="accent"
-						size="small"
-						href="/bar/recipes/create"
-					>
-						Create Recipe
-					</LinkButton>
-				</menu>
-			</footer>
+			{actions ? (
+				<footer className={styles.footer}>
+					<menu className={styles.actions}>{actions}</menu>
+				</footer>
+			) : null}
 		</Lightbox>
 	);
 }
