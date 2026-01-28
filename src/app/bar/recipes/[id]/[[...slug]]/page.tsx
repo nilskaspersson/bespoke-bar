@@ -6,6 +6,7 @@ import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
+import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { getRecipeName } from "@/features/recipes/utils";
 import { Container } from "@/ui/Container";
@@ -38,8 +39,12 @@ async function RecipeContent({ params }: Props) {
 		notFound();
 	}
 
-	const { orgId } = await authOrForbidden();
-	const recipe = await getCachedRecipe(orgId, id);
+	const { orgId, userId } = await authOrForbidden();
+
+	const [recipe, favoriteRecipeIds] = await Promise.all([
+		getCachedRecipe(orgId, id),
+		getCachedUserFavoriteRecipeIds(orgId, userId),
+	]);
 
 	if (!recipe) {
 		notFound();
@@ -47,7 +52,11 @@ async function RecipeContent({ params }: Props) {
 
 	return (
 		<RecipeArticle recipe={recipe}>
-			<RecipeActions recipe={recipe} className={styles.actions} />
+			<RecipeActions
+				recipe={recipe}
+				className={styles.actions}
+				isFavorite={favoriteRecipeIds.includes(recipe.id)}
+			/>
 		</RecipeArticle>
 	);
 }
