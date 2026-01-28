@@ -6,17 +6,6 @@
 		flex: 1 1 auto;
 	}
 
-	.bar {
-		--clerk-button-inset: 0.5rem;
-		margin-left: calc(var(--clerk-button-inset) * -1);
-		flex: 0 0 auto;
-
-		@media (min-width: 814px) {
-			padding-right: calc(var(--gap) - var(--clerk-button-inset));
-			border-right: 1px solid hsl(from var(--mauve-5) h s l / 0.5);
-		}
-	}
-
 	.list {
 		display: grid;
 		align-content: start;
@@ -58,6 +47,8 @@
 	}
 
 	.footer {
+		display: grid;
+		gap: var(--space-2);
 		flex: 0 0 auto;
 		margin-top: var(--gap);
 	}

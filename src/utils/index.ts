@@ -62,17 +62,32 @@ export function isUndefined(o: unknown): o is undefined {
 	return typeof o === "undefined";
 }
 
+/**
+ * Unicode "Combining Diacritical Marks" block (U+0300 to U+036F).
+ * Used to strip accents after NFKD normalization decomposes characters
+ * like "é" into "e" + combining acute accent.
+ */
+const COMBINING_MARKS = /[\u0300-\u036f]/g;
+
 export function deburr(
 	s: string | undefined | null,
 ): string | undefined | null {
-	return typeof s === "string" &&
-		typeof String.prototype.normalize === "function"
-		? s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
-		: s;
+	if (typeof s !== "string") {
+		return s;
+	}
+
+	// Fast path: skip normalize + regex if all ASCII
+	for (let i = 0; i < s.length; i++) {
+		if (s.charCodeAt(i) > 127) {
+			return s.normalize("NFKD").replace(COMBINING_MARKS, "");
+		}
+	}
+
+	return s;
 }
 
-export function normalizeInput(name: string): string {
-	const deburred = deburr(name) || name;
+export function normalizeInput(s: string): string {
+	const deburred = deburr(s) || s;
 	return deburred.toLowerCase().trim();
 }
 

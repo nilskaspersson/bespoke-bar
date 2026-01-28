@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { readOrganisationMembers } from "@/features/organisation/api/readOrganisationMembers";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
@@ -13,9 +12,10 @@ import { authOrForbidden } from "@/utils/auth";
 export default async function FavoriteRecipesPage() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [recipes, favoriteRecipeIds] = await Promise.all([
+	const [recipes, favoriteRecipeIds, members] = await Promise.all([
 		getCachedBarRecipes(orgId),
 		getCachedUserFavoriteRecipeIds(orgId, userId),
+		readOrganisationMembers(),
 	]);
 
 	const favoriteRecipes = recipes.filter((recipe) =>
@@ -27,34 +27,17 @@ export default async function FavoriteRecipesPage() {
 			list={
 				<RecipesList
 					recipes={favoriteRecipes}
-					view="list"
 					favoriteRecipeIds={favoriteRecipeIds}
-				/>
-			}
-			card={
-				<RecipesList
-					recipes={favoriteRecipes}
-					view="card"
-					favoriteRecipeIds={favoriteRecipeIds}
+					withActions
 				/>
 			}
 			table={
 				<Suspense fallback={<RecipeDataTableSkeleton />}>
-					<RecipeDataTableWithMembers recipes={favoriteRecipes} />
+					<RecipeDataTableLoader recipes={favoriteRecipes} members={members} />
 				</Suspense>
 			}
 		/>
 	);
-}
-
-async function RecipeDataTableWithMembers({
-	recipes,
-}: {
-	recipes: RecipeWithSpecs[];
-}) {
-	const members = await readOrganisationMembers();
-
-	return <RecipeDataTableLoader recipes={recipes} members={members} />;
 }
 
 export const metadata: Metadata = {

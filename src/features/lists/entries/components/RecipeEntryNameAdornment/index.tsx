@@ -1,11 +1,12 @@
+"use client";
+
 import { clsx } from "clsx";
 import { type ComponentProps, use } from "react";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { RecipeEntryProfitLabel } from "@/features/lists/entries/components/RecipeEntryProfitLabel";
-import { UpdateRecipeEntryFormDialog } from "@/features/lists/entries/components/UpdateRecipeEntryFormDialog";
+import { UpdateEntryDialog } from "@/features/lists/entries/components/UpdateEntryDialog";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";
 import { FormatterContext } from "@/hooks/useFormatter";
-import { ToggleDrawerButton } from "@/ui/ToggleDrawerButton";
 
 import styles from "./styles.module.css";
 
@@ -32,20 +33,16 @@ export function RecipeEntryNameAdornment({
 
 	return (
 		<div {...props} className={clsx(styles.adornment, className)}>
-			<ToggleDrawerButton
-				aria-label="Update price"
+			<UpdateEntryDialog
+				entry={entry}
 				title="Update price"
 				variant="base"
 				color="heavy"
 				size="small"
 				className={clsx(styles.price, styles.button)}
-				label={priceLabel}
 			>
-				<UpdateRecipeEntryFormDialog
-					entry={entry}
-					key={entry.updatedAt?.toISOString()}
-				/>
-			</ToggleDrawerButton>
+				{priceLabel}
+			</UpdateEntryDialog>
 
 			<RecipeEntryProfitLabel
 				as="div"

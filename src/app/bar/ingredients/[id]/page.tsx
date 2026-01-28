@@ -118,7 +118,7 @@ export default async function IngredientPage({ params }: Props) {
 						{ingredient.name}
 					</Heading>
 
-					<RecipesList recipes={recipesUsingIngredient} view="card" />
+					<RecipesList recipes={recipesUsingIngredient} withActions />
 				</Grid>
 			) : null}
 		</Container>

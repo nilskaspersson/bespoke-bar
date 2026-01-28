@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import type { Route } from "next";
 import Link from "next/link";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
@@ -13,6 +13,7 @@ type Props = {
 	size?: "tiny" | "small" | "default" | "large";
 	fullWidth?: boolean;
 	rounded?: boolean;
+	endAdornment?: ReactNode;
 };
 
 export function Button({
@@ -24,6 +25,7 @@ export function Button({
 	icon,
 	fullWidth,
 	rounded,
+	endAdornment,
 	...props
 }: Props & Omit<ComponentProps<"button">, "color">) {
 	return (
@@ -38,9 +40,12 @@ export function Button({
 				icon,
 				fullWidth,
 				rounded,
+				endAdornment,
 			})}
 		>
 			<span className={styles.label}>{children}</span>
+
+			{endAdornment}
 		</button>
 	);
 }
@@ -56,6 +61,7 @@ export function LinkButton({
 	size,
 	fullWidth,
 	rounded,
+	endAdornment,
 	...props
 }: Props & { href: Route } & ComponentProps<typeof Link>) {
 	return (
@@ -69,9 +75,11 @@ export function LinkButton({
 				icon,
 				fullWidth,
 				rounded,
+				endAdornment,
 			})}
 		>
 			<span className={styles.label}>{children}</span>
+			{endAdornment}
 		</Link>
 	);
 }
@@ -84,6 +92,7 @@ export function generateButtonClassName({
 	icon,
 	fullWidth,
 	rounded,
+	endAdornment,
 }: Props) {
 	return clsx(
 		className,
@@ -97,6 +106,7 @@ export function generateButtonClassName({
 			[styles.icon]: icon,
 			[styles.fullWidth]: fullWidth,
 			[styles.rounded]: rounded,
+			[styles.hasEndAdornment]: Boolean(endAdornment),
 		},
 	);
 }

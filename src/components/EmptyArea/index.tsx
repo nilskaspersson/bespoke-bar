@@ -20,6 +20,8 @@ export function EmptyArea({
 			className={clsx(styles.empty, className, styles[color])}
 			justifyContent="center"
 			justifyItems="center"
+			alignContent="center"
+			alignItems="center"
 			{...props}
 		>
 			{children}

@@ -6,7 +6,7 @@ import z from "zod";
 import { Button } from "@/ui/Button";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
 import { Icon } from "@/ui/Icon";
-import { handleKey } from "@/utils/handleKey";
+import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 export function QuantityControl({

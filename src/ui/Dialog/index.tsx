@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import type { DialogHTMLAttributes, KeyboardEvent, MouseEvent } from "react";
-import { handleKey } from "@/utils/handleKey";
+import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 type DialogEvent =

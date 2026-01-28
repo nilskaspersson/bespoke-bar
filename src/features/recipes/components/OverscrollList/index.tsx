@@ -10,17 +10,15 @@ export function OverscrollList({
 	padding,
 	gap = 4,
 	style,
-	direction = "horizontal",
 	...props
 }: {
 	children: React.ReactNode;
 	padding: Scale;
 	gap?: Scale;
-	direction?: "horizontal" | "vertical";
 } & ComponentProps<"ul">) {
 	return (
 		<ul
-			className={clsx(styles.list, className, styles[direction])}
+			className={clsx(styles.list, className)}
 			style={mergeStyleSources(
 				style,
 				toCSSVars({

@@ -13,7 +13,7 @@ import { Button } from "@/ui/Button";
 import type { Dialog } from "@/ui/Dialog";
 import { Grid } from "@/ui/Grid";
 import { TextField } from "@/ui/TextField";
-import { handleKey } from "@/utils/handleKey";
+import { handleKey } from "@/utils/keyboard";
 
 export function IngredientDialogForm({
 	children,

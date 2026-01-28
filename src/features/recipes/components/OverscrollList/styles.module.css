@@ -4,11 +4,15 @@
 		overflow: auto;
 		gap: var(--jsxGap);
 
-		&.horizontal {
+		/* Default: vertical list */
+		grid-auto-flow: row;
+		align-content: start;
+
+		/* Touch devices: horizontal scroll */
+		@media (hover: none) and (pointer: coarse) {
 			scroll-snap-type: x proximity;
 			grid-auto-flow: column;
-
-			grid-auto-columns: 400px;
+			grid-auto-columns: 85vw;
 			width: calc(100% + var(--jsxPadding) * 2);
 			margin-inline: calc(var(--jsxPadding) * -1);
 			padding-inline: var(--jsxPadding);
@@ -21,16 +25,12 @@
 			);
 			mask-repeat: no-repeat;
 		}
-
-		&.vertical {
-			grid-auto-flow: row;
-		}
 	}
 
 	.item {
 		contain: layout;
 
-		.horizontal & {
+		@media (hover: none) and (pointer: coarse) {
 			scroll-snap-align: center;
 		}
 	}

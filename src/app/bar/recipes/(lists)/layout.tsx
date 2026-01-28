@@ -42,9 +42,7 @@ export default async function Layout({
 					<StatLinks />
 				</Suspense>
 
-				<div>
-					<SwitchListView />
-				</div>
+				<SwitchListView />
 			</Flex>
 
 			{children}

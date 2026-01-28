@@ -13,6 +13,9 @@
 			background-color: var(--mauve-1);
 		}
 
+		overflow: auto;
+		overscroll-behavior: contain;
+
 		transition-property: opacity, transform;
 		transition-duration: var(--transition-duration);
 		transition-behavior: allow-discrete;
