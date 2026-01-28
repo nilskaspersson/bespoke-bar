@@ -8,6 +8,7 @@ type DialogContextValue = {
 	openDialog: () => void;
 	closeDialog: () => void;
 	onClose: () => void;
+	toggleDialog: () => void;
 };
 
 export const DialogContext = createContext<DialogContextValue | null>(null);
@@ -34,11 +35,20 @@ export function useDialog(): DialogContextValue {
 		setIsOpen(false);
 	}, []);
 
+	const toggleDialog = useCallback(() => {
+		if (isOpen) {
+			closeDialog();
+		} else {
+			openDialog();
+		}
+	}, [isOpen, closeDialog, openDialog]);
+
 	return {
 		dialogRef,
 		isOpen,
 		openDialog,
 		closeDialog,
 		onClose,
+		toggleDialog,
 	};
 }
