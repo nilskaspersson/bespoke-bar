@@ -1,80 +1,83 @@
-"use client";
-
 import { clsx } from "clsx";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { HTMLAttributes } from "react";
+import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesButton";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
+import { NavLink } from "@/ui/NavLink";
 import styles from "./styles.module.css";
 
 export function SecondaryNavigation({
 	className,
 	...props
 }: Omit<HTMLAttributes<HTMLDivElement>, "children">) {
-	const pathname = usePathname();
-
 	return (
 		<nav className={clsx(styles.nav, className)} {...props}>
 			<ul className={styles.list}>
 				<li className={styles.item}>
-					<Link
+					<NavLink
 						href="/bar"
-						className={clsx(styles.link, {
-							[styles.isActive]: pathname === "/bar",
-						})}
+						exact
+						className={styles.link}
+						activeClassName={styles.isActive}
 					>
 						<Icon name="duotone-shop" size={2} />
 						Overview
-					</Link>
+					</NavLink>
 				</li>
 
 				<li className={styles.item}>
-					<Link
+					<NavLink
 						href="/bar/lists"
-						className={clsx(styles.link, {
-							[styles.isActive]: pathname.startsWith("/bar/lists"),
-						})}
+						className={styles.link}
+						activeClassName={styles.isActive}
 					>
 						<Icon name="duotone-memo-pad" size={2} />
 						Lists
-					</Link>
+					</NavLink>
 				</li>
 
 				<li className={styles.item}>
-					<Link
+					<NavLink
 						href="/bar/recipes"
-						className={clsx(styles.link, {
-							[styles.isActive]: pathname.startsWith("/bar/recipes"),
-						})}
+						className={styles.link}
+						activeClassName={styles.isActive}
 					>
 						<Icon name="duotone-martini-glass" size={2} />
 						Recipes
-					</Link>
+					</NavLink>
 				</li>
 
 				<li className={styles.item}>
-					<Link
+					<NavLink
 						href="/bar/ingredients"
-						className={clsx(styles.link, {
-							[styles.isActive]: pathname.startsWith("/bar/ingredients"),
-						})}
+						className={styles.link}
+						activeClassName={styles.isActive}
 					>
 						<Icon name="duotone-wine-bottle" size={2} />
 						Ingredients
-					</Link>
+					</NavLink>
 				</li>
 			</ul>
 
 			<div className={styles.footer}>
-				<LinkButton
-					href="/bar/recipes/create"
+				<SearchRecipesButton
 					variant="outline"
 					size="small"
 					color="light"
 					fullWidth
 				>
-					Create new Recipe
+					<Icon name="magnifying-glass" size={1} />
+					Quick search
+				</SearchRecipesButton>
+
+				<LinkButton
+					href="/bar/recipes/create"
+					variant="outline"
+					size="small"
+					color="accent"
+					fullWidth
+				>
+					Create Recipe
 				</LinkButton>
 			</div>
 		</nav>
