@@ -96,3 +96,6 @@ export async function getCachedData(orgId: string, id: string) {
 - **Tabs** for indentation (not spaces)
 - Strict React linting rules enabled
 - Prefer `function` over `const` for function declarations
+
+## CLI Commands
+- Use rg (ripgrep) instead of grep

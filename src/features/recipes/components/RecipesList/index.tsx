@@ -1,5 +1,4 @@
 import type { ComponentProps } from "react";
-import type { ViewType } from "@/components/SwitchListView";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
@@ -9,13 +8,13 @@ import styles from "./styles.module.css";
 
 export function RecipesList({
 	recipes,
-	view,
 	favoriteRecipeIds,
+	withActions,
 	...props
 }: {
 	recipes: RecipeWithSpecs[];
-	view: ViewType;
 	favoriteRecipeIds?: string[];
+	withActions?: boolean;
 } & Omit<ComponentProps<"ul">, "children">) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 
@@ -24,12 +23,7 @@ export function RecipesList({
 	}
 
 	return (
-		<OverscrollList
-			{...props}
-			padding={6}
-			gap={4}
-			direction={view === "card" ? "horizontal" : "vertical"}
-		>
+		<OverscrollList {...props} padding={6} gap={4}>
 			{recipes.map((recipe) => (
 				<OverscrollList.Item key={recipe.id}>
 					<RecipeCard
@@ -44,12 +38,14 @@ export function RecipesList({
 						}
 					/>
 
-					<RecipeActions
-						recipe={recipe}
-						withLink
-						isFavorite={favoriteIdSet.has(recipe.id)}
-						className={styles.actions}
-					/>
+					{withActions ? (
+						<RecipeActions
+							recipe={recipe}
+							withLink
+							isFavorite={favoriteIdSet.has(recipe.id)}
+							className={styles.actions}
+						/>
+					) : null}
 				</OverscrollList.Item>
 			))}
 		</OverscrollList>

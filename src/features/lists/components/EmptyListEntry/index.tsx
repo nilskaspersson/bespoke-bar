@@ -13,7 +13,6 @@ export function EmptyListEntry({
 }: Omit<ComponentProps<typeof EmptyArea>, "children"> & { list: RecipeList }) {
 	return (
 		<EmptyArea
-			adornment={<Icon name="plus" size={4} />}
 			color="light"
 			className={clsx(styles.base, className)}
 			{...props}

@@ -6,13 +6,24 @@ import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserF
 import { RecipeDataTableSkeleton } from "@/features/recipes/components/RecipeDataTable";
 import { RecipeDataTableLoader } from "@/features/recipes/components/RecipeDataTable/Loader";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
-import { RecipeTableSkeleton } from "@/features/recipes/components/RecipeTable";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
+import { Grid } from "@/ui/Grid";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 
 export default async function RecipesPage() {
 	return (
-		<Suspense fallback={<RecipeTableSkeleton />}>
+		<Suspense
+			fallback={
+				<SkeletonScreen>
+					<Grid gap={4}>
+						<Skeleton width="100%" height="147px" />
+						<Skeleton width="100%" height="147px" />
+						<Skeleton width="100%" height="147px" />
+					</Grid>
+				</SkeletonScreen>
+			}
+		>
 			<RecipeViewsWithData />
 		</Suspense>
 	);
@@ -21,9 +32,10 @@ export default async function RecipesPage() {
 async function RecipeViewsWithData() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [recipes, favoriteRecipeIds] = await Promise.all([
+	const [recipes, favoriteRecipeIds, members] = await Promise.all([
 		getCachedBarRecipes(orgId),
 		getCachedUserFavoriteRecipeIds(orgId, userId),
+		readOrganisationMembers(),
 	]);
 
 	return (
@@ -31,34 +43,17 @@ async function RecipeViewsWithData() {
 			list={
 				<RecipesList
 					recipes={recipes}
-					view="list"
 					favoriteRecipeIds={favoriteRecipeIds}
-				/>
-			}
-			card={
-				<RecipesList
-					recipes={recipes}
-					view="card"
-					favoriteRecipeIds={favoriteRecipeIds}
+					withActions
 				/>
 			}
 			table={
 				<Suspense fallback={<RecipeDataTableSkeleton />}>
-					<RecipeDataTableWithMembers recipes={recipes} />
+					<RecipeDataTableLoader recipes={recipes} members={members} />
 				</Suspense>
 			}
 		/>
 	);
-}
-
-async function RecipeDataTableWithMembers({
-	recipes,
-}: {
-	recipes: Awaited<ReturnType<typeof getCachedBarRecipes>>;
-}) {
-	const members = await readOrganisationMembers();
-
-	return <RecipeDataTableLoader recipes={recipes} members={members} />;
 }
 
 export const metadata: Metadata = {

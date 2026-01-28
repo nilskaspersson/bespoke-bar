@@ -20,7 +20,7 @@ import { RadioGroup, type RadioGroupOption } from "@/ui/RadioGroup";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { downloadBlob } from "@/utils/downloadBlob";
-import { handleKey } from "@/utils/handleKey";
+import { handleKey } from "@/utils/keyboard";
 import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
