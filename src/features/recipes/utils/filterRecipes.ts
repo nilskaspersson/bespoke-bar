@@ -2,35 +2,32 @@ import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { DEFAULT_RECIPE_NAME } from "@/features/recipes/constants";
 import { normalizeInput } from "@/utils";
 
-export type RecipeSearchIndex = Map<
-	string,
-	{
-		normalizedName: string;
-		normalizedIngredients: string[];
-	}
->;
-
 export function createRecipeSearchIndex(
 	recipes: RecipeWithSpecs[] | undefined,
-): RecipeSearchIndex {
-	if (!recipes) return new Map();
+): Map<string, string> {
+	if (!recipes) {
+		return new Map();
+	}
 
+	/**
+	 * Create a map of recipe IDs, to a string of the recipe name and all ingredients,
+	 * delimited by a null character. This enables fast substring matching without
+	 * word overlap.
+	 */
 	return new Map(
 		recipes.map((recipe) => [
 			recipe.id,
-			{
-				normalizedName: normalizeInput(recipe.name ?? DEFAULT_RECIPE_NAME),
-				normalizedIngredients: recipe.specs.map((spec) =>
-					normalizeInput(spec.ingredient.name),
-				),
-			},
+			[
+				normalizeInput(recipe.name ?? DEFAULT_RECIPE_NAME),
+				...recipe.specs.map((spec) => normalizeInput(spec.ingredient.name)),
+			].join("\0"),
 		]),
 	);
 }
 
 export function filterRecipes(
 	recipes: RecipeWithSpecs[] | undefined,
-	index: RecipeSearchIndex,
+	index: Map<string, string>,
 	query: string,
 ): RecipeWithSpecs[] {
 	if (!query || !recipes) {
@@ -38,14 +35,16 @@ export function filterRecipes(
 	}
 
 	const q = normalizeInput(query);
+	const result: RecipeWithSpecs[] = [];
 
-	return recipes.filter((recipe) => {
-		const entry = index.get(recipe.id);
-		if (!entry) return false;
+	for (let i = 0; i < recipes.length; i++) {
+		const recipe = recipes[i];
+		const searchStr = index.get(recipe.id);
 
-		return (
-			entry.normalizedName.includes(q) ||
-			entry.normalizedIngredients.some((ing) => ing.includes(q))
-		);
-	});
+		if (searchStr?.includes(q)) {
+			result.push(recipe);
+		}
+	}
+
+	return result;
 }
