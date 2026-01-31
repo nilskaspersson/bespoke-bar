@@ -15,6 +15,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 		updatedAt: new Date("2025-06-13T15:52:10.487Z"),
 		createdBy: "user_2xxJemksY48Jlb4fPZGBotYB6H2",
 		updatedBy: "user_2xxJemksY48Jlb4fPZGBotYB6H2",
+		aiEnrichedFields: null,
 	},
 	{
 		id: "sP9_RdWlqg",
@@ -30,6 +31,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 		updatedAt: null,
 		createdBy: "user_2xxJemksY48Jlb4fPZGBotYB6H2",
 		updatedBy: null,
+		aiEnrichedFields: null,
 	},
 	{
 		id: "-3913mq9Wm",
@@ -45,5 +47,6 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 		updatedAt: null,
 		createdBy: "user_2xxJemksY48Jlb4fPZGBotYB6H2",
 		updatedBy: null,
+		aiEnrichedFields: null,
 	},
 ];

@@ -1,0 +1,1 @@
+ALTER TABLE "ingredients" ADD COLUMN "ai_enriched_fields" text[];
