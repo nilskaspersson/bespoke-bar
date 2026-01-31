@@ -1,3 +1,6 @@
+"use server";
+
+import { after } from "next/server";
 import { db } from "@/db";
 import {
 	type DraftIngredient,
@@ -5,19 +8,19 @@ import {
 	IngredientsTable,
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
+import { enrichIngredients } from "@/features/ingredients/api/enrichIngredient";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 /**
  * Create a new ingredient in the database.
+ * After creation, asynchronously enriches the ingredient with LLM-generated data.
  * @param userInputIngredient - The ingredient data from user input
  * @returns Newly created ingredient
  */
 export async function createIngredient(
 	userIngredient: DraftIngredient,
 ): Promise<Ingredient> {
-	"use server";
-
 	const { userId, orgId } = await authOrForbidden();
 
 	const validatedUserInputIngredient = insertIngredientSchema.parse({
@@ -32,6 +35,14 @@ export async function createIngredient(
 		.returning();
 
 	cacheEvents.ingredient.create.emit(orgId);
+
+	after(async () => {
+		try {
+			await enrichIngredients(orgId, ingredient);
+		} catch (error) {
+			console.error("Ingredient enrichment failed:", error);
+		}
+	});
 
 	return ingredient;
 }

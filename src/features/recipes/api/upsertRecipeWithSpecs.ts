@@ -2,10 +2,12 @@
 
 import { parseWithZod } from "@conform-to/zod/v4";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import z from "zod";
 import { db } from "@/db";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
+import { enrichIngredients } from "@/features/ingredients/api/enrichIngredient";
 import {
 	insertIngredientsInTransaction,
 	replaceSpecsInTransaction,
@@ -27,49 +29,48 @@ export async function upsertRecipesWithSpecs(
 		orgId,
 	);
 
-	const [recipes, createdIngredientNamesToId] = await db.transaction(
-		async (tx) => {
-			/**
-			 * Step 1: Insert all new ingredients once and create a name-to-id mapping
-			 */
-			const createdIngredientNamesToId = await insertIngredientsInTransaction(
+	const [recipes, createdIngredients] = await db.transaction(async (tx) => {
+		/**
+		 * Step 1: Insert all new ingredients once and create a name-to-id mapping
+		 */
+		const [ingredientIdsByName, createdIngredients] =
+			await insertIngredientsInTransaction(
 				tx,
 				Array.from(ingredientsToCreate.values()),
 			);
 
+		/**
+		 * Step 2: Create or update each recipe
+		 */
+		const processedRecipes: [Recipe, boolean][] = [];
+
+		for (const o of userInputRecipes) {
 			/**
-			 * Step 2: Create or update each recipe
+			 * Step 3: Upsert the recipe
 			 */
-			const processedRecipes: [Recipe, boolean][] = [];
+			const [processedRecipe, isNew] = await upsertRecipeInTransaction(
+				tx,
+				o.recipe,
+				userId,
+				orgId,
+			);
 
-			for (const o of userInputRecipes) {
-				/**
-				 * Step 3: Upsert the recipe
-				 */
-				const [processedRecipe, isNew] = await upsertRecipeInTransaction(
-					tx,
-					o.recipe,
-					userId,
-					orgId,
-				);
+			/**
+			 * Step 4: Replace all specs for the recipe with provided specs
+			 * TODO: Merge with `processedRecipe` for a more complete return value?
+			 */
+			await replaceSpecsInTransaction(
+				tx,
+				processedRecipe.id,
+				o.specs,
+				ingredientIdsByName,
+			);
 
-				/**
-				 * Step 4: Replace all specs for the recipe with provided specs
-				 * TODO: Merge with `processedRecipe` for a more complete return value?
-				 */
-				await replaceSpecsInTransaction(
-					tx,
-					processedRecipe.id,
-					o.specs,
-					createdIngredientNamesToId,
-				);
+			processedRecipes.push([processedRecipe, isNew]);
+		}
 
-				processedRecipes.push([processedRecipe, isNew]);
-			}
-
-			return [processedRecipes, createdIngredientNamesToId];
-		},
-	);
+		return [processedRecipes, createdIngredients] as const;
+	});
 
 	recipes.forEach(([recipe, isNew]) => {
 		if (isNew) {
@@ -79,8 +80,13 @@ export async function upsertRecipesWithSpecs(
 		}
 	});
 
-	if (createdIngredientNamesToId.size > 0) {
+	if (createdIngredients.length > 0) {
 		cacheEvents.ingredient.create.emit(orgId);
+
+		/**
+		 * Step 5: Lazily enrich newly created ingredients with LLM-generated metadata
+		 */
+		after(() => enrichIngredients(orgId, createdIngredients));
 	}
 
 	return recipes.map(([recipe]) => recipe);
