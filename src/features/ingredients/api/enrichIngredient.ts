@@ -11,6 +11,7 @@ import { isEmpty } from "@/utils";
 import { cacheEvents } from "@/utils/cache";
 
 const ENRICHABLE_FIELDS = ingredientEnrichmentSchema.keyof().options;
+const MAX_ENRICHMENT_BATCH_SIZE = 50;
 
 /**
  * Apply enrichment data to an ingredient, updating only empty fields.
@@ -44,6 +45,7 @@ function buildEnrichmentUpdates(
 /**
  * Enrich ingredients with LLM-generated data.
  * Uses a single LLM call for efficiency, only updates fields that are currently empty.
+ * Limited to first 50 ingredients to maintain accuracy.
  *
  * @param orgId - The organization ID (for cache invalidation)
  * @param ingredients - The ingredients to enrich (single or array)
@@ -53,9 +55,14 @@ export async function enrichIngredients(
 	orgId: string,
 	ingredients: Ingredient | Ingredient[],
 ): Promise<number> {
-	const ingredientArray = Array.isArray(ingredients)
+	if (process.env.DISABLE_INGREDIENT_ENRICHMENT === "true") {
+		return 0;
+	}
+
+	const allIngredients = Array.isArray(ingredients)
 		? ingredients
 		: [ingredients];
+	const ingredientArray = allIngredients.slice(0, MAX_ENRICHMENT_BATCH_SIZE);
 
 	if (ingredientArray.length === 0) {
 		return 0;
