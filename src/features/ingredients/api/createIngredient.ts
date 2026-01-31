@@ -8,7 +8,7 @@ import {
 	IngredientsTable,
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
-import { enrichIngredients } from "@/features/ingredients/api/enrichIngredient";
+import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 

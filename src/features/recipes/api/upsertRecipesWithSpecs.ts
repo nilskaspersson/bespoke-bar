@@ -7,7 +7,7 @@ import z from "zod";
 import { db } from "@/db";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
-import { enrichIngredients } from "@/features/ingredients/api/enrichIngredient";
+import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
 import {
 	insertIngredientsInTransaction,
 	replaceSpecsInTransaction,
