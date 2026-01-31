@@ -18,6 +18,7 @@ type PendingUpdate = {
 	brand: string | null;
 	abv: number | null;
 	category: string | null;
+	measurementType: string;
 	aiEnrichedFields: string[];
 };
 
@@ -105,18 +106,17 @@ export async function enrichIngredients(
 		}
 
 		/**
-		 * Keep user values, fill empty fields with enrichment
+		 * Keep user values, fill empty fields with enrichment.
+		 * Default measurementType to "volume" if LLM didn't provide one.
 		 */
 		pendingUpdates.push({
 			id: ingredient.id,
-			description: isEmpty(ingredient.description)
-				? enrichment.description
-				: ingredient.description,
-			brand: isEmpty(ingredient.brand) ? enrichment.brand : ingredient.brand,
-			abv: isEmpty(ingredient.abv) ? enrichment.abv : ingredient.abv,
-			category: isEmpty(ingredient.category)
-				? enrichment.category
-				: ingredient.category,
+			description: ingredient.description || enrichment.description,
+			brand: ingredient.brand || enrichment.brand,
+			abv: ingredient.abv || enrichment.abv,
+			category: ingredient.category || enrichment.category,
+			measurementType:
+				ingredient.measurementType || enrichment.measurementType || "volume",
 			aiEnrichedFields,
 		});
 	}
@@ -134,6 +134,7 @@ export async function enrichIngredients(
 			brand: buildCaseStatement(pendingUpdates, "brand"),
 			abv: buildCaseStatement(pendingUpdates, "abv"),
 			category: buildCaseStatement(pendingUpdates, "category"),
+			measurementType: buildCaseStatement(pendingUpdates, "measurementType"),
 			aiEnrichedFields: buildCaseStatement(pendingUpdates, "aiEnrichedFields"),
 		})
 		.where(

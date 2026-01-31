@@ -2,6 +2,7 @@ import type { ResponseSchema } from "@google-cloud/vertexai";
 import { VertexAI } from "@google-cloud/vertexai";
 import { z } from "zod";
 import { systemCategories } from "@/db/schema/categories";
+import { supportedMeasurements } from "@/db/schema/units";
 import { getGCPCredentials } from "@/utils/gcp";
 
 const vertexAI = new VertexAI({
@@ -31,6 +32,11 @@ const enrichmentFieldsSchema = z.object({
 			"ABV as decimal (e.g. 0.40 for 40%). Only set for branded products with known ABV, otherwise null.",
 		),
 	category: systemCategories.nullable(),
+	measurementType: supportedMeasurements
+		.nullable()
+		.describe(
+			"How this ingredient is typically measured: 'volume' for liquids, 'mass' for powders/solids, 'pieces' for whole items like eggs or fruit.",
+		),
 });
 
 export const ingredientEnrichmentSchema = enrichmentFieldsSchema;
