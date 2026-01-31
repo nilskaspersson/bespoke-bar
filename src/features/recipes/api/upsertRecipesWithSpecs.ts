@@ -86,7 +86,13 @@ export async function upsertRecipesWithSpecs(
 		/**
 		 * Step 5: Lazily enrich newly created ingredients with LLM-generated metadata
 		 */
-		after(() => enrichIngredients(orgId, createdIngredients));
+		after(async () => {
+			try {
+				await enrichIngredients(orgId, createdIngredients);
+			} catch (error) {
+				console.error("Ingredient enrichment failed:", error);
+			}
+		});
 	}
 
 	return recipes.map(([recipe]) => recipe);
