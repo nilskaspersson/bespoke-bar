@@ -48,7 +48,6 @@ const nextConfig: NextConfig = {
 		inlineCss: true,
 		useCache: true,
 		useLightningcss: true,
-		viewTransition: true,
 		serverActions: {
 			/**
 			 * TODO: Remove once parseTextFromImage is migrated to API route.
