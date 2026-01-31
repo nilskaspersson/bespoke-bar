@@ -29,18 +29,33 @@ type PendingUpdate = {
 function buildCaseStatement<T>(
 	updates: PendingUpdate[],
 	field: keyof PendingUpdate,
+	cast?: string,
 ): SQL {
 	const chunks: SQL[] = [sql`(case`];
 
 	for (const update of updates) {
-		chunks.push(
-			sql`when ${IngredientsTable.id} = ${update.id} then ${update[field] as T}`,
-		);
+		const value = update[field];
+
+		if (Array.isArray(value)) {
+			const arrayElements = sql.join(
+				value.map((v) => sql`${v}`),
+				sql`, `,
+			);
+			chunks.push(
+				sql`when ${IngredientsTable.id} = ${update.id} then ARRAY[${arrayElements}]`,
+			);
+		} else {
+			chunks.push(
+				sql`when ${IngredientsTable.id} = ${update.id} then ${value as T}`,
+			);
+		}
 	}
 
 	chunks.push(sql`end)`);
 
-	return sql.join(chunks, sql.raw(" "));
+	const caseExpr = sql.join(chunks, sql.raw(" "));
+
+	return cast ? sql`${caseExpr}::${sql.raw(cast)}` : caseExpr;
 }
 
 /**
@@ -132,10 +147,22 @@ export async function enrichIngredients(
 		.set({
 			description: buildCaseStatement(pendingUpdates, "description"),
 			brand: buildCaseStatement(pendingUpdates, "brand"),
-			abv: buildCaseStatement(pendingUpdates, "abv"),
-			category: buildCaseStatement(pendingUpdates, "category"),
-			measurementType: buildCaseStatement(pendingUpdates, "measurementType"),
-			aiEnrichedFields: buildCaseStatement(pendingUpdates, "aiEnrichedFields"),
+			abv: buildCaseStatement(pendingUpdates, "abv", "real"),
+			category: buildCaseStatement(
+				pendingUpdates,
+				"category",
+				"system_category",
+			),
+			measurementType: buildCaseStatement(
+				pendingUpdates,
+				"measurementType",
+				"measurement_type",
+			),
+			aiEnrichedFields: buildCaseStatement(
+				pendingUpdates,
+				"aiEnrichedFields",
+				"text[]",
+			),
 		})
 		.where(
 			and(inArray(IngredientsTable.id, ids), eq(IngredientsTable.orgId, orgId)),
