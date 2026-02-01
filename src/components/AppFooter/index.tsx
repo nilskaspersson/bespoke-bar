@@ -14,6 +14,8 @@ export async function AppFooter({
 	className,
 	...props
 }: Omit<ComponentProps<"footer">, "children">) {
+	"use cache";
+
 	return (
 		<footer
 			className={clsx(styles.footer, className)}

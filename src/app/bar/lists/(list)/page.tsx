@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { cacheTag } from "next/cache";
+import { type ReactNode, Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
 import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
@@ -11,9 +12,24 @@ import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
+import { cacheTags } from "@/utils/cache";
 import styles from "./page.module.css";
 
 export default async function ListsPage() {
+	const { orgId } = await authOrForbidden();
+
+	return (
+		<ListsPageShell>
+			<Suspense fallback={<RecipeListTable.Skeleton />}>
+				<RecipeListData orgId={orgId} />
+			</Suspense>
+		</ListsPageShell>
+	);
+}
+
+async function ListsPageShell({ children }: { children: ReactNode }) {
+	"use cache";
+
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -48,15 +64,15 @@ export default async function ListsPage() {
 				</Grid>
 			</Callout>
 
-			<Suspense fallback={<RecipeListTable.Skeleton />}>
-				<RecipeListData />
-			</Suspense>
+			{children}
 		</Container>
 	);
 }
 
-async function RecipeListData() {
-	const { orgId } = await authOrForbidden();
+async function RecipeListData({ orgId }: { orgId: string }) {
+	"use cache";
+	cacheTag(...cacheTags.recipeLists(orgId));
+
 	const lists = await getCachedRecipeLists(orgId);
 
 	return <RecipeListTable lists={lists} />;

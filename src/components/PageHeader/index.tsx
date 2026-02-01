@@ -3,6 +3,8 @@ import { getClerkOrganization } from "@/features/organisation/api/getClerkOrgani
 import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
 import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 
 export function PageHeader({
@@ -20,13 +22,17 @@ export function PageHeader({
 			wrap
 			gap={4}
 		>
-			<hgroup>
-				<Suspense fallback={<Text size={2} light compact>&nbsp;</Text>}>
-					<OrganizationName />
-				</Suspense>
-
+			<HGroup
+				overline={
+					<Suspense
+						fallback={<Skeleton width="16ch" height="13px" variant="text" />}
+					>
+						<OrganizationName />
+					</Suspense>
+				}
+			>
 				<Heading level="h1">{heading}</Heading>
-			</hgroup>
+			</HGroup>
 
 			{actions}
 		</Flex>
