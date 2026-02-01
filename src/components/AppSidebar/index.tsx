@@ -1,23 +1,27 @@
 import { clsx } from "clsx";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import { OrganisationSwitcherLoader } from "@/features/organisation/components/OrganisationSwitcher/loader";
 import { UserOrSignupLoader } from "@/features/organisation/user/components/UserOrSignup/loader";
+import { Button } from "@/ui/Button";
+import { Icon } from "@/ui/Icon";
 import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
 
 export async function AppSidebar({
 	children,
 	className,
-	toggle,
+	toggleButtonProps,
 	...props
 }: ComponentProps<"aside"> & {
-	toggle?: ReactNode;
+	toggleButtonProps?: ComponentProps<typeof Button>;
 }) {
 	"use cache";
 
 	return (
 		<aside className={clsx(className, styles.sidebar)} {...props} tabIndex={-1}>
-			{toggle}
+			<Button variant="base" size="tiny" {...toggleButtonProps}>
+				<Icon name="bars" size={2} />
+			</Button>
 
 			<div className={clsx(styles.block, styles.header)}>
 				<Logo />
