@@ -29,7 +29,6 @@ import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
 import { Lightbox } from "@/ui/Lightbox";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
 import { fetcher } from "@/utils/api";
@@ -134,13 +133,7 @@ export function SearchRecipesForm({
 
 			<div className={styles.results}>
 				{isLoading ? (
-					<SkeletonScreen>
-						<Grid gap={4}>
-							<Skeleton width="100%" height="147px" />
-							<Skeleton width="100%" height="147px" />
-							<Skeleton width="100%" height="147px" />
-						</Grid>
-					</SkeletonScreen>
+					<RecipesList.Skeleton />
 				) : filteredRecipes.length === 0 ? (
 					<EmptyArea className={styles.empty} color="light">
 						<Heading level="h3" size={4}>
