@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useActionState, useRef } from "react";
+import { useCallback, useRef } from "react";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
@@ -14,6 +14,7 @@ import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
+import { useServerAction } from "@/hooks/useServerAction";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
@@ -21,6 +22,8 @@ import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
+import { toast } from "@/ui/Toast";
+import { mutateSWRBarRecipesCache } from "@/utils/swrCache";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -49,11 +52,36 @@ function initializeSpecFormEntry(spec?: SpecWithIngredient) {
 }
 
 export function RecipeForm({ recipe, ingredients }: Props) {
-	const [state, formAction] = useActionState(upsertRecipeWithSpecsAction, null);
+	const { action } = useServerAction(
+		upsertRecipeWithSpecsAction,
+		mutateSWRBarRecipesCache,
+	);
+
+	const handleSubmit = useCallback(
+		async (formData: FormData) => {
+			const toastId = Date.now().toString();
+
+			try {
+				const promise = action(formData);
+
+				toast.promise(promise, {
+					id: toastId,
+					loading: "Saving changes…",
+					success: () => ({
+						message: "Changes saved",
+					}),
+					error: () => ({
+						message: "Could not save changes",
+						description: "Try again later.",
+					}),
+				});
+			} catch (_e) {}
+		},
+		[action],
+	);
 
 	const [form, fields] = useForm<RecipeFormData>({
 		id: recipe?.id ? `recipe-form-${recipe.id}` : "new-recipe-form",
-		lastResult: state,
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
 				schema: recipeFormSchema,
@@ -80,7 +108,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 		<FormProvider context={form.context}>
 			<Grid
 				as="form"
-				action={formAction}
+				action={handleSubmit}
 				ref={formRef}
 				id={form.id}
 				onSubmit={form.onSubmit}
