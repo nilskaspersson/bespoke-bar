@@ -3,7 +3,7 @@
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
-import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipeWithSpecs";
+import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { pick } from "@/utils";
 import { authOrForbidden } from "@/utils/auth";
 

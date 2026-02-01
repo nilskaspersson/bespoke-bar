@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -12,8 +13,8 @@ export async function GET(_req: Request, { params }: RouteParams) {
 	const list = await getCachedRecipeList(orgId, id);
 
 	if (!list) {
-		return Response.json({ error: "List not found" }, { status: 404 });
+		return NextResponse.json({ error: "List not found" }, { status: 404 });
 	}
 
-	return Response.json(list);
+	return NextResponse.json(list);
 }

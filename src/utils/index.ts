@@ -35,6 +35,10 @@ export function pick<T extends Record<PropertyKey, unknown>, K extends keyof T>(
 	return result;
 }
 
+export function isEmpty(o: unknown): boolean {
+	return o == null || o === "";
+}
+
 /**
  * Escapes special characters in a string for use in a regular expression.
  * @param string - The string to escape.

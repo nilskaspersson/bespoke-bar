@@ -40,6 +40,7 @@ export const IngredientsTable = pgTable(
 		updatedAt: timestamp("updated_at"),
 		createdBy: text("created_by").notNull(),
 		updatedBy: text("updated_by"),
+		aiEnrichedFields: text("ai_enriched_fields").array(),
 	},
 	(table) => [
 		uniqueIndex("unique_ingredient_name_case_insensitive").on(
@@ -127,6 +128,7 @@ export const draftIngredientSchema = baseIngredientSchema
 		updatedBy: true,
 		createdAt: true,
 		updatedAt: true,
+		aiEnrichedFields: true,
 	})
 	.refine(...ingredientsRefinements);
 

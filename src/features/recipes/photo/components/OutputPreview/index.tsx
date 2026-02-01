@@ -9,7 +9,7 @@ import {
 } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import type { BaseRecipe } from "@/db/schema/recipes";
-import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipeWithSpecs";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { DraftRecipeCard } from "@/features/recipes/bulk/components/DraftRecipeCard";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
