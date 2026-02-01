@@ -1,11 +1,7 @@
-import { Suspense } from "react";
-import { getClerkOrganization } from "@/features/organisation/api/getClerkOrganization";
-import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
+import { OrganizationNameLoader } from "@/components/OrganizationName/loader";
 import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
-import { Skeleton } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
 
 export function PageHeader({
 	actions,
@@ -22,29 +18,11 @@ export function PageHeader({
 			wrap
 			gap={4}
 		>
-			<HGroup
-				overline={
-					<Suspense
-						fallback={<Skeleton width="16ch" height="13px" variant="text" />}
-					>
-						<OrganizationName />
-					</Suspense>
-				}
-			>
+			<HGroup overline={<OrganizationNameLoader />}>
 				<Heading level="h1">{heading}</Heading>
 			</HGroup>
 
 			{actions}
 		</Flex>
-	);
-}
-
-async function OrganizationName() {
-	const organization = await getClerkOrganization();
-
-	return (
-		<Text size={2} light compact>
-			{organization?.name || FALLBACK_BAR_NAME}
-		</Text>
 	);
 }

@@ -19,18 +19,6 @@ export default async function ListsPage() {
 	const { orgId } = await authOrForbidden();
 
 	return (
-		<ListsPageShell>
-			<Suspense fallback={<RecipeListTable.Skeleton />}>
-				<RecipeListData orgId={orgId} />
-			</Suspense>
-		</ListsPageShell>
-	);
-}
-
-async function ListsPageShell({ children }: { children: ReactNode }) {
-	"use cache";
-
-	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
 				heading="Lists"
@@ -47,6 +35,20 @@ async function ListsPageShell({ children }: { children: ReactNode }) {
 				}
 			/>
 
+			<ListsPageContent>
+				<Suspense fallback={<RecipeListTable.Skeleton />}>
+					<RecipeListData orgId={orgId} />
+				</Suspense>
+			</ListsPageContent>
+		</Container>
+	);
+}
+
+async function ListsPageContent({ children }: { children: ReactNode }) {
+	"use cache";
+
+	return (
+		<>
 			<Callout variant="inset" color="light" size={7}>
 				<Grid gap={3}>
 					<Heading level="h2" size={4}>
@@ -65,7 +67,7 @@ async function ListsPageShell({ children }: { children: ReactNode }) {
 			</Callout>
 
 			{children}
-		</Container>
+		</>
 	);
 }
 

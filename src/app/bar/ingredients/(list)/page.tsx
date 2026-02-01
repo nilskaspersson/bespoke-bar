@@ -16,22 +16,6 @@ export default async function IngredientsPage() {
 	const { orgId } = await authOrForbidden();
 
 	return (
-		<IngredientsPageShell>
-			<Suspense fallback={<IngredientTableSkeleton />}>
-				<IngredientsTableWithData orgId={orgId} />
-			</Suspense>
-		</IngredientsPageShell>
-	);
-}
-
-async function IngredientsPageShell({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
-	"use cache";
-
-	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
 				heading="Ingredients"
@@ -48,7 +32,9 @@ async function IngredientsPageShell({
 				}
 			/>
 
-			{children}
+			<Suspense fallback={<IngredientTableSkeleton />}>
+				<IngredientsTableWithData orgId={orgId} />
+			</Suspense>
 		</Container>
 	);
 }
