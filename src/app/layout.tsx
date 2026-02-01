@@ -39,9 +39,11 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 				<ThemeProvider>
 					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 					<div className={styles.layout} id="root">
-						<AuthProvider>
-							<main className={styles.main}>{children}</main>
-						</AuthProvider>
+						<Suspense>
+							<AuthProvider>
+								<main className={styles.main}>{children}</main>
+							</AuthProvider>
+						</Suspense>
 
 						<AppFooter className={styles.footer} />
 					</div>

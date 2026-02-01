@@ -1,22 +1,27 @@
+import { cacheTag } from "next/cache";
 import type { ComponentProps } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { EntityActions } from "@/components/EntityActions";
 import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
-import { getCachedFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
+import { readFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
 import { LinkButton } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
-import { authOrForbidden } from "@/utils/auth";
+import { cacheTags } from "@/utils/cache";
 import styles from "./styles.module.css";
 
-export async function FeaturedList(
-	props: Omit<ComponentProps<typeof Grid>, "children">,
-) {
-	const { orgId } = await authOrForbidden();
-	const featuredList = await getCachedFeaturedList(orgId);
+type FeaturedListProps = Omit<ComponentProps<typeof Grid>, "children"> & {
+	orgId: string;
+};
+
+export async function FeaturedList({ orgId, ...props }: FeaturedListProps) {
+	"use cache";
+
+	const featuredList = await readFeaturedList(orgId);
+	cacheTag(...cacheTags.recipeListWithRecipes(orgId, featuredList?.id));
 
 	return (
 		<Grid as="section" gap={6} {...props}>

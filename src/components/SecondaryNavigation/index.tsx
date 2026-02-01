@@ -6,10 +6,12 @@ import { Icon } from "@/ui/Icon";
 import { NavLink } from "@/ui/NavLink";
 import styles from "./styles.module.css";
 
-export function SecondaryNavigation({
+export async function SecondaryNavigation({
 	className,
 	...props
 }: Omit<HTMLAttributes<HTMLDivElement>, "children">) {
+	"use cache";
+
 	return (
 		<nav className={clsx(styles.nav, className)} {...props}>
 			<ul className={styles.list}>

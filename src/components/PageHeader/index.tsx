@@ -1,18 +1,15 @@
-import { getClerkOrganization } from "@/features/organisation/api/getClerkOrganization";
-import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
+import { OrganizationNameLoader } from "@/components/OrganizationName/loader";
 import { Flex } from "@/ui/Flex";
 import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
+import { HGroup } from "@/ui/HGroup";
 
-export async function PageHeader({
+export function PageHeader({
 	actions,
 	heading,
 }: {
 	heading: string;
 	actions?: React.ReactNode;
 }) {
-	const organization = await getClerkOrganization();
-
 	return (
 		<Flex
 			as="header"
@@ -21,13 +18,9 @@ export async function PageHeader({
 			wrap
 			gap={4}
 		>
-			<hgroup>
-				<Text size={2} light compact>
-					{organization?.name || FALLBACK_BAR_NAME}
-				</Text>
-
+			<HGroup overline={<OrganizationNameLoader />}>
 				<Heading level="h1">{heading}</Heading>
-			</hgroup>
+			</HGroup>
 
 			{actions}
 		</Flex>

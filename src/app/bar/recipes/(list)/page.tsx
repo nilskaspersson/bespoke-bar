@@ -7,23 +7,11 @@ import { RecipeDataTableSkeleton } from "@/features/recipes/components/RecipeDat
 import { RecipeDataTableLoader } from "@/features/recipes/components/RecipeDataTable/Loader";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
-import { Grid } from "@/ui/Grid";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 
 export default async function RecipesPage() {
 	return (
-		<Suspense
-			fallback={
-				<SkeletonScreen>
-					<Grid gap={4}>
-						<Skeleton width="100%" height="147px" />
-						<Skeleton width="100%" height="147px" />
-						<Skeleton width="100%" height="147px" />
-					</Grid>
-				</SkeletonScreen>
-			}
-		>
+		<Suspense fallback={<RecipesList.Skeleton />}>
 			<RecipeViewsWithData />
 		</Suspense>
 	);

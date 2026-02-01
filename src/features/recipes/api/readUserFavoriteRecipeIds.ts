@@ -15,7 +15,7 @@ const preparedReadUserFavoriteRecipeIds = db
 	)
 	.prepare("readUserFavoriteRecipeIds");
 
-async function readUserFavoriteRecipeIds(orgId: string, userId: string) {
+export async function readUserFavoriteRecipeIds(orgId: string, userId: string) {
 	const favoriteRecipes = await preparedReadUserFavoriteRecipeIds.execute({
 		orgId,
 		userId,

@@ -40,13 +40,13 @@ const nextConfig: NextConfig = {
 			},
 		],
 	},
-	devIndicators: false,
+	devIndicators: { position: "bottom-right" },
 	poweredByHeader: false,
 	reactCompiler: true,
+	cacheComponents: true,
 	experimental: {
 		authInterrupts: true,
 		inlineCss: true,
-		useCache: true,
 		useLightningcss: true,
 		serverActions: {
 			/**

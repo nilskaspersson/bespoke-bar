@@ -98,10 +98,7 @@ export async function upsertRecipesWithSpecs(
 	return recipes.map(([recipe]) => recipe);
 }
 
-export async function upsertRecipeWithSpecsAction(
-	_prevState: unknown,
-	formData: FormData,
-) {
+export async function upsertRecipeWithSpecsAction(formData: FormData) {
 	const submission = parseWithZod(formData, {
 		schema: recipeFormSchema,
 	});

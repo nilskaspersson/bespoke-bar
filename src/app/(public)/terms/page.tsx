@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { TERMS_CONDITIONS_VERSION } from "@/features/consent/constants";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
 import { Text } from "@/ui/Text";
 import { Time } from "@/ui/Time";
 import styles from "./page.module.css";
@@ -10,18 +12,25 @@ import styles from "./page.module.css";
  * IMPORTANT: When updating these terms, also update the TERMS_CONDITIONS_VERSION
  * constant.
  */
-export default function TermsPage() {
+export default async function TermsPage() {
+	"use cache";
+
 	return (
 		<Container as="article" className={styles.article}>
 			<Grid gap={6}>
 				<Grid as="header" gap={4}>
-					<hgroup>
+					<HGroup
+						tagline={
+							<Text as="em" italic>
+								Last updated:{" "}
+								<Suspense>
+									<Time date={new Date(TERMS_CONDITIONS_VERSION)} />
+								</Suspense>
+							</Text>
+						}
+					>
 						<Heading level="h1">Terms & Conditions</Heading>
-
-						<Text as="p" size={1} italic>
-							Last updated: <Time date={new Date(TERMS_CONDITIONS_VERSION)} />
-						</Text>
-					</hgroup>
+					</HGroup>
 
 					<Text as="p">
 						<Text as="strong" heavy weight={700}>

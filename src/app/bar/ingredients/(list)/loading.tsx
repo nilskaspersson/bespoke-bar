@@ -1,3 +1,5 @@
+import { IngredientTableSkeleton } from "@/features/ingredients/components/IngredientsTable";
+
 export default function Loading() {
-	return "Loading...";
+	return <IngredientTableSkeleton />;
 }

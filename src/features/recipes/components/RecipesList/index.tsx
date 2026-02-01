@@ -3,7 +3,9 @@ import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
 
 export function RecipesList({
@@ -51,3 +53,17 @@ export function RecipesList({
 		</OverscrollList>
 	);
 }
+
+export function RecipesListSkeleton() {
+	return (
+		<SkeletonScreen>
+			<Grid gap={4}>
+				<Skeleton width="100%" height="169px" />
+				<Skeleton width="100%" height="169px" />
+				<Skeleton width="100%" height="169px" />
+			</Grid>
+		</SkeletonScreen>
+	);
+}
+
+RecipesList.Skeleton = RecipesListSkeleton;

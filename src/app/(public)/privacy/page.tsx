@@ -1,7 +1,9 @@
+import { Suspense } from "react";
 import { PRIVACY_POLICY_VERSION } from "@/features/consent/constants";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
 import { Text } from "@/ui/Text";
 import { Time } from "@/ui/Time";
 import styles from "./page.module.css";
@@ -13,18 +15,25 @@ import styles from "./page.module.css";
  * IMPORTANT: When updating anything related to text extraction, also update the
  * OCR_CONSENT_VERSION constant.
  */
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+	"use cache";
+
 	return (
 		<Container as="article" className={styles.article}>
 			<Grid gap={6}>
 				<Grid as="header" gap={4}>
-					<hgroup>
+					<HGroup
+						tagline={
+							<Text as="em">
+								Last updated:{" "}
+								<Suspense>
+									<Time date={new Date(PRIVACY_POLICY_VERSION)} />
+								</Suspense>
+							</Text>
+						}
+					>
 						<Heading level="h1">Privacy Policy</Heading>
-
-						<Text as="p" size={1} italic>
-							Last updated: <Time date={new Date(PRIVACY_POLICY_VERSION)} />
-						</Text>
-					</hgroup>
+					</HGroup>
 
 					<Text as="p">
 						<Text as="strong" heavy weight={700}>

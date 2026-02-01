@@ -1,14 +1,26 @@
+import { cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { getCachedCountBarRecipes } from "@/features/recipes/api/countBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { Flex } from "@/ui/Flex";
 import { Text } from "@/ui/Text";
-import { authOrForbidden } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 import styles from "./styles.module.css";
 
-export async function StatLinks(props: ComponentProps<"nav">) {
-	const { orgId, userId } = await authOrForbidden();
+type StatLinksProps = ComponentProps<"nav"> & {
+	orgId: string;
+	userId: string;
+};
+
+export async function StatLinks({ orgId, userId, ...props }: StatLinksProps) {
+	"use cache";
+
+	cacheTag(
+		cacheEvents.recipe.create.tag(orgId),
+		cacheEvents.recipe.delete.tag(orgId),
+		cacheEvents.favorite.toggle.tag(orgId, userId),
+	);
 
 	const [recipesCount, favoriteRecipes] = await Promise.all([
 		getCachedCountBarRecipes(orgId),

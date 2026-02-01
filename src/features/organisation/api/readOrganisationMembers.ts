@@ -1,8 +1,9 @@
 import { clerkClient } from "@clerk/nextjs/server";
+import { cache } from "react";
 import type { UserIdMap } from "@/features/organisation/types";
 import { authOrForbidden } from "@/utils/auth";
 
-export async function readOrganisationMembers() {
+export const readOrganisationMembers = cache(async () => {
 	const { orgId } = await authOrForbidden();
 	const client = await clerkClient();
 
@@ -25,4 +26,4 @@ export async function readOrganisationMembers() {
 
 		return acc;
 	}, {});
-}
+});

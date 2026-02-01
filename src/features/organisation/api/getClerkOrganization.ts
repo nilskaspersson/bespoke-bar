@@ -1,6 +1,7 @@
 import { auth, clerkClient } from "@clerk/nextjs/server";
+import { cache } from "react";
 
-export async function getClerkOrganization() {
+export const getClerkOrganization = cache(async () => {
 	const { orgId } = await auth();
 
 	if (!orgId) {
@@ -14,4 +15,4 @@ export async function getClerkOrganization() {
 	});
 
 	return organization;
-}
+});

@@ -6,6 +6,7 @@ import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
+import { authOrForbidden } from "@/utils/auth";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -13,6 +14,8 @@ export default async function Layout({
 }: {
 	children: React.ReactNode;
 }) {
+	const { orgId, userId } = await authOrForbidden();
+
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -39,7 +42,7 @@ export default async function Layout({
 				className={styles.navigation}
 			>
 				<Suspense>
-					<StatLinks />
+					<StatLinks orgId={orgId} userId={userId} />
 				</Suspense>
 
 				<SwitchListView />

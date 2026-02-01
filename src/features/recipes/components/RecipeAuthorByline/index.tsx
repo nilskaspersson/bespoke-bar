@@ -5,7 +5,6 @@ import { getFullName } from "@/features/organisation/utils";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { Time } from "@/ui/Time";
-
 export async function RecipeAuthorByline({
 	createdBy,
 	createdAt,
