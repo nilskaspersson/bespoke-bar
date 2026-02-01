@@ -10,10 +10,11 @@ This codebase already has a **mature caching architecture** at the data-fetching
 - Prepared statements provide additional query-level caching
 
 **Opportunities identified:**
-1. **3 public pages** that can be fully cached (static content)
-2. **3 data-fetching functions** from Clerk that could benefit from caching
-3. **2 static UI components** that could be cached
-4. **2 components** that could be restructured to enable caching
+1. **2 layout components** (`AppHeader`, `AppSidebar`) that can be cached using the `ssr: false` skeleton pattern
+2. **3 public pages** that can be fully cached (static content)
+3. **3 data-fetching functions** from Clerk that could benefit from caching
+4. **2 static UI components** that could be cached
+5. **Several page components** that could be restructured to enable caching
 
 ---
 
@@ -162,6 +163,91 @@ export async function readOrganisationMembers() {
 
 ---
 
+### High Priority: Cache AppHeader and AppSidebar
+
+These components appear to have user-specific content but can actually be cached thanks to their architecture.
+
+#### Key Insight: Client Components with `ssr: false`
+
+Both components use dynamic imports with `ssr: false`:
+- `AuthButtonsLoader` → renders `AuthButtonsSkeleton` on server
+- `OrganisationSwitcherLoader` → renders `OrganisationSwitcherSkeleton` on server
+- `UserOrSignupLoader` → renders `UserOrSignupSkeleton` on server
+
+**This means the server-rendered output is entirely static (skeletons).** The actual user-specific content only loads client-side after hydration.
+
+#### `src/components/AppHeader/index.tsx`
+- **What to cache:** Entire component
+- **Why safe:** Server output is static - only contains `Logo` + `AuthButtonsSkeleton`
+- **Refactoring needed:** Convert to async function
+- **How it works:** Cache captures the skeleton placeholder; client hydrates with real auth buttons
+
+```typescript
+export async function AppHeader({
+  className,
+  ...props
+}: Omit<ComponentProps<"header">, "children">) {
+  "use cache";
+
+  return (
+    <header className={clsx(styles.header, className)} {...props}>
+      <div className={styles.container}>
+        <Logo />
+        <div className={styles.grid}>
+          <AuthButtonsLoader />  {/* Renders skeleton on server, hydrates on client */}
+        </div>
+      </div>
+    </header>
+  );
+}
+```
+
+#### `src/components/AppSidebar/index.tsx`
+- **What to cache:** Entire component
+- **Why safe:** Server output is static - Logo + skeletons + children slot
+- **Refactoring needed:** Convert to async function
+- **Note:** `children` and `toggle` are passed through (React handles serialization)
+
+```typescript
+export async function AppSidebar({
+  children,
+  className,
+  toggle,
+  ...props
+}: ComponentProps<"aside"> & {
+  toggle?: ReactNode;
+}) {
+  "use cache";
+
+  return (
+    <aside className={clsx(className, styles.sidebar)} {...props} tabIndex={-1}>
+      {toggle}
+      <div className={clsx(styles.block, styles.header)}>
+        <Logo />
+      </div>
+      <div className={styles.block}>
+        <OrganisationSwitcherLoader className={styles.switcher} />
+      </div>
+      <div className={clsx(styles.block, styles.overscroll)}>{children}</div>
+      <div className={clsx(styles.block, styles.footer)}>
+        <UserOrSignupLoader />
+      </div>
+    </aside>
+  );
+}
+```
+
+#### Why This Works
+
+1. **Server render:** Cached component outputs static HTML with skeleton placeholders
+2. **Hydration:** React attaches to the static HTML
+3. **Client load:** Dynamic imports load the real components (`AuthButtons`, `OrganisationSwitcher`, `UserOrSignup`)
+4. **Client render:** Real components replace skeletons with user-specific content
+
+The cache stores the **serialized React tree**, which includes references to client components. When the cached response is served, the client components still hydrate and run normally.
+
+---
+
 ### Low Priority: Cache Static Components
 
 #### `src/features/recipes/components/CreateRecipeNav/index.tsx`
@@ -292,15 +378,15 @@ The following items might look cacheable but should NOT be cached:
 - **Why not:** Calls `auth()` which is request-specific
 - **Alternative:** Already properly structured - auth at layout, cached data fetching
 
-### `src/components/AppHeader/index.tsx`
-- **Why not:** Contains `AuthButtonsLoader` which depends on current user session
-- The auth buttons are client-side rendered (`ssr: false`)
+### ~~`src/components/AppHeader/index.tsx`~~ ✅ CAN BE CACHED
+- **Previously thought:** Contains auth-dependent content
+- **Actually:** Uses `ssr: false` loaders - server output is static skeletons
+- **See:** "High Priority: Cache AppHeader and AppSidebar" section above
 
-### `src/components/AppSidebar/index.tsx`
-- **Why not:** Contains:
-  - `OrganisationSwitcherLoader` - User's org list
-  - `UserOrSignupLoader` - Current user avatar/info
-- These are inherently user-specific
+### ~~`src/components/AppSidebar/index.tsx`~~ ✅ CAN BE CACHED
+- **Previously thought:** Contains user-specific org switcher and user button
+- **Actually:** Uses `ssr: false` loaders - server output is static skeletons
+- **See:** "High Priority: Cache AppHeader and AppSidebar" section above
 
 ### `src/app/bar/page.tsx` (Bar dashboard)
 - **Why not:** `FeaturedList` component calls `authOrForbidden()` internally
@@ -326,13 +412,15 @@ The following items might look cacheable but should NOT be cached:
 
 | Priority | File | Change | Impact |
 |----------|------|--------|--------|
-| 1 | `src/app/(public)/page.tsx` | Add `"use cache"` | Landing page fully cached |
-| 2 | `src/app/(public)/privacy/page.tsx` | Add `"use cache"` | Privacy page fully cached |
-| 3 | `src/app/(public)/terms/page.tsx` | Add `"use cache"` | Terms page fully cached |
-| 4 | `src/features/organisation/api/getUserById.ts` | Add cached wrapper | Reduce Clerk API calls |
-| 5 | `src/features/organisation/api/getClerkOrganization.ts` | Add cached wrapper | Reduce Clerk API calls |
-| 6 | `src/components/PageHeader/index.tsx` | Accept org name as prop | Enable parent caching |
-| 7 | `src/features/organisation/api/readOrganisationMembers.ts` | Add cached wrapper | Reduce Clerk API calls |
+| 1 | `src/components/AppHeader/index.tsx` | Add `"use cache"` | Header cached globally |
+| 2 | `src/components/AppSidebar/index.tsx` | Add `"use cache"` | Sidebar shell cached globally |
+| 3 | `src/app/(public)/page.tsx` | Add `"use cache"` | Landing page fully cached |
+| 4 | `src/app/(public)/privacy/page.tsx` | Add `"use cache"` | Privacy page fully cached |
+| 5 | `src/app/(public)/terms/page.tsx` | Add `"use cache"` | Terms page fully cached |
+| 6 | `src/features/organisation/api/getUserById.ts` | Add cached wrapper | Reduce Clerk API calls |
+| 7 | `src/features/organisation/api/getClerkOrganization.ts` | Add cached wrapper | Reduce Clerk API calls |
+| 8 | `src/components/PageHeader/index.tsx` | Accept org name as prop | Enable parent caching |
+| 9 | `src/features/organisation/api/readOrganisationMembers.ts` | Add cached wrapper | Reduce Clerk API calls |
 
 ---
 
@@ -351,8 +439,24 @@ After implementing these changes:
 
 The existing caching architecture is well-designed. The main opportunities are:
 
-1. **Quick wins:** Cache 3 static public pages (no refactoring needed)
-2. **Medium effort:** Add caching to 3 Clerk API functions (reduces external calls)
-3. **Larger refactor:** Restructure auth pattern to hoist auth checks to pages, enabling component-level caching
+1. **High impact, minimal effort:** Cache `AppHeader` and `AppSidebar` - these appear user-specific but use `ssr: false` loaders, making server output entirely static
+2. **Quick wins:** Cache 3 static public pages (no refactoring needed)
+3. **Medium effort:** Add caching to 3 Clerk API functions (reduces external calls)
+4. **Larger refactor:** Restructure auth pattern to hoist auth checks to pages, enabling component-level caching
 
-The codebase correctly avoids caching auth-dependent components and properly uses the cache tag system for invalidation.
+### Key Architectural Pattern Discovered
+
+The `ssr: false` + skeleton pattern enables caching components that contain user-specific content:
+
+```
+Server (cached):  [Static Shell] + [Skeleton Placeholders]
+                          ↓
+Client (dynamic): [Static Shell] + [Real User Content]
+```
+
+This pattern can be applied to any component where:
+- User-specific parts are isolated into client components
+- Client components use `dynamic()` with `ssr: false`
+- Skeletons provide the loading state
+
+The cache stores the serialized React tree with client component references - client components still hydrate and render normally after the cached response is served.
