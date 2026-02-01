@@ -3,11 +3,13 @@ import { cacheTag } from "next/cache";
 import { Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import { IngredientTable } from "@/features/ingredients/components/IngredientsTable";
+import {
+	IngredientTable,
+	IngredientTableSkeleton,
+} from "@/features/ingredients/components/IngredientsTable";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Icon } from "@/ui/Icon";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheTags } from "@/utils/cache";
 import styles from "./page.module.css";
@@ -46,14 +48,6 @@ async function IngredientsTableWithData({ orgId }: { orgId: string }) {
 	const ingredients = await getCachedIngredients(orgId);
 
 	return <IngredientTable ingredients={ingredients} />;
-}
-
-function IngredientTableSkeleton() {
-	return (
-		<SkeletonScreen>
-			<Skeleton width="100%" height="100lvh" />
-		</SkeletonScreen>
-	);
 }
 
 export const metadata: Metadata = {

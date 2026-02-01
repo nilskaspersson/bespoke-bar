@@ -1,3 +1,5 @@
+import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
+
 export default function Loading() {
-	return "Loading...";
+	return <RecipeListTable.Skeleton />;
 }

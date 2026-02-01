@@ -15,6 +15,7 @@ import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { Table, TableBody, TableHeader } from "@/ui/Table";
 import { TableLayout } from "@/ui/TableLayout";
 import { Text } from "@/ui/Text";
@@ -140,5 +141,13 @@ export function IngredientTable({
 				<TableBody getRowModel={table.getRowModel} />
 			</Table>
 		</TableLayout>
+	);
+}
+
+export function IngredientTableSkeleton() {
+	return (
+		<SkeletonScreen>
+			<Skeleton width="100%" height="100lvh" />
+		</SkeletonScreen>
 	);
 }
