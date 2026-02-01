@@ -5,7 +5,7 @@ import { UserOrSignupLoader } from "@/features/organisation/user/components/User
 import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
 
-export function AppSidebar({
+export async function AppSidebar({
 	children,
 	className,
 	toggle,
@@ -13,6 +13,8 @@ export function AppSidebar({
 }: ComponentProps<"aside"> & {
 	toggle?: ReactNode;
 }) {
+	"use cache";
+
 	return (
 		<aside className={clsx(className, styles.sidebar)} {...props} tabIndex={-1}>
 			{toggle}

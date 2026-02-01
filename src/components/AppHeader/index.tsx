@@ -4,10 +4,12 @@ import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthB
 import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
 
-export function AppHeader({
+export async function AppHeader({
 	className,
 	...props
 }: Omit<ComponentProps<"header">, "children">) {
+	"use cache";
+
 	return (
 		<header className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>
