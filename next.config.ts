@@ -43,6 +43,7 @@ const nextConfig: NextConfig = {
 	devIndicators: false,
 	poweredByHeader: false,
 	reactCompiler: true,
+	cacheComponents: true,
 	experimental: {
 		authInterrupts: true,
 		inlineCss: true,
