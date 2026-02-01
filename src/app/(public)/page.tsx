@@ -9,6 +9,8 @@ import { Text } from "@/ui/Text";
 import styles from "./page.module.css";
 
 export default async function LandingPage() {
+	"use cache";
+
 	return (
 		<LandingPageHero>
 			<Container className={styles.content} as="section">

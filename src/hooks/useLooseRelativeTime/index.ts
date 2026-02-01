@@ -47,11 +47,11 @@ export function useLooseRelativeTime() {
 	const { dateTimeFormatter, relativeTimeFormatter } = use(FormatterContext);
 
 	return useCallback(
-		(date: Date, relativeThreshold = 30, now = new Date()) =>
+		(date: Date, relativeThreshold = 30, now?: Date) =>
 			formatLooseRelativeTime(
 				date,
 				relativeThreshold,
-				now,
+				now ?? new Date(),
 				dateTimeFormatter,
 				relativeTimeFormatter,
 			),
