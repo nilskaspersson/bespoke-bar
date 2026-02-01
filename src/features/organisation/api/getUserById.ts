@@ -1,7 +1,8 @@
 import { clerkClient } from "@clerk/nextjs/server";
 import type { PublicUserData } from "@clerk/types";
+import { cache } from "react";
 
-export async function getUserById(id: string): Promise<PublicUserData> {
+export const getUserById = cache(async (id: string): Promise<PublicUserData> => {
 	const client = await clerkClient();
 	const user = await client.users.getUser(id);
 
@@ -18,4 +19,4 @@ export async function getUserById(id: string): Promise<PublicUserData> {
 		 */
 		identifier: user.id,
 	};
-}
+});
