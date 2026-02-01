@@ -13,7 +13,7 @@ import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { getServerSideBaseURL } from "@/utils/url";
 
-export function RecipeListActions({
+export async function RecipeListActions({
 	list,
 	hasFeaturedList,
 	deleteRedirectTo,
@@ -26,6 +26,8 @@ export function RecipeListActions({
 	deleteRedirectTo?: string;
 	withLink?: boolean;
 }) {
+	"use cache";
+
 	return (
 		<>
 			{withLink ? (

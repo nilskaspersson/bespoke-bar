@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import type { ComponentProps } from "react";
 import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
@@ -14,6 +15,9 @@ export async function RecipeAuthorByline({
 	createdBy: string;
 	createdAt: Date;
 }) {
+	"use cache";
+	cacheLife("hours");
+
 	const author = await getUserById(createdBy);
 
 	return (
