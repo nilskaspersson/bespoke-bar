@@ -2,7 +2,6 @@
 
 import type { Recipe } from "@/db/schema/recipes";
 import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
-import { useServerAction } from "@/hooks/useServerAction";
 import type { ButtonProps } from "@/ui/Button";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { toast } from "@/ui/Toast";
@@ -17,26 +16,24 @@ export function DeleteRecipeButton({
 	recipe: Recipe;
 	externalToastId?: string;
 } & ButtonProps) {
-	const { action: actionDeleteRecipe } = useServerAction(deleteRecipe);
-
 	const handleDelete = async () => {
 		const toastId = externalToastId ?? Date.now().toString();
 
-		const promise = actionDeleteRecipe({ id: recipe.id });
+		const promise = deleteRecipe({ id: recipe.id });
 
 		toast.promise(promise, {
 			id: toastId,
 			loading: "Deleting…",
-			success: () => {
-				return {
-					message: `Deleted "${recipe.name}"`,
-				};
-			},
+			success: () => ({
+				message: `Deleted "${recipe.name}"`,
+			}),
 			error: (e) => ({
 				message: "Could not delete recipe",
 				description: errorMessageOrFallback(e, "Try again later."),
 			}),
 		});
+
+		await promise;
 	};
 
 	return (

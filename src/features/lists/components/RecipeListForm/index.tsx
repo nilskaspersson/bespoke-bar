@@ -10,7 +10,6 @@ import {
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipeListWithEntriesAction } from "@/features/lists/api/upsertRecipeListWithEntries";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
-import { useServerAction } from "@/hooks/useServerAction";
 import { Button } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
@@ -26,11 +25,6 @@ type Props = {
 };
 
 export function RecipeListForm({ recipes, recipeList, children }: Props) {
-	const { action } = useServerAction(
-		upsertRecipeListWithEntriesAction,
-		mutateSWRRecipeListsCache,
-	);
-
 	const [form, fields] = useForm({
 		id: "list-form",
 		defaultValue: {
@@ -53,25 +47,23 @@ export function RecipeListForm({ recipes, recipeList, children }: Props) {
 		},
 	});
 
-	const handleSubmit = useCallback(
-		async (formData: FormData) => {
-			try {
-				const promise = action(formData);
+	const handleSubmit = useCallback(async (formData: FormData) => {
+		const promise = upsertRecipeListWithEntriesAction(formData);
 
-				toast.promise(promise, {
-					loading: "Creating list…",
-					success: () => ({
-						message: "List created",
-					}),
-					error: () => ({
-						message: "Could not create list",
-						description: "Try again later.",
-					}),
-				});
-			} catch (_e) {}
-		},
-		[action],
-	);
+		toast.promise(promise, {
+			loading: "Creating list…",
+			success: () => ({
+				message: "List created",
+			}),
+			error: () => ({
+				message: "Could not create list",
+				description: "Try again later.",
+			}),
+		});
+
+		await promise;
+		mutateSWRRecipeListsCache();
+	}, []);
 
 	const formRef = useRef<HTMLFormElement>(null);
 

@@ -15,7 +15,6 @@ import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
 import { addRecipeToListAction } from "@/features/lists/entries/api/addRecipeToList";
 import { RecipeListEntryCard } from "@/features/lists/entries/components/RecipeListEntryCard";
 import { createDraftRecipeListEntry } from "@/features/lists/utils";
-import { useServerAction } from "@/hooks/useServerAction";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
@@ -39,11 +38,6 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 		fetcher,
 	);
 
-	const { action: handleAddRecipeToList } = useServerAction(
-		addRecipeToListAction,
-		onSuccess,
-	);
-
 	const [form, fields] = useForm({
 		id: formId,
 		onValidate({ formData }) {
@@ -60,23 +54,23 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 
 	const handleSubmit = useCallback(
 		async (formData: FormData) => {
-			try {
-				const promise = handleAddRecipeToList(formData);
+			const promise = addRecipeToListAction(formData);
 
-				toast.promise(promise, {
-					loading: "Adding recipe…",
-					success: () => ({
-						message: "Recipe added to list",
-					}),
-					error: (err) => ({
-						message: "Could not add recipe to list",
-						description:
-							err instanceof Error ? err.message : "Try again later.",
-					}),
-				});
-			} catch (_e) {}
+			toast.promise(promise, {
+				loading: "Adding recipe…",
+				success: () => ({
+					message: "Recipe added to list",
+				}),
+				error: (err) => ({
+					message: "Could not add recipe to list",
+					description: err instanceof Error ? err.message : "Try again later.",
+				}),
+			});
+
+			await promise;
+			onSuccess?.();
 		},
-		[handleAddRecipeToList],
+		[onSuccess],
 	);
 
 	const selectedRecipe = useMemo(() => {

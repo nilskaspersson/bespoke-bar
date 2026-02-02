@@ -23,7 +23,6 @@ import {
 	isRecipeListWithEntries,
 	recipeListsFetcher,
 } from "@/features/lists/utils";
-import { useServerAction } from "@/hooks/useServerAction";
 import { Button, LinkButton } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
@@ -56,8 +55,6 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 		recipeListsFetcher,
 	);
 
-	const { action } = useServerAction(appendRecipeListEntryAction, onSuccess);
-
 	const [form, fields] = useForm({
 		id: `create-recipe-entry-${recipe.id}`,
 		onValidate({ formData }) {
@@ -87,61 +84,62 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 		async (formData: FormData) => {
 			const toastId = Date.now().toString();
 
-			try {
-				const promise = action(formData);
+			const promise = appendRecipeListEntryAction(formData);
 
-				toast.promise(promise, {
-					id: toastId,
-					loading: withNewList ? "Creating list…" : "Adding to list…",
-					success: (result) => ({
-						message: !isRecipeList(result) ? (
-							"Unknown error"
-						) : withNewList ? (
-							<>
-								List <em>"{getListName(result)}"</em> created
-							</>
-						) : (
-							<>
-								Recipe added to <em>"{getListName(result)}"</em>
-							</>
-						),
-						action: isRecipeListWithEntries(result) ? (
-							<ToastActions>
-								<RemoveListEntryButton
-									size="tiny"
-									variant="ghost"
-									color="heavy"
-									actionRemove={removeRecipeFromList}
-									entry={result.entries[0]}
-									onClick={() => toast.dismiss(toastId)}
-								>
-									Undo
-								</RemoveListEntryButton>
+			toast.promise(promise, {
+				id: toastId,
+				loading: withNewList ? "Creating list…" : "Adding to list…",
+				success: (result) => ({
+					message: !isRecipeList(result) ? (
+						"Unknown error"
+					) : withNewList ? (
+						<>
+							List <em>"{getListName(result)}"</em> created
+						</>
+					) : (
+						<>
+							Recipe added to <em>"{getListName(result)}"</em>
+						</>
+					),
+					action: isRecipeListWithEntries(result) ? (
+						<ToastActions>
+							<RemoveListEntryButton
+								size="tiny"
+								variant="ghost"
+								color="heavy"
+								actionRemove={removeRecipeFromList}
+								entry={result.entries[0]}
+								onClick={() => toast.dismiss(toastId)}
+							>
+								Undo
+							</RemoveListEntryButton>
 
-								<LinkButton
-									size="tiny"
-									href={`/bar/lists/${result.id}`}
-									variant="ghost"
-									color="heavy"
-									prefetch={false}
-									onClick={() => toast.dismiss(toastId)}
-								>
-									View List
-									<Icon name="angles-right" size={0} />
-								</LinkButton>
-							</ToastActions>
-						) : null,
-					}),
-					error: (error) => ({
-						message:
-							error instanceof Error
-								? error.message
-								: "Recipe could not be added to List.",
-					}),
-				});
-			} catch (_e) {}
+							<LinkButton
+								size="tiny"
+								href={`/bar/lists/${result.id}`}
+								variant="ghost"
+								color="heavy"
+								prefetch={false}
+								onClick={() => toast.dismiss(toastId)}
+							>
+								View List
+								<Icon name="angles-right" size={0} />
+							</LinkButton>
+						</ToastActions>
+					) : null,
+				}),
+				error: (error) => ({
+					message:
+						error instanceof Error
+							? error.message
+							: "Recipe could not be added to List.",
+				}),
+			});
+
+			await promise;
+			onSuccess?.();
 		},
-		[action, withNewList],
+		[withNewList, onSuccess],
 	);
 
 	// Since we only have one entry (the current recipe), get the first entry's fields

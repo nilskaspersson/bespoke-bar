@@ -5,7 +5,6 @@ import type { Organisation } from "@/db/schema/organisations";
 import { updateLocalOrganisationAction } from "@/features/organisation/api/updateLocalOrganisation";
 import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
 import { SelectLocale } from "@/features/organisation/components/SelectLocale";
-import { useServerAction } from "@/hooks/useServerAction";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -50,32 +49,26 @@ function OrganisationSettingsForm({
 		},
 	});
 
-	const { action } = useServerAction(
-		updateLocalOrganisationAction,
-		mutateSWROrganisationCache,
-	);
+	const handleSubmit = useCallback(async (formData: FormData) => {
+		const toastId = Date.now().toString();
 
-	const handleSubmit = useCallback(
-		async (formData: FormData) => {
-			try {
-				const promise = action(formData);
-				const toastId = Date.now().toString();
+		const promise = updateLocalOrganisationAction(formData);
 
-				toast.promise(promise, {
-					id: toastId,
-					loading: "Updating organisation settings…",
-					success: () => ({
-						message: "Organisation settings updated",
-					}),
-					error: () => ({
-						message: "Could not update organisation settings",
-						description: "Try again later.",
-					}),
-				});
-			} catch (_e) {}
-		},
-		[action],
-	);
+		toast.promise(promise, {
+			id: toastId,
+			loading: "Updating organisation settings…",
+			success: () => ({
+				message: "Organisation settings updated",
+			}),
+			error: () => ({
+				message: "Could not update organisation settings",
+				description: "Try again later.",
+			}),
+		});
+
+		await promise;
+		mutateSWROrganisationCache();
+	}, []);
 
 	return (
 		<Grid

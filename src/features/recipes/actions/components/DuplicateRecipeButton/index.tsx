@@ -3,7 +3,6 @@
 import type { Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
 import { duplicateRecipeAction } from "@/features/recipes/api/duplicateRecipe";
-import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
@@ -21,14 +20,10 @@ export function DuplicateRecipeButton({
 	onSuccess?: (newRecipe: Recipe) => void;
 	externalToastId?: string;
 } & ButtonProps) {
-	const { action: actionDuplicateRecipe } = useServerAction(
-		duplicateRecipeAction,
-	);
-
 	const handleDuplicate = async () => {
 		const toastId = externalToastId ?? Date.now().toString();
 
-		const promise = actionDuplicateRecipe(recipe.id);
+		const promise = duplicateRecipeAction(recipe.id);
 
 		toast.promise(promise, {
 			id: toastId,
@@ -76,6 +71,8 @@ export function DuplicateRecipeButton({
 				description: errorMessageOrFallback(e, "Try again later."),
 			}),
 		});
+
+		await promise;
 	};
 
 	return (

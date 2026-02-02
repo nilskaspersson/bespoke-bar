@@ -5,7 +5,6 @@ import type {
 	RecipeListEntryFormData,
 } from "@/db/schema/recipeListEntries";
 import { UndoRemoveListEntryButton } from "@/features/lists/actions/components/UndoRemoveListEntryButton";
-import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
@@ -22,11 +21,10 @@ export function RemoveListEntryButton({
 	actionRemove: (entryId: string) => Promise<RecipeListEntry>;
 	actionAdd?: (userInput: RecipeListEntryFormData) => Promise<RecipeListEntry>;
 } & ButtonProps) {
-	const { action: removeRecipe } = useServerAction(actionRemove);
-
 	const handleRemove = async () => {
-		const promise = removeRecipe(entry.id);
 		const toastId = Date.now().toString();
+
+		const promise = actionRemove(entry.id);
 
 		toast.promise(promise, {
 			id: toastId,
@@ -77,6 +75,8 @@ export function RemoveListEntryButton({
 			}),
 			error: () => "Could not remove recipe from list. Try again later.",
 		});
+
+		await promise;
 	};
 
 	return (
