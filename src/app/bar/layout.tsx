@@ -3,9 +3,7 @@ import type { Metadata } from "next";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Providers } from "@/components/Providers";
 import { SecondaryNavigation } from "@/components/SecondaryNavigation";
-import { getClerkOrganization } from "@/features/organisation/api/getClerkOrganization";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
-import { FALLBACK_BAR_NAME } from "@/features/organisation/constants";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -38,21 +36,10 @@ export default async function Layout({
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-	const organization = await getClerkOrganization();
-
-	if (!organization) {
-		return {
-			title: "Unknown bar",
-		};
-	}
-
-	const organizationName = organization.name || FALLBACK_BAR_NAME;
-
 	return {
 		title: {
-			template: `%s @ ${organizationName} :: Bespoke Bar`,
-			default: `Mise en place @ ${organizationName}`,
+			template: `%s :: Bespoke Bar`,
+			default: "Mise en place",
 		},
-		authors: undefined, // TODO: Add bar members
 	};
 }
