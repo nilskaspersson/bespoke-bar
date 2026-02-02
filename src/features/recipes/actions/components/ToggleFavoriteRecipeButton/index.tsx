@@ -1,40 +1,51 @@
 "use client";
 
+import { clsx } from "clsx";
+import { useOptimistic } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { toggleRecipeFavorite } from "@/features/recipes/api/toggleRecipeFavorite";
-import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
 import { errorMessageOrFallback } from "@/utils/api";
+import styles from "./styles.module.css";
 
 export function ToggleFavoriteRecipeButton({
 	recipe,
 	children,
 	isFavorite,
 	externalToastId,
+	color,
+	className,
+	isQuickAction = false,
 	...buttonProps
 }: {
 	recipe: RecipeWithSpecs;
 	isFavorite: boolean;
 	externalToastId?: string;
+	isQuickAction?: boolean;
 } & ButtonProps) {
-	const { action: actionToggleFavoriteRecipe } =
-		useServerAction(toggleRecipeFavorite);
+	const [optimisticIsFavorite, setOptimisticIsFavorite] = useOptimistic(
+		isFavorite,
+		(_, newValue: boolean) => newValue,
+	);
 
 	const handleToggleFavorite = async () => {
-		const promise = actionToggleFavoriteRecipe(recipe.id);
+		const newFavoriteState = !optimisticIsFavorite;
+		setOptimisticIsFavorite(newFavoriteState);
 
 		const toastId = externalToastId ?? Date.now().toString();
 
+		const promise = toggleRecipeFavorite(recipe.id);
+
 		toast.promise(promise, {
 			id: toastId,
-			loading: isFavorite ? "Removing…" : "Adding…",
+			loading: newFavoriteState ? "Adding…" : "Removing…",
 			success: () => ({
-				message: isFavorite
-					? `Removed "${recipe.name}" from favorites`
-					: `Added "${recipe.name}" to favorites`,
+				message: newFavoriteState
+					? `Added "${recipe.name}" to favorites`
+					: `Removed "${recipe.name}" from favorites`,
 				action: (
 					<ToastActions>
 						<ToggleFavoriteRecipeButton
@@ -42,14 +53,15 @@ export function ToggleFavoriteRecipeButton({
 							variant="ghost"
 							size="tiny"
 							key="toggle-favorite"
-							isFavorite={!isFavorite}
+							isFavorite={newFavoriteState}
 							externalToastId={toastId}
+							isQuickAction
 						>
 							<Icon name="arrow-rotate-left" size={0} />
 							Undo
 						</ToggleFavoriteRecipeButton>
 
-						{!isFavorite ? (
+						{newFavoriteState ? (
 							<LinkButton
 								size="tiny"
 								href="/bar/recipes/favorites"
@@ -69,11 +81,27 @@ export function ToggleFavoriteRecipeButton({
 				description: errorMessageOrFallback(e, "Try again later."),
 			}),
 		});
+
+		await promise;
 	};
 
 	return (
 		<form action={handleToggleFavorite}>
-			<SubmitButton {...buttonProps}>{children}</SubmitButton>
+			<SubmitButton
+				{...buttonProps}
+				color={optimisticIsFavorite ? "red" : color}
+				className={clsx(className, {
+					[styles.favorite]: optimisticIsFavorite && !isQuickAction,
+				})}
+			>
+				{!isQuickAction ? (
+					<Icon
+						name={optimisticIsFavorite ? "heart-solid" : "heart"}
+						size={1}
+					/>
+				) : null}
+				{children}
+			</SubmitButton>
 		</form>
 	);
 }

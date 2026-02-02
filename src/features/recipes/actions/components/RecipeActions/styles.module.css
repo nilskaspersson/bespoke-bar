@@ -1,7 +1,0 @@
-@layer feature {
-	.favorite {
-		&:not(:hover, :focus, [aria-disabled="true"]) {
-			color: var(--red-10);
-		}
-	}
-}

@@ -3,7 +3,6 @@
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { UnarchiveRecipeButton } from "@/features/recipes/actions/components/UnarchiveRecipeButton";
 import { archiveRecipe } from "@/features/recipes/api/archiveRecipe";
-import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
@@ -17,14 +16,10 @@ export function ArchiveRecipeButton({
 }: {
 	recipe: RecipeWithSpecs;
 } & ButtonProps) {
-	const { action: actionAchiveRecipe } = useServerAction(archiveRecipe);
-
 	const handleArchive = async () => {
-		const promise = actionAchiveRecipe({
-			id: recipe.id,
-		});
-
 		const toastId = Date.now().toString();
+
+		const promise = archiveRecipe({ id: recipe.id });
 
 		toast.promise(promise, {
 			id: toastId,
@@ -64,6 +59,8 @@ export function ArchiveRecipeButton({
 				description: errorMessageOrFallback(e, "Try again later."),
 			}),
 		});
+
+		await promise;
 	};
 
 	return (

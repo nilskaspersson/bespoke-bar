@@ -1,9 +1,8 @@
 "use client";
 
-import { type PropsWithChildren, useCallback } from "react";
+import type { PropsWithChildren } from "react";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
-import { useServerAction } from "@/hooks/useServerAction";
 import type { ButtonProps } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Grid } from "@/ui/Grid";
@@ -23,14 +22,10 @@ export function DeleteRecipeListButton({
 	list: RecipeListWithEntries;
 }> &
 	ButtonProps) {
-	const { action: deleteList } = useServerAction(
-		action,
-		mutateSWRRecipeListsCache,
-	);
-
-	const handleSubmit = useCallback(async () => {
-		const promise = deleteList();
+	const handleSubmit = async () => {
 		const toastId = Date.now().toString();
+
+		const promise = action();
 
 		toast.promise(promise, {
 			id: toastId,
@@ -41,7 +36,10 @@ export function DeleteRecipeListButton({
 					error instanceof Error ? error.message : "List could not be deleted",
 			}),
 		});
-	}, [deleteList]);
+
+		await promise;
+		mutateSWRRecipeListsCache();
+	};
 
 	return (
 		<ConfirmAction

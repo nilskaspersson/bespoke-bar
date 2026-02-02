@@ -1,0 +1,9 @@
+@layer feature {
+	.favorite {
+		color: var(--red-10);
+
+		&:has(:hover, :focus) {
+			color: var(--red-7);
+		}
+	}
+}
