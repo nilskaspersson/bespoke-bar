@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
@@ -13,7 +12,6 @@ import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToCli
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { getServerSideBaseURL } from "@/utils/url";
-import styles from "./styles.module.css";
 
 export function RecipeActions({
 	recipe,
@@ -47,12 +45,7 @@ export function RecipeActions({
 							{...actionProps}
 							recipe={recipe}
 							isFavorite={isFavorite ?? false}
-							color={isFavorite ? "red" : actionProps.color}
-							className={clsx(actionProps.className, {
-								[styles.favorite]: isFavorite,
-							})}
 						>
-							<Icon name={isFavorite ? "heart-solid" : "heart"} size={1} />
 							Favorite
 						</ToggleFavoriteRecipeButton>
 					</li>
