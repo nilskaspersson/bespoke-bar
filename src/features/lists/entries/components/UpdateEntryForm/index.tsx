@@ -12,7 +12,6 @@ import { updateRecipeListEntryAction } from "@/features/lists/entries/api/update
 import { RecipeEntryDiff } from "@/features/lists/entries/components/RecipeEntryDiff";
 import { RecipeEntryPriceCalculation } from "@/features/lists/entries/components/RecipeEntryPriceCalculation";
 import { isRecipeListEntry } from "@/features/lists/utils";
-import { useServerAction } from "@/hooks/useServerAction";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
@@ -27,11 +26,6 @@ type Props = {
 export function UpdateEntryForm({ entry, onSuccess }: Props) {
 	const formId = useId();
 	const formRef = useRef<HTMLFormElement>(null);
-
-	const { action: handleUpdateRecipeListEntry } = useServerAction(
-		updateRecipeListEntryAction.bind(null, entry.id),
-		onSuccess,
-	);
 
 	const [form, fields] = useForm({
 		id: formId,
@@ -52,40 +46,41 @@ export function UpdateEntryForm({ entry, onSuccess }: Props) {
 		async (formData: FormData) => {
 			const toastId = Date.now().toString();
 
-			try {
-				const promise = handleUpdateRecipeListEntry(formData);
+			const promise = updateRecipeListEntryAction(entry.id, formData);
 
-				toast.promise(promise, {
-					id: toastId,
-					loading: "Saving…",
-					success: (result) => ({
-						message: (
-							<>
-								Updated: <em>{entry.recipe.name}</em>
-							</>
-						),
-						description: isRecipeListEntry(result) ? (
-							<RecipeEntryDiff a={entry} b={result} />
-						) : null,
-						action: (
-							<ToastActions>
-								<UndoEntryChangesButton
-									entry={entry}
-									onClick={() => toast.dismiss(toastId)}
-								>
-									Undo
-								</UndoEntryChangesButton>
-							</ToastActions>
-						),
-					}),
-					error: () => ({
-						message: "List entry could not be updated.",
-						description: "Try again later.",
-					}),
-				});
-			} catch (_e) {}
+			toast.promise(promise, {
+				id: toastId,
+				loading: "Saving…",
+				success: (result) => ({
+					message: (
+						<>
+							Updated: <em>{entry.recipe.name}</em>
+						</>
+					),
+					description: isRecipeListEntry(result) ? (
+						<RecipeEntryDiff a={entry} b={result} />
+					) : null,
+					action: (
+						<ToastActions>
+							<UndoEntryChangesButton
+								entry={entry}
+								onClick={() => toast.dismiss(toastId)}
+							>
+								Undo
+							</UndoEntryChangesButton>
+						</ToastActions>
+					),
+				}),
+				error: () => ({
+					message: "List entry could not be updated.",
+					description: "Try again later.",
+				}),
+			});
+
+			await promise;
+			onSuccess();
 		},
-		[handleUpdateRecipeListEntry, entry],
+		[entry, onSuccess],
 	);
 
 	return (
@@ -97,14 +92,12 @@ export function UpdateEntryForm({ entry, onSuccess }: Props) {
 				onSubmit={form.onSubmit}
 			>
 				<input type="submit" hidden form={form.id} />
-
 				<input
 					type="hidden"
 					name={fields.recipeId.name}
 					value={fields.recipeId.value}
 					id={fields.recipeId.id}
 				/>
-
 				<input
 					type="hidden"
 					name={fields.listId.name}
