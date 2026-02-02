@@ -73,6 +73,7 @@ export async function RecipeListActions({
 						list={list}
 						actionSetFeatured={setFeaturedList}
 						actionClearFeatured={clearFeaturedList}
+						requireConfirmation
 						color="amber"
 					>
 						<Icon name="circle-xmark" />
@@ -85,6 +86,7 @@ export async function RecipeListActions({
 						hasFeaturedList={hasFeaturedList}
 						actionSetFeatured={setFeaturedList}
 						actionClearFeatured={clearFeaturedList}
+						requireConfirmation={hasFeaturedList}
 						color="amber"
 					>
 						<Icon name="star" />

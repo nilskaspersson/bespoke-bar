@@ -2,10 +2,10 @@
 
 import type { RecipeList } from "@/db/schema/recipeLists";
 import { ClearFeaturedListButton } from "@/features/lists/actions/components/ClearFeaturedListButton";
-import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
 import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
@@ -15,6 +15,7 @@ export function SetFeaturedListButton({
 	hasFeaturedList,
 	actionSetFeatured,
 	actionClearFeatured,
+	requireConfirmation = false,
 	children,
 	...buttonProps
 }: {
@@ -22,14 +23,10 @@ export function SetFeaturedListButton({
 	hasFeaturedList?: boolean;
 	actionSetFeatured: (listId: string) => Promise<unknown>;
 	actionClearFeatured: () => Promise<unknown>;
+	requireConfirmation?: boolean;
 } & ButtonProps) {
-	const { action: setFeaturedList } = useServerAction(
-		actionSetFeatured,
-		mutateSWRRecipeListsCache,
-	);
-
 	const handleSetFeaturedList = async () => {
-		const promise = setFeaturedList(list.id);
+		const promise = actionSetFeatured(list.id);
 
 		const toastId = Date.now().toString();
 
@@ -40,40 +37,51 @@ export function SetFeaturedListButton({
 				message: "List set as Featured List",
 				description:
 					"This list is now the Featured List on the front page of the bar.",
+				action: (
+					<ToastActions>
+						<ClearFeaturedListButton
+							list={list}
+							actionClearFeatured={actionClearFeatured}
+							actionSetFeatured={actionSetFeatured}
+							variant="ghost"
+							color="red"
+							size="tiny"
+							onClick={() => toast.dismiss(toastId)}
+						>
+							Undo
+						</ClearFeaturedListButton>
+
+						<LinkButton
+							size="tiny"
+							href="/bar"
+							variant="ghost"
+							color="heavy"
+							prefetch={false}
+							onClick={() => toast.dismiss(toastId)}
+						>
+							View front page
+							<Icon name="angles-right" size={0} />
+						</LinkButton>
+					</ToastActions>
+				),
 			}),
 			error: () => ({
 				message: "Could not set list as Featured List.",
 				description: "Try again later.",
 			}),
-			action: (
-				<ToastActions>
-					<ClearFeaturedListButton
-						list={list}
-						actionClearFeatured={actionClearFeatured}
-						actionSetFeatured={actionSetFeatured}
-						variant="ghost"
-						color="red"
-						size="tiny"
-						onClick={() => toast.dismiss(toastId)}
-					>
-						Remove from Featured
-					</ClearFeaturedListButton>
-
-					<LinkButton
-						size="tiny"
-						href="/bar"
-						variant="ghost"
-						color="heavy"
-						prefetch={false}
-						onClick={() => toast.dismiss(toastId)}
-					>
-						View front page
-						<Icon name="angles-right" size={0} />
-					</LinkButton>
-				</ToastActions>
-			),
 		});
+
+		await promise;
+		mutateSWRRecipeListsCache();
 	};
+
+	if (!requireConfirmation) {
+		return (
+			<form action={handleSetFeaturedList}>
+				<SubmitButton {...buttonProps}>{children}</SubmitButton>
+			</form>
+		);
+	}
 
 	return (
 		<ConfirmAction

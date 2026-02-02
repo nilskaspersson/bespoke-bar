@@ -2,10 +2,10 @@
 
 import type { RecipeList } from "@/db/schema/recipeLists";
 import { SetFeaturedListButton } from "@/features/lists/actions/components/SetFeaturedListButton";
-import { useServerAction } from "@/hooks/useServerAction";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
 import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
@@ -14,20 +14,17 @@ export function ClearFeaturedListButton({
 	list,
 	actionSetFeatured,
 	actionClearFeatured,
+	requireConfirmation = false,
 	children,
 	...buttonProps
 }: {
 	list: RecipeList;
 	actionSetFeatured: (listId: string) => Promise<unknown>;
 	actionClearFeatured: () => Promise<unknown>;
+	requireConfirmation?: boolean;
 } & ButtonProps) {
-	const { action: clearFeaturedList } = useServerAction(
-		actionClearFeatured,
-		mutateSWRRecipeListsCache,
-	);
-
 	const handleClearFeaturedList = async () => {
-		const promise = clearFeaturedList();
+		const promise = actionClearFeatured();
 
 		const toastId = Date.now().toString();
 
@@ -36,40 +33,51 @@ export function ClearFeaturedListButton({
 			loading: "Submitting…",
 			success: () => ({
 				message: "This list is no longer the Featured List.",
+				action: (
+					<ToastActions>
+						<SetFeaturedListButton
+							list={list}
+							actionSetFeatured={actionSetFeatured}
+							actionClearFeatured={actionClearFeatured}
+							variant="ghost"
+							color="red"
+							size="tiny"
+							onClick={() => toast.dismiss(toastId)}
+						>
+							Undo
+						</SetFeaturedListButton>
+
+						<LinkButton
+							size="tiny"
+							href="/bar/lists"
+							variant="ghost"
+							color="heavy"
+							prefetch={false}
+							onClick={() => toast.dismiss(toastId)}
+						>
+							View all lists
+							<Icon name="angles-right" size={0} />
+						</LinkButton>
+					</ToastActions>
+				),
 			}),
 			error: () => ({
 				message: "Could not clear Featured List.",
 				description: "Try again later.",
 			}),
-			action: (
-				<ToastActions>
-					<SetFeaturedListButton
-						list={list}
-						actionSetFeatured={actionSetFeatured}
-						actionClearFeatured={actionClearFeatured}
-						variant="ghost"
-						color="red"
-						size="tiny"
-						onClick={() => toast.dismiss(toastId)}
-					>
-						Undo
-					</SetFeaturedListButton>
-
-					<LinkButton
-						size="tiny"
-						href="/bar/lists"
-						variant="ghost"
-						color="heavy"
-						prefetch={false}
-						onClick={() => toast.dismiss(toastId)}
-					>
-						View all lists
-						<Icon name="angles-right" size={0} />
-					</LinkButton>
-				</ToastActions>
-			),
 		});
+
+		await promise;
+		mutateSWRRecipeListsCache();
 	};
+
+	if (!requireConfirmation) {
+		return (
+			<form action={handleClearFeaturedList}>
+				<SubmitButton {...buttonProps}>{children}</SubmitButton>
+			</form>
+		);
+	}
 
 	return (
 		<ConfirmAction
