@@ -1,58 +1,103 @@
 @layer ui {
 	.popover {
-		position: fixed;
-		position-try-order: most-height;
-		margin: 0;
+		--slide-x: 0;
+		--slide-y: 0;
+		--offset: var(--space-4);
+
 		border: none;
 		background-color: transparent;
+		overflow: visible;
+		margin: var(--space-1);
+		font-family: var(--font-sans-serif);
+
+		opacity: 1;
+		transform: translate(0, 0);
+
+		position: fixed;
+		position-area: var(--area);
+		position-try-fallbacks: var(--fallback);
+		position-try-order: most-height;
+
 		transition-behavior: allow-discrete;
+		transition-property: opacity, transform, display, overlay;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+
+		@starting-style {
+			opacity: 0;
+			transform: translate(var(--slide-x), var(--slide-y));
+		}
 	}
 
+	/* Position area */
 	.top {
-		position-area: top;
-		position-try-fallbacks: flip-block;
-		margin-block-end: var(--gap--small);
+		--area: top;
 	}
 
 	.top-left {
-		position-area: top left;
-		position-try-fallbacks: flip-block;
-		margin-block-end: var(--gap--small);
+		--area: top left;
 	}
 
 	.top-right {
-		position-area: top right;
-		position-try-fallbacks: flip-block;
-		margin-block-end: var(--gap--small);
+		--area: top right;
 	}
 
 	.bottom {
-		position-area: bottom;
-		position-try-fallbacks: flip-block;
-		margin-block-start: var(--gap--small);
+		--area: bottom;
 	}
 
 	.bottom-left {
-		position-area: bottom left;
-		position-try-fallbacks: flip-block;
-		margin-block-start: var(--gap--small);
+		--area: bottom left;
 	}
 
 	.bottom-right {
-		position-area: bottom right;
-		position-try-fallbacks: flip-block;
-		margin-block-start: var(--gap--small);
+		--area: bottom right;
 	}
 
 	.left {
-		position-area: left;
-		position-try-fallbacks: flip-inline;
-		margin-inline-end: var(--gap--small);
+		--area: left;
 	}
 
 	.right {
-		position-area: right;
-		position-try-fallbacks: flip-inline;
-		margin-inline-start: var(--gap--small);
+		--area: right;
+	}
+
+	/* Flip fallbacks */
+	.top,
+	.bottom {
+		--fallback: flip-block;
+	}
+
+	.left,
+	.right {
+		--fallback: flip-inline;
+	}
+
+	.top-left,
+	.top-right,
+	.bottom-left,
+	.bottom-right {
+		--fallback: flip-block, flip-inline, flip-block flip-inline;
+	}
+
+	/* Slide direction based on requested position */
+	.top,
+	.top-left,
+	.top-right {
+		--slide-y: var(--offset);
+	}
+
+	.bottom,
+	.bottom-left,
+	.bottom-right {
+		--slide-y: calc(var(--offset) * -1);
+	}
+
+	.left {
+		--slide-x: var(--offset);
+	}
+
+	.right {
+		--slide-x: calc(var(--offset) * -1);
 	}
 }
