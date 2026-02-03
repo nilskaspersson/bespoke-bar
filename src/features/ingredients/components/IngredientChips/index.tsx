@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { type ComponentProps, use } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
@@ -13,29 +13,34 @@ import styles from "./styles.module.css";
 export function IngredientChips({
 	ingredient,
 	recipesCount,
+	size = 3,
+	color = "regular",
+	...props
 }: {
 	ingredient: Ingredient;
-	recipesCount: number;
-}) {
+	recipesCount?: number;
+	size?: ComponentProps<typeof Chip>["size"];
+	color?: ComponentProps<typeof Chip>["color"];
+} & Omit<ComponentProps<typeof Flex>, "children">) {
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
 	const { percentageFormatter } = use(FormatterContext);
 
 	return (
-		<Flex gap={2} wrap justifyContent="center">
-			<Chip label={<Abv />} size={3} color="regular" className={styles.chip}>
+		<Flex gap={2} wrap justifyContent="center" {...props}>
+			<Chip label={<Abv />} size={size} color={color} className={styles.chip}>
 				{ingredient.abv != null
 					? percentageFormatter.format(ingredient.abv)
 					: "-"}
 			</Chip>
 
-			<Chip label="Brand" size={3} color="regular" className={styles.chip}>
+			<Chip label="Brand" size={size} color={color} className={styles.chip}>
 				{ingredient.brand ?? "-"}
 			</Chip>
 
 			<Chip
 				label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType)}`}
-				size={3}
-				color="regular"
+				size={size}
+				color={color}
 				className={styles.chip}
 			>
 				{ingredient.unitCost && ingredient.measurementType
@@ -46,9 +51,11 @@ export function IngredientChips({
 					: "-"}
 			</Chip>
 
-			<Chip label="Recipes" size={3} color="regular" className={styles.chip}>
-				{recipesCount}
-			</Chip>
+			{recipesCount != null ? (
+				<Chip label="Recipes" size={size} color={color} className={styles.chip}>
+					{recipesCount}
+				</Chip>
+			) : null}
 		</Flex>
 	);
 }
