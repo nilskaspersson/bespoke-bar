@@ -1,0 +1,24 @@
+@layer feature {
+	.card {
+		min-width: 20ch;
+		max-width: 40ch;
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--high);
+
+		border: 1px solid transparent;
+		background-image:
+			linear-gradient(var(--mauve-2), var(--mauve-2)),
+			linear-gradient(to top, var(--iris-8), var(--mauve-6));
+		background-origin: padding-box, border-box;
+		background-clip: padding-box, border-box;
+	}
+
+	.content {
+		padding: var(--gap--small);
+	}
+
+	.actions {
+		padding: var(--space-1) var(--space-1);
+		border-top: 1px solid var(--mauve-6);
+	}
+}

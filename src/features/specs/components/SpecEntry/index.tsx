@@ -1,9 +1,9 @@
 "use client";
 
 import { clsx } from "clsx";
-import Link from "next/link";
 import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
+import { ToggleIngredientCard } from "@/features/ingredients/components/ToggleIngredientCard";
 import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Chip } from "@/ui/Chip";
@@ -40,7 +40,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 
 			{isDraftIngredient && spec.ingredient.name ? (
 				<>
-					<span className={clsx(styles.node, styles.name, styles.isNew)}>
+					<span className={clsx(styles.node, styles.label, styles.isNew)}>
 						{spec.ingredient.name}
 
 						<OptionalText optional={spec.optional} />
@@ -51,13 +51,11 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 					</Chip>
 				</>
 			) : (
-				<span className={clsx(styles.node, styles.name)}>
-					<Link
-						href={`/bar/ingredients/${spec.ingredient.id}`}
-						className={styles.link}
-					>
-						{spec.ingredient.name}
-					</Link>
+				<span className={clsx(styles.node, styles.label)}>
+					<ToggleIngredientCard
+						ingredient={spec.ingredient}
+						className={styles.toggle}
+					/>
 
 					<OptionalText optional={spec.optional} />
 				</span>
@@ -66,14 +64,10 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	);
 }
 
-const OptionalText = ({
-	optional,
-}: {
-	optional: boolean | null | undefined;
-}) => {
+function OptionalText({ optional }: { optional: boolean | null | undefined }) {
 	if (!optional) {
 		return null;
 	}
 
 	return <span className={clsx(styles.node, styles.optional)}>(optional)</span>;
-};
+}

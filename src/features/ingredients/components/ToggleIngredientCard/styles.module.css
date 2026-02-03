@@ -1,0 +1,6 @@
+@layer feature {
+	.close {
+		position: absolute;
+		inset: var(--space-0) var(--space-0) auto auto;
+	}
+}

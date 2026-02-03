@@ -12,7 +12,7 @@
 		flex: 0 0 auto;
 	}
 
-	.name {
+	.label {
 		flex-shrink: 1;
 		text-wrap: balance;
 		word-break: break-word;
@@ -22,11 +22,13 @@
 		}
 	}
 
-	.link {
-		color: var(--iris-11);
+	.toggle {
+		color: var(--mauve-12);
 
-		&:hover {
-			text-decoration: underline;
+		&:hover,
+		&:focus-visible,
+		&:has(+ [popover]:popover-open) {
+			color: var(--iris-11);
 		}
 	}
 
