@@ -1,0 +1,58 @@
+@layer ui {
+	.popover {
+		position: fixed;
+		position-try-order: most-height;
+		margin: 0;
+		border: none;
+		background-color: transparent;
+		transition-behavior: allow-discrete;
+	}
+
+	.top {
+		position-area: top;
+		position-try-fallbacks: flip-block;
+		margin-block-end: var(--gap--small);
+	}
+
+	.top-left {
+		position-area: top left;
+		position-try-fallbacks: flip-block;
+		margin-block-end: var(--gap--small);
+	}
+
+	.top-right {
+		position-area: top right;
+		position-try-fallbacks: flip-block;
+		margin-block-end: var(--gap--small);
+	}
+
+	.bottom {
+		position-area: bottom;
+		position-try-fallbacks: flip-block;
+		margin-block-start: var(--gap--small);
+	}
+
+	.bottom-left {
+		position-area: bottom left;
+		position-try-fallbacks: flip-block;
+		margin-block-start: var(--gap--small);
+	}
+
+	.bottom-right {
+		position-area: bottom right;
+		position-try-fallbacks: flip-block;
+		margin-block-start: var(--gap--small);
+	}
+
+	.left {
+		position-area: left;
+		position-try-fallbacks: flip-inline;
+		margin-inline-end: var(--gap--small);
+	}
+
+	.right {
+		position-area: right;
+		position-try-fallbacks: flip-inline;
+		margin-inline-start: var(--gap--small);
+	}
+}
