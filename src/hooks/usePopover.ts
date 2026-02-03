@@ -1,7 +1,20 @@
 "use client";
 
-import type { CSSProperties } from "react";
+import type { ComponentProps, CSSProperties } from "react";
 import { useCallback, useId, useRef, useState } from "react";
+
+export type PopoverType = NonNullable<ComponentProps<"div">["popover"]>;
+
+type UsePopoverOptions = {
+	/**
+	 * The popover type.
+	 * - "auto": Light-dismisses and closes other auto popovers (menus, dialogs)
+	 * - "hint": Light-dismisses but coexists with other popovers (tooltips)
+	 * - "manual": No light-dismiss, must be closed programmatically
+	 * @default "auto"
+	 */
+	type?: PopoverType;
+};
 
 type UsePopoverReturn = {
 	popoverId: string;
@@ -22,6 +35,7 @@ type UsePopoverReturn = {
 		id: string;
 		ref: React.RefObject<HTMLDivElement | null>;
 		anchorId: string;
+		popover: PopoverType;
 		onToggle: React.ToggleEventHandler<HTMLDivElement>;
 	};
 	openPopover: () => void;
@@ -29,7 +43,8 @@ type UsePopoverReturn = {
 	togglePopover: () => void;
 };
 
-export function usePopover(): UsePopoverReturn {
+export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
+	const { type: popover = "auto" } = options;
 	const popoverId = useId();
 	const popoverRef = useRef<HTMLDivElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
@@ -69,6 +84,7 @@ export function usePopover(): UsePopoverReturn {
 		id: popoverId,
 		ref: popoverRef,
 		anchorId: popoverId,
+		popover,
 		onToggle,
 	};
 

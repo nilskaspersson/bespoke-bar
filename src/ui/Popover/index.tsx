@@ -2,6 +2,7 @@
 
 import { clsx } from "clsx";
 import type { ComponentProps, ToggleEventHandler } from "react";
+import type { PopoverType } from "@/hooks/usePopover";
 import { mergeStyleSources } from "@/utils/styles";
 import styles from "./styles.module.css";
 
@@ -31,6 +32,7 @@ type Props = ComponentProps<"div"> & {
 	 */
 	position?: AnchorPosition;
 	onToggle?: ToggleEventHandler<HTMLDivElement>;
+	popover: PopoverType;
 };
 
 export function Popover({
@@ -43,7 +45,6 @@ export function Popover({
 }: Props) {
 	return (
 		<div
-			popover="auto"
 			className={clsx(styles.popover, styles[position], className)}
 			style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
 			{...props}
