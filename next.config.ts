@@ -45,6 +45,7 @@ const nextConfig: NextConfig = {
 	reactCompiler: true,
 	cacheComponents: true,
 	experimental: {
+		viewTransition: true,
 		authInterrupts: true,
 		inlineCss: true,
 		useLightningcss: true,
