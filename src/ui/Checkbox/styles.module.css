@@ -2,9 +2,14 @@
 	.base {
 		display: grid;
 		justify-items: start;
+		position: relative;
 
 		&.isDisabled {
 			opacity: 0.5;
+		}
+
+		&.regular {
+			--checkbox-length: var(--space-5);
 		}
 
 		&.small {
@@ -21,7 +26,7 @@
 		width: 0;
 		height: 0;
 		opacity: 0;
-		inset: 50% auto 0 var(--checkbox-length);
+		inset: 50% 100% auto auto;
 	}
 
 	.label {

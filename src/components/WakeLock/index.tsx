@@ -11,7 +11,7 @@ export function WakeLock(props: Partial<ComponentProps<typeof Checkbox>>) {
 
 	return (
 		<Checkbox
-			label="Prevent screen from turning off"
+			label="Keep screen awake"
 			checked={isSupported && isMounted ? isActive : false}
 			onChange={isActive ? release : request}
 			{...props}

@@ -47,7 +47,7 @@ export function IngredientCard({
 					) : null}
 				</Grid>
 
-				<Flex gap={2} wrap>
+				<Flex gap={2} wrap className={styles.badges}>
 					{ingredient.category ? (
 						<Chip size={1} color="light">
 							{CATEGORY_TO_LABEL.get(ingredient.category)}

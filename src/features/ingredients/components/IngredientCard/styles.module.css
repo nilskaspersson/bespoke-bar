@@ -21,4 +21,10 @@
 		padding: var(--space-1) var(--space-1);
 		border-top: 1px solid var(--mauve-6);
 	}
+
+	.badges {
+		&:empty {
+			display: none;
+		}
+	}
 }
