@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps, CSSProperties } from "react";
-import { useCallback, useId, useRef, useState } from "react";
+import { startTransition, useCallback, useId, useRef, useState } from "react";
 
 export type PopoverType = NonNullable<ComponentProps<"div">["popover"]>;
 
@@ -37,6 +37,7 @@ type UsePopoverReturn = {
 		anchorId: string;
 		popover: PopoverType;
 		onToggle: React.ToggleEventHandler<HTMLDivElement>;
+		isOpen: boolean;
 	};
 	openPopover: () => void;
 	closePopover: () => void;
@@ -67,7 +68,16 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 	 */
 	const onToggle: React.ToggleEventHandler<HTMLDivElement> = useCallback(
 		(e) => {
-			setIsOpen(e.newState === "open");
+			if (e.newState === "open") {
+				return setIsOpen(true);
+			}
+
+			/**
+			 * Use startTransition when closing to enable ViewTransition exit animations.
+			 */
+			startTransition(() => {
+				setIsOpen(false);
+			});
 		},
 		[],
 	);
@@ -86,6 +96,7 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 		anchorId: popoverId,
 		popover,
 		onToggle,
+		isOpen,
 	};
 
 	return {

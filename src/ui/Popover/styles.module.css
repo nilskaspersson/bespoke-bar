@@ -23,9 +23,11 @@
 		transition-duration: var(--transition-duration);
 		transition-timing-function: var(--swift-in);
 
-		@starting-style {
-			opacity: 0;
-			transform: translate(var(--slide-x), var(--slide-y));
+		@media (prefers-reduced-motion: no-preference) {
+			@starting-style {
+				opacity: 0;
+				transform: translate(var(--slide-x), var(--slide-y));
+			}
 		}
 	}
 
@@ -99,5 +101,19 @@
 
 	.right {
 		--slide-x: calc(var(--offset) * -1);
+	}
+}
+
+::view-transition-old(.popover-exit) {
+	@media (prefers-reduced-motion: no-preference) {
+		animation: popover-exit var(--transition-duration--short) forwards;
+	}
+}
+
+@keyframes popover-exit {
+	to {
+		opacity: 0;
+		transform: scale(1.15);
+		filter: blur(4px);
 	}
 }

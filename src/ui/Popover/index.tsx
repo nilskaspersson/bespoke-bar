@@ -2,6 +2,7 @@
 
 import { clsx } from "clsx";
 import type { ComponentProps, ToggleEventHandler } from "react";
+import { ViewTransition } from "react";
 import type { PopoverType } from "@/hooks/usePopover";
 
 import { mergeStyleSources } from "@/utils/styles";
@@ -34,6 +35,7 @@ type Props = ComponentProps<"div"> & {
 	position?: AnchorPosition;
 	onToggle?: ToggleEventHandler<HTMLDivElement>;
 	popover: PopoverType;
+	isOpen: boolean;
 };
 
 export function Popover({
@@ -42,6 +44,7 @@ export function Popover({
 	className,
 	position = "top",
 	style,
+	isOpen,
 	...props
 }: Props) {
 	return (
@@ -50,7 +53,11 @@ export function Popover({
 			style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
 			{...props}
 		>
-			{children}
+			{isOpen ? (
+				<ViewTransition exit={styles["popover-exit"]}>
+					{children}
+				</ViewTransition>
+			) : null}
 		</div>
 	);
 }

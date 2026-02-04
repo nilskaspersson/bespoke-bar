@@ -25,22 +25,18 @@ export function ToggleIngredientCard({
 			</Button>
 
 			<Popover {...popover.contentProps} position="top">
-				{popover.isOpen ? (
-					<>
-						<IngredientCard ingredient={ingredient} withActions />
+				<IngredientCard ingredient={ingredient} withActions />
 
-						<Button
-							variant="ghost"
-							icon
-							size="tiny"
-							className={styles.close}
-							popoverTarget={popover.triggerProps.popoverTarget}
-							popoverTargetAction="hide"
-						>
-							<Icon name="xmark" size={2} />
-						</Button>
-					</>
-				) : null}
+				<Button
+					variant="ghost"
+					icon
+					size="tiny"
+					className={styles.close}
+					popoverTarget={popover.triggerProps.popoverTarget}
+					popoverTargetAction="hide"
+				>
+					<Icon name="xmark" size={2} />
+				</Button>
 			</Popover>
 		</>
 	);
