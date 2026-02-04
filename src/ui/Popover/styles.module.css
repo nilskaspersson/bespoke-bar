@@ -1,30 +1,119 @@
 @layer ui {
 	.popover {
-		position: fixed;
-		top: var(--popoverTop);
-		left: var(--popoverLeft);
+		--slide-x: 0;
+		--slide-y: 0;
+		--offset: var(--space-4);
 
-		background-color: var(--mauve-2);
-		padding: var(--gap);
-		border-radius: var(--radius--large);
-		box-shadow: var(--shadow--high);
 		border: none;
+		background-color: transparent;
+		overflow: visible;
+		margin: var(--space-1);
+		font-family: var(--font-sans-serif);
+
+		opacity: 1;
+		transform: translate(0, 0);
+
+		position: fixed;
+		position-area: var(--area);
+		position-try-fallbacks: var(--fallback);
+		position-try-order: most-height;
 
 		transition-behavior: allow-discrete;
+		transition-property: opacity, transform, display, overlay;
 		transition-duration: var(--transition-duration);
 		transition-timing-function: var(--swift-in);
-		transition-property: opacity, transform;
-		opacity: 0;
 
-		&:popover-open {
-			opacity: 1;
-		}
-
-		&:popover-open {
+		@media (prefers-reduced-motion: no-preference) {
 			@starting-style {
 				opacity: 0;
-				transform: translateY(var(--gap--small));
+				transform: translate(var(--slide-x), var(--slide-y));
 			}
 		}
+	}
+
+	/* Position area */
+	.top {
+		--area: top;
+	}
+
+	.top-left {
+		--area: top left;
+	}
+
+	.top-right {
+		--area: top right;
+	}
+
+	.bottom {
+		--area: bottom;
+	}
+
+	.bottom-left {
+		--area: bottom left;
+	}
+
+	.bottom-right {
+		--area: bottom right;
+	}
+
+	.left {
+		--area: left;
+	}
+
+	.right {
+		--area: right;
+	}
+
+	/* Flip fallbacks */
+	.top,
+	.bottom {
+		--fallback: flip-block;
+	}
+
+	.left,
+	.right {
+		--fallback: flip-inline;
+	}
+
+	.top-left,
+	.top-right,
+	.bottom-left,
+	.bottom-right {
+		--fallback: flip-block, flip-inline, flip-block flip-inline;
+	}
+
+	/* Slide direction based on requested position */
+	.top,
+	.top-left,
+	.top-right {
+		--slide-y: var(--offset);
+	}
+
+	.bottom,
+	.bottom-left,
+	.bottom-right {
+		--slide-y: calc(var(--offset) * -1);
+	}
+
+	.left {
+		--slide-x: var(--offset);
+	}
+
+	.right {
+		--slide-x: calc(var(--offset) * -1);
+	}
+}
+
+::view-transition-old(.popover-exit) {
+	@media (prefers-reduced-motion: no-preference) {
+		animation: popover-exit var(--transition-duration--short) forwards;
+	}
+}
+
+@keyframes popover-exit {
+	to {
+		opacity: 0;
+		transform: scale(1.15);
+		filter: blur(4px);
 	}
 }

@@ -13,12 +13,17 @@ import styles from "./page.module.css";
 
 type Props = {
 	params: Promise<{ id?: string }>;
+	searchParams: Promise<{ returnTo?: string }>;
 };
 
 export default async function EditIngredientPage({
 	params: paramsPromise,
+	searchParams: searchParamsPromise,
 }: Props) {
-	const { id } = await paramsPromise;
+	const [{ id }, { returnTo }] = await Promise.all([
+		paramsPromise,
+		searchParamsPromise,
+	]);
 
 	if (!id) {
 		notFound();
@@ -46,7 +51,7 @@ export default async function EditIngredientPage({
 
 		await updateIngredient(ingredient.id, values);
 
-		redirect(getIngredientUrl(ingredient));
+		redirect(returnTo ?? getIngredientUrl(ingredient));
 	};
 
 	return (

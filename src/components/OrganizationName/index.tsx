@@ -7,8 +7,12 @@ import { Text } from "@/ui/Text";
 export function OrganizationName() {
 	const { organization } = useOrganization();
 
-	if (!organization) {
+	if (organization === null) {
 		return null;
+	}
+
+	if (!organization) {
+		return <OrganizationNameSkeleton />;
 	}
 
 	return (

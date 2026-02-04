@@ -7,7 +7,7 @@ export function useFormatIngredientUnitCost() {
 	const { currencyFormatter } = use(FormatterContext);
 
 	return useCallback(
-		(cost: number | null, measurementType: Measurement | null) => {
+		(cost: number | null, measurementType: Measurement | null | undefined) => {
 			if (typeof cost !== "number") {
 				return null;
 			}

@@ -1,6 +1,6 @@
 :root {
-	--transition-duration: 250ms;
 	--transition-duration--short: 150ms;
+	--transition-duration: 250ms;
 	--transition-duration--slow: 500ms;
 
 	--swift-in: cubic-bezier(0.1, 1, 0.55, 1);

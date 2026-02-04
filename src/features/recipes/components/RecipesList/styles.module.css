@@ -8,6 +8,7 @@
 		isolation: isolate;
 		content-visibility: auto;
 		contain-intrinsic-size: auto 169px;
+		transition: background-color var(--transition-duration);
 	}
 
 	.actions {
