@@ -41,6 +41,8 @@ export function UploadPhotoForm({
 		accept: ACCEPTED_IMAGE_TYPES.join(","),
 		disabled: isParsingPhotoText,
 		onChange: async (event) => {
+			onChange?.(event);
+
 			const isOCRConsentConfirmed = await checkOCRConsent();
 
 			if (!isOCRConsentConfirmed) {
@@ -56,8 +58,6 @@ export function UploadPhotoForm({
 					console.error(error);
 				}
 			}
-
-			onChange?.(event);
 
 			/**
 			 * Automatically submit the form
