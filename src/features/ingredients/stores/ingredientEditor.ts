@@ -5,12 +5,18 @@ export const INGREDIENT_EDITOR_ID = "ingredient-editor";
 
 type IngredientEditorState = {
 	ingredient: Partial<Ingredient> | null;
+	pending: boolean;
 	setIngredient: (ingredient: Partial<Ingredient>) => void;
+	setPending: (pending: boolean) => void;
 	clear: () => void;
 };
 
-export const useIngredientEditor = create<IngredientEditorState>((set) => ({
+export const ingredientEditorStore = create<IngredientEditorState>((set) => ({
 	ingredient: null,
+	pending: false,
 	setIngredient: (ingredient) => set({ ingredient }),
-	clear: () => set({ ingredient: null }),
+	setPending: (pending) => set({ pending }),
+	clear: () => set({ ingredient: null, pending: false }),
 }));
+
+export const useIngredientEditor = ingredientEditorStore;

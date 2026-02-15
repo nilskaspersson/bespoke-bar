@@ -16,9 +16,10 @@ import { Kbd } from "@/ui/Kbd";
 export function IngredientEditorDrawer() {
 	const formId = useId();
 
-	const { ingredient, clear } = useIngredientEditor(
+	const { ingredient, pending, clear } = useIngredientEditor(
 		useShallow((s) => ({
 			ingredient: s.ingredient,
+			pending: s.pending,
 			clear: s.clear,
 		})),
 	);
@@ -42,6 +43,7 @@ export function IngredientEditorDrawer() {
 						variant="solid"
 						color="accent"
 						size="small"
+						disabled={pending}
 						endAdornment={
 							<Kbd
 								shortcut="mod+enter"
@@ -56,11 +58,7 @@ export function IngredientEditorDrawer() {
 			}
 		>
 			{ingredient ? (
-				<EditIngredientForm
-					formId={formId}
-					ingredient={ingredient}
-					onSuccess={clear}
-				/>
+				<EditIngredientForm formId={formId} ingredient={ingredient} />
 			) : null}
 		</Drawer>
 	);

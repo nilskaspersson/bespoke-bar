@@ -1,6 +1,6 @@
 "use client";
 
-import type { ComponentProps } from "react";
+import { type ComponentProps, useRef } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { updateIngredient } from "@/features/ingredients/api/updateIngredient";
@@ -8,25 +8,35 @@ import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
+import {
+	ingredientEditorStore,
+	useIngredientEditor,
+} from "@/features/ingredients/stores/ingredientEditor";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { Grid } from "@/ui/Grid";
 import { TextField } from "@/ui/TextField";
+import { toast } from "@/ui/Toast";
 
 type Props = {
 	formId: string;
 	ingredient: Partial<Ingredient>;
-	onSuccess: () => void;
 };
 
 export function EditIngredientForm({
 	formId,
 	ingredient,
-	onSuccess,
 	...props
 }: Props & ComponentProps<"form">) {
+	const formRef = useRef<HTMLFormElement>(null);
+	const setPending = useIngredientEditor((s) => s.setPending);
+
 	const formAction = async (formData: FormData) => {
-		if (!ingredient.id) return;
+		if (!ingredient.id || ingredientEditorStore.getState().pending) {
+			return;
+		}
+
+		setPending(true);
 
 		const values = updateIngredientSchema.parse({
 			name: formData.get("name"),
@@ -38,13 +48,25 @@ export function EditIngredientForm({
 			measurementType: formData.get("measurementType"),
 		});
 
-		await updateIngredient(ingredient.id, values);
+		const promise = updateIngredient(ingredient.id, values);
 
-		onSuccess();
+		toast.promise(promise, {
+			loading: "Saving…",
+			success: () => ({
+				message: `Updated: ${ingredient.name}`,
+			}),
+			error: () => ({
+				message: "Could not update ingredient.",
+				description: "Try again later.",
+			}),
+		});
+
+		await promise;
+		formRef.current?.closest("dialog")?.close();
 	};
 
 	return (
-		<form {...props} id={formId} action={formAction}>
+		<form {...props} ref={formRef} id={formId} action={formAction}>
 			<Grid gap={5}>
 				<TextField
 					label="Ingredient name"
