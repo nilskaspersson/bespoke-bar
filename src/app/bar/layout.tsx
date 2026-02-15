@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { AppSidebar } from "@/components/AppSidebar";
 import { Providers } from "@/components/Providers";
 import { SecondaryNavigation } from "@/components/SecondaryNavigation";
-import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditor";
+import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import styles from "./layout.module.css";
 
