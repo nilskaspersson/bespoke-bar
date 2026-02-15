@@ -1,7 +1,7 @@
 @layer ui {
 	.kbd {
 		display: inline-flex;
-		gap: var(--space-0);
+		gap: 1px;
 		align-items: center;
 	}
 
@@ -12,15 +12,25 @@
 		min-width: calc(1ch + var(--space-1) * 2);
 		height: 1.5em;
 		padding: 0 var(--space-1);
-
 		font-size: var(--size-1);
 		font-weight: 500;
 
-		color: var(--mauve-12);
-		background-color: var(--mauve-3);
-		border: 1px solid var(--mauve-6);
-		box-shadow: 0 1px 0 var(--mauve-7);
+		color: var(--c);
+		border: 1px solid var(--bc);
 		border-radius: var(--radius--small);
+
+		&.default {
+			--c: var(--mauve-12);
+			--bc: var(--mauve-6);
+			background-color: var(--mauve-3);
+			box-shadow: 0 1px 0 var(--mauve-7);
+		}
+
+		&.ghost {
+			--c: color-mix(in hsl, currentColor 75%, transparent);
+			--bc: color-mix(in hsl, currentColor 25%, transparent);
+			font-weight: 600;
+		}
 
 		transition: opacity var(--transition-duration);
 		transition-delay: calc(sibling-index() * (16.667ms * 4));

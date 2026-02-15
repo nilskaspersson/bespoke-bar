@@ -23,6 +23,7 @@ type Props = {
 	onTrigger?: () => void;
 	ignoreInputEvents?: boolean;
 	visual?: boolean;
+	variant?: "default" | "ghost";
 };
 
 export function Kbd({
@@ -31,6 +32,7 @@ export function Kbd({
 	ignoreInputEvents = true,
 	className,
 	visual,
+	variant = "default",
 	...props
 }: ComponentProps<"kbd"> & Props) {
 	const [platform, setPlatform] = useState<Platform>();
@@ -46,7 +48,7 @@ export function Kbd({
 				event.repeat ||
 				(ignoreInputEvents && isTextInputElement(event.target)) ||
 				!matchesShortcut(event, shortcut, platform) ||
-				typeof onTrigger !== "function"
+				visual
 			) {
 				return;
 			}
@@ -54,9 +56,14 @@ export function Kbd({
 			event.preventDefault();
 
 			animateChildren(kbdRef.current, keyframes.get("pulse"));
-			onTrigger();
+
+			if (typeof onTrigger === "function") {
+				onTrigger();
+			} else {
+				kbdRef.current?.closest<HTMLElement>("button, a[href]")?.click();
+			}
 		},
-		[ignoreInputEvents, onTrigger, platform, shortcut],
+		[ignoreInputEvents, onTrigger, platform, shortcut, visual],
 	);
 
 	useEffect(() => {
@@ -82,7 +89,7 @@ export function Kbd({
 	return (
 		<kbd ref={kbdRef} className={clsx(styles.kbd, className)} {...props}>
 			{keys.map((key) => (
-				<kbd key={key} className={styles.key}>
+				<kbd key={key} className={clsx(styles.key, styles[variant])}>
 					{key}
 				</kbd>
 			))}
