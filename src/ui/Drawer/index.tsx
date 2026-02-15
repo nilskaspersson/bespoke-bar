@@ -7,14 +7,12 @@ import styles from "./styles.module.css";
 type DrawerProps = {
 	actions?: ReactNode;
 	header?: ReactNode;
-	onClose?: () => void;
 };
 
 export function Drawer({
 	children,
 	actions,
 	header,
-	onClose,
 	className,
 	...props
 }: ComponentProps<"dialog"> & DrawerProps) {

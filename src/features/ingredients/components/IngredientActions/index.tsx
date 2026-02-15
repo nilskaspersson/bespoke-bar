@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { EditIngredientLink } from "@/features/ingredients/components/EditIngredientLink";
+import { EditIngredientButton } from "@/features/ingredients/components/EditIngredientButton";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -35,14 +35,13 @@ export function IngredientActions({
 					) : null}
 
 					<li>
-						<EditIngredientLink
+						<EditIngredientButton
 							{...actionProps}
 							ingredient={ingredient}
 							color="accent"
-							prefetch={false}
 						>
 							Edit
-						</EditIngredientLink>
+						</EditIngredientButton>
 					</li>
 
 					<li>

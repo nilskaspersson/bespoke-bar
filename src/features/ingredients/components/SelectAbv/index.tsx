@@ -8,7 +8,9 @@ import { TextField } from "@/ui/TextField";
 export function SelectAbv({
 	ingredient,
 	...props
-}: { ingredient: Ingredient | undefined } & ComponentProps<typeof TextField>) {
+}: { ingredient: Partial<Ingredient> | undefined } & ComponentProps<
+	typeof TextField
+>) {
 	const { percentageFormatter } = use(FormatterContext);
 
 	return (
