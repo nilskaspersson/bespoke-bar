@@ -5,13 +5,16 @@ import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeDataTableSkeleton } from "@/features/recipes/components/RecipeDataTable";
 import { RecipeDataTableLoader } from "@/features/recipes/components/RecipeDataTable/Loader";
-import { RecipesList } from "@/features/recipes/components/RecipesList";
+import {
+	RecipesList,
+	RecipesListSkeleton,
+} from "@/features/recipes/components/RecipesList";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
 import { authOrForbidden } from "@/utils/auth";
 
 export default async function RecipesPage() {
 	return (
-		<Suspense fallback={<RecipesList.Skeleton />}>
+		<Suspense fallback={<RecipesListSkeleton />}>
 			<RecipeViewsWithData />
 		</Suspense>
 	);

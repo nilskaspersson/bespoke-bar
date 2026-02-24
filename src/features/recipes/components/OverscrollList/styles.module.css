@@ -28,8 +28,6 @@
 	}
 
 	.item {
-		contain: layout;
-
 		@media (hover: none) and (pointer: coarse) {
 			scroll-snap-align: center;
 		}

@@ -4,6 +4,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { Providers } from "@/components/Providers";
 import { SecondaryNavigation } from "@/components/SecondaryNavigation";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
+import { RecipeCardModal } from "@/features/recipes/components/RecipeCardModal";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import styles from "./layout.module.css";
 
@@ -34,6 +35,7 @@ export default async function Layout({
 			</div>
 
 			<IngredientEditorDrawer />
+			<RecipeCardModal />
 		</Providers>
 	);
 }
