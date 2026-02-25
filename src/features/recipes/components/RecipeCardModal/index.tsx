@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { m } from "motion/react";
 import { useCallback, useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
@@ -11,16 +11,18 @@ import { Container } from "@/ui/Container";
 import styles from "./styles.module.css";
 
 export function RecipeCardModal() {
-	const { recipe, isFavorite, clear } = useRecipeCardModal(
+	const { recipe, isFavorite, mounted, clear, setMounted } = useRecipeCardModal(
 		useShallow((s) => ({
 			recipe: s.recipe,
 			isFavorite: s.isFavorite,
+			mounted: s.mounted,
 			clear: s.clear,
+			setMounted: s.setMounted,
 		})),
 	);
 
 	const cardRef = useRef<HTMLDivElement>(null);
-	const canvasRef = useParticleEffect(cardRef, !!recipe);
+	const canvasRef = useParticleEffect(cardRef, !!recipe && mounted);
 
 	const handleEscape = useCallback(
 		(e: KeyboardEvent) => {
@@ -33,6 +35,11 @@ export function RecipeCardModal() {
 
 	useEffect(() => {
 		if (!recipe) return;
+		setMounted(true);
+	}, [recipe, setMounted]);
+
+	useEffect(() => {
+		if (!recipe || !mounted) return;
 
 		document.addEventListener("keydown", handleEscape);
 		document.body.style.overflow = "hidden";
@@ -41,12 +48,12 @@ export function RecipeCardModal() {
 			document.removeEventListener("keydown", handleEscape);
 			document.body.style.overflow = "";
 		};
-	}, [recipe, handleEscape]);
+	}, [recipe, mounted, handleEscape]);
 
-	if (!recipe) return null;
+	if (!recipe || !mounted) return null;
 
 	return (
-		<motion.div className={styles.overlay} layoutRoot onClick={clear}>
+		<m.div className={styles.overlay} layoutRoot onClick={clear}>
 			<div className={styles.backdrop} />
 			<canvas ref={canvasRef} className={styles.particles} />
 
@@ -67,6 +74,6 @@ export function RecipeCardModal() {
 					className={styles.actions}
 				/>
 			</Container>
-		</motion.div>
+		</m.div>
 	);
 }

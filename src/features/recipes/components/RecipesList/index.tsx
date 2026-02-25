@@ -26,6 +26,7 @@ export function RecipesList({
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
 	const selectedRecipeId = useRecipeCardModal((s) => s.recipe?.id);
+	const modalMounted = useRecipeCardModal((s) => s.mounted);
 
 	if (recipes.length === 0) {
 		return null;
@@ -38,7 +39,8 @@ export function RecipesList({
 	return (
 		<OverscrollList ref={ref} padding={6} gap={4}>
 			{recipes.map((recipe) => {
-				const isSelected = withActions && selectedRecipeId === recipe.id;
+				const isSelected =
+					withActions && selectedRecipeId === recipe.id && modalMounted;
 
 				return (
 					<OverscrollList.Item key={recipe.id}>

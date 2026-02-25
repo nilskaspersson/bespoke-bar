@@ -15,7 +15,8 @@ const SIZE_RANGE = 2;
 const SIZE_BIAS = 1.5;
 
 const EP_CURL_MIN = 0.8;
-const EP_CURL_MAX = 2;
+const EP_CURL_RANGE = 2 - EP_CURL_MIN;
+const EP_SPREAD = 30;
 
 export type Particle = {
 	x: number;
@@ -50,9 +51,10 @@ type SpawnEmittedOptions = {
 	curlSign: number;
 };
 
-const SPRING_LUT_DURATION = 0.5;
+export const SPRING_SETTLE_TIME = 0.5;
+
 const SPRING_LUT_RATE = 120;
-const SPRING_LUT_SIZE = Math.ceil(SPRING_LUT_DURATION * SPRING_LUT_RATE) + 1;
+const SPRING_LUT_SIZE = Math.ceil(SPRING_SETTLE_TIME * SPRING_LUT_RATE) + 1;
 const springLut = new Float32Array(SPRING_LUT_SIZE);
 
 for (let i = 0; i < SPRING_LUT_SIZE; i++) {
@@ -134,14 +136,13 @@ export function spawnEmittedParticle({
 }: SpawnEmittedOptions): Particle {
 	const { x, y } = randomEdgePoint(rect);
 	const scale = 0.5 + Math.random() * 0.3;
-	const spread = 30;
 
 	const lifetime = 8000 + Math.random() * 8000;
 	return {
 		x,
 		y,
-		vx: cardVx * scale + (Math.random() - 0.5) * spread,
-		vy: cardVy * scale + (Math.random() - 0.5) * spread,
+		vx: cardVx * scale + (Math.random() - 0.5) * EP_SPREAD,
+		vy: cardVy * scale + (Math.random() - 0.5) * EP_SPREAD,
 		size: SIZE_MIN + Math.random() ** SIZE_BIAS * SIZE_RANGE,
 		color: colors[Math.floor(Math.random() * colors.length)],
 		alpha: 0,
@@ -152,8 +153,7 @@ export function spawnEmittedParticle({
 		drag: 0.975,
 		dragEnd: 0.998,
 		gravity: EP_GRAVITY,
-		curl:
-			curlSign * (EP_CURL_MIN + Math.random() * (EP_CURL_MAX - EP_CURL_MIN)),
+		curl: curlSign * (EP_CURL_MIN + Math.random() * EP_CURL_RANGE),
 	};
 }
 

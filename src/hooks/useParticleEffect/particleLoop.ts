@@ -1,16 +1,17 @@
 import {
 	type CardRect,
 	type Particle,
+	SPRING_SETTLE_TIME,
 	spawnBackdropParticle,
 	spawnEmittedParticle,
 	spawnPassiveParticle,
 	springVelocity,
 } from "@/features/recipes/components/RecipeCardModal/particles";
 
-export const SPRING_SETTLE_TIME = 0.5;
+export { SPRING_SETTLE_TIME };
 
-const BACKDROP_DENSITY = 0.00008;
-const BACKDROP_TRICKLE_DENSITY = 0.0000002;
+const BACKDROP_DENSITY = 0.000096;
+const BACKDROP_TRICKLE_DENSITY = 0.00000024;
 const MIN_CARD_SPEED_SQ = 100 * 100;
 const PASSIVE_EMIT_CHANCE = 0.58;
 const AMBIENT_FRAME_INTERVAL = 1000 / 30;
@@ -81,7 +82,7 @@ export function pollCardRect(
 	return state.settledRect;
 }
 
-const _velocity: CardVelocity = { vx: 0, vy: 0, speedSq: 0 };
+const VELOCITY: CardVelocity = { vx: 0, vy: 0, speedSq: 0 };
 
 export function computeCardVelocity(
 	rect: CardRect,
@@ -89,9 +90,9 @@ export function computeCardVelocity(
 	dt: number,
 	springing: boolean,
 ): CardVelocity {
-	_velocity.vx = 0;
-	_velocity.vy = 0;
-	_velocity.speedSq = 0;
+	VELOCITY.vx = 0;
+	VELOCITY.vy = 0;
+	VELOCITY.speedSq = 0;
 
 	if (springing) {
 		if (state.hasPrevRect && dt > 0) {
@@ -99,10 +100,9 @@ export function computeCardVelocity(
 			const cy = rect.top + rect.height / 2;
 			const prevCx = state.prevRect.left + state.prevRect.width / 2;
 			const prevCy = state.prevRect.top + state.prevRect.height / 2;
-			_velocity.vx = (cx - prevCx) / dt;
-			_velocity.vy = (cy - prevCy) / dt;
-			_velocity.speedSq =
-				_velocity.vx * _velocity.vx + _velocity.vy * _velocity.vy;
+			VELOCITY.vx = (cx - prevCx) / dt;
+			VELOCITY.vy = (cy - prevCy) / dt;
+			VELOCITY.speedSq = VELOCITY.vx * VELOCITY.vx + VELOCITY.vy * VELOCITY.vy;
 		}
 		state.prevRect.left = rect.left;
 		state.prevRect.top = rect.top;
@@ -111,7 +111,7 @@ export function computeCardVelocity(
 		state.hasPrevRect = true;
 	}
 
-	return _velocity;
+	return VELOCITY;
 }
 
 export function spawnFrameParticles(

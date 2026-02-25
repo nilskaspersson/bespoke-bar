@@ -1,7 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import { motion, type Transition } from "motion/react";
+import { m, type Transition } from "motion/react";
 import type { ComponentProps, Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -19,10 +19,7 @@ type MotionRecipeCardProps = {
 	recipe: RecipeWithSpecs;
 	className?: string;
 	ref?: Ref<HTMLDivElement>;
-} & Omit<
-	ComponentProps<typeof motion.div>,
-	"children" | "layoutId" | "transition"
->;
+} & Omit<ComponentProps<typeof m.div>, "children" | "layoutId" | "transition">;
 
 export function MotionRecipeCard({
 	recipe,
@@ -31,7 +28,7 @@ export function MotionRecipeCard({
 	...props
 }: MotionRecipeCardProps) {
 	return (
-		<motion.div
+		<m.div
 			ref={ref}
 			className={clsx(styles.card, className)}
 			layoutId={`recipe-card-${recipe.id}`}
@@ -43,7 +40,7 @@ export function MotionRecipeCard({
 				withLink={false}
 				nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
 			/>
-		</motion.div>
+		</m.div>
 	);
 }
 
