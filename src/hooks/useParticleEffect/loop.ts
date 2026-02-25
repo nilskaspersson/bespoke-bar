@@ -1,14 +1,38 @@
+import { SPRING_DAMPING, SPRING_STIFFNESS } from "@/utils/animate";
 import {
 	type CardRect,
 	type Particle,
-	SPRING_SETTLE_TIME,
 	spawnBackdropParticle,
 	spawnEmittedParticle,
 	spawnPassiveParticle,
-	springVelocity,
-} from "@/features/recipes/components/RecipeCardModal/particles";
+} from "./spawn";
 
-export { SPRING_SETTLE_TIME };
+const omega = Math.sqrt(SPRING_STIFFNESS);
+const zeta = SPRING_DAMPING / (2 * Math.sqrt(SPRING_STIFFNESS));
+const omegaD = omega * Math.sqrt(1 - zeta * zeta);
+
+export const SPRING_SETTLE_TIME = 0.5;
+
+const SPRING_LUT_RATE = 120;
+const SPRING_LUT_SIZE = Math.ceil(SPRING_SETTLE_TIME * SPRING_LUT_RATE) + 1;
+const springLut = new Float32Array(SPRING_LUT_SIZE);
+
+for (let i = 0; i < SPRING_LUT_SIZE; i++) {
+	const t = i / SPRING_LUT_RATE;
+	const decay = Math.exp(-zeta * omega * t);
+	const cos = Math.cos(omegaD * t);
+	const sin = Math.sin(omegaD * t);
+	springLut[i] = Math.abs(decay * (zeta * omega * cos + omegaD * sin));
+}
+
+/** Pre-computed spring velocity lookup with linear interpolation. */
+function springVelocity(t: number): number {
+	const index = t * SPRING_LUT_RATE;
+	const i = Math.floor(index);
+	if (i >= SPRING_LUT_SIZE - 1) return springLut[SPRING_LUT_SIZE - 1];
+	const frac = index - i;
+	return springLut[i] + (springLut[i + 1] - springLut[i]) * frac;
+}
 
 const BACKDROP_DENSITY = 0.000096;
 const BACKDROP_TRICKLE_DENSITY = 0.00000024;

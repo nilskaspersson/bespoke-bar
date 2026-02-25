@@ -1,11 +1,5 @@
 import { type RefObject, useEffect, useRef } from "react";
 import {
-	computeFrameConstants,
-	drawParticles,
-	type Particle,
-	updateAndCompact,
-} from "@/features/recipes/components/RecipeCardModal/particles";
-import {
 	computeCardVelocity,
 	createLoopState,
 	frameSpawnScale,
@@ -14,7 +8,13 @@ import {
 	SPRING_SETTLE_TIME,
 	seedBackdropParticles,
 	spawnFrameParticles,
-} from "./particleLoop";
+} from "./loop";
+import {
+	computeFrameConstants,
+	drawParticles,
+	updateAndCompact,
+} from "./simulation";
+import type { Particle } from "./spawn";
 
 const prefersReducedMotion =
 	typeof window !== "undefined"
