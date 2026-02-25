@@ -1,3 +1,6 @@
+export const SPRING_STIFFNESS = 400;
+export const SPRING_DAMPING = 35;
+
 type AnimationKeyframes = Keyframe[];
 
 type AnimateOptions = {

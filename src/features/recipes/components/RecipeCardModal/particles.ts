@@ -1,12 +1,7 @@
-/**
- * Mirrors Motion's spring config: { stiffness: 400, damping: 35, mass: 1 }
- */
-const STIFFNESS = 400;
-const DAMPING = 35;
-const MASS = 1;
+import { SPRING_DAMPING, SPRING_STIFFNESS } from "@/utils/animate";
 
-const omega = Math.sqrt(STIFFNESS / MASS);
-const zeta = DAMPING / (2 * Math.sqrt(STIFFNESS * MASS));
+const omega = Math.sqrt(SPRING_STIFFNESS);
+const zeta = SPRING_DAMPING / (2 * Math.sqrt(SPRING_STIFFNESS));
 const omegaD = omega * Math.sqrt(1 - zeta * zeta);
 
 const AP_GRAVITY = -4;
@@ -33,6 +28,7 @@ export type Particle = {
 	lifetime: number;
 	lifetimeInv: number;
 	age: number;
+	fadeIn: number;
 	drag: number;
 	dragEnd: number;
 	gravity: number;
@@ -54,11 +50,6 @@ type SpawnEmittedOptions = {
 	curlSign: number;
 };
 
-/**
- * Pre-computed spring velocity lookup table. The spring settles within
- * SPRING_LUT_DURATION seconds; values are sampled at 120Hz for sub-frame
- * interpolation.
- */
 const SPRING_LUT_DURATION = 0.5;
 const SPRING_LUT_RATE = 120;
 const SPRING_LUT_SIZE = Math.ceil(SPRING_LUT_DURATION * SPRING_LUT_RATE) + 1;
@@ -72,7 +63,7 @@ for (let i = 0; i < SPRING_LUT_SIZE; i++) {
 	springLut[i] = Math.abs(decay * (zeta * omega * cos + omegaD * sin));
 }
 
-/** Looks up the pre-computed spring velocity at time `t` (seconds). */
+/** Pre-computed spring velocity lookup with linear interpolation. */
 export function springVelocity(t: number): number {
 	const index = t * SPRING_LUT_RATE;
 	const i = Math.floor(index);
@@ -81,7 +72,6 @@ export function springVelocity(t: number): number {
 	return springLut[i] + (springLut[i + 1] - springLut[i]) * frac;
 }
 
-/** Spawns a particle at a random viewport position with gentle drift. */
 export function spawnBackdropParticle(
 	width: number,
 	height: number,
@@ -101,6 +91,7 @@ export function spawnBackdropParticle(
 		lifetime,
 		lifetimeInv: 1 / lifetime,
 		age: 0,
+		fadeIn: 800,
 		drag: 0.998,
 		dragEnd: 0.998,
 		gravity: AP_GRAVITY,
@@ -108,38 +99,32 @@ export function spawnBackdropParticle(
 	};
 }
 
-const _edge = { x: 0, y: 0 };
+const EDGE = { x: 0, y: 0 };
 
-/** Returns a reused singleton — read immediately before the next call. */
 function randomEdgePoint(rect: CardRect): { x: number; y: number } {
 	const { left, top, width, height } = rect;
 	const perimeter = (width + height) * 2;
 	let d = Math.random() * perimeter;
 
 	if (d < width) {
-		_edge.x = left + d;
-		_edge.y = top;
+		EDGE.x = left + d;
+		EDGE.y = top;
 	} else if (d - width < height) {
 		d -= width;
-		_edge.x = left + width;
-		_edge.y = top + d;
+		EDGE.x = left + width;
+		EDGE.y = top + d;
 	} else if (d - width - height < width) {
 		d -= width + height;
-		_edge.x = left + width - d;
-		_edge.y = top + height;
+		EDGE.x = left + width - d;
+		EDGE.y = top + height;
 	} else {
 		d -= width * 2 + height;
-		_edge.x = left;
-		_edge.y = top + height - d;
+		EDGE.x = left;
+		EDGE.y = top + height - d;
 	}
-	return _edge;
+	return EDGE;
 }
 
-/**
- * Spawns a particle from a card edge with velocity inherited from the card's
- * movement. Heavy initial drag brakes the card velocity, then lerps to
- * backdrop-level drag so the particle settles into the ambient flow.
- */
 export function spawnEmittedParticle({
 	rect,
 	cardVx,
@@ -163,6 +148,7 @@ export function spawnEmittedParticle({
 		lifetime,
 		lifetimeInv: 1 / lifetime,
 		age: 0,
+		fadeIn: 150,
 		drag: 0.975,
 		dragEnd: 0.998,
 		gravity: EP_GRAVITY,
@@ -171,7 +157,6 @@ export function spawnEmittedParticle({
 	};
 }
 
-/** Spawns a particle from a card edge with backdrop-like behavior from birth. */
 export function spawnPassiveParticle(
 	rect: CardRect,
 	colors: string[],
@@ -191,6 +176,7 @@ export function spawnPassiveParticle(
 		lifetime,
 		lifetimeInv: 1 / lifetime,
 		age: 0,
+		fadeIn: 800,
 		drag: 0.998,
 		dragEnd: 0.998,
 		gravity: AP_GRAVITY,
@@ -198,11 +184,6 @@ export function spawnPassiveParticle(
 	};
 }
 
-export function burstEmissionCount(springVel: number): number {
-	return Math.round(springVel * 3.2 + Math.random());
-}
-
-/** Per-frame constants, pre-computed once and reused for all particles. */
 export type FrameConstants = {
 	dtMs: number;
 	dt: number;
@@ -213,7 +194,7 @@ export type FrameConstants = {
 	cullBottom: number;
 };
 
-const _frame: FrameConstants = {
+const FRAME: FrameConstants = {
 	dtMs: 0,
 	dt: 0,
 	turbScale: 0,
@@ -223,29 +204,24 @@ const _frame: FrameConstants = {
 	cullBottom: 0,
 };
 
-/** Mutates and returns a singleton — never allocates after first call. */
 export function computeFrameConstants(
 	dt: number,
 	canvasW: number,
 	canvasH: number,
 ): FrameConstants {
-	_frame.dtMs = dt * 1000;
-	_frame.dt = dt;
-	_frame.turbScale = TURBULENCE * dt;
-	_frame.canvasW = canvasW;
-	_frame.canvasH = canvasH;
-	_frame.cullRight = canvasW + CULL_MARGIN;
-	_frame.cullBottom = canvasH + CULL_MARGIN;
-	return _frame;
+	FRAME.dtMs = dt * 1000;
+	FRAME.dt = dt;
+	FRAME.turbScale = TURBULENCE * dt;
+	FRAME.canvasW = canvasW;
+	FRAME.canvasH = canvasH;
+	FRAME.cullRight = canvasW + CULL_MARGIN;
+	FRAME.cullBottom = canvasH + CULL_MARGIN;
+	return FRAME;
 }
 
-const ALPHA_SCALE = 0.55;
+const ALPHA_SCALE = 0.5;
 
-/**
- * Advances a particle by one frame. Alpha is pre-multiplied for draw.
- * Kills particles that have exceeded their lifetime or drifted off-screen.
- */
-export function updateParticle(p: Particle, f: FrameConstants): void {
+function updateParticle(p: Particle, f: FrameConstants): void {
 	p.age += f.dtMs;
 	if (p.age >= p.lifetime) return;
 
@@ -261,9 +237,8 @@ export function updateParticle(p: Particle, f: FrameConstants): void {
 
 	const progress = p.age * p.lifetimeInv;
 
-	// Fade in over first 10%, hold, fade out over final 40% (pre-multiplied)
-	if (progress < 0.1) {
-		p.alpha = progress * 10 * ALPHA_SCALE;
+	if (p.age < p.fadeIn) {
+		p.alpha = (p.age / p.fadeIn) * ALPHA_SCALE;
 	} else if (progress > 0.6) {
 		p.alpha = (1 - (progress - 0.6) * 2.5) * ALPHA_SCALE;
 	} else {
@@ -277,7 +252,6 @@ export function updateParticle(p: Particle, f: FrameConstants): void {
 	p.vx += (r - 0.5) * f.turbScale;
 	p.vy += (hash - Math.floor(hash) - 0.5) * f.turbScale;
 
-	// Curl fades with the drag transition, then stops
 	if (p.curl !== 0) {
 		const c = p.curl * f.dt;
 		const vx = p.vx - p.vy * c;
@@ -303,14 +277,8 @@ export function updateParticle(p: Particle, f: FrameConstants): void {
 	}
 }
 
-// Pre-allocated buckets to avoid per-frame Map/array allocation
 const colorBuckets: Map<string, Particle[]> = new Map();
 
-/**
- * Clears the canvas and redraws all visible particles, batched by color.
- * Uses fillRect instead of arc — visually identical at this particle size
- * and significantly cheaper (no path construction or arc tessellation).
- */
 export function drawParticles(
 	ctx: CanvasRenderingContext2D,
 	particles: Particle[],
@@ -340,7 +308,6 @@ export function drawParticles(
 	ctx.globalAlpha = 1;
 }
 
-/** Updates all particles and removes dead ones in a single pass. */
 export function updateAndCompact(
 	particles: Particle[],
 	f: FrameConstants,

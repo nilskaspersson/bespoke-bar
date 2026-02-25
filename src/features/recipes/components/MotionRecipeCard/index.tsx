@@ -1,20 +1,19 @@
 "use client";
 
 import { clsx } from "clsx";
-import { motion } from "motion/react";
+import { motion, type Transition } from "motion/react";
 import type { ComponentProps, Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { Icon } from "@/ui/Icon";
+import { SPRING_DAMPING, SPRING_STIFFNESS } from "@/utils/animate";
 import styles from "./styles.module.css";
 
-const transition = {
-	type: "spring" as const,
-	stiffness: 400,
-	damping: 35,
+const transition: Transition = {
+	type: "spring",
+	stiffness: SPRING_STIFFNESS,
+	damping: SPRING_DAMPING,
 };
-
-const nameAdornment = <Icon name="duotone-martini-glass" size={3} />;
 
 type MotionRecipeCardProps = {
 	recipe: RecipeWithSpecs;
@@ -42,7 +41,7 @@ export function MotionRecipeCard({
 			<RecipeCard
 				recipe={recipe}
 				withLink={false}
-				nameAdornment={nameAdornment}
+				nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
 			/>
 		</motion.div>
 	);
@@ -60,7 +59,7 @@ MotionRecipeCard.Placeholder = function MotionRecipeCardPlaceholder({
 			<RecipeCard
 				recipe={recipe}
 				withLink={false}
-				nameAdornment={nameAdornment}
+				nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
 			/>
 		</div>
 	);

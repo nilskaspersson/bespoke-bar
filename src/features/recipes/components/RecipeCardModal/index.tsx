@@ -6,9 +6,9 @@ import { useShallow } from "zustand/react/shallow";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
+import { useParticleEffect } from "@/hooks/useParticleEffect";
 import { Container } from "@/ui/Container";
 import styles from "./styles.module.css";
-import { useParticleEffect } from "./useParticleEffect";
 
 export function RecipeCardModal() {
 	const { recipe, isFavorite, clear } = useRecipeCardModal(
