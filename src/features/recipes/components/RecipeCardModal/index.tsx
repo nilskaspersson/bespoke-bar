@@ -1,13 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { Container } from "@/ui/Container";
 import styles from "./styles.module.css";
+import { useParticleEffect } from "./useParticleEffect";
 
 export function RecipeCardModal() {
 	const { recipe, isFavorite, clear } = useRecipeCardModal(
@@ -17,6 +18,9 @@ export function RecipeCardModal() {
 			clear: s.clear,
 		})),
 	);
+
+	const cardRef = useRef<HTMLDivElement>(null);
+	const canvasRef = useParticleEffect(cardRef, !!recipe);
 
 	const handleEscape = useCallback(
 		(e: KeyboardEvent) => {
@@ -44,9 +48,17 @@ export function RecipeCardModal() {
 	return (
 		<motion.div className={styles.overlay} layoutRoot onClick={clear}>
 			<div className={styles.backdrop} />
+			<canvas ref={canvasRef} className={styles.particles} />
 
-			<Container onClick={(e) => e.stopPropagation()}>
-				<MotionRecipeCard recipe={recipe} className={styles.card} />
+			<Container
+				onClick={(e) => e.stopPropagation()}
+				className={styles.container}
+			>
+				<MotionRecipeCard
+					ref={cardRef}
+					recipe={recipe}
+					className={styles.card}
+				/>
 
 				<RecipeActions
 					recipe={recipe}
