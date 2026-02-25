@@ -19,6 +19,9 @@ const SIZE_MIN = 0.5;
 const SIZE_RANGE = 2;
 const SIZE_BIAS = 1.5;
 
+const EP_CURL_MIN = 0.8;
+const EP_CURL_MAX = 2;
+
 export type Particle = {
 	x: number;
 	y: number;
@@ -33,6 +36,7 @@ export type Particle = {
 	drag: number;
 	dragEnd: number;
 	gravity: number;
+	curl: number;
 };
 
 export type CardRect = {
@@ -47,6 +51,7 @@ type SpawnEmittedOptions = {
 	cardVx: number;
 	cardVy: number;
 	colors: string[];
+	curlSign: number;
 };
 
 /**
@@ -99,6 +104,7 @@ export function spawnBackdropParticle(
 		drag: 0.998,
 		dragEnd: 0.998,
 		gravity: AP_GRAVITY,
+		curl: 0,
 	};
 }
 
@@ -139,12 +145,13 @@ export function spawnEmittedParticle({
 	cardVx,
 	cardVy,
 	colors,
+	curlSign,
 }: SpawnEmittedOptions): Particle {
 	const { x, y } = randomEdgePoint(rect);
-	const scale = 0.3 + Math.random() * 0.2;
+	const scale = 0.5 + Math.random() * 0.3;
 	const spread = 30;
 
-	const lifetime = 5000 + Math.random() * 5000;
+	const lifetime = 8000 + Math.random() * 8000;
 	return {
 		x,
 		y,
@@ -157,8 +164,10 @@ export function spawnEmittedParticle({
 		lifetimeInv: 1 / lifetime,
 		age: 0,
 		drag: 0.975,
-		dragEnd: 0.995,
+		dragEnd: 0.998,
 		gravity: EP_GRAVITY,
+		curl:
+			curlSign * (EP_CURL_MIN + Math.random() * (EP_CURL_MAX - EP_CURL_MIN)),
 	};
 }
 
@@ -169,7 +178,7 @@ export function spawnPassiveParticle(
 ): Particle {
 	const { x, y } = randomEdgePoint(rect);
 	const angle = Math.random() * TWO_PI;
-	const speed = 2 + Math.random() * 6;
+	const speed = 8 + Math.random() * 14;
 	const lifetime = 6000 + Math.random() * 8000;
 	return {
 		x,
@@ -185,11 +194,12 @@ export function spawnPassiveParticle(
 		drag: 0.998,
 		dragEnd: 0.998,
 		gravity: AP_GRAVITY,
+		curl: 0,
 	};
 }
 
 export function burstEmissionCount(springVel: number): number {
-	return Math.round(springVel * 4 + Math.random());
+	return Math.round(springVel * 3.2 + Math.random());
 }
 
 /** Per-frame constants, pre-computed once and reused for all particles. */
@@ -267,6 +277,14 @@ export function updateParticle(p: Particle, f: FrameConstants): void {
 	p.vx += (r - 0.5) * f.turbScale;
 	p.vy += (hash - Math.floor(hash) - 0.5) * f.turbScale;
 
+	// Curl fades with the drag transition, then stops
+	if (p.curl !== 0) {
+		const c = p.curl * f.dt;
+		const vx = p.vx - p.vy * c;
+		p.vy = p.vy + p.vx * c;
+		p.vx = vx;
+	}
+
 	p.x += p.vx * f.dt;
 	p.y += p.vy * f.dt;
 
@@ -275,7 +293,10 @@ export function updateParticle(p: Particle, f: FrameConstants): void {
 		const effectiveDrag = p.drag + (p.dragEnd - p.drag) * t;
 		p.vx *= effectiveDrag;
 		p.vy *= effectiveDrag;
-		if (t >= 1) p.drag = p.dragEnd;
+		if (t >= 1) {
+			p.drag = p.dragEnd;
+			p.curl = 0;
+		}
 	} else {
 		p.vx *= p.drag;
 		p.vy *= p.drag;

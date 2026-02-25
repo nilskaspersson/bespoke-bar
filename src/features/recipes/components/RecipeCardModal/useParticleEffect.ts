@@ -13,10 +13,10 @@ import {
 } from "./particles";
 
 const SPRING_SETTLE_TIME = 0.5;
-const INITIAL_BACKDROP_COUNT = 72;
-const BACKDROP_TRICKLE_CHANCE = 0.18;
+const BACKDROP_DENSITY = 0.00008;
+const BACKDROP_TRICKLE_DENSITY = 0.0000002;
 const MIN_CARD_SPEED_SQ = 100 * 100;
-const PASSIVE_EMIT_CHANCE = 0.4;
+const PASSIVE_EMIT_CHANCE = 0.58;
 const AMBIENT_FRAME_INTERVAL = 1000 / 30;
 const THROTTLE_GRACE = 2;
 
@@ -25,13 +25,7 @@ const prefersReducedMotion =
 		? window.matchMedia("(prefers-reduced-motion: reduce)")
 		: null;
 
-function resolveColors(element: HTMLElement): string[] {
-	const computed = getComputedStyle(element);
-	return [
-		computed.getPropertyValue("--mauve-11").trim() || "#6f6d78",
-		computed.getPropertyValue("--mauve-12").trim() || "#1a1523",
-	];
-}
+const PARTICLE_COLORS = ["#f5e6da", "#f2d5b8", "#e8c4a0"];
 
 /**
  * Drives a canvas-based particle system that reacts to the card's spring
@@ -71,18 +65,23 @@ export function useParticleEffect(
 		};
 		window.addEventListener("resize", resize);
 
-		const colors = resolveColors(card);
+		const colors = PARTICLE_COLORS;
 		const particles = particlesRef.current;
 		particles.length = 0;
 
+		const area = w * h;
+		const initialCount = Math.round(area * BACKDROP_DENSITY);
+		const trickleChance = area * BACKDROP_TRICKLE_DENSITY;
+
 		// Pre-age seeded particles so they appear mid-life
-		for (let i = 0; i < INITIAL_BACKDROP_COUNT; i++) {
+		for (let i = 0; i < initialCount; i++) {
 			const p = spawnBackdropParticle(w, h, colors);
 			p.age = Math.random() * p.lifetime * 0.5;
 			p.alpha = 0.8;
 			particles.push(p);
 		}
 
+		let curlSign = 0;
 		const startTime = performance.now();
 		let lastFrame = startTime;
 		const prevRect: CardRect = { left: 0, top: 0, width: 0, height: 0 };
@@ -154,18 +153,22 @@ export function useParticleEffect(
 			// Double spawn chances when throttled to keep density constant
 			const spawnScale = canThrottle ? 2 : 1;
 
-			if (Math.random() < BACKDROP_TRICKLE_CHANCE * spawnScale) {
+			if (Math.random() < trickleChance * spawnScale) {
 				particles.push(
 					spawnBackdropParticle(ctx.canvas.width, ctx.canvas.height, colors),
 				);
 			}
 
 			if (springing && cardSpeedSq > MIN_CARD_SPEED_SQ) {
+				if (curlSign === 0) {
+					const cardCx = rect.left + rect.width / 2;
+					curlSign = cardCx < ctx.canvas.width / 2 ? 1 : -1;
+				}
 				const vel = springVelocity(elapsed);
 				const burstCount = burstEmissionCount(vel);
 				for (let i = 0; i < burstCount; i++) {
 					particles.push(
-						spawnEmittedParticle({ rect, cardVx, cardVy, colors }),
+						spawnEmittedParticle({ rect, cardVx, cardVy, colors, curlSign }),
 					);
 				}
 			}
