@@ -55,9 +55,12 @@ function updateParticle(p: Particle, f: FrameConstants): void {
 	}
 
 	const progress = p.age * p.lifetimeInv;
+	const visibleAge = p.age - p.fadeDelay;
 
-	if (p.age < p.fadeIn) {
-		p.alpha = (p.age / p.fadeIn) * ALPHA_SCALE;
+	if (visibleAge < 0) {
+		p.alpha = 0;
+	} else if (visibleAge < p.fadeIn) {
+		p.alpha = (visibleAge / p.fadeIn) * ALPHA_SCALE;
 	} else if (progress > 0.6) {
 		p.alpha = (1 - (progress - 0.6) * 2.5) * ALPHA_SCALE;
 	} else {

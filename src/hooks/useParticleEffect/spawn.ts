@@ -8,7 +8,8 @@ const SIZE_BIAS = 1.5;
 
 const EP_CURL_MIN = 0.8;
 const EP_CURL_RANGE = 2 - EP_CURL_MIN;
-const EP_SPREAD = 30;
+const EP_SPREAD = 60;
+const EP_MIN_SPEED = 300;
 
 export type Particle = {
 	x: number;
@@ -21,6 +22,7 @@ export type Particle = {
 	lifetime: number;
 	lifetimeInv: number;
 	age: number;
+	fadeDelay: number;
 	fadeIn: number;
 	drag: number;
 	dragEnd: number;
@@ -62,6 +64,7 @@ export function spawnBackdropParticle(
 		lifetime,
 		lifetimeInv: 1 / lifetime,
 		age: 0,
+		fadeDelay: 800,
 		fadeIn: 800,
 		drag: 0.998,
 		dragEnd: 0.998,
@@ -106,18 +109,28 @@ export function spawnEmittedParticle({
 	const { x, y } = randomEdgePoint(rect);
 	const scale = 0.5 + Math.random() * 0.3;
 
+	let dvx = cardVx * scale;
+	let dvy = cardVy * scale;
+	const speed = Math.sqrt(dvx * dvx + dvy * dvy);
+	if (speed > 0 && speed < EP_MIN_SPEED) {
+		const boost = EP_MIN_SPEED / speed;
+		dvx *= boost;
+		dvy *= boost;
+	}
+
 	const lifetime = 8000 + Math.random() * 8000;
 	return {
 		x,
 		y,
-		vx: cardVx * scale + (Math.random() - 0.5) * EP_SPREAD,
-		vy: cardVy * scale + (Math.random() - 0.5) * EP_SPREAD,
+		vx: dvx + (Math.random() - 0.5) * EP_SPREAD,
+		vy: dvy + (Math.random() - 0.5) * EP_SPREAD,
 		size: SIZE_MIN + Math.random() ** SIZE_BIAS * SIZE_RANGE,
 		color: colors[Math.floor(Math.random() * colors.length)],
 		alpha: 0,
 		lifetime,
 		lifetimeInv: 1 / lifetime,
 		age: 0,
+		fadeDelay: 0,
 		fadeIn: 150,
 		drag: 0.975,
 		dragEnd: 0.998,
@@ -145,6 +158,7 @@ export function spawnPassiveParticle(
 		lifetime,
 		lifetimeInv: 1 / lifetime,
 		age: 0,
+		fadeDelay: 0,
 		fadeIn: 800,
 		drag: 0.998,
 		dragEnd: 0.998,

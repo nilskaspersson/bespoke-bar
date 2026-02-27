@@ -79,8 +79,7 @@ export function seedBackdropParticles(
 	const count = Math.round(w * h * BACKDROP_DENSITY);
 	for (let i = 0; i < count; i++) {
 		const p = spawnBackdropParticle(w, h, colors);
-		p.age = Math.random() * p.lifetime * 0.5;
-		p.alpha = 0.8;
+		p.fadeDelay = 300 + Math.random() * 700;
 		particles.push(p);
 	}
 }
