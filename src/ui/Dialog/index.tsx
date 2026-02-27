@@ -9,15 +9,6 @@ type DialogEvent =
 	| MouseEvent<HTMLDialogElement>
 	| KeyboardEvent<HTMLDialogElement>;
 
-const handleClickClose = (event: DialogEvent) => {
-	if (
-		event.target instanceof HTMLDialogElement &&
-		event.target.nodeName === "DIALOG"
-	) {
-		event.target.close("dismiss");
-	}
-};
-
 const handleKeyboardClose = (event: DialogEvent) => {
 	if (
 		event.target instanceof HTMLDialogElement &&
@@ -39,21 +30,40 @@ const handleKeyboardClose = (event: DialogEvent) => {
 export function Dialog({
 	children,
 	className,
+	handleClose,
 	ref,
 	...props
 }: DialogHTMLAttributes<HTMLDialogElement> & {
+	handleClose?: () => void;
 	onClose?: () => void;
 	ref: React.RefObject<HTMLDialogElement | null>;
 }) {
+	function onBackdropClick(event: DialogEvent) {
+		if (
+			event.target instanceof HTMLDialogElement &&
+			event.target.nodeName === "DIALOG"
+		) {
+			typeof handleClose === "function"
+				? handleClose()
+				: event.target.close("dismiss");
+		}
+	}
+
+	function onEscape(event: DialogEvent) {
+		if (typeof handleClose === "function") {
+			handleClose();
+			return;
+		}
+
+		handleKeyboardClose(event);
+	}
+
 	return (
 		<dialog
 			ref={ref}
 			className={clsx(className, styles.dialog)}
-			/**
-			 * Close on backdrop clicks
-			 */
-			onClick={handleClickClose}
-			onKeyDown={handleKey([["Escape", handleKeyboardClose]])}
+			onClick={onBackdropClick}
+			onKeyDown={handleKey([["Escape", onEscape]])}
 			{...props}
 		>
 			{children}

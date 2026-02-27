@@ -1,13 +1,14 @@
 "use client";
 
 import { m } from "motion/react";
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
 import { Container } from "@/ui/Container";
+import { Dialog } from "@/ui/Dialog";
 import styles from "./styles.module.css";
 
 export function RecipeCardModal() {
@@ -21,59 +22,43 @@ export function RecipeCardModal() {
 		})),
 	);
 
+	const dialogRef = useRef<HTMLDialogElement>(null);
 	const cardRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useParticleEffect(cardRef, !!recipe && mounted);
 
-	const handleEscape = useCallback(
-		(e: KeyboardEvent) => {
-			if (e.key === "Escape") {
-				clear();
-			}
-		},
-		[clear],
-	);
-
 	useEffect(() => {
 		if (!recipe) return;
+		dialogRef.current?.showModal();
 		setMounted(true);
 	}, [recipe, setMounted]);
 
-	useEffect(() => {
-		if (!recipe || !mounted) return;
-
-		document.addEventListener("keydown", handleEscape);
-		document.body.style.overflow = "hidden";
-
-		return () => {
-			document.removeEventListener("keydown", handleEscape);
-			document.body.style.overflow = "";
-		};
-	}, [recipe, mounted, handleEscape]);
-
-	if (!recipe || !mounted) return null;
+	useLayoutEffect(() => {
+		if (recipe) return;
+		dialogRef.current?.close();
+	}, [recipe]);
 
 	return (
-		<m.div className={styles.overlay} layoutRoot onClick={clear}>
-			<div className={styles.backdrop} />
-			<canvas ref={canvasRef} className={styles.particles} />
+		<Dialog ref={dialogRef} handleClose={clear}>
+			<m.div layoutRoot>
+				<canvas ref={canvasRef} className={styles.particles} />
 
-			<Container
-				onClick={(e) => e.stopPropagation()}
-				className={styles.container}
-			>
-				<MotionRecipeCard
-					ref={cardRef}
-					recipe={recipe}
-					className={styles.card}
-				/>
+				{recipe && mounted && (
+					<Container className={styles.container}>
+						<MotionRecipeCard
+							ref={cardRef}
+							recipe={recipe}
+							className={styles.card}
+						/>
 
-				<RecipeActions
-					recipe={recipe}
-					withLink
-					isFavorite={isFavorite}
-					className={styles.actions}
-				/>
-			</Container>
-		</m.div>
+						<RecipeActions
+							recipe={recipe}
+							withLink
+							isFavorite={isFavorite}
+							className={styles.actions}
+						/>
+					</Container>
+				)}
+			</m.div>
+		</Dialog>
 	);
 }

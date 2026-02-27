@@ -23,7 +23,14 @@
 		 * notifications, and other static elements we may want to keep in the foreground.
 		 * For that reason, we blur the #root instead.
 		 */
+
 		&::backdrop {
+			background-image: linear-gradient(
+				to bottom,
+				transparent,
+				rgb(0 0 0 / 0.65)
+			);
+
 			transition: opacity var(--transition-duration);
 			transition-behavior: allow-discrete;
 
