@@ -1,7 +1,7 @@
 "use client";
 
 import { m } from "motion/react";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
@@ -12,30 +12,23 @@ import { Dialog } from "@/ui/Dialog";
 import styles from "./styles.module.css";
 
 export function RecipeCardModal() {
-	const { recipe, isFavorite, mounted, clear, setMounted } = useRecipeCardModal(
+	const { recipe, isFavorite, mounted, clear, dialogRef } = useRecipeCardModal(
 		useShallow((s) => ({
 			recipe: s.recipe,
 			isFavorite: s.isFavorite,
 			mounted: s.mounted,
 			clear: s.clear,
-			setMounted: s.setMounted,
+			dialogRef: s.dialogRef,
 		})),
 	);
 
-	const dialogRef = useRef<HTMLDialogElement>(null);
 	const cardRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useParticleEffect(cardRef, !!recipe && mounted);
-
-	useEffect(() => {
-		if (!recipe) return;
-		dialogRef.current?.showModal();
-		setMounted(true);
-	}, [recipe, setMounted]);
 
 	useLayoutEffect(() => {
 		if (recipe) return;
 		dialogRef.current?.close();
-	}, [recipe]);
+	}, [recipe, dialogRef]);
 
 	return (
 		<Dialog ref={dialogRef} handleClose={clear}>
