@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import type { ComponentProps } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { IngredientCard } from "@/features/ingredients/components/IngredientCard";
@@ -7,11 +8,11 @@ import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Popover } from "@/ui/Popover";
-
 import styles from "./styles.module.css";
 
 export function ToggleIngredientCard({
 	ingredient,
+	className,
 	...props
 }: ComponentProps<typeof Button> & {
 	ingredient: Partial<Ingredient>;
@@ -20,7 +21,12 @@ export function ToggleIngredientCard({
 
 	return (
 		<>
-			<Button variant="base" {...props} {...popover.triggerProps}>
+			<Button
+				variant="base"
+				className={clsx(className, styles.button)}
+				{...props}
+				{...popover.triggerProps}
+			>
 				{ingredient.name}
 			</Button>
 

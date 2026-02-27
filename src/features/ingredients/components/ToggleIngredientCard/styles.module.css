@@ -1,4 +1,8 @@
 @layer feature {
+	.button {
+		user-select: text;
+	}
+
 	.close {
 		position: absolute;
 		inset: var(--space-0) var(--space-0) auto auto;
