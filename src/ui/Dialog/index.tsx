@@ -1,13 +1,10 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { DialogHTMLAttributes, KeyboardEvent, MouseEvent } from "react";
+import type { DialogHTMLAttributes } from "react";
+import { type DialogEvent, isOwnDialogEvent } from "@/utils/events";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
-
-type DialogEvent =
-	| MouseEvent<HTMLDialogElement>
-	| KeyboardEvent<HTMLDialogElement>;
 
 const handleKeyboardClose = (event: DialogEvent) => {
 	if (
@@ -39,23 +36,31 @@ export function Dialog({
 	ref: React.RefObject<HTMLDialogElement | null>;
 }) {
 	function onBackdropClick(event: DialogEvent) {
-		if (
-			event.target instanceof HTMLDialogElement &&
-			event.target.nodeName === "DIALOG"
-		) {
-			typeof handleClose === "function"
+		if (event.target === event.currentTarget) {
+			handleClose
 				? handleClose()
-				: event.target.close("dismiss");
+				: (event.currentTarget as HTMLDialogElement).close("dismiss");
 		}
 	}
 
 	function onEscape(event: DialogEvent) {
-		if (typeof handleClose === "function") {
+		if (handleClose) {
 			handleClose();
 			return;
 		}
-
 		handleKeyboardClose(event);
+	}
+
+	/**
+	 * The native cancel event fires via the close watcher when the user
+	 * presses Escape — even if focus is outside the dialog (e.g. after a
+	 * stacked dialog closes and focus can't be restored). In that case the
+	 * keydown never reaches our onKeyDown handler, so we intercept cancel
+	 * to keep the close lifecycle in React's control.
+	 */
+	function onCancel(event: React.SyntheticEvent<HTMLDialogElement>) {
+		event.preventDefault();
+		handleClose ? handleClose() : event.currentTarget.close("dismiss");
 	}
 
 	return (
@@ -63,7 +68,8 @@ export function Dialog({
 			ref={ref}
 			className={clsx(className, styles.dialog)}
 			onClick={onBackdropClick}
-			onKeyDown={handleKey([["Escape", onEscape]])}
+			onKeyDown={handleKey([["Escape", onEscape, isOwnDialogEvent]])}
+			onCancel={onCancel}
 			{...props}
 		>
 			{children}

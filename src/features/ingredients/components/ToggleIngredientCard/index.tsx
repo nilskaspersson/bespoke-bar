@@ -8,6 +8,7 @@ import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Popover } from "@/ui/Popover";
+import { stopPropagation } from "@/utils/events";
 import styles from "./styles.module.css";
 
 export function ToggleIngredientCard({
@@ -26,6 +27,7 @@ export function ToggleIngredientCard({
 				className={clsx(className, styles.button)}
 				{...props}
 				{...popover.triggerProps}
+				onClick={stopPropagation}
 			>
 				{ingredient.name}
 			</Button>
