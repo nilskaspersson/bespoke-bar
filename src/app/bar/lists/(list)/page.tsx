@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { type ReactNode, Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
@@ -46,6 +46,7 @@ export default async function ListsPage() {
 
 async function ListsPageContent({ children }: { children: ReactNode }) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<>
@@ -73,6 +74,7 @@ async function ListsPageContent({ children }: { children: ReactNode }) {
 
 async function RecipeListData({ orgId }: { orgId: string }) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.recipeLists(orgId));
 
 	const lists = await getCachedRecipeLists(orgId);

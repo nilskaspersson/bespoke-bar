@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { cacheLife } from "next/cache";
 import type { ComponentProps } from "react";
 import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 import { Logo } from "@/ui/Logo";
@@ -9,6 +10,7 @@ export async function AppHeader({
 	...props
 }: Omit<ComponentProps<"header">, "children">) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<header className={clsx(styles.header, className)} {...props}>

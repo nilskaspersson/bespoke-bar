@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
@@ -43,6 +43,7 @@ export default async function IngredientsPage() {
 
 async function IngredientsTableWithData({ orgId }: { orgId: string }) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.ingredientsList(orgId));
 
 	const ingredients = await getCachedIngredients(orgId);

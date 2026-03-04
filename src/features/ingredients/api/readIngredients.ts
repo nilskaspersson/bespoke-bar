@@ -1,5 +1,5 @@
 import { eq, sql } from "drizzle-orm";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { IngredientsTable } from "@/db/schema/ingredients";
 import { cacheTags } from "@/utils/cache";
@@ -14,6 +14,7 @@ export async function readIngredients(orgId: string) {
 
 export async function getCachedIngredients(orgId: string) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.ingredientsList(orgId));
 	return await readIngredients(orgId);
 }

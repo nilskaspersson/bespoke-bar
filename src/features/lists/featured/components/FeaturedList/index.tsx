@@ -1,4 +1,4 @@
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import type { ComponentProps } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { EntityActions } from "@/components/EntityActions";
@@ -19,6 +19,7 @@ type FeaturedListProps = Omit<ComponentProps<typeof Grid>, "children"> & {
 
 export async function FeaturedList({ orgId, ...props }: FeaturedListProps) {
 	"use cache";
+	cacheLife("max");
 
 	const featuredList = await readFeaturedList(orgId);
 	cacheTag(...cacheTags.recipeListWithRecipes(orgId, featuredList?.id));

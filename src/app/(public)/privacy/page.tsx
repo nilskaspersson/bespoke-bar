@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { PRIVACY_POLICY_VERSION } from "@/features/consent/constants";
 import { Container } from "@/ui/Container";
@@ -17,6 +18,7 @@ import styles from "./page.module.css";
  */
 export default async function PrivacyPage() {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<Container as="article" className={styles.article}>

@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { FeaturedList } from "@/features/lists/featured/components/FeaturedList";
@@ -29,6 +30,7 @@ export default async function BarPage() {
 
 async function BarPageShell({ children }: { children: ReactNode }) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<Container as="article" className={styles.container}>

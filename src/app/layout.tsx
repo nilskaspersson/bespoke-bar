@@ -45,7 +45,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 							</AuthProvider>
 						</Suspense>
 
-						<AppFooter className={styles.footer} />
+						<Suspense>
+							<AppFooter className={styles.footer} />
+						</Suspense>
 					</div>
 
 					<Toaster />

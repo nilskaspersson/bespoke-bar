@@ -1,5 +1,5 @@
 import { and, count, eq, isNull } from "drizzle-orm";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 import { cacheTags } from "@/utils/cache";
@@ -15,6 +15,7 @@ export async function countBarRecipes(orgId: string) {
 
 export async function getCachedCountBarRecipes(orgId: string) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.barRecipes(orgId));
 	return await countBarRecipes(orgId);
 }
