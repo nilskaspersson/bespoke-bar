@@ -1,10 +1,6 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
-
-function getServerSnapshot<T>(initialValue: T): () => T {
-	return () => initialValue;
-}
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 type StorageType = "local" | "session";
 
@@ -36,32 +32,31 @@ export function useLocalStorage<T>(
 		[key],
 	);
 
-	const getSnapshot: () => T = useCallback(() => {
-		const storedValue = resolveStorage(storage).getItem(key);
+	const getRawSnapshot = useCallback(
+		() => resolveStorage(storage).getItem(key),
+		[key, storage],
+	);
 
-		if (storedValue === null) {
+	const raw = useSyncExternalStore(subscribe, getRawSnapshot, () => null);
+
+	const value: T = useMemo(() => {
+		if (raw === null) {
 			return initialValue;
 		}
 
 		try {
-			return JSON.parse(storedValue);
+			return JSON.parse(raw);
 		} catch {
 			return initialValue;
 		}
-	}, [key, initialValue, storage]);
-
-	const value = useSyncExternalStore(
-		subscribe,
-		getSnapshot,
-		getServerSnapshot(initialValue),
-	);
+	}, [raw, initialValue]);
 
 	/**
 	 * Mimics the useState setter fn signature, but writes to localStorage instead.
 	 */
 	const setValue = useCallback(
 		(next: T | ((prev: T) => T)) => {
-			const prev = getSnapshot();
+			const prev = raw === null ? initialValue : JSON.parse(raw);
 			const resolved = next instanceof Function ? next(prev) : next;
 
 			try {
@@ -84,7 +79,7 @@ export function useLocalStorage<T>(
 				}),
 			);
 		},
-		[key, storage, getSnapshot],
+		[key, storage, raw, initialValue],
 	);
 
 	return [value, setValue];
