@@ -2,6 +2,7 @@ import { clsx } from "clsx";
 import type { SVGAttributes } from "react";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { Scale } from "@/utils/types";
+import iconsSvg from "./icons.svg";
 import styles from "./styles.module.css";
 import type { IconName } from "./types";
 
@@ -31,7 +32,7 @@ export function Icon({
 				}),
 			)}
 		>
-			{name ? <use href={`/icons.svg#${name}`} /> : children}
+			{name ? <use href={`${iconsSvg.src}#${name}`} /> : children}
 		</svg>
 	);
 }
