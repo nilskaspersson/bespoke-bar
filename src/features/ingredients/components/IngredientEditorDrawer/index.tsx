@@ -24,6 +24,10 @@ export function IngredientEditorDrawer() {
 		})),
 	);
 
+	if (!ingredient) {
+		return null;
+	}
+
 	return (
 		<Drawer
 			id={INGREDIENT_EDITOR_ID}
@@ -31,7 +35,7 @@ export function IngredientEditorDrawer() {
 			header={
 				<HGroup overline="Edit ingredient">
 					<Heading level="h3" size={6}>
-						{ingredient?.name ?? "Ingredient"}
+						{ingredient.name ?? "Ingredient"}
 					</Heading>
 				</HGroup>
 			}
@@ -57,9 +61,7 @@ export function IngredientEditorDrawer() {
 				</li>
 			}
 		>
-			{ingredient ? (
-				<EditIngredientForm formId={formId} ingredient={ingredient} />
-			) : null}
+			<EditIngredientForm formId={formId} ingredient={ingredient} />
 		</Drawer>
 	);
 }

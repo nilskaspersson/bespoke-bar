@@ -29,7 +29,10 @@ export function EditIngredientButton({
 	return (
 		<Button
 			{...props}
-			onClick={() => setIngredient(ingredient)}
+			onClick={(event) => {
+				event.stopPropagation();
+				setIngredient(ingredient);
+			}}
 			commandfor={INGREDIENT_EDITOR_ID}
 			command="show-modal"
 		>
