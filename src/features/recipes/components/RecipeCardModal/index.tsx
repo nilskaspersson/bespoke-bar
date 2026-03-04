@@ -6,7 +6,9 @@ import { useShallow } from "zustand/react/shallow";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
+import { Checkbox } from "@/ui/Checkbox";
 import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
 import styles from "./styles.module.css";
@@ -23,7 +25,12 @@ export function RecipeCardModal() {
 	);
 
 	const cardRef = useRef<HTMLDivElement>(null);
-	const canvasRef = useParticleEffect(cardRef, !!recipe && mounted);
+	const [particlesEnabled, setParticlesEnabled] = useLocalStorage(
+		"particles-enabled",
+		true,
+	);
+	const particleEffectActive = Boolean(recipe) && mounted && particlesEnabled;
+	const canvasRef = useParticleEffect(cardRef, particleEffectActive);
 
 	useLayoutEffect(() => {
 		if (recipe) return;
@@ -35,7 +42,7 @@ export function RecipeCardModal() {
 			<m.div layoutRoot>
 				<canvas ref={canvasRef} className={styles.particles} />
 
-				{recipe && mounted && (
+				{recipe && mounted ? (
 					<Container className={styles.container}>
 						<MotionRecipeCard
 							ref={cardRef}
@@ -50,7 +57,15 @@ export function RecipeCardModal() {
 							className={styles.actions}
 						/>
 					</Container>
-				)}
+				) : null}
+
+				<Checkbox
+					label="Particle effects"
+					size="small"
+					checked={particlesEnabled}
+					onChange={(e) => setParticlesEnabled(e.target.checked)}
+					className={styles.particleToggle}
+				/>
 			</m.div>
 		</Dialog>
 	);

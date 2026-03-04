@@ -17,4 +17,10 @@
 	.actions {
 		margin-top: var(--gap--tiny);
 	}
+
+	.particleToggle {
+		position: fixed;
+		bottom: var(--gap--small);
+		left: var(--gap--small);
+	}
 }
