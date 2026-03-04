@@ -52,8 +52,8 @@ export function EditIngredientForm({
 
 		toast.promise(promise, {
 			loading: "Saving…",
-			success: () => ({
-				message: `Updated: ${ingredient.name}`,
+			success: (result) => ({
+				message: `Updated: ${result.name}`,
 			}),
 			error: () => ({
 				message: "Could not update ingredient.",
@@ -61,7 +61,8 @@ export function EditIngredientForm({
 			}),
 		});
 
-		await promise;
+		const updated = await promise;
+		ingredientEditorStore.emitUpdate(updated);
 		formRef.current?.closest("dialog")?.close();
 	};
 
