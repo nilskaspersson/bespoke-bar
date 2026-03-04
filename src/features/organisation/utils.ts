@@ -1,4 +1,4 @@
-import type { PublicUserData } from "@clerk/types";
+import type { PublicUserData } from "@clerk/nextjs/types";
 
 export function getFullName<T extends PublicUserData>(
 	user: T,

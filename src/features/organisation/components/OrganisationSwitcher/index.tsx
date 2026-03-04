@@ -20,7 +20,7 @@ export function OrganisationSwitcher({ className }: { className?: string }) {
 		>
 			<div className={clsx(className, styles.switcher)}>
 				<AuthProvider>
-					<ClerkOrganizationSwitcher hidePersonal hideSlug>
+					<ClerkOrganizationSwitcher hidePersonal>
 						<ClerkOrganizationSwitcher.OrganizationProfilePage
 							label="Locale & Currency"
 							url="settings"

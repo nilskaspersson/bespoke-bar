@@ -1,12 +1,6 @@
 "use client";
 
-import {
-	SignedIn,
-	SignedOut,
-	SignInButton,
-	SignUpButton,
-	UserButton,
-} from "@clerk/nextjs";
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
 import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
@@ -15,7 +9,7 @@ import { Skeleton } from "@/ui/Skeleton";
 export function UserOrSignup() {
 	return (
 		<Suspense fallback={<UserOrSignupSkeleton />}>
-			<SignedOut>
+			<Show when="signed-out">
 				<SignInButton mode="modal">
 					<Button variant="ghost" size="tiny">
 						Sign in
@@ -27,11 +21,11 @@ export function UserOrSignup() {
 						Sign up
 					</Button>
 				</SignUpButton>
-			</SignedOut>
+			</Show>
 
-			<SignedIn>
+			<Show when="signed-in">
 				<UserButton showName />
-			</SignedIn>
+			</Show>
 		</Suspense>
 	);
 }

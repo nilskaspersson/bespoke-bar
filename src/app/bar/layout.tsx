@@ -13,11 +13,7 @@ export default async function Layout({
 }: {
 	children: React.ReactNode;
 }) {
-	const { userId, orgId, redirectToSignIn } = await auth();
-
-	if (!userId) {
-		return redirectToSignIn();
-	}
+	const { userId, orgId } = await auth.protect();
 
 	const organisation = await getOrCreateLocalOrganisation(orgId, userId);
 
