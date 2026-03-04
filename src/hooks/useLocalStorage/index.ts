@@ -6,9 +6,16 @@ function getServerSnapshot<T>(initialValue: T): () => T {
 	return () => initialValue;
 }
 
+type StorageType = "local" | "session";
+
+function resolveStorage(type: StorageType): Storage {
+	return type === "session" ? sessionStorage : localStorage;
+}
+
 export function useLocalStorage<T>(
 	key: string,
 	initialValue: T,
+	storage: StorageType = "local",
 ): [T, (value: T | ((prev: T) => T)) => void] {
 	const subscribe = useCallback(
 		(onStoreChange: () => void) => {
@@ -30,7 +37,7 @@ export function useLocalStorage<T>(
 	);
 
 	const getSnapshot: () => T = useCallback(() => {
-		const storedValue = localStorage.getItem(key);
+		const storedValue = resolveStorage(storage).getItem(key);
 
 		if (storedValue === null) {
 			return initialValue;
@@ -41,7 +48,7 @@ export function useLocalStorage<T>(
 		} catch {
 			return initialValue;
 		}
-	}, [key, initialValue]);
+	}, [key, initialValue, storage]);
 
 	const value = useSyncExternalStore(
 		subscribe,
@@ -58,7 +65,7 @@ export function useLocalStorage<T>(
 			const resolved = next instanceof Function ? next(prev) : next;
 
 			try {
-				localStorage.setItem(key, JSON.stringify(resolved));
+				resolveStorage(storage).setItem(key, JSON.stringify(resolved));
 			} catch {
 				/**
 				 * Fall through so the in-memory update still fires, even if we failed to persist
@@ -77,7 +84,7 @@ export function useLocalStorage<T>(
 				}),
 			);
 		},
-		[key, getSnapshot],
+		[key, storage, getSnapshot],
 	);
 
 	return [value, setValue];
