@@ -5,7 +5,7 @@ import type { ComponentProps, ToggleEventHandler } from "react";
 import { ViewTransition } from "react";
 import type { PopoverType } from "@/hooks/usePopover";
 
-import { stopEscapePropagation } from "@/utils/events";
+import { stopEscapePropagation, stopPropagation } from "@/utils/events";
 import { mergeStyleSources } from "@/utils/styles";
 import styles from "./styles.module.css";
 
@@ -54,6 +54,7 @@ export function Popover({
 			className={clsx(styles.popover, styles[position], className)}
 			style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
 			onKeyDown={stopEscapePropagation}
+			onClick={stopPropagation}
 			{...props}
 		>
 			{isOpen ? (

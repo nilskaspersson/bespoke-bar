@@ -9,6 +9,7 @@
 		overflow: visible;
 		margin: var(--space-1);
 		font-family: var(--font-sans-serif);
+		cursor: default;
 
 		opacity: 1;
 		transform: translate(0, 0);
