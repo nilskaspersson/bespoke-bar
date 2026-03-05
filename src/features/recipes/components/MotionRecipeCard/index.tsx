@@ -19,14 +19,28 @@ type MotionRecipeCardProps = {
 	recipe: RecipeWithSpecs;
 	className?: string;
 	ref?: Ref<HTMLDivElement>;
+	withMotion?: boolean;
 } & Omit<ComponentProps<typeof m.div>, "children" | "layoutId" | "transition">;
 
 export function MotionRecipeCard({
 	recipe,
 	className,
+	withMotion,
 	ref,
 	...props
 }: MotionRecipeCardProps) {
+	if (!withMotion) {
+		return (
+			<div ref={ref} className={clsx(styles.card, className)}>
+				<RecipeCard
+					recipe={recipe}
+					withLink={false}
+					nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
+				/>
+			</div>
+		);
+	}
+
 	return (
 		<m.div
 			ref={ref}
@@ -43,21 +57,3 @@ export function MotionRecipeCard({
 		</m.div>
 	);
 }
-
-MotionRecipeCard.Placeholder = function MotionRecipeCardPlaceholder({
-	recipe,
-	className,
-}: {
-	recipe: RecipeWithSpecs;
-	className?: string;
-}) {
-	return (
-		<div className={clsx(styles.card, className)}>
-			<RecipeCard
-				recipe={recipe}
-				withLink={false}
-				nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
-			/>
-		</div>
-	);
-};

@@ -9,12 +9,16 @@
 		transition: background-color var(--transition-duration);
 	}
 
-	.motionWrapper {
-		cursor: pointer;
+	.hidden {
+		visibility: hidden;
 	}
 
 	.actions {
 		margin-top: var(--gap--tiny);
+	}
+
+	.pointer {
+		cursor: pointer;
 	}
 
 	.icon {

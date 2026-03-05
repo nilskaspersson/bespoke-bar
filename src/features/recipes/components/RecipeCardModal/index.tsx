@@ -45,6 +45,7 @@ export function RecipeCardModal() {
 				{recipe && mounted ? (
 					<Container className={styles.container}>
 						<MotionRecipeCard
+							withMotion
 							ref={cardRef}
 							recipe={recipe}
 							className={styles.card}

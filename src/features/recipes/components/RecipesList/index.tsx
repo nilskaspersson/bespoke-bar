@@ -1,15 +1,15 @@
 "use client";
 
+import clsx from "clsx";
 import type { Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
+import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 export function RecipesList({
@@ -17,11 +17,13 @@ export function RecipesList({
 	favoriteRecipeIds,
 	withActions,
 	ref,
+	withMotion = true,
 }: {
 	recipes: RecipeWithSpecs[];
 	favoriteRecipeIds?: string[];
 	withActions?: boolean;
 	ref?: Ref<HTMLUListElement>;
+	withMotion?: boolean;
 }) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
@@ -32,60 +34,37 @@ export function RecipesList({
 		return null;
 	}
 
-	const nameAdornment = (
-		<Icon name="duotone-martini-glass" size={3} className={styles.icon} />
-	);
-
 	return (
 		<OverscrollList ref={ref} padding={6} gap={4}>
 			{recipes.map((recipe) => {
+				const isFavorite = favoriteIdSet.has(recipe.id);
 				const isSelected =
 					withActions && selectedRecipeId === recipe.id && modalMounted;
+				const selectRecipe = () => setRecipe(recipe, isFavorite);
 
 				return (
 					<OverscrollList.Item key={recipe.id}>
-						{!withActions ? (
-							<RecipeCard
-								recipe={recipe}
-								className={styles.card}
-								nameAdornment={nameAdornment}
-							/>
-						) : isSelected ? (
-							<div style={{ visibility: "hidden" }}>
-								<MotionRecipeCard.Placeholder recipe={recipe} />
-								<RecipeActions
-									recipe={recipe}
-									withLink
-									isFavorite={favoriteIdSet.has(recipe.id)}
-									className={styles.actions}
-								/>
-							</div>
-						) : (
-							<>
-								<MotionRecipeCard
-									recipe={recipe}
-									onClick={() =>
-										setRecipe(recipe, favoriteIdSet.has(recipe.id))
-									}
-									onKeyDown={(e) => {
-										if (e.key === "Enter" || e.key === " ") {
-											e.preventDefault();
-											setRecipe(recipe, favoriteIdSet.has(recipe.id));
-										}
-									}}
-									role="button"
-									tabIndex={0}
-									className={styles.motionWrapper}
-								/>
+						<MotionRecipeCard
+							withMotion={withMotion && !isSelected}
+							recipe={recipe}
+							onClick={selectRecipe}
+							onKeyDown={handleKey([
+								["Enter", selectRecipe],
+								[" ", selectRecipe],
+							])}
+							role="button"
+							tabIndex={0}
+							className={clsx({ [styles.pointer]: withMotion })}
+						/>
 
-								<RecipeActions
-									recipe={recipe}
-									withLink
-									isFavorite={favoriteIdSet.has(recipe.id)}
-									className={styles.actions}
-								/>
-							</>
-						)}
+						{withActions ? (
+							<RecipeActions
+								recipe={recipe}
+								withLink
+								isFavorite={isFavorite}
+								className={styles.actions}
+							/>
+						) : null}
 					</OverscrollList.Item>
 				);
 			})}
