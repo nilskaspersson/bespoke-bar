@@ -2,10 +2,7 @@
 
 import type { ReactNode } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import {
-	INGREDIENT_EDITOR_ID,
-	useIngredientEditor,
-} from "@/features/ingredients/stores/ingredientEditor";
+import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";
 import type { ButtonProps } from "@/ui/Button";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -24,17 +21,15 @@ export function EditIngredientButton({
 	children,
 	...props
 }: Props) {
-	const setIngredient = useIngredientEditor((s) => s.setIngredient);
+	const open = useIngredientEditor((s) => s.open);
 
 	return (
 		<Button
 			{...props}
 			onClick={(event) => {
 				event.stopPropagation();
-				setIngredient(ingredient);
+				open(ingredient);
 			}}
-			commandfor={INGREDIENT_EDITOR_ID}
-			command="show-modal"
 		>
 			<Icon name="pen-to-square" size={1} />
 			{children}

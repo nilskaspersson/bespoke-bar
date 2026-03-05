@@ -17,8 +17,13 @@ import {
 } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
-import { onMotionValueReached } from "@/utils/animate";
+import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
 import styles from "./styles.module.css";
+
+export type DrawerHandle = {
+	showModal: () => void;
+	close: () => void;
+};
 
 type DrawerProps = {
 	actions?: ReactNode;
@@ -44,12 +49,20 @@ const CLOSE_OFFSET_THRESHOLD = 100;
 const CLOSE_VELOCITY_THRESHOLD = 500;
 const REVERSAL_VELOCITY_THRESHOLD = -20;
 
+/**
+ * Sentinel y value for dormant (closed) drawers. Large enough to always
+ * derive hidden visibility and zero backdrop opacity on both server and client.
+ */
+const DORMANT_Y = 100_000;
+
 function deriveBackdropOpacity(y: number): number {
-	return Math.max(0, Math.min(1, 1 - y / window.innerHeight));
+	const height = getWindowHeight();
+	return height > 0 ? Math.max(0, Math.min(1, 1 - y / height)) : 0;
 }
 
 function deriveVisibility(y: number): "hidden" | "visible" {
-	return y >= window.innerHeight - 1 ? "hidden" : "visible";
+	const height = getWindowHeight();
+	return height === 0 || y >= height - 1 ? "hidden" : "visible";
 }
 
 function shouldDragClose(offset: number, velocity: number): boolean {
@@ -70,35 +83,43 @@ export function Drawer({
 	...props
 }: Omit<
 	ComponentProps<"dialog">,
-	"onDrag" | "onDragEnd" | "onDragStart" | "onAnimationStart" | "onAnimationEnd"
+	| "ref"
+	| "onDrag"
+	| "onDragEnd"
+	| "onDragStart"
+	| "onAnimationStart"
+	| "onAnimationEnd"
 > &
-	DrawerProps) {
+	DrawerProps & { ref?: React.Ref<DrawerHandle> }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const motionRef = useRef<HTMLDivElement>(null);
 	const closingRef = useRef(false);
 
 	/**
-	 * Expose the internal dialog element to parent refs. Needed because the Drawer
-	 * manages its own ref for close animations and open detection, but consumers
-	 * (e.g. useDialog) need access to call showModal().
+	 * Initialize y to DORMANT_Y to avoid hydration mismatches.
 	 */
-	useImperativeHandle(ref, () => {
-		if (!dialogRef.current) {
-			throw new Error("Drawer dialog ref accessed before mount");
-		}
-
-		return dialogRef.current;
-	});
-
-	/**
-	 * The major motion value for the drawer.
-	 */
-	const y = useMotionValue(
-		typeof window !== "undefined" ? window.innerHeight : 0,
-	);
+	const y = useMotionValue(DORMANT_Y);
 
 	const backdropOpacity = useTransform(y, deriveBackdropOpacity);
 	const visibility = useTransform(y, deriveVisibility);
+
+	/**
+	 * Expose showModal/close as an imperative handle. showModal includes the entry
+	 * animation since m.dialog doesn't forward the native toggle event.
+	 * TODO: Rework once Motion dialogs support onToggle?
+	 */
+	useImperativeHandle(ref, () => ({
+		showModal() {
+			const dialog = dialogRef.current;
+			if (!dialog || dialog.open) return;
+			dialog.showModal();
+			y.jump(getWindowHeight());
+			animateValue(y, 0, SPRING_BOUNCY);
+		},
+		close() {
+			handleClose();
+		},
+	}));
 
 	async function handleClose() {
 		const dialog = dialogRef.current;
@@ -106,31 +127,29 @@ export function Drawer({
 		if (!dialog?.open || closingRef.current) return;
 		closingRef.current = true;
 
-		const offscreen = motionRef.current?.offsetHeight ?? window.innerHeight;
+		const offscreen = motionRef.current?.offsetHeight ?? getWindowHeight();
 		animateValue(y, offscreen, SPRING);
 
 		await onMotionValueReached(y, offscreen);
 
-		y.jump(window.innerHeight);
+		y.jump(DORMANT_Y);
 		dialog.close();
 		closingRef.current = false;
 	}
 
-	function handleToggle(e: React.ToggleEvent<HTMLDialogElement>) {
-		if (e.newState === "open") {
-			y.jump(window.innerHeight);
-			animateValue(y, 0, SPRING_BOUNCY);
-		}
-	}
-
 	function handleBackdropClick(e: React.MouseEvent) {
-		if (e.target === dialogRef.current) handleClose();
+		if (e.target === dialogRef.current) {
+			handleClose();
+		}
 	}
 
 	function handleDragEnd(_: unknown, info: PanInfo) {
 		if (shouldDragClose(info.offset.y, info.velocity.y)) {
 			handleClose();
 		} else {
+			/**
+			 * Initialize with current drag velocity
+			 */
 			animateValue(y, 0, { ...SPRING, velocity: info.velocity.y });
 		}
 	}
@@ -140,7 +159,6 @@ export function Drawer({
 			ref={dialogRef}
 			className={clsx(styles.drawer, className)}
 			style={{ ...style, "--backdrop-opacity": backdropOpacity }}
-			onToggle={handleToggle}
 			onCancel={(e) => {
 				e.preventDefault();
 				handleClose();

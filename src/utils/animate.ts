@@ -3,6 +3,10 @@ import type { MotionValue } from "motion/react";
 export const SPRING_STIFFNESS = 400;
 export const SPRING_DAMPING = 35;
 
+export function getWindowHeight(): number {
+	return typeof window !== "undefined" ? window.innerHeight : 0;
+}
+
 /**
  * Subscribe to a MotionValue and resolve when the value reaches the target. Use to
  * detect animation completion.

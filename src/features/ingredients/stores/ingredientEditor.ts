@@ -1,13 +1,14 @@
+import { createRef } from "react";
 import { create } from "zustand";
 import type { Ingredient } from "@/db/schema/ingredients";
-
-export const INGREDIENT_EDITOR_ID = "ingredient-editor";
+import type { DrawerHandle } from "@/ui/Drawer";
 
 type OnUpdateCallback = (updated: Ingredient) => void;
 
 type IngredientEditorState = {
 	ingredient: Partial<Ingredient> | null;
 	pending: boolean;
+	open: (ingredient: Partial<Ingredient>) => void;
 	setIngredient: (ingredient: Partial<Ingredient>) => void;
 	setPending: (pending: boolean) => void;
 	clear: () => void;
@@ -19,11 +20,16 @@ export const ingredientEditorStore = Object.assign(
 	create<IngredientEditorState>((set) => ({
 		ingredient: null,
 		pending: false,
+		open: (ingredient) => {
+			set({ ingredient });
+			ingredientEditorStore.dialogRef.current?.showModal();
+		},
 		setIngredient: (ingredient) => set({ ingredient }),
 		setPending: (pending) => set({ pending }),
 		clear: () => set({ ingredient: null, pending: false }),
 	})),
 	{
+		dialogRef: createRef<DrawerHandle>(),
 		emitUpdate: (updated: Ingredient) => {
 			for (const listener of onUpdateListeners) {
 				listener(updated);

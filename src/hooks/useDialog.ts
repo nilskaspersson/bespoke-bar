@@ -1,9 +1,10 @@
 "use client";
 
 import { createContext, useCallback, useRef, useState } from "react";
+import type { DrawerHandle } from "@/ui/Drawer";
 
 type DialogContextValue = {
-	dialogRef: React.RefObject<HTMLDialogElement | null>;
+	dialogRef: React.RefObject<DrawerHandle | null>;
 	isOpen: boolean;
 	openDialog: () => void;
 	closeDialog: () => void;
@@ -14,7 +15,7 @@ type DialogContextValue = {
 export const DialogContext = createContext<DialogContextValue | null>(null);
 
 export function useDialog(): DialogContextValue {
-	const dialogRef = useRef<HTMLDialogElement>(null);
+	const dialogRef = useRef<DrawerHandle>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
 	const openDialog = useCallback(() => {

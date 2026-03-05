@@ -4,7 +4,7 @@ import { useId } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { EditIngredientForm } from "@/features/ingredients/components/EditIngredientForm";
 import {
-	INGREDIENT_EDITOR_ID,
+	ingredientEditorStore,
 	useIngredientEditor,
 } from "@/features/ingredients/stores/ingredientEditor";
 import { Button } from "@/ui/Button";
@@ -24,18 +24,14 @@ export function IngredientEditorDrawer() {
 		})),
 	);
 
-	if (!ingredient) {
-		return null;
-	}
-
 	return (
 		<Drawer
-			id={INGREDIENT_EDITOR_ID}
+			ref={ingredientEditorStore.dialogRef}
 			onClose={clear}
 			header={
 				<HGroup overline="Edit ingredient">
 					<Heading level="h3" size={6}>
-						{ingredient.name ?? "Ingredient"}
+						{ingredient?.name ?? "Ingredient"}
 					</Heading>
 				</HGroup>
 			}
@@ -61,7 +57,9 @@ export function IngredientEditorDrawer() {
 				</li>
 			}
 		>
-			<EditIngredientForm formId={formId} ingredient={ingredient} />
+			{ingredient ? (
+				<EditIngredientForm formId={formId} ingredient={ingredient} />
+			) : null}
 		</Drawer>
 	);
 }
