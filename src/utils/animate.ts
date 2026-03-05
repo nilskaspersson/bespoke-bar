@@ -1,5 +1,25 @@
+import type { MotionValue } from "motion/react";
+
 export const SPRING_STIFFNESS = 400;
 export const SPRING_DAMPING = 35;
+
+/**
+ * Subscribe to a MotionValue and resolve when the value reaches the target. Use to
+ * detect animation completion.
+ */
+export function onMotionValueReached(
+	mv: MotionValue<number>,
+	target: number,
+): Promise<void> {
+	return new Promise((resolve) => {
+		const unsub = mv.on("change", (v) => {
+			if (v >= target - 1) {
+				unsub();
+				resolve();
+			}
+		});
+	});
+}
 
 type AnimationKeyframes = Keyframe[];
 

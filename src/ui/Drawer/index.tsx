@@ -6,7 +6,6 @@ import {
 	m,
 	type Transition,
 	useMotionValue,
-	useReducedMotion,
 	useTransform,
 } from "motion/react";
 import {
@@ -17,6 +16,7 @@ import {
 } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
+import { onMotionValueReached } from "@/utils/animate";
 import styles from "./styles.module.css";
 
 type DrawerProps = {
@@ -36,10 +36,28 @@ const SPRING_BOUNCY: Transition = {
 	bounce: 0.15,
 };
 
-const INSTANT: Transition = { duration: 0 };
+const DRAG_CONSTRAINTS = { top: 0 } as const;
+const DRAG_ELASTIC = { top: 0.15, bottom: 0 } as const;
 
 const CLOSE_OFFSET_THRESHOLD = 100;
 const CLOSE_VELOCITY_THRESHOLD = 500;
+const REVERSAL_VELOCITY_THRESHOLD = -20;
+
+function deriveBackdropOpacity(y: number): number {
+	return Math.max(0, Math.min(1, 1 - y / window.innerHeight));
+}
+
+function deriveVisibility(y: number): "hidden" | "visible" {
+	return y >= window.innerHeight - 1 ? "hidden" : "visible";
+}
+
+function shouldDragClose(offset: number, velocity: number): boolean {
+	const movingDown = velocity > REVERSAL_VELOCITY_THRESHOLD;
+	return (
+		movingDown &&
+		(offset > CLOSE_OFFSET_THRESHOLD || velocity > CLOSE_VELOCITY_THRESHOLD)
+	);
+}
 
 export function Drawer({
 	children,
@@ -56,88 +74,40 @@ export function Drawer({
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	useImperativeHandle(ref, () => dialogRef.current as HTMLDialogElement);
 	const motionRef = useRef<HTMLDivElement>(null);
-	const offscreenRef = useRef(window.innerHeight);
-	const reducedMotion = useReducedMotion();
+	const closingRef = useRef(false);
 	const y = useMotionValue(window.innerHeight);
-	const backdropOpacity = useTransform(y, (v) => {
-		const offscreen = offscreenRef.current;
-		return offscreen > 0 ? 1 - Math.min(1, v / offscreen) : 0;
-	});
-	const motionVisibility = useTransform(y, (v) =>
-		v >= offscreenRef.current - 1 ? "hidden" : "visible",
-	);
+	const backdropOpacity = useTransform(y, deriveBackdropOpacity);
+	const visibility = useTransform(y, deriveVisibility);
 
-	function measureOffscreen() {
-		offscreenRef.current =
-			motionRef.current?.offsetHeight ?? window.innerHeight;
-		return offscreenRef.current;
-	}
-
-	function animateClose() {
+	async function handleClose() {
 		const dialog = dialogRef.current;
-		if (!dialog?.open) return;
 
-		if (reducedMotion) {
-			y.jump(window.innerHeight);
-			dialog.close();
-			return;
-		}
+		if (!dialog?.open || closingRef.current) return;
+		closingRef.current = true;
 
-		const offscreen = measureOffscreen();
+		const offscreen = motionRef.current?.offsetHeight ?? window.innerHeight;
 		animateValue(y, offscreen, SPRING);
 
-		const unsub = y.on("change", (v) => {
-			if (typeof v === "number" && v >= offscreen - 1) {
-				unsub();
-				y.jump(window.innerHeight);
-				dialog.close();
-			}
-		});
+		await onMotionValueReached(y, offscreen);
+
+		closingRef.current = false;
+		y.jump(window.innerHeight);
+		dialog.close();
 	}
 
 	function handleToggle(e: React.ToggleEvent<HTMLDialogElement>) {
 		if (e.newState === "open") {
-			const offscreen = window.innerHeight;
-			offscreenRef.current = offscreen;
-			y.jump(offscreen);
-			animateValue(y, 0, reducedMotion ? INSTANT : SPRING_BOUNCY);
+			y.jump(window.innerHeight);
+			animateValue(y, 0, SPRING_BOUNCY);
 		}
-	}
-
-	function handleCancel(e: React.SyntheticEvent<HTMLDialogElement>) {
-		e.preventDefault();
-		animateClose();
-	}
-
-	function handleBackdropClick(e: React.MouseEvent<HTMLDialogElement>) {
-		if (e.target === dialogRef.current) {
-			animateClose();
-		}
-	}
-
-	function canDragClose(e: PointerEvent): boolean {
-		let node = e.target as HTMLElement | null;
-		while (node && node !== motionRef.current) {
-			if (node.scrollHeight > node.clientHeight && node.scrollTop > 0) {
-				return false;
-			}
-			node = node.parentElement;
-		}
-		return true;
 	}
 
 	function handleDragEnd(
 		_: unknown,
 		info: { offset: { y: number }; velocity: { y: number } },
 	) {
-		const movingDown = info.velocity.y > -20;
-		const shouldClose =
-			movingDown &&
-			(info.offset.y > CLOSE_OFFSET_THRESHOLD ||
-				info.velocity.y > CLOSE_VELOCITY_THRESHOLD);
-
-		if (shouldClose) {
-			animateClose();
+		if (shouldDragClose(info.offset.y, info.velocity.y)) {
+			handleClose();
 		} else {
 			animateValue(y, 0, { ...SPRING, velocity: info.velocity.y });
 		}
@@ -149,22 +119,22 @@ export function Drawer({
 			className={clsx(styles.drawer, className)}
 			style={{ "--backdrop-opacity": backdropOpacity } as React.CSSProperties}
 			onToggle={handleToggle}
-			onCancel={handleCancel}
-			onClick={handleBackdropClick}
+			onCancel={(e: React.SyntheticEvent) => {
+				e.preventDefault();
+				handleClose();
+			}}
+			onClick={(e: React.MouseEvent) => {
+				if (e.target === dialogRef.current) handleClose();
+			}}
 			{...props}
 		>
 			<m.div
 				ref={motionRef}
 				className={styles.motion}
-				style={{ y, visibility: motionVisibility }}
+				style={{ y, visibility }}
 				drag="y"
-				dragConstraints={{ top: 0 }}
-				dragElastic={{ top: 0.15, bottom: 0 }}
-				onDragStart={(e) => {
-					if (!canDragClose(e as PointerEvent)) {
-						y.jump(0);
-					}
-				}}
+				dragConstraints={DRAG_CONSTRAINTS}
+				dragElastic={DRAG_ELASTIC}
 				onDragEnd={handleDragEnd}
 			>
 				<Container className={styles.container} padding={false}>
@@ -179,7 +149,7 @@ export function Drawer({
 									type="button"
 									variant="ghost"
 									size="tiny"
-									onClick={() => animateClose()}
+									onClick={handleClose}
 								>
 									Cancel
 								</Button>
