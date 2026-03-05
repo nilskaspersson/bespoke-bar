@@ -3,11 +3,6 @@
 		--inset: calc(var(--app-inset) / 2);
 		--maxHeight: 80svh;
 
-		transition-behavior: allow-discrete;
-		transition-property: display, overlay, transform, opacity;
-		transition-duration: var(--transition-duration--slow);
-		transition-timing-function: var(--spring-lazy);
-
 		background: none;
 		box-shadow: none;
 		border: none;
@@ -16,19 +11,13 @@
 
 		inset: 0;
 		width: 100%;
-		height: fit-content;
-		max-height: var(--maxHeight);
-		max-width: var(--container);
+		height: 100%;
+		max-width: 100%;
+		max-height: 100%;
 
-		margin: auto auto 0;
-		padding: 0 var(--inset) var(--inset);
+		margin: 0;
+		padding: 0;
 		overflow: hidden;
-		overscroll-behavior: contain;
-
-		@starting-style {
-			transform: translateY(100%);
-			opacity: 0;
-		}
 
 		&::backdrop {
 			background-image: linear-gradient(
@@ -36,14 +25,22 @@
 				transparent,
 				rgb(0 0 0 / 0.65)
 			);
-
-			transition: opacity var(--transition-duration);
-			transition-behavior: allow-discrete;
-
-			@starting-style {
-				opacity: 0;
-			}
+			opacity: var(--backdrop-opacity, 0);
 		}
+	}
+
+	.motion {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		max-width: var(--container);
+		margin: 0 auto;
+		padding: 0 var(--inset) var(--inset);
+		max-height: var(--maxHeight);
+		touch-action: none;
+		will-change: transform;
+		contain: layout style paint;
 	}
 
 	.container {
@@ -57,6 +54,19 @@
 		background-color: var(--mauve-2);
 		box-shadow: var(--shadow--high);
 		max-height: calc(var(--maxHeight) - var(--inset));
+		position: relative;
+
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			inset: var(--space-3) 0 auto;
+			margin-inline: auto;
+			width: var(--size-8);
+			height: 4px;
+			border-radius: var(--radius--full);
+			background-color: var(--mauve-6);
+		}
 	}
 
 	.header {
