@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import {
 	animate as animateValue,
 	m,
+	type PanInfo,
 	type Transition,
 	useMotionValue,
 	useTransform,
@@ -64,6 +65,7 @@ export function Drawer({
 	actions,
 	header,
 	className,
+	style,
 	ref,
 	...props
 }: Omit<
@@ -72,10 +74,29 @@ export function Drawer({
 > &
 	DrawerProps) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
-	useImperativeHandle(ref, () => dialogRef.current as HTMLDialogElement);
 	const motionRef = useRef<HTMLDivElement>(null);
 	const closingRef = useRef(false);
-	const y = useMotionValue(window.innerHeight);
+
+	/**
+	 * Expose the internal dialog element to parent refs. Needed because the Drawer
+	 * manages its own ref for close animations and open detection, but consumers
+	 * (e.g. useDialog) need access to call showModal().
+	 */
+	useImperativeHandle(ref, () => {
+		if (!dialogRef.current) {
+			throw new Error("Drawer dialog ref accessed before mount");
+		}
+
+		return dialogRef.current;
+	});
+
+	/**
+	 * The major motion value for the drawer.
+	 */
+	const y = useMotionValue(
+		typeof window !== "undefined" ? window.innerHeight : 0,
+	);
+
 	const backdropOpacity = useTransform(y, deriveBackdropOpacity);
 	const visibility = useTransform(y, deriveVisibility);
 
@@ -90,9 +111,9 @@ export function Drawer({
 
 		await onMotionValueReached(y, offscreen);
 
-		closingRef.current = false;
 		y.jump(window.innerHeight);
 		dialog.close();
+		closingRef.current = false;
 	}
 
 	function handleToggle(e: React.ToggleEvent<HTMLDialogElement>) {
@@ -102,10 +123,11 @@ export function Drawer({
 		}
 	}
 
-	function handleDragEnd(
-		_: unknown,
-		info: { offset: { y: number }; velocity: { y: number } },
-	) {
+	function handleBackdropClick(e: React.MouseEvent) {
+		if (e.target === dialogRef.current) handleClose();
+	}
+
+	function handleDragEnd(_: unknown, info: PanInfo) {
 		if (shouldDragClose(info.offset.y, info.velocity.y)) {
 			handleClose();
 		} else {
@@ -117,15 +139,13 @@ export function Drawer({
 		<m.dialog
 			ref={dialogRef}
 			className={clsx(styles.drawer, className)}
-			style={{ "--backdrop-opacity": backdropOpacity } as React.CSSProperties}
+			style={{ ...style, "--backdrop-opacity": backdropOpacity }}
 			onToggle={handleToggle}
-			onCancel={(e: React.SyntheticEvent) => {
+			onCancel={(e) => {
 				e.preventDefault();
 				handleClose();
 			}}
-			onClick={(e: React.MouseEvent) => {
-				if (e.target === dialogRef.current) handleClose();
-			}}
+			onClick={handleBackdropClick}
 			{...props}
 		>
 			<m.div
