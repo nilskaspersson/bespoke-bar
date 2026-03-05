@@ -40,33 +40,35 @@ export function RecipeCardModal() {
 	return (
 		<Dialog ref={dialogRef} handleClose={clear}>
 			<m.div layoutRoot>
-				<canvas ref={canvasRef} className={styles.particles} />
-
 				{recipe && mounted ? (
-					<Container className={styles.container}>
-						<MotionRecipeCard
-							withMotion
-							ref={cardRef}
-							recipe={recipe}
-							className={styles.card}
-						/>
+					<>
+						<canvas ref={canvasRef} className={styles.particles} />
 
-						<RecipeActions
-							recipe={recipe}
-							withLink
-							isFavorite={isFavorite}
-							className={styles.actions}
+						<Container className={styles.container}>
+							<MotionRecipeCard
+								withMotion
+								ref={cardRef}
+								recipe={recipe}
+								className={styles.card}
+							/>
+
+							<RecipeActions
+								recipe={recipe}
+								withLink
+								isFavorite={isFavorite}
+								className={styles.actions}
+							/>
+						</Container>
+
+						<Checkbox
+							label="Particle effects"
+							size="small"
+							checked={particlesEnabled}
+							onChange={(e) => setParticlesEnabled(e.target.checked)}
+							className={styles.particleToggle}
 						/>
-					</Container>
+					</>
 				) : null}
-
-				<Checkbox
-					label="Particle effects"
-					size="small"
-					checked={particlesEnabled}
-					onChange={(e) => setParticlesEnabled(e.target.checked)}
-					className={styles.particleToggle}
-				/>
 			</m.div>
 		</Dialog>
 	);

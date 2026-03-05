@@ -54,7 +54,10 @@ export function RecipesList({
 							])}
 							role="button"
 							tabIndex={0}
-							className={clsx({ [styles.pointer]: withMotion })}
+							className={clsx({
+								[styles.pointer]: withMotion,
+								[styles.hidden]: isSelected,
+							})}
 						/>
 
 						{withActions ? (
