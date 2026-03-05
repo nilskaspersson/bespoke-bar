@@ -35,34 +35,34 @@ export function AddRecipeDialog({ list, children, ...props }: Props) {
 				{children}
 			</Button>
 
-			<Drawer
-				ref={dialogRef}
-				onClose={closeDialog}
-				header={
-					<HGroup overline="Add recipe to">
-						<Heading level="h3" size={6}>
-							{list.name}
-						</Heading>
-					</HGroup>
-				}
-				actions={
-					<li>
-						<Button
-							type="submit"
-							form={formId}
-							variant="solid"
-							color="accent"
-							size="small"
-						>
-							Add
-						</Button>
-					</li>
-				}
-			>
-				{isOpen ? (
+			{isOpen ? (
+				<Drawer
+					ref={dialogRef}
+					onClose={closeDialog}
+					header={
+						<HGroup overline="Add recipe to">
+							<Heading level="h3" size={6}>
+								{list.name}
+							</Heading>
+						</HGroup>
+					}
+					actions={
+						<li>
+							<Button
+								type="submit"
+								form={formId}
+								variant="solid"
+								color="accent"
+								size="small"
+							>
+								Add
+							</Button>
+						</li>
+					}
+				>
 					<AddRecipeForm formId={formId} list={list} onSuccess={closeDialog} />
-				) : null}
-			</Drawer>
+				</Drawer>
+			) : null}
 		</>
 	);
 }

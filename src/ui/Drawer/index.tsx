@@ -6,6 +6,7 @@ import {
 	m,
 	type Transition,
 	useMotionValue,
+	useReducedMotion,
 	useTransform,
 } from "motion/react";
 import {
@@ -35,6 +36,8 @@ const SPRING_BOUNCY: Transition = {
 	bounce: 0.15,
 };
 
+const INSTANT: Transition = { duration: 0 };
+
 const CLOSE_OFFSET_THRESHOLD = 100;
 const CLOSE_VELOCITY_THRESHOLD = 500;
 
@@ -54,6 +57,7 @@ export function Drawer({
 	useImperativeHandle(ref, () => dialogRef.current as HTMLDialogElement);
 	const motionRef = useRef<HTMLDivElement>(null);
 	const offscreenRef = useRef(window.innerHeight);
+	const reducedMotion = useReducedMotion();
 	const y = useMotionValue(window.innerHeight);
 	const backdropOpacity = useTransform(y, (v) => {
 		const offscreen = offscreenRef.current;
@@ -73,6 +77,12 @@ export function Drawer({
 		const dialog = dialogRef.current;
 		if (!dialog?.open) return;
 
+		if (reducedMotion) {
+			y.jump(window.innerHeight);
+			dialog.close();
+			return;
+		}
+
 		const offscreen = measureOffscreen();
 		animateValue(y, offscreen, SPRING);
 
@@ -90,7 +100,7 @@ export function Drawer({
 			const offscreen = window.innerHeight;
 			offscreenRef.current = offscreen;
 			y.jump(offscreen);
-			animateValue(y, 0, SPRING_BOUNCY);
+			animateValue(y, 0, reducedMotion ? INSTANT : SPRING_BOUNCY);
 		}
 	}
 
@@ -105,17 +115,31 @@ export function Drawer({
 		}
 	}
 
+	function canDragClose(e: PointerEvent): boolean {
+		let node = e.target as HTMLElement | null;
+		while (node && node !== motionRef.current) {
+			if (node.scrollHeight > node.clientHeight && node.scrollTop > 0) {
+				return false;
+			}
+			node = node.parentElement;
+		}
+		return true;
+	}
+
 	function handleDragEnd(
 		_: unknown,
 		info: { offset: { y: number }; velocity: { y: number } },
 	) {
-		if (
-			info.offset.y > CLOSE_OFFSET_THRESHOLD ||
-			info.velocity.y > CLOSE_VELOCITY_THRESHOLD
-		) {
+		const movingDown = info.velocity.y > -20;
+		const shouldClose =
+			movingDown &&
+			(info.offset.y > CLOSE_OFFSET_THRESHOLD ||
+				info.velocity.y > CLOSE_VELOCITY_THRESHOLD);
+
+		if (shouldClose) {
 			animateClose();
 		} else {
-			animateValue(y, 0, SPRING);
+			animateValue(y, 0, { ...SPRING, velocity: info.velocity.y });
 		}
 	}
 
@@ -136,6 +160,11 @@ export function Drawer({
 				drag="y"
 				dragConstraints={{ top: 0 }}
 				dragElastic={{ top: 0.15, bottom: 0 }}
+				onDragStart={(e) => {
+					if (!canDragClose(e as PointerEvent)) {
+						y.jump(0);
+					}
+				}}
 				onDragEnd={handleDragEnd}
 			>
 				<Container className={styles.container} padding={false}>
