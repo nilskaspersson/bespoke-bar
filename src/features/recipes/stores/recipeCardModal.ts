@@ -37,7 +37,10 @@ export const recipeCardModalStore = create<RecipeCardModalState>(
 				},
 			});
 		},
-		clear: () => set({ recipe: null, isFavorite: false, mounted: false }),
+		clear: () => {
+			get().dialogRef.current?.close();
+			set({ recipe: null, isFavorite: false, mounted: false });
+		},
 	}),
 );
 

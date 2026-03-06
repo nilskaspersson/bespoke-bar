@@ -6,8 +6,10 @@ import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
+import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { Grid } from "@/ui/Grid";
+import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
@@ -58,7 +60,13 @@ export function RecipesList({
 								[styles.pointer]: withMotion,
 								[styles.hidden]: isSelected,
 							})}
-						/>
+						>
+							<RecipeCard
+								recipe={recipe}
+								withLink={false}
+								nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
+							/>
+						</MotionRecipeCard>
 
 						{withActions ? (
 							<RecipeActions

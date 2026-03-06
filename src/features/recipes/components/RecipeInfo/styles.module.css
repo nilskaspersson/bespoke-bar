@@ -44,13 +44,6 @@
 		flex: 0 0 auto;
 	}
 
-	.servings {
-		display: flex;
-		flex-wrap: wrap;
-		gap: var(--gap--tiny);
-		align-items: center;
-	}
-
 	.count {
 		font-variant-numeric: tabular-nums;
 	}

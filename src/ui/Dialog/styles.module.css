@@ -10,6 +10,7 @@
 		position: fixed;
 		inset: 0;
 		background-color: transparent;
+		color: var(--mauve-11);
 		z-index: var(--z-modal);
 		border: none;
 		padding: var(--gap);

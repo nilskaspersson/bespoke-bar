@@ -6,7 +6,8 @@
 		border: 1px solid var(--shine);
 		box-shadow: var(--shadow--low);
 		isolation: isolate;
-		max-width: var(--recipe-card-width);
+		width: var(--recipe-card-width);
+		max-width: 100%;
 		transition: border-color var(--transition-duration);
 	}
 }
