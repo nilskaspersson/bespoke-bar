@@ -9,19 +9,24 @@ import { Text } from "@/ui/Text";
 
 export function ConfirmDeleteRecipe({
 	action,
+	onAction,
 	className,
 	children,
 	recipe,
 	buttonProps,
 }: PropsWithChildren<{
 	action: () => Promise<void>;
+	onAction?: () => void;
 	className?: string;
 	recipe: Recipe;
 	buttonProps?: ButtonProps;
 }>) {
 	return (
 		<ConfirmAction
-			action={action}
+			action={async () => {
+				await action();
+				onAction?.();
+			}}
 			className={className}
 			iconName="trash"
 			buttonProps={{
