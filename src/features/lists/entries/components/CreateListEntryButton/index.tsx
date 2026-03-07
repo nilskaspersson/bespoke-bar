@@ -7,6 +7,7 @@ import { CreateListEntryFormSkeleton } from "@/features/lists/entries/components
 import { getRecipeName } from "@/features/recipes/utils";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
+import type { DrawerHandle } from "@/ui/Drawer";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
@@ -28,7 +29,8 @@ type Props = ButtonProps & {
 };
 
 export function CreateListEntryButton({ recipe, children, ...props }: Props) {
-	const { openDialog, closeDialog, onClose, dialogRef, isOpen } = useDialog();
+	const { openDialog, closeDialog, onClose, dialogRef, isOpen } =
+		useDialog<DrawerHandle>();
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const handleSubmit = () => {

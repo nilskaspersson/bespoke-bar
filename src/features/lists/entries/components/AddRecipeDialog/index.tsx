@@ -6,6 +6,7 @@ import type { RecipeList } from "@/db/schema/recipeLists";
 import { AddRecipeFormSkeleton } from "@/features/lists/entries/components/AddRecipeForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
+import type { DrawerHandle } from "@/ui/Drawer";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
@@ -26,7 +27,8 @@ type Props = ButtonProps & {
 };
 
 export function AddRecipeDialog({ list, children, ...props }: Props) {
-	const { openDialog, closeDialog, dialogRef, isOpen } = useDialog();
+	const { openDialog, closeDialog, dialogRef, isOpen } =
+		useDialog<DrawerHandle>();
 	const formId = useId();
 
 	return (

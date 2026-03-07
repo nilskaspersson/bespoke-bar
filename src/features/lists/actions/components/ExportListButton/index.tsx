@@ -6,6 +6,7 @@ import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { ExportListFormSkeleton } from "@/features/lists/components/ExportListForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
+import type { DrawerHandle } from "@/ui/Drawer";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
@@ -32,7 +33,7 @@ export function ExportListButton({
 	 * Had also wanted to use Activity to keep form state, but that unearths an issue
 	 * where Radio buttons `defaultValue` is lost when there are Suspense boundaries.
 	 */
-	const { openDialog, onClose, dialogRef, isOpen } = useDialog();
+	const { openDialog, onClose, dialogRef, isOpen } = useDialog<DrawerHandle>();
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const handleExport = () => {

@@ -2,6 +2,7 @@
 
 import { clsx } from "clsx";
 import type { DialogHTMLAttributes } from "react";
+import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { type DialogEvent, isOwnDialogEvent } from "@/utils/events";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
@@ -35,6 +36,13 @@ export function Dialog({
 	onClose?: () => void;
 	ref: React.RefObject<HTMLDialogElement | null>;
 }) {
+	useOnNavigation(() => {
+		if (ref.current?.open) {
+			handleClose?.();
+			ref.current.close("dismiss");
+		}
+	});
+
 	function onBackdropClick(event: DialogEvent) {
 		if (event.target === event.currentTarget) {
 			handleClose

@@ -15,6 +15,7 @@ import {
 	useImperativeHandle,
 	useRef,
 } from "react";
+import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
@@ -120,6 +121,8 @@ export function Drawer({
 			handleClose();
 		},
 	}));
+
+	useOnNavigation(handleClose);
 
 	async function handleClose() {
 		const dialog = dialogRef.current;

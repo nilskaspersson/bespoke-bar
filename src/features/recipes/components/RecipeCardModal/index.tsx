@@ -41,6 +41,7 @@ export function RecipeCardModal() {
 }
 
 function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
+	const clear = useRecipeCardModal((s) => s.clear);
 	const [particlesEnabled, setParticlesEnabled] = useLocalStorage(
 		"particles-enabled",
 		true,
@@ -77,7 +78,7 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 						/>
 					</MotionRecipeCard>
 
-					<RecipeActions recipe={recipe} withLink />
+					<RecipeActions recipe={recipe} withLink onDelete={clear} />
 				</Grid>
 
 				<Grid gap={4}>
