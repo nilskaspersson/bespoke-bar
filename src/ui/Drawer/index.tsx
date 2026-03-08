@@ -78,20 +78,10 @@ export function Drawer({
 	actions,
 	header,
 	className,
-	style,
 	ref,
 	isOpen = false,
 	...props
-}: Omit<
-	ComponentProps<"dialog">,
-	| "ref"
-	| "onDrag"
-	| "onDragEnd"
-	| "onDragStart"
-	| "onAnimationStart"
-	| "onAnimationEnd"
-> &
-	DrawerProps) {
+}: Omit<ComponentProps<"dialog">, "ref"> & DrawerProps) {
 	const motionRef = useRef<HTMLDivElement>(null);
 	const closingRef = useRef(false);
 
@@ -111,7 +101,10 @@ export function Drawer({
 	}, [isOpen, y]);
 
 	async function handleClose() {
-		if (!ref.current?.open || closingRef.current) return;
+		if (!ref.current?.open || closingRef.current) {
+			return;
+		}
+
 		closingRef.current = true;
 
 		const offscreen = motionRef.current?.offsetHeight ?? getWindowHeight();
@@ -137,10 +130,8 @@ export function Drawer({
 		<dialog
 			ref={ref}
 			className={clsx(styles.drawer, className)}
-			style={style}
-			data-test="foo"
-			onCancel={(e) => {
-				e.preventDefault();
+			onCancel={(event) => {
+				event.preventDefault();
 				handleClose();
 			}}
 			onClick={onBackdropClick}
