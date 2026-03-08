@@ -126,9 +126,10 @@ export function Drawer({
 	return (
 		<dialog
 			ref={ref}
-			className={clsx(styles.drawer, className)}
 			closedby="any"
+			className={clsx(styles.drawer, className)}
 			onCancel={(event) => {
+				if (event.target !== event.currentTarget) return;
 				event.preventDefault();
 				handleClose();
 			}}

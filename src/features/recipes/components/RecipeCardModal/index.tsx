@@ -57,6 +57,7 @@ export function RecipeCardModal() {
 			ref={dialogRef}
 			isOpen
 			onCancel={(event) => {
+				if (event.target !== event.currentTarget) return;
 				event.preventDefault();
 				clear();
 			}}
