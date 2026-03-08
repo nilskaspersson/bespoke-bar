@@ -1,25 +1,18 @@
 @layer ui {
 	.dialog {
-		max-width: calc(100lvw - 2 * var(--gap));
-		max-height: calc(100lvh - 2 * var(--gap));
-		margin: auto;
 		container: inline-size;
-		background-color: transparent;
-		color: var(--mauve-11);
-		border: none;
+
+		margin: auto;
 		padding: 0;
+		border: none;
+		background: none;
+		text-align: initial;
 		overflow: visible;
 
-		&[open] {
-			display: grid;
-		}
+		color: var(--mauve-11);
 
 		&::backdrop {
-			background-image: linear-gradient(
-				to bottom,
-				transparent,
-				rgb(0 0 0 / 0.65)
-			);
+			background: linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.65));
 
 			transition: opacity var(--transition-duration);
 			transition-behavior: allow-discrete;

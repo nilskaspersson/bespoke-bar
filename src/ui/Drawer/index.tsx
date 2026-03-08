@@ -124,18 +124,13 @@ export function Drawer({
 	}
 
 	return (
-		// biome-ignore lint/a11y/useKeyWithClickEvents: backdrop click to dismiss
 		<dialog
 			ref={ref}
 			className={clsx(styles.drawer, className)}
+			closedby="any"
 			onCancel={(event) => {
 				event.preventDefault();
 				handleClose();
-			}}
-			onClick={(event) => {
-				if (event.target === event.currentTarget) {
-					handleClose();
-				}
 			}}
 			{...props}
 		>
