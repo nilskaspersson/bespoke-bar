@@ -1,12 +1,13 @@
 "use client";
 
-import { useId } from "react";
+import { useEffect, useId } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { EditIngredientForm } from "@/features/ingredients/components/EditIngredientForm";
 import {
 	ingredientEditorStore,
 	useIngredientEditor,
 } from "@/features/ingredients/stores/ingredientEditor";
+import { useDialog } from "@/hooks/useDialog";
 import { Button } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
@@ -15,6 +16,11 @@ import { Kbd } from "@/ui/Kbd";
 
 export function IngredientEditorDrawer() {
 	const formId = useId();
+	const { dialogRef, isOpen } = useDialog();
+
+	useEffect(() => {
+		ingredientEditorStore.dialogRef = dialogRef;
+	}, [dialogRef]);
 
 	const { ingredient, pending, clear } = useIngredientEditor(
 		useShallow((s) => ({
@@ -26,7 +32,8 @@ export function IngredientEditorDrawer() {
 
 	return (
 		<Drawer
-			ref={ingredientEditorStore.dialogRef}
+			ref={dialogRef}
+			isOpen={isOpen}
 			onClose={clear}
 			header={
 				<HGroup overline="Edit ingredient">

@@ -8,6 +8,7 @@ import {
 } from "@/features/consent/ocrConsent";
 import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPhotoAction";
 import { useConfirm } from "@/hooks/useConfirm";
+import { useDialog } from "@/hooks/useDialog";
 import { Callout } from "@/ui/Callout";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { FileInput } from "@/ui/FileInput";
@@ -36,6 +37,8 @@ export function UploadPhotoForm({
 		rejectAction: rejectOCRConsentPrompt,
 	} = useConfirm();
 
+	const { dialogRef: ocrConsentDialogRef } = useDialog();
+
 	const fileInputProps: Partial<ComponentProps<typeof FileInput>> = {
 		name: "image",
 		accept: ACCEPTED_IMAGE_TYPES.join(","),
@@ -46,6 +49,7 @@ export function UploadPhotoForm({
 			const isOCRConsentConfirmed = await checkOCRConsent();
 
 			if (!isOCRConsentConfirmed) {
+				ocrConsentDialogRef.current?.showModal();
 				const confirmed = await confirmOCRConsent();
 
 				if (!confirmed) {
@@ -109,35 +113,35 @@ export function UploadPhotoForm({
 				</Callout>
 			</Grid>
 
-			{isConfirmingOCRConsent ? (
-				<ConfirmAction.Alert
-					heading="Image Processing"
-					acceptLabel="I understand and accept"
-					description={
-						<Grid gap={3}>
-							<Text as="p">
-								Images are processed by Google for text extraction. Bespoke Bar
-								does not store these images.
-							</Text>
+			<ConfirmAction.Alert
+				ref={ocrConsentDialogRef}
+				isOpen={isConfirmingOCRConsent}
+				heading="Image Processing"
+				acceptLabel="I understand and accept"
+				description={
+					<Grid gap={3}>
+						<Text as="p">
+							Images are processed by Google for text extraction. Bespoke Bar
+							does not store these images.
+						</Text>
 
-							<Callout
-								variant="solid"
-								color="regular"
-								icon="circle-info"
-								size={2}
-							>
-								Read the full <Link href="/privacy">privacy policy</Link> and{" "}
-								<Link href="/terms">terms & conditions</Link>.
-							</Callout>
-						</Grid>
-					}
-					onClose={rejectOCRConsentPrompt}
-					resolveAction={acceptOCRConsentPrompt}
-					buttonProps={{
-						color: "accent",
-					}}
-				/>
-			) : null}
+						<Callout
+							variant="solid"
+							color="regular"
+							icon="circle-info"
+							size={2}
+						>
+							Read the full <Link href="/privacy">privacy policy</Link> and{" "}
+							<Link href="/terms">terms & conditions</Link>.
+						</Callout>
+					</Grid>
+				}
+				onClose={rejectOCRConsentPrompt}
+				resolveAction={acceptOCRConsentPrompt}
+				buttonProps={{
+					color: "accent",
+				}}
+			/>
 		</form>
 	);
 }

@@ -1,7 +1,13 @@
 "use client";
 
 import { m } from "motion/react";
-import { useDeferredValue, useRef, useState } from "react";
+import {
+	useDeferredValue,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from "react";
 import { useShallow } from "zustand/react/shallow";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
@@ -10,8 +16,12 @@ import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
-import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
+import {
+	recipeCardModalStore,
+	useRecipeCardModal,
+} from "@/features/recipes/stores/recipeCardModal";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
 import { Checkbox } from "@/ui/Checkbox";
@@ -22,17 +32,35 @@ import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 export function RecipeCardModal() {
-	const { recipe, mounted, clear, dialogRef } = useRecipeCardModal(
+	const { dialogRef } = useDialog();
+
+	useEffect(() => {
+		recipeCardModalStore.dialogRef = dialogRef;
+	}, [dialogRef]);
+
+	const { recipe, mounted, clear } = useRecipeCardModal(
 		useShallow((s) => ({
 			recipe: s.recipe,
 			mounted: s.mounted,
 			clear: s.clear,
-			dialogRef: s.dialogRef,
 		})),
 	);
 
+	useLayoutEffect(() => {
+		if (!mounted && dialogRef.current?.open) {
+			dialogRef.current.close();
+		}
+	}, [mounted, dialogRef]);
+
 	return (
-		<Dialog ref={dialogRef} handleClose={clear}>
+		<Dialog
+			ref={dialogRef}
+			isOpen
+			onCancel={(event) => {
+				event.preventDefault();
+				clear();
+			}}
+		>
 			<m.div layoutRoot className={styles.container}>
 				{recipe && mounted ? <RecipeCardModalContent recipe={recipe} /> : null}
 			</m.div>

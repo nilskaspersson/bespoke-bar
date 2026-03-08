@@ -7,7 +7,6 @@ import { CreateListEntryFormSkeleton } from "@/features/lists/entries/components
 import { getRecipeName } from "@/features/recipes/utils";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
-import type { DrawerHandle } from "@/ui/Drawer";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
@@ -29,23 +28,18 @@ type Props = ButtonProps & {
 };
 
 export function CreateListEntryButton({ recipe, children, ...props }: Props) {
-	const { openDialog, closeDialog, onClose, dialogRef, isOpen } =
-		useDialog<DrawerHandle>();
+	const { dialogRef, isOpen } = useDialog();
 	const formRef = useRef<HTMLFormElement>(null);
-
-	const handleSubmit = () => {
-		formRef.current?.requestSubmit();
-	};
 
 	return (
 		<>
-			<Button {...props} onClick={openDialog}>
+			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
 				{children}
 			</Button>
 
 			<Drawer
 				ref={dialogRef}
-				onClose={onClose}
+				isOpen={isOpen}
 				header={
 					<HGroup overline={getRecipeName(recipe)}>
 						<Heading level="h3" size={6}>
@@ -59,20 +53,18 @@ export function CreateListEntryButton({ recipe, children, ...props }: Props) {
 							variant="solid"
 							color="accent"
 							size="small"
-							onClick={handleSubmit}
+							onClick={() => formRef.current?.requestSubmit()}
 						>
 							Add
 						</SubmitButton>
 					</li>
 				}
 			>
-				{isOpen ? (
-					<CreateListEntryForm
-						recipe={recipe}
-						onSuccess={closeDialog}
-						formRef={formRef}
-					/>
-				) : null}
+				<CreateListEntryForm
+					recipe={recipe}
+					onSuccess={() => dialogRef.current?.close()}
+					formRef={formRef}
+				/>
 			</Drawer>
 		</>
 	);

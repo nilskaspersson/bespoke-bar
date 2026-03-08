@@ -1,19 +1,13 @@
 @layer ui {
 	.dialog {
-		place-items: center;
-		width: 100lvw;
-		height: 100lvh;
-		max-width: none;
-		max-height: none;
-		contain: strict;
+		max-width: calc(100lvw - 2 * var(--gap));
+		max-height: calc(100lvh - 2 * var(--gap));
+		margin: auto;
 		container: inline-size;
-		position: fixed;
-		inset: 0;
 		background-color: transparent;
 		color: var(--mauve-11);
-		z-index: var(--z-modal);
 		border: none;
-		padding: var(--gap);
+		padding: 0;
 
 		&[open] {
 			display: grid;

@@ -5,7 +5,6 @@ import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { UpdateEntryFormSkeleton } from "@/features/lists/entries/components/UpdateEntryForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
-import type { DrawerHandle } from "@/ui/Drawer";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
@@ -31,18 +30,17 @@ export function UpdateEntryDialog({
 	children,
 	...props
 }: ButtonProps & Props) {
-	const { openDialog, closeDialog, dialogRef, isOpen } =
-		useDialog<DrawerHandle>();
+	const { dialogRef, isOpen } = useDialog();
 
 	return (
 		<>
-			<Button {...props} onClick={openDialog}>
+			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
 				{children}
 			</Button>
 
 			<Drawer
 				ref={dialogRef}
-				onClose={closeDialog}
+				isOpen={isOpen}
 				header={
 					<HGroup overline="Update sales price">
 						<Heading level="h3" size={6}>
@@ -58,9 +56,10 @@ export function UpdateEntryDialog({
 					</li>
 				}
 			>
-				{isOpen ? (
-					<UpdateEntryForm entry={entry} onSuccess={closeDialog} />
-				) : null}
+				<UpdateEntryForm
+					entry={entry}
+					onSuccess={() => dialogRef.current?.close()}
+				/>
 			</Drawer>
 		</>
 	);

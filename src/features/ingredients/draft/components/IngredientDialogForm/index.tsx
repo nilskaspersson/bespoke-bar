@@ -1,7 +1,7 @@
 "use client";
 
 import { type FieldName, useField } from "@conform-to/react";
-import { type ComponentProps, useCallback } from "react";
+import type { ComponentProps } from "react";
 import type { IngredientFormData, RecipeFormData } from "@/db/schema/composite";
 import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
@@ -28,18 +28,18 @@ export function IngredientDialogForm({
 
 	const ingredient = field.getFieldset();
 
-	const handleClose = useCallback(() => {
-		ref.current?.close();
-		onClose?.();
-	}, [ref, onClose]);
-
 	return (
 		<Alert
 			ref={ref}
-			onClose={handleClose}
+			onClose={onClose}
 			heading="Edit ingredient"
 			actions={
-				<Button variant="solid" color="heavy" fullWidth onClick={handleClose}>
+				<Button
+					variant="solid"
+					color="heavy"
+					fullWidth
+					onClick={() => ref.current?.close()}
+				>
 					Apply
 				</Button>
 			}

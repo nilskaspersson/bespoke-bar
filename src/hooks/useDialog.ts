@@ -1,61 +1,52 @@
-"use client";
+import { useEffect, useRef, useState } from "react";
+import { useOnNavigation } from "@/hooks/useOnNavigation";
 
-import { createContext, useCallback, useRef, useState } from "react";
-
-type DialogHandle = {
-	showModal: () => void;
-	close: () => void;
-};
-
-type DialogContextValue<T extends DialogHandle = HTMLDialogElement> = {
-	dialogRef: React.RefObject<T | null>;
-	isOpen: boolean;
-	openDialog: () => void;
-	closeDialog: () => void;
-	onClose: () => void;
-	toggleDialog: () => void;
-};
-
-export const DialogContext = createContext<DialogContextValue | null>(null);
-
-export function useDialog<
-	T extends DialogHandle = HTMLDialogElement,
->(): DialogContextValue<T> {
-	const dialogRef = useRef<T>(null);
+export function useDialog() {
+	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 
-	const openDialog = useCallback(() => {
-		dialogRef.current?.showModal();
-		setIsOpen(true);
+	useEffect(() => {
+		const dialog = dialogRef.current;
+
+		if (!dialog) return;
+
+		const controller = new AbortController();
+
+		dialog.addEventListener(
+			"toggle",
+			(e) => {
+				setIsOpen((e as ToggleEvent).newState === "open");
+			},
+			{ signal: controller.signal },
+		);
+
+		return () => controller.abort();
 	}, []);
 
-	const closeDialog = useCallback(() => {
-		dialogRef.current?.close();
-		setIsOpen(false);
-	}, []);
+	useOnNavigation(
+		isOpen
+			? () => {
+					if (dialogRef.current?.open) {
+						dialogRef.current.close("dismiss");
+					}
+				}
+			: undefined,
+	);
 
-	/**
-	 * Note: MUST be assigned to the dialog, or native dismissal methods won't update
-	 * internal state.
-	 */
-	const onClose = useCallback(() => {
-		setIsOpen(false);
-	}, []);
+	useEffect(() => {
+		if (!isOpen) return;
 
-	const toggleDialog = useCallback(() => {
-		if (isOpen) {
-			closeDialog();
-		} else {
-			openDialog();
-		}
-	}, [isOpen, closeDialog, openDialog]);
+		const dialog = dialogRef.current;
+
+		return () => {
+			if (dialog?.open) {
+				dialog.close("dismiss");
+			}
+		};
+	}, [isOpen]);
 
 	return {
 		dialogRef,
 		isOpen,
-		openDialog,
-		closeDialog,
-		onClose,
-		toggleDialog,
 	};
 }

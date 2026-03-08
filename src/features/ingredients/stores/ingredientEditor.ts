@@ -1,7 +1,5 @@
-import { createRef } from "react";
 import { create } from "zustand";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { DrawerHandle } from "@/ui/Drawer";
 
 type OnUpdateCallback = (updated: Ingredient) => void;
 
@@ -29,7 +27,7 @@ export const ingredientEditorStore = Object.assign(
 		clear: () => set({ ingredient: null, pending: false }),
 	})),
 	{
-		dialogRef: createRef<DrawerHandle>(),
+		dialogRef: { current: null } as React.RefObject<HTMLDialogElement | null>,
 		emitUpdate: (updated: Ingredient) => {
 			for (const listener of onUpdateListeners) {
 				listener(updated);

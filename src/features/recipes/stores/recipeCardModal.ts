@@ -7,20 +7,18 @@ type RecipeCardModalState = {
 	recipe: RecipeWithSpecs | null;
 	isFavorite: boolean;
 	mounted: boolean;
-	dialogRef: React.RefObject<HTMLDialogElement | null>;
 	setRecipe: (recipe: RecipeWithSpecs, isFavorite: boolean) => void;
 	updateIngredient: (updated: Ingredient) => void;
 	clear: () => void;
 };
 
-export const recipeCardModalStore = create<RecipeCardModalState>(
-	(set, get) => ({
+export const recipeCardModalStore = Object.assign(
+	create<RecipeCardModalState>((set, get) => ({
 		recipe: null,
 		isFavorite: false,
 		mounted: false,
-		dialogRef: { current: null },
 		setRecipe: (recipe, isFavorite) => {
-			get().dialogRef.current?.showModal();
+			recipeCardModalStore.dialogRef.current?.showModal();
 			set({ recipe, isFavorite, mounted: true });
 		},
 		updateIngredient: (updated) => {
@@ -38,10 +36,12 @@ export const recipeCardModalStore = create<RecipeCardModalState>(
 			});
 		},
 		clear: () => {
-			get().dialogRef.current?.close();
 			set({ recipe: null, isFavorite: false, mounted: false });
 		},
-	}),
+	})),
+	{
+		dialogRef: { current: null } as React.RefObject<HTMLDialogElement | null>,
+	},
 );
 
 export const useRecipeCardModal = recipeCardModalStore;

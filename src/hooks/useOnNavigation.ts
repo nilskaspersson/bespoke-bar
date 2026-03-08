@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useRef } from "react";
 
-export function useOnNavigation(callback: undefined | (() => unknown)) {
+export function useOnNavigation(cb: undefined | (() => unknown)) {
 	const pathname = usePathname();
 	const initialPathnameRef = useRef(pathname);
 
@@ -12,7 +12,7 @@ export function useOnNavigation(callback: undefined | (() => unknown)) {
 			return;
 		}
 
-		callback?.();
+		cb?.();
 		initialPathnameRef.current = pathname;
-	}, [callback, pathname]);
+	}, [cb, pathname]);
 }

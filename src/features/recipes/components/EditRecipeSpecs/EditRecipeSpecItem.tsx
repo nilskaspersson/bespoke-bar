@@ -1,7 +1,7 @@
 "use client";
 
 import { type FieldName, useField } from "@conform-to/react";
-import { type ReactNode, use, useId, useRef } from "react";
+import { type ReactNode, use, useId } from "react";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_DEFAULT_ABV } from "@/features/categories/constants";
@@ -13,6 +13,7 @@ import { QuantityControl } from "@/features/quantity/components/QuantityControl"
 import { SelectUnit } from "@/features/units/components/SelectUnit";
 import { isValidUnit } from "@/features/units/utils";
 import { getMeasurementFromUnit } from "@/features/units/utils/getMeasurementFromUnit";
+import { useDialog } from "@/hooks/useDialog";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
@@ -36,7 +37,7 @@ export function EditRecipeSpecItem({
 	ingredients: Ingredient[];
 	withOptional?: boolean;
 }) {
-	const dialogRef = useRef<HTMLDialogElement>(null);
+	const { dialogRef } = useDialog();
 	const { percentageFormatter } = use(FormatterContext);
 
 	const searchName = useId();

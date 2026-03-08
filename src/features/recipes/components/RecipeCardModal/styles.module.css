@@ -1,6 +1,6 @@
 @layer feature {
 	.particles {
-		position: absolute;
+		position: fixed;
 		inset: 0;
 		pointer-events: none;
 	}

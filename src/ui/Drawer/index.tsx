@@ -7,29 +7,15 @@ import {
 	type PanInfo,
 	type Transition,
 	useMotionValue,
+	useMotionValueEvent,
 	useTransform,
 } from "motion/react";
-import {
-	type ComponentProps,
-	type ReactNode,
-	useImperativeHandle,
-	useRef,
-} from "react";
-import { useOnNavigation } from "@/hooks/useOnNavigation";
+import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
+import type { DialogEvent } from "@/utils/events";
 import styles from "./styles.module.css";
-
-export type DrawerHandle = {
-	showModal: () => void;
-	close: () => void;
-};
-
-type DrawerProps = {
-	actions?: ReactNode;
-	header?: ReactNode;
-};
 
 const SPRING: Transition = {
 	type: "spring",
@@ -74,6 +60,19 @@ function shouldDragClose(offset: number, velocity: number): boolean {
 	);
 }
 
+function onBackdropClick(event: DialogEvent) {
+	if (event.target === event.currentTarget) {
+		event.currentTarget.close("dismiss");
+	}
+}
+
+type DrawerProps = {
+	actions?: ReactNode;
+	header?: ReactNode;
+	isOpen?: boolean;
+	ref: React.RefObject<HTMLDialogElement | null>;
+};
+
 export function Drawer({
 	children,
 	actions,
@@ -81,6 +80,7 @@ export function Drawer({
 	className,
 	style,
 	ref,
+	isOpen = false,
 	...props
 }: Omit<
 	ComponentProps<"dialog">,
@@ -91,43 +91,27 @@ export function Drawer({
 	| "onAnimationStart"
 	| "onAnimationEnd"
 > &
-	DrawerProps & { ref?: React.Ref<DrawerHandle> }) {
-	const dialogRef = useRef<HTMLDialogElement>(null);
+	DrawerProps) {
 	const motionRef = useRef<HTMLDivElement>(null);
 	const closingRef = useRef(false);
 
-	/**
-	 * Initialize y to DORMANT_Y to avoid hydration mismatches.
-	 */
 	const y = useMotionValue(DORMANT_Y);
-
 	const backdropOpacity = useTransform(y, deriveBackdropOpacity);
 	const visibility = useTransform(y, deriveVisibility);
 
-	/**
-	 * Expose showModal/close as an imperative handle. showModal includes the entry
-	 * animation since m.dialog doesn't forward the native toggle event.
-	 * TODO: Rework once Motion dialogs support onToggle?
-	 */
-	useImperativeHandle(ref, () => ({
-		showModal() {
-			const dialog = dialogRef.current;
-			if (!dialog || dialog.open) return;
-			dialog.showModal();
+	useMotionValueEvent(backdropOpacity, "change", (v) => {
+		ref.current?.style.setProperty("--backdrop-opacity", String(v));
+	});
+
+	useEffect(() => {
+		if (isOpen) {
 			y.jump(getWindowHeight());
 			animateValue(y, 0, SPRING_BOUNCY);
-		},
-		close() {
-			handleClose();
-		},
-	}));
-
-	useOnNavigation(handleClose);
+		}
+	}, [isOpen, y]);
 
 	async function handleClose() {
-		const dialog = dialogRef.current;
-
-		if (!dialog?.open || closingRef.current) return;
+		if (!ref.current?.open || closingRef.current) return;
 		closingRef.current = true;
 
 		const offscreen = motionRef.current?.offsetHeight ?? getWindowHeight();
@@ -136,71 +120,68 @@ export function Drawer({
 		await onMotionValueReached(y, offscreen);
 
 		y.jump(DORMANT_Y);
-		dialog.close();
+		ref.current?.close();
 		closingRef.current = false;
-	}
-
-	function handleBackdropClick(e: React.MouseEvent) {
-		if (e.target === dialogRef.current) {
-			handleClose();
-		}
 	}
 
 	function handleDragEnd(_: unknown, info: PanInfo) {
 		if (shouldDragClose(info.offset.y, info.velocity.y)) {
 			handleClose();
 		} else {
-			/**
-			 * Initialize with current drag velocity
-			 */
 			animateValue(y, 0, { ...SPRING, velocity: info.velocity.y });
 		}
 	}
 
 	return (
-		<m.dialog
-			ref={dialogRef}
+		// biome-ignore lint/a11y/useKeyWithClickEvents: backdrop click to dismiss
+		<dialog
+			ref={ref}
 			className={clsx(styles.drawer, className)}
-			style={{ ...style, "--backdrop-opacity": backdropOpacity }}
+			style={style}
+			data-test="foo"
 			onCancel={(e) => {
 				e.preventDefault();
 				handleClose();
 			}}
-			onClick={handleBackdropClick}
+			onClick={onBackdropClick}
 			{...props}
 		>
-			<m.div
-				ref={motionRef}
-				className={styles.motion}
-				style={{ y, visibility }}
-				drag="y"
-				dragConstraints={DRAG_CONSTRAINTS}
-				dragElastic={DRAG_ELASTIC}
-				onDragEnd={handleDragEnd}
-			>
-				<Container className={styles.container} padding={false}>
-					{header ? <header className={styles.header}>{header}</header> : null}
+			{isOpen ? (
+				<m.div
+					ref={motionRef}
+					className={styles.motion}
+					style={{ y, visibility }}
+					drag="y"
+					dragConstraints={DRAG_CONSTRAINTS}
+					dragElastic={DRAG_ELASTIC}
+					onDragEnd={handleDragEnd}
+				>
+					<Container className={styles.container} padding={false}>
+						{header ? (
+							<header className={styles.header}>{header}</header>
+						) : null}
 
-					<div className={styles.content}>{children}</div>
+						<div className={styles.content}>{children}</div>
 
-					<footer className={styles.footer}>
-						<menu className={styles.actions}>
-							<li>
-								<Button
-									type="button"
-									variant="ghost"
-									size="tiny"
-									onClick={handleClose}
-								>
-									Cancel
-								</Button>
-							</li>
+						<footer className={styles.footer}>
+							<menu className={styles.actions}>
+								<li>
+									<Button
+										type="button"
+										variant="ghost"
+										size="tiny"
+										onClick={handleClose}
+									>
+										Cancel
+									</Button>
+								</li>
 
-							{actions}
-						</menu>
-					</footer>
-				</Container>
-			</m.div>
-		</m.dialog>
+								{actions}
+							</menu>
+						</footer>
+					</Container>
+				</m.div>
+			) : null}
+		</dialog>
 	);
 }
