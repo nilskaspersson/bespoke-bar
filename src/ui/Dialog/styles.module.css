@@ -8,6 +8,7 @@
 		color: var(--mauve-11);
 		border: none;
 		padding: 0;
+		overflow: visible;
 
 		&[open] {
 			display: grid;

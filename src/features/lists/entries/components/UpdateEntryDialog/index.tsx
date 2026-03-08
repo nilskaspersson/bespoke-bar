@@ -30,7 +30,7 @@ export function UpdateEntryDialog({
 	children,
 	...props
 }: ButtonProps & Props) {
-	const { dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 
 	return (
 		<>
@@ -41,6 +41,8 @@ export function UpdateEntryDialog({
 			<Drawer
 				ref={dialogRef}
 				isOpen={isOpen}
+				mounted={mounted}
+				onExitComplete={unmount}
 				header={
 					<HGroup overline="Update sales price">
 						<Heading level="h3" size={6}>

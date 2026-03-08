@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 
 export function useDialog() {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
+	const [mounted, setMounted] = useState(false);
 
 	useEffect(() => {
 		const dialog = dialogRef.current;
@@ -14,14 +15,26 @@ export function useDialog() {
 
 		dialog.addEventListener(
 			"toggle",
-			(e) => {
-				setIsOpen((e as ToggleEvent).newState === "open");
+			(event) => {
+				const open = event.newState === "open";
+				setIsOpen(open);
+
+				/**
+				 * Only mount on open — never unmount here. Unmounting is deferred to `unmount()`
+				 * so consumers can, f.e., finish exit animations before children are removed
+				 * from the DOM, or preserve state.
+				 */
+				if (open) {
+					setMounted(true);
+				}
 			},
 			{ signal: controller.signal },
 		);
 
 		return () => controller.abort();
 	}, []);
+
+	const unmount = useCallback(() => setMounted(false), []);
 
 	useOnNavigation(
 		isOpen
@@ -48,5 +61,7 @@ export function useDialog() {
 	return {
 		dialogRef,
 		isOpen,
+		mounted,
+		unmount,
 	};
 }

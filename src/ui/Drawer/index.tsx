@@ -14,7 +14,6 @@ import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
-import type { DialogEvent } from "@/utils/events";
 import styles from "./styles.module.css";
 
 const SPRING: Transition = {
@@ -60,16 +59,12 @@ function shouldDragClose(offset: number, velocity: number): boolean {
 	);
 }
 
-function onBackdropClick(event: DialogEvent) {
-	if (event.target === event.currentTarget) {
-		event.currentTarget.close("dismiss");
-	}
-}
-
 type DrawerProps = {
 	actions?: ReactNode;
 	header?: ReactNode;
 	isOpen?: boolean;
+	mounted?: boolean;
+	onExitComplete?: () => void;
 	ref: React.RefObject<HTMLDialogElement | null>;
 };
 
@@ -80,6 +75,8 @@ export function Drawer({
 	className,
 	ref,
 	isOpen = false,
+	mounted,
+	onExitComplete,
 	...props
 }: Omit<ComponentProps<"dialog">, "ref"> & DrawerProps) {
 	const motionRef = useRef<HTMLDivElement>(null);
@@ -107,7 +104,7 @@ export function Drawer({
 
 		closingRef.current = true;
 
-		const offscreen = motionRef.current?.offsetHeight ?? getWindowHeight();
+		const offscreen = getWindowHeight();
 		animateValue(y, offscreen, SPRING);
 
 		await onMotionValueReached(y, offscreen);
@@ -115,6 +112,7 @@ export function Drawer({
 		y.jump(DORMANT_Y);
 		ref.current?.close();
 		closingRef.current = false;
+		onExitComplete?.();
 	}
 
 	function handleDragEnd(_: unknown, info: PanInfo) {
@@ -134,10 +132,14 @@ export function Drawer({
 				event.preventDefault();
 				handleClose();
 			}}
-			onClick={onBackdropClick}
+			onClick={(event) => {
+				if (event.target === event.currentTarget) {
+					handleClose();
+				}
+			}}
 			{...props}
 		>
-			{isOpen ? (
+			{mounted ? (
 				<m.div
 					ref={motionRef}
 					className={styles.motion}

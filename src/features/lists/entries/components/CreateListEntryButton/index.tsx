@@ -28,7 +28,7 @@ type Props = ButtonProps & {
 };
 
 export function CreateListEntryButton({ recipe, children, ...props }: Props) {
-	const { dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 	const formRef = useRef<HTMLFormElement>(null);
 
 	return (
@@ -40,6 +40,8 @@ export function CreateListEntryButton({ recipe, children, ...props }: Props) {
 			<Drawer
 				ref={dialogRef}
 				isOpen={isOpen}
+				mounted={mounted}
+				onExitComplete={unmount}
 				header={
 					<HGroup overline={getRecipeName(recipe)}>
 						<Heading level="h3" size={6}>

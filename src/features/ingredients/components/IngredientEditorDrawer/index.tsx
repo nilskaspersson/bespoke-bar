@@ -16,7 +16,7 @@ import { Kbd } from "@/ui/Kbd";
 
 export function IngredientEditorDrawer() {
 	const formId = useId();
-	const { dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 
 	useEffect(() => {
 		ingredientEditorStore.dialogRef = dialogRef;
@@ -34,6 +34,8 @@ export function IngredientEditorDrawer() {
 		<Drawer
 			ref={dialogRef}
 			isOpen={isOpen}
+			mounted={mounted}
+			onExitComplete={unmount}
 			onClose={clear}
 			header={
 				<HGroup overline="Edit ingredient">
