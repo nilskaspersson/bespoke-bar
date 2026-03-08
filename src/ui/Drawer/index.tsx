@@ -13,6 +13,7 @@ import {
 import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
+import { Dialog } from "@/ui/Dialog";
 import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
 import styles from "./styles.module.css";
 
@@ -78,7 +79,7 @@ export function Drawer({
 	mounted,
 	onExitComplete,
 	...props
-}: Omit<ComponentProps<"dialog">, "ref"> & DrawerProps) {
+}: ComponentProps<typeof Dialog> & DrawerProps) {
 	const motionRef = useRef<HTMLDivElement>(null);
 	const closingRef = useRef(false);
 
@@ -87,7 +88,7 @@ export function Drawer({
 	const visibility = useTransform(y, deriveVisibility);
 
 	useMotionValueEvent(backdropOpacity, "change", (v) => {
-		ref.current?.style.setProperty("--backdrop-opacity", String(v));
+		ref.current?.style.setProperty("--progress", String(v));
 	});
 
 	useEffect(() => {
@@ -124,9 +125,10 @@ export function Drawer({
 	}
 
 	return (
-		<dialog
+		<Dialog
 			ref={ref}
-			closedby="any"
+			isOpen={mounted}
+			withBlur={false}
 			className={clsx(styles.drawer, className)}
 			onCancel={(event) => {
 				if (event.target !== event.currentTarget) return;
@@ -135,42 +137,38 @@ export function Drawer({
 			}}
 			{...props}
 		>
-			{mounted ? (
-				<m.div
-					ref={motionRef}
-					className={styles.motion}
-					style={{ y, visibility }}
-					drag="y"
-					dragConstraints={DRAG_CONSTRAINTS}
-					dragElastic={DRAG_ELASTIC}
-					onDragEnd={handleDragEnd}
-				>
-					<Container className={styles.container} padding={false}>
-						{header ? (
-							<header className={styles.header}>{header}</header>
-						) : null}
+			<m.div
+				ref={motionRef}
+				className={styles.motion}
+				style={{ y, visibility }}
+				drag="y"
+				dragConstraints={DRAG_CONSTRAINTS}
+				dragElastic={DRAG_ELASTIC}
+				onDragEnd={handleDragEnd}
+			>
+				<Container className={styles.container} padding={false}>
+					{header ? <header className={styles.header}>{header}</header> : null}
 
-						<div className={styles.content}>{children}</div>
+					<div className={styles.content}>{children}</div>
 
-						<footer className={styles.footer}>
-							<menu className={styles.actions}>
-								<li>
-									<Button
-										type="button"
-										variant="ghost"
-										size="tiny"
-										onClick={handleClose}
-									>
-										Cancel
-									</Button>
-								</li>
+					<footer className={styles.footer}>
+						<menu className={styles.actions}>
+							<li>
+								<Button
+									type="button"
+									variant="ghost"
+									size="tiny"
+									onClick={handleClose}
+								>
+									Cancel
+								</Button>
+							</li>
 
-								{actions}
-							</menu>
-						</footer>
-					</Container>
-				</m.div>
-			) : null}
-		</dialog>
+							{actions}
+						</menu>
+					</footer>
+				</Container>
+			</m.div>
+		</Dialog>
 	);
 }

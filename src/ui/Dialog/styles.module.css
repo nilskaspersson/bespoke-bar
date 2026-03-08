@@ -1,5 +1,6 @@
 @layer ui {
 	.dialog {
+		--progress: 0;
 		container: inline-size;
 
 		margin: auto;
@@ -11,8 +12,13 @@
 
 		color: var(--mauve-11);
 
+		&[open] {
+			--progress: 1;
+		}
+
 		&::backdrop {
 			background: linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.65));
+			opacity: var(--progress);
 
 			transition: opacity var(--transition-duration);
 			transition-behavior: allow-discrete;
@@ -28,8 +34,8 @@
 	 * notifications, and other static elements we may want to keep in the foreground.
 	 * For that reason, we blur the #root instead.
 	 */
-	:global(#root):has(.dialog[open]) {
-		filter: blur(var(--space-1));
+	:global(#root):has(.blur[open]) {
+		filter: blur(calc(var(--space-1) * var(--progress, 1)));
 		transition: filter var(--transition-duration);
 	}
 }

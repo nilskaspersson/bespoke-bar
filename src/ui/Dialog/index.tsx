@@ -8,10 +8,12 @@ export function Dialog({
 	children,
 	className,
 	isOpen = false,
+	withBlur = true,
 	ref,
 	...props
 }: DialogHTMLAttributes<HTMLDialogElement> & {
 	isOpen?: boolean;
+	withBlur?: boolean;
 	onClose?: () => void;
 	ref: React.RefObject<HTMLDialogElement | null>;
 }) {
@@ -22,7 +24,7 @@ export function Dialog({
 		<dialog
 			ref={ref}
 			closedby="any"
-			className={clsx(className, styles.dialog)}
+			className={clsx(className, styles.dialog, { [styles.blur]: withBlur })}
 			{...props}
 		>
 			{isOpen ? children : null}

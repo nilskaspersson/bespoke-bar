@@ -1,33 +1,18 @@
-@layer ui {
+@layer component {
 	.drawer {
 		--inset: calc(var(--app-inset) / 2);
 		--maxHeight: 80svh;
 
-		container: inline-size;
-
-		margin: auto;
-		padding: 0;
-		border: none;
-		background: none;
-		text-align: initial;
-		overflow: visible;
-
-		color: var(--mauve-11);
-
 		&::backdrop {
-			background: linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.65));
-			opacity: var(--backdrop-opacity, 0);
+			transition: none;
 		}
 	}
 
 	.motion {
 		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		inset: auto var(--inset) var(--inset);
+		margin-inline: auto;
 		max-width: var(--container);
-		margin: 0 auto;
-		padding: 0 var(--inset) var(--inset);
 		max-height: var(--maxHeight);
 		touch-action: none;
 		will-change: transform;
