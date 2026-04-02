@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
@@ -14,6 +16,7 @@ import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
@@ -22,7 +25,23 @@ type Props = {
 	params: Promise<{ id?: string }>;
 };
 
-export default async function IngredientPage({ params }: Props) {
+export default function IngredientPage({ params }: Props) {
+	return (
+		<Container as="article" className={styles.container}>
+			<Suspense
+				fallback={
+					<SkeletonScreen>
+						<Skeleton width="100%" height="60lvh" />
+					</SkeletonScreen>
+				}
+			>
+				<IngredientWithAuth params={params} />
+			</Suspense>
+		</Container>
+	);
+}
+
+async function IngredientWithAuth({ params }: Props) {
 	const { id } = await params;
 
 	if (!id) {
@@ -46,7 +65,7 @@ export default async function IngredientPage({ params }: Props) {
 	);
 
 	return (
-		<Container as="article" className={styles.container}>
+		<OrgProvider>
 			<Grid gap={4} justifyContent="center" className={styles.content}>
 				<header>
 					{ingredient.category ? (
@@ -121,7 +140,7 @@ export default async function IngredientPage({ params }: Props) {
 					<RecipesList recipes={recipesUsingIngredient} withActions />
 				</Grid>
 			) : null}
-		</Container>
+		</OrgProvider>
 	);
 }
 

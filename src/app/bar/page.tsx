@@ -1,6 +1,7 @@
 import { cacheLife } from "next/cache";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { FeaturedList } from "@/features/lists/featured/components/FeaturedList";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Container } from "@/ui/Container";
@@ -10,9 +11,7 @@ import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
-export default async function BarPage() {
-	const { orgId } = await authOrForbidden();
-
+export default function BarPage() {
 	return (
 		<BarPageShell>
 			<Suspense
@@ -22,9 +21,18 @@ export default async function BarPage() {
 					</SkeletonScreen>
 				}
 			>
-				<FeaturedList orgId={orgId} />
+				<FeaturedListWithAuth />
 			</Suspense>
 		</BarPageShell>
+	);
+}
+
+async function FeaturedListWithAuth() {
+	const { orgId } = await authOrForbidden();
+	return (
+		<OrgProvider>
+			<FeaturedList orgId={orgId} />
+		</OrgProvider>
 	);
 }
 

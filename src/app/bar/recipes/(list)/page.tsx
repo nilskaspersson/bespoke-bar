@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { readOrganisationMembers } from "@/features/organisation/api/readOrganisationMembers";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
@@ -30,20 +31,22 @@ async function RecipeViewsWithData() {
 	]);
 
 	return (
-		<RecipeViews
-			list={
-				<RecipesList
-					recipes={recipes}
-					favoriteRecipeIds={favoriteRecipeIds}
-					withActions
-				/>
-			}
-			table={
-				<Suspense fallback={<RecipeDataTableSkeleton />}>
-					<RecipeDataTableLoader recipes={recipes} members={members} />
-				</Suspense>
-			}
-		/>
+		<OrgProvider>
+			<RecipeViews
+				list={
+					<RecipesList
+						recipes={recipes}
+						favoriteRecipeIds={favoriteRecipeIds}
+						withActions
+					/>
+				}
+				table={
+					<Suspense fallback={<RecipeDataTableSkeleton />}>
+						<RecipeDataTableLoader recipes={recipes} members={members} />
+					</Suspense>
+				}
+			/>
+		</OrgProvider>
 	);
 }
 
