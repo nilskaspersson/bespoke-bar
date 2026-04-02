@@ -15,6 +15,7 @@ export function ImageUploadPreview({
 	return (
 		<div {...props} className={clsx(styles.container, className)}>
 			{src ? (
+				// biome-ignore lint/performance/noImgElement: This is a locally created image
 				<img src={src} className={styles.image} alt={alt} />
 			) : (
 				<Icon size={8} name="image" className={styles.icon} />
