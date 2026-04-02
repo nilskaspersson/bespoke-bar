@@ -28,6 +28,7 @@ export function ThemePicker() {
 	const isMounted = useIsMounted();
 
 	const handleThemeChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+		if (!isMounted) return;
 		const selectedTheme = event.target.value;
 		setTheme(selectedTheme);
 	};
@@ -38,7 +39,6 @@ export function ThemePicker() {
 			options={THEME_OPTIONS}
 			legend="Choose theme"
 			value={theme}
-			disabled={!isMounted}
 			onChange={handleThemeChange}
 		/>
 	);

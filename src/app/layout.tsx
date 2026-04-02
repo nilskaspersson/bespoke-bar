@@ -27,6 +27,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html
 			lang="en"
+			data-scroll-behavior="smooth"
 			/**
 			 * Suppresses hydration warning of next-themes
 			 */
