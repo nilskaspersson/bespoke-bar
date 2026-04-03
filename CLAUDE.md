@@ -10,6 +10,7 @@
 - **Multi-tenant**: All DB queries must be scoped by `orgId` from `authOrForbidden()` (`src/utils/auth.ts`)
 - Prefer `function` over `const` for function declarations
 - Tabs for indentation
+- Run `npm run lint -- --fix` after every edit
 
 ## Skills
 
