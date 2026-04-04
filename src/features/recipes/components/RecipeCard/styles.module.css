@@ -14,5 +14,6 @@
 		flex: 1 1 auto;
 		border-bottom: 2px dotted var(--mauve-6);
 		min-width: 3ch;
+		align-self: baseline;
 	}
 }

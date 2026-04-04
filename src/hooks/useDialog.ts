@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 
-export function useDialog() {
+export function useDialog(options?: { onNavigationClose?: () => void }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [mounted, setMounted] = useState(false);
@@ -42,6 +42,8 @@ export function useDialog() {
 					if (dialogRef.current?.open) {
 						dialogRef.current.close("dismiss");
 					}
+
+					options?.onNavigationClose?.();
 				}
 			: undefined,
 	);

@@ -1,70 +1,63 @@
-import { useCallback } from "react";
+import { use, useCallback } from "react";
 import type { Unit } from "@/db/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
-import { useRoundedUnit } from "@/features/units/hooks/useRoundedUnit";
+import {
+	formatMeasure,
+	type MeasureParts,
+	roundUnit,
+} from "@/features/units/hooks/useRoundedUnit";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
+import { FormatterContext } from "@/hooks/useFormatter";
 
 export function quantityToBestUnit({
 	quantity,
 	unit,
 	unitSystem,
 	servings = 1,
-	roundUnit,
 }: {
 	quantity: number | null | undefined;
 	unit: Unit | null | undefined;
 	unitSystem?: UnitSystems | null;
 	servings?: number;
-	roundUnit: (
-		volumeInMl: number,
-		unitSystem: UnitSystems | null | undefined,
-	) => string;
-}) {
-	if (!quantity) {
-		return "";
-	}
+}): MeasureParts | null {
+	if (!quantity || !unit) return null;
 
 	const qty = quantity * servings;
-
-	if (!unit) {
-		return qty.toString();
-	}
-
 	const libUnit = DB_UNIT_TO_LIB_UNIT.get(unit);
 
-	if (!libUnit) {
-		return qty.toString();
-	}
+	if (!libUnit) return [qty, unit];
 
 	const volumeInMl = convert(qty).from(libUnit).to("ml");
-
 	const nativeUnitSystem = getUnitSystemFromUnit(unit);
 
 	if (nativeUnitSystem === "bartending" && volumeInMl <= 10) {
-		return `${qty} ${getFormattedUnit(unit, qty)}`;
+		return [qty, unit];
 	}
 
 	return roundUnit(volumeInMl, unitSystem);
 }
 
 export function useQuantityToBestUnit() {
-	const roundUnit = useRoundedUnit();
+	const { volumeFormatter } = use(FormatterContext);
 
 	return useCallback(
-		({
-			quantity,
-			unit,
-			unitSystem,
-			servings = 1,
-		}: {
+		(args: {
 			quantity: number | null | undefined;
 			unit: Unit | null | undefined;
 			unitSystem?: UnitSystems | null;
 			servings?: number;
-		}) =>
-			quantityToBestUnit({ quantity, unit, unitSystem, servings, roundUnit }),
-		[roundUnit],
+		}) => {
+			const parts = quantityToBestUnit(args);
+			if (!parts) return null;
+			const [quantity, unit] = parts;
+			return {
+				quantity,
+				unit: getFormattedUnit(unit, quantity),
+				formatted: formatMeasure(parts, volumeFormatter),
+			};
+		},
+		[volumeFormatter],
 	);
 }

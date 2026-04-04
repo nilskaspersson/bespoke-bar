@@ -9,6 +9,7 @@
 		background: none;
 		text-align: initial;
 		overflow: visible;
+		outline: none;
 
 		color: var(--mauve-11);
 

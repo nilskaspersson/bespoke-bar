@@ -1,18 +1,18 @@
 @layer composition {
-	.lightbox {
+	.dialog {
 		--offset-top: 10svh;
+
+		width: min(40rem, 100%);
+		margin-block: var(--offset-top) auto;
+	}
+
+	.lightbox {
 		--r: calc(var(--radius--huge) * 1.25);
 
 		display: grid;
 		grid-template-rows: auto 1fr auto;
 
-		position: absolute;
-		inset-block: var(--offset-top) auto;
-		width: 100%;
-		max-width: 40rem;
-		max-height: calc(100% - var(--offset-top) - var(--gap));
-		margin-inline: auto;
-		margin-block: 0 auto;
+		max-height: calc(100svh - var(--offset-top, 10svh) - var(--gap));
 		border-radius: var(--r) var(--r) var(--radius--large) var(--radius--large);
 		padding: var(--space-2);
 	}

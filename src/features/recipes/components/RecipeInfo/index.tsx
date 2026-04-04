@@ -3,6 +3,7 @@
 import { type ReactNode, use, useDeferredValue, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
@@ -10,7 +11,6 @@ import type { UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -42,9 +42,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 					servings={servings}
 					convertUnits={withConversionSystem}
 					withLink={false}
-					nameAdornment={
-						<Icon name="martini-glass" className={styles.icon} size={3} />
-					}
+					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
 				>
 					<Text as="div" size={1} fullWidth className={styles.count}>
 						Servings: {quantityFormatter.format(servings)}

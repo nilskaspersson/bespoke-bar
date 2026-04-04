@@ -33,6 +33,14 @@ export function VolumeInfo<T extends BaseRecipe>({
 		isBartendingUnit(spec.unit),
 	);
 
+	const displayVolume = roundUnit(
+		diluted ? recipeMetrics.finalVolume : recipeMetrics.originalVolume,
+		convertUnits,
+	);
+	const originalVolume = roundUnit(recipeMetrics.originalVolume, convertUnits);
+	const dilutionVolume = roundUnit(recipeMetrics.dilutionVolume, convertUnits);
+	const finalVolume = roundUnit(recipeMetrics.finalVolume, convertUnits);
+
 	return (
 		<details {...props}>
 			<Text as="summary" size={1} compact>
@@ -40,10 +48,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 					? "Volume per serving: "
 					: `Total volume (${quantityFormatter.format(servings)} servings): `}
 				<Text heavy weight={600}>
-					{roundUnit(
-						diluted ? recipeMetrics.finalVolume : recipeMetrics.originalVolume,
-						convertUnits,
-					)}
+					{displayVolume}
 				</Text>
 			</Text>
 
@@ -52,13 +57,13 @@ export function VolumeInfo<T extends BaseRecipe>({
 					<tbody>
 						<tr>
 							<th>Undiluted volume</th>
-							<td>{roundUnit(recipeMetrics.originalVolume, convertUnits)}</td>
+							<td>{originalVolume}</td>
 						</tr>
 
 						<tr>
 							<th>Water</th>
 							<td>
-								{roundUnit(recipeMetrics.dilutionVolume, convertUnits)} (
+								{dilutionVolume} (
 								{percentageFormatter.format(
 									recipeMetrics.dilutionOfOriginalVolume,
 								)}{" "}
@@ -77,7 +82,7 @@ export function VolumeInfo<T extends BaseRecipe>({
 
 						<tr>
 							<th>Final volume</th>
-							<td>{roundUnit(recipeMetrics.finalVolume, convertUnits)}</td>
+							<td>{finalVolume}</td>
 						</tr>
 					</tbody>
 				</Text>
@@ -99,15 +104,15 @@ export function VolumeInfo<T extends BaseRecipe>({
 
 									const unitData = convert().describe(spec.unit);
 									const qty = spec.quantity * servings;
+									const estimated = roundUnit(
+										convert(spec.quantity).from(spec.unit).to("ml") * qty,
+										convertUnits,
+									);
 
 									return (
 										<li key={getKey(spec)}>
 											{qty} {qty > 1 ? unitData.plural : unitData.singular}{" "}
-											{spec.ingredient.name} ={" "}
-											{roundUnit(
-												convert(spec.quantity).from(spec.unit).to("ml") * qty,
-												convertUnits,
-											)}
+											{spec.ingredient.name} = {estimated}
 										</li>
 									);
 								})}

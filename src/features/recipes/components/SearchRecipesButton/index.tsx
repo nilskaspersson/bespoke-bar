@@ -1,6 +1,7 @@
 "use client";
 
 import { SearchRecipesForm } from "@/features/recipes/components/SearchRecipesForm";
+import styles from "@/features/recipes/components/SearchRecipesForm/styles.module.css";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Dialog } from "@/ui/Dialog";
@@ -27,7 +28,7 @@ export function SearchRecipesButton({ children, ...props }: ButtonProps) {
 				{children}
 			</Button>
 
-			<Dialog ref={dialogRef} isOpen={isOpen}>
+			<Dialog ref={dialogRef} isOpen={isOpen} className={styles.dialog}>
 				<SearchRecipesForm
 					actions={
 						<li>

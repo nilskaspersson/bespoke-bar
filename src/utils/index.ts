@@ -20,6 +20,11 @@ export function clamp(n: number, min: number, max: number): number {
 	return Math.min(Math.max(n, min), max);
 }
 
+export function round(value: number, decimals = 2): number {
+	const factor = 10 ** decimals;
+	return Math.round(value * factor) / factor;
+}
+
 export function pick<T extends Record<PropertyKey, unknown>, K extends keyof T>(
 	o: T,
 	...keys: K[]

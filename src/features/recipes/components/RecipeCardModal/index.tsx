@@ -13,6 +13,7 @@ import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
@@ -28,21 +29,23 @@ import { Checkbox } from "@/ui/Checkbox";
 import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 export function RecipeCardModal() {
-	const { dialogRef } = useDialog();
+	const clear = useRecipeCardModal((s) => s.clear);
+
+	const { dialogRef } = useDialog({
+		onNavigationClose: clear,
+	});
 
 	useEffect(() => {
 		recipeCardModalStore.dialogRef = dialogRef;
 	}, [dialogRef]);
 
-	const { recipe, mounted, clear } = useRecipeCardModal(
+	const { recipe, mounted } = useRecipeCardModal(
 		useShallow((s) => ({
 			recipe: s.recipe,
 			mounted: s.mounted,
-			clear: s.clear,
 		})),
 	);
 
@@ -97,13 +100,16 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 						ref={cardRef}
 						recipe={recipe}
 						className={styles.card}
+						layout="position"
 					>
 						<RecipeCard
 							recipe={recipe}
 							servings={deferredServings}
 							convertUnits={conversionSystem}
 							withLink
-							nameAdornment={<Icon name="duotone-martini-glass" size={3} />}
+							nameAdornment={
+								<RecipeNameAdornment servings={deferredServings} />
+							}
 						/>
 					</MotionRecipeCard>
 
