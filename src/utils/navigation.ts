@@ -28,8 +28,6 @@ export function NavigationObserver() {
 			return;
 		}
 
-		console.log("navigation", listeners);
-
 		prev.current = pathname;
 
 		for (const cb of listeners) {
