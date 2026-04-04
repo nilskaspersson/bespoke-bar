@@ -1,5 +1,5 @@
 import { and, desc, eq, sql } from "drizzle-orm";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
@@ -21,6 +21,7 @@ export async function readBarRecipeLists(
 
 export async function getCachedRecipeLists(orgId: string) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.recipeLists(orgId));
 	return await readBarRecipeLists(orgId);
 }

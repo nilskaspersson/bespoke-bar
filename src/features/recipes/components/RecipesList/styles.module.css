@@ -6,13 +6,19 @@
 		border: 1px solid var(--shine);
 		box-shadow: var(--shadow--low);
 		isolation: isolate;
-		content-visibility: auto;
-		contain-intrinsic-size: auto 169px;
 		transition: background-color var(--transition-duration);
+	}
+
+	.hidden {
+		visibility: hidden;
 	}
 
 	.actions {
 		margin-top: var(--gap--tiny);
+	}
+
+	.pointer {
+		cursor: pointer;
 	}
 
 	.icon {

@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
+import type { ComponentProps, Ref } from "react";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { Scale } from "@/utils/types";
 import styles from "./styles.module.css";
@@ -10,14 +10,18 @@ export function OverscrollList({
 	padding,
 	gap = 4,
 	style,
-	...props
+	ref,
 }: {
 	children: React.ReactNode;
 	padding: Scale;
 	gap?: Scale;
-} & ComponentProps<"ul">) {
+	className?: string;
+	style?: React.CSSProperties;
+	ref?: Ref<HTMLUListElement>;
+}) {
 	return (
 		<ul
+			ref={ref}
 			className={clsx(styles.list, className)}
 			style={mergeStyleSources(
 				style,
@@ -26,7 +30,6 @@ export function OverscrollList({
 					jsxGap: gap > 0 ? `var(--space-${gap})` : gap,
 				}),
 			)}
-			{...props}
 		>
 			{children}
 		</ul>

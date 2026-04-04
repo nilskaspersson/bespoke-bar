@@ -17,11 +17,13 @@ export function RecipeActions({
 	recipe,
 	withLink,
 	isFavorite,
+	onDelete,
 	...props
 }: {
 	recipe: RecipeWithSpecs;
 	withLink?: boolean;
 	isFavorite?: boolean;
+	onDelete?: () => void;
 } & Omit<ComponentProps<typeof EntityActions>, "children">) {
 	return (
 		<EntityActions {...props}>
@@ -96,6 +98,7 @@ export function RecipeActions({
 								id: recipe.id,
 								redirectTo: "/bar/recipes",
 							})}
+							onAction={onDelete}
 						>
 							<Icon name="trash" size={1} /> Delete
 						</ConfirmDeleteRecipe>

@@ -1,5 +1,5 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import type { PublicUserData } from "@clerk/types";
+import type { PublicUserData } from "@clerk/nextjs/types";
 import { cache } from "react";
 
 export const getUserById = cache(

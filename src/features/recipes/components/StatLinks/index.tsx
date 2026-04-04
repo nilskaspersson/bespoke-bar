@@ -1,4 +1,4 @@
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { getCachedCountBarRecipes } from "@/features/recipes/api/countBarRecipes";
@@ -15,6 +15,7 @@ type StatLinksProps = ComponentProps<"nav"> & {
 
 export async function StatLinks({ orgId, userId, ...props }: StatLinksProps) {
 	"use cache";
+	cacheLife("max");
 
 	cacheTag(
 		cacheEvents.recipe.create.tag(orgId),

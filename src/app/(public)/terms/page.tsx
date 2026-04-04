@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { TERMS_CONDITIONS_VERSION } from "@/features/consent/constants";
 import { Container } from "@/ui/Container";
@@ -14,6 +15,7 @@ import styles from "./page.module.css";
  */
 export default async function TermsPage() {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<Container as="article" className={styles.article}>

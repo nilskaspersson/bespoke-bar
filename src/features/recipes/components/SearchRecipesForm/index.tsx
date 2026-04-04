@@ -165,7 +165,11 @@ export function SearchRecipesForm({
 						</Flex>
 					</EmptyArea>
 				) : (
-					<RecipesList recipes={filteredRecipes} ref={listRef} />
+					<RecipesList
+						recipes={filteredRecipes}
+						ref={listRef}
+						withMotion={false}
+					/>
 				)}
 			</div>
 

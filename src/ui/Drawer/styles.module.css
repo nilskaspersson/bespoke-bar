@@ -1,46 +1,22 @@
-@layer ui {
+@layer component {
 	.drawer {
 		--inset: calc(var(--app-inset) / 2);
 		--maxHeight: 80svh;
 
-		transition-behavior: allow-discrete;
-		transition-property: display, overlay, transform, opacity;
-		transition-duration: var(--transition-duration--slow);
-		transition-timing-function: var(--spring-lazy);
-
-		background: none;
-		box-shadow: none;
-		border: none;
-		text-align: initial;
-		color: var(--mauve-11);
-
-		inset: 0;
-		width: 100%;
-		height: fit-content;
-		max-height: var(--maxHeight);
-		max-width: var(--container);
-
-		margin: auto auto 0;
-		padding: 0 var(--inset) var(--inset);
-		overflow: hidden;
-		overscroll-behavior: contain;
-
 		&::backdrop {
-			background-image: linear-gradient(
-				to bottom,
-				transparent,
-				rgb(0 0 0 / 0.65)
-			);
-			transition: opacity var(--transition-duration) allow-discrete;
-
-			@starting-style {
-				opacity: 0;
-			}
+			transition: none;
 		}
+	}
 
-		@starting-style {
-			transform: translateY(100%);
-		}
+	.motion {
+		position: fixed;
+		inset: auto var(--inset) var(--inset);
+		margin-inline: auto;
+		max-width: var(--container);
+		max-height: var(--maxHeight);
+		touch-action: none;
+		will-change: transform;
+		contain: layout style paint;
 	}
 
 	.container {
@@ -54,6 +30,19 @@
 		background-color: var(--mauve-2);
 		box-shadow: var(--shadow--high);
 		max-height: calc(var(--maxHeight) - var(--inset));
+		position: relative;
+
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			inset: var(--space-3) 0 auto;
+			margin-inline: auto;
+			width: var(--size-8);
+			height: 4px;
+			border-radius: var(--radius--full);
+			background-color: var(--mauve-6);
+		}
 	}
 
 	.header {

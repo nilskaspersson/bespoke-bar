@@ -1,63 +1,69 @@
 import { use, useCallback } from "react";
+import type { Unit } from "@/db/schema/units";
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { round } from "@/utils";
+
+export type MeasureParts = [quantity: number, unit: Unit];
 
 export function roundUnit(
 	volumeInMl: number,
 	unitSystem: UnitSystems | null | undefined,
-	volumeFormatter: Intl.NumberFormat,
-) {
-	if (volumeInMl === 0) return unitSystem === "metric" ? "0 ml" : "0 fl oz";
+): MeasureParts {
+	if (volumeInMl === 0) {
+		return unitSystem === "metric" ? [0, "ml"] : [0, "fl_oz"];
+	}
 
 	if (unitSystem === "imperial") {
 		const flOz = convert(volumeInMl).from("ml").to("fl-oz");
 
 		if (flOz >= 128) {
-			const gallons = convert(flOz).from("fl-oz").to("gal");
-			return `${volumeFormatter.format(gallons)} ${getFormattedUnit("gal", gallons)}`;
+			return [round(convert(flOz).from("fl-oz").to("gal")), "gal"];
 		}
 
 		if (flOz >= 64) {
-			const quarts = convert(flOz).from("fl-oz").to("qt");
-			return `${volumeFormatter.format(quarts)} ${getFormattedUnit("qt", quarts)}`;
+			return [round(convert(flOz).from("fl-oz").to("qt")), "qt"];
 		}
 
 		if (flOz >= 8) {
-			const cups = convert(flOz).from("fl-oz").to("cup");
-			return `${volumeFormatter.format(cups)} ${getFormattedUnit("cup", cups)}`;
+			return [round(convert(flOz).from("fl-oz").to("cup")), "cup"];
 		}
 
-		return `${volumeFormatter.format(flOz)} ${getFormattedUnit("fl_oz", flOz)}`;
+		return [round(flOz), "fl_oz"];
 	}
 
 	if (volumeInMl >= 1000) {
-		const liters = convert(volumeInMl).from("ml").to("l");
-		return `${volumeFormatter.format(liters)} ${getFormattedUnit("l", liters)}`;
+		return [round(convert(volumeInMl).from("ml").to("l")), "l"];
 	}
 
 	if (volumeInMl >= 200) {
-		const deciliters = convert(volumeInMl).from("ml").to("dl");
-		return `${volumeFormatter.format(deciliters)} ${getFormattedUnit("dl", deciliters)}`;
+		return [round(convert(volumeInMl).from("ml").to("dl")), "dl"];
 	}
 
 	if (volumeInMl >= 10) {
-		const centiliters = convert(volumeInMl).from("ml").to("cl");
-		return `${volumeFormatter.format(centiliters)} ${getFormattedUnit("cl", centiliters)}`;
+		return [round(convert(volumeInMl).from("ml").to("cl")), "cl"];
 	}
 
-	return `${volumeFormatter.format(volumeInMl)} ${getFormattedUnit("ml", volumeInMl)}`;
+	return [round(volumeInMl), "ml"];
 }
 
-export function useRoundedUnit(): (
-	volumeInMl: number,
-	unitSystem: UnitSystems | null | undefined,
-) => string {
+export function formatMeasure(
+	parts: MeasureParts,
+	formatter: Intl.NumberFormat,
+): string {
+	const [quantity, unit] = parts;
+	return `${formatter.format(quantity)} ${getFormattedUnit(unit, quantity)}`;
+}
+
+export function useRoundedUnit() {
 	const { volumeFormatter } = use(FormatterContext);
 
 	return useCallback(
-		(volumeInMl: number, unitSystem: UnitSystems | null | undefined) =>
-			roundUnit(volumeInMl, unitSystem, volumeFormatter),
+		(volumeInMl: number, unitSystem: UnitSystems | null | undefined) => {
+			const parts = roundUnit(volumeInMl, unitSystem);
+			return formatMeasure(parts, volumeFormatter);
+		},
 		[volumeFormatter],
 	);
 }

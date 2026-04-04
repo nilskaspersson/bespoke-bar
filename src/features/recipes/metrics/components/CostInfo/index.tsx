@@ -77,7 +77,10 @@ export function CostInfo<T extends BaseRecipe>({
 									</Text>
 
 									<Text as="td" align="right">
-										{formatSpecMeasure({ spec, servings, convertUnits })}
+										{
+											formatSpecMeasure({ spec, servings, convertUnits })
+												.formatted
+										}
 									</Text>
 
 									<Text as="td" align="right">

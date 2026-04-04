@@ -1,3 +1,30 @@
+import type { MotionValue } from "motion/react";
+
+export const SPRING_STIFFNESS = 400;
+export const SPRING_DAMPING = 35;
+
+export function getWindowHeight(): number {
+	return typeof window !== "undefined" ? window.innerHeight : 0;
+}
+
+/**
+ * Subscribe to a MotionValue and resolve when the value reaches the target. Use to
+ * detect animation completion.
+ */
+export function onMotionValueReached(
+	mv: MotionValue<number>,
+	target: number,
+): Promise<void> {
+	return new Promise((resolve) => {
+		const unsub = mv.on("change", (v) => {
+			if (v >= target - 1) {
+				unsub();
+				resolve();
+			}
+		});
+	});
+}
+
 type AnimationKeyframes = Keyframe[];
 
 type AnimateOptions = {
@@ -98,4 +125,46 @@ export function animateChildren(
 	options: AnimateOptions = {},
 ): Animation[] {
 	return animateStaggered(parent?.children, keyframes, options);
+}
+
+/**
+ * Returns the number of decimal places in a number.
+ * E.g., 22.5 → 1, 45 → 0
+ */
+function getPrecision(value: number): number {
+	const decimals = value.toString().split(".")[1];
+	return decimals ? decimals.length : 0;
+}
+
+/**
+ * Tween from `from` to `to` over `duration` ms with ease-out.
+ * Calls `onUpdate` on each frame with the interpolated value,
+ * rounded to the target's decimal precision.
+ * Returns a cleanup function that cancels the animation.
+ */
+export function tween(
+	from: number,
+	to: number,
+	duration: number,
+	onUpdate: (value: number, precision: number) => void,
+): () => void {
+	const precision = getPrecision(to);
+	const factor = 10 ** precision;
+	const start = performance.now();
+	let raf: number;
+
+	function tick(now: number) {
+		const t = Math.min((now - start) / duration, 1);
+		const eased = 1 - (1 - t) ** 3;
+		const current = Math.round((from + (to - from) * eased) * factor) / factor;
+
+		onUpdate(current, precision);
+
+		if (t < 1) {
+			raf = requestAnimationFrame(tick);
+		}
+	}
+
+	raf = requestAnimationFrame(tick);
+	return () => cancelAnimationFrame(raf);
 }

@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { ThemePicker } from "@/components/ThemePicker";
@@ -15,6 +15,7 @@ export async function AppFooter({
 	...props
 }: Omit<ComponentProps<"footer">, "children">) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<footer
@@ -107,6 +108,7 @@ export async function AppFooter({
 
 async function Copyright() {
 	"use cache";
+	cacheLife("max");
 	cacheTag("current-year");
 
 	return (

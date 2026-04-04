@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { forbidden, redirect } from "next/navigation";
 import { db } from "@/db";
 import { OrganisationsTable } from "@/db/schema/organisations";
@@ -42,6 +42,7 @@ export async function getOrCreateLocalOrganisation(
 
 async function getCachedOrganisation(orgId: string) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(`organisation-${orgId}`);
 
 	const [existingOrganisation] = await db

@@ -1,0 +1,5 @@
+@layer ui {
+	.number {
+		font-variant-numeric: tabular-nums;
+	}
+}

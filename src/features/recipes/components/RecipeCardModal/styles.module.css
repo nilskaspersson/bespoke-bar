@@ -1,0 +1,34 @@
+@layer feature {
+	.particles {
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.container {
+		display: grid;
+	}
+
+	.content {
+		display: flex;
+		/* flex-wrap: wrap; */
+		align-items: flex-start;
+		gap: var(--gap--large);
+		isolation: isolate;
+	}
+
+	.card {
+		box-shadow: var(--shadow--high);
+		border-color: var(--mauve-6);
+	}
+
+	.actions {
+		margin-top: var(--gap--tiny);
+	}
+
+	.particleToggle {
+		position: fixed;
+		bottom: var(--gap--small);
+		left: var(--gap--small);
+	}
+}

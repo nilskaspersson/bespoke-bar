@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import {
@@ -14,9 +15,7 @@ import { authOrForbidden } from "@/utils/auth";
 import { cacheTags } from "@/utils/cache";
 import styles from "./page.module.css";
 
-export default async function IngredientsPage() {
-	const { orgId } = await authOrForbidden();
-
+export default function IngredientsPage() {
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -35,14 +34,25 @@ export default async function IngredientsPage() {
 			/>
 
 			<Suspense fallback={<IngredientTableSkeleton />}>
-				<IngredientsTableWithData orgId={orgId} />
+				<IngredientsWithAuth />
 			</Suspense>
 		</Container>
 	);
 }
 
+async function IngredientsWithAuth() {
+	const { orgId } = await authOrForbidden();
+
+	return (
+		<OrgProvider>
+			<IngredientsTableWithData orgId={orgId} />
+		</OrgProvider>
+	);
+}
+
 async function IngredientsTableWithData({ orgId }: { orgId: string }) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.ingredientsList(orgId));
 
 	const ingredients = await getCachedIngredients(orgId);

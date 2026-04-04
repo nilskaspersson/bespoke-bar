@@ -1,3 +1,3 @@
-import type { PublicUserData } from "@clerk/types";
+import type { PublicUserData } from "@clerk/nextjs/types";
 
 export type UserIdMap = Record<string, PublicUserData>;

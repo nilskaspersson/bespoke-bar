@@ -7,7 +7,7 @@ export default function CreateOrgPage() {
 		<section className={styles.base}>
 			<AnimatedBackground />
 
-			<CreateOrganization hideSlug afterCreateOrganizationUrl="/bar" />
+			<CreateOrganization afterCreateOrganizationUrl="/bar" />
 		</section>
 	);
 }

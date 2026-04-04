@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { cacheLife } from "next/cache";
 import type { HTMLAttributes } from "react";
 import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesButton";
 import { LinkButton } from "@/ui/Button";
@@ -11,6 +12,7 @@ export async function SecondaryNavigation({
 	...props
 }: Omit<HTMLAttributes<HTMLDivElement>, "children">) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<nav className={clsx(styles.nav, className)} {...props}>

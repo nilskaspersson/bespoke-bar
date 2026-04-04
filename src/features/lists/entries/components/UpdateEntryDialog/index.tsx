@@ -30,17 +30,19 @@ export function UpdateEntryDialog({
 	children,
 	...props
 }: ButtonProps & Props) {
-	const { openDialog, closeDialog, dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 
 	return (
 		<>
-			<Button {...props} onClick={openDialog}>
+			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
 				{children}
 			</Button>
 
 			<Drawer
 				ref={dialogRef}
-				onClose={closeDialog}
+				isOpen={isOpen}
+				mounted={mounted}
+				onExitComplete={unmount}
 				header={
 					<HGroup overline="Update sales price">
 						<Heading level="h3" size={6}>
@@ -56,9 +58,10 @@ export function UpdateEntryDialog({
 					</li>
 				}
 			>
-				{isOpen ? (
-					<UpdateEntryForm entry={entry} onSuccess={closeDialog} />
-				) : null}
+				<UpdateEntryForm
+					entry={entry}
+					onSuccess={() => dialogRef.current?.close()}
+				/>
 			</Drawer>
 		</>
 	);

@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import {
@@ -18,7 +17,6 @@ import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
-
 import styles from "./styles.module.css";
 
 type Props<T> = {

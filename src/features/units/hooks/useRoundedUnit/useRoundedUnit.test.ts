@@ -1,47 +1,50 @@
 import { describe, expect, it } from "vitest";
-import { createVolumeFormatter } from "@/utils/formatting";
 import { roundUnit } from ".";
 
-const volumeFormatter = createVolumeFormatter("en-GB");
-
-describe("formatVolume", () => {
-	it("should return '0 ml' for zero volume with metric system", () => {
-		expect(roundUnit(0, "metric", volumeFormatter)).toBe("0 ml");
+describe("roundUnit", () => {
+	it("should return [0, 'ml'] for zero volume with metric system", () => {
+		expect(roundUnit(0, "metric")).toEqual([0, "ml"]);
 	});
 
-	it("should return '0 fl oz' for zero volume with imperial system", () => {
-		expect(roundUnit(0, "imperial", volumeFormatter)).toBe("0 fl oz");
+	it("should return [0, 'fl_oz'] for zero volume with imperial system", () => {
+		expect(roundUnit(0, "imperial")).toEqual([0, "fl_oz"]);
 	});
 
-	it("should format large imperial volumes as gallons", () => {
-		expect(roundUnit(15000, "imperial", volumeFormatter)).toBe("3.96 Gallons");
+	it("should convert large imperial volumes to gallons", () => {
+		const [quantity, unit] = roundUnit(15000, "imperial");
+		expect(unit).toBe("gal");
+		expect(quantity).toBeCloseTo(3.96, 1);
 	});
 
-	it("should format medium imperial volumes as cups", () => {
-		expect(roundUnit(300, "imperial", volumeFormatter)).toBe("1.27 Cups");
+	it("should convert medium imperial volumes to cups", () => {
+		const [quantity, unit] = roundUnit(300, "imperial");
+		expect(unit).toBe("cup");
+		expect(quantity).toBeCloseTo(1.27, 1);
 	});
 
-	it("should format small imperial volumes as fl oz", () => {
-		expect(roundUnit(100, "imperial", volumeFormatter)).toBe("3.38 fl oz");
+	it("should convert small imperial volumes to fl oz", () => {
+		const [quantity, unit] = roundUnit(100, "imperial");
+		expect(unit).toBe("fl_oz");
+		expect(quantity).toBeCloseTo(3.38, 1);
 	});
 
-	it("should format large metric volumes as liters", () => {
-		expect(roundUnit(1500, "metric", volumeFormatter)).toBe("1.5 Litres");
+	it("should convert large metric volumes to liters", () => {
+		expect(roundUnit(1500, "metric")).toEqual([1.5, "l"]);
 	});
 
-	it("should format medium metric volumes as deciliters", () => {
-		expect(roundUnit(250, "metric", volumeFormatter)).toBe("2.5 dl");
+	it("should convert medium metric volumes to deciliters", () => {
+		expect(roundUnit(250, "metric")).toEqual([2.5, "dl"]);
 	});
 
-	it("should format small metric volumes as centiliters", () => {
-		expect(roundUnit(50, "metric", volumeFormatter)).toBe("5 cl");
+	it("should convert small metric volumes to centiliters", () => {
+		expect(roundUnit(50, "metric")).toEqual([5, "cl"]);
 	});
 
-	it("should format very small metric volumes as ml", () => {
-		expect(roundUnit(5, "metric", volumeFormatter)).toBe("5 ml");
+	it("should keep very small metric volumes as ml", () => {
+		expect(roundUnit(5, "metric")).toEqual([5, "ml"]);
 	});
 
-	it("should default to metric formatting when unitSystem is null", () => {
-		expect(roundUnit(100, null, volumeFormatter)).toBe("10 cl");
+	it("should default to metric when unitSystem is null", () => {
+		expect(roundUnit(100, null)).toEqual([10, "cl"]);
 	});
 });

@@ -1,4 +1,4 @@
-import type { PublicUserData } from "@clerk/types";
+import type { PublicUserData } from "@clerk/nextjs/types";
 import { clsx } from "clsx";
 import Image from "next/image";
 import type { ComponentProps } from "react";

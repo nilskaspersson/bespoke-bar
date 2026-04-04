@@ -1,54 +1,69 @@
-"use client";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useOnNavigation } from "@/hooks/useOnNavigation";
 
-import { createContext, useCallback, useRef, useState } from "react";
-
-type DialogContextValue = {
-	dialogRef: React.RefObject<HTMLDialogElement | null>;
-	isOpen: boolean;
-	openDialog: () => void;
-	closeDialog: () => void;
-	onClose: () => void;
-	toggleDialog: () => void;
-};
-
-export const DialogContext = createContext<DialogContextValue | null>(null);
-
-export function useDialog(): DialogContextValue {
+export function useDialog(options?: { onNavigationClose?: () => void }) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [isOpen, setIsOpen] = useState(false);
+	const [mounted, setMounted] = useState(false);
 
-	const openDialog = useCallback(() => {
-		dialogRef.current?.showModal();
-		setIsOpen(true);
+	useEffect(() => {
+		const dialog = dialogRef.current;
+
+		if (!dialog) return;
+
+		const controller = new AbortController();
+
+		dialog.addEventListener(
+			"toggle",
+			(event) => {
+				const open = event.newState === "open";
+				setIsOpen(open);
+
+				/**
+				 * Only mount on open — never unmount here. Unmounting is deferred to `unmount()`
+				 * so consumers can, f.e., finish exit animations before children are removed
+				 * from the DOM, or preserve state.
+				 */
+				if (open) {
+					setMounted(true);
+				}
+			},
+			{ signal: controller.signal },
+		);
+
+		return () => controller.abort();
 	}, []);
 
-	const closeDialog = useCallback(() => {
-		dialogRef.current?.close();
-		setIsOpen(false);
-	}, []);
+	const unmount = useCallback(() => setMounted(false), []);
 
-	/**
-	 * Note: MUST be assigned to the dialog, or native dismissal methods won't update
-	 * internal state.
-	 */
-	const onClose = useCallback(() => {
-		setIsOpen(false);
-	}, []);
+	useOnNavigation(
+		isOpen
+			? () => {
+					if (dialogRef.current?.open) {
+						dialogRef.current.close("dismiss");
+					}
 
-	const toggleDialog = useCallback(() => {
-		if (isOpen) {
-			closeDialog();
-		} else {
-			openDialog();
-		}
-	}, [isOpen, closeDialog, openDialog]);
+					options?.onNavigationClose?.();
+				}
+			: undefined,
+	);
+
+	useEffect(() => {
+		if (!isOpen) return;
+
+		const dialog = dialogRef.current;
+
+		return () => {
+			if (dialog?.open) {
+				dialog.close("dismiss");
+			}
+		};
+	}, [isOpen]);
 
 	return {
 		dialogRef,
 		isOpen,
-		openDialog,
-		closeDialog,
-		onClose,
-		toggleDialog,
+		mounted,
+		unmount,
 	};
 }

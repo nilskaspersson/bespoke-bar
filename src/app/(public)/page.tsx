@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import { LandingPageHero } from "@/features/landing-page/components/LandingPageHero";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
@@ -10,6 +11,7 @@ import styles from "./page.module.css";
 
 export default async function LandingPage() {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<LandingPageHero>

@@ -1,29 +1,26 @@
 @layer ui {
 	.dialog {
-		place-items: center;
-		width: 100lvw;
-		height: 100lvh;
-		max-width: none;
-		max-height: none;
-		contain: strict;
+		--progress: 0;
 		container: inline-size;
-		position: fixed;
-		inset: 0;
-		background-color: transparent;
-		z-index: var(--z-modal);
+
+		margin: auto;
+		padding: 0;
 		border: none;
-		padding: var(--gap);
+		background: none;
+		text-align: initial;
+		overflow: visible;
+		outline: none;
+
+		color: var(--mauve-11);
 
 		&[open] {
-			display: grid;
+			--progress: 1;
 		}
 
-		/**
-		 * NOTE: Backdrop blur will always cover the rest of the app—including
-		 * notifications, and other static elements we may want to keep in the foreground.
-		 * For that reason, we blur the #root instead.
-		 */
 		&::backdrop {
+			background: linear-gradient(to bottom, transparent, rgb(0 0 0 / 0.65));
+			opacity: var(--progress);
+
 			transition: opacity var(--transition-duration);
 			transition-behavior: allow-discrete;
 
@@ -33,8 +30,13 @@
 		}
 	}
 
-	:global(#root):has(.dialog[open]) {
-		filter: blur(var(--space-1));
+	/**
+	 * NOTE: Backdrop blur will always cover the rest of the app—including
+	 * notifications, and other static elements we may want to keep in the foreground.
+	 * For that reason, we blur the #root instead.
+	 */
+	:global(#root):has(.blur[open]) {
+		filter: blur(calc(var(--space-1) * var(--progress, 1)));
 		transition: filter var(--transition-duration);
 	}
 }

@@ -17,7 +17,7 @@ export function useGetSpecsToText<T extends DraftSpecWithDraftIngredient>(
 		return specs
 			.map(
 				(spec) =>
-					`${formatSpecMeasure({ spec, servings, convertUnits })} ${spec.ingredient.name}`,
+					`${formatSpecMeasure({ spec, servings, convertUnits }).formatted} ${spec.ingredient.name}`,
 			)
 			.join(joiner);
 	};

@@ -26,18 +26,20 @@ type Props = ButtonProps & {
 };
 
 export function AddRecipeDialog({ list, children, ...props }: Props) {
-	const { openDialog, closeDialog, dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 	const formId = useId();
 
 	return (
 		<>
-			<Button {...props} onClick={openDialog}>
+			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
 				{children}
 			</Button>
 
 			<Drawer
 				ref={dialogRef}
-				onClose={closeDialog}
+				isOpen={isOpen}
+				mounted={mounted}
+				onExitComplete={unmount}
 				header={
 					<HGroup overline="Add recipe to">
 						<Heading level="h3" size={6}>
@@ -59,9 +61,11 @@ export function AddRecipeDialog({ list, children, ...props }: Props) {
 					</li>
 				}
 			>
-				{isOpen ? (
-					<AddRecipeForm formId={formId} list={list} onSuccess={closeDialog} />
-				) : null}
+				<AddRecipeForm
+					formId={formId}
+					list={list}
+					onSuccess={() => dialogRef.current?.close()}
+				/>
 			</Drawer>
 		</>
 	);

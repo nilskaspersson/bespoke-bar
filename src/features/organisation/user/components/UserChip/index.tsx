@@ -1,4 +1,4 @@
-import type { PublicUserData } from "@clerk/types";
+import type { PublicUserData } from "@clerk/nextjs/types";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { getFullName } from "@/features/organisation/utils";

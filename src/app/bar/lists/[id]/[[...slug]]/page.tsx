@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EntityActions } from "@/components/EntityActions";
+import { OrgProvider } from "@/components/OrgProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
@@ -23,7 +24,7 @@ type Props = {
  * [[...slug]] enables suffixing the URL with a slug of the list name for
  * improved readability of links.
  */
-export default async function RecipeListPage({ params }: Props) {
+export default function RecipeListPage({ params }: Props) {
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader heading="Recipe List" />
@@ -54,7 +55,7 @@ async function RecipeListContent({ params }: Props) {
 	}
 
 	return (
-		<>
+		<OrgProvider>
 			<RecipeListFrame level="h2" list={list} className={styles.frame}>
 				<Grid gap={8}>
 					<RecipeListFilters list={list} editable withActions />
@@ -72,7 +73,7 @@ async function RecipeListContent({ params }: Props) {
 					/>
 				)}
 			</EntityActions>
-		</>
+		</OrgProvider>
 	);
 }
 

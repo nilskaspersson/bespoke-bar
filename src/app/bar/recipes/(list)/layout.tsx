@@ -9,13 +9,7 @@ import { Icon } from "@/ui/Icon";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./layout.module.css";
 
-export default async function Layout({
-	children,
-}: {
-	children: React.ReactNode;
-}) {
-	const { orgId, userId } = await authOrForbidden();
-
+export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -42,13 +36,20 @@ export default async function Layout({
 				className={styles.navigation}
 			>
 				<Suspense>
-					<StatLinks orgId={orgId} userId={userId} />
+					<StatLinksWithAuth />
 				</Suspense>
 
-				<SwitchListView />
+				<Suspense>
+					<SwitchListView />
+				</Suspense>
 			</Flex>
 
 			{children}
 		</Container>
 	);
+}
+
+async function StatLinksWithAuth() {
+	const { orgId, userId } = await authOrForbidden();
+	return <StatLinks orgId={orgId} userId={userId} />;
 }

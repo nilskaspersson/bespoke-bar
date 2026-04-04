@@ -1,3 +1,4 @@
+import { cacheLife } from "next/cache";
 import type { ActionProps } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
@@ -27,6 +28,7 @@ export async function RecipeListActions({
 	withLink?: boolean;
 }) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<>

@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import { cacheLife } from "next/cache";
 import type { ComponentProps } from "react";
 import { OrganisationSwitcherLoader } from "@/features/organisation/components/OrganisationSwitcher/loader";
 import { UserOrSignupLoader } from "@/features/organisation/user/components/UserOrSignup/loader";
@@ -16,6 +17,7 @@ export async function AppSidebar({
 	toggleButtonProps?: ComponentProps<typeof Button>;
 }) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<aside className={clsx(className, styles.sidebar)} {...props} tabIndex={-1}>

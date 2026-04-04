@@ -1,55 +1,84 @@
-import type { ComponentProps } from "react";
+"use client";
+
+import clsx from "clsx";
+import type { Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
+import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
+import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
+import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 export function RecipesList({
 	recipes,
 	favoriteRecipeIds,
 	withActions,
-	...props
+	ref,
+	withMotion = true,
 }: {
 	recipes: RecipeWithSpecs[];
 	favoriteRecipeIds?: string[];
 	withActions?: boolean;
-} & Omit<ComponentProps<"ul">, "children">) {
+	ref?: Ref<HTMLUListElement>;
+	withMotion?: boolean;
+}) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
+	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
+	const selectedRecipeId = useRecipeCardModal((s) => s.recipe?.id);
+	const modalMounted = useRecipeCardModal((s) => s.mounted);
 
 	if (recipes.length === 0) {
 		return null;
 	}
 
 	return (
-		<OverscrollList {...props} padding={6} gap={4}>
-			{recipes.map((recipe) => (
-				<OverscrollList.Item key={recipe.id}>
-					<RecipeCard
-						recipe={recipe}
-						className={styles.card}
-						nameAdornment={
-							<Icon
-								name="duotone-martini-glass"
-								size={3}
-								className={styles.icon}
-							/>
-						}
-					/>
+		<OverscrollList ref={ref} padding={6} gap={4}>
+			{recipes.map((recipe) => {
+				const isFavorite = favoriteIdSet.has(recipe.id);
+				const isSelected =
+					withActions && selectedRecipeId === recipe.id && modalMounted;
+				const selectRecipe = () => setRecipe(recipe, isFavorite);
 
-					{withActions ? (
-						<RecipeActions
+				return (
+					<OverscrollList.Item key={recipe.id}>
+						<MotionRecipeCard
+							withMotion={withMotion && !isSelected}
 							recipe={recipe}
-							withLink
-							isFavorite={favoriteIdSet.has(recipe.id)}
-							className={styles.actions}
-						/>
-					) : null}
-				</OverscrollList.Item>
-			))}
+							onClick={selectRecipe}
+							onKeyDown={handleKey([
+								["Enter", selectRecipe],
+								[" ", selectRecipe],
+							])}
+							role="button"
+							tabIndex={0}
+							className={clsx({
+								[styles.pointer]: withMotion,
+								[styles.hidden]: isSelected,
+							})}
+						>
+							<RecipeCard
+								recipe={recipe}
+								withLink={!withMotion}
+								nameAdornment={<RecipeNameAdornment />}
+							/>
+						</MotionRecipeCard>
+
+						{withActions ? (
+							<RecipeActions
+								recipe={recipe}
+								withLink
+								isFavorite={isFavorite}
+								className={styles.actions}
+							/>
+						) : null}
+					</OverscrollList.Item>
+				);
+			})}
 		</OverscrollList>
 	);
 }

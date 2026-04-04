@@ -1,12 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import {
-	type ComponentProps,
-	type ReactNode,
-	useLayoutEffect,
-	useRef,
-} from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Dialog } from "@/ui/Dialog";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
@@ -22,29 +17,15 @@ export function Alert({
 	heading,
 	notice,
 	color = "regular",
-	ref,
 	...props
-}: Partial<ComponentProps<typeof Dialog>> & {
+}: ComponentProps<typeof Dialog> & {
 	actions?: ReactNode;
 	notice?: ReactNode;
 	heading?: ReactNode;
 	color?: SystemColor;
 }) {
-	const dialogRef = useRef<HTMLDialogElement>(null);
-
-	useLayoutEffect(() => {
-		/**
-		 * Dialogs must be opened with `showModal`, or they don't render ::backdrop.
-		 * Don't act if an external ref is provided, assume it's handled by the
-		 * implementing component.
-		 */
-		if (dialogRef.current && !ref) {
-			dialogRef.current.showModal();
-		}
-	}, [ref]);
-
 	return (
-		<Dialog ref={ref ?? dialogRef} {...props}>
+		<Dialog {...props}>
 			<Lightbox className={clsx(className, styles.lightbox)}>
 				<div
 					className={clsx(styles.contain, {

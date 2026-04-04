@@ -1,4 +1,6 @@
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
@@ -8,6 +10,7 @@ import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
@@ -16,9 +19,31 @@ type Props = {
 	params: Promise<{ id?: string }>;
 };
 
-export default async function EditRecipeListPage({
-	params: paramsPromise,
-}: Props) {
+export default function EditRecipeListPage({ params: paramsPromise }: Props) {
+	return (
+		<Container as="article" className={styles.container}>
+			<Grid gap={4}>
+				<Heading level="h1">Edit List</Heading>
+
+				<Suspense
+					fallback={
+						<SkeletonScreen>
+							<Skeleton width="100%" height="40lvh" />
+						</SkeletonScreen>
+					}
+				>
+					<EditRecipeListWithAuth paramsPromise={paramsPromise} />
+				</Suspense>
+			</Grid>
+		</Container>
+	);
+}
+
+async function EditRecipeListWithAuth({
+	paramsPromise,
+}: {
+	paramsPromise: Promise<{ id?: string }>;
+}) {
 	const { id } = await paramsPromise;
 
 	if (!id) {
@@ -37,31 +62,25 @@ export default async function EditRecipeListPage({
 	}
 
 	return (
-		<Container as="article" className={styles.container}>
-			<Grid gap={4}>
-				<header>
-					<nav>
-						<LinkButton
-							href={getRecipeListUrl(recipeList)}
-							variant="text"
-							color="accent"
-							size="small"
-						>
-							<Icon name="angle-left" />
-							Back to List
-						</LinkButton>
-					</nav>
+		<OrgProvider>
+			<nav>
+				<LinkButton
+					href={getRecipeListUrl(recipeList)}
+					variant="text"
+					color="accent"
+					size="small"
+				>
+					<Icon name="angle-left" />
+					Back to List
+				</LinkButton>
+			</nav>
 
-					<Heading level="h1">Edit List</Heading>
-				</header>
-
-				<RecipeListForm recipeList={recipeList} recipes={recipes}>
-					<SubmitButton variant="solid" color="accent">
-						<Icon name="pen" />
-						Save changes
-					</SubmitButton>
-				</RecipeListForm>
-			</Grid>
-		</Container>
+			<RecipeListForm recipeList={recipeList} recipes={recipes}>
+				<SubmitButton variant="solid" color="accent">
+					<Icon name="pen" />
+					Save changes
+				</SubmitButton>
+			</RecipeListForm>
+		</OrgProvider>
 	);
 }

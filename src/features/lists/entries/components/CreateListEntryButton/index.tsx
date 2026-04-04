@@ -28,22 +28,20 @@ type Props = ButtonProps & {
 };
 
 export function CreateListEntryButton({ recipe, children, ...props }: Props) {
-	const { openDialog, closeDialog, onClose, dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 	const formRef = useRef<HTMLFormElement>(null);
-
-	const handleSubmit = () => {
-		formRef.current?.requestSubmit();
-	};
 
 	return (
 		<>
-			<Button {...props} onClick={openDialog}>
+			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
 				{children}
 			</Button>
 
 			<Drawer
 				ref={dialogRef}
-				onClose={onClose}
+				isOpen={isOpen}
+				mounted={mounted}
+				onExitComplete={unmount}
 				header={
 					<HGroup overline={getRecipeName(recipe)}>
 						<Heading level="h3" size={6}>
@@ -57,20 +55,18 @@ export function CreateListEntryButton({ recipe, children, ...props }: Props) {
 							variant="solid"
 							color="accent"
 							size="small"
-							onClick={handleSubmit}
+							onClick={() => formRef.current?.requestSubmit()}
 						>
 							Add
 						</SubmitButton>
 					</li>
 				}
 			>
-				{isOpen ? (
-					<CreateListEntryForm
-						recipe={recipe}
-						onSuccess={closeDialog}
-						formRef={formRef}
-					/>
-				) : null}
+				<CreateListEntryForm
+					recipe={recipe}
+					onSuccess={() => dialogRef.current?.close()}
+					formRef={formRef}
+				/>
 			</Drawer>
 		</>
 	);

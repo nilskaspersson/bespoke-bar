@@ -1,7 +1,8 @@
 "use client";
 
-import type { PropsWithChildren } from "react";
+import type { ComponentProps, PropsWithChildren } from "react";
 import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
+import { useDialog } from "@/hooks/useDialog";
 import { useGracePeriod } from "@/hooks/useGracePeriod";
 import { Alert } from "@/ui/Alert";
 import { Button, type ButtonProps } from "@/ui/Button";
@@ -14,10 +15,8 @@ export function ConfirmAction({
 	actionLabel,
 	children,
 	className,
-	description,
-	iconName,
-	notice,
 	buttonProps,
+	...props
 }: PropsWithChildren<{
 	action: () => Promise<void>;
 	actionLabel: string;
@@ -35,60 +34,63 @@ export function ConfirmAction({
 		isSubmitting,
 	} = useConfirmSubmit(action);
 
-	return (
-		<form className={className} onSubmit={confirmSubmit}>
-			<SubmitButton variant="outline" size="small" {...buttonProps}>
-				{children}
-			</SubmitButton>
+	const { dialogRef } = useDialog();
 
-			{isPending ? (
-				<ConfirmAction.Alert
-					onClose={rejectAction}
-					heading={actionLabel}
-					notice={notice}
-					description={description}
-					iconName={iconName}
-					buttonProps={buttonProps}
-					resolveAction={resolveAction}
-					isSubmitting={isSubmitting}
-				/>
-			) : null}
-		</form>
+	return (
+		<>
+			<form
+				className={className}
+				onSubmit={(e) => {
+					confirmSubmit(e);
+					dialogRef.current?.showModal();
+				}}
+			>
+				<SubmitButton variant="outline" size="small" {...buttonProps}>
+					{children}
+				</SubmitButton>
+			</form>
+
+			<ConfirmAction.Alert
+				{...props}
+				ref={dialogRef}
+				isOpen={isPending}
+				onClose={rejectAction}
+				heading={actionLabel}
+				buttonProps={buttonProps}
+				resolveAction={resolveAction}
+				isSubmitting={isSubmitting}
+			/>
+		</>
 	);
 }
 
 ConfirmAction.Alert = function ConfirmActionAlert({
-	onClose,
-	heading,
 	acceptLabel,
-	notice,
 	description,
 	iconName,
 	buttonProps,
 	resolveAction,
 	isSubmitting,
+	...props
 }: {
-	onClose?: () => void;
-	heading: string;
 	acceptLabel?: string;
-	notice?: React.ReactNode;
 	description: React.ReactNode;
 	iconName?: IconName;
 	buttonProps?: ButtonProps;
 	resolveAction?: () => void;
 	isSubmitting?: boolean;
-}) {
+} & Omit<ComponentProps<typeof Alert>, "actions" | "children">) {
 	return (
 		<Alert
-			onClose={onClose}
-			heading={heading}
-			notice={notice}
 			color={buttonProps?.color}
+			{...props}
 			actions={
 				<>
-					<Button onClick={onClose} autoFocus size="small" variant="ghost">
-						Cancel
-					</Button>
+					<form method="dialog">
+						<Button type="submit" autoFocus size="small" variant="ghost">
+							Cancel
+						</Button>
+					</form>
 
 					<ConfirmButton
 						{...buttonProps}
@@ -99,7 +101,7 @@ ConfirmAction.Alert = function ConfirmActionAlert({
 						size="small"
 					>
 						{iconName ? <Icon name={iconName} /> : null}
-						{acceptLabel ?? heading}
+						{acceptLabel ?? props.heading}
 					</ConfirmButton>
 				</>
 			}

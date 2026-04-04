@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { type ReactNode, Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
 import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
@@ -15,9 +16,7 @@ import { authOrForbidden } from "@/utils/auth";
 import { cacheTags } from "@/utils/cache";
 import styles from "./page.module.css";
 
-export default async function ListsPage() {
-	const { orgId } = await authOrForbidden();
-
+export default function ListsPage() {
 	return (
 		<Container as="article" className={styles.container}>
 			<PageHeader
@@ -37,15 +36,26 @@ export default async function ListsPage() {
 
 			<ListsPageContent>
 				<Suspense fallback={<RecipeListTable.Skeleton />}>
-					<RecipeListData orgId={orgId} />
+					<ListsWithAuth />
 				</Suspense>
 			</ListsPageContent>
 		</Container>
 	);
 }
 
+async function ListsWithAuth() {
+	const { orgId } = await authOrForbidden();
+
+	return (
+		<OrgProvider>
+			<RecipeListData orgId={orgId} />
+		</OrgProvider>
+	);
+}
+
 async function ListsPageContent({ children }: { children: ReactNode }) {
 	"use cache";
+	cacheLife("max");
 
 	return (
 		<>
@@ -73,6 +83,7 @@ async function ListsPageContent({ children }: { children: ReactNode }) {
 
 async function RecipeListData({ orgId }: { orgId: string }) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.recipeLists(orgId));
 
 	const lists = await getCachedRecipeLists(orgId);

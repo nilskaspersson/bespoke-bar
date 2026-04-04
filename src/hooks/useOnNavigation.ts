@@ -1,18 +1,14 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { useLayoutEffect, useRef } from "react";
+import { useEffect } from "react";
+import { onNavigation } from "@/utils/navigation";
 
-export function useOnNavigation(callback: undefined | (() => unknown)) {
-	const pathname = usePathname();
-	const initialPathnameRef = useRef(pathname);
-
-	useLayoutEffect(() => {
-		if (pathname === initialPathnameRef.current) {
+export function useOnNavigation(cb: undefined | (() => unknown)) {
+	useEffect(() => {
+		if (typeof cb !== "function") {
 			return;
 		}
 
-		callback?.();
-		initialPathnameRef.current = pathname;
-	}, [callback, pathname]);
+		return onNavigation(cb);
+	}, [cb]);
 }

@@ -1,8 +1,10 @@
-import { VertexAI } from "@google-cloud/vertexai";
+import { GoogleGenAI } from "@google/genai";
 import { getGCPCredentials } from "@/utils/gcp";
 
-const vertexAI = new VertexAI({
+const ai = new GoogleGenAI({
+	vertexai: true,
 	project: process.env.GCP_PROJECT_ID,
+	location: "us-central1",
 	googleAuthOptions: getGCPCredentials(),
 });
 
@@ -45,19 +47,6 @@ If no recipe found, return: ${NO_RECIPES_FOUND}
 
 Return ONLY the recipe text, or ${NO_RECIPES_FOUND}. No markdown, no commentary.`;
 
-const generativeModel = vertexAI.getGenerativeModel(
-	{
-		model: "gemini-2.5-flash-lite",
-		generationConfig: {
-			temperature: 0, // no randomness, should preserve input best
-			topP: 1, // for explicity, doesn't matter with temp 0
-			maxOutputTokens: 2048, // roughly 8k characters with gemini
-		},
-		systemInstruction: SYSTEM_PROMPT,
-	},
-	{ timeout: 10000 },
-);
-
 export async function findRecipeInTextWithLLM(
 	userText: string | null | undefined,
 ): Promise<string> {
@@ -74,25 +63,25 @@ export async function findRecipeInTextWithLLM(
 	}
 
 	try {
-		const result = await generativeModel.generateContent({
-			contents: [
-				{
-					role: "user",
-					parts: [{ text: `<detected_text>${userText}</detected_text>` }],
-				},
-			],
+		const response = await ai.models.generateContent({
+			model: "gemini-2.5-flash-lite",
+			contents: `<detected_text>${userText}</detected_text>`,
+			config: {
+				systemInstruction: SYSTEM_PROMPT,
+				temperature: 0, // no randomness, should preserve input best
+				topP: 1, // for explicity, doesn't matter with temp 0
+				maxOutputTokens: 2048, // roughly 8k characters with gemini
+				httpOptions: { timeout: 10000 },
+			},
 		});
 
-		const response = result.response;
-		const textPart = response.candidates?.[0]?.content?.parts?.find((part) =>
-			Boolean(part.text),
-		);
+		const text = response.text?.trim();
 
-		if (textPart?.text?.trim() === NO_RECIPES_FOUND) {
+		if (!text || text === NO_RECIPES_FOUND) {
 			return "";
 		}
 
-		return textPart?.text ?? "";
+		return text;
 	} catch (error) {
 		const isTimeout =
 			error instanceof Error &&

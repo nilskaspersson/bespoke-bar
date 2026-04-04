@@ -1,4 +1,6 @@
 import { notFound, redirect } from "next/navigation";
+import { Suspense } from "react";
+import { OrgProvider } from "@/components/OrgProvider";
 import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { updateIngredient } from "@/features/ingredients/api/updateIngredient";
@@ -8,6 +10,7 @@ import { percentageToRatioSchema } from "@/features/ingredients/utils/percentage
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
@@ -16,10 +19,39 @@ type Props = {
 	searchParams: Promise<{ returnTo?: string }>;
 };
 
-export default async function EditIngredientPage({
+export default function EditIngredientPage({
 	params: paramsPromise,
 	searchParams: searchParamsPromise,
 }: Props) {
+	return (
+		<Container as="article" className={styles.container}>
+			<Grid gap={4}>
+				<Heading level="h1">Edit ingredient</Heading>
+
+				<Suspense
+					fallback={
+						<SkeletonScreen>
+							<Skeleton width="100%" height="40lvh" />
+						</SkeletonScreen>
+					}
+				>
+					<EditIngredientWithAuth
+						paramsPromise={paramsPromise}
+						searchParamsPromise={searchParamsPromise}
+					/>
+				</Suspense>
+			</Grid>
+		</Container>
+	);
+}
+
+async function EditIngredientWithAuth({
+	paramsPromise,
+	searchParamsPromise,
+}: {
+	paramsPromise: Promise<{ id?: string }>;
+	searchParamsPromise: Promise<{ returnTo?: string }>;
+}) {
 	const [{ id }, { returnTo }] = await Promise.all([
 		paramsPromise,
 		searchParamsPromise,
@@ -55,14 +87,10 @@ export default async function EditIngredientPage({
 	};
 
 	return (
-		<Container as="article" className={styles.container}>
-			<Grid gap={4}>
-				<Heading level="h1">Edit ingredient</Heading>
-
-				<form action={formAction}>
-					<IngredientForm ingredient={ingredient} />
-				</form>
-			</Grid>
-		</Container>
+		<OrgProvider>
+			<form action={formAction}>
+				<IngredientForm ingredient={ingredient} />
+			</form>
+		</OrgProvider>
 	);
 }

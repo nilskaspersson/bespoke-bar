@@ -32,22 +32,20 @@ export function ExportListButton({
 	 * Had also wanted to use Activity to keep form state, but that unearths an issue
 	 * where Radio buttons `defaultValue` is lost when there are Suspense boundaries.
 	 */
-	const { openDialog, onClose, dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, mounted, unmount } = useDialog();
 	const formRef = useRef<HTMLFormElement>(null);
-
-	const handleExport = () => {
-		formRef.current?.requestSubmit();
-	};
 
 	return (
 		<>
-			<Button {...props} onClick={openDialog}>
+			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
 				{children}
 			</Button>
 
 			<Drawer
 				ref={dialogRef}
-				onClose={onClose}
+				isOpen={isOpen}
+				mounted={mounted}
+				onExitComplete={unmount}
 				header={
 					<Heading level="h3">
 						Export <em>"{list.name}"</em>
@@ -59,7 +57,7 @@ export function ExportListButton({
 							variant="solid"
 							color="accent"
 							size="small"
-							onClick={handleExport}
+							onClick={() => formRef.current?.requestSubmit()}
 						>
 							<Icon name="arrow-down-from-line" size={1} />
 							Export
@@ -67,7 +65,7 @@ export function ExportListButton({
 					</li>
 				}
 			>
-				{isOpen ? <ExportListForm list={list} formRef={formRef} /> : null}
+				<ExportListForm list={list} formRef={formRef} />
 			</Drawer>
 		</>
 	);

@@ -1,5 +1,5 @@
 import { and, eq, sql } from "drizzle-orm";
-import { cacheTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
 import { cacheTags } from "@/utils/cache";
@@ -28,6 +28,7 @@ export async function getCachedUserFavoriteRecipeIds(
 	userId: string,
 ) {
 	"use cache";
+	cacheLife("max");
 	cacheTag(...cacheTags.favorite.toggle(orgId, userId));
 	return await readUserFavoriteRecipeIds(orgId, userId);
 }

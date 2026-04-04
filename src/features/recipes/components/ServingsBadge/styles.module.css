@@ -1,0 +1,24 @@
+@layer feature {
+	.servingsBadge {
+		position: relative;
+		top: calc(-1 * var(--space-1));
+		animation: servings-enter var(--transition-duration);
+	}
+
+	@keyframes servings-enter {
+		0% {
+			scale: 1;
+			filter: brightness(1);
+		}
+
+		50% {
+			scale: 1.25;
+			filter: brightness(1.25);
+		}
+
+		100% {
+			scale: 1;
+			filter: brightness(1);
+		}
+	}
+}

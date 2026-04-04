@@ -8,6 +8,7 @@ import { AppFooter } from "@/components/AppFooter";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ScrollFix } from "@/components/ScrollFix";
 import { Toaster } from "@/ui/Toast/Toaster";
+import { NavigationObserver } from "@/utils/navigation";
 import styles from "./layout.module.css";
 
 const sans = Figtree({
@@ -26,16 +27,13 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html
 			lang="en"
+			data-scroll-behavior="smooth"
 			/**
 			 * Suppresses hydration warning of next-themes
 			 */
 			suppressHydrationWarning
 		>
 			<body className={clsx(sans.variable, serif.variable, styles.body)}>
-				<Suspense>
-					<ScrollFix />
-				</Suspense>
-
 				<ThemeProvider>
 					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 					<div className={styles.layout} id="root">
@@ -45,11 +43,18 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 							</AuthProvider>
 						</Suspense>
 
-						<AppFooter className={styles.footer} />
+						<Suspense>
+							<AppFooter className={styles.footer} />
+						</Suspense>
 					</div>
 
 					<Toaster />
 				</ThemeProvider>
+
+				<Suspense>
+					<ScrollFix />
+					<NavigationObserver />
+				</Suspense>
 			</body>
 		</html>
 	);
