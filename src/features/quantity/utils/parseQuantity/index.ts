@@ -53,6 +53,16 @@ export function quantityTextParser(userInput: string): [number | null, string] {
 	const floatResult = tryParseFloat(text);
 
 	if (floatResult[0] !== null) {
+		/**
+		 * Handle mixed numbers like "1 3/4" or "2 ½" by checking if a fraction
+		 * follows the whole number.
+		 */
+		const fractionResult = tryParseFraction(floatResult[1].trimStart());
+
+		if (fractionResult[0] !== null) {
+			return [floatResult[0] + fractionResult[0], fractionResult[1]];
+		}
+
 		return floatResult;
 	}
 
