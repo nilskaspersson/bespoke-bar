@@ -1,6 +1,51 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
+
+let wakeLock: WakeLockSentinel | null = null;
+
+const listeners = new Set<() => void>();
+
+function getSnapshot(): boolean {
+	return wakeLock !== null;
+}
+
+function subscribe(listener: () => void): () => void {
+	listeners.add(listener);
+	return () => listeners.delete(listener);
+}
+
+function notify() {
+	for (const listener of listeners) {
+		listener();
+	}
+}
+
+const isSupported = typeof navigator !== "undefined" && "wakeLock" in navigator;
+
+async function requestWakeLock(): Promise<boolean> {
+	if (!isSupported || wakeLock) {
+		return false;
+	}
+
+	try {
+		wakeLock = await navigator.wakeLock.request("screen");
+
+		wakeLock.addEventListener("release", () => {
+			wakeLock = null;
+			notify();
+		});
+
+		notify();
+		return true;
+	} catch {
+		return false;
+	}
+}
+
+async function releaseWakeLock(): Promise<void> {
+	await wakeLock?.release();
+}
 
 type UseWakeLockReturn = {
 	isSupported: boolean;
@@ -10,50 +55,12 @@ type UseWakeLockReturn = {
 };
 
 export function useWakeLock(): UseWakeLockReturn {
-	const wakeLockRef = useRef<WakeLockSentinel | null>(null);
-	const abortControllerRef = useRef<AbortController | null>(null);
-	const isSupportedRef = useRef("wakeLock" in navigator);
-
-	const [isActive, setIsActive] = useState(false);
-
-	const request = useCallback(async (): Promise<boolean> => {
-		if (!isSupportedRef.current || wakeLockRef.current) {
-			return false;
-		}
-
-		try {
-			const lock = await navigator.wakeLock.request("screen");
-			wakeLockRef.current = lock;
-			setIsActive(true);
-
-			abortControllerRef.current = new AbortController();
-
-			lock.addEventListener(
-				"release",
-				() => {
-					setIsActive(false);
-					wakeLockRef.current = null;
-					abortControllerRef.current = null;
-				},
-				{ signal: abortControllerRef.current.signal },
-			);
-
-			return true;
-		} catch (_e) {
-			return false;
-		}
-	}, []);
-
-	const release = useCallback(async (): Promise<void> => {
-		await wakeLockRef.current?.release();
-	}, []);
-
-	useEffect(() => () => abortControllerRef.current?.abort(), []);
+	const isActive = useSyncExternalStore(subscribe, getSnapshot, () => false);
 
 	return {
-		isSupported: isSupportedRef.current,
+		isSupported,
 		isActive,
-		request,
-		release,
+		request: useCallback(requestWakeLock, []),
+		release: useCallback(releaseWakeLock, []),
 	};
 }
