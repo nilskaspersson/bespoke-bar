@@ -3,7 +3,8 @@
 import type { SubmissionResult } from "@conform-to/dom";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { type ComponentProps, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { updateIngredientAction } from "@/features/ingredients/api/updateIngredient";
@@ -11,37 +12,31 @@ import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
-import {
-	ingredientEditorStore,
-	useIngredientEditor,
-} from "@/features/ingredients/stores/ingredientEditor";
+import { getIngredientUrl } from "@/features/ingredients/utils";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
+import { Icon } from "@/ui/Icon";
+import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
 
 type Props = {
-	formId: string;
-	ingredient: Partial<Ingredient>;
+	ingredient: Ingredient;
+	redirectTo?: string;
 };
 
 function hasErrors(field: { errors?: unknown }): boolean {
 	return Array.isArray(field.errors) && field.errors.length > 0;
 }
 
-export function EditIngredientForm({
-	formId,
-	ingredient,
-	...props
-}: Props & ComponentProps<"form">) {
+export function EditIngredientPageForm({ ingredient, redirectTo }: Props) {
+	const router = useRouter();
 	const formRef = useRef<HTMLFormElement>(null);
-	const setPending = useIngredientEditor((s) => s.setPending);
-	const [submitting, setSubmitting] = useState(false);
 	const [lastResult, setLastResult] = useState<SubmissionResult>();
 
 	const [form, fields] = useForm({
-		id: formId,
+		id: `edit-ingredient-${ingredient.id}`,
 		lastResult,
 		defaultValue: {
 			name: ingredient.name,
@@ -60,18 +55,7 @@ export function EditIngredientForm({
 		async onSubmit(event, { formData }) {
 			event.preventDefault();
 
-			if (!ingredient.id || submitting) {
-				return;
-			}
-
-			setSubmitting(true);
-			setPending(true);
-
 			const result = await updateIngredientAction(ingredient.id, formData);
-
-			setSubmitting(false);
-			setPending(false);
-
 			setLastResult(result);
 
 			if (result.status === "error") {
@@ -90,22 +74,17 @@ export function EditIngredientForm({
 						"Could not update ingredient."
 					),
 				);
-
 				return;
 			}
 
 			toast.success(`Updated: ${ingredient.name}`);
-			ingredientEditorStore.emitUpdate({
-				...(ingredient as Ingredient),
-			});
-			formRef.current?.closest("dialog")?.close();
+			router.push(redirectTo ?? getIngredientUrl(ingredient));
 		},
 	});
 
 	return (
 		<FormProvider context={form.context}>
 			<form
-				{...props}
 				ref={formRef}
 				id={form.id}
 				onSubmit={form.onSubmit}
@@ -160,7 +139,7 @@ export function EditIngredientForm({
 					/>
 
 					<SelectUnitCost
-						label={`Cost per ${getMeasurementPriceUnit(ingredient?.measurementType)}`}
+						label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType)}`}
 						key={fields.unitCost.key}
 						name={fields.unitCost.name}
 						defaultValue={fields.unitCost.initialValue as string | undefined}
@@ -178,6 +157,13 @@ export function EditIngredientForm({
 					/>
 
 					<FormErrors formRef={formRef} />
+
+					<div>
+						<SubmitButton variant="solid" color="accent">
+							<Icon name="circle-check" />
+							Save changes
+						</SubmitButton>
+					</div>
 				</Grid>
 			</form>
 		</FormProvider>

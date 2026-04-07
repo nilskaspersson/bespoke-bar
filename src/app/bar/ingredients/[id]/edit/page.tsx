@@ -1,17 +1,13 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { OrgProvider } from "@/components/OrgProvider";
-import { updateIngredientSchema } from "@/db/schema/ingredients";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
-import { updateIngredient } from "@/features/ingredients/api/updateIngredient";
-import { IngredientForm } from "@/features/ingredients/components/IngredientForm";
-import { getIngredientUrl } from "@/features/ingredients/utils";
-import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
+import { EditIngredientPageForm } from "./EditIngredientPageForm";
 import styles from "./page.module.css";
 
 type Props = {
@@ -68,29 +64,9 @@ async function EditIngredientWithAuth({
 		notFound();
 	}
 
-	const formAction = async (formData: FormData) => {
-		"use server";
-
-		const values = updateIngredientSchema.parse({
-			name: formData.get("name"),
-			category: formData.get("category"),
-			description: formData.get("description"),
-			abv: percentageToRatioSchema.parse(formData.get("abv")),
-			brand: formData.get("brand"),
-			unitCost: formData.get("unitCost"),
-			measurementType: formData.get("measurementType"),
-		});
-
-		await updateIngredient(ingredient.id, values);
-
-		redirect(returnTo ?? getIngredientUrl(ingredient));
-	};
-
 	return (
 		<OrgProvider>
-			<form action={formAction}>
-				<IngredientForm ingredient={ingredient} />
-			</form>
+			<EditIngredientPageForm ingredient={ingredient} redirectTo={returnTo} />
 		</OrgProvider>
 	);
 }

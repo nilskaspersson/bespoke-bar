@@ -1,5 +1,6 @@
 "use server";
 
+import { parseWithZod } from "@conform-to/zod/v4";
 import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
@@ -8,8 +9,10 @@ import {
 	IngredientsTable,
 	updateIngredientSchema,
 } from "@/db/schema/ingredients";
+import { isUniqueConstraintViolation } from "@/db/utils";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { ingredientEnrichmentSchema } from "@/features/ingredients/utils/getIngredientMetaDataWithLLM";
+
 import { isEmpty } from "@/utils";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
@@ -53,4 +56,40 @@ export async function updateIngredient(
 	cacheEvents.ingredient.update.emit(orgId, id);
 
 	return result;
+}
+
+export async function updateIngredientAction(
+	id: Ingredient["id"],
+	formData: FormData,
+) {
+	const submission = parseWithZod(formData, {
+		schema: updateIngredientSchema,
+	});
+
+	if (submission.status !== "success" || !id) {
+		return submission.reply();
+	}
+
+	try {
+		await updateIngredient(id, submission.value);
+	} catch (error) {
+		if (
+			isUniqueConstraintViolation(
+				error,
+				"unique_ingredient_name_case_insensitive",
+			)
+		) {
+			return submission.reply({
+				fieldErrors: {
+					name: ["An ingredient with this name already exists."],
+				},
+			});
+		}
+
+		return submission.reply({
+			formErrors: ["Failed to update ingredient."],
+		});
+	}
+
+	return submission.reply();
 }

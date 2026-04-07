@@ -20,6 +20,7 @@ import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes, supportedMeasurements } from "@/db/schema/units";
 import { sqlNormalizedString } from "@/db/utils";
+import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { nullifyEmptyField } from "@/utils/form";
 
 export const IngredientsTable = pgTable(
@@ -76,16 +77,19 @@ export type InsertIngredient = Omit<
 
 const ingredientsConstraintsSchema = {
 	name: z
-		.string("Ingredient must have a name")
-		.min(1, "Ingredient must have a name")
+		.string("Name is required")
+		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
 	category: z.preprocess(nullifyEmptyField, systemCategories.nullable()),
-	abv: z.preprocess(
-		nullifyEmptyField,
-		z.coerce.number().min(0).max(100).nullable(),
-	),
+	abv: percentageToRatioSchema,
 	brand: z.preprocess(nullifyEmptyField, z.string().nullable()),
-	unitCost: z.preprocess(nullifyEmptyField, z.coerce.number().nullable()),
+	unitCost: z.preprocess(
+		nullifyEmptyField,
+		z.coerce
+			.number({ message: "Cost must be a number" })
+			.positive("Cost must be positive")
+			.nullable(),
+	),
 	measurementType: z.preprocess(
 		nullifyEmptyField,
 		supportedMeasurements.nullable(),
