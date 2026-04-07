@@ -9,6 +9,7 @@ import {
 	useState,
 } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { WakeLock } from "@/components/WakeLock";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
@@ -133,13 +134,15 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 				</Grid>
 			</Container>
 
-			<Checkbox
-				label="Particle effects"
-				size="small"
-				checked={particlesEnabled}
-				onChange={(e) => setParticlesEnabled(e.target.checked)}
-				className={styles.particleToggle}
-			/>
+			<div className={styles.toggles}>
+				<WakeLock size="small" />
+				<Checkbox
+					label="Particle effects"
+					size="small"
+					checked={particlesEnabled}
+					onChange={(e) => setParticlesEnabled(e.target.checked)}
+				/>
+			</div>
 		</>
 	);
 }
