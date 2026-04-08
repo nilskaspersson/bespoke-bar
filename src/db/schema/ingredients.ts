@@ -9,11 +9,7 @@ import {
 	uniqueIndex,
 	varchar,
 } from "drizzle-orm/pg-core";
-import {
-	createInsertSchema,
-	createSelectSchema,
-	createUpdateSchema,
-} from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
@@ -52,10 +48,7 @@ export const IngredientsTable = pgTable(
 			"abv_valid_range",
 			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 1)`,
 		),
-		check(
-			"cost_positive",
-			sql`${table.unitCost} IS NULL OR ${table.unitCost} > 0`,
-		),
+		check("cost_positive", sql`${table.unitCost} IS NULL OR ${table.unitCost} > 0`),
 		check(
 			"cost_requires_measurement_type",
 			sql`${table.unitCost} IS NULL OR ${table.measurementType} IS NOT NULL`,
@@ -75,70 +68,95 @@ export type InsertIngredient = Omit<
 	"id" | "createdAt" | "updatedAt"
 >;
 
-const ingredientsConstraintsSchema = {
+/**
+ * System fields excluded from user-facing schemas (draft/form).
+ */
+const INGREDIENT_SYSTEM_FIELDS = {
+	id: true,
+	orgId: true,
+	createdBy: true,
+	updatedBy: true,
+	createdAt: true,
+	updatedAt: true,
+	aiEnrichedFields: true,
+} as const;
+
+/**
+ * API/DB constraints — clean types, no coercion.
+ * Used by tRPC input validation and service-layer DB validation.
+ */
+const ingredientConstraints = {
 	name: z
 		.string("Name is required")
 		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
-	category: z.preprocess(nullifyEmptyField, systemCategories.nullable()),
-	abv: percentageToRatioSchema,
-	brand: z.preprocess(nullifyEmptyField, z.string().nullable()),
-	unitCost: z.preprocess(
-		nullifyEmptyField,
-		z.coerce
-			.number({ message: "Cost must be a number" })
-			.positive("Cost must be positive")
-			.nullable(),
-	),
-	measurementType: z.preprocess(
-		nullifyEmptyField,
-		supportedMeasurements.nullable(),
-	),
+	category: systemCategories.nullish(),
+	abv: z.number().min(0).max(1).nullish(),
+	brand: z.string().nullish(),
+	unitCost: z
+		.number({ message: "Cost must be a number" })
+		.positive("Cost must be positive")
+		.nullish(),
+	measurementType: supportedMeasurements.nullish(),
 };
 
-type IngredientRefinementInput = Partial<
-	Pick<
-		z.input<ReturnType<typeof createInsertSchema<typeof IngredientsTable>>>,
-		"unitCost" | "measurementType"
-	>
->;
+/**
+ * Form constraints — coercion transforms for FormData (strings → proper types).
+ * Same output types as ingredientConstraints.
+ */
+const ingredientFormConstraints = {
+	name: z
+		.string("Name is required")
+		.min(1, "Name is required")
+		.max(100, "Name must be 100 characters or less"),
+	category: z.preprocess(nullifyEmptyField, systemCategories.nullable()).optional(),
+	abv: percentageToRatioSchema.optional(),
+	brand: z.preprocess(nullifyEmptyField, z.string().nullable()).optional(),
+	unitCost: z
+		.preprocess(
+			nullifyEmptyField,
+			z.coerce
+				.number({ message: "Cost must be a number" })
+				.positive("Cost must be positive")
+				.nullable(),
+		)
+		.optional(),
+	measurementType: z.preprocess(nullifyEmptyField, supportedMeasurements.nullable()).optional(),
+};
 
-export const ingredientsRefinements: [
-	(data: IngredientRefinementInput) => boolean,
-	{ message: string; path: string[] },
-] = [
-	(data) => data.unitCost == null || data.measurementType != null,
-	{
-		message: "Measurement type is required when unitCost is provided",
-		path: ["measurementType"],
-	},
-];
+function refineIngredient<T extends z.ZodObject<z.ZodRawShape>>(schema: T) {
+	return schema.refine(
+		(data: z.output<T>) => data.unitCost == null || data.measurementType != null,
+		{
+			message: "Measurement type is required when unitCost is provided",
+			path: ["measurementType"],
+		},
+	);
+}
 
 export const selectIngredientSchema = createSelectSchema(IngredientsTable);
 
-const baseIngredientSchema = createInsertSchema(IngredientsTable).extend(
-	ingredientsConstraintsSchema,
+/**
+ * Shared base shapes — each schema = base × constraints, then refined.
+ */
+const insertBase = createInsertSchema(IngredientsTable);
+const draftBase = insertBase.omit(INGREDIENT_SYSTEM_FIELDS);
+const updateBase = createUpdateSchema(IngredientsTable);
+
+/** DB insert schema */
+export const insertIngredientSchema = refineIngredient(insertBase.extend(ingredientConstraints));
+
+/** API schema */
+export const draftIngredientSchema = refineIngredient(draftBase.extend(ingredientConstraints));
+export const updateIngredientSchema = refineIngredient(updateBase.extend(ingredientConstraints));
+
+/** Form schema */
+export const draftIngredientFormSchema = refineIngredient(
+	draftBase.extend(ingredientFormConstraints),
 );
-
-export const insertIngredientSchema = baseIngredientSchema.refine(
-	...ingredientsRefinements,
+export const updateIngredientFormSchema = refineIngredient(
+	updateBase.extend(ingredientFormConstraints),
 );
-
-export const draftIngredientSchema = baseIngredientSchema
-	.omit({
-		id: true,
-		orgId: true,
-		createdBy: true,
-		updatedBy: true,
-		createdAt: true,
-		updatedAt: true,
-		aiEnrichedFields: true,
-	})
-	.refine(...ingredientsRefinements);
-
-export const updateIngredientSchema = createUpdateSchema(IngredientsTable)
-	.extend(ingredientsConstraintsSchema)
-	.refine(...ingredientsRefinements);
 
 /**
  * The fields users can provide to create an ingredient.

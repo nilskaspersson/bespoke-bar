@@ -1,11 +1,12 @@
 "use server";
 
-import { and, eq, sql } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { db } from "@/db";
-import { type Recipe, RecipesTable } from "@/db/schema/recipes";
+import type { Recipe } from "@/db/schema/recipes";
+import {
+	archiveRecipe as archiveRecipeService,
+	unarchiveRecipe as unarchiveRecipeService,
+} from "@/features/recipes/api/archiveRecipe.service";
 import { authOrForbidden } from "@/utils/auth";
-import { cacheEvents } from "@/utils/cache";
 
 export async function archiveRecipe({
 	id,
@@ -14,17 +15,8 @@ export async function archiveRecipe({
 	id: Recipe["id"];
 	redirectTo?: string;
 }): Promise<void> {
-	const { userId, orgId } = await authOrForbidden();
-
-	await db
-		.update(RecipesTable)
-		.set({
-			archivedAt: sql`NOW()`,
-			archivedBy: userId,
-		})
-		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
-
-	cacheEvents.recipe.update.emit(orgId, id);
+	const auth = await authOrForbidden();
+	await archiveRecipeService(auth, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);
@@ -38,19 +30,8 @@ export async function unarchiveRecipe({
 	id: Recipe["id"];
 	redirectTo?: string;
 }): Promise<void> {
-	const { userId, orgId } = await authOrForbidden();
-
-	await db
-		.update(RecipesTable)
-		.set({
-			archivedAt: null,
-			archivedBy: null,
-			updatedBy: userId,
-			updatedAt: sql`NOW()`,
-		})
-		.where(and(eq(RecipesTable.id, id), eq(RecipesTable.orgId, orgId)));
-
-	cacheEvents.recipe.update.emit(orgId, id);
+	const auth = await authOrForbidden();
+	await unarchiveRecipeService(auth, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);

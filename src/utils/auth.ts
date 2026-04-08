@@ -2,6 +2,8 @@ import { auth } from "@clerk/nextjs/server";
 import { forbidden } from "next/navigation";
 import { cache } from "react";
 
+export type Auth = { userId: string; orgId: string };
+
 /**
  * React's `cache` is per-request. Cache the outcome of this function to avoid
  * repeating whatever `auth()` does internally, since we usually invoke

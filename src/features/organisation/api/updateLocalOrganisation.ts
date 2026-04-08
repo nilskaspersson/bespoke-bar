@@ -1,34 +1,17 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { eq, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { db } from "@/db";
-import {
-	OrganisationsTable,
-	type UpdateOrganisationFormData,
-	updateOrganisationFormSchema,
-	updateOrganisationSchema,
-} from "@/db/schema/organisations";
+import type { UpdateOrganisationFormData } from "@/db/schema/organisations";
+import { updateOrganisationFormSchema } from "@/db/schema/organisations";
+import { updateLocalOrganisation as updateLocalOrganisationService } from "@/features/organisation/api/updateLocalOrganisation.service";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function updateLocalOrganisation(
 	userInput: UpdateOrganisationFormData,
 ) {
-	const { orgId } = await authOrForbidden();
-
-	const validatedInput = updateOrganisationSchema.parse(userInput);
-
-	const [organisation] = await db
-		.update(OrganisationsTable)
-		.set({
-			...validatedInput,
-			updatedAt: sql`NOW()`,
-		})
-		.where(eq(OrganisationsTable.clerkOrgId, orgId))
-		.returning();
-
-	return organisation;
+	const auth = await authOrForbidden();
+	return updateLocalOrganisationService(auth, userInput);
 }
 
 export async function updateLocalOrganisationAction(formData: FormData) {
@@ -50,9 +33,6 @@ export async function updateLocalOrganisationAction(formData: FormData) {
 		});
 	}
 
-	/**
-	 * Bust bar-wide cache.
-	 */
 	revalidatePath("/bar", "layout");
 
 	return submission.reply({

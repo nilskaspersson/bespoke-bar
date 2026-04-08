@@ -2,47 +2,17 @@
 
 import { parseWithZod } from "@conform-to/zod/v4";
 import { redirect } from "next/navigation";
-import { db } from "@/db";
-import {
-	insertRecipeListSchema,
-	type RecipeList,
-	type RecipeListFormData,
-	RecipeListsTable,
-	recipeListFormSchema,
-} from "@/db/schema/recipeLists";
-import {
-	generateDefaultRecipeListName,
-	getRecipeListUrl,
-} from "@/features/lists/utils";
+import type { RecipeList, RecipeListFormData } from "@/db/schema/recipeLists";
+import { recipeListFormSchema } from "@/db/schema/recipeLists";
+import { createRecipeList as createRecipeListService } from "@/features/lists/api/createRecipeList.service";
+import { getRecipeListUrl } from "@/features/lists/utils";
 import { authOrForbidden } from "@/utils/auth";
-import { cacheEvents } from "@/utils/cache";
 
 export async function createRecipeList(
 	userInputList: RecipeListFormData,
 ): Promise<RecipeList> {
-	const { userId, orgId } = await authOrForbidden();
-
-	/**
-	 * Use a timestamp as a fallback name
-	 * TODO: Move to implementation point for local formatting + schema validation?
-	 */
-	const name = userInputList?.name || generateDefaultRecipeListName();
-
-	const validatedList = insertRecipeListSchema.parse({
-		...userInputList,
-		name,
-		orgId,
-		createdBy: userId,
-	});
-
-	const [list] = await db
-		.insert(RecipeListsTable)
-		.values(validatedList)
-		.returning();
-
-	cacheEvents.recipeList.create.emit(orgId);
-
-	return list;
+	const auth = await authOrForbidden();
+	return createRecipeListService(auth, userInputList);
 }
 
 export async function createRecipeListAction(

@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { type ComponentProps, useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { updateIngredientSchema } from "@/db/schema/ingredients";
+import { updateIngredientFormSchema } from "@/db/schema/ingredients";
 import { updateIngredientAction } from "@/features/ingredients/api/updateIngredient";
 import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
@@ -53,7 +53,7 @@ export function EditIngredientForm({
 			measurementType: ingredient.measurementType,
 		},
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: updateIngredientSchema });
+			return parseWithZod(formData, { schema: updateIngredientFormSchema });
 		},
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
