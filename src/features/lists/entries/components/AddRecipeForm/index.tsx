@@ -48,7 +48,10 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 	});
 
 	const handleSubmit = useCallback(
-		async (formData: FormData) => {
+		async (event: React.FormEvent<HTMLFormElement>) => {
+			event.preventDefault();
+
+			const formData = new FormData(event.currentTarget);
 			const promise = addRecipeToListAction(formData);
 
 			toast.promise(promise, {
@@ -62,8 +65,12 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 				}),
 			});
 
-			await promise;
-			onSuccess?.();
+			try {
+				await promise;
+				onSuccess?.();
+			} catch {
+				// Handled by toast.promise
+			}
 		},
 		[onSuccess],
 	);
@@ -90,9 +97,9 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 		<FormProvider context={form.context}>
 			<form
 				ref={formRef}
-				action={handleSubmit}
 				id={form.id}
-				onSubmit={form.onSubmit}
+				onSubmit={handleSubmit}
+				autoComplete="off"
 			>
 				<input type="submit" hidden />
 
