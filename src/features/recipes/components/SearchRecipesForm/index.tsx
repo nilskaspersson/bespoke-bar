@@ -11,9 +11,7 @@ import {
 	useRef,
 	useState,
 } from "react";
-import useSWRImmutable from "swr/immutable";
 import { EmptyArea } from "@/components/EmptyArea";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import {
@@ -21,6 +19,7 @@ import {
 	filterRecipes,
 } from "@/features/recipes/utils/filterRecipes";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
+import { trpc } from "@/trpc/client";
 import { Button, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
@@ -31,7 +30,6 @@ import { Kbd } from "@/ui/Kbd";
 import { Lightbox } from "@/ui/Lightbox";
 import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
-import { fetcher } from "@/utils/api";
 import styles from "./styles.module.css";
 
 export function SearchRecipesForm({
@@ -52,10 +50,7 @@ export function SearchRecipesForm({
 
 	useOnNavigation(onNavigate);
 
-	const { data: recipes, isLoading } = useSWRImmutable<RecipeWithSpecs[]>(
-		"/api/recipes",
-		fetcher,
-	);
+	const { data: recipes, isLoading } = trpc.recipe.list.useQuery();
 
 	const searchIndex = useMemo(
 		() => createRecipeSearchIndex(recipes),

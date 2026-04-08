@@ -3,11 +3,7 @@
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { Fragment, useCallback, useMemo, useRef, useState } from "react";
-import useSWRImmutable from "swr/immutable";
-import {
-	type RecipeListWithEntries,
-	recipeListWithEntriesFormSchema,
-} from "@/db/schema/composite";
+import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RemoveListEntryButton } from "@/features/lists/actions/components/RemoveListEntryButton";
@@ -21,8 +17,8 @@ import {
 	getListName,
 	isRecipeList,
 	isRecipeListWithEntries,
-	recipeListsFetcher,
 } from "@/features/lists/utils";
+import { trpc } from "@/trpc/client";
 import { Button, LinkButton } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
@@ -50,10 +46,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 	const [withNewList, setWithNewList] = useState(false);
 	const [comboboxInputValue, setComboboxInputValue] = useState("");
 
-	const { data: lists } = useSWRImmutable<RecipeListWithEntries[] | undefined>(
-		"/api/lists",
-		recipeListsFetcher,
-	);
+	const { data: lists } = trpc.recipeList.list.useQuery();
 
 	const [form, fields] = useForm({
 		id: `create-recipe-entry-${recipe.id}`,

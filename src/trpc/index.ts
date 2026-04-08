@@ -1,10 +1,10 @@
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
-import type { NextRequest } from "next/server";
 import superjson from "superjson";
+import { z } from "zod";
 
-export async function createContext(req: NextRequest) {
-	const { userId, orgId } = await getAuth(req);
+export async function createContext() {
+	const { userId, orgId } = await auth();
 
 	return { userId, orgId };
 }
@@ -13,6 +13,22 @@ type Context = Awaited<ReturnType<typeof createContext>>;
 
 const t = initTRPC.context<Context>().create({
 	transformer: superjson,
+	errorFormatter({ shape, error }) {
+		return {
+			...shape,
+			message:
+				error.code === "INTERNAL_SERVER_ERROR"
+					? "Internal server error"
+					: shape.message,
+			data: {
+				...shape.data,
+				zodError:
+					error.cause instanceof z.ZodError
+						? z.flattenError(error.cause)
+						: null,
+			},
+		};
+	},
 });
 
 export const router = t.router;

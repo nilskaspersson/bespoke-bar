@@ -1,9 +1,9 @@
-import { getAuth } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import type { NextRequest } from "next/server";
 import { parseTextFromImageService } from "@/features/recipes/photo/api/parseTextFromImage.service";
 
 export async function POST(req: NextRequest) {
-	const { userId } = await getAuth(req);
+	const { userId } = await auth();
 
 	if (!userId) {
 		return Response.json({ error: "Unauthorized" }, { status: 401 });

@@ -15,7 +15,7 @@ export async function removeRecipeFromList(
 	const { orgId } = auth;
 
 	const deletedEntry = await db.transaction(async (tx) => {
-		const [entry] = await db
+		const [entry] = await tx
 			.delete(RecipeListEntriesTable)
 			.where(
 				and(

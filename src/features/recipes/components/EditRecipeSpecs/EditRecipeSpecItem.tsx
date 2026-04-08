@@ -37,7 +37,7 @@ export function EditRecipeSpecItem({
 	ingredients: Ingredient[];
 	withOptional?: boolean;
 }) {
-	const { dialogRef } = useDialog();
+	const { dialogRef, isOpen: isDialogOpen } = useDialog();
 	const { percentageFormatter } = use(FormatterContext);
 
 	const searchName = useId();
@@ -189,6 +189,7 @@ export function EditRecipeSpecItem({
 					<IngredientDialogForm
 						name={spec.ingredient.name}
 						ref={dialogRef}
+						isOpen={isDialogOpen}
 						onClose={() => {
 							/**
 							 * Keep Combobox search in sync with the ingredient name. There is an unwanted

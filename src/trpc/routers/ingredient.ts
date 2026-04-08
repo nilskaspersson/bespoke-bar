@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import {
 	draftIngredientSchema,
 	updateIngredientSchema,
@@ -8,7 +8,7 @@ import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient.se
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { updateIngredient } from "@/features/ingredients/api/updateIngredient.service";
-import { protectedProcedure, router } from "@/server/trpc";
+import { protectedProcedure, router } from "@/trpc";
 
 export const ingredientRouter = router({
 	list: protectedProcedure.query(({ ctx }) => {

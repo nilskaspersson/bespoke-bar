@@ -3,25 +3,23 @@
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useMemo, useRef } from "react";
-import useSWRImmutable from "swr/immutable";
 import z from "zod";
 import {
 	type RecipeListEntryWithRecipe,
 	recipeListEntryFormSchema,
 } from "@/db/schema/recipeListEntries";
 import type { RecipeList } from "@/db/schema/recipeLists";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
 import { addRecipeToListAction } from "@/features/lists/entries/api/addRecipeToList";
 import { RecipeListEntryCard } from "@/features/lists/entries/components/RecipeListEntryCard";
 import { createDraftRecipeListEntry } from "@/features/lists/utils";
+import { trpc } from "@/trpc/client";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Skeleton } from "@/ui/Skeleton";
 import { toast } from "@/ui/Toast";
-import { fetcher } from "@/utils/api";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -33,10 +31,7 @@ type Props = {
 export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const { data: recipes } = useSWRImmutable<RecipeWithSpecs[]>(
-		"/api/recipes",
-		fetcher,
-	);
+	const { data: recipes } = trpc.recipe.list.useQuery();
 
 	const [form, fields] = useForm({
 		id: formId,

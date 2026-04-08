@@ -1,3 +1,4 @@
+import { TRPCError } from "@trpc/server";
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
@@ -35,6 +36,13 @@ export async function setFeaturedList(auth: Auth, listId: RecipeList["id"]) {
 
 		return [prev, next];
 	});
+
+	if (!next) {
+		throw new TRPCError({
+			code: "NOT_FOUND",
+			message: "List not found",
+		});
+	}
 
 	cacheEvents.recipeList.update.emit(orgId, next.id);
 

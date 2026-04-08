@@ -29,6 +29,10 @@ export async function updateRecipeListEntry(
 		)
 		.returning();
 
+	if (!result) {
+		throw new Error("Entry not found or access denied");
+	}
+
 	cacheEvents.recipeList.update.emit(orgId, result.listId);
 
 	return result;

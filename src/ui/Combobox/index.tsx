@@ -1,4 +1,5 @@
 "use client";
+"use no memo";
 
 import { clsx } from "clsx";
 import { type UseComboboxProps, useCombobox } from "downshift";

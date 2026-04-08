@@ -21,7 +21,9 @@ export async function clearFeaturedList(auth: Auth) {
 		)
 		.returning();
 
-	cacheEvents.recipeList.update.emit(orgId, list.id);
+	if (list) {
+		cacheEvents.recipeList.update.emit(orgId, list.id);
+	}
 
-	return list;
+	return list ?? null;
 }

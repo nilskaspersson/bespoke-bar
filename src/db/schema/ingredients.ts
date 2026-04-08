@@ -9,7 +9,11 @@ import {
 	uniqueIndex,
 	varchar,
 } from "drizzle-orm/pg-core";
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import {
+	createInsertSchema,
+	createSelectSchema,
+	createUpdateSchema,
+} from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
@@ -48,7 +52,10 @@ export const IngredientsTable = pgTable(
 			"abv_valid_range",
 			sql`${table.abv} IS NULL OR (${table.abv} >= 0 AND ${table.abv} <= 1)`,
 		),
-		check("cost_positive", sql`${table.unitCost} IS NULL OR ${table.unitCost} > 0`),
+		check(
+			"cost_positive",
+			sql`${table.unitCost} IS NULL OR ${table.unitCost} > 0`,
+		),
 		check(
 			"cost_requires_measurement_type",
 			sql`${table.unitCost} IS NULL OR ${table.measurementType} IS NOT NULL`,
@@ -109,7 +116,9 @@ const ingredientFormConstraints = {
 		.string("Name is required")
 		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
-	category: z.preprocess(nullifyEmptyField, systemCategories.nullable()).optional(),
+	category: z
+		.preprocess(nullifyEmptyField, systemCategories.nullable())
+		.optional(),
 	abv: percentageToRatioSchema.optional(),
 	brand: z.preprocess(nullifyEmptyField, z.string().nullable()).optional(),
 	unitCost: z
@@ -121,12 +130,15 @@ const ingredientFormConstraints = {
 				.nullable(),
 		)
 		.optional(),
-	measurementType: z.preprocess(nullifyEmptyField, supportedMeasurements.nullable()).optional(),
+	measurementType: z
+		.preprocess(nullifyEmptyField, supportedMeasurements.nullable())
+		.optional(),
 };
 
 function refineIngredient<T extends z.ZodObject<z.ZodRawShape>>(schema: T) {
 	return schema.refine(
-		(data: z.output<T>) => data.unitCost == null || data.measurementType != null,
+		(data: z.output<T>) =>
+			data.unitCost == null || data.measurementType != null,
 		{
 			message: "Measurement type is required when unitCost is provided",
 			path: ["measurementType"],
@@ -144,11 +156,17 @@ const draftBase = insertBase.omit(INGREDIENT_SYSTEM_FIELDS);
 const updateBase = createUpdateSchema(IngredientsTable);
 
 /** DB insert schema */
-export const insertIngredientSchema = refineIngredient(insertBase.extend(ingredientConstraints));
+export const insertIngredientSchema = refineIngredient(
+	insertBase.extend(ingredientConstraints),
+);
 
 /** API schema */
-export const draftIngredientSchema = refineIngredient(draftBase.extend(ingredientConstraints));
-export const updateIngredientSchema = refineIngredient(updateBase.extend(ingredientConstraints));
+export const draftIngredientSchema = refineIngredient(
+	draftBase.extend(ingredientConstraints),
+);
+export const updateIngredientSchema = refineIngredient(
+	updateBase.extend(ingredientConstraints),
+);
 
 /** Form schema */
 export const draftIngredientFormSchema = refineIngredient(

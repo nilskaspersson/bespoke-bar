@@ -1,10 +1,10 @@
 import { useForm } from "@conform-to/react";
 import { useCallback } from "react";
-import useSWRImmutable from "swr/immutable";
 import type { Organisation } from "@/db/schema/organisations";
 import { updateLocalOrganisationAction } from "@/features/organisation/api/updateLocalOrganisation";
 import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
 import { SelectLocale } from "@/features/organisation/components/SelectLocale";
+import { trpc } from "@/trpc/client";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -12,14 +12,10 @@ import { SkeletonScreen } from "@/ui/Skeleton";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextFieldSkeleton } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
-import { fetcher } from "@/utils/api";
-import { mutateSWROrganisationCache } from "@/utils/swrCache";
 import styles from "./styles.module.css";
 
 export function OrganisationSettings() {
-	const { data: organisation, isLoading } = useSWRImmutable<
-		Organisation | undefined
-	>("/api/organisation", fetcher);
+	const { data: organisation, isLoading } = trpc.organisation.get.useQuery();
 
 	return (
 		<article className={styles.settings}>
@@ -49,26 +45,31 @@ function OrganisationSettingsForm({
 		},
 	});
 
-	const handleSubmit = useCallback(async (formData: FormData) => {
-		const toastId = Date.now().toString();
+	const utils = trpc.useUtils();
 
-		const promise = updateLocalOrganisationAction(formData);
+	const handleSubmit = useCallback(
+		async (formData: FormData) => {
+			const toastId = Date.now().toString();
 
-		toast.promise(promise, {
-			id: toastId,
-			loading: "Updating organisation settings…",
-			success: () => ({
-				message: "Organisation settings updated",
-			}),
-			error: () => ({
-				message: "Could not update organisation settings",
-				description: "Try again later.",
-			}),
-		});
+			const promise = updateLocalOrganisationAction(formData);
 
-		await promise;
-		mutateSWROrganisationCache();
-	}, []);
+			toast.promise(promise, {
+				id: toastId,
+				loading: "Updating organisation settings…",
+				success: () => ({
+					message: "Organisation settings updated",
+				}),
+				error: () => ({
+					message: "Could not update organisation settings",
+					description: "Try again later.",
+				}),
+			});
+
+			await promise;
+			utils.organisation.get.invalidate();
+		},
+		[utils],
+	);
 
 	return (
 		<Grid

@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { recipeFormSchema } from "@/db/schema/composite";
 import { updateRecipeSchema } from "@/db/schema/recipes";
 import {
@@ -14,7 +14,7 @@ import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { updateRecipe } from "@/features/recipes/api/updateRecipe.service";
 import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
-import { protectedProcedure, router } from "@/server/trpc";
+import { protectedProcedure, router } from "@/trpc";
 
 export const recipeRouter = router({
 	list: protectedProcedure.query(({ ctx }) => {

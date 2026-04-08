@@ -2,13 +2,13 @@
 
 import type { RecipeList } from "@/db/schema/recipeLists";
 import { SetFeaturedListButton } from "@/features/lists/actions/components/SetFeaturedListButton";
+import { trpc } from "@/trpc/client";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
-import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
 
 export function ClearFeaturedListButton({
 	list,
@@ -23,6 +23,8 @@ export function ClearFeaturedListButton({
 	actionClearFeatured: () => Promise<unknown>;
 	requireConfirmation?: boolean;
 } & ButtonProps) {
+	const utils = trpc.useUtils();
+
 	const handleClearFeaturedList = async () => {
 		const promise = actionClearFeatured();
 
@@ -68,7 +70,7 @@ export function ClearFeaturedListButton({
 		});
 
 		await promise;
-		mutateSWRRecipeListsCache();
+		utils.recipeList.list.invalidate();
 	};
 
 	if (!requireConfirmation) {

@@ -1,4 +1,4 @@
-import { router } from "@/server/trpc";
+import { router } from "@/trpc";
 import { favoriteRouter } from "./favorite";
 import { featuredRouter } from "./featured";
 import { ingredientRouter } from "./ingredient";

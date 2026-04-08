@@ -1,7 +1,7 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { toggleRecipeFavorite } from "@/features/recipes/api/toggleRecipeFavorite.service";
-import { protectedProcedure, router } from "@/server/trpc";
+import { protectedProcedure, router } from "@/trpc";
 
 export const favoriteRouter = router({
 	list: protectedProcedure.query(({ ctx }) => {
