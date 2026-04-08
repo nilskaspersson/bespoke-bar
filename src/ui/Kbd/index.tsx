@@ -53,7 +53,20 @@ export function Kbd({
 				return;
 			}
 
+			/**
+			 * If this Kbd is inside a dialog, only trigger if the focused element is in the
+				same dialog. This prevents parent dialogs from firing shortcuts when a nested
+				dialog has focus.
+			 */
+			const dialog = kbdRef.current?.closest("dialog");
+			const targetDialog = (event.target as Element)?.closest?.("dialog");
+
+			if (dialog && targetDialog && targetDialog !== dialog) {
+				return;
+			}
+
 			event.preventDefault();
+			event.stopPropagation();
 
 			animateChildren(kbdRef.current, keyframes.get("pulse"));
 
