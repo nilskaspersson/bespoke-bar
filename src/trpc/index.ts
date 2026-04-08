@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { z } from "zod";
+import type { Auth } from "@/utils/auth";
 
 export async function createContext() {
 	const { userId, orgId } = await auth();
@@ -43,6 +44,6 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 		ctx: {
 			userId: ctx.userId,
 			orgId: ctx.orgId,
-		},
+		} as Auth,
 	});
 });
