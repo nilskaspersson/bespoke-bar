@@ -86,13 +86,11 @@
 			transition: opacity var(--transition-duration);
 		}
 
-		[data-theme="dark"] &,
-		[data-theme] [data-force-theme="dark"] & {
+		[data-theme="dark"] & {
 			--text-lightness: 0%;
 		}
 
-		[data-theme="light"] &,
-		[data-theme] [data-force-theme="light"] & {
+		[data-theme="light"] & {
 			--text-lightness: 95%;
 		}
 	}
@@ -105,8 +103,7 @@
 	}
 
 	.light {
-		[data-theme="dark"] &,
-		[data-theme] [data-force-theme="dark"] & {
+		[data-theme="dark"] & {
 			--text-lightness: 80%;
 			--button-color: var(--mauve-7);
 
@@ -116,8 +113,7 @@
 			}
 		}
 
-		[data-theme="light"] &,
-		[data-theme] [data-force-theme="light"] & {
+		[data-theme="light"] & {
 			--text-lightness: 0%;
 			--button-color: var(--mauve-7);
 

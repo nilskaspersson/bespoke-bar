@@ -107,23 +107,28 @@ export function SearchRecipesForm({
 					<Kbd shortcut="Esc" visual className={styles.esc} />
 				</div>
 
-				<Text
-					as="p"
-					size={1}
-					className={clsx(styles.shortcut, {
-						[styles.disabled]: filteredRecipes.length === 0,
-					})}
-					align="right"
-					light
-				>
-					Press{" "}
-					<Kbd
-						shortcut="mod+enter"
-						onTrigger={filteredRecipes.length > 0 ? openFirstResult : undefined}
-						ignoreInputEvents={false}
-					/>{" "}
-					to open the first result
-				</Text>
+				<Flex justifyContent="space-between" >
+					<Text as="p" size={1} light numeric>
+						{filteredRecipes.length} matching {filteredRecipes.length === 1 ? "recipe" : "recipes"}
+					</Text>
+
+					<Text
+						as="p"
+						size={1}
+						className={clsx(styles.shortcut, {
+							[styles.disabled]: filteredRecipes.length === 0,
+						})}
+						light
+					>
+						Press{" "}
+						<Kbd
+							shortcut="mod+enter"
+							onTrigger={filteredRecipes.length > 0 ? openFirstResult : undefined}
+							ignoreInputEvents={false}
+						/>{" "}
+						to open the first result
+					</Text>
+				</Flex>
 			</Grid>
 
 			<div className={styles.results}>

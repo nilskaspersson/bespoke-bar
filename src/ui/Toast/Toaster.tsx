@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Toaster as SonnerToaster } from "sonner";
+import type { ResolvedTheme } from "@/app/_theme/constants";
 import { useTheme } from "@/hooks/useTheme";
 import { Icon } from "@/ui/Icon";
 import { Spinner } from "@/ui/Spinner";
-import styles from "./styles.module.css";
 
 const ICONS_MAP = {
 	success: <Icon name="check" size={3} />,
@@ -16,23 +15,20 @@ const ICONS_MAP = {
 	close: <Icon name="xmark" size={2} />,
 } as const;
 
+const INVERTED: Record<ResolvedTheme, ResolvedTheme> = {
+	light: "dark",
+	dark: "light",
+};
+
 export function Toaster() {
 	const { resolvedTheme } = useTheme();
 
-	const [isMounted, setIsMounted] = useState(false);
-
-	useEffect(() => {
-		setIsMounted(true);
-	}, []);
-
 	return (
-		<div
-			className={styles.toaster}
-			data-force-theme={
-				isMounted ? (resolvedTheme === "dark" ? "light" : "dark") : undefined
-			}
-		>
-			<SonnerToaster position="top-right" closeButton icons={ICONS_MAP} />
-		</div>
+		<SonnerToaster
+			position="top-right"
+			closeButton
+			icons={ICONS_MAP}
+			theme={INVERTED[resolvedTheme]}
+		/>
 	);
 }
