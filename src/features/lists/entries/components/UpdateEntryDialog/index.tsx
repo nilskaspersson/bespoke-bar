@@ -8,6 +8,7 @@ import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
+import { Kbd } from "@/ui/Kbd";
 import { SubmitButton } from "@/ui/SubmitButton";
 
 const UpdateEntryForm = dynamic(
@@ -52,7 +53,18 @@ export function UpdateEntryDialog({
 				}
 				actions={
 					<li>
-						<SubmitButton variant="solid" color="accent" size="small">
+						<SubmitButton
+							variant="solid"
+							color="accent"
+							size="small"
+							endAdornment={
+								<Kbd
+									shortcut="mod+enter"
+									variant="ghost"
+									ignoreInputEvents={false}
+								/>
+							}
+						>
 							Save
 						</SubmitButton>
 					</li>

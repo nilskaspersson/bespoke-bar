@@ -107,9 +107,10 @@ export function SearchRecipesForm({
 					<Kbd shortcut="Esc" visual className={styles.esc} />
 				</div>
 
-				<Flex justifyContent="space-between" >
+				<Flex justifyContent="space-between">
 					<Text as="p" size={1} light numeric>
-						{filteredRecipes.length} matching {filteredRecipes.length === 1 ? "recipe" : "recipes"}
+						{filteredRecipes.length} matching{" "}
+						{filteredRecipes.length === 1 ? "recipe" : "recipes"}
 					</Text>
 
 					<Text
@@ -123,7 +124,9 @@ export function SearchRecipesForm({
 						Press{" "}
 						<Kbd
 							shortcut="mod+enter"
-							onTrigger={filteredRecipes.length > 0 ? openFirstResult : undefined}
+							onTrigger={
+								filteredRecipes.length > 0 ? openFirstResult : undefined
+							}
 							ignoreInputEvents={false}
 						/>{" "}
 						to open the first result
