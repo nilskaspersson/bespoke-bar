@@ -54,14 +54,12 @@ export function Kbd({
 			}
 
 			/**
-			 * If this Kbd is inside a dialog, only trigger if the focused element is in the
-				same dialog. This prevents parent dialogs from firing shortcuts when a nested
-				dialog has focus.
+			 * Scope shortcuts to the nearest dialog boundary. If the Kbd lives inside a
+			 * dialog, only fire when the event target is also inside that same dialog.
 			 */
-			const dialog = kbdRef.current?.closest("dialog");
-			const targetDialog = (event.target as Element)?.closest?.("dialog");
+			const scope = kbdRef.current?.closest("dialog");
 
-			if (dialog && targetDialog && targetDialog !== dialog) {
+			if (scope && !scope.contains(event.target as Node)) {
 				return;
 			}
 
