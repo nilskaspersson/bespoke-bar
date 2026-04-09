@@ -25,6 +25,10 @@ export async function removeRecipeFromList(
 			)
 			.returning();
 
+		if (!entry) {
+			throw new Error("Recipe not found, or access denied");
+		}
+
 		await tx
 			.update(RecipeListsTable)
 			.set({ updatedAt: sql`NOW()` })
@@ -37,10 +41,6 @@ export async function removeRecipeFromList(
 
 		return entry;
 	});
-
-	if (!deletedEntry) {
-		throw new Error("Recipe not found, or access denied");
-	}
 
 	cacheEvents.recipeList.update.emit(orgId, deletedEntry.listId);
 
