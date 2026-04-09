@@ -6,7 +6,7 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { updateIngredientSchema } from "@/db/schema/ingredients";
+import { updateIngredientFormSchema } from "@/db/schema/ingredients";
 import { updateIngredientAction } from "@/features/ingredients/api/updateIngredient";
 import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
@@ -14,6 +14,7 @@ import { SelectMeasurementType } from "@/features/ingredients/components/SelectM
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
+import { useInvalidateClientCache } from "@/hooks/useInvalidateClientCache";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
@@ -32,6 +33,7 @@ function hasErrors(field: { errors?: unknown }): boolean {
 
 export function EditIngredientPageForm({ ingredient, redirectTo }: Props) {
 	const router = useRouter();
+	const invalidateClientCache = useInvalidateClientCache();
 	const formRef = useRef<HTMLFormElement>(null);
 	const [lastResult, setLastResult] = useState<SubmissionResult>();
 
@@ -48,7 +50,7 @@ export function EditIngredientPageForm({ ingredient, redirectTo }: Props) {
 			measurementType: ingredient.measurementType,
 		},
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: updateIngredientSchema });
+			return parseWithZod(formData, { schema: updateIngredientFormSchema });
 		},
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
@@ -77,7 +79,11 @@ export function EditIngredientPageForm({ ingredient, redirectTo }: Props) {
 				return;
 			}
 
-			toast.success(`Updated: ${ingredient.name}`);
+			toast.success(
+				`Updated Ingredient ${formData.get("name") ?? ingredient.name}`,
+			);
+
+			invalidateClientCache("ingredient.update");
 			router.push(redirectTo ?? getIngredientUrl(ingredient));
 		},
 	});

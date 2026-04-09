@@ -9,6 +9,7 @@ import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { HGroup } from "@/ui/HGroup";
+import { Kbd } from "@/ui/Kbd";
 
 const AddRecipeForm = dynamic(
 	() =>
@@ -55,6 +56,13 @@ export function AddRecipeDialog({ list, children, ...props }: Props) {
 							variant="solid"
 							color="accent"
 							size="small"
+							endAdornment={
+								<Kbd
+									shortcut="mod+enter"
+									variant="ghost"
+									ignoreInputEvents={false}
+								/>
+							}
 						>
 							Add
 						</Button>

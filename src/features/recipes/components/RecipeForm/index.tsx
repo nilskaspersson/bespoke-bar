@@ -14,6 +14,7 @@ import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
+import { trpc } from "@/trpc/client";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
@@ -22,7 +23,6 @@ import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
-import { mutateSWRBarRecipesCache } from "@/utils/swrCache";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -51,26 +51,31 @@ function initializeSpecFormEntry(spec?: SpecWithIngredient) {
 }
 
 export function RecipeForm({ recipe, ingredients }: Props) {
-	const handleSubmit = useCallback(async (formData: FormData) => {
-		const toastId = Date.now().toString();
+	const utils = trpc.useUtils();
 
-		const promise = upsertRecipeWithSpecsAction(formData);
+	const handleSubmit = useCallback(
+		async (formData: FormData) => {
+			const toastId = Date.now().toString();
 
-		toast.promise(promise, {
-			id: toastId,
-			loading: "Saving changes…",
-			success: () => ({
-				message: "Changes saved",
-			}),
-			error: () => ({
-				message: "Could not save changes",
-				description: "Try again later.",
-			}),
-		});
+			const promise = upsertRecipeWithSpecsAction(formData);
 
-		await promise;
-		mutateSWRBarRecipesCache();
-	}, []);
+			toast.promise(promise, {
+				id: toastId,
+				loading: "Saving changes…",
+				success: () => ({
+					message: "Changes saved",
+				}),
+				error: () => ({
+					message: "Could not save changes",
+					description: "Try again later.",
+				}),
+			});
+
+			await promise;
+			utils.recipe.list.invalidate();
+		},
+		[utils],
+	);
 
 	const [form, fields] = useForm<RecipeFormData>({
 		id: recipe?.id ? `recipe-form-${recipe.id}` : "new-recipe-form",

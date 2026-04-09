@@ -1,7 +1,7 @@
 @layer base {
 	:root,
 	[data-theme="light"],
-	[data-theme] [data-force-theme="light"] {
+	[data-sonner-theme="light"] {
 		--amber-1: #fefdfb;
 		--amber-2: #fefbe9;
 		--amber-3: #fff7c2;
@@ -34,7 +34,7 @@
 	}
 
 	[data-theme="dark"],
-	[data-theme] [data-force-theme="dark"] {
+	[data-sonner-theme="dark"] {
 		--amber-1: #16120c;
 		--amber-2: #1d180f;
 		--amber-3: #302008;

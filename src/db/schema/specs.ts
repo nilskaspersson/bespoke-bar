@@ -30,7 +30,9 @@ export const SpecsTable = pgTable(
 		ingredientId: text("ingredient_id")
 			.notNull()
 			.references(() => IngredientsTable.id, { onDelete: "restrict" }),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
+		createdAt: timestamp("created_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
 		optional: boolean("optional").default(false),
 	},
 	(table) => [

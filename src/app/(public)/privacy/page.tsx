@@ -29,7 +29,7 @@ export default async function PrivacyPage() {
 							<Text as="em">
 								Last updated:{" "}
 								<Suspense>
-									<Time date={new Date(PRIVACY_POLICY_VERSION)} />
+									<Time date={PRIVACY_POLICY_VERSION} />
 								</Suspense>
 							</Text>
 						}

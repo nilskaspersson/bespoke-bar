@@ -49,12 +49,6 @@ const nextConfig: NextConfig = {
 		authInterrupts: true,
 		inlineCss: true,
 		useLightningcss: true,
-		serverActions: {
-			/**
-			 * TODO: Remove once parseTextFromImage is migrated to API route.
-			 */
-			bodySizeLimit: "10mb",
-		},
 	},
 };
 

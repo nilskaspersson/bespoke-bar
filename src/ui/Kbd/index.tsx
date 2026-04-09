@@ -53,7 +53,18 @@ export function Kbd({
 				return;
 			}
 
+			/**
+			 * Scope shortcuts to the nearest dialog boundary. If the Kbd lives inside a
+			 * dialog, only fire when the event target is also inside that same dialog.
+			 */
+			const scope = kbdRef.current?.closest("dialog");
+
+			if (scope && !scope.contains(event.target as Node)) {
+				return;
+			}
+
 			event.preventDefault();
+			event.stopPropagation();
 
 			animateChildren(kbdRef.current, keyframes.get("pulse"));
 

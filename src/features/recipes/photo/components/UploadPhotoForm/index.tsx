@@ -27,8 +27,12 @@ export function UploadPhotoForm({
 	onSuccess: (extractedText: string) => void;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 }) {
-	const { action: submitPhotoAction, isPending: isParsingPhotoText } =
-		useSubmitPhotoAction({ onSuccess });
+	const {
+		action: submitPhotoAction,
+		isPending: isParsingPhotoText,
+		startLoading,
+		dismissLoading,
+	} = useSubmitPhotoAction({ onSuccess });
 
 	const {
 		confirmAction: confirmOCRConsent,
@@ -46,6 +50,8 @@ export function UploadPhotoForm({
 		onChange: async (event) => {
 			onChange?.(event);
 
+			startLoading();
+
 			const isOCRConsentConfirmed = await checkOCRConsent();
 
 			if (!isOCRConsentConfirmed) {
@@ -53,6 +59,7 @@ export function UploadPhotoForm({
 				const confirmed = await confirmOCRConsent();
 
 				if (!confirmed) {
+					dismissLoading();
 					return;
 				}
 

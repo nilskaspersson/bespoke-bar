@@ -43,10 +43,36 @@ function toastSuccess(
 	});
 }
 
+type LoadingToast = typeof sonnerToast.loading;
+
+function toastLoading(
+	message: Parameters<LoadingToast>[0],
+	options?: Parameters<LoadingToast>[1],
+): ReturnType<LoadingToast> {
+	return sonnerToast.loading(message, {
+		...defaultConfig,
+		...options,
+	});
+}
+
+type ErrorToast = typeof sonnerToast.error;
+
+function toastError(
+	message: Parameters<ErrorToast>[0],
+	options?: Parameters<ErrorToast>[1],
+): ReturnType<ErrorToast> {
+	return sonnerToast.error(message, {
+		...defaultConfig,
+		...options,
+	});
+}
+
 export const toast = {
 	...sonnerToast,
 	promise: toastPromise,
 	success: toastSuccess,
+	loading: toastLoading,
+	error: toastError,
 };
 
 export function ToastActions({ className, children }: ComponentProps<"div">) {

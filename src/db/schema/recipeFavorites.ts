@@ -14,7 +14,7 @@ export const RecipeFavoritesTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		userId: text("user_id").notNull(),
 		orgId: text("org_id").notNull(),
-		addedAt: timestamp("created_at").defaultNow().notNull(),
+		addedAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
 	},
 	(table) => [
 		unique("recipe_favorites_user_recipe_unique").on(

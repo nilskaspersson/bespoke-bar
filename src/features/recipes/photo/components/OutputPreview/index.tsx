@@ -103,13 +103,13 @@ export function OutputPreview({
 					Text extraction can be inaccurate. Double-check extracted recipes.
 				</Callout>
 
-				<form action={submitBulkRecipesAction} className={styles.create}>
+				<div className={styles.create}>
 					<Button
-						type="submit"
 						variant="solid"
 						color={hasDraftRecipes ? "accent" : "light"}
 						size="small"
 						disabled={!hasDraftRecipes}
+						onClick={submitBulkRecipesAction}
 					>
 						{hasDraftRecipes ? (
 							<>
@@ -120,7 +120,7 @@ export function OutputPreview({
 							"Create"
 						)}
 					</Button>
-				</form>
+				</div>
 			</Flex>
 		</section>
 	);

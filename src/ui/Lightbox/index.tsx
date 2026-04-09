@@ -4,19 +4,19 @@ import styles from "./styles.module.css";
 
 type Props = {
 	rounded?: boolean;
-	forceTheme?: "light" | "dark";
+	theme?: "light" | "dark";
 };
 
 export function Lightbox({
 	children,
 	className,
 	rounded,
-	forceTheme,
+	theme,
 	...props
 }: ComponentProps<"div"> & Props) {
 	return (
 		<div
-			data-force-theme={forceTheme}
+			data-theme={theme}
 			className={clsx(styles.lightbox, className, {
 				[styles.rounded]: rounded,
 			})}

@@ -1,8 +1,5 @@
-import { z } from "zod/v4";
-import {
-	draftIngredientSchema,
-	ingredientsRefinements,
-} from "@/db/schema/ingredients";
+import { z } from "zod";
+import { draftIngredientFormSchema } from "@/db/schema/ingredients";
 import {
 	type RecipeListEntryWithRecipe,
 	recipeListEntryFormSchema,
@@ -15,7 +12,6 @@ import {
 } from "@/db/schema/recipeLists";
 import { insertRecipeSchema } from "@/db/schema/recipes";
 import { insertSpecsSchema } from "@/db/schema/specs";
-import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 
 /**
  * Recipes with specs and ingredients
@@ -34,19 +30,6 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-export const ingredientFormDataSchema = z
-	.object(draftIngredientSchema.shape)
-	/**
-	 * This is for user form. Users will type a percentage value, but we store a ratio.
-	 * Remove existing constraints first, then add another schema. It may be a better
-	 * idea to not try and derive any shapes from the draft schema in the form?
-	 */
-	.omit({ abv: true })
-	.extend({
-		abv: percentageToRatioSchema.optional(),
-	})
-	.refine(...ingredientsRefinements);
-
 export const upsertSpecSchema = insertSpecsSchema
 	.omit({
 		id: true,
@@ -57,7 +40,7 @@ export const upsertSpecSchema = insertSpecsSchema
 	.extend({
 		id: z.string().optional(),
 		ingredientId: z.string().optional(),
-		ingredient: ingredientFormDataSchema.optional(),
+		ingredient: draftIngredientFormSchema.optional(),
 	})
 	.refine((data) => data.ingredientId || data.ingredient, {
 		message: "Either ingredientId or ingredient data must be provided",
@@ -71,7 +54,7 @@ export const upsertSpecSchema = insertSpecsSchema
 			if (!data.ingredientId || data.ingredientId.trim() === "") {
 				return (
 					data.ingredient &&
-					ingredientFormDataSchema.safeParse(data.ingredient).success
+					draftIngredientFormSchema.safeParse(data.ingredient).success
 				);
 			}
 
@@ -91,7 +74,7 @@ export const recipeFormSchema = z.object({
 
 export type RecipeFormData = z.infer<typeof recipeFormSchema>;
 
-export type IngredientFormData = z.infer<typeof ingredientFormDataSchema>;
+export type IngredientFormData = z.infer<typeof draftIngredientFormSchema>;
 
 /**
  * Recipe lists with entries
@@ -108,13 +91,13 @@ export type RecipeListWithEntriesFormData = z.infer<
 export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
 	entries: z.array(
 		selectRecipeListEntrySchema.extend({
-			createdAt: z.coerce.date(),
-			updatedAt: z.coerce.date().nullable(),
+			createdAt: z.string(),
+			updatedAt: z.string().nullable(),
 		}),
 	),
-	createdAt: z.coerce.date(),
-	updatedAt: z.coerce.date().nullable(),
-	featuredAt: z.coerce.date().nullable(),
+	createdAt: z.string(),
+	updatedAt: z.string().nullable(),
+	featuredAt: z.string().nullable(),
 });
 
 export type RecipeListWithEntries = z.infer<typeof recipeListWithEntriesSchema>;

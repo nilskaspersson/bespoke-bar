@@ -9,6 +9,7 @@ import { Button, type ButtonProps } from "@/ui/Button";
 import { Drawer } from "@/ui/Drawer";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
+import { Kbd } from "@/ui/Kbd";
 
 const ExportListForm = dynamic(
 	() =>
@@ -58,6 +59,13 @@ export function ExportListButton({
 							color="accent"
 							size="small"
 							onClick={() => formRef.current?.requestSubmit()}
+							endAdornment={
+								<Kbd
+									shortcut="mod+enter"
+									variant="ghost"
+									ignoreInputEvents={false}
+								/>
+							}
 						>
 							<Icon name="arrow-down-from-line" size={1} />
 							Export

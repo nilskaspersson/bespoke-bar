@@ -5,7 +5,7 @@ import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { type ComponentProps, useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { updateIngredientSchema } from "@/db/schema/ingredients";
+import { updateIngredientFormSchema } from "@/db/schema/ingredients";
 import { updateIngredientAction } from "@/features/ingredients/api/updateIngredient";
 import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
@@ -16,6 +16,7 @@ import {
 	useIngredientEditor,
 } from "@/features/ingredients/stores/ingredientEditor";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
+import { useInvalidateClientCache } from "@/hooks/useInvalidateClientCache";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { TextField } from "@/ui/TextField";
@@ -36,6 +37,7 @@ export function EditIngredientForm({
 	...props
 }: Props & ComponentProps<"form">) {
 	const formRef = useRef<HTMLFormElement>(null);
+	const invalidateClientCache = useInvalidateClientCache();
 	const setPending = useIngredientEditor((s) => s.setPending);
 	const [submitting, setSubmitting] = useState(false);
 	const [lastResult, setLastResult] = useState<SubmissionResult>();
@@ -53,7 +55,7 @@ export function EditIngredientForm({
 			measurementType: ingredient.measurementType,
 		},
 		onValidate({ formData }) {
-			return parseWithZod(formData, { schema: updateIngredientSchema });
+			return parseWithZod(formData, { schema: updateIngredientFormSchema });
 		},
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
@@ -94,9 +96,14 @@ export function EditIngredientForm({
 				return;
 			}
 
-			toast.success(`Updated: ${ingredient.name}`);
+			toast.success(
+				`Updated Ingredient ${formData.get("name") ?? ingredient.name}`,
+			);
+
+			invalidateClientCache("ingredient.update");
 			ingredientEditorStore.emitUpdate({
 				...(ingredient as Ingredient),
+				name: (formData.get("name") as string) ?? ingredient.name,
 			});
 			formRef.current?.closest("dialog")?.close();
 		},

@@ -1,22 +1,13 @@
-"use server";
-
 import z from "zod";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 import { parseTextFromImage } from "@/features/recipes/photo/api/vision";
 import { findRecipeInTextWithLLM } from "@/features/recipes/photo/utils/findRecipeInTextWithLLM";
-import { authOrForbidden } from "@/utils/auth";
 
 const fileSchema = z.file();
 fileSchema.max(10 * 1024 * 1024); // 10 MB
 fileSchema.mime(ACCEPTED_IMAGE_TYPES);
 
-/**
- * TODO: Move to API route with specific body size limit (remove config from
- * next.config.ts).
- */
-export async function parseTextFromImageAction(formData: FormData) {
-	await authOrForbidden();
-
+export async function parseTextFromImageService(formData: FormData) {
 	const imageEntries = formData.getAll("image");
 
 	const validFile = imageEntries

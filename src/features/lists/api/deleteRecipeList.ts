@@ -1,11 +1,9 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { db } from "@/db";
-import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
+import type { RecipeList } from "@/db/schema/recipeLists";
+import { deleteRecipeList as deleteRecipeListService } from "@/features/lists/api/deleteRecipeList.service";
 import { authOrForbidden } from "@/utils/auth";
-import { cacheEvents } from "@/utils/cache";
 
 export async function deleteRecipeList({
 	id,
@@ -14,13 +12,8 @@ export async function deleteRecipeList({
 	id: RecipeList["id"];
 	redirectTo?: string;
 }): Promise<void> {
-	const { orgId } = await authOrForbidden();
-
-	await db
-		.delete(RecipeListsTable)
-		.where(and(eq(RecipeListsTable.id, id), eq(RecipeListsTable.orgId, orgId)));
-
-	cacheEvents.recipeList.delete.emit(orgId, id);
+	const auth = await authOrForbidden();
+	await deleteRecipeListService(auth, id);
 
 	if (redirectTo) {
 		redirect(redirectTo);

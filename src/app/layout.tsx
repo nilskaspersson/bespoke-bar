@@ -2,13 +2,14 @@ import "./_theme";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
-import { ThemeProvider } from "next-themes";
 import { type PropsWithChildren, Suspense } from "react";
 import { AppFooter } from "@/components/AppFooter";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ScrollFix } from "@/components/ScrollFix";
+import { ThemeProvider } from "@/hooks/useTheme";
 import { Toaster } from "@/ui/Toast/Toaster";
 import { NavigationObserver } from "@/utils/navigation";
+import { ThemeScript } from "./_theme/ThemeScript";
 import styles from "./layout.module.css";
 
 const sans = Figtree({
@@ -25,15 +26,10 @@ const serif = Newsreader({
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
-		<html
-			lang="en"
-			data-scroll-behavior="smooth"
-			/**
-			 * Suppresses hydration warning of next-themes
-			 */
-			suppressHydrationWarning
-		>
+		<html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
 			<body className={clsx(sans.variable, serif.variable, styles.body)}>
+				<ThemeScript />
+
 				<ThemeProvider>
 					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 					<div className={styles.layout} id="root">

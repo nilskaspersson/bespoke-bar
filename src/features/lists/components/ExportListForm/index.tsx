@@ -1,10 +1,7 @@
 "use client";
 
 import { type FormEvent, use, useCallback, useMemo, useState } from "react";
-import useSWRImmutable from "swr/immutable";
-import type { RecipeListWithRecipes } from "@/db/schema/composite";
 import type { RecipeList } from "@/db/schema/recipeLists";
-import { recipeListFetcher } from "@/features/lists/utils";
 import {
 	type ExportOptions,
 	exportRecipeListAsJson,
@@ -12,6 +9,7 @@ import {
 	getExportFilename,
 } from "@/features/lists/utils/exportRecipeList";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { trpc } from "@/trpc/client";
 import { Checkbox } from "@/ui/Checkbox";
 import { CopyToClipboard } from "@/ui/CopyToClipboard";
 import { Grid } from "@/ui/Grid";
@@ -61,10 +59,7 @@ export function ExportListForm({
 
 	const { currencyFormatter } = use(FormatterContext);
 
-	const { data, isLoading } = useSWRImmutable<RecipeListWithRecipes>(
-		`/api/lists/${list.id}`,
-		recipeListFetcher,
-	);
+	const { data, isLoading } = trpc.recipeList.byId.useQuery({ id: list.id });
 
 	const preview = useMemo(() => {
 		if (!data) return "";

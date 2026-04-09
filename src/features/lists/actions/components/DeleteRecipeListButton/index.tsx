@@ -3,12 +3,12 @@
 import type { PropsWithChildren } from "react";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
+import { trpc } from "@/trpc/client";
 import type { ButtonProps } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
 import { toast } from "@/ui/Toast";
-import { mutateSWRRecipeListsCache } from "@/utils/swrCache";
 import styles from "./styles.module.css";
 
 export function DeleteRecipeListButton({
@@ -22,6 +22,8 @@ export function DeleteRecipeListButton({
 	list: RecipeListWithEntries;
 }> &
 	ButtonProps) {
+	const utils = trpc.useUtils();
+
 	const handleSubmit = async () => {
 		const toastId = Date.now().toString();
 
@@ -38,7 +40,7 @@ export function DeleteRecipeListButton({
 		});
 
 		await promise;
-		mutateSWRRecipeListsCache();
+		utils.recipeList.list.invalidate();
 	};
 
 	return (

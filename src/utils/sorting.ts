@@ -3,10 +3,10 @@ import { normalizeInput } from "@/utils";
 import { collator } from "@/utils/collator";
 
 export function sortingFnCreatedAt<
-	T extends { createdAt: Date; name: string | null },
+	T extends { createdAt: string; name: string | null },
 >(rowA: Row<T>, rowB: Row<T>) {
-	const dateA = rowA.original.createdAt.getTime();
-	const dateB = rowB.original.createdAt.getTime();
+	const dateA = new Date(rowA.original.createdAt).getTime();
+	const dateB = new Date(rowB.original.createdAt).getTime();
 
 	if (dateA !== dateB) {
 		return dateA - dateB;
