@@ -1,36 +1,38 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import type { ChangeEventHandler } from "react";
-import { useIsMounted } from "@/hooks/useIsMounted";
+import { ThemeSchema } from "@/app/_theme/constants";
+import { useTheme } from "@/hooks/useTheme";
 import type { IconName } from "@/ui/Icon/types";
 import { OptionsSwitch } from "@/ui/OptionsSwitch";
 import { withKey } from "@/utils/withKey";
 
-const THEME_OPTIONS = (
-	[
-		{
-			value: "light",
-			label: "Light",
-			icon: "sun-bright" satisfies IconName,
-		},
-		{ value: "dark", label: "Dark", icon: "moon" satisfies IconName },
-		{
-			value: "system",
-			label: "System",
-			icon: "display" satisfies IconName,
-		},
-	] as const
-).map(withKey);
+const ICONS: Record<(typeof ThemeSchema)["options"][number], IconName> = {
+	light: "sun-bright",
+	dark: "moon",
+	system: "display",
+};
+
+const LABELS: Record<(typeof ThemeSchema)["options"][number], string> = {
+	light: "Light",
+	dark: "Dark",
+	system: "System",
+};
+
+const THEME_OPTIONS = ThemeSchema.options
+	.map((value) => ({
+		value,
+		label: LABELS[value],
+		icon: ICONS[value],
+	}))
+	.map(withKey);
 
 export function ThemePicker() {
 	const { setTheme, theme } = useTheme();
-	const isMounted = useIsMounted();
 
 	const handleThemeChange: ChangeEventHandler<HTMLInputElement> = (event) => {
-		if (!isMounted) return;
-		const selectedTheme = event.target.value;
-		setTheme(selectedTheme);
+		const parsed = ThemeSchema.safeParse(event.target.value);
+		if (parsed.success) setTheme(parsed.data);
 	};
 
 	return (

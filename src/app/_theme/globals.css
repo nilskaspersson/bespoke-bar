@@ -12,17 +12,20 @@
 		box-sizing: border-box;
 	}
 
-	/**
-	 * 1. Fill browser window
-	 * 2. Use default cursor, unless to imply interactivity.
-	 * 3. Flatten unwanted line-height
-	 */
 	html {
-		height: 100%; /* 1 */
-		cursor: default; /* 2 */
-		line-height: 1; /* 3 */
+		height: 100%;
+		cursor: default;
+		line-height: 1;
 		scroll-snap-type: y proximity;
 		scroll-behavior: smooth;
+
+		&[data-theme="light"] {
+			color-scheme: light;
+		}
+
+		&[data-theme="dark"] {
+			color-scheme: dark;
+		}
 	}
 
 	body {
@@ -33,8 +36,6 @@
 		color: var(--mauve-11);
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		transition-property: background-color, color;
-		transition-duration: var(--transition-duration--short);
 	}
 
 	/**

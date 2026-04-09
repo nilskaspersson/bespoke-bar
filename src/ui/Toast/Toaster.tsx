@@ -1,8 +1,8 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Toaster as SonnerToaster } from "sonner";
+import { useTheme } from "@/hooks/useTheme";
 import { Icon } from "@/ui/Icon";
 import { Spinner } from "@/ui/Spinner";
 import styles from "./styles.module.css";
