@@ -52,7 +52,7 @@ export function createDraftRecipeListEntry(
 		recipe: o.recipe,
 		recipeId: o.recipe.id,
 		price: null,
-		createdAt: new Date(),
+		createdAt: new Date().toISOString(),
 		updatedAt: null,
 		sortOrder: null,
 		...o,

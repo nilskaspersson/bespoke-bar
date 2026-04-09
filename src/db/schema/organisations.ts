@@ -14,8 +14,12 @@ export const OrganisationsTable = pgTable(
 		defaultLocale: varchar("default_locale", { length: 10 })
 			.notNull()
 			.default("en-GB"),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
-		updatedAt: timestamp("updated_at").defaultNow().notNull(),
+		createdAt: timestamp("created_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
+		updatedAt: timestamp("updated_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
 		createdBy: text("created_by").notNull(),
 	},
 	(table) => [index("organisations_clerk_org_id_idx").on(table.clerkOrgId)],

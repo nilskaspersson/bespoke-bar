@@ -24,11 +24,13 @@ export const RecipeListsTable = pgTable(
 		description: varchar("description", { length: 1000 }),
 		isPublic: boolean("is_public").default(false).notNull(),
 		isFeatured: boolean("is_featured").default(false).notNull(),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
+		createdAt: timestamp("created_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
 		createdBy: text("created_by").notNull(),
-		updatedAt: timestamp("updated_at"),
+		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),
-		featuredAt: timestamp("featured_at"),
+		featuredAt: timestamp("featured_at", { mode: "string" }),
 		orgId: text("org_id").notNull(),
 	},
 	(table) => [

@@ -37,8 +37,10 @@ export const IngredientsTable = pgTable(
 		unitCost: real("unitCost"),
 		measurementType: measurementTypes("measurementType"),
 		orgId: text("org_id").notNull(),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
-		updatedAt: timestamp("updated_at"),
+		createdAt: timestamp("created_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
+		updatedAt: timestamp("updated_at", { mode: "string" }),
 		createdBy: text("created_by").notNull(),
 		updatedBy: text("updated_by"),
 		aiEnrichedFields: text("ai_enriched_fields").array(),

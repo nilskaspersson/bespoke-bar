@@ -1,6 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
-import superjson from "superjson";
 import { z } from "zod";
 import type { Auth } from "@/utils/auth";
 
@@ -13,7 +12,6 @@ export async function createContext() {
 type Context = Awaited<ReturnType<typeof createContext>>;
 
 const t = initTRPC.context<Context>().create({
-	transformer: superjson,
 	errorFormatter({ shape, error }) {
 		return {
 			...shape,

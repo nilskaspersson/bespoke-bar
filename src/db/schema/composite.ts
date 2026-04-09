@@ -91,13 +91,13 @@ export type RecipeListWithEntriesFormData = z.infer<
 export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
 	entries: z.array(
 		selectRecipeListEntrySchema.extend({
-			createdAt: z.coerce.date(),
-			updatedAt: z.coerce.date().nullable(),
+			createdAt: z.string(),
+			updatedAt: z.string().nullable(),
 		}),
 	),
-	createdAt: z.coerce.date(),
-	updatedAt: z.coerce.date().nullable(),
-	featuredAt: z.coerce.date().nullable(),
+	createdAt: z.string(),
+	updatedAt: z.string().nullable(),
+	featuredAt: z.string().nullable(),
 });
 
 export type RecipeListWithEntries = z.infer<typeof recipeListWithEntriesSchema>;

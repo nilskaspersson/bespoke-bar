@@ -11,7 +11,7 @@ export async function RecipeAuthorByline({
 	...props
 }: ComponentProps<typeof Text> & {
 	createdBy: string;
-	createdAt: Date;
+	createdAt: string;
 }) {
 	const author = await getUserById(createdBy);
 

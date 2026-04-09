@@ -26,7 +26,7 @@ export default async function TermsPage() {
 							<Text as="em" italic>
 								Last updated:{" "}
 								<Suspense>
-									<Time date={new Date(TERMS_CONDITIONS_VERSION)} />
+									<Time date={TERMS_CONDITIONS_VERSION} />
 								</Suspense>
 							</Text>
 						}

@@ -88,8 +88,8 @@ function formatIngredient(
 
 export function getExportFilename(
 	list: Pick<RecipeList, "name"> & {
-		createdAt?: Date | string | null;
-		updatedAt?: Date | string | null;
+		createdAt?: string | null;
+		updatedAt?: string | null;
 	},
 	format: "txt" | "json",
 ): string {
@@ -100,7 +100,7 @@ export function getExportFilename(
 
 	const timestamp = list.updatedAt ?? list.createdAt;
 	const dateStr = timestamp
-		? new Date(timestamp).toISOString().slice(0, 10)
+		? timestamp.slice(0, 10)
 		: new Date().toISOString().slice(0, 10);
 
 	return `${sanitizedName || "recipe-list"}-${dateStr}.${format}`;

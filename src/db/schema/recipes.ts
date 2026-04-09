@@ -40,10 +40,12 @@ export const RecipesTable = pgTable(
 		garnish: varchar("garnish", { length: 100 }),
 		style: cocktailStylesEnum("style"),
 		archivedBy: text("archived_by"),
-		archivedAt: timestamp("archived_at"),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
+		archivedAt: timestamp("archived_at", { mode: "string" }),
+		createdAt: timestamp("created_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
 		createdBy: text("created_by").notNull(),
-		updatedAt: timestamp("updated_at"),
+		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),
 		orgId: text("org_id").notNull(),
 	},

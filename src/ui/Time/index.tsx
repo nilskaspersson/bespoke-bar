@@ -12,12 +12,13 @@ export function Time({
 	relativeThreshold = 30,
 	...props
 }: {
-	date: Date;
+	date: string;
 	relativeThreshold?: number;
 } & Omit<ComponentProps<typeof Text>, "children">) {
 	const formatLooseRelativeTime = useLooseRelativeTime();
-	const displayText = formatLooseRelativeTime(date, relativeThreshold);
-	const isoString = date.toISOString();
+	const dateObj = new Date(date);
+	const displayText = formatLooseRelativeTime(dateObj, relativeThreshold);
+	const isoString = dateObj.toISOString();
 
 	return (
 		<Text

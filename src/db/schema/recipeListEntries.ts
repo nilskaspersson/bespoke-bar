@@ -33,8 +33,10 @@ export const RecipeListEntriesTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		sortOrder: integer("sort_order"),
 		price: real("price"),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
-		updatedAt: timestamp("updated_at"),
+		createdAt: timestamp("created_at", { mode: "string" })
+			.defaultNow()
+			.notNull(),
+		updatedAt: timestamp("updated_at", { mode: "string" }),
 	},
 	(table) => [
 		index("idx_recipe_list_entries_org").on(table.orgId),
