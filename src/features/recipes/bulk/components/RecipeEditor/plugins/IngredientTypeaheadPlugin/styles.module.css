@@ -3,10 +3,10 @@
 		position: fixed;
 		position-anchor: --typeahead;
 		inset: unset;
-		top: anchor(bottom);
+		top: calc(anchor(bottom) + var(--space-0));
 		left: anchor(left);
 		width: max-content;
-		z-index: 1000;
+		z-index: var(--z-popover);
 		position-try-fallbacks: flip-block;
 	}
 

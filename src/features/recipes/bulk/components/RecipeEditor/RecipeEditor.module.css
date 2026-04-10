@@ -37,11 +37,12 @@
 
 	.placeholder {
 		position: absolute;
-		top: calc(var(--space-2) + 1px);
+		top: calc(var(--space-3) + 1px);
 		left: calc(var(--control-inset) + 1px);
 		color: var(--mauve-9);
 		font-size: max(1rem, 16px);
 		font-weight: 600;
+		line-height: var(--line-height);
 		pointer-events: none;
 		user-select: none;
 	}
