@@ -28,6 +28,7 @@ import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
+import { Kbd } from "@/ui/Kbd";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionLabel } from "@/ui/OptionLabel";
 import { OptionsList } from "@/ui/OptionsList";
@@ -115,6 +116,10 @@ function getIngredientQuery(): IngredientQueryResult | null {
 function formatAbv(abv: number | null): string | null {
 	if (abv === null) return null;
 	return `${(abv * 100).toFixed(0)}%`;
+}
+
+function preventFocusLoss(e: React.MouseEvent) {
+	e.preventDefault();
 }
 
 /**
@@ -480,7 +485,9 @@ export function IngredientTypeaheadPlugin({
 	if (!menuState || options.length === 0) return null;
 
 	return createPortal(
+		// biome-ignore lint/a11y/noStaticElementInteractions: prevents focus loss on mousedown
 		<div
+			onMouseDown={preventFocusLoss}
 			style={{
 				position: "fixed",
 				top: menuState.position.top,
@@ -488,7 +495,29 @@ export function IngredientTypeaheadPlugin({
 				zIndex: 1000,
 			}}
 		>
-			<OptionsList>
+			<OptionsList
+				footer={
+					<button
+						type="button"
+						style={{
+							all: "unset",
+							display: "flex",
+							alignItems: "center",
+							gap: "var(--space-2)",
+							cursor: "pointer",
+							fontSize: "var(--font-size-1)",
+							color: "var(--mauve-9)",
+						}}
+						onMouseDown={(e) => {
+							e.preventDefault();
+							selectOption(options[selectedIndex ?? 0]);
+						}}
+					>
+						<Kbd shortcut="tab" visual />
+						<span>to complete</span>
+					</button>
+				}
+			>
 				{options.map((option, index) => {
 					const { ingredient } = option;
 					const category = ingredient.category
