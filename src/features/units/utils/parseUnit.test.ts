@@ -51,61 +51,61 @@ describe("unitTextParser", () => {
 
 	describe("aliases", () => {
 		test("plural: cls → cl", () => {
-			expect(unitTextParser("cls Lime")![0]).toBe("cl");
+			expect(unitTextParser("cls Lime")?.[0]).toBe("cl");
 		});
 
 		test("plural: dashes → dash", () => {
-			expect(unitTextParser("dashes Bitters")![0]).toBe("dash");
+			expect(unitTextParser("dashes Bitters")?.[0]).toBe("dash");
 		});
 
 		test("long form: centiliter → cl", () => {
-			expect(unitTextParser("centiliter Lime")![0]).toBe("cl");
+			expect(unitTextParser("centiliter Lime")?.[0]).toBe("cl");
 		});
 
 		test("long form: fluid ounces → fl_oz", () => {
-			expect(unitTextParser("fluid ounces Gin")![0]).toBe("fl_oz");
+			expect(unitTextParser("fluid ounces Gin")?.[0]).toBe("fl_oz");
 		});
 
 		test("dot notation: oz. → fl_oz", () => {
-			expect(unitTextParser("oz. Gin")![0]).toBe("fl_oz");
+			expect(unitTextParser("oz. Gin")?.[0]).toBe("fl_oz");
 		});
 
 		test("dot notation: fl.oz. → fl_oz", () => {
-			expect(unitTextParser("fl.oz. Gin")![0]).toBe("fl_oz");
+			expect(unitTextParser("fl.oz. Gin")?.[0]).toBe("fl_oz");
 		});
 
 		test("bar spoon (two words) → barspoon", () => {
-			expect(unitTextParser("bar spoon Absinthe")![0]).toBe("barspoon");
+			expect(unitTextParser("bar spoon Absinthe")?.[0]).toBe("barspoon");
 		});
 
 		test("bsp → barspoon", () => {
-			expect(unitTextParser("bsp Absinthe")![0]).toBe("barspoon");
+			expect(unitTextParser("bsp Absinthe")?.[0]).toBe("barspoon");
 		});
 
 		test("wash → rinse", () => {
-			expect(unitTextParser("wash Absinthe")![0]).toBe("rinse");
+			expect(unitTextParser("wash Absinthe")?.[0]).toBe("rinse");
 		});
 
 		test("mist → spray", () => {
-			expect(unitTextParser("mist Absinthe")![0]).toBe("spray");
+			expect(unitTextParser("mist Absinthe")?.[0]).toBe("spray");
 		});
 	});
 
 	describe("case insensitivity", () => {
 		test("CL", () => {
-			expect(unitTextParser("CL Lime")![0]).toBe("cl");
+			expect(unitTextParser("CL Lime")?.[0]).toBe("cl");
 		});
 
 		test("Cl", () => {
-			expect(unitTextParser("Cl Lime")![0]).toBe("cl");
+			expect(unitTextParser("Cl Lime")?.[0]).toBe("cl");
 		});
 
 		test("FL OZ", () => {
-			expect(unitTextParser("FL OZ Gin")![0]).toBe("fl_oz");
+			expect(unitTextParser("FL OZ Gin")?.[0]).toBe("fl_oz");
 		});
 
 		test("Dash", () => {
-			expect(unitTextParser("Dash Bitters")![0]).toBe("dash");
+			expect(unitTextParser("Dash Bitters")?.[0]).toBe("dash");
 		});
 	});
 

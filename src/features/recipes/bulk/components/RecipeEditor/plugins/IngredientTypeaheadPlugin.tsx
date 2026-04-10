@@ -13,6 +13,7 @@ import {
 	KEY_ENTER_COMMAND,
 	KEY_ESCAPE_COMMAND,
 	KEY_TAB_COMMAND,
+	type LexicalEditor,
 	mergeRegister,
 } from "lexical";
 import {
@@ -23,7 +24,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
@@ -33,86 +33,25 @@ import { Kbd } from "@/ui/Kbd";
 import { OptionItem } from "@/ui/OptionItem";
 import { OptionLabel } from "@/ui/OptionLabel";
 import { OptionsList } from "@/ui/OptionsList";
+import { Text } from "@/ui/Text";
+import styles from "../RecipeEditor.module.css";
+import { useGhostText } from "./useGhostText";
 
-type IngredientQueryResult = {
-	matchingString: string;
-	cursorAtEnd: boolean;
+// ─── Types ──────────────────────────────────────────────────
+
+type MenuMode = "typing" | "browsing";
+
+type MenuState = {
+	mode: MenuMode;
+	queryString: string;
 };
 
-function getIngredientQuery(): IngredientQueryResult | null {
-	const selection = $getSelection();
+type IngredientOption = {
+	key: string;
+	ingredient: Ingredient;
+};
 
-	if (!$isRangeSelection(selection) || !selection.isCollapsed()) {
-		return null;
-	}
-
-	const anchor = selection.anchor;
-
-	if (anchor.type !== "text") {
-		return null;
-	}
-
-	const anchorNode = anchor.getNode();
-	const paragraph = anchorNode.getParent();
-
-	if (!paragraph) {
-		return null;
-	}
-
-	const children = paragraph.getChildren();
-	let lineText = "";
-	let cursorOffset = 0;
-	let foundAnchor = false;
-
-	for (const child of children) {
-		if ($isLineBreakNode(child)) {
-			if (foundAnchor) break;
-			lineText = "";
-			continue;
-		}
-
-		const text = child.getTextContent();
-
-		if (child.is(anchorNode)) {
-			cursorOffset = lineText.length + anchor.offset;
-			foundAnchor = true;
-		}
-
-		lineText += text;
-	}
-
-	if (!foundAnchor) {
-		return null;
-	}
-
-	const textUpToCursor = lineText.slice(0, cursorOffset);
-
-	const [quantity, quantityRemainder] = quantityTextParser(textUpToCursor);
-
-	if (quantity === null) {
-		return null;
-	}
-
-	const trimmedForUnit = quantityRemainder.trimStart();
-	const [unit, unitRemainder] = unitTextParser(trimmedForUnit);
-
-	if (unit === null) {
-		return null;
-	}
-
-	const ingredientText = unitRemainder.trimStart();
-
-	if (ingredientText.length === 0) {
-		return null;
-	}
-
-	const restOfLine = lineText.slice(cursorOffset).trimEnd();
-
-	return {
-		matchingString: ingredientText,
-		cursorAtEnd: restOfLine.length === 0,
-	};
-}
+// ─── Pure helpers ───────────────────────────────────────────
 
 function formatAbv(abv: number | null): string | null {
 	if (abv === null) return null;
@@ -123,48 +62,102 @@ function preventFocusLoss(e: React.MouseEvent) {
 	e.preventDefault();
 }
 
+// ─── Lexical helpers ────────────────────────────────────────
+
 /**
- * Get fixed-position coordinates for the menu, measured from
- * the cursor's text node so it works in all browsers.
+ * Read the current line from the Lexical selection and extract the
+ * ingredient query (text after quantity + unit, up to the cursor).
+ * Must be called inside `editor.getEditorState().read()`.
  */
-function getMenuPosition(): { top: number; left: number } | null {
-	const sel = window.getSelection();
-	if (!sel || sel.rangeCount === 0) return null;
+function getIngredientQuery(): {
+	matchingString: string;
+	cursorAtEnd: boolean;
+} | null {
+	const selection = $getSelection();
+	if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
 
-	const { anchorNode, anchorOffset } = sel;
-	if (!anchorNode || anchorNode.nodeType !== Node.TEXT_NODE) return null;
+	const anchor = selection.anchor;
+	if (anchor.type !== "text") return null;
 
-	const range = document.createRange();
-	try {
-		if (anchorOffset > 0) {
-			range.setStart(anchorNode, anchorOffset - 1);
-			range.setEnd(anchorNode, anchorOffset);
-		} else if ((anchorNode as Text).length > 0) {
-			range.setStart(anchorNode, 0);
-			range.setEnd(anchorNode, 1);
-		} else {
-			return null;
+	const anchorNode = anchor.getNode();
+	const paragraph = anchorNode.getParent();
+	if (!paragraph) return null;
+
+	let lineText = "";
+	let cursorOffset = 0;
+	let foundAnchor = false;
+
+	for (const child of paragraph.getChildren()) {
+		if ($isLineBreakNode(child)) {
+			if (foundAnchor) break;
+			lineText = "";
+			continue;
 		}
-	} catch {
-		return null;
+		const text = child.getTextContent();
+		if (child.is(anchorNode)) {
+			cursorOffset = lineText.length + anchor.offset;
+			foundAnchor = true;
+		}
+		lineText += text;
 	}
 
-	const rect = range.getBoundingClientRect();
-	if (rect.height === 0) return null;
+	if (!foundAnchor) return null;
 
+	const textUpToCursor = lineText.slice(0, cursorOffset);
+	const [quantity, quantityRemainder] = quantityTextParser(textUpToCursor);
+	if (quantity === null) return null;
+
+	const [unit, unitRemainder] = unitTextParser(quantityRemainder.trimStart());
+	if (unit === null) return null;
+
+	const ingredientText = unitRemainder.trimStart();
+	if (ingredientText.length === 0) return null;
+
+	const restOfLine = lineText.slice(cursorOffset).trimEnd();
 	return {
-		top: rect.bottom,
-		left: anchorOffset > 0 ? rect.right : rect.left,
+		matchingString: ingredientText,
+		cursorAtEnd: restOfLine.length === 0,
 	};
 }
 
-type MenuMode = "typing" | "browsing";
+/**
+ * Replace the ingredient text at the cursor with `replacement`,
+ * removing any trailing text nodes split by Lexical.
+ */
+function replaceIngredientText(
+	editor: LexicalEditor,
+	matchingString: string,
+	replacement: string,
+) {
+	editor.update(() => {
+		const selection = $getSelection();
+		if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
 
-type MenuState = {
-	mode: MenuMode;
-	queryString: string;
-	position: { top: number; left: number };
-};
+		const anchor = selection.anchor;
+		if (anchor.type !== "text") return;
+
+		const textNode = anchor.getNode();
+		const text = textNode.getTextContent();
+		const matchStart = text.lastIndexOf(matchingString);
+		if (matchStart < 0) return;
+
+		const before = text.slice(0, matchStart);
+		textNode.setTextContent(before + replacement);
+
+		let sibling = textNode.getNextSibling();
+		while (sibling && $isTextNode(sibling)) {
+			const next = sibling.getNextSibling();
+			sibling.remove();
+			sibling = next;
+		}
+
+		const offset = before.length + replacement.length;
+		selection.anchor.set(textNode.__key, offset, "text");
+		selection.focus.set(textNode.__key, offset, "text");
+	});
+}
+
+// ─── Component ──────────────────────────────────────────────
 
 export function IngredientTypeaheadPlugin({
 	ingredients,
@@ -174,42 +167,42 @@ export function IngredientTypeaheadPlugin({
 	const [editor] = useLexicalComposerContext();
 	const [menuState, setMenuState] = useState<MenuState | null>(null);
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
 	const prevTextRef = useRef("");
 	const mouseDownRef = useRef(false);
 	const escapeRef = useRef(false);
 	const escapePendingRef = useRef(false);
 	const menuStateRef = useRef(menuState);
-	const ghostDomRef = useRef<HTMLElement | null>(null);
-
 	menuStateRef.current = menuState;
 
 	const queryString = menuState?.queryString ?? null;
 	const menuMode = menuState?.mode ?? null;
-
 	const queryStringRef = useRef(queryString);
 	queryStringRef.current = queryString;
 
-	const openMenu = useCallback((state: MenuState) => {
-		setMenuState(state);
+	const ingredientNamesLower = useMemo(
+		() => new Set(ingredients.map((i) => i.name.toLowerCase())),
+		[ingredients],
+	);
+
+	const openMenu = useCallback((mode: MenuMode, qs: string) => {
+		const prev = menuStateRef.current;
+		if (prev?.mode === mode && prev?.queryString === qs) return;
+		setMenuState({ mode, queryString: qs });
 		setSelectedIndex(null);
 	}, []);
 
 	const closeMenu = useCallback(() => {
+		if (!menuStateRef.current) return;
 		setMenuState(null);
 	}, []);
 
-	/**
-	 * Track mousedown on the editor to distinguish clicking from typing.
-	 * Track Escape keydown to detect Escape-caused blur.
-	 * Handle blur: close the menu and refocus when appropriate.
-	 * This also covers Firefox's behavior of blurring contenteditable
-	 * on Escape (even without autocomplete open).
-	 */
+	// ── Focus, blur & escape tracking ───────────────────────
+
 	useEffect(() => {
 		function onMouseDown(e: MouseEvent) {
 			escapeRef.current = false;
-			const root = editor.getRootElement();
-			if (root?.contains(e.target as Node)) {
+			if (editor.getRootElement()?.contains(e.target as Node)) {
 				mouseDownRef.current = true;
 			}
 		}
@@ -221,14 +214,11 @@ export function IngredientTypeaheadPlugin({
 			}
 		}
 		function onKeyDown(e: KeyboardEvent) {
-			if (e.key === "Escape") {
-				escapePendingRef.current = true;
-			}
+			if (e.key === "Escape") escapePendingRef.current = true;
 		}
 		function onKeyUp() {
 			escapePendingRef.current = false;
 		}
-
 		function onBlur() {
 			if (menuStateRef.current) {
 				if (mouseDownRef.current) {
@@ -237,17 +227,12 @@ export function IngredientTypeaheadPlugin({
 				}
 				escapeRef.current = true;
 				setMenuState(null);
-				requestAnimationFrame(() => {
-					editor.getRootElement()?.focus();
-				});
+				requestAnimationFrame(() => editor.getRootElement()?.focus());
 				return;
 			}
-			// No menu open — refocus if Escape caused the blur (Firefox).
 			if (escapePendingRef.current) {
 				escapePendingRef.current = false;
-				requestAnimationFrame(() => {
-					editor.getRootElement()?.focus();
-				});
+				requestAnimationFrame(() => editor.getRootElement()?.focus());
 			}
 		}
 
@@ -255,13 +240,10 @@ export function IngredientTypeaheadPlugin({
 		document.addEventListener("mouseup", onMouseUp, true);
 		document.addEventListener("keydown", onKeyDown, true);
 		document.addEventListener("keyup", onKeyUp, true);
-
-		const removeRootListener = editor.registerRootListener(
-			(rootElement, prevRootElement) => {
-				prevRootElement?.removeEventListener("blur", onBlur);
-				rootElement?.addEventListener("blur", onBlur);
-			},
-		);
+		const removeRootListener = editor.registerRootListener((root, prev) => {
+			prev?.removeEventListener("blur", onBlur);
+			root?.addEventListener("blur", onBlur);
+		});
 
 		return () => {
 			document.removeEventListener("mousedown", onMouseDown, true);
@@ -272,26 +254,16 @@ export function IngredientTypeaheadPlugin({
 		};
 	}, [editor]);
 
-	/**
-	 * Core update listener — detect ingredient queries and
-	 * imperatively open/close the menu.
-	 */
+	// ── Menu detection ──────────────────────────────────────
+
 	useEffect(() => {
 		return editor.registerUpdateListener(() => {
-			if (ghostDomRef.current) {
-				ghostDomRef.current.removeAttribute("data-ghost");
-				ghostDomRef.current = null;
-			}
-
 			editor.getEditorState().read(() => {
 				const currentText = $getRoot().getTextContent();
 				const textChanged = currentText !== prevTextRef.current;
 				prevTextRef.current = currentText;
 
-				if (textChanged) {
-					escapeRef.current = false;
-				}
-
+				if (textChanged) escapeRef.current = false;
 				if (escapeRef.current) {
 					closeMenu();
 					return;
@@ -310,8 +282,7 @@ export function IngredientTypeaheadPlugin({
 						closeMenu();
 						return;
 					}
-					const query = result.matchingString.toLowerCase();
-					if (ingredients.some((i) => i.name.toLowerCase() === query)) {
+					if (ingredientNamesLower.has(result.matchingString.toLowerCase())) {
 						closeMenu();
 						return;
 					}
@@ -325,29 +296,18 @@ export function IngredientTypeaheadPlugin({
 					return;
 				}
 
-				const position = getMenuPosition();
-				if (!position) {
-					closeMenu();
-					return;
-				}
-
-				openMenu({
-					mode,
-					queryString: result.matchingString,
-					position,
-				});
+				openMenu(mode, result.matchingString);
 			});
 		});
-	}, [editor, ingredients, openMenu, closeMenu]);
+	}, [editor, ingredientNamesLower, openMenu, closeMenu]);
+
+	// ── Options & ghost text ────────────────────────────────
 
 	const options = useMemo(() => {
 		if (!queryString || !menuMode) return [];
 
 		if (menuMode === "browsing") {
-			return ingredients.map((i) => ({
-				key: i.id,
-				ingredient: i,
-			}));
+			return ingredients.map((i) => ({ key: i.id, ingredient: i }));
 		}
 
 		const query = queryString.toLowerCase();
@@ -358,85 +318,62 @@ export function IngredientTypeaheadPlugin({
 	}, [ingredients, queryString, menuMode]);
 
 	const ghostText = useMemo(() => {
-		if (!queryString || menuMode !== "typing" || options.length === 0) {
+		if (!queryString || menuMode !== "typing" || options.length === 0)
 			return null;
-		}
-
 		const active = options[selectedIndex ?? 0];
 		if (!active) return null;
-
 		return getGhostCompletion(queryString, active.ingredient.name);
 	}, [queryString, menuMode, options, selectedIndex]);
 
+	useGhostText(ghostText);
+
+	// ── Anchor positioning ──────────────────────────────────
+
+	const anchorDomRef = useRef<HTMLElement | null>(null);
+
 	useLayoutEffect(() => {
-		if (!ghostText) return;
+		if (anchorDomRef.current) {
+			anchorDomRef.current.style.anchorName = "";
+			anchorDomRef.current = null;
+		}
+
+		if (!menuState) return;
 
 		editor.getEditorState().read(() => {
 			const selection = $getSelection();
 			if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
-
 			const anchor = selection.anchor;
 			if (anchor.type !== "text") return;
-
 			const node = anchor.getNode();
 			const dom = editor.getElementByKey(node.getKey());
 			if (dom) {
-				dom.setAttribute("data-ghost", ghostText);
-				ghostDomRef.current = dom;
+				dom.style.anchorName = "--typeahead";
+				anchorDomRef.current = dom;
 			}
 		});
 
 		return () => {
-			if (ghostDomRef.current) {
-				ghostDomRef.current.removeAttribute("data-ghost");
-				ghostDomRef.current = null;
+			if (anchorDomRef.current) {
+				anchorDomRef.current.style.anchorName = "";
+				anchorDomRef.current = null;
 			}
 		};
-	}, [editor, ghostText]);
+	}, [editor, menuState]);
+
+	// ── Option selection ────────────────────────────────────
 
 	const selectOption = useCallback(
-		(option: { ingredient: Ingredient }) => {
-			const matchingString = queryStringRef.current;
-			if (!matchingString) return;
-
-			editor.update(() => {
-				const selection = $getSelection();
-				if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
-
-				const anchor = selection.anchor;
-				if (anchor.type !== "text") return;
-
-				const textNode = anchor.getNode();
-				const text = textNode.getTextContent();
-				const matchStart = text.lastIndexOf(matchingString);
-
-				if (matchStart >= 0) {
-					const before = text.slice(0, matchStart);
-					const newText = before + option.ingredient.name;
-					textNode.setTextContent(newText);
-
-					let sibling = textNode.getNextSibling();
-					while (sibling && $isTextNode(sibling)) {
-						const next = sibling.getNextSibling();
-						sibling.remove();
-						sibling = next;
-					}
-
-					const offset = before.length + option.ingredient.name.length;
-					selection.anchor.set(textNode.__key, offset, "text");
-					selection.focus.set(textNode.__key, offset, "text");
-				}
-			});
-
+		(option: IngredientOption) => {
+			const matching = queryStringRef.current;
+			if (!matching) return;
+			replaceIngredientText(editor, matching, option.ingredient.name);
 			closeMenu();
 		},
 		[editor, closeMenu],
 	);
 
-	/**
-	 * Keyboard handlers — only registered while the menu is open.
-	 * Uses refs for frequently-changing values to avoid re-registration.
-	 */
+	// ── Keyboard navigation ─────────────────────────────────
+
 	const selectedIndexRef = useRef(selectedIndex);
 	selectedIndexRef.current = selectedIndex;
 	const optionsRef = useRef(options);
@@ -488,8 +425,9 @@ export function IngredientTypeaheadPlugin({
 				KEY_TAB_COMMAND,
 				(event) => {
 					event.preventDefault();
-					const opts = optionsRef.current;
-					selectOptionRef.current(opts[selectedIndexRef.current ?? 0]);
+					selectOptionRef.current(
+						optionsRef.current[selectedIndexRef.current ?? 0],
+					);
 					return true;
 				},
 				COMMAND_PRIORITY_HIGH,
@@ -508,68 +446,50 @@ export function IngredientTypeaheadPlugin({
 		);
 	}, [editor, hasMenu, closeMenu]);
 
+	// ── Render ──────────────────────────────────────────────
+
 	if (!menuState || options.length === 0) return null;
 
-	return createPortal(
-		// biome-ignore lint/a11y/noStaticElementInteractions: prevents focus loss on mousedown
-		<div
+	return (
+		<OptionsList
+			className={styles.typeahead}
 			onMouseDown={preventFocusLoss}
-			style={{
-				position: "fixed",
-				top: menuState.position.top,
-				left: menuState.position.left,
-				zIndex: 1000,
-			}}
+			footer={
+				<Text size={1} className={styles.typeaheadFooter}>
+					<Kbd shortcut="tab" visual variant="ghost" />{" "}
+					{selectedIndex !== null && (
+						<>
+							or <Kbd shortcut="enter" visual variant="ghost" />
+						</>
+					)}{" "}
+					to complete
+				</Text>
+			}
 		>
-			<OptionsList
-				footer={
-					<button
-						type="button"
-						style={{
-							all: "unset",
-							display: "flex",
-							alignItems: "center",
-							gap: "var(--space-2)",
-							cursor: "pointer",
-							fontSize: "var(--font-size-1)",
-							color: "var(--mauve-9)",
-						}}
-						onMouseDown={(e) => {
-							e.preventDefault();
-							selectOption(options[selectedIndex ?? 0]);
-						}}
-					>
-						<Kbd shortcut="tab" visual />
-						<span>to complete</span>
-					</button>
-				}
-			>
-				{options.map((option, index) => {
-					const { ingredient } = option;
-					const category = ingredient.category
-						? CATEGORY_TO_LABEL.get(ingredient.category)
-						: null;
-					const abv = formatAbv(ingredient.abv);
+			{options.map((option, index) => {
+				const { ingredient } = option;
+				const category = ingredient.category
+					? CATEGORY_TO_LABEL.get(ingredient.category)
+					: null;
+				const abv = formatAbv(ingredient.abv);
 
-					return (
-						<OptionItem
-							key={option.key}
-							isHighlighted={selectedIndex === index}
-							onClick={() => selectOption(option)}
-							onMouseEnter={() => setSelectedIndex(index)}
+				return (
+					<OptionItem
+						key={option.key}
+						isHighlighted={selectedIndex === index}
+						onClick={() => selectOption(option)}
+						onMouseEnter={() => setSelectedIndex(index)}
+					>
+						<OptionLabel
+							description={
+								[category, abv].filter(Boolean).join(", ") || undefined
+							}
 						>
-							<OptionLabel
-								description={
-									[category, abv].filter(Boolean).join(", ") || undefined
-								}
-							>
-								{ingredient.name}
-							</OptionLabel>
-						</OptionItem>
-					);
-				})}
-			</OptionsList>
-		</div>,
-		document.body,
+							{ingredient.name}
+						</OptionLabel>
+					</OptionItem>
+				);
+			})}
+		</OptionsList>
 	);
 }

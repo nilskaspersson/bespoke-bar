@@ -2,13 +2,11 @@
 "use no memo";
 
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import { KEY_ESCAPE_COMMAND } from "lexical";
-import type { KeyboardEvent, Ref } from "react";
+import type { Ref } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import {
 	EditorHandlePlugin,
@@ -36,19 +34,8 @@ function EditorContainer({
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
 }) {
-	const [editor] = useLexicalComposerContext();
-
-	function handleKeyDown(e: KeyboardEvent<HTMLDivElement>) {
-		if (e.key === "Escape") {
-			e.preventDefault();
-			editor.dispatchCommand(KEY_ESCAPE_COMMAND, e.nativeEvent);
-			editor.getRootElement()?.focus();
-		}
-	}
-
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: keydown forwarded to Lexical command system
-		<div className={styles.container} onKeyDown={handleKeyDown}>
+		<div className={styles.container}>
 			<PlainTextPlugin
 				contentEditable={
 					<ContentEditable className={styles.input} spellCheck={false} />
