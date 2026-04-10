@@ -56,13 +56,4 @@
 		pointer-events: none;
 		user-select: none;
 	}
-
-	.ingredientPopover {
-		position: relative;
-	}
-
-	.popoverClose {
-		position: absolute;
-		inset: var(--space-0) var(--space-0) auto auto;
-	}
 }

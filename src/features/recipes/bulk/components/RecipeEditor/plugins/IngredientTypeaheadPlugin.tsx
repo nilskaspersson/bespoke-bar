@@ -177,10 +177,17 @@ export function IngredientTypeaheadPlugin({
 	const prevTextRef = useRef("");
 	const mouseDownRef = useRef(false);
 	const escapeRef = useRef(false);
+	const escapePendingRef = useRef(false);
 	const menuStateRef = useRef(menuState);
 	const ghostDomRef = useRef<HTMLElement | null>(null);
 
 	menuStateRef.current = menuState;
+
+	const queryString = menuState?.queryString ?? null;
+	const menuMode = menuState?.mode ?? null;
+
+	const queryStringRef = useRef(queryString);
+	queryStringRef.current = queryString;
 
 	const openMenu = useCallback((state: MenuState) => {
 		setMenuState(state);
@@ -193,9 +200,10 @@ export function IngredientTypeaheadPlugin({
 
 	/**
 	 * Track mousedown on the editor to distinguish clicking from typing.
-	 * Handle blur: if the editor loses focus while the autocomplete is
-	 * open, close the menu and refocus. This handles Escape in Firefox
-	 * where the browser blurs contenteditable before JS sees the keydown.
+	 * Track Escape keydown to detect Escape-caused blur.
+	 * Handle blur: close the menu and refocus when appropriate.
+	 * This also covers Firefox's behavior of blurring contenteditable
+	 * on Escape (even without autocomplete open).
 	 */
 	useEffect(() => {
 		function onMouseDown(e: MouseEvent) {
@@ -212,9 +220,41 @@ export function IngredientTypeaheadPlugin({
 				});
 			}
 		}
+		function onKeyDown(e: KeyboardEvent) {
+			if (e.key === "Escape") {
+				escapePendingRef.current = true;
+			}
+		}
+		function onKeyUp() {
+			escapePendingRef.current = false;
+		}
+
+		function onBlur() {
+			if (menuStateRef.current) {
+				if (mouseDownRef.current) {
+					setMenuState(null);
+					return;
+				}
+				escapeRef.current = true;
+				setMenuState(null);
+				requestAnimationFrame(() => {
+					editor.getRootElement()?.focus();
+				});
+				return;
+			}
+			// No menu open — refocus if Escape caused the blur (Firefox).
+			if (escapePendingRef.current) {
+				escapePendingRef.current = false;
+				requestAnimationFrame(() => {
+					editor.getRootElement()?.focus();
+				});
+			}
+		}
 
 		document.addEventListener("mousedown", onMouseDown, true);
 		document.addEventListener("mouseup", onMouseUp, true);
+		document.addEventListener("keydown", onKeyDown, true);
+		document.addEventListener("keyup", onKeyUp, true);
 
 		const removeRootListener = editor.registerRootListener(
 			(rootElement, prevRootElement) => {
@@ -223,25 +263,11 @@ export function IngredientTypeaheadPlugin({
 			},
 		);
 
-		function onBlur() {
-			if (!menuStateRef.current) return;
-			// If the blur is from clicking outside, just close the menu
-			// without refocusing — the user intended to leave the editor.
-			if (mouseDownRef.current) {
-				setMenuState(null);
-				return;
-			}
-			// Otherwise (Escape or programmatic blur), close and refocus.
-			escapeRef.current = true;
-			setMenuState(null);
-			requestAnimationFrame(() => {
-				editor.getRootElement()?.focus();
-			});
-		}
-
 		return () => {
 			document.removeEventListener("mousedown", onMouseDown, true);
 			document.removeEventListener("mouseup", onMouseUp, true);
+			document.removeEventListener("keydown", onKeyDown, true);
+			document.removeEventListener("keyup", onKeyUp, true);
 			removeRootListener();
 		};
 	}, [editor]);
@@ -262,7 +288,6 @@ export function IngredientTypeaheadPlugin({
 				const textChanged = currentText !== prevTextRef.current;
 				prevTextRef.current = currentText;
 
-				// Reset escape flag when the user types new text
 				if (textChanged) {
 					escapeRef.current = false;
 				}
@@ -316,32 +341,32 @@ export function IngredientTypeaheadPlugin({
 	}, [editor, ingredients, openMenu, closeMenu]);
 
 	const options = useMemo(() => {
-		if (!menuState) return [];
+		if (!queryString || !menuMode) return [];
 
-		if (menuState.mode === "browsing") {
+		if (menuMode === "browsing") {
 			return ingredients.map((i) => ({
 				key: i.id,
 				ingredient: i,
 			}));
 		}
 
-		const query = menuState.queryString.toLowerCase();
+		const query = queryString.toLowerCase();
 		return ingredients
 			.filter((i) => i.name.toLowerCase().includes(query))
 			.slice(0, 10)
 			.map((i) => ({ key: i.id, ingredient: i }));
-	}, [ingredients, menuState]);
+	}, [ingredients, queryString, menuMode]);
 
 	const ghostText = useMemo(() => {
-		if (!menuState || menuState.mode !== "typing" || options.length === 0) {
+		if (!queryString || menuMode !== "typing" || options.length === 0) {
 			return null;
 		}
 
 		const active = options[selectedIndex ?? 0];
 		if (!active) return null;
 
-		return getGhostCompletion(menuState.queryString, active.ingredient.name);
-	}, [menuState, options, selectedIndex]);
+		return getGhostCompletion(queryString, active.ingredient.name);
+	}, [queryString, menuMode, options, selectedIndex]);
 
 	useLayoutEffect(() => {
 		if (!ghostText) return;
@@ -371,8 +396,8 @@ export function IngredientTypeaheadPlugin({
 
 	const selectOption = useCallback(
 		(option: { ingredient: Ingredient }) => {
-			if (!menuState) return;
-			const matchingString = menuState.queryString;
+			const matchingString = queryStringRef.current;
+			if (!matchingString) return;
 
 			editor.update(() => {
 				const selection = $getSelection();
@@ -405,14 +430,24 @@ export function IngredientTypeaheadPlugin({
 
 			closeMenu();
 		},
-		[editor, menuState, closeMenu],
+		[editor, closeMenu],
 	);
 
 	/**
 	 * Keyboard handlers — only registered while the menu is open.
+	 * Uses refs for frequently-changing values to avoid re-registration.
 	 */
+	const selectedIndexRef = useRef(selectedIndex);
+	selectedIndexRef.current = selectedIndex;
+	const optionsRef = useRef(options);
+	optionsRef.current = options;
+	const selectOptionRef = useRef(selectOption);
+	selectOptionRef.current = selectOption;
+
+	const hasMenu = menuState !== null && options.length > 0;
+
 	useEffect(() => {
-		if (!menuState || options.length === 0) return;
+		if (!hasMenu) return;
 
 		return mergeRegister(
 			editor.registerCommand(
@@ -429,9 +464,10 @@ export function IngredientTypeaheadPlugin({
 				KEY_ARROW_DOWN_COMMAND,
 				(event) => {
 					event.preventDefault();
-					setSelectedIndex((prev) =>
-						prev === null ? 0 : prev < options.length - 1 ? prev + 1 : 0,
-					);
+					setSelectedIndex((prev) => {
+						const len = optionsRef.current.length;
+						return prev === null ? 0 : prev < len - 1 ? prev + 1 : 0;
+					});
 					return true;
 				},
 				COMMAND_PRIORITY_HIGH,
@@ -440,13 +476,10 @@ export function IngredientTypeaheadPlugin({
 				KEY_ARROW_UP_COMMAND,
 				(event) => {
 					event.preventDefault();
-					setSelectedIndex((prev) =>
-						prev === null
-							? options.length - 1
-							: prev > 0
-								? prev - 1
-								: options.length - 1,
-					);
+					setSelectedIndex((prev) => {
+						const len = optionsRef.current.length;
+						return prev === null ? len - 1 : prev > 0 ? prev - 1 : len - 1;
+					});
 					return true;
 				},
 				COMMAND_PRIORITY_HIGH,
@@ -455,7 +488,8 @@ export function IngredientTypeaheadPlugin({
 				KEY_TAB_COMMAND,
 				(event) => {
 					event.preventDefault();
-					selectOption(options[selectedIndex ?? 0]);
+					const opts = optionsRef.current;
+					selectOptionRef.current(opts[selectedIndexRef.current ?? 0]);
 					return true;
 				},
 				COMMAND_PRIORITY_HIGH,
@@ -463,15 +497,16 @@ export function IngredientTypeaheadPlugin({
 			editor.registerCommand(
 				KEY_ENTER_COMMAND,
 				(event) => {
-					if (selectedIndex === null) return false;
+					const idx = selectedIndexRef.current;
+					if (idx === null) return false;
 					event?.preventDefault();
-					selectOption(options[selectedIndex]);
+					selectOptionRef.current(optionsRef.current[idx]);
 					return true;
 				},
 				COMMAND_PRIORITY_HIGH,
 			),
 		);
-	}, [editor, menuState, options, selectedIndex, selectOption, closeMenu]);
+	}, [editor, hasMenu, closeMenu]);
 
 	if (!menuState || options.length === 0) return null;
 

@@ -14,12 +14,10 @@ import {
 	EditorHandlePlugin,
 	type RecipeEditorHandle,
 } from "./plugins/EditorHandlePlugin";
-import { IngredientPopoverPlugin } from "./plugins/IngredientPopoverPlugin";
 import { IngredientTypeaheadPlugin } from "./plugins/IngredientTypeaheadPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
 import { TextExtractionPlugin } from "./plugins/TextExtractionPlugin";
-import { TokenSelectionPlugin } from "./plugins/TokenSelectionPlugin";
 import styles from "./RecipeEditor.module.css";
 import { recipeEditorTheme } from "./theme";
 
@@ -65,10 +63,8 @@ function EditorContainer({
 			<HistoryPlugin />
 			<ParagraphBreakPlugin />
 			<TextExtractionPlugin onTextChange={onTextChange} />
-			<TokenSelectionPlugin />
 			<SyntaxHighlightPlugin ingredients={ingredients} />
 			<IngredientTypeaheadPlugin ingredients={ingredients} />
-			<IngredientPopoverPlugin ingredients={ingredients} />
 			{ref ? <EditorHandlePlugin ref={ref} /> : null}
 		</div>
 	);

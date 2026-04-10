@@ -10,7 +10,7 @@ import {
 	type ParagraphNode,
 	type TextNode,
 } from "lexical";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import {
 	type Token,
@@ -135,25 +135,12 @@ function getHighlightGroup(token: Token): HighlightGroup | null {
 	}
 }
 
-/**
- * Store known ingredient positions so the popover plugin can use them.
- */
-export type IngredientPosition = {
-	ingredientId: string;
-	paragraphKey: string;
-	start: number;
-	end: number;
-};
-
 export function SyntaxHighlightPlugin({
 	ingredients,
-	onIngredientPositionsChange,
 }: {
 	ingredients: Ingredient[];
-	onIngredientPositionsChange?: (positions: IngredientPosition[]) => void;
 }) {
 	const [editor] = useLexicalComposerContext();
-	const positionsRef = useRef<IngredientPosition[]>([]);
 
 	useEffect(() => {
 		const style = document.createElement("style");
@@ -176,8 +163,6 @@ export function SyntaxHighlightPlugin({
 			for (const name of HIGHLIGHT_NAMES) {
 				ranges.set(name, []);
 			}
-
-			const ingredientPositions: IngredientPosition[] = [];
 
 			editor.getEditorState().read(() => {
 				const root = $getRoot();
@@ -212,15 +197,6 @@ export function SyntaxHighlightPlugin({
 							if (range) {
 								ranges.get(group)?.push(range);
 							}
-
-							if (token.type === "ingredient" && token.ingredientId) {
-								ingredientPositions.push({
-									ingredientId: token.ingredientId,
-									paragraphKey: child.getKey(),
-									start: token.start,
-									end: token.end,
-								});
-							}
 						}
 					}
 				}
@@ -235,17 +211,8 @@ export function SyntaxHighlightPlugin({
 					CSS.highlights.delete(name);
 				}
 			}
-
-			if (
-				onIngredientPositionsChange &&
-				JSON.stringify(ingredientPositions) !==
-					JSON.stringify(positionsRef.current)
-			) {
-				positionsRef.current = ingredientPositions;
-				onIngredientPositionsChange(ingredientPositions);
-			}
 		});
-	}, [editor, ingredients, onIngredientPositionsChange]);
+	}, [editor, ingredients]);
 
 	return null;
 }
