@@ -1,0 +1,68 @@
+@layer feature {
+	.container {
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+
+	.input {
+		cursor: text;
+		font-family: inherit;
+		font-size: max(1rem, 16px);
+		font-weight: 600;
+		color: var(--mauve-12);
+		background-color: var(--mauve-2);
+		border: 1px solid var(--mauve-6);
+		border-radius: var(--radius);
+		padding-inline: var(--control-inset);
+		padding-block: var(--space-3);
+		line-height: var(--line-height);
+		min-block-size: 100%;
+		width: 100%;
+		outline: var(--space-0) solid transparent;
+		outline-offset: 0;
+		transition-property: border-color, outline-color;
+		transition-duration: var(--transition-duration);
+
+		&:hover {
+			border-color: var(--mauve-8);
+		}
+
+		&:focus-within {
+			outline-color: var(--iris-11);
+			border-color: var(--iris-11);
+			z-index: 2;
+		}
+	}
+
+	.placeholder {
+		position: absolute;
+		top: calc(var(--space-2) + 1px);
+		left: calc(var(--control-inset) + 1px);
+		color: var(--mauve-9);
+		font-size: max(1rem, 16px);
+		font-weight: 600;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.paragraph {
+		min-height: 1lh;
+	}
+
+	.container [data-ghost]::after {
+		content: attr(data-ghost);
+		color: var(--mauve-8);
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.ingredientPopover {
+		position: relative;
+	}
+
+	.popoverClose {
+		position: absolute;
+		inset: var(--space-0) var(--space-0) auto auto;
+	}
+}

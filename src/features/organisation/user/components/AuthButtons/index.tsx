@@ -17,7 +17,7 @@ export function AuthButtons() {
 
 				<SignUpButton mode="modal">
 					<Button variant="solid" size="tiny" color="heavy">
-						Sign up
+						Get Bespoke Bar free
 					</Button>
 				</SignUpButton>
 			</Show>
