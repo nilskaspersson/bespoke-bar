@@ -23,11 +23,11 @@ import { Text } from "@/ui/Text";
 import { normalizeInput } from "@/utils";
 import { collator } from "@/utils/collator";
 import { createSearchIndex, searchByIndex } from "@/utils/search";
-import styles from "./typeahead.module.css";
-import { useEditorFocus } from "./useEditorFocus";
-import { useGhostText } from "./useGhostText";
-import { useTypeaheadAnchor } from "./useTypeaheadAnchor";
-import { useTypeaheadKeyboard } from "./useTypeaheadKeyboard";
+import { useEditorFocus } from "../../hooks/useEditorFocus";
+import { useGhostText } from "../../hooks/useGhostText";
+import { useTypeaheadAnchor } from "../../hooks/useTypeaheadAnchor";
+import { useTypeaheadKeyboard } from "../../hooks/useTypeaheadKeyboard";
+import styles from "./styles.module.css";
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -175,7 +175,14 @@ export function IngredientTypeaheadPlugin({
 			createSearchIndex(
 				sortedIngredients,
 				(i) => i.id,
-				(i) => [i.name],
+				(i) => {
+					const fields = [i.name];
+					const categoryLabel = i.category
+						? CATEGORY_TO_LABEL.get(i.category)
+						: null;
+					if (categoryLabel) fields.push(categoryLabel);
+					return fields;
+				},
 			),
 		[sortedIngredients],
 	);

@@ -22,11 +22,9 @@ export function useEditorFocus(
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: menuStateRef is a stable ref, read inside callbacks
 	useEffect(() => {
-		function onMouseDown(e: MouseEvent) {
+		function onMouseDown() {
 			escapeRef.current = false;
-			if (editor.getRootElement()?.contains(e.target as Node)) {
-				mouseDownRef.current = true;
-			}
+			mouseDownRef.current = true;
 		}
 		function onMouseUp() {
 			if (mouseDownRef.current) {

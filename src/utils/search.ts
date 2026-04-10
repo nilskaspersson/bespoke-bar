@@ -20,7 +20,8 @@ export function createSearchIndex<T>(
 
 /**
  * Filter items using a pre-built search index.
- * Returns items whose indexed text contains the normalized query.
+ * Returns items whose indexed text contains the normalized query,
+ * with prefix matches sorted before substring-only matches.
  */
 export function searchByIndex<T>(
 	items: T[],
@@ -31,13 +32,19 @@ export function searchByIndex<T>(
 	if (!query) return items;
 
 	const q = normalizeInput(query);
-	const result: T[] = [];
+	const prefixMatches: T[] = [];
+	const substringMatches: T[] = [];
 
 	for (const item of items) {
-		if (index.get(getKey(item))?.includes(q)) {
-			result.push(item);
+		const searchStr = index.get(getKey(item));
+		if (!searchStr) continue;
+
+		if (searchStr.startsWith(q)) {
+			prefixMatches.push(item);
+		} else if (searchStr.includes(q)) {
+			substringMatches.push(item);
 		}
 	}
 
-	return result;
+	return prefixMatches.concat(substringMatches);
 }
