@@ -34,6 +34,8 @@ import { OptionItem } from "@/ui/OptionItem";
 import { OptionLabel } from "@/ui/OptionLabel";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
+import { normalizeInput } from "@/utils";
+import { createSearchIndex, searchByIndex } from "@/utils/search";
 import styles from "../RecipeEditor.module.css";
 import { useGhostText } from "./useGhostText";
 
@@ -180,8 +182,18 @@ export function IngredientTypeaheadPlugin({
 	const queryStringRef = useRef(queryString);
 	queryStringRef.current = queryString;
 
-	const ingredientNamesLower = useMemo(
-		() => new Set(ingredients.map((i) => i.name.toLowerCase())),
+	const ingredientIndex = useMemo(
+		() =>
+			createSearchIndex(
+				ingredients,
+				(i) => i.id,
+				(i) => [i.name],
+			),
+		[ingredients],
+	);
+
+	const ingredientNamesNormalized = useMemo(
+		() => new Set(ingredients.map((i) => normalizeInput(i.name))),
 		[ingredients],
 	);
 
@@ -282,7 +294,9 @@ export function IngredientTypeaheadPlugin({
 						closeMenu();
 						return;
 					}
-					if (ingredientNamesLower.has(result.matchingString.toLowerCase())) {
+					if (
+						ingredientNamesNormalized.has(normalizeInput(result.matchingString))
+					) {
 						closeMenu();
 						return;
 					}
@@ -299,7 +313,7 @@ export function IngredientTypeaheadPlugin({
 				openMenu(mode, result.matchingString);
 			});
 		});
-	}, [editor, ingredientNamesLower, openMenu, closeMenu]);
+	}, [editor, ingredientNamesNormalized, openMenu, closeMenu]);
 
 	// ── Options & ghost text ────────────────────────────────
 
@@ -310,12 +324,10 @@ export function IngredientTypeaheadPlugin({
 			return ingredients.map((i) => ({ key: i.id, ingredient: i }));
 		}
 
-		const query = queryString.toLowerCase();
-		return ingredients
-			.filter((i) => i.name.toLowerCase().includes(query))
+		return searchByIndex(ingredients, ingredientIndex, (i) => i.id, queryString)
 			.slice(0, 10)
 			.map((i) => ({ key: i.id, ingredient: i }));
-	}, [ingredients, queryString, menuMode]);
+	}, [ingredients, ingredientIndex, queryString, menuMode]);
 
 	const ghostText = useMemo(() => {
 		if (!queryString || menuMode !== "typing" || options.length === 0)
