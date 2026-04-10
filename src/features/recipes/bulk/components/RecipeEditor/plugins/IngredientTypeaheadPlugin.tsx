@@ -7,23 +7,9 @@ import {
 	$isLineBreakNode,
 	$isRangeSelection,
 	$isTextNode,
-	COMMAND_PRIORITY_HIGH,
-	KEY_ARROW_DOWN_COMMAND,
-	KEY_ARROW_UP_COMMAND,
-	KEY_ENTER_COMMAND,
-	KEY_ESCAPE_COMMAND,
-	KEY_TAB_COMMAND,
 	type LexicalEditor,
-	mergeRegister,
 } from "lexical";
-import {
-	useCallback,
-	useEffect,
-	useLayoutEffect,
-	useMemo,
-	useRef,
-	useState,
-} from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
@@ -35,9 +21,13 @@ import { OptionLabel } from "@/ui/OptionLabel";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { normalizeInput } from "@/utils";
+import { collator } from "@/utils/collator";
 import { createSearchIndex, searchByIndex } from "@/utils/search";
-import styles from "../RecipeEditor.module.css";
+import styles from "./typeahead.module.css";
+import { useEditorFocus } from "./useEditorFocus";
 import { useGhostText } from "./useGhostText";
+import { useTypeaheadAnchor } from "./useTypeaheadAnchor";
+import { useTypeaheadKeyboard } from "./useTypeaheadKeyboard";
 
 // ─── Types ──────────────────────────────────────────────────
 
@@ -53,7 +43,7 @@ type IngredientOption = {
 	ingredient: Ingredient;
 };
 
-// ─── Pure helpers ───────────────────────────────────────────
+// ─── Helpers ────────────────────────────────────────────────
 
 function formatAbv(abv: number | null): string | null {
 	if (abv === null) return null;
@@ -63,8 +53,6 @@ function formatAbv(abv: number | null): string | null {
 function preventFocusLoss(e: React.MouseEvent) {
 	e.preventDefault();
 }
-
-// ─── Lexical helpers ────────────────────────────────────────
 
 /**
  * Read the current line from the Lexical selection and extract the
@@ -122,10 +110,6 @@ function getIngredientQuery(): {
 	};
 }
 
-/**
- * Replace the ingredient text at the cursor with `replacement`,
- * removing any trailing text nodes split by Lexical.
- */
 function replaceIngredientText(
 	editor: LexicalEditor,
 	matchingString: string,
@@ -171,9 +155,6 @@ export function IngredientTypeaheadPlugin({
 	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
 	const prevTextRef = useRef("");
-	const mouseDownRef = useRef(false);
-	const escapeRef = useRef(false);
-	const escapePendingRef = useRef(false);
 	const menuStateRef = useRef(menuState);
 	menuStateRef.current = menuState;
 
@@ -182,20 +163,29 @@ export function IngredientTypeaheadPlugin({
 	const queryStringRef = useRef(queryString);
 	queryStringRef.current = queryString;
 
-	const ingredientIndex = useMemo(
-		() =>
-			createSearchIndex(
-				ingredients,
-				(i) => i.id,
-				(i) => [i.name],
-			),
+	// ── Ingredient index ────────────────────────────────────
+
+	const sortedIngredients = useMemo(
+		() => [...ingredients].sort((a, b) => collator.compare(a.name, b.name)),
 		[ingredients],
 	);
 
-	const ingredientNamesNormalized = useMemo(
-		() => new Set(ingredients.map((i) => normalizeInput(i.name))),
-		[ingredients],
+	const ingredientIndex = useMemo(
+		() =>
+			createSearchIndex(
+				sortedIngredients,
+				(i) => i.id,
+				(i) => [i.name],
+			),
+		[sortedIngredients],
 	);
+
+	const ingredientNamesNormalized = useMemo(
+		() => new Set(sortedIngredients.map((i) => normalizeInput(i.name))),
+		[sortedIngredients],
+	);
+
+	// ── Menu state ──────────────────────────────────────────
 
 	const openMenu = useCallback((mode: MenuMode, qs: string) => {
 		const prev = menuStateRef.current;
@@ -204,67 +194,16 @@ export function IngredientTypeaheadPlugin({
 		setSelectedIndex(null);
 	}, []);
 
+	const forceClose = useCallback(() => setMenuState(null), []);
+
 	const closeMenu = useCallback(() => {
 		if (!menuStateRef.current) return;
 		setMenuState(null);
 	}, []);
 
-	// ── Focus, blur & escape tracking ───────────────────────
+	// ── Editor interactions ─────────────────────────────────
 
-	useEffect(() => {
-		function onMouseDown(e: MouseEvent) {
-			escapeRef.current = false;
-			if (editor.getRootElement()?.contains(e.target as Node)) {
-				mouseDownRef.current = true;
-			}
-		}
-		function onMouseUp() {
-			if (mouseDownRef.current) {
-				requestAnimationFrame(() => {
-					mouseDownRef.current = false;
-				});
-			}
-		}
-		function onKeyDown(e: KeyboardEvent) {
-			if (e.key === "Escape") escapePendingRef.current = true;
-		}
-		function onKeyUp() {
-			escapePendingRef.current = false;
-		}
-		function onBlur() {
-			if (menuStateRef.current) {
-				if (mouseDownRef.current) {
-					setMenuState(null);
-					return;
-				}
-				escapeRef.current = true;
-				setMenuState(null);
-				requestAnimationFrame(() => editor.getRootElement()?.focus());
-				return;
-			}
-			if (escapePendingRef.current) {
-				escapePendingRef.current = false;
-				requestAnimationFrame(() => editor.getRootElement()?.focus());
-			}
-		}
-
-		document.addEventListener("mousedown", onMouseDown, true);
-		document.addEventListener("mouseup", onMouseUp, true);
-		document.addEventListener("keydown", onKeyDown, true);
-		document.addEventListener("keyup", onKeyUp, true);
-		const removeRootListener = editor.registerRootListener((root, prev) => {
-			prev?.removeEventListener("blur", onBlur);
-			root?.addEventListener("blur", onBlur);
-		});
-
-		return () => {
-			document.removeEventListener("mousedown", onMouseDown, true);
-			document.removeEventListener("mouseup", onMouseUp, true);
-			document.removeEventListener("keydown", onKeyDown, true);
-			document.removeEventListener("keyup", onKeyUp, true);
-			removeRootListener();
-		};
-	}, [editor]);
+	const { mouseDownRef, escapeRef } = useEditorFocus(menuStateRef, forceClose);
 
 	// ── Menu detection ──────────────────────────────────────
 
@@ -313,7 +252,14 @@ export function IngredientTypeaheadPlugin({
 				openMenu(mode, result.matchingString);
 			});
 		});
-	}, [editor, ingredientNamesNormalized, openMenu, closeMenu]);
+	}, [
+		editor,
+		ingredientNamesNormalized,
+		openMenu,
+		closeMenu,
+		escapeRef,
+		mouseDownRef,
+	]);
 
 	// ── Options & ghost text ────────────────────────────────
 
@@ -321,13 +267,18 @@ export function IngredientTypeaheadPlugin({
 		if (!queryString || !menuMode) return [];
 
 		if (menuMode === "browsing") {
-			return ingredients.map((i) => ({ key: i.id, ingredient: i }));
+			return sortedIngredients.map((i) => ({ key: i.id, ingredient: i }));
 		}
 
-		return searchByIndex(ingredients, ingredientIndex, (i) => i.id, queryString)
+		return searchByIndex(
+			sortedIngredients,
+			ingredientIndex,
+			(i) => i.id,
+			queryString,
+		)
 			.slice(0, 10)
 			.map((i) => ({ key: i.id, ingredient: i }));
-	}, [ingredients, ingredientIndex, queryString, menuMode]);
+	}, [sortedIngredients, ingredientIndex, queryString, menuMode]);
 
 	const ghostText = useMemo(() => {
 		if (!queryString || menuMode !== "typing" || options.length === 0)
@@ -338,41 +289,9 @@ export function IngredientTypeaheadPlugin({
 	}, [queryString, menuMode, options, selectedIndex]);
 
 	useGhostText(ghostText);
+	useTypeaheadAnchor("--typeahead", menuState);
 
-	// ── Anchor positioning ──────────────────────────────────
-
-	const anchorDomRef = useRef<HTMLElement | null>(null);
-
-	useLayoutEffect(() => {
-		if (anchorDomRef.current) {
-			anchorDomRef.current.style.anchorName = "";
-			anchorDomRef.current = null;
-		}
-
-		if (!menuState) return;
-
-		editor.getEditorState().read(() => {
-			const selection = $getSelection();
-			if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
-			const anchor = selection.anchor;
-			if (anchor.type !== "text") return;
-			const node = anchor.getNode();
-			const dom = editor.getElementByKey(node.getKey());
-			if (dom) {
-				dom.style.anchorName = "--typeahead";
-				anchorDomRef.current = dom;
-			}
-		});
-
-		return () => {
-			if (anchorDomRef.current) {
-				anchorDomRef.current.style.anchorName = "";
-				anchorDomRef.current = null;
-			}
-		};
-	}, [editor, menuState]);
-
-	// ── Option selection ────────────────────────────────────
+	// ── Selection ───────────────────────────────────────────
 
 	const selectOption = useCallback(
 		(option: IngredientOption) => {
@@ -384,79 +303,23 @@ export function IngredientTypeaheadPlugin({
 		[editor, closeMenu],
 	);
 
-	// ── Keyboard navigation ─────────────────────────────────
-
-	const selectedIndexRef = useRef(selectedIndex);
-	selectedIndexRef.current = selectedIndex;
-	const optionsRef = useRef(options);
-	optionsRef.current = options;
-	const selectOptionRef = useRef(selectOption);
-	selectOptionRef.current = selectOption;
+	const scrollIntoView = useCallback((el: HTMLLIElement | null) => {
+		el?.scrollIntoView({ behavior: "instant", block: "nearest" });
+	}, []);
 
 	const hasMenu = menuState !== null && options.length > 0;
 
-	useEffect(() => {
-		if (!hasMenu) return;
-
-		return mergeRegister(
-			editor.registerCommand(
-				KEY_ESCAPE_COMMAND,
-				(event) => {
-					event.preventDefault();
-					escapeRef.current = true;
-					closeMenu();
-					return true;
-				},
-				COMMAND_PRIORITY_HIGH,
-			),
-			editor.registerCommand(
-				KEY_ARROW_DOWN_COMMAND,
-				(event) => {
-					event.preventDefault();
-					setSelectedIndex((prev) => {
-						const len = optionsRef.current.length;
-						return prev === null ? 0 : prev < len - 1 ? prev + 1 : 0;
-					});
-					return true;
-				},
-				COMMAND_PRIORITY_HIGH,
-			),
-			editor.registerCommand(
-				KEY_ARROW_UP_COMMAND,
-				(event) => {
-					event.preventDefault();
-					setSelectedIndex((prev) => {
-						const len = optionsRef.current.length;
-						return prev === null ? len - 1 : prev > 0 ? prev - 1 : len - 1;
-					});
-					return true;
-				},
-				COMMAND_PRIORITY_HIGH,
-			),
-			editor.registerCommand(
-				KEY_TAB_COMMAND,
-				(event) => {
-					event.preventDefault();
-					selectOptionRef.current(
-						optionsRef.current[selectedIndexRef.current ?? 0],
-					);
-					return true;
-				},
-				COMMAND_PRIORITY_HIGH,
-			),
-			editor.registerCommand(
-				KEY_ENTER_COMMAND,
-				(event) => {
-					const idx = selectedIndexRef.current;
-					if (idx === null) return false;
-					event?.preventDefault();
-					selectOptionRef.current(optionsRef.current[idx]);
-					return true;
-				},
-				COMMAND_PRIORITY_HIGH,
-			),
-		);
-	}, [editor, hasMenu, closeMenu]);
+	useTypeaheadKeyboard(
+		hasMenu,
+		options,
+		selectedIndex,
+		setSelectedIndex,
+		() => {
+			escapeRef.current = true;
+			closeMenu();
+		},
+		selectOption,
+	);
 
 	// ── Render ──────────────────────────────────────────────
 
@@ -467,7 +330,7 @@ export function IngredientTypeaheadPlugin({
 			className={styles.typeahead}
 			onMouseDown={preventFocusLoss}
 			footer={
-				<Text size={1} className={styles.typeaheadFooter}>
+				<Text size={1} className={styles.footer}>
 					<Kbd shortcut="tab" visual variant="ghost" />{" "}
 					{selectedIndex !== null && (
 						<>
@@ -488,6 +351,7 @@ export function IngredientTypeaheadPlugin({
 				return (
 					<OptionItem
 						key={option.key}
+						ref={selectedIndex === index ? scrollIntoView : undefined}
 						isHighlighted={selectedIndex === index}
 						onClick={() => selectOption(option)}
 						onMouseEnter={() => setSelectedIndex(index)}

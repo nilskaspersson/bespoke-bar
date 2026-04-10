@@ -9,15 +9,23 @@
 		transition-duration: var(--transition-duration--short);
 		color: var(--mauve-12);
 
-		&.isHighlighted,
 		&:hover,
 		&:focus {
-			background-color: hsl(from var(--iris-7) h s l / 0.25);
+			background-color: hsl(from var(--mauve-7) h s l / 0.15);
+		}
+
+		&.isHighlighted {
+			background-color: hsl(from var(--iris-7) h s l / 0.2);
 		}
 
 		&.isSelected {
 			background-color: hsl(from var(--iris-7) h s l / 0.75);
 		}
+	}
+
+	.item:has(~ .isHighlighted):hover,
+	.isHighlighted ~ .item:hover {
+		background-color: transparent;
 	}
 
 	.label {

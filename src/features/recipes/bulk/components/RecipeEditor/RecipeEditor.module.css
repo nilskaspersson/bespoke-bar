@@ -56,21 +56,4 @@
 		pointer-events: none;
 		user-select: none;
 	}
-
-	.typeahead {
-		position: absolute;
-		position-anchor: --typeahead;
-		inset: unset;
-		top: anchor(bottom);
-		left: anchor(left);
-		width: max-content;
-		z-index: 1000;
-		position-try-fallbacks: flip-block;
-	}
-
-	.typeahead :has(> .typeaheadFooter) {
-		@media (hover: none) and (pointer: coarse) {
-			display: none;
-		}
-	}
 }

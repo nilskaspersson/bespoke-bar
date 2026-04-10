@@ -1,0 +1,18 @@
+@layer feature {
+	.typeahead {
+		position: fixed;
+		position-anchor: --typeahead;
+		inset: unset;
+		top: anchor(bottom);
+		left: anchor(left);
+		width: max-content;
+		z-index: 1000;
+		position-try-fallbacks: flip-block;
+	}
+
+	.typeahead :has(> .footer) {
+		@media (hover: none) and (pointer: coarse) {
+			display: none;
+		}
+	}
+}
