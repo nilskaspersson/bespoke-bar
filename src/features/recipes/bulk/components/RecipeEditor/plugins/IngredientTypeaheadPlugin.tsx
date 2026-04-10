@@ -27,6 +27,7 @@ import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
+import { getGhostCompletion } from "@/features/recipes/bulk/utils/getGhostCompletion";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { Kbd } from "@/ui/Kbd";
 import { OptionItem } from "@/ui/OptionItem";
@@ -339,17 +340,7 @@ export function IngredientTypeaheadPlugin({
 		const active = options[selectedIndex ?? 0];
 		if (!active) return null;
 
-		const name = active.ingredient.name;
-		if (!name.toLowerCase().startsWith(menuState.queryString.toLowerCase())) {
-			return null;
-		}
-
-		const completion = name.slice(menuState.queryString.length);
-		if (completion.length === 0 || /^\s/.test(completion)) {
-			return null;
-		}
-
-		return completion;
+		return getGhostCompletion(menuState.queryString, active.ingredient.name);
 	}, [menuState, options, selectedIndex]);
 
 	useLayoutEffect(() => {

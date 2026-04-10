@@ -169,4 +169,94 @@ describe("tokenizeLine", () => {
 			end: 3,
 		});
 	});
+
+	test("quantity only, no unit or ingredient", () => {
+		const result = tokenizeLine("3", MOCK_INGREDIENTS);
+		expect(result.isRecipeName).toBe(false);
+		expect(result.tokens).toEqual([
+			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
+		]);
+	});
+
+	test("quantity + unit, no ingredient", () => {
+		const result = tokenizeLine("3 cl", MOCK_INGREDIENTS);
+		expect(result.isRecipeName).toBe(false);
+		expect(result.tokens).toEqual([
+			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
+			{ type: "unit", text: "cl", start: 2, end: 4, valid: true },
+		]);
+	});
+
+	test("no space between quantity and unit", () => {
+		const result = tokenizeLine("3cl Lime", MOCK_INGREDIENTS);
+		expect(result.tokens).toEqual([
+			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
+			{ type: "unit", text: "cl", start: 1, end: 3, valid: true },
+			{
+				type: "ingredient",
+				text: "Lime",
+				start: 4,
+				end: 8,
+				valid: true,
+				ingredientId: "sP9_RdWlqg",
+			},
+		]);
+	});
+
+	test("multiple spaces between quantity and unit", () => {
+		const result = tokenizeLine("3  cl Lime", MOCK_INGREDIENTS);
+		expect(result.tokens).toEqual([
+			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
+			{ type: "unit", text: "cl", start: 3, end: 5, valid: true },
+			{
+				type: "ingredient",
+				text: "Lime",
+				start: 6,
+				end: 10,
+				valid: true,
+				ingredientId: "sP9_RdWlqg",
+			},
+		]);
+	});
+
+	test("multiple spaces between unit and ingredient", () => {
+		const result = tokenizeLine("3 cl  Lime", MOCK_INGREDIENTS);
+		expect(result.tokens).toEqual([
+			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
+			{ type: "unit", text: "cl", start: 2, end: 4, valid: true },
+			{
+				type: "ingredient",
+				text: "Lime",
+				start: 6,
+				end: 10,
+				valid: true,
+				ingredientId: "sP9_RdWlqg",
+			},
+		]);
+	});
+
+	test("multi-word unit offsets are correct", () => {
+		const result = tokenizeLine("1 fl oz Lime", MOCK_INGREDIENTS);
+		expect(result.tokens).toEqual([
+			{ type: "quantity", text: "1", start: 0, end: 1, valid: true },
+			{ type: "unit", text: "fl oz", start: 2, end: 7, valid: true },
+			{
+				type: "ingredient",
+				text: "Lime",
+				start: 8,
+				end: 12,
+				valid: true,
+				ingredientId: "sP9_RdWlqg",
+			},
+		]);
+	});
+
+	test("case-insensitive ingredient match", () => {
+		const result = tokenizeLine("2 cl lime", MOCK_INGREDIENTS);
+		const ingredientToken = result.tokens.find((t) => t.type === "ingredient");
+		expect(ingredientToken).toMatchObject({
+			text: "lime",
+			ingredientId: "sP9_RdWlqg",
+		});
+	});
 });
