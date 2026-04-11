@@ -18,13 +18,25 @@ export type LineTokenization = {
 	isRecipeName: boolean;
 };
 
+export type IngredientIndex = Map<string, string>;
+
+export function buildIngredientIndex(
+	ingredients: Ingredient[],
+): IngredientIndex {
+	const map = new Map<string, string>();
+	for (const i of ingredients) {
+		map.set(i.name.toLowerCase(), i.id);
+	}
+	return map;
+}
+
 /**
  * Tokenize a single line of recipe input into typed spans with character offsets.
  * Reuses the existing sequential parsers but tracks positions for editor highlighting.
  */
 export function tokenizeLine(
 	line: string,
-	ingredients: Ingredient[],
+	ingredientIndex: IngredientIndex,
 ): LineTokenization {
 	if (!line.trim()) {
 		return { tokens: [], isRecipeName: false };
@@ -105,9 +117,6 @@ export function tokenizeLine(
 
 			if (trimmedForIngredient) {
 				const ingredientName = trimmedForIngredient.trim();
-				const match = ingredients.find(
-					({ name }) => name.toLowerCase() === ingredientName.toLowerCase(),
-				);
 
 				tokens.push({
 					type: "ingredient",
@@ -115,7 +124,7 @@ export function tokenizeLine(
 					start: cursor,
 					end: cursor + ingredientName.length,
 					valid: true,
-					ingredientId: match?.id,
+					ingredientId: ingredientIndex.get(ingredientName.toLowerCase()),
 				});
 			}
 		} else {
@@ -128,17 +137,13 @@ export function tokenizeLine(
 			const ingredientText = trimmedForUnit.trim();
 
 			if (ingredientText) {
-				const match = ingredients.find(
-					({ name }) => name.toLowerCase() === ingredientText.toLowerCase(),
-				);
-
 				tokens.push({
 					type: "ingredient",
 					text: ingredientText,
 					start: cursor,
 					end: cursor + ingredientText.length,
 					valid: true,
-					ingredientId: match?.id,
+					ingredientId: ingredientIndex.get(ingredientText.toLowerCase()),
 				});
 			}
 		}

@@ -1,24 +1,26 @@
 import { describe, expect, test } from "vitest";
 import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
-import { tokenizeLine } from "./tokenizeLine";
+import { buildIngredientIndex, tokenizeLine } from "./tokenizeLine";
+
+const index = buildIngredientIndex(MOCK_INGREDIENTS);
 
 describe("tokenizeLine", () => {
 	test("empty line", () => {
-		expect(tokenizeLine("", MOCK_INGREDIENTS)).toEqual({
+		expect(tokenizeLine("", index)).toEqual({
 			tokens: [],
 			isRecipeName: false,
 		});
 	});
 
 	test("whitespace-only line", () => {
-		expect(tokenizeLine("   ", MOCK_INGREDIENTS)).toEqual({
+		expect(tokenizeLine("   ", index)).toEqual({
 			tokens: [],
 			isRecipeName: false,
 		});
 	});
 
 	test("recipe name (no quantity)", () => {
-		const result = tokenizeLine("Negroni", MOCK_INGREDIENTS);
+		const result = tokenizeLine("Negroni", index);
 		expect(result.isRecipeName).toBe(true);
 		expect(result.tokens).toEqual([
 			{
@@ -32,7 +34,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("full spec: quantity + unit + ingredient", () => {
-		const result = tokenizeLine("3 cl Sipsmith Gin", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3 cl Sipsmith Gin", index);
 		expect(result.isRecipeName).toBe(false);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
@@ -49,19 +51,19 @@ describe("tokenizeLine", () => {
 	});
 
 	test("known ingredient gets ingredientId", () => {
-		const result = tokenizeLine("2 cl Sipsmith Gin", MOCK_INGREDIENTS);
+		const result = tokenizeLine("2 cl Sipsmith Gin", index);
 		const ingredientToken = result.tokens.find((t) => t.type === "ingredient");
 		expect(ingredientToken?.ingredientId).toBe("gqWyGCI0EN");
 	});
 
 	test("unknown ingredient has no ingredientId", () => {
-		const result = tokenizeLine("3 cl Unknown Spirit", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3 cl Unknown Spirit", index);
 		const ingredientToken = result.tokens.find((t) => t.type === "ingredient");
 		expect(ingredientToken?.ingredientId).toBeUndefined();
 	});
 
 	test("quantity without unit", () => {
-		const result = tokenizeLine("2 cucumber slices", MOCK_INGREDIENTS);
+		const result = tokenizeLine("2 cucumber slices", index);
 		expect(result.isRecipeName).toBe(false);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "2", start: 0, end: 1, valid: true },
@@ -76,7 +78,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("fractional quantity", () => {
-		const result = tokenizeLine("1/2 cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("1/2 cl Lime", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "1/2",
@@ -86,7 +88,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("mixed number quantity", () => {
-		const result = tokenizeLine("1 1/2 cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("1 1/2 cl Lime", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "1 1/2",
@@ -96,7 +98,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("unicode fraction", () => {
-		const result = tokenizeLine("½ cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("½ cl Lime", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "½",
@@ -105,7 +107,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("fl oz unit", () => {
-		const result = tokenizeLine("1 fl oz Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("1 fl oz Lime", index);
 		expect(result.tokens[1]).toMatchObject({
 			type: "unit",
 			text: "fl oz",
@@ -113,7 +115,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("line with list prefix -", () => {
-		const result = tokenizeLine("- 3 cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("- 3 cl Lime", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "3",
@@ -121,7 +123,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("line with list prefix *", () => {
-		const result = tokenizeLine("* 3 cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("* 3 cl Lime", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "3",
@@ -129,7 +131,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("leading whitespace offsets are correct", () => {
-		const result = tokenizeLine("  Negroni", MOCK_INGREDIENTS);
+		const result = tokenizeLine("  Negroni", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "recipe-name",
 			text: "Negroni",
@@ -139,7 +141,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("trailing whitespace does not shift offsets", () => {
-		const result = tokenizeLine("3 cl Lime ", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3 cl Lime ", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "3",
@@ -161,7 +163,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("decimal quantity", () => {
-		const result = tokenizeLine("2.5 cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("2.5 cl Lime", index);
 		expect(result.tokens[0]).toMatchObject({
 			type: "quantity",
 			text: "2.5",
@@ -171,7 +173,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("quantity only, no unit or ingredient", () => {
-		const result = tokenizeLine("3", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3", index);
 		expect(result.isRecipeName).toBe(false);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
@@ -179,7 +181,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("quantity + unit, no ingredient", () => {
-		const result = tokenizeLine("3 cl", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3 cl", index);
 		expect(result.isRecipeName).toBe(false);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
@@ -188,7 +190,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("no space between quantity and unit", () => {
-		const result = tokenizeLine("3cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3cl Lime", index);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
 			{ type: "unit", text: "cl", start: 1, end: 3, valid: true },
@@ -204,7 +206,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("multiple spaces between quantity and unit", () => {
-		const result = tokenizeLine("3  cl Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3  cl Lime", index);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
 			{ type: "unit", text: "cl", start: 3, end: 5, valid: true },
@@ -220,7 +222,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("multiple spaces between unit and ingredient", () => {
-		const result = tokenizeLine("3 cl  Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("3 cl  Lime", index);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "3", start: 0, end: 1, valid: true },
 			{ type: "unit", text: "cl", start: 2, end: 4, valid: true },
@@ -236,7 +238,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("multi-word unit offsets are correct", () => {
-		const result = tokenizeLine("1 fl oz Lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("1 fl oz Lime", index);
 		expect(result.tokens).toEqual([
 			{ type: "quantity", text: "1", start: 0, end: 1, valid: true },
 			{ type: "unit", text: "fl oz", start: 2, end: 7, valid: true },
@@ -252,7 +254,7 @@ describe("tokenizeLine", () => {
 	});
 
 	test("case-insensitive ingredient match", () => {
-		const result = tokenizeLine("2 cl lime", MOCK_INGREDIENTS);
+		const result = tokenizeLine("2 cl lime", index);
 		const ingredientToken = result.tokens.find((t) => t.type === "ingredient");
 		expect(ingredientToken).toMatchObject({
 			text: "lime",

@@ -10,9 +10,10 @@ import {
 	type ParagraphNode,
 	type TextNode,
 } from "lexical";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import {
+	buildIngredientIndex,
 	type Token,
 	tokenizeLine,
 } from "@/features/recipes/bulk/utils/tokenizeLine";
@@ -141,6 +142,10 @@ export function SyntaxHighlightPlugin({
 	ingredients: Ingredient[];
 }) {
 	const [editor] = useLexicalComposerContext();
+	const ingredientIndex = useMemo(
+		() => buildIngredientIndex(ingredients),
+		[ingredients],
+	);
 
 	useEffect(() => {
 		const style = document.createElement("style");
@@ -178,7 +183,7 @@ export function SyntaxHighlightPlugin({
 							continue;
 						}
 
-						const { tokens } = tokenizeLine(segment.text, ingredients);
+						const { tokens } = tokenizeLine(segment.text, ingredientIndex);
 
 						for (const token of tokens) {
 							const group = getHighlightGroup(token);
@@ -212,7 +217,7 @@ export function SyntaxHighlightPlugin({
 				}
 			}
 		});
-	}, [editor, ingredients]);
+	}, [editor, ingredientIndex]);
 
 	return null;
 }

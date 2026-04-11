@@ -32,7 +32,12 @@ export function EditorHandlePlugin({ ref }: { ref: Ref<RecipeEditorHandle> }) {
 			});
 		},
 		getText() {
-			return editor.getEditorState().read(() => $getRoot().getTextContent());
+			return editor.getEditorState().read(() =>
+				$getRoot()
+					.getChildren()
+					.map((child) => child.getTextContent())
+					.join("\n"),
+			);
 		},
 	}));
 

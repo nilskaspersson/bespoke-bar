@@ -2,7 +2,7 @@
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getRoot } from "lexical";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 export function TextExtractionPlugin({
 	onTextChange,
@@ -10,6 +10,7 @@ export function TextExtractionPlugin({
 	onTextChange: (text: string) => void;
 }) {
 	const [editor] = useLexicalComposerContext();
+	const prevTextRef = useRef("");
 
 	useEffect(() => {
 		return editor.registerUpdateListener(({ editorState }) => {
@@ -18,6 +19,8 @@ export function TextExtractionPlugin({
 					.getChildren()
 					.map((child) => child.getTextContent())
 					.join("\n");
+				if (text === prevTextRef.current) return;
+				prevTextRef.current = text;
 				onTextChange(text);
 			});
 		});
