@@ -42,16 +42,23 @@ function onError(error: Error) {
 	console.error("[RecipeEditor]", error);
 }
 
+const EDITOR_CONFIG = {
+	namespace: "RecipeEditor",
+	theme: recipeEditorTheme,
+	onError,
+	nodes: [],
+};
+
 function EditorContainer({
 	ref,
 	ingredients,
 	onTextChange,
-	footerEnd,
+	statusBar,
 }: {
 	ref?: Ref<RecipeEditorHandle>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
-	footerEnd?: ReactNode;
+	statusBar?: ReactNode;
 }) {
 	const placeholder = useIsMounted(() => pickRandom(EXAMPLE_RECIPES));
 
@@ -78,7 +85,8 @@ function EditorContainer({
 				<IngredientTypeaheadPlugin ingredients={ingredients} />
 				{ref ? <EditorHandlePlugin ref={ref} /> : null}
 			</div>
-			<EditorActionsPlugin>{footerEnd}</EditorActionsPlugin>
+			<EditorActionsPlugin />
+			{statusBar ? <div className={styles.statusBar}>{statusBar}</div> : null}
 		</div>
 	);
 }
@@ -87,27 +95,20 @@ export function RecipeEditor({
 	ref,
 	ingredients,
 	onTextChange,
-	footerEnd,
+	statusBar,
 }: {
 	ref?: Ref<RecipeEditorHandle>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
-	footerEnd?: ReactNode;
+	statusBar?: ReactNode;
 }) {
-	const initialConfig = {
-		namespace: "RecipeEditor",
-		theme: recipeEditorTheme,
-		onError,
-		nodes: [],
-	};
-
 	return (
-		<LexicalComposer initialConfig={initialConfig}>
+		<LexicalComposer initialConfig={EDITOR_CONFIG}>
 			<EditorContainer
 				ref={ref}
 				ingredients={ingredients}
 				onTextChange={onTextChange}
-				footerEnd={footerEnd}
+				statusBar={statusBar}
 			/>
 		</LexicalComposer>
 	);

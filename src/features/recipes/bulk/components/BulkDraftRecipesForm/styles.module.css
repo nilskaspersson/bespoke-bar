@@ -13,6 +13,10 @@
 		padding-block: var(--space-5);
 	}
 
+	.submitButton {
+		margin-inline-start: auto;
+	}
+
 	.dialogHeader {
 		display: flex;
 		align-items: baseline;

@@ -227,6 +227,13 @@ export function IngredientTypeaheadPlugin({
 					return;
 				}
 
+				// Selection-only updates with no mouse interaction —
+				// skip line parsing when there's nothing to react to
+				if (!textChanged && !mouseDownRef.current) {
+					closeMenu();
+					return;
+				}
+
 				const result = getIngredientQuery();
 				if (!result) {
 					closeMenu();

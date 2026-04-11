@@ -1,4 +1,4 @@
-import type { Ingredient } from "@/db/schema/ingredients";
+import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 
@@ -17,18 +17,6 @@ export type LineTokenization = {
 	tokens: Token[];
 	isRecipeName: boolean;
 };
-
-export type IngredientIndex = Map<string, string>;
-
-export function buildIngredientIndex(
-	ingredients: Ingredient[],
-): IngredientIndex {
-	const map = new Map<string, string>();
-	for (const i of ingredients) {
-		map.set(i.name.toLowerCase(), i.id);
-	}
-	return map;
-}
 
 /**
  * Tokenize a single line of recipe input into typed spans with character offsets.
@@ -124,7 +112,7 @@ export function tokenizeLine(
 					start: cursor,
 					end: cursor + ingredientName.length,
 					valid: true,
-					ingredientId: ingredientIndex.get(ingredientName.toLowerCase()),
+					ingredientId: ingredientIndex.get(ingredientName.toLowerCase())?.id,
 				});
 			}
 		} else {
@@ -143,7 +131,7 @@ export function tokenizeLine(
 					start: cursor,
 					end: cursor + ingredientText.length,
 					valid: true,
-					ingredientId: ingredientIndex.get(ingredientText.toLowerCase()),
+					ingredientId: ingredientIndex.get(ingredientText.toLowerCase())?.id,
 				});
 			}
 		}

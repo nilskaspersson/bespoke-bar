@@ -13,11 +13,7 @@ import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-export function EditorActionsPlugin({
-	children,
-}: {
-	children?: React.ReactNode;
-}) {
+export function EditorActionsPlugin() {
 	const [editor] = useLexicalComposerContext();
 
 	const applyTransform = useCallback(
@@ -94,13 +90,6 @@ export function EditorActionsPlugin({
 			<Button variant="ghost" size="tiny" color="red" onClick={clear}>
 				<Icon name="trash" size={2} />
 			</Button>
-
-			{children ? (
-				<>
-					<div className={styles.separator} />
-					{children}
-				</>
-			) : null}
 		</div>
 	);
 }

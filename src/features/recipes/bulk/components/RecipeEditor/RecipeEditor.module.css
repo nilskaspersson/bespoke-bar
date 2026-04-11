@@ -6,19 +6,11 @@
 		border-radius: var(--radius--large);
 		background-color: var(--mauve-2);
 		overflow: hidden;
-		outline: var(--space-0) solid transparent;
-		outline-offset: 0;
-		transition-property: border-color, outline-color;
+		transition-property: border-color;
 		transition-duration: var(--transition-duration);
 
 		&:hover {
 			border-color: var(--mauve-8);
-		}
-
-		&:focus-within {
-			outline-color: var(--iris-11);
-			border-color: var(--iris-11);
-			z-index: 2;
 		}
 	}
 
@@ -40,6 +32,14 @@
 	.container {
 		position: relative;
 		width: 100%;
+		outline: var(--space-0) solid transparent;
+		outline-offset: calc(-1 * var(--space-0));
+		transition-property: outline-color;
+		transition-duration: var(--transition-duration);
+
+		&:focus-within {
+			outline-color: var(--iris-11);
+		}
 	}
 
 	.input {
@@ -75,6 +75,17 @@
 
 	.paragraph {
 		min-height: 1lh;
+	}
+
+	.statusBar {
+		display: flex;
+		align-items: center;
+		gap: var(--space-3);
+		padding-inline: var(--space-3);
+		padding-block: var(--space-2);
+		border-top: 1px solid var(--mauve-6);
+		background-color: var(--mauve-3);
+		user-select: none;
 	}
 
 	.container [data-ghost]::after {

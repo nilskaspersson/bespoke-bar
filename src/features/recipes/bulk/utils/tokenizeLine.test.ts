@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
+import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
-import { buildIngredientIndex, tokenizeLine } from "./tokenizeLine";
+import { tokenizeLine } from "./tokenizeLine";
 
 const index = buildIngredientIndex(MOCK_INGREDIENTS);
 

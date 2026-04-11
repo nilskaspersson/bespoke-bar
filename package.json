@@ -8,6 +8,7 @@
 		"start": "next start",
 		"lint": "biome check",
 		"test": "vitest run",
+		"bench": "vitest bench",
 		"ncu": "npx npm-check-updates --interactive",
 		"ci": "biome ci && npm run test && npm run drizzle:migrate && npm run build && tsc --noEmit",
 		"update-icons": "npm i --no-save @awesome.me/kit-20e437f9b8@latest",

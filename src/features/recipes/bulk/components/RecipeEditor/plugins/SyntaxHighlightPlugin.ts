@@ -10,10 +10,10 @@ import {
 	type ParagraphNode,
 	type TextNode,
 } from "lexical";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
+import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import {
-	buildIngredientIndex,
 	type Token,
 	tokenizeLine,
 } from "@/features/recipes/bulk/utils/tokenizeLine";
@@ -146,6 +146,7 @@ export function SyntaxHighlightPlugin({
 		() => buildIngredientIndex(ingredients),
 		[ingredients],
 	);
+	const prevTextRef = useRef("");
 
 	useEffect(() => {
 		const style = document.createElement("style");
@@ -163,6 +164,12 @@ export function SyntaxHighlightPlugin({
 		}
 
 		return editor.registerUpdateListener(() => {
+			const text = editor
+				.getEditorState()
+				.read(() => $getRoot().getTextContent());
+			if (text === prevTextRef.current) return;
+			prevTextRef.current = text;
+
 			const ranges = new Map<HighlightGroup, Range[]>();
 
 			for (const name of HIGHLIGHT_NAMES) {
