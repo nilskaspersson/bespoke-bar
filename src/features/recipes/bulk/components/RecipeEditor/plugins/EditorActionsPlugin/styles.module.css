@@ -1,7 +1,6 @@
 @layer feature {
 	.actions {
-		padding-inline: var(--space-2);
-		padding-block: var(--space-1);
+		padding: var(--space-2);
 		border-top: 1px solid var(--mauve-6);
 		background-color: var(--mauve-2);
 	}
