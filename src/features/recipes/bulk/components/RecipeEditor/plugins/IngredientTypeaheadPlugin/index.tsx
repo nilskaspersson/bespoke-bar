@@ -185,9 +185,15 @@ export function IngredientTypeaheadPlugin({
 		[editor, closeMenu],
 	);
 
-	const scrollIntoView = useCallback((el: HTMLLIElement | null) => {
-		el?.scrollIntoView({ behavior: "instant", block: "nearest" });
-	}, []);
+	const selectedItemRef = useRef<HTMLLIElement>(null);
+
+	useEffect(() => {
+		if (selectedIndex === null) return;
+		selectedItemRef.current?.scrollIntoView({
+			behavior: "instant",
+			block: "nearest",
+		});
+	}, [selectedIndex]);
 
 	const hasMenu = menuState !== null && options.length > 0;
 
@@ -231,7 +237,7 @@ export function IngredientTypeaheadPlugin({
 				return (
 					<OptionsList.Item
 						key={option.key}
-						ref={selectedIndex === index ? scrollIntoView : undefined}
+						ref={selectedIndex === index ? selectedItemRef : undefined}
 						isHighlighted={selectedIndex === index}
 						onClick={() => selectOption(option)}
 						onMouseEnter={() => setSelectedIndex(index)}

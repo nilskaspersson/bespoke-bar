@@ -84,7 +84,7 @@ export function BulkDraftRecipesForm({
 					onTextChange={setDraftValue}
 					statusBar={
 						<Flex gap={2} justifyContent="space-between">
-							<Text as="div" size={1} light numeric>
+							<Text as="div" size={1} light compact numeric>
 								{recipeCount > 0 ? (
 									<div>
 										{recipeCount} new {recipeCount === 1 ? "Recipe" : "Recipes"}
