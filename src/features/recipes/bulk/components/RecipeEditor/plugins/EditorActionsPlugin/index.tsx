@@ -9,6 +9,7 @@ import {
 	roundLine,
 } from "@/features/recipes/bulk/utils/transformRecipeText";
 import { Button } from "@/ui/Button";
+import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -54,42 +55,57 @@ export function EditorActionsPlugin() {
 	}, [editor]);
 
 	return (
-		<div className={styles.actions}>
-			<Text light size={0}>
-				Transform
-			</Text>
+		<Flex gap={2} alignItems="center" className={styles.actions}>
+			<Flex gap={1} alignItems="center">
+				<Text light size={0}>
+					Convert
+				</Text>
+				<Button
+					variant="ghost"
+					size="tiny"
+					onClick={() => applyTransform((line) => convertLine(line, "metric"))}
+				>
+					<Icon name="arrow-rotate-right" size={1} />
+					Metric
+				</Button>
+				<Button
+					variant="ghost"
+					size="tiny"
+					onClick={() =>
+						applyTransform((line) => convertLine(line, "imperial"))
+					}
+				>
+					<Icon name="arrow-rotate-right" size={1} />
+					Imperial
+				</Button>
+			</Flex>
 
-			<Button
-				variant="ghost"
-				size="tiny"
-				onClick={() => applyTransform((line) => convertLine(line, "metric"))}
-			>
-				Metric
-			</Button>
-			<Button
-				variant="ghost"
-				size="tiny"
-				onClick={() => applyTransform((line) => convertLine(line, "imperial"))}
-			>
-				Imperial
-			</Button>
-			<Button
-				variant="ghost"
-				size="tiny"
-				onClick={() => applyTransform(roundLine)}
-			>
-				Round
-			</Button>
-			<Button
-				variant="ghost"
-				size="tiny"
-				onClick={() => applyTransform(capitalizeLine)}
-			>
-				Capitalize
-			</Button>
+			<div className={styles.separator} />
+
+			<Flex gap={1} alignItems="center">
+				<Button
+					variant="ghost"
+					size="tiny"
+					onClick={() => applyTransform(roundLine)}
+				>
+					<Icon name="arrow-rotate-left" size={1} />
+					Round
+				</Button>
+				<Button
+					variant="ghost"
+					size="tiny"
+					onClick={() => applyTransform(capitalizeLine)}
+				>
+					<Icon name="pen" size={1} />
+					Capitalize
+				</Button>
+			</Flex>
+
+			<div className={styles.separator} />
+
 			<Button variant="ghost" size="tiny" color="red" onClick={clear}>
 				<Icon name="trash" size={2} />
 			</Button>
-		</div>
+		</Flex>
 	);
 }

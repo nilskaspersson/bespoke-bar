@@ -34,7 +34,7 @@ export function ConfirmAction({
 		isSubmitting,
 	} = useConfirmSubmit(action);
 
-	const { dialogRef } = useDialog();
+	const { dialogRef, showModal } = useDialog();
 
 	return (
 		<>
@@ -42,7 +42,7 @@ export function ConfirmAction({
 				className={className}
 				onSubmit={(e) => {
 					confirmSubmit(e);
-					dialogRef.current?.showModal();
+					showModal();
 				}}
 			>
 				<SubmitButton variant="outline" size="small" {...buttonProps}>

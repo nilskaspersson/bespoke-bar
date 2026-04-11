@@ -31,11 +31,12 @@ export function UpdateEntryDialog({
 	children,
 	...props
 }: ButtonProps & Props) {
-	const { dialogRef, isOpen, mounted, unmount } = useDialog();
+	const { dialogRef, isOpen, mounted, showModal, closeModal, unmount } =
+		useDialog();
 
 	return (
 		<>
-			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
+			<Button {...props} onClick={showModal}>
 				{children}
 			</Button>
 
@@ -70,10 +71,7 @@ export function UpdateEntryDialog({
 					</li>
 				}
 			>
-				<UpdateEntryForm
-					entry={entry}
-					onSuccess={() => dialogRef.current?.close()}
-				/>
+				<UpdateEntryForm entry={entry} onSuccess={closeModal} />
 			</Drawer>
 		</>
 	);

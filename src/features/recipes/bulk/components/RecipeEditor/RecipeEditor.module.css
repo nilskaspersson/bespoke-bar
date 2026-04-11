@@ -4,10 +4,11 @@
 		grid-template-rows: auto 1fr auto;
 		border: 1px solid var(--mauve-6);
 		border-radius: var(--radius--large);
-		background-color: var(--mauve-2);
-		overflow: hidden;
+		background-color: var(--mauve-1);
+		isolation: isolate;
 		transition-property: border-color;
 		transition-duration: var(--transition-duration);
+		contain: layout;
 
 		&:hover {
 			border-color: var(--mauve-8);
@@ -15,14 +16,12 @@
 	}
 
 	.titleBar {
-		display: flex;
-		align-items: center;
-		gap: var(--space-2);
-		padding-inline: var(--space-3);
-		padding-block: var(--space-2);
+		padding: var(--space-2) var(--space-3);
 		border-bottom: 1px solid var(--mauve-6);
-		background-color: var(--mauve-3);
+		background-color: var(--mauve-2);
 		user-select: none;
+		border-top-left-radius: inherit;
+		border-top-right-radius: inherit;
 	}
 
 	.titleIcon {
@@ -78,14 +77,13 @@
 	}
 
 	.statusBar {
-		display: flex;
-		align-items: center;
-		gap: var(--space-3);
 		padding-inline: var(--space-3);
 		padding-block: var(--space-2);
 		border-top: 1px solid var(--mauve-6);
-		background-color: var(--mauve-3);
+		background-color: var(--mauve-2);
 		user-select: none;
+		border-bottom-left-radius: inherit;
+		border-bottom-right-radius: inherit;
 	}
 
 	.container [data-ghost]::after {

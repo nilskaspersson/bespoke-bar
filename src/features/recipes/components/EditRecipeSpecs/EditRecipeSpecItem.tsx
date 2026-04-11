@@ -37,7 +37,7 @@ export function EditRecipeSpecItem({
 	ingredients: Ingredient[];
 	withOptional?: boolean;
 }) {
-	const { dialogRef, isOpen: isDialogOpen } = useDialog();
+	const { dialogRef, isOpen: isDialogOpen, showModal } = useDialog();
 	const { percentageFormatter } = use(FormatterContext);
 
 	const searchName = useId();
@@ -146,7 +146,7 @@ export function EditRecipeSpecItem({
 												});
 											}
 
-											dialogRef.current?.showModal();
+											showModal();
 										}}
 									>
 										<OptionLabel description={<i>"{newIngredientName}"</i>}>
@@ -177,7 +177,7 @@ export function EditRecipeSpecItem({
 										variant="outline"
 										color="accent"
 										size="tiny"
-										onClick={() => dialogRef.current?.showModal()}
+										onClick={showModal}
 									>
 										Edit ingredient data
 									</Button>

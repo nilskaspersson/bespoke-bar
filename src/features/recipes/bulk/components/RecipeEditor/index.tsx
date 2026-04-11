@@ -9,6 +9,7 @@ import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import type { ReactNode, Ref } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { useIsMounted } from "@/hooks/useIsMounted";
+import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
@@ -64,12 +65,14 @@ function EditorContainer({
 
 	return (
 		<div className={styles.root}>
-			<div className={styles.titleBar}>
+			<Flex gap={2} alignItems="center" className={styles.titleBar}>
 				<Icon name="duotone-input-text" size={3} className={styles.titleIcon} />
+
 				<Text size={1} weight={600}>
 					Recipe editor
 				</Text>
-			</div>
+			</Flex>
+
 			<div className={styles.container}>
 				<PlainTextPlugin
 					contentEditable={
@@ -86,6 +89,7 @@ function EditorContainer({
 				{ref ? <EditorHandlePlugin ref={ref} /> : null}
 			</div>
 			<EditorActionsPlugin />
+
 			{statusBar ? <div className={styles.statusBar}>{statusBar}</div> : null}
 		</div>
 	);

@@ -22,6 +22,7 @@ import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
@@ -68,7 +69,7 @@ export function BulkDraftRecipesForm({
 
 	const formAction = useCreateBulkDraftRecipes(draftRecipes, createRecipes);
 
-	const { dialogRef, isOpen, mounted } = useDialog();
+	const { dialogRef, isOpen, mounted, showModal, closeModal } = useDialog();
 	const recipeCount = draftRecipes.length;
 
 	return (
@@ -82,47 +83,51 @@ export function BulkDraftRecipesForm({
 					ingredients={ingredients}
 					onTextChange={setDraftValue}
 					statusBar={
-						<>
-							{recipeCount > 0 ? (
-								<Text size={1} light compact>
-									{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}
-								</Text>
-							) : null}
+						<Flex gap={2} justifyContent="space-between">
+							<Text as="div" size={1} light numeric>
+								{recipeCount > 0 ? (
+									<div>
+										{recipeCount} new {recipeCount === 1 ? "Recipe" : "Recipes"}
+									</div>
+								) : null}
 
-							{newIngredientCount > 0 ? (
-								<Text size={1} light compact>
-									{newIngredientCount} new{" "}
-									{newIngredientCount === 1 ? "ingredient" : "ingredients"}
-								</Text>
-							) : null}
+								{newIngredientCount > 0 ? (
+									<div>
+										{newIngredientCount} new{" "}
+										{newIngredientCount === 1 ? "Ingredient" : "Ingredients"}
+									</div>
+								) : null}
+							</Text>
 
-							<Button
-								variant="ghost"
-								size="small"
-								onClick={() => dialogRef.current?.showModal()}
-								aria-disabled={recipeCount === 0}
-								className={styles.submitButton}
-							>
-								<Icon name="expand" size={2} />
-								Preview
-							</Button>
+							<Flex gap={2}>
+								<Button
+									variant="outline"
+									size="small"
+									onClick={showModal}
+									disabled={recipeCount === 0}
+									aria-disabled={recipeCount === 0}
+								>
+									<Icon name="expand" size={1} />
+									Preview
+								</Button>
 
-							<SubmitButton
-								size="small"
-								variant="solid"
-								color={recipeCount > 0 ? "accent" : "light"}
-								disabled={recipeCount === 0}
-								endAdornment={
-									<Kbd
-										shortcut="mod+enter"
-										variant="ghost"
-										ignoreInputEvents={false}
-									/>
-								}
-							>
-								Create
-							</SubmitButton>
-						</>
+								<SubmitButton
+									size="small"
+									variant="solid"
+									color={recipeCount > 0 ? "accent" : "light"}
+									disabled={recipeCount === 0}
+									endAdornment={
+										<Kbd
+											shortcut="mod+enter"
+											variant="ghost"
+											ignoreInputEvents={false}
+										/>
+									}
+								>
+									Create
+								</SubmitButton>
+							</Flex>
+						</Flex>
 					}
 				/>
 			</div>
@@ -173,11 +178,7 @@ export function BulkDraftRecipesForm({
 							</ul>
 
 							<div className={styles.dialogFooter}>
-								<Button
-									variant="ghost"
-									size="small"
-									onClick={() => dialogRef.current?.close()}
-								>
+								<Button variant="ghost" size="small" onClick={closeModal}>
 									Close
 								</Button>
 							</div>

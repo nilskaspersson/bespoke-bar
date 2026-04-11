@@ -29,12 +29,13 @@ type Props = ButtonProps & {
 };
 
 export function CreateListEntryButton({ recipe, children, ...props }: Props) {
-	const { dialogRef, isOpen, mounted, unmount } = useDialog();
+	const { dialogRef, isOpen, mounted, showModal, closeModal, unmount } =
+		useDialog();
 	const formRef = useRef<HTMLFormElement>(null);
 
 	return (
 		<>
-			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
+			<Button {...props} onClick={showModal}>
 				{children}
 			</Button>
 
@@ -72,7 +73,7 @@ export function CreateListEntryButton({ recipe, children, ...props }: Props) {
 			>
 				<CreateListEntryForm
 					recipe={recipe}
-					onSuccess={() => dialogRef.current?.close()}
+					onSuccess={closeModal}
 					formRef={formRef}
 				/>
 			</Drawer>

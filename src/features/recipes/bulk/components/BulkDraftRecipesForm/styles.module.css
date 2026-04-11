@@ -2,6 +2,7 @@
 	.form {
 		display: grid;
 		gap: var(--gap);
+		align-self: start;
 	}
 
 	.editor {
@@ -11,10 +12,6 @@
 
 	.dialog {
 		padding-block: var(--space-5);
-	}
-
-	.submitButton {
-		margin-inline-start: auto;
 	}
 
 	.dialogHeader {

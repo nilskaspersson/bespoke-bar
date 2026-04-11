@@ -34,6 +34,8 @@ export function useDialog(options?: { onNavigationClose?: () => void }) {
 		return () => controller.abort();
 	}, []);
 
+	const showModal = useCallback(() => dialogRef.current?.showModal(), []);
+	const closeModal = useCallback(() => dialogRef.current?.close(), []);
 	const unmount = useCallback(() => setMounted(false), []);
 
 	useOnNavigation(
@@ -64,6 +66,8 @@ export function useDialog(options?: { onNavigationClose?: () => void }) {
 		dialogRef,
 		isOpen,
 		mounted,
+		showModal,
+		closeModal,
 		unmount,
 	};
 }
