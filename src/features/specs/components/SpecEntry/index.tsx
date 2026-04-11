@@ -15,6 +15,7 @@ import styles from "./styles.module.css";
 export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	className,
 	convertUnits,
+	snap,
 	onChange,
 	spec,
 	servings = 1,
@@ -23,13 +24,14 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	spec: T;
 	onChange?: (spec: T) => void;
 	convertUnits?: UnitSystems | null;
+	snap?: boolean;
 	servings?: number;
 } & Omit<ComponentProps<typeof Text>, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 	const formatSpecMeasure = useFormatSpecMeasure();
 	const formatQuantity = useSpecQuantityFormatter();
 
-	const measure = formatSpecMeasure({ spec, servings, convertUnits });
+	const measure = formatSpecMeasure({ spec, servings, convertUnits, snap });
 
 	return (
 		<Text

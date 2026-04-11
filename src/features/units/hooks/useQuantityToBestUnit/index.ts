@@ -9,6 +9,7 @@ import {
 import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
+import { snapQuantity } from "@/features/units/utils/snapQuantity";
 import { FormatterContext } from "@/hooks/useFormatter";
 
 export function quantityToBestUnit({
@@ -48,14 +49,18 @@ export function useQuantityToBestUnit() {
 			unit: Unit | null | undefined;
 			unitSystem?: UnitSystems | null;
 			servings?: number;
+			snap?: boolean;
 		}) => {
 			const parts = quantityToBestUnit(args);
 			if (!parts) return null;
-			const [quantity, unit] = parts;
+			let [quantity, unit] = parts;
+			if (args.snap) {
+				quantity = snapQuantity(quantity, unit);
+			}
 			return {
 				quantity,
 				unit: getFormattedUnit(unit, quantity),
-				formatted: formatMeasure(parts, volumeFormatter),
+				formatted: formatMeasure([quantity, unit], volumeFormatter),
 			};
 		},
 		[volumeFormatter],

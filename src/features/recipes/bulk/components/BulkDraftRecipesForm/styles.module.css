@@ -5,20 +5,31 @@
 	}
 
 	.editor {
+		display: grid;
 		min-height: 30lvh;
 	}
 
-	.toolbar {
+	.dialog {
+		padding-block: var(--space-5);
+	}
+
+	.dialogHeader {
+		display: flex;
+		align-items: baseline;
+		gap: var(--space-3);
+	}
+
+	.dialogToolbar {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		gap: var(--gap);
 	}
 
-	.status {
+	.dialogFooter {
 		display: flex;
 		align-items: center;
-		gap: var(--gap);
+		justify-content: flex-end;
+		gap: var(--space-2);
 	}
 
 	.recipes {

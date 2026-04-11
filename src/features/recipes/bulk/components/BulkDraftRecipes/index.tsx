@@ -7,17 +7,17 @@ import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDra
 export function BulkDraftRecipes({
 	ingredients,
 	createRecipes,
-	empty,
+	info,
 }: {
 	ingredients: Ingredient[];
 	createRecipes: (recipes: RecipeFormData[]) => Promise<Recipe[]>;
-	empty?: ReactNode;
+	info?: ReactNode;
 }) {
 	return (
 		<BulkDraftRecipesForm
 			ingredients={ingredients}
 			createRecipes={createRecipes}
-			empty={empty}
+			info={info}
 		/>
 	);
 }

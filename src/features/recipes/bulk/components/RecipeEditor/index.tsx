@@ -6,8 +6,12 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import type { Ref } from "react";
+import type { ReactNode, Ref } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
+import { useIsMounted } from "@/hooks/useIsMounted";
+import { Icon } from "@/ui/Icon";
+import { Text } from "@/ui/Text";
+import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
 import {
 	EditorHandlePlugin,
 	type RecipeEditorHandle,
@@ -21,6 +25,19 @@ import { recipeEditorTheme } from "./theme";
 
 export type { RecipeEditorHandle };
 
+const EXAMPLE_RECIPES = [
+	"Gimlet\n5 cl gin\n3 cl lime juice\n2.5 cl simple syrup",
+	"Daiquiri\n2 oz rum\n1 oz lime juice\n3/4 oz simple syrup",
+	"Negroni\n3 cl gin\n3 cl campari\n3 cl sweet vermouth",
+	"Old Fashioned\n6 cl bourbon\n2 dashes angostura bitters\n1 barspoon simple syrup",
+	"Margarita\n4 cl tequila\n2 cl lime juice\n2 cl cointreau",
+	"Whiskey Sour\n6 cl bourbon\n3 cl lemon juice\n1.5 cl simple syrup",
+];
+
+function pickRandom<T>(items: T[]): T {
+	return items[Math.floor(Math.random() * items.length)];
+}
+
 function onError(error: Error) {
 	console.error("[RecipeEditor]", error);
 }
@@ -29,30 +46,39 @@ function EditorContainer({
 	ref,
 	ingredients,
 	onTextChange,
+	footerEnd,
 }: {
 	ref?: Ref<RecipeEditorHandle>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
+	footerEnd?: ReactNode;
 }) {
+	const placeholder = useIsMounted(() => pickRandom(EXAMPLE_RECIPES));
+
 	return (
-		<div className={styles.container}>
-			<PlainTextPlugin
-				contentEditable={
-					<ContentEditable className={styles.input} spellCheck={false} />
-				}
-				placeholder={
-					<div className={styles.placeholder}>
-						Start typing to create recipes…
-					</div>
-				}
-				ErrorBoundary={LexicalErrorBoundary}
-			/>
-			<HistoryPlugin />
-			<ParagraphBreakPlugin />
-			<TextExtractionPlugin onTextChange={onTextChange} />
-			<SyntaxHighlightPlugin ingredients={ingredients} />
-			<IngredientTypeaheadPlugin ingredients={ingredients} />
-			{ref ? <EditorHandlePlugin ref={ref} /> : null}
+		<div className={styles.root}>
+			<div className={styles.titleBar}>
+				<Icon name="duotone-input-text" size={3} className={styles.titleIcon} />
+				<Text size={1} weight={600}>
+					Recipe editor
+				</Text>
+			</div>
+			<div className={styles.container}>
+				<PlainTextPlugin
+					contentEditable={
+						<ContentEditable className={styles.input} spellCheck={false} />
+					}
+					placeholder={<div className={styles.placeholder}>{placeholder}</div>}
+					ErrorBoundary={LexicalErrorBoundary}
+				/>
+				<HistoryPlugin />
+				<ParagraphBreakPlugin />
+				<TextExtractionPlugin onTextChange={onTextChange} />
+				<SyntaxHighlightPlugin ingredients={ingredients} />
+				<IngredientTypeaheadPlugin ingredients={ingredients} />
+				{ref ? <EditorHandlePlugin ref={ref} /> : null}
+			</div>
+			<EditorActionsPlugin>{footerEnd}</EditorActionsPlugin>
 		</div>
 	);
 }
@@ -61,10 +87,12 @@ export function RecipeEditor({
 	ref,
 	ingredients,
 	onTextChange,
+	footerEnd,
 }: {
 	ref?: Ref<RecipeEditorHandle>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
+	footerEnd?: ReactNode;
 }) {
 	const initialConfig = {
 		namespace: "RecipeEditor",
@@ -79,6 +107,7 @@ export function RecipeEditor({
 				ref={ref}
 				ingredients={ingredients}
 				onTextChange={onTextChange}
+				footerEnd={footerEnd}
 			/>
 		</LexicalComposer>
 	);

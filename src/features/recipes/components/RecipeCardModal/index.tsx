@@ -89,6 +89,7 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 	const [conversionSystem, setConversionSystem] = useState<UnitSystems | null>(
 		null,
 	);
+	const [snap, setSnap] = useState(false);
 
 	return (
 		<>
@@ -107,6 +108,7 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 							recipe={recipe}
 							servings={deferredServings}
 							convertUnits={conversionSystem}
+							snap={snap}
 							withLink
 							nameAdornment={
 								<RecipeNameAdornment servings={deferredServings} />
@@ -125,6 +127,15 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 						defaultValue={conversionSystem}
 						onChange={setConversionSystem}
 					/>
+
+					{conversionSystem ? (
+						<Checkbox
+							label="Round to nearest"
+							size="small"
+							checked={snap}
+							onChange={(e) => setSnap(e.target.checked)}
+						/>
+					) : null}
 
 					<RecipeMetrics
 						recipe={recipe}

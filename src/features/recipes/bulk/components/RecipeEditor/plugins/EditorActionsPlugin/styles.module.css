@@ -1,0 +1,23 @@
+@layer feature {
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		padding-inline: var(--space-2);
+		padding-block: var(--space-1);
+		border-top: 1px solid var(--mauve-6);
+		background-color: var(--mauve-3);
+	}
+
+	.spacer {
+		margin-inline-start: auto;
+	}
+
+	.separator {
+		width: 1px;
+		align-self: stretch;
+		margin-block: var(--space-1);
+		margin-inline-start: auto;
+		background-color: var(--mauve-6);
+	}
+}

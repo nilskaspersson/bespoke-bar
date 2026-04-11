@@ -9,6 +9,7 @@ import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitCo
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
@@ -28,6 +29,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 
 	const [withConversionSystem, setWithConversionSystem] =
 		useState<UnitSystems | null>(null);
+	const [withSnap, setWithSnap] = useState(false);
 
 	if (!recipe.specs || recipe.specs.length === 0) {
 		return null;
@@ -41,6 +43,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 					className={styles.card}
 					servings={servings}
 					convertUnits={withConversionSystem}
+					snap={withSnap}
 					withLink={false}
 					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
 				>
@@ -63,6 +66,15 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 						defaultValue={withConversionSystem}
 						onChange={setWithConversionSystem}
 					/>
+
+					{withConversionSystem ? (
+						<Checkbox
+							label="Round to nearest"
+							size="small"
+							checked={withSnap}
+							onChange={(e) => setWithSnap(e.target.checked)}
+						/>
+					) : null}
 
 					<SelectServings value={deferredServings} onChange={setServings} />
 
