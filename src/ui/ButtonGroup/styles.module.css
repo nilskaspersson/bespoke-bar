@@ -1,6 +1,6 @@
 @layer ui {
 	.group {
-		> :where(button, a)+ :where(button, a) {
+		> :where(button, a) + :where(button, a) {
 			margin-left: -1px;
 		}
 

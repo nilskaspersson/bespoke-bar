@@ -69,7 +69,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 
 					{withConversionSystem ? (
 						<Checkbox
-							label="Round to nearest"
+							label="With rounding"
 							size="small"
 							checked={withSnap}
 							onChange={(e) => setWithSnap(e.target.checked)}

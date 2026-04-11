@@ -86,6 +86,21 @@
 		border-bottom-right-radius: inherit;
 	}
 
+	.skeleton {
+		display: grid;
+		gap: var(--space-2);
+		padding: var(--control-inset);
+		padding-block: var(--space-3);
+		font-size: max(1rem, 16px);
+		line-height: var(--line-height);
+	}
+
+	.skeletonActions {
+		padding: var(--space-2);
+		border-top: 1px solid var(--mauve-6);
+		background-color: var(--mauve-2);
+	}
+
 	.container [data-ghost]::after {
 		content: attr(data-ghost);
 		color: var(--mauve-8);

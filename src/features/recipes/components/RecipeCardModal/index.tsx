@@ -130,7 +130,7 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 
 					{conversionSystem ? (
 						<Checkbox
-							label="Round to nearest"
+							label="With rounding"
 							size="small"
 							checked={snap}
 							onChange={(e) => setSnap(e.target.checked)}
