@@ -129,6 +129,10 @@ export function invertMapToLookup<K, V>(map: Map<K, V[]>): Map<V, K> {
 	return result;
 }
 
+export function pickRandom<T>(items: readonly T[]): T {
+	return items[Math.floor(Math.random() * items.length)];
+}
+
 export function times(n: number): number[] {
 	return Array.from({ length: n }, (_, i) => i);
 }

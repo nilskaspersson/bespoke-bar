@@ -15,7 +15,6 @@ import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
-import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
@@ -229,7 +228,7 @@ export function Combobox<T>({
 							header={header}
 						>
 							{filteredItems.map((item, index) => (
-								<OptionItem
+								<OptionsList.Item
 									key={getKey(item)}
 									{...getItemProps({ item, index })}
 									isHighlighted={highlightedIndex === index}
@@ -246,7 +245,7 @@ export function Combobox<T>({
 											{itemToString(item)}
 										</Text>
 									)}
-								</OptionItem>
+								</OptionsList.Item>
 							))}
 
 							{Boolean(comboboxInputProps.value) && renderCreateListItem

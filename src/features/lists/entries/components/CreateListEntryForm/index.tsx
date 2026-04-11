@@ -24,8 +24,7 @@ import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
-import { OptionItem } from "@/ui/OptionItem";
-import { OptionLabel } from "@/ui/OptionLabel";
+import { OptionsList } from "@/ui/OptionsList";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
@@ -192,7 +191,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 									},
 								}}
 								renderCreateListItem={({ closeMenu, inputValue }) => (
-									<OptionItem
+									<OptionsList.Item
 										onClick={() => {
 											form.update({
 												name: recipeList.name.name,
@@ -203,10 +202,12 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 											closeMenu?.();
 										}}
 									>
-										<OptionLabel description={<i>"{inputValue.trim()}"</i>}>
+										<OptionsList.Label
+											description={<i>"{inputValue.trim()}"</i>}
+										>
 											Create new List
-										</OptionLabel>
-									</OptionItem>
+										</OptionsList.Label>
+									</OptionsList.Item>
 								)}
 							/>
 						)}

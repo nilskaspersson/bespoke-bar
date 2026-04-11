@@ -1,23 +1,12 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-	$getRoot,
-	$getSelection,
-	$isLineBreakNode,
-	$isRangeSelection,
-	$isTextNode,
-	type LexicalEditor,
-} from "lexical";
+import { $getRoot } from "lexical";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { getGhostCompletion } from "@/features/recipes/bulk/utils/getGhostCompletion";
-import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { Kbd } from "@/ui/Kbd";
-import { OptionItem } from "@/ui/OptionItem";
-import { OptionLabel } from "@/ui/OptionLabel";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { normalizeInput } from "@/utils";
@@ -28,122 +17,15 @@ import { useGhostText } from "../../hooks/useGhostText";
 import { useTypeaheadAnchor } from "../../hooks/useTypeaheadAnchor";
 import { useTypeaheadKeyboard } from "../../hooks/useTypeaheadKeyboard";
 import styles from "./styles.module.css";
-
-// ─── Types ──────────────────────────────────────────────────
-
-type MenuMode = "typing" | "browsing";
-
-type MenuState = {
-	mode: MenuMode;
-	queryString: string;
-};
-
-type IngredientOption = {
-	key: string;
-	ingredient: Ingredient;
-};
-
-// ─── Helpers ────────────────────────────────────────────────
-
-function formatAbv(abv: number | null): string | null {
-	if (abv === null) return null;
-	return `${(abv * 100).toFixed(0)}%`;
-}
-
-function preventFocusLoss(e: React.MouseEvent) {
-	e.preventDefault();
-}
-
-/**
- * Read the current line from the Lexical selection and extract the
- * ingredient query (text after quantity + unit, up to the cursor).
- * Must be called inside `editor.getEditorState().read()`.
- */
-function getIngredientQuery(): {
-	matchingString: string;
-	cursorAtEnd: boolean;
-} | null {
-	const selection = $getSelection();
-	if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
-
-	const anchor = selection.anchor;
-	if (anchor.type !== "text") return null;
-
-	const anchorNode = anchor.getNode();
-	const paragraph = anchorNode.getParent();
-	if (!paragraph) return null;
-
-	let lineText = "";
-	let cursorOffset = 0;
-	let foundAnchor = false;
-
-	for (const child of paragraph.getChildren()) {
-		if ($isLineBreakNode(child)) {
-			if (foundAnchor) break;
-			lineText = "";
-			continue;
-		}
-		const text = child.getTextContent();
-		if (child.is(anchorNode)) {
-			cursorOffset = lineText.length + anchor.offset;
-			foundAnchor = true;
-		}
-		lineText += text;
-	}
-
-	if (!foundAnchor) return null;
-
-	const textUpToCursor = lineText.slice(0, cursorOffset);
-	const [quantity, quantityRemainder] = quantityTextParser(textUpToCursor);
-	if (quantity === null) return null;
-
-	const [unit, unitRemainder] = unitTextParser(quantityRemainder.trimStart());
-	if (unit === null) return null;
-
-	const ingredientText = unitRemainder.trimStart();
-	if (ingredientText.length === 0) return null;
-
-	const restOfLine = lineText.slice(cursorOffset).trimEnd();
-	return {
-		matchingString: ingredientText,
-		cursorAtEnd: restOfLine.length === 0,
-	};
-}
-
-function replaceIngredientText(
-	editor: LexicalEditor,
-	matchingString: string,
-	replacement: string,
-) {
-	editor.update(() => {
-		const selection = $getSelection();
-		if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
-
-		const anchor = selection.anchor;
-		if (anchor.type !== "text") return;
-
-		const textNode = anchor.getNode();
-		const text = textNode.getTextContent();
-		const matchStart = text.lastIndexOf(matchingString);
-		if (matchStart < 0) return;
-
-		const before = text.slice(0, matchStart);
-		textNode.setTextContent(before + replacement);
-
-		let sibling = textNode.getNextSibling();
-		while (sibling && $isTextNode(sibling)) {
-			const next = sibling.getNextSibling();
-			sibling.remove();
-			sibling = next;
-		}
-
-		const offset = before.length + replacement.length;
-		selection.anchor.set(textNode.__key, offset, "text");
-		selection.focus.set(textNode.__key, offset, "text");
-	});
-}
-
-// ─── Component ──────────────────────────────────────────────
+import {
+	formatAbv,
+	getIngredientQuery,
+	type IngredientOption,
+	type MenuMode,
+	type MenuState,
+	preventFocusLoss,
+	replaceIngredientText,
+} from "./utils";
 
 export function IngredientTypeaheadPlugin({
 	ingredients,
@@ -162,8 +44,6 @@ export function IngredientTypeaheadPlugin({
 	const menuMode = menuState?.mode ?? null;
 	const queryStringRef = useRef(queryString);
 	queryStringRef.current = queryString;
-
-	// ── Ingredient index ────────────────────────────────────
 
 	const sortedIngredients = useMemo(
 		() => [...ingredients].sort((a, b) => collator.compare(a.name, b.name)),
@@ -192,8 +72,6 @@ export function IngredientTypeaheadPlugin({
 		[sortedIngredients],
 	);
 
-	// ── Menu state ──────────────────────────────────────────
-
 	const openMenu = useCallback((mode: MenuMode, qs: string) => {
 		const prev = menuStateRef.current;
 		if (prev?.mode === mode && prev?.queryString === qs) return;
@@ -208,11 +86,7 @@ export function IngredientTypeaheadPlugin({
 		setMenuState(null);
 	}, []);
 
-	// ── Editor interactions ─────────────────────────────────
-
 	const { mouseDownRef, escapeRef } = useEditorFocus(menuStateRef, forceClose);
-
-	// ── Menu detection ──────────────────────────────────────
 
 	useEffect(() => {
 		return editor.registerUpdateListener(() => {
@@ -227,8 +101,6 @@ export function IngredientTypeaheadPlugin({
 					return;
 				}
 
-				// Selection-only updates with no mouse interaction —
-				// skip line parsing when there's nothing to react to
 				if (!textChanged && !mouseDownRef.current) {
 					closeMenu();
 					return;
@@ -275,8 +147,6 @@ export function IngredientTypeaheadPlugin({
 		mouseDownRef,
 	]);
 
-	// ── Options & ghost text ────────────────────────────────
-
 	const options = useMemo(() => {
 		if (!queryString || !menuMode) return [];
 
@@ -304,8 +174,6 @@ export function IngredientTypeaheadPlugin({
 
 	useGhostText(ghostText);
 	useTypeaheadAnchor("--typeahead", menuState);
-
-	// ── Selection ───────────────────────────────────────────
 
 	const selectOption = useCallback(
 		(option: IngredientOption) => {
@@ -335,8 +203,6 @@ export function IngredientTypeaheadPlugin({
 		selectOption,
 	);
 
-	// ── Render ──────────────────────────────────────────────
-
 	if (!menuState || options.length === 0) return null;
 
 	return (
@@ -363,21 +229,21 @@ export function IngredientTypeaheadPlugin({
 				const abv = formatAbv(ingredient.abv);
 
 				return (
-					<OptionItem
+					<OptionsList.Item
 						key={option.key}
 						ref={selectedIndex === index ? scrollIntoView : undefined}
 						isHighlighted={selectedIndex === index}
 						onClick={() => selectOption(option)}
 						onMouseEnter={() => setSelectedIndex(index)}
 					>
-						<OptionLabel
+						<OptionsList.Label
 							description={
 								[category, abv].filter(Boolean).join(", ") || undefined
 							}
 						>
 							{ingredient.name}
-						</OptionLabel>
-					</OptionItem>
+						</OptionsList.Label>
+					</OptionsList.Item>
 				);
 			})}
 		</OptionsList>

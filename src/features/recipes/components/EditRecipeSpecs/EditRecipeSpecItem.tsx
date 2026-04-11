@@ -19,8 +19,7 @@ import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Chip } from "@/ui/Chip";
 import { Grid } from "@/ui/Grid";
-import { OptionItem } from "@/ui/OptionItem";
-import { OptionLabel } from "@/ui/OptionLabel";
+import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
@@ -112,7 +111,7 @@ export function EditRecipeSpecItem({
 									"aria-invalid": !ingredient.name.valid,
 								}}
 								renderCreateListItem={({ closeMenu, inputValue }) => (
-									<OptionItem
+									<OptionsList.Item
 										onClick={() => {
 											closeMenu?.();
 
@@ -149,10 +148,12 @@ export function EditRecipeSpecItem({
 											showModal();
 										}}
 									>
-										<OptionLabel description={<i>"{newIngredientName}"</i>}>
+										<OptionsList.Label
+											description={<i>"{newIngredientName}"</i>}
+										>
 											Create new ingredient
-										</OptionLabel>
-									</OptionItem>
+										</OptionsList.Label>
+									</OptionsList.Item>
 								)}
 							/>
 						</div>

@@ -32,4 +32,62 @@
 		border-top: 1px solid var(--mauve-6);
 		padding-block: calc(var(--spacing));
 	}
+
+	/* Item */
+
+	.item {
+		display: flex;
+		gap: var(--gap);
+		padding-inline: var(--spacing);
+		cursor: pointer;
+		border-radius: var(--radius);
+		transition: background-color, color;
+		transition-duration: var(--transition-duration--short);
+		color: var(--mauve-12);
+
+		&:hover,
+		&:focus {
+			background-color: hsl(from var(--mauve-7) h s l / 0.15);
+		}
+
+		&.isHighlighted {
+			background-color: hsl(from var(--iris-7) h s l / 0.2);
+		}
+
+		&.isSelected {
+			background-color: hsl(from var(--iris-7) h s l / 0.75);
+		}
+	}
+
+	.item:has(~ .isHighlighted):hover,
+	.isHighlighted ~ .item:hover {
+		background-color: transparent;
+	}
+
+	.label {
+		flex: 1 1 auto;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		padding-block: var(--space-2);
+	}
+
+	.icon {
+		flex: 0 0 auto;
+		align-self: center;
+		color: var(--mauve-12);
+	}
+
+	/* Label */
+
+	.optionLabel {
+		width: 100%;
+		display: flex;
+		gap: var(--space-2);
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.description {
+		margin-top: var(--space-0);
+	}
 }

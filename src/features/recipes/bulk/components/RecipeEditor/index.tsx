@@ -12,6 +12,8 @@ import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { pickRandom } from "@/utils";
+import { EDITOR_CONFIG, EXAMPLE_RECIPES } from "./constants";
 import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
 import {
 	EditorHandlePlugin,
@@ -22,33 +24,8 @@ import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
 import { TextExtractionPlugin } from "./plugins/TextExtractionPlugin";
 import styles from "./RecipeEditor.module.css";
-import { recipeEditorTheme } from "./theme";
 
 export type { RecipeEditorHandle };
-
-const EXAMPLE_RECIPES = [
-	"Gimlet\n5 cl gin\n3 cl lime juice\n2.5 cl simple syrup",
-	"Daiquiri\n2 oz rum\n1 oz lime juice\n3/4 oz simple syrup",
-	"Negroni\n3 cl gin\n3 cl campari\n3 cl sweet vermouth",
-	"Old Fashioned\n6 cl bourbon\n2 dashes angostura bitters\n1 barspoon simple syrup",
-	"Margarita\n4 cl tequila\n2 cl lime juice\n2 cl cointreau",
-	"Whiskey Sour\n6 cl bourbon\n3 cl lemon juice\n1.5 cl simple syrup",
-];
-
-function pickRandom<T>(items: T[]): T {
-	return items[Math.floor(Math.random() * items.length)];
-}
-
-function onError(error: Error) {
-	console.error("[RecipeEditor]", error);
-}
-
-const EDITOR_CONFIG = {
-	namespace: "RecipeEditor",
-	theme: recipeEditorTheme,
-	onError,
-	nodes: [],
-};
 
 function EditorContainer({
 	ref,
