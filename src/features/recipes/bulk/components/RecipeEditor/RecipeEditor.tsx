@@ -1,13 +1,22 @@
 "use client";
 "use no memo";
 
+import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
+import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
+import { EditorRefPlugin } from "@lexical/react/LexicalEditorRefPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
+import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import { $createParagraphNode, $createTextNode, $getRoot } from "lexical";
-import { type ReactNode, type Ref, useState } from "react";
+import {
+	$createParagraphNode,
+	$createTextNode,
+	$getRoot,
+	type LexicalEditor,
+} from "lexical";
+import { type ReactNode, type RefObject, useCallback, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";
@@ -16,17 +25,10 @@ import { Text } from "@/ui/Text";
 import { pickRandom } from "@/utils";
 import { EDITOR_CONFIG, EXAMPLE_RECIPES } from "./constants";
 import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
-import {
-	EditorHandlePlugin,
-	type RecipeEditorHandle,
-} from "./plugins/EditorHandlePlugin";
 import { IngredientTypeaheadPlugin } from "./plugins/IngredientTypeaheadPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
-import { TextExtractionPlugin } from "./plugins/TextExtractionPlugin";
 import styles from "./RecipeEditor.module.css";
-
-export type { RecipeEditorHandle };
 
 function seedEditorState(text: string) {
 	const root = $getRoot();
@@ -39,17 +41,30 @@ function seedEditorState(text: string) {
 }
 
 function EditorContainer({
-	ref,
+	editorRef,
 	ingredients,
 	onTextChange,
 	statusBar,
 }: {
-	ref?: Ref<RecipeEditorHandle>;
+	editorRef?: RefObject<LexicalEditor | null>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
 	statusBar?: ReactNode;
 }) {
 	const placeholder = useIsMounted(() => pickRandom(EXAMPLE_RECIPES));
+
+	const handleChange = useCallback(
+		(editorState: import("lexical").EditorState) => {
+			const text = editorState.read(() =>
+				$getRoot()
+					.getChildren()
+					.map((child) => child.getTextContent())
+					.join("\n"),
+			);
+			onTextChange(text);
+		},
+		[onTextChange],
+	);
 
 	return (
 		<div className={styles.root}>
@@ -75,11 +90,13 @@ function EditorContainer({
 					ErrorBoundary={LexicalErrorBoundary}
 				/>
 				<HistoryPlugin />
+				<AutoFocusPlugin defaultSelection="rootEnd" />
+				<ClearEditorPlugin />
+				<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
 				<ParagraphBreakPlugin />
-				<TextExtractionPlugin onTextChange={onTextChange} />
 				<SyntaxHighlightPlugin ingredients={ingredients} />
 				<IngredientTypeaheadPlugin ingredients={ingredients} />
-				{ref ? <EditorHandlePlugin ref={ref} /> : null}
+				{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
 			</div>
 			<EditorActionsPlugin />
 
@@ -89,13 +106,13 @@ function EditorContainer({
 }
 
 export function RecipeEditor({
-	ref,
+	editorRef,
 	ingredients,
 	onTextChange,
 	statusBar,
 	initialText,
 }: {
-	ref?: Ref<RecipeEditorHandle>;
+	editorRef?: RefObject<LexicalEditor | null>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
 	statusBar?: ReactNode;
@@ -109,7 +126,7 @@ export function RecipeEditor({
 	return (
 		<LexicalComposer initialConfig={config}>
 			<EditorContainer
-				ref={ref}
+				editorRef={editorRef}
 				ingredients={ingredients}
 				onTextChange={onTextChange}
 				statusBar={statusBar}

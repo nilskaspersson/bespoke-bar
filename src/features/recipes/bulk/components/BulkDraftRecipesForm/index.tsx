@@ -1,6 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
+import { CLEAR_EDITOR_COMMAND, type LexicalEditor } from "lexical";
 import { useRouter } from "next/navigation";
 import {
 	type HTMLAttributes,
@@ -15,10 +16,7 @@ import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Recipe } from "@/db/schema/recipes";
 import { DraftRecipeCard } from "@/features/recipes/bulk/components/DraftRecipeCard";
-import {
-	RecipeEditor,
-	type RecipeEditorHandle,
-} from "@/features/recipes/bulk/components/RecipeEditor";
+import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
@@ -61,17 +59,13 @@ export function BulkDraftRecipesForm({
 		"",
 		"session",
 	);
-	const [editorKey, setEditorKey] = useState(0);
+	const deferredDraftValue = useDeferredValue(persistedDraft);
 	const [isSubmitting, setIsSubmitting] = useState(false);
 
-	const [draftValue, setDraftValue] = useState(persistedDraft);
-	const deferredDraftValue = useDeferredValue(draftValue);
-
-	const editorHandleRef = useRef<RecipeEditorHandle | null>(null);
+	const editorRef = useRef<LexicalEditor | null>(null);
 
 	const handleTextChange = useCallback(
 		(text: string) => {
-			setDraftValue(text);
 			setPersistedDraft(text);
 		},
 		[setPersistedDraft],
@@ -96,15 +90,13 @@ export function BulkDraftRecipesForm({
 
 	const router = useRouter();
 	const onSuccess = useCallback(() => {
-		setPersistedDraft("");
-		setDraftValue("");
-		setEditorKey((k) => k + 1);
+		editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
 		router.push("/bar/recipes");
-	}, [router, setPersistedDraft]);
+	}, [router]);
 
 	const onError = useCallback(() => {
 		setIsSubmitting(false);
-		editorHandleRef.current?.setDisabled(false);
+		editorRef.current?.setEditable(true);
 	}, []);
 
 	const baseFormAction = useCreateBulkDraftRecipes(
@@ -119,7 +111,7 @@ export function BulkDraftRecipesForm({
 
 	const formAction = useCallback(() => {
 		setIsSubmitting(true);
-		editorHandleRef.current?.setDisabled(true);
+		editorRef.current?.setEditable(false);
 		baseFormAction();
 	}, [baseFormAction]);
 
@@ -134,8 +126,7 @@ export function BulkDraftRecipesForm({
 		>
 			<div className={clsx(styles.editor, isSubmitting && styles.disabled)}>
 				<RecipeEditor
-					key={editorKey}
-					ref={editorHandleRef}
+					editorRef={editorRef}
 					ingredients={ingredients}
 					initialText={persistedDraft}
 					onTextChange={handleTextChange}
