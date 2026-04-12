@@ -1,31 +1,25 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot } from "lexical";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
+import type { TextNode } from "lexical";
+import { useCallback, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { getGhostCompletion } from "@/features/recipes/bulk/utils/getGhostCompletion";
 import { Kbd } from "@/ui/Kbd";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { normalizeInput } from "@/utils";
 import { collator } from "@/utils/collator";
 import { createSearchIndex, searchByIndex } from "@/utils/search";
-import { useEditorFocus } from "../../hooks/useEditorFocus";
-import { useGhostText } from "../../hooks/useGhostText";
-import { useTypeaheadAnchor } from "../../hooks/useTypeaheadAnchor";
-import { useTypeaheadKeyboard } from "../../hooks/useTypeaheadKeyboard";
+import { GhostTextController } from "./GhostTextController";
 import styles from "./styles.module.css";
 import {
+	createIngredientTriggerFn,
 	formatAbv,
-	getIngredientQuery,
-	type IngredientOption,
+	IngredientMenuOption,
 	MAX_TYPEAHEAD_OPTIONS,
-	type MenuMode,
-	type MenuState,
-	preventFocusLoss,
-	replaceIngredientText,
 } from "./utils";
 
 const getIngredientId = (i: Ingredient) => i.id;
@@ -36,17 +30,7 @@ export function IngredientTypeaheadPlugin({
 	ingredients: Ingredient[];
 }) {
 	const [editor] = useLexicalComposerContext();
-	const [menuState, setMenuState] = useState<MenuState | null>(null);
-	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-
-	const prevTextRef = useRef("");
-	const menuStateRef = useRef(menuState);
-	menuStateRef.current = menuState;
-
-	const queryString = menuState?.queryString ?? null;
-	const menuMode = menuState?.mode ?? null;
-	const queryStringRef = useRef(queryString);
-	queryStringRef.current = queryString;
+	const [query, setQuery] = useState<string | null>(null);
 
 	const sortedIngredients = useMemo(
 		() => [...ingredients].sort((a, b) => collator.compare(a.name, b.name)),
@@ -66,191 +50,108 @@ export function IngredientTypeaheadPlugin({
 		[sortedIngredients],
 	);
 
-	const ingredientNamesNormalized = useMemo(
+	const knownNames = useMemo(
 		() => new Set(sortedIngredients.map((i) => normalizeInput(i.name))),
 		[sortedIngredients],
 	);
 
-	const openMenu = useCallback((mode: MenuMode, qs: string) => {
-		const prev = menuStateRef.current;
-		if (prev?.mode === mode && prev?.queryString === qs) return;
-		setMenuState({ mode, queryString: qs });
-		setSelectedIndex(null);
-	}, []);
-
-	const forceClose = useCallback(() => setMenuState(null), []);
-
-	const closeMenu = useCallback(() => {
-		if (!menuStateRef.current) return;
-		setMenuState(null);
-	}, []);
-
-	const { mouseDownRef, escapeRef } = useEditorFocus(menuStateRef, forceClose);
-
-	useEffect(() => {
-		return editor.registerUpdateListener(() => {
-			editor.getEditorState().read(() => {
-				const currentText = $getRoot().getTextContent();
-				const textChanged = currentText !== prevTextRef.current;
-				prevTextRef.current = currentText;
-
-				if (textChanged) escapeRef.current = false;
-				if (escapeRef.current) {
-					closeMenu();
-					return;
-				}
-
-				if (!textChanged && !mouseDownRef.current) {
-					closeMenu();
-					return;
-				}
-
-				const result = getIngredientQuery();
-				if (!result) {
-					closeMenu();
-					return;
-				}
-
-				let mode: MenuMode | null = null;
-
-				if (textChanged) {
-					if (!result.cursorAtEnd) {
-						closeMenu();
-						return;
-					}
-					if (
-						ingredientNamesNormalized.has(normalizeInput(result.matchingString))
-					) {
-						closeMenu();
-						return;
-					}
-					mode = "typing";
-				} else if (mouseDownRef.current) {
-					mode = "browsing";
-				}
-
-				if (!mode) {
-					closeMenu();
-					return;
-				}
-
-				openMenu(mode, result.matchingString);
-			});
-		});
-	}, [
-		editor,
-		ingredientNamesNormalized,
-		openMenu,
-		closeMenu,
-		escapeRef,
-		mouseDownRef,
-	]);
+	const triggerFn = useMemo(
+		() => createIngredientTriggerFn(knownNames),
+		[knownNames],
+	);
 
 	const options = useMemo(() => {
-		if (!queryString || !menuMode) return [];
-
-		if (menuMode === "browsing") {
-			return sortedIngredients.map((i) => ({ key: i.id, ingredient: i }));
-		}
-
+		if (!query) return [];
 		return searchByIndex(
 			sortedIngredients,
 			ingredientIndex,
 			getIngredientId,
-			queryString,
+			query,
 		)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
-			.map((i) => ({ key: i.id, ingredient: i }));
-	}, [sortedIngredients, ingredientIndex, queryString, menuMode]);
+			.map((i) => new IngredientMenuOption(i));
+	}, [sortedIngredients, ingredientIndex, query]);
 
-	const ghostText = useMemo(() => {
-		if (!queryString || menuMode !== "typing" || options.length === 0)
-			return null;
-		const active = options[selectedIndex ?? 0];
-		if (!active) return null;
-		return getGhostCompletion(queryString, active.ingredient.name);
-	}, [queryString, menuMode, options, selectedIndex]);
-
-	useGhostText(ghostText);
-	useTypeaheadAnchor("--typeahead", menuState);
-
-	const selectOption = useCallback(
-		(option: IngredientOption) => {
-			const matching = queryStringRef.current;
-			if (!matching) return;
-			replaceIngredientText(editor, matching, option.ingredient.name);
-			closeMenu();
+	const onSelectOption = useCallback(
+		(
+			selectedOption: IngredientMenuOption,
+			textNodeContainingQuery: TextNode | null,
+			closeMenu: () => void,
+		) => {
+			editor.update(() => {
+				if (textNodeContainingQuery) {
+					textNodeContainingQuery.setTextContent(
+						selectedOption.ingredient.name,
+					);
+					textNodeContainingQuery.selectEnd();
+				}
+				closeMenu();
+			});
 		},
-		[editor, closeMenu],
+		[editor],
 	);
-
-	const selectedItemRef = useRef<HTMLLIElement>(null);
-
-	useEffect(() => {
-		if (selectedIndex === null) return;
-		selectedItemRef.current?.scrollIntoView({
-			behavior: "instant",
-			block: "nearest",
-		});
-	}, [selectedIndex]);
-
-	const hasMenu = menuState !== null && options.length > 0;
-
-	useTypeaheadKeyboard(
-		hasMenu,
-		options,
-		selectedIndex,
-		setSelectedIndex,
-		() => {
-			escapeRef.current = true;
-			closeMenu();
-		},
-		selectOption,
-	);
-
-	if (!menuState || options.length === 0) return null;
 
 	return (
-		<OptionsList
-			className={styles.typeahead}
-			onMouseDown={preventFocusLoss}
-			footer={
-				<Text size={1} className={styles.footer}>
-					<Kbd shortcut="tab" visual variant="ghost" />{" "}
-					{selectedIndex !== null && (
-						<>
-							or <Kbd shortcut="enter" visual variant="ghost" />
-						</>
-					)}{" "}
-					to complete
-				</Text>
-			}
-		>
-			{options.map((option, index) => {
-				const { ingredient } = option;
-				const category = ingredient.category
-					? CATEGORY_TO_LABEL.get(ingredient.category)
-					: null;
-				const abv = formatAbv(ingredient.abv);
-
-				return (
-					<OptionsList.Item
-						key={option.key}
-						ref={selectedIndex === index ? selectedItemRef : undefined}
-						isHighlighted={selectedIndex === index}
-						onClick={() => selectOption(option)}
-						onMouseEnter={() => setSelectedIndex(index)}
-					>
-						<OptionsList.Label
-							description={
-								[category, abv].filter(Boolean).join(", ") || undefined
+		<LexicalTypeaheadMenuPlugin<IngredientMenuOption>
+			options={options}
+			triggerFn={triggerFn}
+			onQueryChange={setQuery}
+			onSelectOption={onSelectOption}
+			menuRenderFn={(
+				anchorElementRef,
+				{ selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
+			) => {
+				if (!anchorElementRef.current || options.length === 0) return null;
+				return createPortal(
+					<>
+						<GhostTextController
+							query={query}
+							options={options}
+							selectedIndex={selectedIndex}
+						/>
+						<OptionsList
+							className={styles.typeahead}
+							onMouseDown={(e) => e.preventDefault()}
+							footer={
+								<Text size={1} className={styles.footer}>
+									<Kbd shortcut="tab" visual variant="ghost" /> or{" "}
+									<Kbd shortcut="enter" visual variant="ghost" /> to complete
+								</Text>
 							}
 						>
-							{ingredient.name}
-						</OptionsList.Label>
-					</OptionsList.Item>
+							{options.map((option, index) => {
+								const { ingredient } = option;
+								const category = ingredient.category
+									? CATEGORY_TO_LABEL.get(ingredient.category)
+									: null;
+								const abv = formatAbv(ingredient.abv);
+
+								return (
+									<OptionsList.Item
+										key={option.key}
+										ref={option.setRefElement}
+										isHighlighted={selectedIndex === index}
+										onClick={() => {
+											setHighlightedIndex(index);
+											selectOptionAndCleanUp(option);
+										}}
+										onMouseEnter={() => setHighlightedIndex(index)}
+									>
+										<OptionsList.Label
+											description={
+												[category, abv].filter(Boolean).join(", ") || undefined
+											}
+										>
+											{ingredient.name}
+										</OptionsList.Label>
+									</OptionsList.Item>
+								);
+							})}
+						</OptionsList>
+					</>,
+					anchorElementRef.current,
 				);
-			})}
-		</OptionsList>
+			}}
+		/>
 	);
 }

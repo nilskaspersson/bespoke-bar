@@ -25,7 +25,9 @@ import { Text } from "@/ui/Text";
 import { pickRandom } from "@/utils";
 import { EDITOR_CONFIG, EXAMPLE_RECIPES } from "./constants";
 import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
+import { EscapeFocusPlugin } from "./plugins/EscapeFocusPlugin";
 import { IngredientTypeaheadPlugin } from "./plugins/IngredientTypeaheadPlugin";
+import { IngredientBrowsingPlugin } from "./plugins/IngredientTypeaheadPlugin/BrowsingPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
 import styles from "./RecipeEditor.module.css";
@@ -96,6 +98,8 @@ function EditorContainer({
 				<ParagraphBreakPlugin />
 				<SyntaxHighlightPlugin ingredients={ingredients} />
 				<IngredientTypeaheadPlugin ingredients={ingredients} />
+				<IngredientBrowsingPlugin ingredients={ingredients} />
+				<EscapeFocusPlugin />
 				{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
 			</div>
 			<EditorActionsPlugin />
