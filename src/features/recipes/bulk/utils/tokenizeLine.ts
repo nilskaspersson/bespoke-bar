@@ -1,6 +1,7 @@
 import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
+import { normalizeInput } from "@/utils";
 
 export type TokenType = "quantity" | "unit" | "ingredient" | "recipe-name";
 
@@ -112,7 +113,7 @@ export function tokenizeLine(
 					start: cursor,
 					end: cursor + ingredientName.length,
 					valid: true,
-					ingredientId: ingredientIndex.get(ingredientName.toLowerCase())?.id,
+					ingredientId: ingredientIndex.get(normalizeInput(ingredientName))?.id,
 				});
 			}
 		} else {
@@ -131,7 +132,7 @@ export function tokenizeLine(
 					start: cursor,
 					end: cursor + ingredientText.length,
 					valid: true,
-					ingredientId: ingredientIndex.get(ingredientText.toLowerCase())?.id,
+					ingredientId: ingredientIndex.get(normalizeInput(ingredientText))?.id,
 				});
 			}
 		}

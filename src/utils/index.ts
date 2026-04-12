@@ -129,7 +129,7 @@ export function invertMapToLookup<K, V>(map: Map<K, V[]>): Map<V, K> {
 	return result;
 }
 
-export function pickRandom<T>(items: readonly T[]): T {
+export function pickRandom<T>(items: readonly [T, ...T[]]): T {
 	return items[Math.floor(Math.random() * items.length)];
 }
 

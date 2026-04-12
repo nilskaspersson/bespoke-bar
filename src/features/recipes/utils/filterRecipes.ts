@@ -6,7 +6,7 @@ const getRecipeId = (recipe: RecipeWithSpecs) => recipe.id;
 
 function getRecipeSearchFields(recipe: RecipeWithSpecs): string[] {
 	return [
-		recipe.name ?? DEFAULT_RECIPE_NAME,
+		recipe.name || DEFAULT_RECIPE_NAME,
 		...recipe.specs.map((spec) => spec.ingredient.name),
 	];
 }

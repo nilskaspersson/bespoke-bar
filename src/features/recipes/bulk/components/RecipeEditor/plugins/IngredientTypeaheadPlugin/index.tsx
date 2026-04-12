@@ -21,11 +21,14 @@ import {
 	formatAbv,
 	getIngredientQuery,
 	type IngredientOption,
+	MAX_TYPEAHEAD_OPTIONS,
 	type MenuMode,
 	type MenuState,
 	preventFocusLoss,
 	replaceIngredientText,
 } from "./utils";
+
+const getIngredientId = (i: Ingredient) => i.id;
 
 export function IngredientTypeaheadPlugin({
 	ingredients,
@@ -52,18 +55,14 @@ export function IngredientTypeaheadPlugin({
 
 	const ingredientIndex = useMemo(
 		() =>
-			createSearchIndex(
-				sortedIngredients,
-				(i) => i.id,
-				(i) => {
-					const fields = [i.name];
-					const categoryLabel = i.category
-						? CATEGORY_TO_LABEL.get(i.category)
-						: null;
-					if (categoryLabel) fields.push(categoryLabel);
-					return fields;
-				},
-			),
+			createSearchIndex(sortedIngredients, getIngredientId, (i) => {
+				const fields = [i.name];
+				const categoryLabel = i.category
+					? CATEGORY_TO_LABEL.get(i.category)
+					: null;
+				if (categoryLabel) fields.push(categoryLabel);
+				return fields;
+			}),
 		[sortedIngredients],
 	);
 
@@ -157,10 +156,10 @@ export function IngredientTypeaheadPlugin({
 		return searchByIndex(
 			sortedIngredients,
 			ingredientIndex,
-			(i) => i.id,
+			getIngredientId,
 			queryString,
 		)
-			.slice(0, 10)
+			.slice(0, MAX_TYPEAHEAD_OPTIONS)
 			.map((i) => ({ key: i.id, ingredient: i }));
 	}, [sortedIngredients, ingredientIndex, queryString, menuMode]);
 

@@ -4,11 +4,4 @@
 		border-top: 1px solid var(--mauve-6);
 		background-color: var(--mauve-2);
 	}
-
-	.separator {
-		width: 1px;
-		align-self: stretch;
-		margin-block: var(--space-1);
-		background-color: var(--mauve-6);
-	}
 }

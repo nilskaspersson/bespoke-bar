@@ -163,7 +163,7 @@ export function SyntaxHighlightPlugin({
 			return;
 		}
 
-		return editor.registerUpdateListener(() => {
+		const unsubscribe = editor.registerUpdateListener(() => {
 			const text = editor
 				.getEditorState()
 				.read(() => $getRoot().getTextContent());
@@ -224,6 +224,12 @@ export function SyntaxHighlightPlugin({
 				}
 			}
 		});
+		return () => {
+			unsubscribe();
+			for (const name of HIGHLIGHT_NAMES) {
+				CSS.highlights?.delete(name);
+			}
+		};
 	}, [editor, ingredientIndex]);
 
 	return null;

@@ -5,7 +5,7 @@ import { getDefaultIngredientData } from "@/features/ingredients/utils/getDefaul
 import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
-
+import { normalizeInput } from "@/utils";
 import { sequencedParsers } from "@/utils/sequencedParsers";
 
 export function userInputToSpec(
@@ -28,11 +28,10 @@ export function userInputToSpec(
 		ingredientTextParser,
 	)(trimmedInput);
 
+	const normalized = normalizeInput(ingredientName);
 	const ingredient = ingredientIndex
-		? ingredientIndex.get(ingredientName.toLowerCase())
-		: ingredients.find(
-				({ name }) => name.toLowerCase() === ingredientName.toLowerCase(),
-			);
+		? ingredientIndex.get(normalized)
+		: ingredients.find(({ name }) => normalizeInput(name) === normalized);
 
 	const spec: DraftSpecWithDraftIngredient = {
 		quantity,

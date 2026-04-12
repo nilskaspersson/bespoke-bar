@@ -1,9 +1,9 @@
 import type { Ingredient } from "@/db/schema/ingredients";
-import { indexBy } from "@/utils";
+import { indexBy, normalizeInput } from "@/utils";
 
 export type IngredientIndex = Map<string, Ingredient>;
 
-const getIngredientKey = (i: Ingredient) => i.name.toLowerCase();
+const getIngredientKey = (i: Ingredient) => normalizeInput(i.name);
 
 export function buildIngredientIndex(
 	ingredients: Ingredient[],

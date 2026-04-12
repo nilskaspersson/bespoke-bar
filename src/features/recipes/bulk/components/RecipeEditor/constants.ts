@@ -5,7 +5,7 @@ export const EDITOR_THEME: EditorThemeClasses = {
 	paragraph: styles.paragraph,
 };
 
-export const EXAMPLE_RECIPES = [
+export const EXAMPLE_RECIPES: readonly [string, ...string[]] = [
 	"Gimlet\n5 cl gin\n3 cl lime juice\n2.5 cl simple syrup",
 	"Daiquiri\n2 oz rum\n1 oz lime juice\n3/4 oz simple syrup",
 	"Negroni\n3 cl gin\n3 cl campari\n3 cl sweet vermouth",
