@@ -1,4 +1,8 @@
 @layer component {
+	.actions {
+		contain: content;
+	}
+
 	.action {
 		display: flex;
 		align-items: center;

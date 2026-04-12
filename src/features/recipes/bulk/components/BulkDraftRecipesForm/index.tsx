@@ -1,23 +1,30 @@
 "use client";
 
 import { clsx } from "clsx";
+import { useRouter } from "next/navigation";
 import {
 	type HTMLAttributes,
 	type ReactNode,
+	useCallback,
 	useDeferredValue,
 	useMemo,
+	useRef,
 	useState,
 } from "react";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Recipe } from "@/db/schema/recipes";
 import { DraftRecipeCard } from "@/features/recipes/bulk/components/DraftRecipeCard";
-import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
+import {
+	RecipeEditor,
+	type RecipeEditorHandle,
+} from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { useDialog } from "@/hooks/useDialog";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Container } from "@/ui/Container";
@@ -31,6 +38,8 @@ import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
 import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
+
+const DRAFT_STORAGE_KEY = "recipe-editor-draft";
 
 export function BulkDraftRecipesForm({
 	className,
@@ -47,8 +56,26 @@ export function BulkDraftRecipesForm({
 		useState<UnitSystems | null>(null);
 	const [withSnap, setWithSnap] = useState(false);
 
-	const [draftValue, setDraftValue] = useState("");
+	const [persistedDraft, setPersistedDraft] = useLocalStorage<string>(
+		DRAFT_STORAGE_KEY,
+		"",
+		"session",
+	);
+	const [editorKey, setEditorKey] = useState(0);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+
+	const [draftValue, setDraftValue] = useState(persistedDraft);
 	const deferredDraftValue = useDeferredValue(draftValue);
+
+	const editorHandleRef = useRef<RecipeEditorHandle | null>(null);
+
+	const handleTextChange = useCallback(
+		(text: string) => {
+			setDraftValue(text);
+			setPersistedDraft(text);
+		},
+		[setPersistedDraft],
+	);
 
 	const draftRecipes = useBulkDraftTextToBaseRecipes(
 		deferredDraftValue,
@@ -67,7 +94,34 @@ export function BulkDraftRecipesForm({
 		return names.size;
 	}, [draftRecipes]);
 
-	const formAction = useCreateBulkDraftRecipes(draftRecipes, createRecipes);
+	const router = useRouter();
+	const onSuccess = useCallback(() => {
+		setPersistedDraft("");
+		setDraftValue("");
+		setEditorKey((k) => k + 1);
+		router.push("/bar/recipes");
+	}, [router, setPersistedDraft]);
+
+	const onError = useCallback(() => {
+		setIsSubmitting(false);
+		editorHandleRef.current?.setDisabled(false);
+	}, []);
+
+	const baseFormAction = useCreateBulkDraftRecipes(
+		draftRecipes,
+		createRecipes,
+		{
+			onSuccess,
+			onError,
+			createMoreHref: "/bar/recipes/create/text",
+		},
+	);
+
+	const formAction = useCallback(() => {
+		setIsSubmitting(true);
+		editorHandleRef.current?.setDisabled(true);
+		baseFormAction();
+	}, [baseFormAction]);
 
 	const { dialogRef, isOpen, mounted, showModal, closeModal } = useDialog();
 	const recipeCount = draftRecipes.length;
@@ -78,10 +132,13 @@ export function BulkDraftRecipesForm({
 			className={clsx(className, styles.form)}
 			action={formAction}
 		>
-			<div className={styles.editor}>
+			<div className={clsx(styles.editor, isSubmitting && styles.disabled)}>
 				<RecipeEditor
+					key={editorKey}
+					ref={editorHandleRef}
 					ingredients={ingredients}
-					onTextChange={setDraftValue}
+					initialText={persistedDraft}
+					onTextChange={handleTextChange}
 					statusBar={
 						<Flex gap={2} justifyContent="space-between">
 							<Text as="div" size={1} light compact numeric>

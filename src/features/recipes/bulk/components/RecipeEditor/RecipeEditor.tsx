@@ -6,7 +6,8 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
-import type { ReactNode, Ref } from "react";
+import { $createParagraphNode, $createTextNode, $getRoot } from "lexical";
+import { type ReactNode, type Ref, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";
@@ -26,6 +27,16 @@ import { TextExtractionPlugin } from "./plugins/TextExtractionPlugin";
 import styles from "./RecipeEditor.module.css";
 
 export type { RecipeEditorHandle };
+
+function seedEditorState(text: string) {
+	const root = $getRoot();
+	if (root.getChildrenSize() > 0) return;
+	for (const line of text.split("\n")) {
+		const paragraph = $createParagraphNode();
+		if (line) paragraph.append($createTextNode(line));
+		root.append(paragraph);
+	}
+}
 
 function EditorContainer({
 	ref,
@@ -53,7 +64,12 @@ function EditorContainer({
 			<div className={styles.container}>
 				<PlainTextPlugin
 					contentEditable={
-						<ContentEditable className={styles.input} spellCheck={false} />
+						<ContentEditable
+							className={styles.input}
+							spellCheck={false}
+							autoComplete="off"
+							autoCorrect="off"
+						/>
 					}
 					placeholder={<div className={styles.placeholder}>{placeholder}</div>}
 					ErrorBoundary={LexicalErrorBoundary}
@@ -77,14 +93,21 @@ export function RecipeEditor({
 	ingredients,
 	onTextChange,
 	statusBar,
+	initialText,
 }: {
 	ref?: Ref<RecipeEditorHandle>;
 	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
 	statusBar?: ReactNode;
+	initialText?: string;
 }) {
+	const [config] = useState(() => ({
+		...EDITOR_CONFIG,
+		editorState: initialText ? () => seedEditorState(initialText) : undefined,
+	}));
+
 	return (
-		<LexicalComposer initialConfig={EDITOR_CONFIG}>
+		<LexicalComposer initialConfig={config}>
 			<EditorContainer
 				ref={ref}
 				ingredients={ingredients}

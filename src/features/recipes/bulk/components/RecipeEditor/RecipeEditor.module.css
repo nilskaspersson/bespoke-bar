@@ -5,10 +5,8 @@
 		border: 1px solid var(--mauve-6);
 		border-radius: var(--radius--large);
 		background-color: var(--mauve-1);
-		isolation: isolate;
 		transition-property: border-color;
 		transition-duration: var(--transition-duration);
-		contain: layout;
 
 		&:hover {
 			border-color: var(--mauve-8);

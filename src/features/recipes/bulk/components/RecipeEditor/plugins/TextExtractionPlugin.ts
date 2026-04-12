@@ -1,30 +1,32 @@
 "use client";
 
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $getRoot } from "lexical";
-import { useEffect, useRef } from "react";
+import { useLexicalSubscription } from "@lexical/react/useLexicalSubscription";
+import { $getRoot, type LexicalEditor } from "lexical";
+import { useEffect } from "react";
+
+function getText(editor: LexicalEditor): string {
+	return editor.getEditorState().read(() =>
+		$getRoot()
+			.getChildren()
+			.map((child) => child.getTextContent())
+			.join("\n"),
+	);
+}
+
+const TEXT_SUBSCRIPTION = (editor: LexicalEditor) => ({
+	initialValueFn: () => getText(editor),
+	subscribe: (callback: (text: string) => void) =>
+		editor.registerUpdateListener(() => callback(getText(editor))),
+});
 
 export function TextExtractionPlugin({
 	onTextChange,
 }: {
 	onTextChange: (text: string) => void;
 }) {
-	const [editor] = useLexicalComposerContext();
-	const prevTextRef = useRef("");
-
+	const text = useLexicalSubscription(TEXT_SUBSCRIPTION);
 	useEffect(() => {
-		return editor.registerUpdateListener(({ editorState }) => {
-			editorState.read(() => {
-				const text = $getRoot()
-					.getChildren()
-					.map((child) => child.getTextContent())
-					.join("\n");
-				if (text === prevTextRef.current) return;
-				prevTextRef.current = text;
-				onTextChange(text);
-			});
-		});
-	}, [editor, onTextChange]);
-
+		onTextChange(text);
+	}, [text, onTextChange]);
 	return null;
 }

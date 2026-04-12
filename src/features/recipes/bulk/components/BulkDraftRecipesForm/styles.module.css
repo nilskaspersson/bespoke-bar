@@ -8,6 +8,13 @@
 	.editor {
 		display: grid;
 		min-height: 30lvh;
+		transition-property: opacity;
+		transition-duration: var(--transition-duration);
+	}
+
+	.disabled {
+		opacity: 0.6;
+		pointer-events: none;
 	}
 
 	.dialog {

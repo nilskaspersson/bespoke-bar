@@ -1,6 +1,7 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { useLexicalSubscription } from "@lexical/react/useLexicalSubscription";
 import {
 	$getRoot,
 	$isLineBreakNode,
@@ -10,7 +11,7 @@ import {
 	type ParagraphNode,
 	type TextNode,
 } from "lexical";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import {
@@ -136,6 +137,18 @@ function getHighlightGroup(token: Token): HighlightGroup | null {
 	}
 }
 
+const TEXT_SUBSCRIPTION = (editor: LexicalEditor) => ({
+	initialValueFn: () =>
+		editor.getEditorState().read(() => $getRoot().getTextContent()),
+	subscribe: (callback: (text: string) => void) =>
+		editor.registerUpdateListener(() => {
+			const text = editor
+				.getEditorState()
+				.read(() => $getRoot().getTextContent());
+			callback(text);
+		}),
+});
+
 export function SyntaxHighlightPlugin({
 	ingredients,
 }: {
@@ -146,7 +159,7 @@ export function SyntaxHighlightPlugin({
 		() => buildIngredientIndex(ingredients),
 		[ingredients],
 	);
-	const prevTextRef = useRef("");
+	const text = useLexicalSubscription(TEXT_SUBSCRIPTION);
 
 	useEffect(() => {
 		const style = document.createElement("style");
@@ -155,82 +168,66 @@ export function SyntaxHighlightPlugin({
 		document.head.appendChild(style);
 		return () => {
 			style.remove();
-		};
-	}, []);
-
-	useEffect(() => {
-		if (!CSS.highlights) {
-			return;
-		}
-
-		const unsubscribe = editor.registerUpdateListener(() => {
-			const text = editor
-				.getEditorState()
-				.read(() => $getRoot().getTextContent());
-			if (text === prevTextRef.current) return;
-			prevTextRef.current = text;
-
-			const ranges = new Map<HighlightGroup, Range[]>();
-
-			for (const name of HIGHLIGHT_NAMES) {
-				ranges.set(name, []);
-			}
-
-			editor.getEditorState().read(() => {
-				const root = $getRoot();
-
-				for (const child of root.getChildren()) {
-					if (!$isParagraphNode(child)) {
-						continue;
-					}
-
-					const segments = getLineSegments(child);
-					for (const segment of segments) {
-						if (!segment.text.trim()) {
-							continue;
-						}
-
-						const { tokens } = tokenizeLine(segment.text, ingredientIndex);
-
-						for (const token of tokens) {
-							const group = getHighlightGroup(token);
-
-							if (!group) {
-								continue;
-							}
-
-							const range = createDOMRange(
-								editor,
-								segment,
-								token.start,
-								token.end,
-							);
-
-							if (range) {
-								ranges.get(group)?.push(range);
-							}
-						}
-					}
-				}
-			});
-
-			for (const name of HIGHLIGHT_NAMES) {
-				const group = ranges.get(name);
-
-				if (group && group.length > 0) {
-					CSS.highlights.set(name, new Highlight(...group));
-				} else {
-					CSS.highlights.delete(name);
-				}
-			}
-		});
-		return () => {
-			unsubscribe();
 			for (const name of HIGHLIGHT_NAMES) {
 				CSS.highlights?.delete(name);
 			}
 		};
-	}, [editor, ingredientIndex]);
+	}, []);
+
+	useEffect(() => {
+		if (!CSS.highlights) return;
+
+		if (!text.trim()) {
+			for (const name of HIGHLIGHT_NAMES) {
+				CSS.highlights.delete(name);
+			}
+			return;
+		}
+
+		const ranges = new Map<HighlightGroup, Range[]>();
+		for (const name of HIGHLIGHT_NAMES) {
+			ranges.set(name, []);
+		}
+
+		editor.getEditorState().read(() => {
+			const root = $getRoot();
+
+			for (const child of root.getChildren()) {
+				if (!$isParagraphNode(child)) continue;
+
+				const segments = getLineSegments(child);
+				for (const segment of segments) {
+					if (!segment.text.trim()) continue;
+
+					const { tokens } = tokenizeLine(segment.text, ingredientIndex);
+
+					for (const token of tokens) {
+						const group = getHighlightGroup(token);
+						if (!group) continue;
+
+						const range = createDOMRange(
+							editor,
+							segment,
+							token.start,
+							token.end,
+						);
+						if (range) {
+							ranges.get(group)?.push(range);
+						}
+					}
+				}
+			}
+		});
+
+		for (const name of HIGHLIGHT_NAMES) {
+			const group = ranges.get(name);
+			if (group && group.length > 0) {
+				CSS.highlights.set(name, new Highlight(...group));
+			} else {
+				CSS.highlights.delete(name);
+			}
+		}
+	}, [editor, text, ingredientIndex]);
 
 	return null;
 }

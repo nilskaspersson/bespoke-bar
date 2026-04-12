@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import type { ButtonProps } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
@@ -13,13 +14,21 @@ export type ActionProps = {
 export function EntityActions({
 	children,
 	actionProps,
+	className,
 	...props
 }: Omit<ComponentProps<typeof Flex>, "children"> & {
 	children: (actionProps: ActionProps) => ReactNode;
 	actionProps?: Partial<ActionProps>;
 }) {
 	return (
-		<Flex as="menu" wrap alignItems="center" gap={0} {...props}>
+		<Flex
+			as="menu"
+			wrap
+			alignItems="center"
+			gap={0}
+			{...props}
+			className={clsx(styles.actions, className)}
+		>
 			{children({
 				variant: "ghost",
 				size: "tiny",
