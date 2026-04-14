@@ -2,7 +2,6 @@
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
-	$createLineBreakNode,
 	$createParagraphNode,
 	$createTextNode,
 	$getRoot,
@@ -29,26 +28,19 @@ export function EditorActionsPlugin() {
 		(transform: (line: string) => string) => {
 			editor.update(() => {
 				/**
-				 * ParagraphBreakPlugin turns Enter into a paragraph split, but
-				 * plain-text paste still lands as one paragraph with
-				 * LineBreakNodes between lines (see `insertRawText` in Lexical).
-				 * So a paragraph may hold multiple logical lines, and the
-				 * transform runs per *line* — not per paragraph. Rebuild each
-				 * paragraph's children as a TextNode / LineBreakNode chain so
-				 * the result keeps the same logical-line shape.
+				 * ParagraphBreakPlugin guarantees one paragraph per logical line
+				 * (Enter creates a new paragraph; any LineBreakNode introduced
+				 * by paste/drop is normalized into a split). So each paragraph's
+				 * text is one line — transform in place, preserving paragraph
+				 * node identity so history and selection stay coherent.
 				 */
 				for (const node of $getRoot().getChildren()) {
 					if (!$isParagraphNode(node)) continue;
 					const text = node.getTextContent();
-					const lines = text.split("\n");
-					const transformed = lines.map(transform);
-					if (lines.every((line, i) => line === transformed[i])) continue;
-
+					const result = transform(text);
+					if (result === text) continue;
 					for (const child of node.getChildren()) child.remove();
-					transformed.forEach((line, i) => {
-						if (i > 0) node.append($createLineBreakNode());
-						if (line) node.append($createTextNode(line));
-					});
+					if (result) node.append($createTextNode(result));
 				}
 			});
 		},

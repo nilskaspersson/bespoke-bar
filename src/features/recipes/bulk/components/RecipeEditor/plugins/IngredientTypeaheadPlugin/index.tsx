@@ -6,14 +6,11 @@ import type { TextNode } from "lexical";
 import { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { Kbd } from "@/ui/Kbd";
-import { OptionsList } from "@/ui/OptionsList";
-import { Text } from "@/ui/Text";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import { GhostTextController } from "./GhostTextController";
+import { IngredientMenu } from "./IngredientMenu";
 import { IngredientOption } from "./IngredientOption";
-import styles from "./styles.module.css";
 import {
 	createIngredientTriggerFn,
 	IngredientMenuOption,
@@ -76,16 +73,7 @@ export function IngredientTypeaheadPlugin() {
 							options={options}
 							selectedIndex={selectedIndex}
 						/>
-						<OptionsList
-							className={styles.typeahead}
-							onMouseDown={(e) => e.preventDefault()}
-							footer={
-								<Text size={1} className={styles.footer}>
-									<Kbd shortcut="tab" visual variant="ghost" /> or{" "}
-									<Kbd shortcut="enter" visual variant="ghost" /> to complete
-								</Text>
-							}
-						>
+						<IngredientMenu footerAction="complete">
 							{options.map((option, index) => (
 								<IngredientOption
 									key={option.key}
@@ -99,7 +87,7 @@ export function IngredientTypeaheadPlugin() {
 									onMouseEnter={() => setHighlightedIndex(index)}
 								/>
 							))}
-						</OptionsList>
+						</IngredientMenu>
 					</>,
 					anchorElementRef.current,
 				);

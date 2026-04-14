@@ -7,7 +7,6 @@ import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { EditorRefPlugin } from "@lexical/react/LexicalEditorRefPlugin";
 import { LexicalErrorBoundary } from "@lexical/react/LexicalErrorBoundary";
 import { HistoryPlugin } from "@lexical/react/LexicalHistoryPlugin";
-import { OnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
 import { PlainTextPlugin } from "@lexical/react/LexicalPlainTextPlugin";
 import {
 	$createParagraphNode,
@@ -15,7 +14,7 @@ import {
 	$getRoot,
 	type LexicalEditor,
 } from "lexical";
-import { type ReactNode, type RefObject, useCallback, useState } from "react";
+import { type ReactNode, type RefObject, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";
@@ -30,6 +29,7 @@ import { IngredientTypeaheadPlugin } from "./plugins/IngredientTypeaheadPlugin";
 import { IngredientBrowsingPlugin } from "./plugins/IngredientTypeaheadPlugin/BrowsingPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
+import { TextChangePlugin } from "./plugins/TextChangePlugin";
 import styles from "./RecipeEditor.module.css";
 
 function seedEditorState(text: string) {
@@ -52,19 +52,6 @@ function EditorContainer({
 	statusBar?: ReactNode;
 }) {
 	const placeholder = useIsMounted(() => pickRandom(EXAMPLE_RECIPES));
-
-	const handleChange = useCallback(
-		(editorState: import("lexical").EditorState) => {
-			const text = editorState.read(() =>
-				$getRoot()
-					.getChildren()
-					.map((child) => child.getTextContent())
-					.join("\n"),
-			);
-			onTextChange(text);
-		},
-		[onTextChange],
-	);
 
 	return (
 		<div className={styles.root}>
@@ -92,7 +79,7 @@ function EditorContainer({
 				<HistoryPlugin />
 				<AutoFocusPlugin defaultSelection="rootEnd" />
 				<ClearEditorPlugin />
-				<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
+				<TextChangePlugin onTextChange={onTextChange} />
 				<ParagraphBreakPlugin />
 				<SyntaxHighlightPlugin />
 				<IngredientTypeaheadPlugin />

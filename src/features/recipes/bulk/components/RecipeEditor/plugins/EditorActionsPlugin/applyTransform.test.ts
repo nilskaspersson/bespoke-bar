@@ -1,5 +1,4 @@
 import {
-	$createLineBreakNode,
 	$createParagraphNode,
 	$createTextNode,
 	$getRoot,
@@ -54,14 +53,10 @@ function applyTransformInPlace(
 				for (const node of $getRoot().getChildren()) {
 					if (!$isParagraphNode(node)) continue;
 					const text = node.getTextContent();
-					const lines = text.split("\n");
-					const transformed = lines.map(transform);
-					if (lines.every((line, i) => line === transformed[i])) continue;
+					const result = transform(text);
+					if (result === text) continue;
 					for (const child of node.getChildren()) child.remove();
-					transformed.forEach((line, i) => {
-						if (i > 0) node.append($createLineBreakNode());
-						if (line) node.append($createTextNode(line));
-					});
+					if (result) node.append($createTextNode(result));
 				}
 			},
 			{ onUpdate: resolve },
@@ -134,47 +129,6 @@ describe("applyTransform in-place", () => {
 		expect(lines[1]).not.toContain("2.33");
 		expect(lines[2]).not.toContain("1.1");
 		expect(lines[3]).not.toContain("0.7");
-	});
-
-	test("handles a single paragraph with LineBreakNodes (paste shape)", async () => {
-		const editor = createTestEditor();
-		await new Promise<void>((resolve) => {
-			editor.update(
-				() => {
-					const root = $getRoot();
-					root.clear();
-					const p = $createParagraphNode();
-					p.append($createTextNode("Negroni"));
-					p.append($createLineBreakNode());
-					p.append($createTextNode("3 cl gin"));
-					p.append($createLineBreakNode());
-					p.append($createTextNode("3 cl campari"));
-					p.append($createLineBreakNode());
-					p.append($createTextNode("3 cl sweet vermouth"));
-					root.append(p);
-				},
-				{ onUpdate: resolve },
-			);
-		});
-
-		const before = readLines(editor);
-		await applyTransformInPlace(editor, (line) =>
-			convertLine(line, "imperial"),
-		);
-		const after = readLines(editor);
-
-		/**
-		 * Diagnostic: document what one-paragraph-with-linebreaks looks like
-		 * before and after the transform. Paste in plain-text mode produces
-		 * this structure.
-		 */
-		expect(before).toEqual([
-			"Negroni\n3 cl gin\n3 cl campari\n3 cl sweet vermouth",
-		]);
-		expect(after[0]).toContain("fl oz");
-		expect(after[0].split("\n").filter((l) => l.includes("fl oz")).length).toBe(
-			3,
-		);
 	});
 
 	test("capitalizes recipe name and every ingredient name", async () => {

@@ -1,0 +1,26 @@
+@layer feature {
+	::highlight(recipe-quantity) {
+		color: var(--iris-11);
+	}
+
+	::highlight(recipe-unit) {
+		color: var(--grass-11);
+	}
+
+	::highlight(recipe-ingredient) {
+		color: var(--mauve-11);
+	}
+
+	::highlight(recipe-known) {
+		color: var(--mauve-12);
+		text-decoration: underline;
+		text-decoration-color: var(--mauve-8);
+		text-underline-offset: 3px;
+	}
+
+	::highlight(recipe-invalid) {
+		text-decoration: wavy underline;
+		text-decoration-color: var(--red-9);
+		text-underline-offset: 3px;
+	}
+}
