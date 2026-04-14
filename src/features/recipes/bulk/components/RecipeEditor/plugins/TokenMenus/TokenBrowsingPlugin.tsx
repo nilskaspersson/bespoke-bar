@@ -12,8 +12,13 @@ import {
 } from "lexical";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import type { Ingredient } from "@/db/schema/ingredients";
-import { tokenizeLine } from "@/features/recipes/bulk/utils/tokenizeLine";
+import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
+import {
+	type Token,
+	tokenizeLine,
+} from "@/features/recipes/bulk/utils/tokenizeLine";
+import { SORTED_UNITS } from "@/features/units/constants";
+import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { useMenuKeyboard } from "../../hooks/useMenuKeyboard";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import {
@@ -23,18 +28,19 @@ import {
 import { IngredientMenu } from "./IngredientMenu";
 import { IngredientOption } from "./IngredientOption";
 import styles from "./styles.module.css";
+import { UnitOption } from "./UnitOption";
 
 /**
  * Callback ref that scrolls the attached element into the nearest scroll
- * container. Assigned to the currently highlighted `IngredientOption` only —
- * when `selectedIndex` changes, React calls the old slot's ref with `null`
- * and the new slot's ref with the element, and that second call scrolls.
+ * container. Assigned to the currently highlighted option only — when
+ * `selectedIndex` changes, React calls the old slot's ref with `null` and
+ * the new slot's ref with the element, and that second call scrolls.
  */
 const scrollIntoViewRef = (el: HTMLLIElement | null) => {
 	el?.scrollIntoView({ block: "nearest" });
 };
 
-type BrowsingState = {
+type BrowsingStateBase = {
 	paragraphKey: string;
 	tokenStart: number;
 	tokenEnd: number;
@@ -42,7 +48,24 @@ type BrowsingState = {
 	selectedIndex: number;
 };
 
-export function IngredientBrowsingPlugin() {
+type BrowsingState =
+	| (BrowsingStateBase & { variant: "ingredient" })
+	| (BrowsingStateBase & { variant: "unit"; quantity: number });
+
+/**
+ * Parse the quantity associated with a unit token so the replacement label
+ * can be pluralized correctly. Falls back to `1` (singular) if parsing
+ * fails — the text still gets replaced, just possibly with the singular
+ * form when the user had a plural quantity.
+ */
+function resolveUnitQuantity(tokens: Token[]): number {
+	const quantityToken = tokens.find((t) => t.type === "quantity");
+	if (!quantityToken) return 1;
+	const [quantity] = quantityTextParser(quantityToken.text);
+	return quantity ?? 1;
+}
+
+export function TokenBrowsingPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [state, setState] = useState<BrowsingState | null>(null);
 	const { sortedIngredients, ingredientIndex } = useRecipeIngredients();
@@ -70,10 +93,10 @@ export function IngredientBrowsingPlugin() {
 
 					const lineText = paragraph.getTextContent();
 					const { tokens } = tokenizeLine(lineText, ingredientIndex);
-					const ingredientTokens = tokens.filter(
-						(t) => t.type === "ingredient",
+					const browsable = tokens.filter(
+						(t) => t.type === "ingredient" || t.type === "unit",
 					);
-					if (ingredientTokens.length === 0) {
+					if (browsable.length === 0) {
 						setState(null);
 						return;
 					}
@@ -81,11 +104,11 @@ export function IngredientBrowsingPlugin() {
 					const textNodes = getParagraphTextNodes(paragraph);
 
 					/**
-					 * For each ingredient token, measure the bounding rect of its
+					 * For each browsable token, measure the bounding rect of its
 					 * characters via a DOM Range. Only open the menu if the click
 					 * coordinates landed inside that rect — not just near it.
 					 */
-					for (const token of ingredientTokens) {
+					for (const token of browsable) {
 						const range = createParagraphDOMRange(
 							editor,
 							textNodes,
@@ -94,21 +117,30 @@ export function IngredientBrowsingPlugin() {
 						);
 						if (!range) continue;
 						const rect = range.getBoundingClientRect();
-						if (
+						const inside =
 							event.clientX >= rect.left &&
 							event.clientX <= rect.right &&
 							event.clientY >= rect.top &&
-							event.clientY <= rect.bottom
-						) {
+							event.clientY <= rect.bottom;
+						if (!inside) continue;
+
+						const base: BrowsingStateBase = {
+							paragraphKey: paragraph.getKey(),
+							tokenStart: token.start,
+							tokenEnd: token.end,
+							anchorRect: rect,
+							selectedIndex: 0,
+						};
+						if (token.type === "ingredient") {
+							setState({ ...base, variant: "ingredient" });
+						} else {
 							setState({
-								paragraphKey: paragraph.getKey(),
-								tokenStart: token.start,
-								tokenEnd: token.end,
-								anchorRect: rect,
-								selectedIndex: 0,
+								...base,
+								variant: "unit",
+								quantity: resolveUnitQuantity(tokens),
 							});
-							return;
 						}
+						return;
 					}
 					setState(null);
 				});
@@ -130,7 +162,7 @@ export function IngredientBrowsingPlugin() {
 		});
 	}, [editor]);
 
-	const commitIngredient = (ingredient: Ingredient) => {
+	const commit = (replacement: string) => {
 		if (!state) return;
 		editor.update(() => {
 			const paragraph = $getNodeByKey(state.paragraphKey);
@@ -138,33 +170,44 @@ export function IngredientBrowsingPlugin() {
 			const text = paragraph.getTextContent();
 			const replaced =
 				text.slice(0, state.tokenStart) +
-				ingredient.name +
+				replacement +
 				text.slice(state.tokenEnd);
 			for (const child of paragraph.getChildren()) child.remove();
 			const newText = $createTextNode(replaced);
 			paragraph.append(newText);
-			const caret = state.tokenStart + ingredient.name.length;
+			const caret = state.tokenStart + replacement.length;
 			newText.select(caret, caret);
 		});
 		setState(null);
 	};
 
+	const itemCount =
+		state?.variant === "ingredient"
+			? sortedIngredients.length
+			: state?.variant === "unit"
+				? SORTED_UNITS.length
+				: 0;
+
 	useMenuKeyboard(editor, state !== null, {
 		onMove: (delta) =>
 			setState((prev) =>
-				prev
+				prev && itemCount > 0
 					? {
 							...prev,
 							selectedIndex:
-								(prev.selectedIndex + delta + sortedIngredients.length) %
-								sortedIngredients.length,
+								(prev.selectedIndex + delta + itemCount) % itemCount,
 						}
-					: null,
+					: prev,
 			),
 		onCommit: () => {
 			if (!state) return;
-			const selected = sortedIngredients[state.selectedIndex];
-			if (selected) commitIngredient(selected);
+			if (state.variant === "ingredient") {
+				const selected = sortedIngredients[state.selectedIndex];
+				if (selected) commit(selected.name);
+			} else {
+				const selected = SORTED_UNITS[state.selectedIndex];
+				if (selected) commit(getFormattedUnit(selected, state.quantity));
+			}
 		},
 		onClose: () => setState(null),
 	});
@@ -180,23 +223,41 @@ export function IngredientBrowsingPlugin() {
 			}}
 		>
 			<IngredientMenu footerAction="replace">
-				{sortedIngredients.map((ingredient, index) => {
-					const isHighlighted = state.selectedIndex === index;
-					return (
-						<IngredientOption
-							key={ingredient.id}
-							ref={isHighlighted ? scrollIntoViewRef : undefined}
-							ingredient={ingredient}
-							isHighlighted={isHighlighted}
-							onClick={() => commitIngredient(ingredient)}
-							onMouseEnter={() =>
-								setState((prev) =>
-									prev ? { ...prev, selectedIndex: index } : null,
-								)
-							}
-						/>
-					);
-				})}
+				{state.variant === "ingredient"
+					? sortedIngredients.map((ingredient, index) => {
+							const isHighlighted = state.selectedIndex === index;
+							return (
+								<IngredientOption
+									key={ingredient.id}
+									ref={isHighlighted ? scrollIntoViewRef : undefined}
+									ingredient={ingredient}
+									isHighlighted={isHighlighted}
+									onClick={() => commit(ingredient.name)}
+									onMouseEnter={() =>
+										setState((prev) =>
+											prev ? { ...prev, selectedIndex: index } : null,
+										)
+									}
+								/>
+							);
+						})
+					: SORTED_UNITS.map((unit, index) => {
+							const isHighlighted = state.selectedIndex === index;
+							return (
+								<UnitOption
+									key={unit}
+									ref={isHighlighted ? scrollIntoViewRef : undefined}
+									unit={unit}
+									isHighlighted={isHighlighted}
+									onClick={() => commit(getFormattedUnit(unit, state.quantity))}
+									onMouseEnter={() =>
+										setState((prev) =>
+											prev ? { ...prev, selectedIndex: index } : null,
+										)
+									}
+								/>
+							);
+						})}
 			</IngredientMenu>
 		</div>,
 		document.body,

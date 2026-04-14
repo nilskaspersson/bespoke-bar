@@ -25,11 +25,14 @@ import { EDITOR_CONFIG, EXAMPLE_RECIPES } from "./constants";
 import { RecipeIngredientsProvider } from "./hooks/useRecipeIngredients";
 import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
 import { EscapeFocusPlugin } from "./plugins/EscapeFocusPlugin";
-import { IngredientTypeaheadPlugin } from "./plugins/IngredientTypeaheadPlugin";
-import { IngredientBrowsingPlugin } from "./plugins/IngredientTypeaheadPlugin/BrowsingPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
 import { TextChangePlugin } from "./plugins/TextChangePlugin";
+import {
+	IngredientTypeaheadPlugin,
+	TokenBrowsingPlugin,
+	UnitTypeaheadPlugin,
+} from "./plugins/TokenMenus";
 import styles from "./RecipeEditor.module.css";
 
 function seedEditorState(text: string) {
@@ -99,7 +102,8 @@ export function RecipeEditor({
 						<ParagraphBreakPlugin />
 						<SyntaxHighlightPlugin />
 						<IngredientTypeaheadPlugin />
-						<IngredientBrowsingPlugin />
+						<UnitTypeaheadPlugin />
+						<TokenBrowsingPlugin />
 						<EscapeFocusPlugin />
 						{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
 					</div>

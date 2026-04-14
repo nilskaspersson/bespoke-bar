@@ -72,6 +72,7 @@ export function IngredientTypeaheadPlugin() {
 							query={query}
 							options={options}
 							selectedIndex={selectedIndex}
+							getLabel={(option) => option.ingredient.name}
 						/>
 						<IngredientMenu footerAction="complete">
 							{options.map((option, index) => (

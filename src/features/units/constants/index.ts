@@ -1,9 +1,10 @@
-import type { Unit } from "@/db/schema/units";
+import { supportedUnits, type Unit } from "@/db/schema/units";
 import type {
 	BartendingUnits,
 	VolumeUnits,
 } from "@/features/units/constants/volume";
 import { invertMapToSets } from "@/utils";
+import { collator } from "@/utils/collator";
 
 /**
  * A map of our database units to the units supported by `convert-units`.
@@ -157,3 +158,11 @@ export const UNIT_TO_LABEL = new Map<Unit, string>([
 	["float", "Float"],
 	["spray", "Spray"],
 ]);
+
+/**
+ * Supported units sorted alphabetically by their display label. Shared by
+ * the recipe-editor unit picker + typeahead so both lists agree on order.
+ */
+export const SORTED_UNITS: Unit[] = [...supportedUnits.options].sort((a, b) =>
+	collator.compare(UNIT_TO_LABEL.get(a) ?? a, UNIT_TO_LABEL.get(b) ?? b),
+);
