@@ -42,58 +42,6 @@ function seedEditorState(text: string) {
 	}
 }
 
-function EditorContainer({
-	editorRef,
-	onTextChange,
-	statusBar,
-}: {
-	editorRef?: RefObject<LexicalEditor | null>;
-	onTextChange: (text: string) => void;
-	statusBar?: ReactNode;
-}) {
-	const placeholder = useIsMounted(() => pickRandom(EXAMPLE_RECIPES));
-
-	return (
-		<div className={styles.root}>
-			<Flex gap={2} alignItems="center" className={styles.titleBar}>
-				<Icon name="duotone-input-text" size={3} className={styles.titleIcon} />
-
-				<Text size={1} weight={600}>
-					Recipe editor
-				</Text>
-			</Flex>
-
-			<div className={styles.container}>
-				<PlainTextPlugin
-					contentEditable={
-						<ContentEditable
-							className={styles.input}
-							spellCheck={false}
-							autoComplete="off"
-							autoCorrect="off"
-						/>
-					}
-					placeholder={<div className={styles.placeholder}>{placeholder}</div>}
-					ErrorBoundary={LexicalErrorBoundary}
-				/>
-				<HistoryPlugin />
-				<AutoFocusPlugin defaultSelection="rootEnd" />
-				<ClearEditorPlugin />
-				<TextChangePlugin onTextChange={onTextChange} />
-				<ParagraphBreakPlugin />
-				<SyntaxHighlightPlugin />
-				<IngredientTypeaheadPlugin />
-				<IngredientBrowsingPlugin />
-				<EscapeFocusPlugin />
-				{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
-			</div>
-			<EditorActionsPlugin />
-
-			{statusBar ? <div className={styles.statusBar}>{statusBar}</div> : null}
-		</div>
-	);
-}
-
 export function RecipeEditor({
 	editorRef,
 	ingredients,
@@ -111,15 +59,56 @@ export function RecipeEditor({
 		...EDITOR_CONFIG,
 		editorState: initialText ? () => seedEditorState(initialText) : undefined,
 	}));
+	const placeholder = useIsMounted(() => pickRandom(EXAMPLE_RECIPES));
 
 	return (
 		<LexicalComposer initialConfig={config}>
 			<RecipeIngredientsProvider ingredients={ingredients}>
-				<EditorContainer
-					editorRef={editorRef}
-					onTextChange={onTextChange}
-					statusBar={statusBar}
-				/>
+				<div className={styles.root}>
+					<Flex gap={2} alignItems="center" className={styles.titleBar}>
+						<Icon
+							name="duotone-input-text"
+							size={3}
+							className={styles.titleIcon}
+						/>
+
+						<Text size={1} weight={600}>
+							Recipe editor
+						</Text>
+					</Flex>
+
+					<div className={styles.container}>
+						<PlainTextPlugin
+							contentEditable={
+								<ContentEditable
+									className={styles.input}
+									spellCheck={false}
+									autoComplete="off"
+									autoCorrect="off"
+								/>
+							}
+							placeholder={
+								<div className={styles.placeholder}>{placeholder}</div>
+							}
+							ErrorBoundary={LexicalErrorBoundary}
+						/>
+						<HistoryPlugin />
+						<AutoFocusPlugin defaultSelection="rootEnd" />
+						<ClearEditorPlugin />
+						<TextChangePlugin onTextChange={onTextChange} />
+						<ParagraphBreakPlugin />
+						<SyntaxHighlightPlugin />
+						<IngredientTypeaheadPlugin />
+						<IngredientBrowsingPlugin />
+						<EscapeFocusPlugin />
+						{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
+					</div>
+					<EditorActionsPlugin />
+
+					{statusBar ? (
+						<div className={styles.statusBar}>{statusBar}</div>
+					) : null}
+				</div>
 			</RecipeIngredientsProvider>
 		</LexicalComposer>
 	);

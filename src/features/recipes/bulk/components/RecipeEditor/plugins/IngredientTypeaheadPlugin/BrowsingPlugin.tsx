@@ -10,7 +10,7 @@ import {
 	CLICK_COMMAND,
 	COMMAND_PRIORITY_LOW,
 } from "lexical";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { tokenizeLine } from "@/features/recipes/bulk/utils/tokenizeLine";
@@ -46,14 +46,6 @@ export function IngredientBrowsingPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [state, setState] = useState<BrowsingState | null>(null);
 	const { sortedIngredients, ingredientIndex } = useRecipeIngredients();
-
-	/**
-	 * Mirror `state` into a ref so `commitIngredient` and the keyboard
-	 * handlers can read the latest selection without their parent effects
-	 * re-running on every arrow keystroke.
-	 */
-	const stateRef = useRef(state);
-	stateRef.current = state;
 
 	useEffect(() => {
 		return editor.registerCommand(
@@ -138,28 +130,24 @@ export function IngredientBrowsingPlugin() {
 		});
 	}, [editor]);
 
-	const commitIngredient = useCallback(
-		(ingredient: Ingredient) => {
-			const current = stateRef.current;
-			if (!current) return;
-			editor.update(() => {
-				const paragraph = $getNodeByKey(current.paragraphKey);
-				if (!$isParagraphNode(paragraph)) return;
-				const text = paragraph.getTextContent();
-				const replaced =
-					text.slice(0, current.tokenStart) +
-					ingredient.name +
-					text.slice(current.tokenEnd);
-				for (const child of paragraph.getChildren()) child.remove();
-				const newText = $createTextNode(replaced);
-				paragraph.append(newText);
-				const caret = current.tokenStart + ingredient.name.length;
-				newText.select(caret, caret);
-			});
-			setState(null);
-		},
-		[editor],
-	);
+	const commitIngredient = (ingredient: Ingredient) => {
+		if (!state) return;
+		editor.update(() => {
+			const paragraph = $getNodeByKey(state.paragraphKey);
+			if (!$isParagraphNode(paragraph)) return;
+			const text = paragraph.getTextContent();
+			const replaced =
+				text.slice(0, state.tokenStart) +
+				ingredient.name +
+				text.slice(state.tokenEnd);
+			for (const child of paragraph.getChildren()) child.remove();
+			const newText = $createTextNode(replaced);
+			paragraph.append(newText);
+			const caret = state.tokenStart + ingredient.name.length;
+			newText.select(caret, caret);
+		});
+		setState(null);
+	};
 
 	useMenuKeyboard(editor, state !== null, {
 		onMove: (delta) =>
@@ -174,7 +162,8 @@ export function IngredientBrowsingPlugin() {
 					: null,
 			),
 		onCommit: () => {
-			const selected = sortedIngredients[stateRef.current?.selectedIndex ?? 0];
+			if (!state) return;
+			const selected = sortedIngredients[state.selectedIndex];
 			if (selected) commitIngredient(selected);
 		},
 		onClose: () => setState(null),

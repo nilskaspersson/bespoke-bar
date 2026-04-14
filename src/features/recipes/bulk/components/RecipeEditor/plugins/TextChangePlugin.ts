@@ -7,9 +7,9 @@ import { useEffect } from "react";
 /**
  * Custom replacement for `<OnChangePlugin onChange={...} ignoreSelectionChange />`
  * that mirrors its filtering rules but fires the callback with the joined
- * line text directly, avoiding a second `editor.getEditorState().read()`
- * pass on every keystroke when the syntax highlighter is already reading
- * state in its own update listener.
+ * line text directly, avoiding a second `editor.read()` pass on every
+ * keystroke when the syntax highlighter is already reading state in its
+ * own update listener.
  *
  * Gate is the same as OnChangePlugin's `ignoreSelectionChange = true` path:
  * skip pure selection updates (both dirty maps empty) and history-merge

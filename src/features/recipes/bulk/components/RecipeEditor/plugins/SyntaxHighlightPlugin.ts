@@ -90,7 +90,7 @@ export function SyntaxHighlightPlugin() {
 		const cache = new Map<NodeKey, ParagraphCacheEntry>();
 
 		const updateHighlights = () => {
-			editor.getEditorState().read(() => {
+			editor.read(() => {
 				const root = $getRoot();
 				const ranges = new Map<HighlightGroup, Range[]>();
 				for (const name of HIGHLIGHT_NAMES) ranges.set(name, []);

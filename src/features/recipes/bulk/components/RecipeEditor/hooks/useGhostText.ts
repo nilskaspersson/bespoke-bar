@@ -25,7 +25,7 @@ export function useGhostText(ghostText: string | null) {
 	useLayoutEffect(() => {
 		if (!ghostText) return;
 
-		editor.getEditorState().read(() => {
+		editor.read(() => {
 			const selection = $getSelection();
 			if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
 
