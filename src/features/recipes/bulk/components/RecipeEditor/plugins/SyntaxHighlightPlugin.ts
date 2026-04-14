@@ -19,7 +19,6 @@ import {
 	createParagraphDOMRange,
 	getParagraphTextNodes,
 } from "../utils/paragraphRange";
-import "./SyntaxHighlightPlugin.module.css";
 
 const HIGHLIGHT_NAMES = [
 	"recipe-quantity",
@@ -30,6 +29,32 @@ const HIGHLIGHT_NAMES = [
 ] as const;
 
 type HighlightGroup = (typeof HIGHLIGHT_NAMES)[number];
+
+/**
+ * Inlined into a runtime `<style>` tag rather than a CSS module: lightningcss
+ * (≤ 1.32.0 — the version shipped with Next 16.2.3) rejects the
+ * `::highlight(name)` pseudo-element at build time with a fatal parse error.
+ * The fix has landed upstream (parcel-bundler/lightningcss#970, merged
+ * 2026-03-12) but hasn't been released to npm yet. Injecting at runtime
+ * bypasses the build-time parse entirely; revisit when lightningcss 1.33+
+ * ships and the `.module.css` approach starts working.
+ */
+const HIGHLIGHT_CSS = `
+::highlight(recipe-quantity) { color: var(--iris-11); }
+::highlight(recipe-unit) { color: var(--grass-11); }
+::highlight(recipe-ingredient) { color: var(--mauve-11); }
+::highlight(recipe-known) {
+	color: var(--mauve-12);
+	text-decoration: underline;
+	text-decoration-color: var(--mauve-8);
+	text-underline-offset: 3px;
+}
+::highlight(recipe-invalid) {
+	text-decoration: wavy underline;
+	text-decoration-color: var(--red-9);
+	text-underline-offset: 3px;
+}
+`;
 
 type TokenSpan = {
 	group: HighlightGroup;
@@ -75,6 +100,14 @@ function tokenizeParagraph(
 export function SyntaxHighlightPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const { ingredientIndex } = useRecipeIngredients();
+
+	useEffect(() => {
+		const style = document.createElement("style");
+		style.setAttribute("data-recipe-highlights", "");
+		style.textContent = HIGHLIGHT_CSS;
+		document.head.appendChild(style);
+		return () => style.remove();
+	}, []);
 
 	useEffect(() => {
 		if (!CSS.highlights) return;
