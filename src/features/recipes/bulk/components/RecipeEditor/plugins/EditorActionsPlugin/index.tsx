@@ -1,7 +1,13 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $createParagraphNode, $createTextNode, $getRoot } from "lexical";
+import {
+	$createLineBreakNode,
+	$createParagraphNode,
+	$createTextNode,
+	$getRoot,
+	$isParagraphNode,
+} from "lexical";
 import { useCallback } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import {
@@ -22,26 +28,27 @@ export function EditorActionsPlugin() {
 	const applyTransform = useCallback(
 		(transform: (line: string) => string) => {
 			editor.update(() => {
-				const root = $getRoot();
-				let changed = false;
-				const results: string[] = [];
-
-				for (const node of root.getChildren()) {
+				/**
+				 * ParagraphBreakPlugin turns Enter into a paragraph split, but
+				 * plain-text paste still lands as one paragraph with
+				 * LineBreakNodes between lines (see `insertRawText` in Lexical).
+				 * So a paragraph may hold multiple logical lines, and the
+				 * transform runs per *line* — not per paragraph. Rebuild each
+				 * paragraph's children as a TextNode / LineBreakNode chain so
+				 * the result keeps the same logical-line shape.
+				 */
+				for (const node of $getRoot().getChildren()) {
+					if (!$isParagraphNode(node)) continue;
 					const text = node.getTextContent();
-					for (const line of text.split("\n")) {
-						const result = transform(line);
-						if (result !== line) changed = true;
-						results.push(result);
-					}
-				}
+					const lines = text.split("\n");
+					const transformed = lines.map(transform);
+					if (lines.every((line, i) => line === transformed[i])) continue;
 
-				if (!changed) return;
-
-				root.clear();
-				for (const line of results) {
-					const p = $createParagraphNode();
-					if (line) p.append($createTextNode(line));
-					root.append(p);
+					for (const child of node.getChildren()) child.remove();
+					transformed.forEach((line, i) => {
+						if (i > 0) node.append($createLineBreakNode());
+						if (line) node.append($createTextNode(line));
+					});
 				}
 			});
 		},

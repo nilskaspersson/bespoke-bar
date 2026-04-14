@@ -1,5 +1,4 @@
 "use client";
-"use no memo";
 
 import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
@@ -24,6 +23,7 @@ import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { pickRandom } from "@/utils";
 import { EDITOR_CONFIG, EXAMPLE_RECIPES } from "./constants";
+import { RecipeIngredientsProvider } from "./hooks/useRecipeIngredients";
 import { EditorActionsPlugin } from "./plugins/EditorActionsPlugin";
 import { EscapeFocusPlugin } from "./plugins/EscapeFocusPlugin";
 import { IngredientTypeaheadPlugin } from "./plugins/IngredientTypeaheadPlugin";
@@ -44,12 +44,10 @@ function seedEditorState(text: string) {
 
 function EditorContainer({
 	editorRef,
-	ingredients,
 	onTextChange,
 	statusBar,
 }: {
 	editorRef?: RefObject<LexicalEditor | null>;
-	ingredients: Ingredient[];
 	onTextChange: (text: string) => void;
 	statusBar?: ReactNode;
 }) {
@@ -96,9 +94,9 @@ function EditorContainer({
 				<ClearEditorPlugin />
 				<OnChangePlugin onChange={handleChange} ignoreSelectionChange />
 				<ParagraphBreakPlugin />
-				<SyntaxHighlightPlugin ingredients={ingredients} />
-				<IngredientTypeaheadPlugin ingredients={ingredients} />
-				<IngredientBrowsingPlugin ingredients={ingredients} />
+				<SyntaxHighlightPlugin />
+				<IngredientTypeaheadPlugin />
+				<IngredientBrowsingPlugin />
 				<EscapeFocusPlugin />
 				{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
 			</div>
@@ -129,12 +127,13 @@ export function RecipeEditor({
 
 	return (
 		<LexicalComposer initialConfig={config}>
-			<EditorContainer
-				editorRef={editorRef}
-				ingredients={ingredients}
-				onTextChange={onTextChange}
-				statusBar={statusBar}
-			/>
+			<RecipeIngredientsProvider ingredients={ingredients}>
+				<EditorContainer
+					editorRef={editorRef}
+					onTextChange={onTextChange}
+					statusBar={statusBar}
+				/>
+			</RecipeIngredientsProvider>
 		</LexicalComposer>
 	);
 }

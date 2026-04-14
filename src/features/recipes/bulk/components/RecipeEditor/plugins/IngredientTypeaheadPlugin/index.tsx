@@ -6,54 +6,26 @@ import type { TextNode } from "lexical";
 import { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { Kbd } from "@/ui/Kbd";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
-import { normalizeInput } from "@/utils";
-import { collator } from "@/utils/collator";
-import { createSearchIndex, searchByIndex } from "@/utils/search";
+import { searchByIndex } from "@/utils/search";
+import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import { GhostTextController } from "./GhostTextController";
+import { IngredientOption } from "./IngredientOption";
 import styles from "./styles.module.css";
 import {
 	createIngredientTriggerFn,
-	formatAbv,
 	IngredientMenuOption,
 	MAX_TYPEAHEAD_OPTIONS,
 } from "./utils";
 
 const getIngredientId = (i: Ingredient) => i.id;
 
-export function IngredientTypeaheadPlugin({
-	ingredients,
-}: {
-	ingredients: Ingredient[];
-}) {
+export function IngredientTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [query, setQuery] = useState<string | null>(null);
-
-	const sortedIngredients = useMemo(
-		() => [...ingredients].sort((a, b) => collator.compare(a.name, b.name)),
-		[ingredients],
-	);
-
-	const ingredientIndex = useMemo(
-		() =>
-			createSearchIndex(sortedIngredients, getIngredientId, (i) => {
-				const fields = [i.name];
-				const categoryLabel = i.category
-					? CATEGORY_TO_LABEL.get(i.category)
-					: null;
-				if (categoryLabel) fields.push(categoryLabel);
-				return fields;
-			}),
-		[sortedIngredients],
-	);
-
-	const knownNames = useMemo(
-		() => new Set(sortedIngredients.map((i) => normalizeInput(i.name))),
-		[sortedIngredients],
-	);
+	const { sortedIngredients, searchIndex, knownNames } = useRecipeIngredients();
 
 	const triggerFn = useMemo(
 		() => createIngredientTriggerFn(knownNames),
@@ -62,15 +34,10 @@ export function IngredientTypeaheadPlugin({
 
 	const options = useMemo(() => {
 		if (!query) return [];
-		return searchByIndex(
-			sortedIngredients,
-			ingredientIndex,
-			getIngredientId,
-			query,
-		)
+		return searchByIndex(sortedIngredients, searchIndex, getIngredientId, query)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
 			.map((i) => new IngredientMenuOption(i));
-	}, [sortedIngredients, ingredientIndex, query]);
+	}, [sortedIngredients, searchIndex, query]);
 
 	const onSelectOption = useCallback(
 		(
@@ -119,34 +86,19 @@ export function IngredientTypeaheadPlugin({
 								</Text>
 							}
 						>
-							{options.map((option, index) => {
-								const { ingredient } = option;
-								const category = ingredient.category
-									? CATEGORY_TO_LABEL.get(ingredient.category)
-									: null;
-								const abv = formatAbv(ingredient.abv);
-
-								return (
-									<OptionsList.Item
-										key={option.key}
-										ref={option.setRefElement}
-										isHighlighted={selectedIndex === index}
-										onClick={() => {
-											setHighlightedIndex(index);
-											selectOptionAndCleanUp(option);
-										}}
-										onMouseEnter={() => setHighlightedIndex(index)}
-									>
-										<OptionsList.Label
-											description={
-												[category, abv].filter(Boolean).join(", ") || undefined
-											}
-										>
-											{ingredient.name}
-										</OptionsList.Label>
-									</OptionsList.Item>
-								);
-							})}
+							{options.map((option, index) => (
+								<IngredientOption
+									key={option.key}
+									ref={option.setRefElement}
+									ingredient={option.ingredient}
+									isHighlighted={selectedIndex === index}
+									onClick={() => {
+										setHighlightedIndex(index);
+										selectOptionAndCleanUp(option);
+									}}
+									onMouseEnter={() => setHighlightedIndex(index)}
+								/>
+							))}
 						</OptionsList>
 					</>,
 					anchorElementRef.current,

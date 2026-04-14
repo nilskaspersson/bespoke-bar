@@ -5,7 +5,6 @@ import { mergeRegister } from "@lexical/utils";
 import {
 	$getNearestNodeFromDOMNode,
 	$getNodeByKey,
-	$getRoot,
 	$isTextNode,
 	CLICK_COMMAND,
 	COMMAND_PRIORITY_HIGH,
@@ -14,17 +13,28 @@ import {
 	KEY_ARROW_UP_COMMAND,
 	KEY_ENTER_COMMAND,
 	KEY_ESCAPE_COMMAND,
+	KEY_TAB_COMMAND,
 } from "lexical";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import type { Ingredient } from "@/db/schema/ingredients";
-import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { tokenizeLine } from "@/features/recipes/bulk/utils/tokenizeLine";
+import { Kbd } from "@/ui/Kbd";
 import { OptionsList } from "@/ui/OptionsList";
-import { collator } from "@/utils/collator";
+import { Text as UIText } from "@/ui/Text";
+import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
+import { IngredientOption } from "./IngredientOption";
 import styles from "./styles.module.css";
-import { formatAbv } from "./utils";
+
+/**
+ * Callback ref that scrolls the attached element into the nearest scroll
+ * container. Assigned to the currently highlighted `IngredientOption` only —
+ * when `selectedIndex` changes, React calls the old slot's ref with `null`
+ * and the new slot's ref with the element, and that second call scrolls.
+ */
+const scrollIntoViewRef = (el: HTMLLIElement | null) => {
+	el?.scrollIntoView({ block: "nearest" });
+};
 
 type BrowsingState = {
 	nodeKey: string;
@@ -34,23 +44,10 @@ type BrowsingState = {
 	selectedIndex: number;
 };
 
-export function IngredientBrowsingPlugin({
-	ingredients,
-}: {
-	ingredients: Ingredient[];
-}) {
+export function IngredientBrowsingPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [state, setState] = useState<BrowsingState | null>(null);
-
-	const sortedIngredients = useMemo(
-		() => [...ingredients].sort((a, b) => collator.compare(a.name, b.name)),
-		[ingredients],
-	);
-
-	const ingredientIndex = useMemo(
-		() => buildIngredientIndex(ingredients),
-		[ingredients],
-	);
+	const { sortedIngredients, ingredientIndex } = useRecipeIngredients();
 
 	useEffect(() => {
 		return editor.registerCommand(
@@ -73,12 +70,17 @@ export function IngredientBrowsingPlugin({
 						setState(null);
 						return;
 					}
-					const paragraph = lexNode.getParent();
-					if (!paragraph) {
-						setState(null);
-						return;
-					}
-					const lineText = paragraph.getTextContent();
+
+					/**
+					 * Tokenize the clicked TextNode's own text, not the paragraph's
+					 * full content. A paragraph may hold multiple logical lines
+					 * (paste-shape: `TextNode`s separated by `LineBreakNode`s), so
+					 * paragraph-relative token offsets don't map back onto the
+					 * clicked text node's DOM range. Treating the clicked node as
+					 * its own line keeps offsets local and matches how every
+					 * ingredient line is laid out in practice.
+					 */
+					const lineText = lexNode.getTextContent();
 					const { tokens } = tokenizeLine(lineText, ingredientIndex);
 					const ingredientTokens = tokens.filter(
 						(t) => t.type === "ingredient",
@@ -94,6 +96,7 @@ export function IngredientBrowsingPlugin({
 						setState(null);
 						return;
 					}
+					const textLength = textDomNode.length;
 
 					/**
 					 * For each ingredient token, measure the bounding rect of its
@@ -101,6 +104,7 @@ export function IngredientBrowsingPlugin({
 					 * coordinates landed inside that rect — not just near it.
 					 */
 					for (const token of ingredientTokens) {
+						if (token.start < 0 || token.end > textLength) continue;
 						const range = document.createRange();
 						range.setStart(textDomNode, token.start);
 						range.setEnd(textDomNode, token.end);
@@ -130,20 +134,14 @@ export function IngredientBrowsingPlugin({
 	}, [editor, ingredientIndex]);
 
 	/**
-	 * Close the menu when the editor's text content changes (typing, deleting).
-	 * Selection-only updates do not close it — otherwise the click-to-open
-	 * command and the update listener race on which runs first.
+	 * Close the menu on any text mutation (typing, deleting). Lexical reports
+	 * text changes via `dirtyLeaves` — selection-only updates leave it empty,
+	 * so we don't race with the click-to-open command that has just moved the
+	 * cursor.
 	 */
 	useEffect(() => {
-		let prevText = editor
-			.getEditorState()
-			.read(() => $getRoot().getTextContent());
-		return editor.registerUpdateListener(({ editorState }) => {
-			const text = editorState.read(() => $getRoot().getTextContent());
-			if (text !== prevText) {
-				prevText = text;
-				setState(null);
-			}
+		return editor.registerUpdateListener(({ dirtyLeaves }) => {
+			if (dirtyLeaves.size > 0) setState(null);
 		});
 	}, [editor]);
 
@@ -225,6 +223,16 @@ export function IngredientBrowsingPlugin({
 				},
 				COMMAND_PRIORITY_HIGH,
 			),
+			editor.registerCommand(
+				KEY_TAB_COMMAND,
+				(event) => {
+					event.preventDefault();
+					const selected = sortedIngredients[state?.selectedIndex ?? 0];
+					if (selected) commitIngredient(selected);
+					return true;
+				},
+				COMMAND_PRIORITY_HIGH,
+			),
 		);
 	}, [
 		editor,
@@ -247,31 +255,28 @@ export function IngredientBrowsingPlugin({
 			<OptionsList
 				className={styles.typeahead}
 				onMouseDown={(e) => e.preventDefault()}
+				footer={
+					<UIText size={1} className={styles.footer}>
+						<Kbd shortcut="tab" visual variant="ghost" /> or{" "}
+						<Kbd shortcut="enter" visual variant="ghost" /> to complete
+					</UIText>
+				}
 			>
 				{sortedIngredients.map((ingredient, index) => {
-					const category = ingredient.category
-						? CATEGORY_TO_LABEL.get(ingredient.category)
-						: null;
-					const abv = formatAbv(ingredient.abv);
+					const isHighlighted = state.selectedIndex === index;
 					return (
-						<OptionsList.Item
+						<IngredientOption
 							key={ingredient.id}
-							isHighlighted={state.selectedIndex === index}
+							ref={isHighlighted ? scrollIntoViewRef : undefined}
+							ingredient={ingredient}
+							isHighlighted={isHighlighted}
 							onClick={() => commitIngredient(ingredient)}
 							onMouseEnter={() =>
 								setState((prev) =>
 									prev ? { ...prev, selectedIndex: index } : null,
 								)
 							}
-						>
-							<OptionsList.Label
-								description={
-									[category, abv].filter(Boolean).join(", ") || undefined
-								}
-							>
-								{ingredient.name}
-							</OptionsList.Label>
-						</OptionsList.Item>
+						/>
 					);
 				})}
 			</OptionsList>

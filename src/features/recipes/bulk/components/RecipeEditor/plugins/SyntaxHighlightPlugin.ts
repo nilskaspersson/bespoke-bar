@@ -1,23 +1,24 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { useLexicalSubscription } from "@lexical/react/useLexicalSubscription";
 import {
 	$getRoot,
 	$isLineBreakNode,
 	$isParagraphNode,
 	$isTextNode,
+	HISTORIC_TAG,
 	type LexicalEditor,
+	type NodeKey,
 	type ParagraphNode,
 	type TextNode,
 } from "lexical";
-import { useEffect, useMemo } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
-import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
+import { useEffect } from "react";
+import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import {
 	type Token,
 	tokenizeLine,
 } from "@/features/recipes/bulk/utils/tokenizeLine";
+import { useRecipeIngredients } from "../hooks/useRecipeIngredients";
 
 const HIGHLIGHT_NAMES = [
 	"recipe-quantity",
@@ -26,6 +27,8 @@ const HIGHLIGHT_NAMES = [
 	"recipe-known",
 	"recipe-invalid",
 ] as const;
+
+type HighlightGroup = (typeof HIGHLIGHT_NAMES)[number];
 
 const HIGHLIGHT_CSS = `
 ::highlight(recipe-quantity) { color: var(--iris-11); }
@@ -47,6 +50,18 @@ const HIGHLIGHT_CSS = `
 type LineSegment = {
 	text: string;
 	textNodes: Array<{ node: TextNode; offsetInLine: number }>;
+};
+
+type TokenSpan = {
+	group: HighlightGroup;
+	segmentIndex: number;
+	start: number;
+	end: number;
+};
+
+type ParagraphCacheEntry = {
+	text: string;
+	spans: TokenSpan[];
 };
 
 /**
@@ -122,8 +137,6 @@ function createDOMRange(
 	return range;
 }
 
-type HighlightGroup = (typeof HIGHLIGHT_NAMES)[number];
-
 function getHighlightGroup(token: Token): HighlightGroup | null {
 	switch (token.type) {
 		case "quantity":
@@ -137,29 +150,27 @@ function getHighlightGroup(token: Token): HighlightGroup | null {
 	}
 }
 
-const TEXT_SUBSCRIPTION = (editor: LexicalEditor) => ({
-	initialValueFn: () =>
-		editor.getEditorState().read(() => $getRoot().getTextContent()),
-	subscribe: (callback: (text: string) => void) =>
-		editor.registerUpdateListener(() => {
-			const text = editor
-				.getEditorState()
-				.read(() => $getRoot().getTextContent());
-			callback(text);
-		}),
-});
+function tokenizeParagraph(
+	paragraph: ParagraphNode,
+	ingredientIndex: IngredientIndex,
+): { segments: LineSegment[]; spans: TokenSpan[]; text: string } {
+	const segments = getLineSegments(paragraph);
+	const spans: TokenSpan[] = [];
+	segments.forEach((segment, segmentIndex) => {
+		if (!segment.text.trim()) return;
+		const { tokens } = tokenizeLine(segment.text, ingredientIndex);
+		for (const token of tokens) {
+			const group = getHighlightGroup(token);
+			if (!group) continue;
+			spans.push({ group, segmentIndex, start: token.start, end: token.end });
+		}
+	});
+	return { segments, spans, text: paragraph.getTextContent() };
+}
 
-export function SyntaxHighlightPlugin({
-	ingredients,
-}: {
-	ingredients: Ingredient[];
-}) {
+export function SyntaxHighlightPlugin() {
 	const [editor] = useLexicalComposerContext();
-	const ingredientIndex = useMemo(
-		() => buildIngredientIndex(ingredients),
-		[ingredients],
-	);
-	const text = useLexicalSubscription(TEXT_SUBSCRIPTION);
+	const { ingredientIndex } = useRecipeIngredients();
 
 	useEffect(() => {
 		const style = document.createElement("style");
@@ -177,57 +188,89 @@ export function SyntaxHighlightPlugin({
 	useEffect(() => {
 		if (!CSS.highlights) return;
 
-		if (!text.trim()) {
-			for (const name of HIGHLIGHT_NAMES) {
-				CSS.highlights.delete(name);
-			}
-			return;
-		}
+		/**
+		 * Per-paragraph token cache keyed by NodeKey. Avoids re-tokenizing
+		 * paragraphs whose text hasn't changed — for a 50-line recipe where
+		 * only one line was edited, we skip 49 parser passes on every
+		 * keystroke. DOM Ranges must always be rebuilt (offsets don't
+		 * auto-track text mutations), but range construction is much
+		 * cheaper than tokenization.
+		 */
+		const cache = new Map<NodeKey, ParagraphCacheEntry>();
 
-		const ranges = new Map<HighlightGroup, Range[]>();
-		for (const name of HIGHLIGHT_NAMES) {
-			ranges.set(name, []);
-		}
+		const updateHighlights = () => {
+			editor.getEditorState().read(() => {
+				const root = $getRoot();
+				const ranges = new Map<HighlightGroup, Range[]>();
+				for (const name of HIGHLIGHT_NAMES) ranges.set(name, []);
+				const liveKeys = new Set<NodeKey>();
 
-		editor.getEditorState().read(() => {
-			const root = $getRoot();
+				for (const child of root.getChildren()) {
+					if (!$isParagraphNode(child)) continue;
+					const key = child.getKey();
+					liveKeys.add(key);
 
-			for (const child of root.getChildren()) {
-				if (!$isParagraphNode(child)) continue;
+					const currentText = child.getTextContent();
+					let entry = cache.get(key);
+					let segments: LineSegment[];
 
-				const segments = getLineSegments(child);
-				for (const segment of segments) {
-					if (!segment.text.trim()) continue;
+					if (entry && entry.text === currentText) {
+						segments = getLineSegments(child);
+					} else {
+						const tokenized = tokenizeParagraph(child, ingredientIndex);
+						entry = { text: tokenized.text, spans: tokenized.spans };
+						cache.set(key, entry);
+						segments = tokenized.segments;
+					}
 
-					const { tokens } = tokenizeLine(segment.text, ingredientIndex);
-
-					for (const token of tokens) {
-						const group = getHighlightGroup(token);
-						if (!group) continue;
-
-						const range = createDOMRange(
-							editor,
-							segment,
-							token.start,
-							token.end,
-						);
-						if (range) {
-							ranges.get(group)?.push(range);
-						}
+					for (const span of entry.spans) {
+						const segment = segments[span.segmentIndex];
+						if (!segment) continue;
+						const range = createDOMRange(editor, segment, span.start, span.end);
+						if (range) ranges.get(span.group)?.push(range);
 					}
 				}
-			}
-		});
 
-		for (const name of HIGHLIGHT_NAMES) {
-			const group = ranges.get(name);
-			if (group && group.length > 0) {
-				CSS.highlights.set(name, new Highlight(...group));
-			} else {
-				CSS.highlights.delete(name);
+				for (const key of cache.keys()) {
+					if (!liveKeys.has(key)) cache.delete(key);
+				}
+
+				for (const name of HIGHLIGHT_NAMES) {
+					const group = ranges.get(name);
+					if (group && group.length > 0) {
+						CSS.highlights.set(name, new Highlight(...group));
+					} else {
+						CSS.highlights.delete(name);
+					}
+				}
+			});
+		};
+
+		updateHighlights();
+
+		/**
+		 * Fire on text mutation only. `dirtyLeaves` holds the TextNode /
+		 * LineBreakNode keys that changed — selection-only updates leave it
+		 * empty, so we skip those without having to diff the full root text.
+		 * Unchanged paragraphs short-circuit inside updateHighlights via the
+		 * per-paragraph cache.
+		 *
+		 * Undo / redo are a special case: `HistoryPlugin` rolls state back via
+		 * `setEditorState`, which replaces the tree wholesale and reports no
+		 * dirty leaves. We detect that via the `HISTORIC_TAG` and force a
+		 * full rebuild — after a state swap, node keys may differ from the
+		 * cached ones, so we also drop the cache to avoid stale hits.
+		 */
+		return editor.registerUpdateListener(({ dirtyLeaves, tags }) => {
+			if (tags.has(HISTORIC_TAG)) {
+				cache.clear();
+				updateHighlights();
+				return;
 			}
-		}
-	}, [editor, text, ingredientIndex]);
+			if (dirtyLeaves.size === 0) return;
+			updateHighlights();
+		});
+	}, [editor, ingredientIndex]);
 
 	return null;
 }
