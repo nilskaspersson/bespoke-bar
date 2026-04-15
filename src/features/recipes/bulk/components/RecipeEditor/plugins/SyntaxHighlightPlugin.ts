@@ -15,10 +15,7 @@ import {
 	tokenizeLine,
 } from "@/features/recipes/bulk/utils/tokenizeLine";
 import { useRecipeIngredients } from "../hooks/useRecipeIngredients";
-import {
-	createParagraphDOMRange,
-	getParagraphTextNodes,
-} from "../utils/paragraphRange";
+import { createParagraphDOMRange } from "../utils/paragraphRange";
 
 const HIGHLIGHT_NAMES = [
 	"recipe-quantity",
@@ -142,11 +139,10 @@ export function SyntaxHighlightPlugin() {
 					}
 					if (entry.spans.length === 0) continue;
 
-					const textNodes = getParagraphTextNodes(child);
 					for (const span of entry.spans) {
 						const range = createParagraphDOMRange(
 							editor,
-							textNodes,
+							child,
 							span.start,
 							span.end,
 						);

@@ -31,10 +31,7 @@ import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Input } from "@/ui/Input";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
-import {
-	createParagraphDOMRange,
-	getParagraphTextNodes,
-} from "../../utils/paragraphRange";
+import { createParagraphDOMRange } from "../../utils/paragraphRange";
 import { IngredientOption } from "./IngredientOption";
 import styles from "./styles.module.css";
 import { TokenMenu } from "./TokenMenu";
@@ -124,7 +121,6 @@ function resolveBrowsingStateFromClick(
 	if (!$isParagraphNode(paragraph)) return null;
 
 	const { tokens } = tokenizeLine(paragraph.getTextContent(), ingredientIndex);
-	const textNodes = getParagraphTextNodes(paragraph);
 
 	for (const token of tokens) {
 		if (token.type !== "ingredient" && token.type !== "unit") continue;
@@ -136,7 +132,7 @@ function resolveBrowsingStateFromClick(
 		 */
 		const range = createParagraphDOMRange(
 			editor,
-			textNodes,
+			paragraph,
 			token.start,
 			token.end,
 		);

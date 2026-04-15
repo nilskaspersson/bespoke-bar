@@ -1,3 +1,4 @@
+import { createDOMRange } from "@lexical/selection";
 import {
 	$isTextNode,
 	type LexicalEditor,
@@ -5,77 +6,48 @@ import {
 	type TextNode,
 } from "lexical";
 
-export type TextNodeOffset = {
-	node: TextNode;
-	offsetInParagraph: number;
-};
+type TextNodeAtOffset = { node: TextNode; offset: number };
 
-/**
- * Walk a paragraph's children and record each `TextNode` plus its offset
- * within the paragraph's concatenated text. The returned array is used to
- * translate paragraph-relative character offsets into a DOM Range over the
- * correct underlying text nodes — because a paragraph can still hold more
- * than one `TextNode` child in some edge cases (IME, cross-format edits)
- * even after `LineBreakNode` normalization.
- */
-export function getParagraphTextNodes(
+function locateOffset(
 	paragraph: ParagraphNode,
-): TextNodeOffset[] {
-	const result: TextNodeOffset[] = [];
-	let offset = 0;
+	offset: number,
+	matchAtEnd: boolean,
+): TextNodeAtOffset | null {
+	let cursor = 0;
 	for (const child of paragraph.getChildren()) {
-		if ($isTextNode(child)) {
-			result.push({ node: child, offsetInParagraph: offset });
-			offset += child.getTextContentSize();
-		}
+		if (!$isTextNode(child)) continue;
+		const nodeEnd = cursor + child.getTextContentSize();
+		const within = matchAtEnd ? nodeEnd >= offset : nodeEnd > offset;
+		if (within) return { node: child, offset: offset - cursor };
+		cursor = nodeEnd;
 	}
-	return result;
+	return null;
 }
 
 /**
- * Build a DOM Range covering the character offsets `start..end` within a
- * paragraph, using the paragraph's text-node offset map from
- * `getParagraphTextNodes`. Returns `null` if either boundary can't be
- * resolved (missing DOM node, non-Text first child, etc).
+ * Build a DOM `Range` covering the character offsets `start..end` within a
+ * paragraph's concatenated text. Translates paragraph-relative offsets
+ * into per-`TextNode` offsets, then hands off to `@lexical/selection`'s
+ * `createDOMRange` for the actual DOM resolution (which handles the
+ * `<br>` / collapsed-range edge cases we don't want to reimplement).
+ * Returns `null` if either boundary can't be resolved — usually because
+ * the paragraph contains something other than `TextNode`s at the target
+ * offset.
  */
 export function createParagraphDOMRange(
 	editor: LexicalEditor,
-	textNodes: TextNodeOffset[],
+	paragraph: ParagraphNode,
 	start: number,
 	end: number,
 ): Range | null {
-	let startContainer: Text | null = null;
-	let startOffset = 0;
-	let endContainer: Text | null = null;
-	let endOffset = 0;
-
-	for (const { node, offsetInParagraph } of textNodes) {
-		const nodeEnd = offsetInParagraph + node.getTextContentSize();
-
-		if (!startContainer && nodeEnd > start) {
-			const dom = editor.getElementByKey(node.getKey());
-			const text = dom?.firstChild;
-			if (text instanceof Text) {
-				startContainer = text;
-				startOffset = start - offsetInParagraph;
-			}
-		}
-
-		if (!endContainer && nodeEnd >= end) {
-			const dom = editor.getElementByKey(node.getKey());
-			const text = dom?.firstChild;
-			if (text instanceof Text) {
-				endContainer = text;
-				endOffset = end - offsetInParagraph;
-			}
-			break;
-		}
-	}
-
-	if (!startContainer || !endContainer) return null;
-
-	const range = new Range();
-	range.setStart(startContainer, startOffset);
-	range.setEnd(endContainer, endOffset);
-	return range;
+	const anchor = locateOffset(paragraph, start, false);
+	const focus = locateOffset(paragraph, end, true);
+	if (!anchor || !focus) return null;
+	return createDOMRange(
+		editor,
+		anchor.node,
+		anchor.offset,
+		focus.node,
+		focus.offset,
+	);
 }
