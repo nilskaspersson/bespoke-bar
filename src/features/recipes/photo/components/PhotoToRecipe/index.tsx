@@ -9,6 +9,7 @@ import {
 	useRef,
 	useState,
 } from "react";
+
 import type { Ingredient } from "@/db/schema/ingredients";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { OutputPreview } from "@/features/recipes/photo/components/OutputPreview";
@@ -104,8 +105,9 @@ export function PhotoToRecipe({
 				ref={outputContainerRef}
 				draftRecipes={draftRecipes}
 				disabled={!hasParsedText}
-				draftRecipesText={draftRecipeText}
-				onChangeDraftRecipesText={(e) => setDraftRecipeText(e.target.value)}
+				ingredients={ingredients}
+				ocrText={ocrText}
+				onChangeDraftRecipesText={setDraftRecipeText}
 				className={clsx(styles.step, styles.stepOutput, {
 					[styles.hasParsedText]: hasParsedText,
 					[styles.hasDraftRecipes]: hasDraftRecipes,

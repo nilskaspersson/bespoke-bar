@@ -105,7 +105,12 @@ export function EditorActionsPlugin() {
 					</li>
 
 					<li>
-						<Button {...actionProps} color="red" onClick={clear} title="Clear editor">
+						<Button
+							{...actionProps}
+							color="red"
+							onClick={clear}
+							title="Clear editor"
+						>
 							<Icon name="trash" size={2} />
 						</Button>
 					</li>
