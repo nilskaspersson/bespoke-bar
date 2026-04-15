@@ -1,17 +1,22 @@
-import type { ComponentProps } from "react";
+"use client";
+
+import { type ComponentProps, use } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
+import { FormatterContext } from "@/hooks/useFormatter";
 import { OptionsList } from "@/ui/OptionsList";
-import { formatAbv } from "./utils";
 
 export function IngredientOption({
 	ingredient,
 	...props
 }: { ingredient: Ingredient } & ComponentProps<typeof OptionsList.Item>) {
+	const { percentageFormatter } = use(FormatterContext);
+
 	const category = ingredient.category
 		? CATEGORY_TO_LABEL.get(ingredient.category)
 		: null;
-	const abv = formatAbv(ingredient.abv);
+	const abv =
+		ingredient.abv !== null ? percentageFormatter.format(ingredient.abv) : null;
 	const description = [category, abv].filter(Boolean).join(", ") || undefined;
 
 	return (

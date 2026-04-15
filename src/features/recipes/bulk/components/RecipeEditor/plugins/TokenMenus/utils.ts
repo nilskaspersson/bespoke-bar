@@ -53,11 +53,6 @@ export function gateOnTextChange<T>(
 	};
 }
 
-export function formatAbv(abv: number | null): string | null {
-	if (abv === null) return null;
-	return `${(abv * 100).toFixed(0)}%`;
-}
-
 /**
  * Build a Lexical typeahead trigger from the recipe syntax:
  *   <quantity> <unit> <ingredient text>
