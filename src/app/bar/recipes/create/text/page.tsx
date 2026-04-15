@@ -29,7 +29,7 @@ async function BulkCreateRecipeWithAuth() {
 		<OrgProvider>
 			<BulkDraftRecipes
 				ingredients={ingredients}
-				empty={<BulkDraftInfo />}
+				info={<BulkDraftInfo />}
 				createRecipes={createRecipesWithSpecsFromData}
 			/>
 		</OrgProvider>

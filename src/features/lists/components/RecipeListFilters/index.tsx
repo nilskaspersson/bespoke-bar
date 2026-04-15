@@ -8,13 +8,23 @@ import {
 } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import type { RecipeListWithRecipes } from "@/db/schema/composite";
+import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { RecipeEntryList } from "@/features/lists/entries/components/RecipeEntryList";
 import { Button, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Input } from "@/ui/Input";
-import { normalizeInput } from "@/utils";
+import { createSearchIndex, searchByIndex } from "@/utils/search";
+
+const getEntryKey = (entry: RecipeListEntryWithRecipe) => entry.id;
+
+function getEntrySearchFields(entry: RecipeListEntryWithRecipe): string[] {
+	return [
+		entry.recipe.name ?? "",
+		...entry.recipe.specs.map((spec) => spec.ingredient.name),
+	];
+}
 
 export function RecipeListFilters({
 	list,
@@ -31,21 +41,15 @@ export function RecipeListFilters({
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
 
-	const filteredEntries = useMemo(() => {
-		const normalizedSearch = normalizeInput(deferredSearch);
+	const searchIndex = useMemo(
+		() => createSearchIndex(entries, getEntryKey, getEntrySearchFields),
+		[entries],
+	);
 
-		if (!normalizedSearch) {
-			return entries;
-		}
-
-		return entries.filter(
-			(entry) =>
-				normalizeInput(entry.recipe.name ?? "").includes(normalizedSearch) ||
-				normalizeInput(
-					entry.recipe.specs.map((spec) => spec.ingredient.name).join(" "),
-				).includes(normalizedSearch),
-		);
-	}, [entries, deferredSearch]);
+	const filteredEntries = useMemo(
+		() => searchByIndex(entries, searchIndex, getEntryKey, deferredSearch),
+		[entries, searchIndex, deferredSearch],
+	);
 
 	return (
 		<Grid gap={6}>

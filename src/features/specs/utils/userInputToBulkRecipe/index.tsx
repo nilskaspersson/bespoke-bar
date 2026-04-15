@@ -1,5 +1,6 @@
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { userInputToSpec } from "@/features/specs/utils/userInputToSpec";
 import { withKey } from "@/utils/withKey";
 
@@ -15,6 +16,7 @@ export function userInputToBulkRecipe(
 	ingredients: Ingredient[],
 ): BaseRecipe[] {
 	const textBlocks = userInput.trim().split(PATTERN_REPEATING_NEWLINES);
+	const ingredientIndex = buildIngredientIndex(ingredients);
 
 	const results: BaseRecipe[] = [];
 
@@ -36,6 +38,7 @@ export function userInputToBulkRecipe(
 			const firstLineAsSpec = userInputToSpec(
 				removeListPrefix(lines[0]),
 				ingredients,
+				ingredientIndex,
 			);
 
 			/**
@@ -53,7 +56,11 @@ export function userInputToBulkRecipe(
 		 * already parsed the first line of the block.
 		 */
 		for (let j = 1; j < lines.length; j++) {
-			const spec = userInputToSpec(removeListPrefix(lines[j]), ingredients);
+			const spec = userInputToSpec(
+				removeListPrefix(lines[j]),
+				ingredients,
+				ingredientIndex,
+			);
 
 			if (spec) {
 				specs.push(withKey(spec));

@@ -1,0 +1,108 @@
+@layer feature {
+	.root {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		border: 1px solid var(--mauve-6);
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-1);
+		transition-property: border-color;
+		transition-duration: var(--transition-duration);
+
+		&:hover {
+			border-color: var(--mauve-8);
+		}
+	}
+
+	.titleBar {
+		padding: var(--space-2) var(--space-3);
+		border-bottom: 1px solid var(--mauve-6);
+		background-color: var(--mauve-2);
+		user-select: none;
+		border-top-left-radius: inherit;
+		border-top-right-radius: inherit;
+	}
+
+	.titleIcon {
+		color: var(--iris-9);
+	}
+
+	.container {
+		position: relative;
+		width: 100%;
+		outline: var(--space-0) solid transparent;
+		outline-offset: calc(-1 * var(--space-0));
+		transition-property: outline-color;
+		transition-duration: var(--transition-duration);
+
+		&:focus-within {
+			outline-color: var(--iris-11);
+		}
+	}
+
+	.input {
+		cursor: text;
+		font-family: inherit;
+		font-size: max(1rem, 16px);
+		font-weight: 600;
+		color: var(--mauve-12);
+		background: transparent;
+		border: none;
+		border-radius: 0;
+		padding-inline: var(--control-inset);
+		padding-block: var(--space-3);
+		line-height: var(--line-height);
+		min-block-size: 100%;
+		width: 100%;
+		outline: none;
+	}
+
+	.placeholder {
+		position: absolute;
+		top: var(--space-3);
+		left: var(--control-inset);
+		right: var(--control-inset);
+		color: var(--mauve-9);
+		font-size: max(1rem, 16px);
+		font-weight: 600;
+		line-height: var(--line-height);
+		white-space: pre-line;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	.paragraph {
+		min-height: 1lh;
+	}
+
+	.statusBar {
+		padding-inline: var(--space-3);
+		padding-block: var(--space-2);
+		border-top: 1px solid var(--mauve-6);
+		background-color: var(--mauve-2);
+		user-select: none;
+		border-bottom-left-radius: inherit;
+		border-bottom-right-radius: inherit;
+	}
+
+	.skeleton {
+		display: grid;
+		gap: var(--space-2);
+		padding: var(--control-inset);
+		padding-block: var(--space-3);
+		font-size: max(1rem, 16px);
+		line-height: var(--line-height);
+	}
+
+	.skeletonActions {
+		padding: var(--space-2);
+		border-top: 1px solid var(--mauve-6);
+		background-color: var(--mauve-2);
+	}
+
+	.container [data-ghost]::after {
+		content: attr(data-ghost);
+		color: var(--mauve-8);
+		pointer-events: none;
+		user-select: none;
+	}
+}

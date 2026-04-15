@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 import { supportedUnits, type Unit } from "@/db/schema/units";
-import { UNIT_TO_LABEL } from "@/features/units/constants";
+import { getUnitLabel } from "@/features/units/constants";
 import { isValidUnit } from "@/features/units/utils";
 import { Select } from "@/ui/Select";
 import { collator } from "@/utils/collator";
@@ -23,7 +23,7 @@ const OPTIONS: Keyed<Option>[] = [
 		.map((item) =>
 			withKey({
 				value: item,
-				label: isValidUnit(item) ? (UNIT_TO_LABEL.get(item) ?? item) : item,
+				label: isValidUnit(item) ? getUnitLabel(item) : item,
 			}),
 		)
 		.sort((a, b) => collator.compare(itemToString(a), itemToString(b))),

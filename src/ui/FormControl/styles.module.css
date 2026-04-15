@@ -35,10 +35,6 @@
 			--w: 100%;
 		}
 
-		&.compact {
-			--w: var(--control-width--small);
-		}
-
 		&:not(.inline) {
 			height: var(--h);
 			background-color: var(--mauve-2);

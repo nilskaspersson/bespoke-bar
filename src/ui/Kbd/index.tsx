@@ -1,17 +1,10 @@
 "use client";
 
 import { clsx } from "clsx";
-import {
-	type ComponentProps,
-	useCallback,
-	useEffect,
-	useRef,
-	useState,
-} from "react";
+import { type ComponentProps, useCallback, useEffect, useRef } from "react";
+import { usePlatform } from "@/stores/platform";
 import { animateChildren, keyframes } from "@/utils/animate";
-import type { Platform } from "@/utils/keyboard";
 import {
-	detectPlatform,
 	isTextInputElement,
 	matchesShortcut,
 	parseShortcut,
@@ -35,12 +28,8 @@ export function Kbd({
 	variant = "default",
 	...props
 }: ComponentProps<"kbd"> & Props) {
-	const [platform, setPlatform] = useState<Platform>();
+	const platform = usePlatform((s) => s.platform);
 	const kbdRef = useRef<HTMLElement>(null);
-
-	useEffect(() => {
-		setPlatform(detectPlatform() ?? "windows");
-	}, []);
 
 	const handleKeyDown = useCallback(
 		(event: KeyboardEvent) => {

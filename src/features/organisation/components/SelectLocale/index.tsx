@@ -1,7 +1,6 @@
 import { type ComponentProps, useMemo } from "react";
 import { Combobox } from "@/ui/Combobox";
-import { OptionLabel } from "@/ui/OptionLabel";
-import { Text } from "@/ui/Text";
+import { OptionsList } from "@/ui/OptionsList";
 import { collator } from "@/utils/collator";
 import { SUPPORTED_LOCALES } from "@/utils/locales";
 import { type Keyed, withKey } from "@/utils/withKey";
@@ -22,13 +21,11 @@ const getItemValue = (item: Locale) => item.code;
 const intlLocaleDisplayName = new Intl.DisplayNames("en", { type: "language" });
 
 const getItemLabel = (item: Locale) => (
-	<OptionLabel>
+	<OptionsList.Label
+		description={<span className={styles.code}>{item.code}</span>}
+	>
 		{item.name}
-
-		<Text light className={styles.code} size={1}>
-			{item.code}
-		</Text>
-	</OptionLabel>
+	</OptionsList.Label>
 );
 
 export function SelectLocale({

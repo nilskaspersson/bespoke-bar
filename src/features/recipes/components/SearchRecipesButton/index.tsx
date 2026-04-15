@@ -8,13 +8,13 @@ import { Dialog } from "@/ui/Dialog";
 import { Kbd } from "@/ui/Kbd";
 
 export function SearchRecipesButton({ children, ...props }: ButtonProps) {
-	const { dialogRef, isOpen } = useDialog();
+	const { dialogRef, isOpen, showModal, closeModal } = useDialog();
 
 	function toggleDialog() {
 		if (dialogRef.current?.open) {
-			dialogRef.current.close();
+			closeModal();
 		} else {
-			dialogRef.current?.showModal();
+			showModal();
 		}
 	}
 
@@ -22,7 +22,7 @@ export function SearchRecipesButton({ children, ...props }: ButtonProps) {
 		<>
 			<Button
 				{...props}
-				onClick={() => dialogRef.current?.showModal()}
+				onClick={showModal}
 				endAdornment={<Kbd shortcut="mod+k" onTrigger={toggleDialog} />}
 			>
 				{children}

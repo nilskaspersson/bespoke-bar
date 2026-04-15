@@ -1,35 +1,20 @@
+import type { ComponentProps } from "react";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
 
-export function BulkDraftInfo({ className }: { className?: string }) {
+export function BulkDraftInfo(props: ComponentProps<typeof Grid>) {
 	return (
-		<Grid gap={2} className={className}>
-			<Callout
-				color="heavy"
-				heading="Type any number of recipes in the following format."
-				icon="circle-question"
-			>
-				<Text as="div" italic>
-					Gimlet
-					<br />5 cl gin
-					<br />
-					30 ml lime juice
-					<br />
-					2.5 centiliters simple syrup
-					<br />
-					<br />
-					Daiquiri
-					<br />2 ounces rum
-					<br />1 ounce lime juice
-					<br />
-					3/4 fl-oz demerara syrup
-				</Text>
-			</Callout>
-
+		<Grid gap={2} {...props}>
 			<Callout color="light" icon="circle-info" size={2}>
-				Most common units and aliases are supported. New ingredients are created
-				automatically. Existing ingredients are matched by name.
+				<Text as="ul" list>
+					<li>Most common units and aliases are supported.</li>
+					<li>New ingredients are created automatically.</li>
+					<li>Existing ingredients are matched by name.</li>
+					<li>
+						Create many recipes by separating each recipe with a blank line.
+					</li>
+				</Text>
 			</Callout>
 		</Grid>
 	);

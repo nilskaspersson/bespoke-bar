@@ -5,7 +5,7 @@ import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Combobox } from "@/ui/Combobox";
-import { OptionLabel } from "@/ui/OptionLabel";
+import { OptionsList } from "@/ui/OptionsList";
 import { collator } from "@/utils/collator";
 
 const itemToString = (item: Ingredient | null) => (!item ? "" : item.name);
@@ -31,9 +31,11 @@ export function IngredientPicker({
 			const abv = item.abv ? percentageFormatter.format(item.abv) : null;
 
 			return (
-				<OptionLabel description={[category, abv].filter(Boolean).join(", ")}>
+				<OptionsList.Label
+					description={[category, abv].filter(Boolean).join(", ")}
+				>
 					{item.name}
-				</OptionLabel>
+				</OptionsList.Label>
 			);
 		},
 		[percentageFormatter],

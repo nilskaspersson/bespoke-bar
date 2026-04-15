@@ -10,11 +10,11 @@ import {
 	useMemo,
 	useState,
 } from "react";
+import { useIndexedItems } from "@/hooks/useIndexedItems";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
-import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
@@ -83,6 +83,8 @@ export function Combobox<T>({
 }: Props<T>) {
 	const helperTextId = useId();
 
+	const itemsByValue = useIndexedItems(items, getItemValue);
+
 	const [inputValue, setInputValue] = useState<string | null>(null);
 	const deferredInputValue = useDeferredValue<typeof inputValue>(inputValue);
 
@@ -139,11 +141,9 @@ export function Combobox<T>({
 		 * Fallback to null to avoid switching between controlled/uncontrolled state.
 		 */
 		selectedItem:
-			value !== undefined
-				? (items.find((o) => getItemValue(o) === value) ?? null)
-				: undefined,
+			value !== undefined ? (itemsByValue.get(value) ?? null) : undefined,
 		defaultSelectedItem: defaultValue
-			? items.find((o) => getItemValue(o) === defaultValue)
+			? itemsByValue.get(defaultValue)
 			: undefined,
 		scrollIntoView: (node) =>
 			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
@@ -228,7 +228,7 @@ export function Combobox<T>({
 							header={header}
 						>
 							{filteredItems.map((item, index) => (
-								<OptionItem
+								<OptionsList.Item
 									key={getKey(item)}
 									{...getItemProps({ item, index })}
 									isHighlighted={highlightedIndex === index}
@@ -245,7 +245,7 @@ export function Combobox<T>({
 											{itemToString(item)}
 										</Text>
 									)}
-								</OptionItem>
+								</OptionsList.Item>
 							))}
 
 							{Boolean(comboboxInputProps.value) && renderCreateListItem

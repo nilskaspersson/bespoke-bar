@@ -3,7 +3,7 @@ import type { Recipe } from "@/db/schema/recipes";
 import { getRecipeName, isRecipeWithSpecs } from "@/features/recipes/utils";
 import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
 import { Combobox } from "@/ui/Combobox";
-import { OptionLabel } from "@/ui/OptionLabel";
+import { OptionsList } from "@/ui/OptionsList";
 import { collator } from "@/utils/collator";
 
 const itemToString = (item: Recipe | null) =>
@@ -22,11 +22,11 @@ export function SelectRecipe({
 	const getItemLabel = useCallback(
 		(item: Recipe) => {
 			return (
-				<OptionLabel
+				<OptionsList.Label
 					description={isRecipeWithSpecs(item) ? specsToText(item.specs) : null}
 				>
 					{getRecipeName(item)}
-				</OptionLabel>
+				</OptionsList.Label>
 			);
 		},
 		[specsToText],

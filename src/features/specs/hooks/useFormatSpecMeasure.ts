@@ -22,10 +22,12 @@ export function useFormatSpecMeasure<T extends DraftSpec>() {
 			spec,
 			servings,
 			convertUnits,
+			snap,
 		}: {
 			spec: T;
 			servings: number;
 			convertUnits?: UnitSystems | null;
+			snap?: boolean;
 		}): SpecMeasure => {
 			if (convertUnits) {
 				const result = quantityToBestUnit({
@@ -33,6 +35,7 @@ export function useFormatSpecMeasure<T extends DraftSpec>() {
 					unit: spec.unit,
 					unitSystem: convertUnits,
 					servings,
+					snap,
 				});
 
 				if (result) return result;

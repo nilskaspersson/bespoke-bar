@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 
-export function useIsMounted() {
-	const [isMounted, setIsMounted] = useState(false);
+export function useIsMounted<T = undefined>(onMount?: () => T): T | undefined {
+	const [value, setValue] = useState<T>();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: onMount is read once at mount
 	useEffect(() => {
-		setIsMounted(true);
+		setValue(onMount ? onMount() : (true as T));
 	}, []);
 
-	return isMounted;
+	return value;
 }

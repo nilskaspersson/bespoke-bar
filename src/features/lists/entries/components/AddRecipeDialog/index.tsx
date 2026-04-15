@@ -27,12 +27,13 @@ type Props = ButtonProps & {
 };
 
 export function AddRecipeDialog({ list, children, ...props }: Props) {
-	const { dialogRef, isOpen, mounted, unmount } = useDialog();
+	const { dialogRef, isOpen, mounted, showModal, closeModal, unmount } =
+		useDialog();
 	const formId = useId();
 
 	return (
 		<>
-			<Button {...props} onClick={() => dialogRef.current?.showModal()}>
+			<Button {...props} onClick={showModal}>
 				{children}
 			</Button>
 
@@ -69,11 +70,7 @@ export function AddRecipeDialog({ list, children, ...props }: Props) {
 					</li>
 				}
 			>
-				<AddRecipeForm
-					formId={formId}
-					list={list}
-					onSuccess={() => dialogRef.current?.close()}
-				/>
+				<AddRecipeForm formId={formId} list={list} onSuccess={closeModal} />
 			</Drawer>
 		</>
 	);

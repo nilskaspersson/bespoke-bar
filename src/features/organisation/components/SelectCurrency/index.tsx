@@ -1,8 +1,7 @@
 import { type ComponentProps, use, useCallback, useMemo } from "react";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Combobox } from "@/ui/Combobox";
-import { OptionLabel } from "@/ui/OptionLabel";
-import { Text } from "@/ui/Text";
+import { OptionsList } from "@/ui/OptionsList";
 import { collator } from "@/utils/collator";
 import { type Keyed, withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
@@ -25,13 +24,11 @@ export function SelectCurrency({
 
 	const getItemLabel = useCallback((item: Currency) => {
 		return (
-			<OptionLabel>
+			<OptionsList.Label
+				description={<span className={styles.code}>{item.code}</span>}
+			>
 				{item.name}
-
-				<Text light className={styles.code} size={1}>
-					{item.code}
-				</Text>
-			</OptionLabel>
+			</OptionsList.Label>
 		);
 	}, []);
 

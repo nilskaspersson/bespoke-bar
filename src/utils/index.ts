@@ -99,6 +99,19 @@ export function normalizeInput(s: string): string {
 	const deburred = deburr(s) || s;
 	return deburred.toLowerCase().trim();
 }
+/**
+ * Build a Map from an array, keyed by a value extracted from each item.
+ */
+export function indexBy<T>(
+	items: readonly T[],
+	getKey: (item: T) => string,
+): Map<string, T> {
+	const map = new Map<string, T>();
+	for (const item of items) {
+		map.set(getKey(item), item);
+	}
+	return map;
+}
 
 /**
  * Inverts a Map<K, V[]> to Map<V, K> for one-to-one lookups
@@ -114,6 +127,10 @@ export function invertMapToLookup<K, V>(map: Map<K, V[]>): Map<V, K> {
 	}
 
 	return result;
+}
+
+export function pickRandom<T>(items: readonly [T, ...T[]]): T {
+	return items[Math.floor(Math.random() * items.length)];
 }
 
 export function times(n: number): number[] {

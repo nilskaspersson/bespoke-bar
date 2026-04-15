@@ -13,6 +13,7 @@ import { SelectRecipe } from "@/features/lists/components/SelectRecipe";
 import { addRecipeToListAction } from "@/features/lists/entries/api/addRecipeToList";
 import { RecipeListEntryCard } from "@/features/lists/entries/components/RecipeListEntryCard";
 import { createDraftRecipeListEntry } from "@/features/lists/utils";
+import { useIndexedItems } from "@/hooks/useIndexedItems";
 import { trpc } from "@/trpc/client";
 import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
@@ -27,6 +28,8 @@ type Props = {
 	list: RecipeList;
 	onSuccess?: () => void;
 };
+
+const getRecipeId = (recipe: { id: string }) => recipe.id;
 
 export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 	const formRef = useRef<HTMLFormElement>(null);
@@ -75,9 +78,13 @@ export function AddRecipeForm({ formId, list, onSuccess }: Props) {
 		[onSuccess],
 	);
 
+	const recipesById = useIndexedItems(recipes, getRecipeId);
+
 	const selectedRecipe = useMemo(() => {
-		return recipes?.find((recipe) => recipe.id === fields.recipeId.value);
-	}, [recipes, fields.recipeId.value]);
+		return fields.recipeId.value
+			? recipesById.get(fields.recipeId.value)
+			: undefined;
+	}, [recipesById, fields.recipeId.value]);
 
 	const draftEntry: RecipeListEntryWithRecipe | null = useMemo(() => {
 		if (!selectedRecipe) {

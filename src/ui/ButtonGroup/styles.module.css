@@ -1,0 +1,21 @@
+@layer ui {
+	.group {
+		> :where(button, a) + :where(button, a) {
+			margin-left: -1px;
+		}
+
+		> :where(button, a):not(:first-child):not(:last-child) {
+			border-radius: 0;
+		}
+
+		> :where(button, a):first-child:not(:last-child) {
+			border-top-right-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+
+		> :where(button, a):last-child:not(:first-child) {
+			border-top-left-radius: 0;
+			border-bottom-left-radius: 0;
+		}
+	}
+}

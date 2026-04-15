@@ -13,20 +13,34 @@ import { getKey, type Keyed } from "@/utils/withKey";
 export function useCreateBulkDraftRecipes(
 	recipes: Keyed<BaseRecipe>[],
 	createRecipes: (recipes: RecipeFormData[]) => Promise<Recipe[]>,
-	onSuccess?: (recipes: Recipe[]) => void,
+	{
+		onSuccess,
+		onError,
+		createMoreHref,
+	}: {
+		onSuccess?: (recipes: Recipe[]) => void;
+		onError?: (error: unknown) => void;
+		createMoreHref?: string;
+	} = {},
 ) {
 	return useCallback(() => {
-		const data = z.array(recipeFormSchema).parse(
-			recipes.map(({ specs, ...recipe }) => ({
-				recipe,
-				specs,
-			})),
-		);
-
-		const promise = createRecipes(data).then((recipes) => {
-			onSuccess?.(recipes);
-			return recipes;
-		});
+		const promise = (async () => {
+			const data = z.array(recipeFormSchema).parse(
+				recipes.map(({ specs, ...recipe }) => ({
+					recipe,
+					specs,
+				})),
+			);
+			return createRecipes(data);
+		})()
+			.then((recipes) => {
+				onSuccess?.(recipes);
+				return recipes;
+			})
+			.catch((error) => {
+				onError?.(error);
+				throw error;
+			});
 
 		const toastId = Date.now().toString();
 
@@ -63,12 +77,13 @@ export function useCreateBulkDraftRecipes(
 					<ToastActions>
 						<LinkButton
 							size="tiny"
-							href="/bar/recipes"
+							href={createMoreHref ?? "/bar/recipes"}
 							variant="ghost"
 							color="heavy"
 							prefetch={false}
+							onClick={() => toast.dismiss(toastId)}
 						>
-							All recipes
+							{createMoreHref ? "Create more Recipes" : "All recipes"}
 						</LinkButton>
 
 						{recipes.length === 1 ? (
@@ -89,5 +104,5 @@ export function useCreateBulkDraftRecipes(
 			}),
 			error: () => "Recipe could not be created",
 		});
-	}, [recipes, createRecipes, onSuccess]);
+	}, [recipes, createRecipes, onSuccess, onError, createMoreHref]);
 }

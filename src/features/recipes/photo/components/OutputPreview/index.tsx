@@ -1,16 +1,13 @@
 "use client";
 
 import { clsx } from "clsx";
-import {
-	Activity,
-	type ChangeEventHandler,
-	type ComponentProps,
-	useState,
-} from "react";
+import { Activity, type ComponentProps, useState } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
+import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { DraftRecipeCard } from "@/features/recipes/bulk/components/DraftRecipeCard";
+import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import {
@@ -22,7 +19,6 @@ import { Callout } from "@/ui/Callout";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-import { TextArea } from "@/ui/Input";
 import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
@@ -30,14 +26,16 @@ export function OutputPreview({
 	className,
 	disabled,
 	draftRecipes,
-	draftRecipesText,
+	ingredients,
+	ocrText,
 	onChangeDraftRecipesText,
 	...props
 }: ComponentProps<"section"> & {
 	disabled?: boolean;
 	draftRecipes: Keyed<BaseRecipe>[];
-	draftRecipesText: string;
-	onChangeDraftRecipesText: ChangeEventHandler<HTMLTextAreaElement>;
+	ingredients: Ingredient[];
+	ocrText: string;
+	onChangeDraftRecipesText: (text: string) => void;
 }) {
 	const [displayMode, setDisplayMode] = useState<DisplayMode>("PREVIEW");
 
@@ -83,14 +81,14 @@ export function OutputPreview({
 			</Activity>
 
 			<Activity mode={displayMode === "EDIT" ? "visible" : "hidden"}>
-				<TextArea
-					name="draftRecipeText"
-					value={draftRecipesText}
-					onChange={onChangeDraftRecipesText}
-					rows={5}
-					fullWidth
-					readOnly={disabled}
-				/>
+				{!disabled && (
+					<RecipeEditor
+						key={ocrText}
+						ingredients={ingredients}
+						initialText={ocrText}
+						onTextChange={onChangeDraftRecipesText}
+					/>
+				)}
 			</Activity>
 
 			<Flex justifyContent="space-between" alignItems="center" gap={4} wrap>
@@ -108,8 +106,8 @@ export function OutputPreview({
 						variant="solid"
 						color={hasDraftRecipes ? "accent" : "light"}
 						size="small"
-						disabled={!hasDraftRecipes}
-						onClick={submitBulkRecipesAction}
+						aria-disabled={!hasDraftRecipes}
+						onClick={hasDraftRecipes ? submitBulkRecipesAction : undefined}
 					>
 						{hasDraftRecipes ? (
 							<>

@@ -3,9 +3,9 @@
 import { clsx } from "clsx";
 import { type UseSelectProps, useSelect } from "downshift";
 import { type ComponentProps, useId } from "react";
+import { useIndexedItems } from "@/hooks/useIndexedItems";
 import { ControlLabel } from "@/ui/ControlLabel";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
-import { OptionItem } from "@/ui/OptionItem";
 import { OptionsList } from "@/ui/OptionsList";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
@@ -60,6 +60,8 @@ export function Select<T>({
 }: Props<T> & Partial<ComponentProps<typeof ControlLabel>>) {
 	const helperTextId = useId();
 
+	const itemsByValue = useIndexedItems(items, getItemValue);
+
 	const {
 		isOpen,
 		selectedItem,
@@ -71,7 +73,7 @@ export function Select<T>({
 	} = useSelect({
 		items,
 		defaultSelectedItem: defaultValue
-			? items.find((o) => getItemValue(o) === defaultValue)
+			? itemsByValue.get(defaultValue)
 			: undefined,
 		itemToString,
 		scrollIntoView: (node) =>
@@ -118,7 +120,7 @@ export function Select<T>({
 					{isOpen ? (
 						<OptionsList footer={footer}>
 							{items.map((item, index) => (
-								<OptionItem
+								<OptionsList.Item
 									key={getKey(item)}
 									{...getItemProps({ item, index })}
 									isHighlighted={highlightedIndex === index}
@@ -135,7 +137,7 @@ export function Select<T>({
 											{itemToString(item)}
 										</Text>
 									)}
-								</OptionItem>
+								</OptionsList.Item>
 							))}
 						</OptionsList>
 					) : null}

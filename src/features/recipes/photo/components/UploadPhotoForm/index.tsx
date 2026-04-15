@@ -41,7 +41,8 @@ export function UploadPhotoForm({
 		rejectAction: rejectOCRConsentPrompt,
 	} = useConfirm();
 
-	const { dialogRef: ocrConsentDialogRef } = useDialog();
+	const { dialogRef: ocrConsentDialogRef, showModal: showOCRConsentDialog } =
+		useDialog();
 
 	const fileInputProps: Partial<ComponentProps<typeof FileInput>> = {
 		name: "image",
@@ -55,7 +56,7 @@ export function UploadPhotoForm({
 			const isOCRConsentConfirmed = await checkOCRConsent();
 
 			if (!isOCRConsentConfirmed) {
-				ocrConsentDialogRef.current?.showModal();
+				showOCRConsentDialog();
 				const confirmed = await confirmOCRConsent();
 
 				if (!confirmed) {
