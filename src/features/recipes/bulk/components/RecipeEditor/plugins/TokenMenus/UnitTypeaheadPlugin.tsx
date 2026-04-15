@@ -17,7 +17,11 @@ import { searchByIndex } from "@/utils/search";
 import { GhostTextController } from "./GhostTextController";
 import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";
-import { MAX_TYPEAHEAD_OPTIONS, UnitMenuOption } from "./utils";
+import {
+	createUnitMenuOption,
+	MAX_TYPEAHEAD_OPTIONS,
+	type UnitMenuOption,
+} from "./utils";
 
 /**
  * Trigger the unit typeahead when the cursor is positioned where a unit
@@ -70,7 +74,7 @@ export function UnitTypeaheadPlugin() {
 		if (!query) return [];
 		return searchByIndex(SORTED_UNITS, UNIT_SEARCH_INDEX, (u) => u, query)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
-			.map((u) => new UnitMenuOption(u));
+			.map(createUnitMenuOption);
 	}, [query]);
 
 	const onSelectOption = useCallback(

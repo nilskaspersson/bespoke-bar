@@ -8,22 +8,17 @@ import { normalizeInput } from "@/utils";
 
 export const MAX_TYPEAHEAD_OPTIONS = 10;
 
-export class IngredientMenuOption extends MenuOption {
-	ingredient: Ingredient;
+export type IngredientMenuOption = MenuOption & { ingredient: Ingredient };
+export type UnitMenuOption = MenuOption & { unit: Unit };
 
-	constructor(ingredient: Ingredient) {
-		super(ingredient.id);
-		this.ingredient = ingredient;
-	}
+export function createIngredientMenuOption(
+	ingredient: Ingredient,
+): IngredientMenuOption {
+	return Object.assign(new MenuOption(ingredient.id), { ingredient });
 }
 
-export class UnitMenuOption extends MenuOption {
-	unit: Unit;
-
-	constructor(unit: Unit) {
-		super(unit);
-		this.unit = unit;
-	}
+export function createUnitMenuOption(unit: Unit): UnitMenuOption {
+	return Object.assign(new MenuOption(unit), { unit });
 }
 
 export function formatAbv(abv: number | null): string | null {

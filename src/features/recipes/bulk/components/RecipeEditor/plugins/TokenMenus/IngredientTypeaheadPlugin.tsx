@@ -12,8 +12,9 @@ import { GhostTextController } from "./GhostTextController";
 import { IngredientOption } from "./IngredientOption";
 import { TokenMenu } from "./TokenMenu";
 import {
+	createIngredientMenuOption,
 	createIngredientTriggerFn,
-	IngredientMenuOption,
+	type IngredientMenuOption,
 	MAX_TYPEAHEAD_OPTIONS,
 } from "./utils";
 
@@ -37,7 +38,7 @@ export function IngredientTypeaheadPlugin() {
 			deferredQuery,
 		)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
-			.map((i) => new IngredientMenuOption(i));
+			.map(createIngredientMenuOption);
 	}, [sortedIngredients, searchIndex, deferredQuery]);
 
 	const onSelectOption = useCallback(
