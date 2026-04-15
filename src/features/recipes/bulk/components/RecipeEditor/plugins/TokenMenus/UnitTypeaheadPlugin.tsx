@@ -1,37 +1,23 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import {
-	LexicalTypeaheadMenuPlugin,
-	MenuOption,
-} from "@lexical/react/LexicalTypeaheadMenuPlugin";
+import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getSelection, $isRangeSelection, type TextNode } from "lexical";
 import { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import type { Unit } from "@/db/schema/units";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
-import { SORTED_UNITS, UNIT_TO_LABEL } from "@/features/units/constants";
+import {
+	getUnitLabel,
+	SORTED_UNITS,
+	UNIT_SEARCH_INDEX,
+} from "@/features/units/constants";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
-import { createSearchIndex, searchByIndex } from "@/utils/search";
+import { searchByIndex } from "@/utils/search";
 import { GhostTextController } from "./GhostTextController";
 import { IngredientMenu } from "./IngredientMenu";
 import { UnitOption } from "./UnitOption";
-import { MAX_TYPEAHEAD_OPTIONS } from "./utils";
-
-class UnitMenuOption extends MenuOption {
-	unit: Unit;
-	constructor(unit: Unit) {
-		super(unit);
-		this.unit = unit;
-	}
-}
-
-const SEARCH_INDEX = createSearchIndex(
-	SORTED_UNITS,
-	(u) => u,
-	(u) => [UNIT_TO_LABEL.get(u) ?? u, u],
-);
+import { MAX_TYPEAHEAD_OPTIONS, UnitMenuOption } from "./utils";
 
 /**
  * Trigger the unit typeahead when the cursor is positioned where a unit
@@ -74,8 +60,7 @@ function unitTriggerFn(text: string) {
 	};
 }
 
-const getUnitLabel = (option: UnitMenuOption) =>
-	UNIT_TO_LABEL.get(option.unit) ?? option.unit;
+const getOptionLabel = (option: UnitMenuOption) => getUnitLabel(option.unit);
 
 export function UnitTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
@@ -83,7 +68,7 @@ export function UnitTypeaheadPlugin() {
 
 	const options = useMemo(() => {
 		if (!query) return [];
-		return searchByIndex(SORTED_UNITS, SEARCH_INDEX, (u) => u, query)
+		return searchByIndex(SORTED_UNITS, UNIT_SEARCH_INDEX, (u) => u, query)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
 			.map((u) => new UnitMenuOption(u));
 	}, [query]);
@@ -136,7 +121,7 @@ export function UnitTypeaheadPlugin() {
 							query={query}
 							options={options}
 							selectedIndex={selectedIndex}
-							getLabel={getUnitLabel}
+							getLabel={getOptionLabel}
 						/>
 						<IngredientMenu footerAction="complete">
 							{options.map((option, index) => (

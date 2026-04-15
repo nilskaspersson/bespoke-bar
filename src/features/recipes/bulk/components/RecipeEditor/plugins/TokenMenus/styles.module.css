@@ -1,6 +1,6 @@
 @layer feature {
 	.typeahead {
-		width: max-content;
+		width: var(--control-width);
 		z-index: var(--z-popover);
 
 		/**

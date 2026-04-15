@@ -8,22 +8,27 @@ import styles from "./styles.module.css";
 
 /**
  * Shared menu scaffold for both `IngredientTypeaheadPlugin` (completing a
- * partial query) and `IngredientBrowsingPlugin` (click-to-replace on an
- * existing token). Identical visuals, only the footer verb differs.
- * `onMouseDown` is suppressed so clicking inside the menu doesn't steal
- * focus from the contenteditable.
+ * partial query) and `TokenBrowsingPlugin` (click-to-replace on an existing
+ * token). `onMouseDown` is suppressed so clicking inside the menu doesn't
+ * steal focus from whatever currently has it — the editor for typeahead,
+ * the search input for browsing. Firefox in particular blurs focused
+ * elements when the user mousedowns on a non-focusable descendant, which
+ * without this would tear the popover down mid-click and break commit.
  */
 export function IngredientMenu({
 	children,
 	footerAction,
+	header,
 }: {
 	children: ReactNode;
 	footerAction: "complete" | "replace";
+	header?: ReactNode;
 }) {
 	return (
 		<OptionsList
 			className={styles.typeahead}
 			onMouseDown={(e) => e.preventDefault()}
+			header={header}
 			footer={
 				<Text size={1} className={styles.footer}>
 					<Kbd shortcut="tab" visual variant="ghost" /> or{" "}

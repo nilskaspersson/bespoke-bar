@@ -57,11 +57,9 @@ function Label({
 	children,
 	className,
 	description,
-	secondary,
 	...props
 }: ComponentProps<typeof Text> & {
 	description?: React.ReactNode;
-	secondary?: React.ReactNode;
 }) {
 	return (
 		<>
@@ -74,12 +72,6 @@ function Label({
 				{...props}
 			>
 				{children}
-
-				{secondary ? (
-					<Text as="span" size={1} compact light>
-						{secondary}
-					</Text>
-				) : null}
 			</Text>
 
 			{description ? (

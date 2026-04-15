@@ -9,17 +9,26 @@ import {
 	$isTextNode,
 	CLICK_COMMAND,
 	COMMAND_PRIORITY_LOW,
+	type LexicalEditor,
 } from "lexical";
-import { useEffect, useState } from "react";
+import {
+	type FocusEvent as ReactFocusEvent,
+	type KeyboardEvent as ReactKeyboardEvent,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { createPortal } from "react-dom";
+import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import {
 	type Token,
 	tokenizeLine,
 } from "@/features/recipes/bulk/utils/tokenizeLine";
-import { SORTED_UNITS } from "@/features/units/constants";
+import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { useMenuKeyboard } from "../../hooks/useMenuKeyboard";
+import { Input } from "@/ui/Input";
+import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import {
 	createParagraphDOMRange,
@@ -46,6 +55,7 @@ type BrowsingStateBase = {
 	tokenEnd: number;
 	anchorRect: DOMRect;
 	selectedIndex: number;
+	query: string;
 };
 
 type BrowsingState =
@@ -65,84 +75,113 @@ function resolveUnitQuantity(tokens: Token[]): number {
 	return quantity ?? 1;
 }
 
+/**
+ * Replace the text between `tokenStart..tokenEnd` in the paragraph
+ * identified by `paragraphKey` with `replacement`, then drop the caret at
+ * the end of the replacement. Must be called outside an active Lexical
+ * update — we start our own here.
+ */
+function applyTokenReplacement(
+	editor: LexicalEditor,
+	paragraphKey: string,
+	tokenStart: number,
+	tokenEnd: number,
+	replacement: string,
+) {
+	editor.update(() => {
+		const paragraph = $getNodeByKey(paragraphKey);
+		if (!$isParagraphNode(paragraph)) return;
+		const text = paragraph.getTextContent();
+		const replaced =
+			text.slice(0, tokenStart) + replacement + text.slice(tokenEnd);
+		for (const child of paragraph.getChildren()) child.remove();
+		const newText = $createTextNode(replaced);
+		paragraph.append(newText);
+		const caret = tokenStart + replacement.length;
+		newText.select(caret, caret);
+	});
+}
+
+/**
+ * Inspect a click event inside the editor and figure out whether it landed
+ * inside a browsable token (ingredient or unit). Must be called inside an
+ * `editor.read(...)` so Lexical node accessors resolve. Returns `null` for
+ * clicks that miss a token — the caller is expected to close the popover.
+ */
+function resolveBrowsingStateFromClick(
+	event: MouseEvent,
+	editor: LexicalEditor,
+	ingredientIndex: IngredientIndex,
+): BrowsingState | null {
+	const target = event.target;
+	if (!(target instanceof Node)) return null;
+
+	const lexNode = $getNearestNodeFromDOMNode(target);
+	if (!$isTextNode(lexNode)) return null;
+
+	const paragraph = lexNode.getParent();
+	if (!$isParagraphNode(paragraph)) return null;
+
+	const { tokens } = tokenizeLine(paragraph.getTextContent(), ingredientIndex);
+	const textNodes = getParagraphTextNodes(paragraph);
+
+	for (const token of tokens) {
+		if (token.type !== "ingredient" && token.type !== "unit") continue;
+
+		/**
+		 * Measure the bounding rect of the token's characters via a DOM
+		 * Range. Only resolve if the click coordinates landed inside that
+		 * rect — not just near it.
+		 */
+		const range = createParagraphDOMRange(
+			editor,
+			textNodes,
+			token.start,
+			token.end,
+		);
+		if (!range) continue;
+
+		const rect = range.getBoundingClientRect();
+		const inside =
+			event.clientX >= rect.left &&
+			event.clientX <= rect.right &&
+			event.clientY >= rect.top &&
+			event.clientY <= rect.bottom;
+		if (!inside) continue;
+
+		const base: BrowsingStateBase = {
+			paragraphKey: paragraph.getKey(),
+			tokenStart: token.start,
+			tokenEnd: token.end,
+			anchorRect: rect,
+			selectedIndex: 0,
+			query: "",
+		};
+		return token.type === "ingredient"
+			? { ...base, variant: "ingredient" }
+			: { ...base, variant: "unit", quantity: resolveUnitQuantity(tokens) };
+	}
+
+	return null;
+}
+
 export function TokenBrowsingPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [state, setState] = useState<BrowsingState | null>(null);
-	const { sortedIngredients, ingredientIndex } = useRecipeIngredients();
+	const { sortedIngredients, searchIndex, ingredientIndex } =
+		useRecipeIngredients();
+
+	const variant = state?.variant;
+	const query = state?.query ?? "";
 
 	useEffect(() => {
 		return editor.registerCommand(
 			CLICK_COMMAND,
 			(event: MouseEvent) => {
 				editor.read(() => {
-					const target = event.target;
-					if (!(target instanceof Node)) {
-						setState(null);
-						return;
-					}
-					const lexNode = $getNearestNodeFromDOMNode(target);
-					if (!$isTextNode(lexNode)) {
-						setState(null);
-						return;
-					}
-					const paragraph = lexNode.getParent();
-					if (!$isParagraphNode(paragraph)) {
-						setState(null);
-						return;
-					}
-
-					const lineText = paragraph.getTextContent();
-					const { tokens } = tokenizeLine(lineText, ingredientIndex);
-					const browsable = tokens.filter(
-						(t) => t.type === "ingredient" || t.type === "unit",
+					setState(
+						resolveBrowsingStateFromClick(event, editor, ingredientIndex),
 					);
-					if (browsable.length === 0) {
-						setState(null);
-						return;
-					}
-
-					const textNodes = getParagraphTextNodes(paragraph);
-
-					/**
-					 * For each browsable token, measure the bounding rect of its
-					 * characters via a DOM Range. Only open the menu if the click
-					 * coordinates landed inside that rect — not just near it.
-					 */
-					for (const token of browsable) {
-						const range = createParagraphDOMRange(
-							editor,
-							textNodes,
-							token.start,
-							token.end,
-						);
-						if (!range) continue;
-						const rect = range.getBoundingClientRect();
-						const inside =
-							event.clientX >= rect.left &&
-							event.clientX <= rect.right &&
-							event.clientY >= rect.top &&
-							event.clientY <= rect.bottom;
-						if (!inside) continue;
-
-						const base: BrowsingStateBase = {
-							paragraphKey: paragraph.getKey(),
-							tokenStart: token.start,
-							tokenEnd: token.end,
-							anchorRect: rect,
-							selectedIndex: 0,
-						};
-						if (token.type === "ingredient") {
-							setState({ ...base, variant: "ingredient" });
-						} else {
-							setState({
-								...base,
-								variant: "unit",
-								quantity: resolveUnitQuantity(tokens),
-							});
-						}
-						return;
-					}
-					setState(null);
 				});
 				return false;
 			},
@@ -151,10 +190,12 @@ export function TokenBrowsingPlugin() {
 	}, [editor, ingredientIndex]);
 
 	/**
-	 * Close the menu on any text mutation (typing, deleting). Lexical reports
-	 * text changes via `dirtyLeaves` — selection-only updates leave it empty,
-	 * so we don't race with the click-to-open command that has just moved the
-	 * cursor.
+	 * Close the menu on any text mutation (typing in the editor, deleting).
+	 * Lexical reports text changes via `dirtyLeaves` — selection-only updates
+	 * leave it empty, so we don't race with the click-to-open command that
+	 * has just moved the cursor. Typing in the browsing menu's own search
+	 * input doesn't trigger the editor's update listener at all, since the
+	 * input isn't a Lexical node.
 	 */
 	useEffect(() => {
 		return editor.registerUpdateListener(({ dirtyLeaves }) => {
@@ -162,57 +203,166 @@ export function TokenBrowsingPlugin() {
 		});
 	}, [editor]);
 
-	const commit = (replacement: string) => {
-		if (!state) return;
-		editor.update(() => {
-			const paragraph = $getNodeByKey(state.paragraphKey);
-			if (!$isParagraphNode(paragraph)) return;
-			const text = paragraph.getTextContent();
-			const replaced =
-				text.slice(0, state.tokenStart) +
-				replacement +
-				text.slice(state.tokenEnd);
-			for (const child of paragraph.getChildren()) child.remove();
-			const newText = $createTextNode(replaced);
-			paragraph.append(newText);
-			const caret = state.tokenStart + replacement.length;
-			newText.select(caret, caret);
-		});
-		setState(null);
-	};
+	/**
+	 * Any pointer interaction outside the popover closes it. Document-level
+	 * capture phase so clicks on the page background, sidebar, etc. are
+	 * caught regardless of which element they land on.
+	 */
+	const isOpen = state !== null;
+	useEffect(() => {
+		if (!isOpen) return;
+		function handlePointerDown(event: PointerEvent) {
+			if (!(event.target instanceof Element)) return;
+			if (event.target.closest(`.${styles.browsingPopover}`)) return;
+			setState(null);
+			editor.focus();
+		}
+		document.addEventListener("pointerdown", handlePointerDown, true);
+		return () =>
+			document.removeEventListener("pointerdown", handlePointerDown, true);
+	}, [isOpen, editor]);
+
+	const filteredIngredients = useMemo(() => {
+		if (variant !== "ingredient") return [];
+		return searchByIndex(sortedIngredients, searchIndex, (i) => i.id, query);
+	}, [variant, query, sortedIngredients, searchIndex]);
+
+	const filteredUnits = useMemo(() => {
+		if (variant !== "unit") return [];
+		return searchByIndex(SORTED_UNITS, UNIT_SEARCH_INDEX, (u) => u, query);
+	}, [variant, query]);
 
 	const itemCount =
-		state?.variant === "ingredient"
-			? sortedIngredients.length
-			: state?.variant === "unit"
-				? SORTED_UNITS.length
+		variant === "ingredient"
+			? filteredIngredients.length
+			: variant === "unit"
+				? filteredUnits.length
 				: 0;
 
-	useMenuKeyboard(editor, state !== null, {
-		onMove: (delta) =>
-			setState((prev) =>
-				prev && itemCount > 0
-					? {
-							...prev,
-							selectedIndex:
-								(prev.selectedIndex + delta + itemCount) % itemCount,
-						}
-					: prev,
-			),
-		onCommit: () => {
-			if (!state) return;
-			if (state.variant === "ingredient") {
-				const selected = sortedIngredients[state.selectedIndex];
-				if (selected) commit(selected.name);
-			} else {
-				const selected = SORTED_UNITS[state.selectedIndex];
-				if (selected) commit(getFormattedUnit(selected, state.quantity));
-			}
-		},
-		onClose: () => setState(null),
-	});
+	function closePopover() {
+		setState(null);
+		editor.focus();
+	}
+
+	function commit(replacement: string) {
+		if (!state) return;
+		applyTokenReplacement(
+			editor,
+			state.paragraphKey,
+			state.tokenStart,
+			state.tokenEnd,
+			replacement,
+		);
+		closePopover();
+	}
+
+	function commitSelected() {
+		if (!state) return;
+		if (state.variant === "ingredient") {
+			const selected = filteredIngredients[state.selectedIndex];
+			if (selected) commit(selected.name);
+		} else {
+			const selected = filteredUnits[state.selectedIndex];
+			if (selected) commit(getFormattedUnit(selected, state.quantity));
+		}
+	}
+
+	function moveSelection(delta: 1 | -1) {
+		if (itemCount === 0) return;
+		setState((prev) =>
+			prev
+				? {
+						...prev,
+						selectedIndex: (prev.selectedIndex + delta + itemCount) % itemCount,
+					}
+				: prev,
+		);
+	}
+
+	function highlightOption(index: number) {
+		setState((prev) => (prev ? { ...prev, selectedIndex: index } : prev));
+	}
+
+	function onSearchKeyDown(event: ReactKeyboardEvent<HTMLInputElement>) {
+		switch (event.key) {
+			case "ArrowDown":
+				event.preventDefault();
+				moveSelection(1);
+				return;
+			case "ArrowUp":
+				event.preventDefault();
+				moveSelection(-1);
+				return;
+			case "Enter":
+			case "Tab":
+				event.preventDefault();
+				commitSelected();
+				return;
+			case "Escape":
+				event.preventDefault();
+				closePopover();
+				return;
+		}
+	}
+
+	function onSearchChange(event: React.ChangeEvent<HTMLInputElement>) {
+		const next = event.target.value;
+		setState((prev) =>
+			prev ? { ...prev, query: next, selectedIndex: 0 } : prev,
+		);
+	}
+
+	/**
+	 * Firefox blurs focused inputs on Escape at a layer below JS — the
+	 * keydown event doesn't reach React, so `onSearchKeyDown`'s Escape case
+	 * never fires. Mirror `EscapeFocusPlugin`'s workaround: when the input
+	 * blurs "going nowhere" (relatedTarget null or `document.body`), treat
+	 * it as Escape and close. List-item clicks don't trigger this because
+	 * the `<li>`s are non-focusable, so focus never leaves the input.
+	 */
+	function onSearchBlur(event: ReactFocusEvent<HTMLInputElement>) {
+		if (event.relatedTarget && event.relatedTarget !== document.body) return;
+		closePopover();
+	}
 
 	if (!state) return null;
+
+	const searchInput = (
+		<Input
+			key={`${state.paragraphKey}:${state.tokenStart}`}
+			autoFocus
+			compact
+			fullWidth
+			placeholder="Type to filter…"
+			value={state.query}
+			onChange={onSearchChange}
+			onKeyDown={onSearchKeyDown}
+			onBlur={onSearchBlur}
+		/>
+	);
+
+	const options =
+		state.variant === "ingredient"
+			? filteredIngredients.map((ingredient, index) => (
+					<IngredientOption
+						key={ingredient.id}
+						ref={state.selectedIndex === index ? scrollIntoViewRef : undefined}
+						ingredient={ingredient}
+						isHighlighted={state.selectedIndex === index}
+						onClick={() => commit(ingredient.name)}
+						onMouseEnter={() => highlightOption(index)}
+					/>
+				))
+			: filteredUnits.map((unit, index) => (
+					<UnitOption
+						key={unit}
+						ref={state.selectedIndex === index ? scrollIntoViewRef : undefined}
+						unit={unit}
+						isHighlighted={state.selectedIndex === index}
+						onClick={() => commit(getFormattedUnit(unit, state.quantity))}
+						onMouseEnter={() => highlightOption(index)}
+					/>
+				));
 
 	return createPortal(
 		<div
@@ -222,42 +372,8 @@ export function TokenBrowsingPlugin() {
 				left: state.anchorRect.left + window.scrollX,
 			}}
 		>
-			<IngredientMenu footerAction="replace">
-				{state.variant === "ingredient"
-					? sortedIngredients.map((ingredient, index) => {
-							const isHighlighted = state.selectedIndex === index;
-							return (
-								<IngredientOption
-									key={ingredient.id}
-									ref={isHighlighted ? scrollIntoViewRef : undefined}
-									ingredient={ingredient}
-									isHighlighted={isHighlighted}
-									onClick={() => commit(ingredient.name)}
-									onMouseEnter={() =>
-										setState((prev) =>
-											prev ? { ...prev, selectedIndex: index } : null,
-										)
-									}
-								/>
-							);
-						})
-					: SORTED_UNITS.map((unit, index) => {
-							const isHighlighted = state.selectedIndex === index;
-							return (
-								<UnitOption
-									key={unit}
-									ref={isHighlighted ? scrollIntoViewRef : undefined}
-									unit={unit}
-									isHighlighted={isHighlighted}
-									onClick={() => commit(getFormattedUnit(unit, state.quantity))}
-									onMouseEnter={() =>
-										setState((prev) =>
-											prev ? { ...prev, selectedIndex: index } : null,
-										)
-									}
-								/>
-							);
-						})}
+			<IngredientMenu footerAction="replace" header={searchInput}>
+				{options}
 			</IngredientMenu>
 		</div>,
 		document.body,

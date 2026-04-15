@@ -2,7 +2,7 @@
 
 import type { MouseEventHandler, Ref } from "react";
 import type { Unit } from "@/db/schema/units";
-import { UNIT_TO_LABEL } from "@/features/units/constants";
+import { getUnitLabel } from "@/features/units/constants";
 import { OptionsList } from "@/ui/OptionsList";
 
 export function UnitOption({
@@ -25,7 +25,7 @@ export function UnitOption({
 			onClick={onClick}
 			onMouseEnter={onMouseEnter}
 		>
-			<OptionsList.Label>{UNIT_TO_LABEL.get(unit) ?? unit}</OptionsList.Label>
+			<OptionsList.Label>{getUnitLabel(unit)}</OptionsList.Label>
 		</OptionsList.Item>
 	);
 }

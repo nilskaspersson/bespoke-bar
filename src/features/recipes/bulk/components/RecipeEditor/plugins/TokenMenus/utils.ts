@@ -1,6 +1,7 @@
 import { MenuOption } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getSelection, $isRangeSelection } from "lexical";
 import type { Ingredient } from "@/db/schema/ingredients";
+import type { Unit } from "@/db/schema/units";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { normalizeInput } from "@/utils";
@@ -13,6 +14,15 @@ export class IngredientMenuOption extends MenuOption {
 	constructor(ingredient: Ingredient) {
 		super(ingredient.id);
 		this.ingredient = ingredient;
+	}
+}
+
+export class UnitMenuOption extends MenuOption {
+	unit: Unit;
+
+	constructor(unit: Unit) {
+		super(unit);
+		this.unit = unit;
 	}
 }
 
