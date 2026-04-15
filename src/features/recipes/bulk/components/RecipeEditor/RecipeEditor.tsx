@@ -1,6 +1,5 @@
 "use client";
 
-import { AutoFocusPlugin } from "@lexical/react/LexicalAutoFocusPlugin";
 import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -96,7 +95,6 @@ export function RecipeEditor({
 							ErrorBoundary={LexicalErrorBoundary}
 						/>
 						<HistoryPlugin />
-						<AutoFocusPlugin defaultSelection="rootEnd" />
 						<ClearEditorPlugin />
 						<TextChangePlugin onTextChange={onTextChange} />
 						<ParagraphBreakPlugin />

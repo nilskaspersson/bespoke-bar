@@ -68,6 +68,7 @@ export function EditorActionsPlugin() {
 							<Button
 								{...actionProps}
 								variant="outline"
+								title="Convert to metric"
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "metric"))
 								}
@@ -78,6 +79,7 @@ export function EditorActionsPlugin() {
 							<Button
 								{...actionProps}
 								variant="outline"
+								title="Convert to imperial"
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "imperial"))
 								}
@@ -103,7 +105,7 @@ export function EditorActionsPlugin() {
 					</li>
 
 					<li>
-						<Button {...actionProps} color="red" onClick={clear}>
+						<Button {...actionProps} color="red" onClick={clear} title="Clear editor">
 							<Icon name="trash" size={2} />
 						</Button>
 					</li>

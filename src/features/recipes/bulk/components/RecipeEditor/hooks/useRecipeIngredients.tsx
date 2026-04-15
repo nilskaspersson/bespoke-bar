@@ -33,10 +33,7 @@ const getSearchFields = (i: Ingredient) => {
 
 /**
  * Compute every ingredient-derived structure the editor plugins need once,
- * then share them via context. Previously each plugin re-derived its own
- * sorted list, lookup index, and known-name set from the same `ingredients`
- * prop — three passes per render, and any reference change invalidated all
- * three memoizations independently.
+ * then share them via context.
  */
 export function RecipeIngredientsProvider({
 	ingredients,
@@ -46,7 +43,7 @@ export function RecipeIngredientsProvider({
 	children: ReactNode;
 }) {
 	const value = useMemo<RecipeIngredientsValue>(() => {
-		const sortedIngredients = [...ingredients].sort((a, b) =>
+		const sortedIngredients = ingredients.toSorted((a, b) =>
 			collator.compare(a.name, b.name),
 		);
 		const ingredientIndex = buildIngredientIndex(ingredients);

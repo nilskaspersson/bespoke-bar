@@ -163,6 +163,6 @@ export const UNIT_TO_LABEL = new Map<Unit, string>([
  * Supported units sorted alphabetically by their display label. Shared by
  * the recipe-editor unit picker + typeahead so both lists agree on order.
  */
-export const SORTED_UNITS: Unit[] = [...supportedUnits.options].sort((a, b) =>
+export const SORTED_UNITS: Unit[] = supportedUnits.options.toSorted((a, b) =>
 	collator.compare(UNIT_TO_LABEL.get(a) ?? a, UNIT_TO_LABEL.get(b) ?? b),
 );
