@@ -19,6 +19,7 @@ import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";
 import {
 	createUnitMenuOption,
+	gateOnTextChange,
 	MAX_TYPEAHEAD_OPTIONS,
 	type UnitMenuOption,
 } from "./utils";
@@ -41,27 +42,29 @@ import {
  *     leaving `newNode = undefined`. The select handler then has nothing
  *     to replace and Tab becomes a no-op.
  */
-function unitTriggerFn(text: string) {
-	const selection = $getSelection();
-	if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
-	const anchor = selection.anchor;
-	if (anchor.type !== "text") return null;
-	if (anchor.offset !== anchor.getNode().getTextContentSize()) return null;
+function createUnitTriggerFn() {
+	return gateOnTextChange((text: string) => {
+		const selection = $getSelection();
+		if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
+		const anchor = selection.anchor;
+		if (anchor.type !== "text") return null;
+		if (anchor.offset !== anchor.getNode().getTextContentSize()) return null;
 
-	const [quantity, quantityRemainder] = quantityTextParser(text);
-	if (quantity === null) return null;
+		const [quantity, quantityRemainder] = quantityTextParser(text);
+		if (quantity === null) return null;
 
-	const afterQuantity = quantityRemainder.trimStart();
-	if (afterQuantity.length === 0) return null;
+		const afterQuantity = quantityRemainder.trimStart();
+		if (afterQuantity.length === 0) return null;
 
-	const [unit] = unitTextParser(afterQuantity);
-	if (unit !== null) return null;
+		const [unit] = unitTextParser(afterQuantity);
+		if (unit !== null) return null;
 
-	return {
-		leadOffset: text.length - afterQuantity.length,
-		matchingString: afterQuantity,
-		replaceableString: afterQuantity,
-	};
+		return {
+			leadOffset: text.length - afterQuantity.length,
+			matchingString: afterQuantity,
+			replaceableString: afterQuantity,
+		};
+	});
 }
 
 const getOptionLabel = (option: UnitMenuOption) => getUnitLabel(option.unit);
@@ -70,6 +73,8 @@ export function UnitTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [query, setQuery] = useState<string | null>(null);
 	const deferredQuery = useDeferredValue(query);
+
+	const triggerFn = useMemo(createUnitTriggerFn, []);
 
 	const options = useMemo(() => {
 		if (!deferredQuery) return [];
@@ -117,7 +122,7 @@ export function UnitTypeaheadPlugin() {
 	return (
 		<LexicalTypeaheadMenuPlugin<UnitMenuOption>
 			options={options}
-			triggerFn={unitTriggerFn}
+			triggerFn={triggerFn}
 			onQueryChange={setQuery}
 			onSelectOption={onSelectOption}
 			menuRenderFn={(

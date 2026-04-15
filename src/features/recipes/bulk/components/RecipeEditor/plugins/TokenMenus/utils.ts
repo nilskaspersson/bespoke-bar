@@ -1,5 +1,5 @@
 import { MenuOption } from "@lexical/react/LexicalTypeaheadMenuPlugin";
-import { $getSelection, $isRangeSelection } from "lexical";
+import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Unit } from "@/db/schema/units";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
@@ -21,6 +21,38 @@ export function createUnitMenuOption(unit: Unit): UnitMenuOption {
 	return Object.assign(new MenuOption(unit), { unit });
 }
 
+/**
+ * Wraps a typeahead trigger so it only fires when the editor's root text
+ * content has actually changed since the previous evaluation.
+ *
+ * `LexicalTypeaheadMenuPlugin` re-runs the trigger on every Lexical update
+ * — including selection-only updates from clicking, focusing, or the
+ * caret returning to a position where the plugin *would* match. That
+ * makes the menu re-open after the user dismissed it by clicking away,
+ * because the underlying text hasn't changed and the plugin thinks it's
+ * still a valid match.
+ *
+ * Gating on "the root text is different from last time" means:
+ *   - typing → text changes → trigger fires
+ *   - cursor move / focus return → text unchanged → suppressed
+ *   - type one more character after dismissing → text differs → fires again
+ *
+ * State lives in a closure per factory call, so each typeahead plugin
+ * holds its own "last seen text" and can't trample the other.
+ */
+export function gateOnTextChange<T>(
+	compute: (text: string) => T | null,
+): (text: string) => T | null {
+	let lastRootText = "";
+	return (text) => {
+		const rootText = $getRoot().getTextContent();
+		const changed = rootText !== lastRootText;
+		lastRootText = rootText;
+		if (!changed) return null;
+		return compute(text);
+	};
+}
+
 export function formatAbv(abv: number | null): string | null {
 	if (abv === null) return null;
 	return `${(abv * 100).toFixed(0)}%`;
@@ -35,7 +67,7 @@ export function formatAbv(abv: number | null): string | null {
  * exactly match an existing ingredient name.
  */
 export function createIngredientTriggerFn(knownIngredientNames: Set<string>) {
-	return (text: string) => {
+	return gateOnTextChange((text) => {
 		/**
 		 * Only fire when the cursor is at the end of its TextNode — i.e. the user
 		 * is actively appending. Clicking into the middle of an existing ingredient
@@ -63,5 +95,5 @@ export function createIngredientTriggerFn(knownIngredientNames: Set<string>) {
 			matchingString: ingredientText,
 			replaceableString: ingredientText,
 		};
-	};
+	});
 }
