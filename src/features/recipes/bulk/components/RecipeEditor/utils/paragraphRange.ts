@@ -6,9 +6,17 @@ import {
 	type TextNode,
 } from "lexical";
 
-type TextNodeAtOffset = { node: TextNode; offset: number };
+export type TextNodeAtOffset = { node: TextNode; offset: number };
 
-function locateOffset(
+/**
+ * Walk a paragraph's `TextNode` children to find the one that contains
+ * the paragraph-relative character `offset`, returning both the node and
+ * the offset within it. `matchAtEnd` controls whether the search is
+ * inclusive of the offset at a node's end boundary — `true` for a
+ * Range-end lookup (so an offset exactly at the boundary still resolves
+ * to the node before it), `false` for a Range-start lookup.
+ */
+export function locateTextNodeAtOffset(
 	paragraph: ParagraphNode,
 	offset: number,
 	matchAtEnd: boolean,
@@ -40,8 +48,8 @@ export function createParagraphDOMRange(
 	start: number,
 	end: number,
 ): Range | null {
-	const anchor = locateOffset(paragraph, start, false);
-	const focus = locateOffset(paragraph, end, true);
+	const anchor = locateTextNodeAtOffset(paragraph, start, false);
+	const focus = locateTextNodeAtOffset(paragraph, end, true);
 	if (!anchor || !focus) return null;
 	return createDOMRange(
 		editor,

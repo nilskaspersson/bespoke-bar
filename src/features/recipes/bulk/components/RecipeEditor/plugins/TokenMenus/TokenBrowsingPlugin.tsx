@@ -2,11 +2,12 @@
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
-	$createTextNode,
+	$createRangeSelection,
 	$getNearestNodeFromDOMNode,
 	$getNodeByKey,
 	$isParagraphNode,
 	$isTextNode,
+	$setSelection,
 	CLICK_COMMAND,
 	COMMAND_PRIORITY_LOW,
 	type LexicalEditor,
@@ -31,7 +32,10 @@ import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { Input } from "@/ui/Input";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
-import { createParagraphDOMRange } from "../../utils/paragraphRange";
+import {
+	createParagraphDOMRange,
+	locateTextNodeAtOffset,
+} from "../../utils/paragraphRange";
 import { IngredientOption } from "./IngredientOption";
 import styles from "./styles.module.css";
 import { TokenMenu } from "./TokenMenu";
@@ -78,6 +82,14 @@ function resolveUnitQuantity(tokens: Token[]): number {
  * identified by `paragraphKey` with `replacement`, then drop the caret at
  * the end of the replacement. Must be called outside an active Lexical
  * update — we start our own here.
+ *
+ * Uses Lexical's `RangeSelection.insertText()` rather than clearing the
+ * paragraph and appending a single `TextNode`: that preserves the
+ * identities of `TextNode`s outside the replaced span, which keeps undo
+ * history granular and plays nicely with collaborative editing if we
+ * ever add it. `insertText` also handles multi-node spans (a token that
+ * straddles two `TextNode`s) correctly — something the old approach
+ * brute-forced by rebuilding everything.
  */
 function applyTokenReplacement(
 	editor: LexicalEditor,
@@ -89,14 +101,15 @@ function applyTokenReplacement(
 	editor.update(() => {
 		const paragraph = $getNodeByKey(paragraphKey);
 		if (!$isParagraphNode(paragraph)) return;
-		const text = paragraph.getTextContent();
-		const replaced =
-			text.slice(0, tokenStart) + replacement + text.slice(tokenEnd);
-		for (const child of paragraph.getChildren()) child.remove();
-		const newText = $createTextNode(replaced);
-		paragraph.append(newText);
-		const caret = tokenStart + replacement.length;
-		newText.select(caret, caret);
+		const anchor = locateTextNodeAtOffset(paragraph, tokenStart, false);
+		const focus = locateTextNodeAtOffset(paragraph, tokenEnd, true);
+		if (!anchor || !focus) return;
+
+		const selection = $createRangeSelection();
+		selection.anchor.set(anchor.node.getKey(), anchor.offset, "text");
+		selection.focus.set(focus.node.getKey(), focus.offset, "text");
+		$setSelection(selection);
+		selection.insertText(replacement);
 	});
 }
 
