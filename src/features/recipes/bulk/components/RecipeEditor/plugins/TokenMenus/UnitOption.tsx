@@ -1,30 +1,16 @@
 "use client";
 
-import type { MouseEventHandler, Ref } from "react";
+import type { ComponentProps } from "react";
 import type { Unit } from "@/db/schema/units";
 import { getUnitLabel } from "@/features/units/constants";
 import { OptionsList } from "@/ui/OptionsList";
 
 export function UnitOption({
 	unit,
-	isHighlighted,
-	onClick,
-	onMouseEnter,
-	ref,
-}: {
-	unit: Unit;
-	isHighlighted: boolean;
-	onClick: MouseEventHandler<HTMLLIElement>;
-	onMouseEnter: MouseEventHandler<HTMLLIElement>;
-	ref?: Ref<HTMLLIElement>;
-}) {
+	...props
+}: { unit: Unit } & ComponentProps<typeof OptionsList.Item>) {
 	return (
-		<OptionsList.Item
-			ref={ref}
-			isHighlighted={isHighlighted}
-			onClick={onClick}
-			onMouseEnter={onMouseEnter}
-		>
+		<OptionsList.Item {...props}>
 			<OptionsList.Label>{getUnitLabel(unit)}</OptionsList.Label>
 		</OptionsList.Item>
 	);
