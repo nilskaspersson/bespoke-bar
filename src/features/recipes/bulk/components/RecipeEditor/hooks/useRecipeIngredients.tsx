@@ -3,6 +3,7 @@
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
+import { getIngredientId } from "@/features/ingredients/utils";
 import {
 	buildIngredientIndex,
 	type IngredientIndex,
@@ -21,8 +22,6 @@ type RecipeIngredientsValue = {
 const RecipeIngredientsContext = createContext<RecipeIngredientsValue | null>(
 	null,
 );
-
-const getIngredientId = (i: Ingredient) => i.id;
 
 const getSearchFields = (i: Ingredient) => {
 	const fields = [i.name];

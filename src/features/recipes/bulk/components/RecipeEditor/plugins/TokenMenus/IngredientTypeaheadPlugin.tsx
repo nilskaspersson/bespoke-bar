@@ -5,7 +5,7 @@ import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuP
 import type { TextNode } from "lexical";
 import { useCallback, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import type { Ingredient } from "@/db/schema/ingredients";
+import { getIngredientId } from "@/features/ingredients/utils";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import { GhostTextController } from "./GhostTextController";
@@ -16,8 +16,6 @@ import {
 	IngredientMenuOption,
 	MAX_TYPEAHEAD_OPTIONS,
 } from "./utils";
-
-const getIngredientId = (i: Ingredient) => i.id;
 
 export function IngredientTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();

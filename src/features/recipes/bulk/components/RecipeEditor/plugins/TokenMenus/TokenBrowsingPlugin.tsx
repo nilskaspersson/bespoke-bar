@@ -19,6 +19,7 @@ import {
 	useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { getIngredientId } from "@/features/ingredients/utils";
 import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import {
@@ -224,7 +225,12 @@ export function TokenBrowsingPlugin() {
 
 	const filteredIngredients = useMemo(() => {
 		if (variant !== "ingredient") return [];
-		return searchByIndex(sortedIngredients, searchIndex, (i) => i.id, query);
+		return searchByIndex(
+			sortedIngredients,
+			searchIndex,
+			getIngredientId,
+			query,
+		);
 	}, [variant, query, sortedIngredients, searchIndex]);
 
 	const filteredUnits = useMemo(() => {
