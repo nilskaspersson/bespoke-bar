@@ -15,7 +15,7 @@ import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { searchByIndex } from "@/utils/search";
 import { GhostTextController } from "./GhostTextController";
-import { IngredientMenu } from "./IngredientMenu";
+import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";
 import { MAX_TYPEAHEAD_OPTIONS, UnitMenuOption } from "./utils";
 
@@ -123,7 +123,7 @@ export function UnitTypeaheadPlugin() {
 							selectedIndex={selectedIndex}
 							getLabel={getOptionLabel}
 						/>
-						<IngredientMenu footerAction="complete">
+						<TokenMenu footerAction="complete">
 							{options.map((option, index) => (
 								<UnitOption
 									key={option.key}
@@ -137,7 +137,7 @@ export function UnitTypeaheadPlugin() {
 									onMouseEnter={() => setHighlightedIndex(index)}
 								/>
 							))}
-						</IngredientMenu>
+						</TokenMenu>
 					</>,
 					anchorElementRef.current,
 				);

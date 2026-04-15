@@ -9,8 +9,8 @@ import { getIngredientId } from "@/features/ingredients/utils";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import { GhostTextController } from "./GhostTextController";
-import { IngredientMenu } from "./IngredientMenu";
 import { IngredientOption } from "./IngredientOption";
+import { TokenMenu } from "./TokenMenu";
 import {
 	createIngredientTriggerFn,
 	IngredientMenuOption,
@@ -72,7 +72,7 @@ export function IngredientTypeaheadPlugin() {
 							selectedIndex={selectedIndex}
 							getLabel={(option) => option.ingredient.name}
 						/>
-						<IngredientMenu footerAction="complete">
+						<TokenMenu footerAction="complete">
 							{options.map((option, index) => (
 								<IngredientOption
 									key={option.key}
@@ -86,7 +86,7 @@ export function IngredientTypeaheadPlugin() {
 									onMouseEnter={() => setHighlightedIndex(index)}
 								/>
 							))}
-						</IngredientMenu>
+						</TokenMenu>
 					</>,
 					anchorElementRef.current,
 				);

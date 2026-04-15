@@ -35,9 +35,9 @@ import {
 	createParagraphDOMRange,
 	getParagraphTextNodes,
 } from "../../utils/paragraphRange";
-import { IngredientMenu } from "./IngredientMenu";
 import { IngredientOption } from "./IngredientOption";
 import styles from "./styles.module.css";
+import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";
 
 /**
@@ -378,9 +378,9 @@ export function TokenBrowsingPlugin() {
 				left: state.anchorRect.left + window.scrollX,
 			}}
 		>
-			<IngredientMenu footerAction="replace" header={searchInput}>
+			<TokenMenu footerAction="replace" header={searchInput}>
 				{options}
-			</IngredientMenu>
+			</TokenMenu>
 		</div>,
 		document.body,
 	);

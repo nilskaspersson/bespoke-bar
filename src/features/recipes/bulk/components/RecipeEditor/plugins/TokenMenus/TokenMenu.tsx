@@ -7,15 +7,16 @@ import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 /**
- * Shared menu scaffold for both `IngredientTypeaheadPlugin` (completing a
- * partial query) and `TokenBrowsingPlugin` (click-to-replace on an existing
- * token). `onMouseDown` is suppressed so clicking inside the menu doesn't
- * steal focus from whatever currently has it — the editor for typeahead,
- * the search input for browsing. Firefox in particular blurs focused
- * elements when the user mousedowns on a non-focusable descendant, which
- * without this would tear the popover down mid-click and break commit.
+ * Shared menu scaffold for the ingredient and unit typeaheads (completing
+ * a partial query) and `TokenBrowsingPlugin` (click-to-replace on an
+ * existing token). `onMouseDown` is suppressed so clicking inside the
+ * menu doesn't steal focus from whatever currently has it — the editor
+ * for typeahead, the search input for browsing. Firefox in particular
+ * blurs focused elements when the user mousedowns on a non-focusable
+ * descendant, which without this would tear the popover down mid-click
+ * and break commit.
  */
-export function IngredientMenu({
+export function TokenMenu({
 	children,
 	footerAction,
 	header,

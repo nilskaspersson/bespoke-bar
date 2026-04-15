@@ -27,11 +27,9 @@ import { EscapeFocusPlugin } from "./plugins/EscapeFocusPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
 import { TextChangePlugin } from "./plugins/TextChangePlugin";
-import {
-	IngredientTypeaheadPlugin,
-	TokenBrowsingPlugin,
-	UnitTypeaheadPlugin,
-} from "./plugins/TokenMenus";
+import { IngredientTypeaheadPlugin } from "./plugins/TokenMenus/IngredientTypeaheadPlugin";
+import { TokenBrowsingPlugin } from "./plugins/TokenMenus/TokenBrowsingPlugin";
+import { UnitTypeaheadPlugin } from "./plugins/TokenMenus/UnitTypeaheadPlugin";
 import styles from "./RecipeEditor.module.css";
 
 function seedEditorState(text: string) {
