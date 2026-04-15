@@ -1,4 +1,3 @@
-import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import type { ButtonProps } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
@@ -14,7 +13,6 @@ export type ActionProps = {
 export function EntityActions({
 	children,
 	actionProps,
-	className,
 	...props
 }: Omit<ComponentProps<typeof Flex>, "children"> & {
 	children: (actionProps: ActionProps) => ReactNode;
@@ -27,7 +25,6 @@ export function EntityActions({
 			alignItems="center"
 			gap={0}
 			{...props}
-			className={clsx(styles.actions, className)}
 		>
 			{children({
 				variant: "ghost",
