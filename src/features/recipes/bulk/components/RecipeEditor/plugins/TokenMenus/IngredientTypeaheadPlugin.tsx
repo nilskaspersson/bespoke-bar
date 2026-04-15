@@ -3,7 +3,7 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import type { TextNode } from "lexical";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { getIngredientId } from "@/features/ingredients/utils";
 import { searchByIndex } from "@/utils/search";
@@ -20,6 +20,7 @@ import {
 export function IngredientTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [query, setQuery] = useState<string | null>(null);
+	const deferredQuery = useDeferredValue(query);
 	const { sortedIngredients, searchIndex, knownNames } = useRecipeIngredients();
 
 	const triggerFn = useMemo(
@@ -28,11 +29,16 @@ export function IngredientTypeaheadPlugin() {
 	);
 
 	const options = useMemo(() => {
-		if (!query) return [];
-		return searchByIndex(sortedIngredients, searchIndex, getIngredientId, query)
+		if (!deferredQuery) return [];
+		return searchByIndex(
+			sortedIngredients,
+			searchIndex,
+			getIngredientId,
+			deferredQuery,
+		)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
 			.map((i) => new IngredientMenuOption(i));
-	}, [sortedIngredients, searchIndex, query]);
+	}, [sortedIngredients, searchIndex, deferredQuery]);
 
 	const onSelectOption = useCallback(
 		(
@@ -67,7 +73,7 @@ export function IngredientTypeaheadPlugin() {
 				return createPortal(
 					<>
 						<GhostTextController
-							query={query}
+							query={deferredQuery}
 							options={options}
 							selectedIndex={selectedIndex}
 							getLabel={(option) => option.ingredient.name}
