@@ -74,7 +74,7 @@ export function IngredientTypeaheadPlugin() {
 				return createPortal(
 					<>
 						<GhostTextController
-							query={deferredQuery}
+							query={query}
 							options={options}
 							selectedIndex={selectedIndex}
 							getLabel={(option) => option.ingredient.name}

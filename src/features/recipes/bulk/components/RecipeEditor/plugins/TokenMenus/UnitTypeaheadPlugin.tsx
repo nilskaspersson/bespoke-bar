@@ -3,7 +3,7 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getSelection, $isRangeSelection, type TextNode } from "lexical";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import {
@@ -69,13 +69,19 @@ const getOptionLabel = (option: UnitMenuOption) => getUnitLabel(option.unit);
 export function UnitTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [query, setQuery] = useState<string | null>(null);
+	const deferredQuery = useDeferredValue(query);
 
 	const options = useMemo(() => {
-		if (!query) return [];
-		return searchByIndex(SORTED_UNITS, UNIT_SEARCH_INDEX, (u) => u, query)
+		if (!deferredQuery) return [];
+		return searchByIndex(
+			SORTED_UNITS,
+			UNIT_SEARCH_INDEX,
+			(u) => u,
+			deferredQuery,
+		)
 			.slice(0, MAX_TYPEAHEAD_OPTIONS)
 			.map(createUnitMenuOption);
-	}, [query]);
+	}, [deferredQuery]);
 
 	const onSelectOption = useCallback(
 		(
