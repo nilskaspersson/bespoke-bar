@@ -124,7 +124,7 @@ export function BulkDraftRecipesForm({
 			className={clsx(className, styles.form)}
 			action={formAction}
 		>
-			<div className={clsx(styles.editor, isSubmitting && styles.disabled)}>
+			<div className={clsx(styles.editor, { [styles.disabled]: isSubmitting })}>
 				<RecipeEditor
 					editorRef={editorRef}
 					ingredients={ingredients}
@@ -147,8 +147,7 @@ export function BulkDraftRecipesForm({
 								<Button
 									variant="outline"
 									size="small"
-									onClick={showModal}
-									disabled={recipeCount === 0}
+									onClick={recipeCount > 0 ? showModal : undefined}
 									aria-disabled={recipeCount === 0}
 								>
 									<Icon name="expand" size={1} />

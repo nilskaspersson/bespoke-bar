@@ -2,49 +2,51 @@
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getSelection, $isRangeSelection } from "lexical";
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useLayoutEffect } from "react";
 
 /**
- * Manages ghost text (inline completion preview) on the editor's DOM.
- * Sets a `data-ghost` attribute on the cursor's text node element,
- * which CSS renders via `::after`.
+ * Paints ghost text (inline completion preview) as a `data-ghost` attribute
+ * on the editor element that contains the current caret. CSS renders the
+ * value via `::after`, so there's no React node to hold the state — the
+ * attribute itself is the source of truth.
+ *
+ * The effect re-applies on every Lexical update: typing a character swaps
+ * the underlying TextNode (and its DOM element) for a new one, so the old
+ * ghost-bearing element is detached and we need to transfer the attribute
+ * onto the new cursor-adjacent element. `useLayoutEffect` keeps that work
+ * inside the same paint as React's commit so there's no visible flicker.
  */
 export function useGhostText(ghostText: string | null) {
 	const [editor] = useLexicalComposerContext();
-	const ghostDomRef = useRef<HTMLElement | null>(null);
-
-	useEffect(() => {
-		return editor.registerUpdateListener(() => {
-			if (ghostDomRef.current) {
-				ghostDomRef.current.removeAttribute("data-ghost");
-				ghostDomRef.current = null;
-			}
-		});
-	}, [editor]);
 
 	useLayoutEffect(() => {
 		if (!ghostText) return;
+		const text = ghostText;
 
-		editor.read(() => {
-			const selection = $getSelection();
-			if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
+		function clear() {
+			editor
+				.getRootElement()
+				?.querySelector("[data-ghost]")
+				?.removeAttribute("data-ghost");
+		}
 
-			const anchor = selection.anchor;
-			if (anchor.type !== "text") return;
+		function apply() {
+			clear();
+			editor.read(() => {
+				const selection = $getSelection();
+				if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
+				const anchor = selection.anchor;
+				if (anchor.type !== "text") return;
+				const dom = editor.getElementByKey(anchor.getNode().getKey());
+				dom?.setAttribute("data-ghost", text);
+			});
+		}
 
-			const node = anchor.getNode();
-			const dom = editor.getElementByKey(node.getKey());
-			if (dom) {
-				dom.setAttribute("data-ghost", ghostText);
-				ghostDomRef.current = dom;
-			}
-		});
-
+		apply();
+		const unregister = editor.registerUpdateListener(apply);
 		return () => {
-			if (ghostDomRef.current) {
-				ghostDomRef.current.removeAttribute("data-ghost");
-				ghostDomRef.current = null;
-			}
+			unregister();
+			clear();
 		};
 	}, [editor, ghostText]);
 }

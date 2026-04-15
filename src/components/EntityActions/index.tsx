@@ -19,13 +19,7 @@ export function EntityActions({
 	actionProps?: Partial<ActionProps>;
 }) {
 	return (
-		<Flex
-			as="menu"
-			wrap
-			alignItems="center"
-			gap={0}
-			{...props}
-		>
+		<Flex as="menu" wrap alignItems="center" gap={0} {...props}>
 			{children({
 				variant: "ghost",
 				size: "tiny",
