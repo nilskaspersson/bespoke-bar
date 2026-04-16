@@ -3,6 +3,7 @@
 import clsx from "clsx";
 import type { Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -45,34 +46,39 @@ export function RecipesList({
 
 				return (
 					<OverscrollList.Item key={recipe.id}>
-						<MotionRecipeCard
-							withMotion={withMotion && !isSelected}
+						<RecipeCard
 							recipe={recipe}
-							onClick={selectRecipe}
-							onKeyDown={handleKey([
-								["Enter", selectRecipe],
-								[" ", selectRecipe],
-							])}
-							role="button"
-							tabIndex={0}
-							className={clsx({
-								[styles.pointer]: withMotion,
-								[styles.hidden]: isSelected,
-							})}
-						>
-							<RecipeCard
-								recipe={recipe}
-								withLink={!withMotion}
-								nameAdornment={
-									<RecipeNameAdornment
+							withLink={!withMotion}
+							nameAdornment={<RecipeNameAdornment />}
+							cardWrapper={(card) => (
+								<MotionRecipeCard
+									withMotion={withMotion && !isSelected}
+									recipe={recipe}
+									onClick={selectRecipe}
+									onKeyDown={handleKey([
+										["Enter", selectRecipe],
+										[" ", selectRecipe],
+									])}
+									role="button"
+									tabIndex={0}
+									className={clsx({
+										[styles.pointer]: withMotion,
+										[styles.hidden]: isSelected,
+									})}
+								>
+									{card}
+								</MotionRecipeCard>
+							)}
+							footer={
+								withActions ? (
+									<RecipeCardActions
 										recipe={recipe}
 										isFavorite={isFavorite}
-										withActions={withActions}
 										withLink
 									/>
-								}
-							/>
-						</MotionRecipeCard>
+								) : undefined
+							}
+						/>
 					</OverscrollList.Item>
 				);
 			})}

@@ -11,6 +11,7 @@ import {
 import { useShallow } from "zustand/react/shallow";
 import { WakeLock } from "@/components/WakeLock";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
@@ -104,31 +105,33 @@ function RecipeCardModalContent({
 			<canvas ref={canvasRef} className={styles.particles} />
 
 			<Container className={styles.content}>
-				<MotionRecipeCard
-					withMotion
-					ref={cardRef}
+				<RecipeCard
 					recipe={recipe}
-					className={styles.card}
-					layout="position"
-				>
-					<RecipeCard
-						recipe={recipe}
-						servings={deferredServings}
-						convertUnits={conversionSystem}
-						snap={snap}
-						withLink
-						nameAdornment={
-							<RecipeNameAdornment
-								recipe={recipe}
-								servings={deferredServings}
-								isFavorite={isFavorite}
-								onDelete={clear}
-								withActions
-								withLink
-							/>
-						}
-					/>
-				</MotionRecipeCard>
+					servings={deferredServings}
+					convertUnits={conversionSystem}
+					snap={snap}
+					withLink
+					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
+					cardWrapper={(card) => (
+						<MotionRecipeCard
+							withMotion
+							ref={cardRef}
+							recipe={recipe}
+							className={styles.card}
+							layout="position"
+						>
+							{card}
+						</MotionRecipeCard>
+					)}
+					footer={
+						<RecipeCardActions
+							recipe={recipe}
+							isFavorite={isFavorite}
+							onDelete={clear}
+							withLink
+						/>
+					}
+				/>
 
 				<Grid gap={4}>
 					<SelectServings value={deferredServings} onChange={setServings} />

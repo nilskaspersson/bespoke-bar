@@ -2,6 +2,7 @@
 
 import { use, useDeferredValue, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
@@ -40,19 +41,12 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 			<section className={styles.primary}>
 				<RecipeCard
 					recipe={recipe}
-					className={styles.card}
 					servings={servings}
 					convertUnits={withConversionSystem}
 					snap={withSnap}
 					withLink={false}
-					nameAdornment={
-						<RecipeNameAdornment
-							recipe={recipe}
-							servings={deferredServings}
-							isFavorite={isFavorite}
-							withActions
-						/>
-					}
+					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
+					footer={<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />}
 				>
 					<Text as="div" size={1} fullWidth className={styles.count}>
 						Servings: {quantityFormatter.format(servings)}

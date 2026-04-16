@@ -1,4 +1,25 @@
 @layer feature {
+	.base {
+		display: grid;
+		gap: var(--space-1);
+		width: 500px;
+		max-width: 100%;
+	}
+
+	.card {
+		height: 260px;
+		padding: var(--gap);
+		background-color: var(--mauve-2);
+		border-radius: var(--radius--large);
+		border: 1px solid var(--mauve-4);
+		outline: 1px solid var(--mauve-4);
+		outline-offset: calc(var(--space-1) * -1);
+		box-shadow: var(--shadow--low);
+		isolation: isolate;
+		overflow: hidden;
+		transition: border-color var(--transition-duration);
+	}
+
 	.recipeName {
 		font-weight: 600;
 	}
