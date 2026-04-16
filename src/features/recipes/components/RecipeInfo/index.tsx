@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, use, useDeferredValue, useState } from "react";
+import { use, useDeferredValue, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
@@ -16,11 +16,11 @@ import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends RecipeWithSpecs>({
-	children,
 	recipe,
+	isFavorite,
 }: {
-	children?: ReactNode;
 	recipe: T;
+	isFavorite?: boolean;
 }) {
 	const { quantityFormatter } = use(FormatterContext);
 
@@ -45,13 +45,18 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 					convertUnits={withConversionSystem}
 					snap={withSnap}
 					withLink={false}
-					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
+					nameAdornment={
+						<RecipeNameAdornment
+							recipe={recipe}
+							servings={deferredServings}
+							isFavorite={isFavorite}
+							withActions
+						/>
+					}
 				>
 					<Text as="div" size={1} fullWidth className={styles.count}>
 						Servings: {quantityFormatter.format(servings)}
 					</Text>
-
-					{children}
 				</RecipeCard>
 			</section>
 

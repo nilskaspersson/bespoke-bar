@@ -13,10 +13,6 @@
 		visibility: hidden;
 	}
 
-	.actions {
-		margin-top: var(--gap--tiny);
-	}
-
 	.pointer {
 		cursor: pointer;
 	}

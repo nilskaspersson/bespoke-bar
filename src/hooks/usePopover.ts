@@ -65,9 +65,16 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 	/**
 	 * Sync internal state with native popover state changes.
 	 * Handles light dismiss, Escape key, and other native dismissal methods.
+	 *
+	 * React simulates bubbling for non-bubbling events like `toggle`, so this
+	 * handler would otherwise fire for toggles from any descendant dialog,
+	 * popover, or details element. Guard against that by ignoring events whose
+	 * target isn't the popover itself.
 	 */
 	const onToggle: React.ToggleEventHandler<HTMLDivElement> = useCallback(
 		(e) => {
+			if (e.target !== e.currentTarget) return;
+
 			if (e.newState === "open") {
 				return setIsOpen(true);
 			}

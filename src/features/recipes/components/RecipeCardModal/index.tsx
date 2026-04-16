@@ -11,7 +11,6 @@ import {
 import { useShallow } from "zustand/react/shallow";
 import { WakeLock } from "@/components/WakeLock";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
@@ -43,9 +42,10 @@ export function RecipeCardModal() {
 		recipeCardModalStore.dialogRef = dialogRef;
 	}, [dialogRef]);
 
-	const { recipe, mounted } = useRecipeCardModal(
+	const { recipe, isFavorite, mounted } = useRecipeCardModal(
 		useShallow((s) => ({
 			recipe: s.recipe,
+			isFavorite: s.isFavorite,
 			mounted: s.mounted,
 		})),
 	);
@@ -67,13 +67,21 @@ export function RecipeCardModal() {
 			}}
 		>
 			<m.div layoutRoot className={styles.container}>
-				{recipe && mounted ? <RecipeCardModalContent recipe={recipe} /> : null}
+				{recipe && mounted ? (
+					<RecipeCardModalContent recipe={recipe} isFavorite={isFavorite} />
+				) : null}
 			</m.div>
 		</Dialog>
 	);
 }
 
-function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
+function RecipeCardModalContent({
+	recipe,
+	isFavorite,
+}: {
+	recipe: RecipeWithSpecs;
+	isFavorite: boolean;
+}) {
 	const clear = useRecipeCardModal((s) => s.clear);
 	const [particlesEnabled, setParticlesEnabled] = useLocalStorage(
 		"particles-enabled",
@@ -96,28 +104,31 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 			<canvas ref={canvasRef} className={styles.particles} />
 
 			<Container className={styles.content}>
-				<Grid gap={4}>
-					<MotionRecipeCard
-						withMotion
-						ref={cardRef}
+				<MotionRecipeCard
+					withMotion
+					ref={cardRef}
+					recipe={recipe}
+					className={styles.card}
+					layout="position"
+				>
+					<RecipeCard
 						recipe={recipe}
-						className={styles.card}
-						layout="position"
-					>
-						<RecipeCard
-							recipe={recipe}
-							servings={deferredServings}
-							convertUnits={conversionSystem}
-							snap={snap}
-							withLink
-							nameAdornment={
-								<RecipeNameAdornment servings={deferredServings} />
-							}
-						/>
-					</MotionRecipeCard>
-
-					<RecipeActions recipe={recipe} withLink onDelete={clear} />
-				</Grid>
+						servings={deferredServings}
+						convertUnits={conversionSystem}
+						snap={snap}
+						withLink
+						nameAdornment={
+							<RecipeNameAdornment
+								recipe={recipe}
+								servings={deferredServings}
+								isFavorite={isFavorite}
+								onDelete={clear}
+								withActions
+								withLink
+							/>
+						}
+					/>
+				</MotionRecipeCard>
 
 				<Grid gap={4}>
 					<SelectServings value={deferredServings} onChange={setServings} />

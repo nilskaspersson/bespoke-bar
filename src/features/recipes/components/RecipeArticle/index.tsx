@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import type { ComponentProps, ReactNode } from "react";
+import type { ComponentProps } from "react";
 import { Suspense } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeAuthorByline } from "@/features/recipes/components/RecipeAuthorByline";
@@ -11,14 +11,14 @@ import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function RecipeArticle({
-	children,
 	recipe,
+	isFavorite,
 	className,
 	...props
 }: {
-	actions?: ReactNode;
 	recipe: RecipeWithSpecs;
-} & ComponentProps<"article">) {
+	isFavorite?: boolean;
+} & Omit<ComponentProps<"article">, "children">) {
 	return (
 		<article className={clsx(styles.article, className)} {...props}>
 			<header className={styles.header}>
@@ -40,7 +40,7 @@ export function RecipeArticle({
 				) : null}
 			</header>
 
-			<RecipeInfo recipe={recipe}>{children}</RecipeInfo>
+			<RecipeInfo recipe={recipe} isFavorite={isFavorite} />
 		</article>
 	);
 }

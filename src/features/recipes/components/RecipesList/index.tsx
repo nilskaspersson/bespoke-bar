@@ -3,7 +3,6 @@
 import clsx from "clsx";
 import type { Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -64,18 +63,16 @@ export function RecipesList({
 							<RecipeCard
 								recipe={recipe}
 								withLink={!withMotion}
-								nameAdornment={<RecipeNameAdornment />}
+								nameAdornment={
+									<RecipeNameAdornment
+										recipe={recipe}
+										isFavorite={isFavorite}
+										withActions={withActions}
+										withLink
+									/>
+								}
 							/>
 						</MotionRecipeCard>
-
-						{withActions ? (
-							<RecipeActions
-								recipe={recipe}
-								withLink
-								isFavorite={isFavorite}
-								className={styles.actions}
-							/>
-						) : null}
 					</OverscrollList.Item>
 				);
 			})}
