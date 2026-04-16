@@ -1,6 +1,5 @@
 "use client";
 
-import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { toast } from "@/ui/Toast";
@@ -18,8 +17,6 @@ export function CopyToClipboard({
 	iconSize?: Scale;
 	iconName?: IconName;
 } & Omit<ButtonProps, "onClick">) {
-	const [copy, status] = useCopyToClipboard();
-
 	return (
 		<Button
 			variant="base"
@@ -27,14 +24,13 @@ export function CopyToClipboard({
 				const value = getValue();
 
 				if (value) {
-					await copy(value);
+					await navigator.clipboard.writeText(value);
 					toast.success("Copied to clipboard");
 				}
 			}}
-			title={status === "pending" ? "Copy to clipboard" : undefined}
 			{...props}
 		>
-			<Icon name={status === "success" ? "check" : iconName} size={iconSize} />
+			<Icon name={iconName} size={iconSize} />
 
 			{children}
 		</Button>

@@ -76,7 +76,7 @@ export function RecipeActions({
 				</LinkButton>
 			</li>
 
-			<li>
+			<li {...dismissProps}>
 				<CreateListEntryButton {...baseActionProps} recipe={recipe}>
 					<Icon name="plus" size={1} /> Add to list
 				</CreateListEntryButton>

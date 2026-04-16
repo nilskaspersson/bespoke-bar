@@ -7,7 +7,7 @@
 		border: none;
 		background-color: transparent;
 		overflow: visible;
-		margin: var(--space-1);
+		margin: 0;
 		font-family: var(--font-sans-serif);
 		cursor: default;
 

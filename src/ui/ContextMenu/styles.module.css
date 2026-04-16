@@ -1,25 +1,33 @@
-@layer ui {
+@layer component {
 	.popover {
+		min-width: 14rem;
+		margin-inline: var(--space-1);
+
+		&[popover] {
+			--area: span-bottom right;
+			--fallback:
+				--context-menu-flip-block, --context-menu-flip-inline,
+				--context-menu-flip-both;
+			align-self: start;
+			transition:
+				display 0.2s allow-discrete,
+				overlay 0.2s allow-discrete;
+		}
+	}
+
+	.content {
+		display: grid;
+		gap: var(--space-2);
+		padding: var(--space-2);
 		border-radius: var(--radius--large);
 		box-shadow: var(--shadow--high);
-		border: 1px solid hsl(0 0 100% / 0.15);
-		backdrop-filter: blur(var(--size-2));
-		background-color: hsl(from var(--mauve-1) h s l / 0.5);
-		padding: var(--space-2);
-		min-width: 14rem;
-		gap: var(--space-2);
 
-		@supports (not (backdrop-filter: blur(var(--size-1)))) {
-			background-color: var(--mauve-1);
-		}
-
-		&:not(:has(*)) {
-			opacity: 0;
-		}
-
-		&:popover-open {
-			display: grid;
-		}
+		border: 1px solid transparent;
+		background-image:
+			linear-gradient(var(--mauve-2), var(--mauve-2)),
+			linear-gradient(to top, var(--iris-8), var(--mauve-6));
+		background-origin: padding-box, border-box;
+		background-clip: padding-box, border-box;
 	}
 
 	.heading {
@@ -35,6 +43,22 @@
 	}
 
 	.open {
-		background-color: var(--mauve-4);
+		background-color: hsl(from var(--button-color) h s 90%);
+		color: hsl(from var(--button-color) h s 20%);
 	}
+}
+
+@position-try --context-menu-flip-block {
+	position-area: span-top right;
+	align-self: end;
+}
+
+@position-try --context-menu-flip-inline {
+	position-area: span-bottom left;
+	align-self: start;
+}
+
+@position-try --context-menu-flip-both {
+	position-area: span-top left;
+	align-self: end;
 }
