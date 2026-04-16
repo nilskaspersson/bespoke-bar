@@ -1,3 +1,21 @@
+@property --fade-start {
+	syntax: "<percentage>";
+	initial-value: 60%;
+	inherits: false;
+}
+
+@property --fade-end {
+	syntax: "<percentage>";
+	initial-value: 90%;
+	inherits: false;
+}
+
+@property --tile-color {
+	syntax: "<color>";
+	initial-value: #000000;
+	inherits: false;
+}
+
 @layer feature {
 	.base {
 		display: grid;
@@ -15,8 +33,19 @@
 		border: 1px solid var(--mauve-4);
 		box-shadow: var(--shadow--low);
 		isolation: isolate;
-		overflow: hidden;
-		transition: border-color var(--transition-duration);
+		transition-property: border-color, box-shadow;
+		transition-duration: var(--transition-duration);
+	}
+
+	.card:is(:hover, :focus, :focus-within) {
+		border-color: var(--mauve-5);
+		box-shadow: var(--shadow);
+
+		&::before {
+			--fade-start: 40%;
+			--fade-end: 105%;
+			--tile-color: var(--mauve-7);
+		}
 	}
 
 	.card::before {
@@ -33,10 +62,12 @@
 				var(--tile-color) 1px,
 				transparent 0);
 		background-size: var(--tile-size) var(--tile-size);
-		background-position: right bottom;
+		background-position: 100% 100%;
 		mask-image: radial-gradient(ellipse 80% 80% at 100% 100%,
-				black 50%,
-				transparent 90%);
+				black var(--fade-start),
+				transparent var(--fade-end));
+		transition-property: --fade-start, --fade-end, --tile-color;
+		transition-duration: 1s;
 	}
 
 	.recipeName {
