@@ -7,17 +7,36 @@
 	}
 
 	.card {
+		position: relative;
 		height: 260px;
 		padding: var(--gap);
 		background-color: var(--mauve-2);
 		border-radius: var(--radius--large);
 		border: 1px solid var(--mauve-4);
-		outline: 1px solid var(--mauve-4);
-		outline-offset: calc(var(--space-1) * -1);
 		box-shadow: var(--shadow--low);
 		isolation: isolate;
 		overflow: hidden;
 		transition: border-color var(--transition-duration);
+	}
+
+	.card::before {
+		--tile-size: var(--space-4);
+		--tile-color: var(--mauve-5);
+
+		content: "";
+		display: block;
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background-image: radial-gradient(circle at 1px 1px,
+				var(--tile-color) 1px,
+				transparent 0);
+		background-size: var(--tile-size) var(--tile-size);
+		background-position: right bottom;
+		mask-image: radial-gradient(ellipse 80% 80% at 100% 100%,
+				black 50%,
+				transparent 90%);
 	}
 
 	.recipeName {
