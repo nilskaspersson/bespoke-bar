@@ -44,10 +44,12 @@ export function DuplicateRecipeButton({
 						<ToastActions>
 							<DeleteRecipeButton
 								recipe={newRecipe}
-								variant="ghost"
-								size="tiny"
-								color="red"
-								onClick={() => toast.dismiss(toastId)}
+								buttonProps={{
+									variant: "ghost",
+									size: "tiny",
+									color: "red",
+									onClick: () => toast.dismiss(toastId),
+								}}
 							>
 								<Icon name="arrow-rotate-left" size={0} /> Undo
 							</DeleteRecipeButton>

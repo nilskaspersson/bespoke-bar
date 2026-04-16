@@ -14,23 +14,24 @@ import { errorMessageOrFallback } from "@/utils/api";
 
 type Props = {
 	recipe: Recipe;
+	buttonProps?: ButtonProps;
 	redirectTo?: string;
 	onDelete?: () => void;
 	confirm?: boolean;
 	externalToastId?: string;
 	className?: string;
 	children?: ReactNode;
-} & ButtonProps;
+};
 
 export function DeleteRecipeButton({
 	recipe,
+	buttonProps,
 	redirectTo,
 	onDelete,
 	confirm,
 	externalToastId,
 	className,
 	children,
-	...buttonProps
 }: Props) {
 	const handleDelete = async () => {
 		const toastId = externalToastId ?? Date.now().toString();

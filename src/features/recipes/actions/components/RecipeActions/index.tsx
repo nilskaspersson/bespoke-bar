@@ -15,6 +15,7 @@ const baseActionProps = {
 	variant: "ghost",
 	size: "small",
 	color: "light",
+	fullWidth: true,
 	className: styles.item,
 } as const;
 
@@ -94,7 +95,7 @@ export function RecipeActions({
 
 			<li>
 				<DeleteRecipeButton
-					{...baseActionProps}
+					buttonProps={baseActionProps}
 					recipe={recipe}
 					confirm
 					onDelete={onDelete}
