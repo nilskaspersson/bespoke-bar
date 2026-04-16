@@ -16,7 +16,7 @@ type UsePopoverOptions = {
 	type?: PopoverType;
 };
 
-type UsePopoverReturn = {
+export type UsePopoverReturn = {
 	popoverId: string;
 	popoverRef: React.RefObject<HTMLDivElement | null>;
 	isOpen: boolean;

@@ -1,41 +1,36 @@
-"use client";
-
 import type { ReactNode } from "react";
-import { usePopover } from "@/hooks/usePopover";
-import { Button } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
-import { Popover } from "@/ui/Popover";
-import { stopPropagation } from "@/utils/events";
-import styles from "./styles.module.css";
+import { ContextMenu } from "@/ui/ContextMenu";
+import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
 
 type Props = {
 	children: ReactNode;
+	heading?: ReactNode;
+	footer?: ReactNode;
+	label?: string;
 };
 
-export function RecipeActionsToggle({ children }: Props) {
-	const popover = usePopover();
-
+export function RecipeActionsToggle({
+	children,
+	heading,
+	footer,
+	label,
+}: Props) {
 	return (
-		<>
-			<Button
-				variant="ghost"
-				size="tiny"
-				color="light"
-				icon
-				aria-label="Recipe actions"
-				{...popover.triggerProps}
-				onClick={stopPropagation}
-			>
-				<Icon name="ellipsis" size={2} />
-			</Button>
-
-			<Popover
-				{...popover.contentProps}
-				position="bottom-right"
-				className={styles.popover}
-			>
-				{children}
-			</Popover>
-		</>
+		<ContextMenu
+			label={label}
+			heading={
+				heading ? (
+					<HGroup overline="Recipe actions">
+						<Heading level="h4" size={4}>
+							{heading}
+						</Heading>
+					</HGroup>
+				) : undefined
+			}
+			footer={footer}
+		>
+			{children}
+		</ContextMenu>
 	);
 }

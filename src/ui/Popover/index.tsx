@@ -5,7 +5,7 @@ import type { ComponentProps, ToggleEventHandler } from "react";
 import { ViewTransition } from "react";
 import type { PopoverType } from "@/hooks/usePopover";
 
-import { stopEscapePropagation, stopPropagation } from "@/utils/events";
+import { stopPropagation } from "@/utils/events";
 import { mergeStyleSources } from "@/utils/styles";
 import styles from "./styles.module.css";
 
@@ -49,11 +49,11 @@ export function Popover({
 	...props
 }: Props) {
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: prevents Escape from bubbling to parent dialogs
+		// biome-ignore lint/a11y/noStaticElementInteractions: top-layer element; prevents keyboard/click events from leaking to elements beneath the popover
 		<div
 			className={clsx(styles.popover, styles[position], className)}
 			style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
-			onKeyDown={stopEscapePropagation}
+			onKeyDown={stopPropagation}
 			onClick={stopPropagation}
 			{...props}
 		>

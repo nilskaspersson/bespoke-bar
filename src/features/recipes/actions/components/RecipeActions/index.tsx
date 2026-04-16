@@ -1,3 +1,5 @@
+"use client";
+
 import { ShareAction } from "@/components/ShareAction";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { CreateListEntryButton } from "@/features/lists/entries/components/CreateListEntryButton";
@@ -7,6 +9,7 @@ import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/component
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToClipboard";
 import { LinkButton } from "@/ui/Button";
+import { useContextMenu } from "@/ui/ContextMenu";
 import { Icon } from "@/ui/Icon";
 import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
@@ -30,10 +33,16 @@ export function RecipeActions({
 	isFavorite?: boolean;
 	onDelete?: () => void;
 }) {
+	const { closePopover: close } = useContextMenu();
+	const closeOnKey: React.KeyboardEventHandler = (e) => {
+		if (e.key === "Enter" || e.key === " ") close();
+	};
+	const dismissProps = { onClick: close, onKeyDown: closeOnKey } as const;
+
 	return (
-		<menu className={styles.menu}>
+		<menu className={styles.menu} aria-label="Recipe actions">
 			{withLink ? (
-				<li>
+				<li {...dismissProps}>
 					<LinkButton
 						{...baseActionProps}
 						href={getRecipeUrl(recipe)}
@@ -45,7 +54,7 @@ export function RecipeActions({
 				</li>
 			) : null}
 
-			<li>
+			<li {...dismissProps}>
 				<ToggleFavoriteRecipeButton
 					{...baseActionProps}
 					recipe={recipe}
@@ -55,7 +64,7 @@ export function RecipeActions({
 				</ToggleFavoriteRecipeButton>
 			</li>
 
-			<li>
+			<li {...dismissProps}>
 				<LinkButton
 					{...baseActionProps}
 					href={`/bar/recipes/${recipe.id}/edit`}
@@ -73,7 +82,7 @@ export function RecipeActions({
 				</CreateListEntryButton>
 			</li>
 
-			<li>
+			<li {...dismissProps}>
 				<CopySpecsToClipboard
 					{...baseActionProps}
 					specs={recipe.specs}
@@ -83,7 +92,7 @@ export function RecipeActions({
 				</CopySpecsToClipboard>
 			</li>
 
-			<li>
+			<li {...dismissProps}>
 				<DuplicateRecipeButton
 					{...baseActionProps}
 					recipe={recipe}
@@ -104,7 +113,7 @@ export function RecipeActions({
 				</DeleteRecipeButton>
 			</li>
 
-			<li>
+			<li {...dismissProps}>
 				<ShareAction
 					{...baseActionProps}
 					value={new URL(

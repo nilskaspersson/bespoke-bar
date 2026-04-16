@@ -1,0 +1,40 @@
+@layer ui {
+	.popover {
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--high);
+		border: 1px solid hsl(0 0 100% / 0.15);
+		backdrop-filter: blur(var(--size-2));
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+		padding: var(--space-2);
+		min-width: 14rem;
+		gap: var(--space-2);
+
+		@supports (not (backdrop-filter: blur(var(--size-1)))) {
+			background-color: var(--mauve-1);
+		}
+
+		&:not(:has(*)) {
+			opacity: 0;
+		}
+
+		&:popover-open {
+			display: grid;
+		}
+	}
+
+	.heading {
+		padding: var(--space-1) var(--space-2);
+		border-bottom: 1px solid var(--mauve-4);
+		padding-bottom: var(--space-2);
+	}
+
+	.footer {
+		padding: var(--space-1) var(--space-2);
+		border-top: 1px solid var(--mauve-4);
+		padding-top: var(--space-2);
+	}
+
+	.open {
+		background-color: var(--mauve-4);
+	}
+}
