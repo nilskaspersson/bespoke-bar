@@ -1,7 +1,6 @@
 @layer feature {
 	.list {
 		display: grid;
-		overflow: auto;
 		gap: var(--jsxGap);
 
 		/* Default: vertical list */
@@ -10,19 +9,18 @@
 
 		/* Touch devices: horizontal scroll */
 		@media (hover: none) and (pointer: coarse) {
+			overflow: auto;
 			scroll-snap-type: x proximity;
 			grid-auto-flow: column;
 			grid-auto-columns: 85vw;
 			width: calc(100% + var(--jsxPadding) * 2);
 			margin-inline: calc(var(--jsxPadding) * -1);
 			padding-inline: var(--jsxPadding);
-			mask-image: linear-gradient(
-				to right,
-				transparent 0px,
-				black var(--jsxPadding),
-				black calc(100% - var(--jsxPadding)),
-				transparent 100%
-			);
+			mask-image: linear-gradient(to right,
+					transparent 0px,
+					black var(--jsxPadding),
+					black calc(100% - var(--jsxPadding)),
+					transparent 100%);
 			mask-repeat: no-repeat;
 		}
 	}
