@@ -37,17 +37,6 @@
 		transition-duration: var(--transition-duration);
 	}
 
-	.card:is(:hover, :focus, :focus-within) {
-		border-color: var(--mauve-5);
-		box-shadow: var(--shadow);
-
-		&::before {
-			--fade-start: 40%;
-			--fade-end: 105%;
-			--tile-color: var(--mauve-7);
-		}
-	}
-
 	.card::before {
 		--tile-size: var(--space-4);
 		--tile-color: var(--mauve-5);
@@ -58,16 +47,31 @@
 		inset: 0;
 		z-index: -1;
 		pointer-events: none;
-		background-image: radial-gradient(circle at 1px 1px,
-				var(--tile-color) 1px,
-				transparent 0);
+		background-image: radial-gradient(
+			circle at 1px 1px,
+			var(--tile-color) 1px,
+			transparent 0
+		);
 		background-size: var(--tile-size) var(--tile-size);
 		background-position: 100% 100%;
-		mask-image: radial-gradient(ellipse 80% 80% at 100% 100%,
-				black var(--fade-start),
-				transparent var(--fade-end));
+		mask-image: radial-gradient(
+			ellipse 80% 80% at 100% 100%,
+			black var(--fade-start),
+			transparent var(--fade-end)
+		);
 		transition-property: --fade-start, --fade-end, --tile-color;
 		transition-duration: 1s;
+	}
+
+	.card:is(:hover, :focus, :focus-within) {
+		border-color: var(--mauve-5);
+		box-shadow: var(--shadow);
+
+		&::before {
+			--fade-start: 40%;
+			--fade-end: 105%;
+			--tile-color: var(--mauve-7);
+		}
 	}
 
 	.recipeName {

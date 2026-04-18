@@ -23,6 +23,7 @@ import {
 	useRecipeCardModal,
 } from "@/features/recipes/stores/recipeCardModal";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { useCardTilt } from "@/hooks/useCardTilt";
 import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
@@ -88,9 +89,14 @@ function RecipeCardModalContent({
 		"particles-enabled",
 		true,
 	);
+	const [tiltEnabled, setTiltEnabled] = useLocalStorage(
+		"card-tilt-enabled",
+		false,
+	);
 
 	const cardRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useParticleEffect(cardRef, particlesEnabled);
+	const tilt = useCardTilt();
 
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
@@ -119,6 +125,9 @@ function RecipeCardModalContent({
 							recipe={recipe}
 							className={styles.card}
 							layout="position"
+							onMouseMove={tiltEnabled ? tilt.onMouseMove : undefined}
+							onMouseLeave={tiltEnabled ? tilt.onMouseLeave : undefined}
+							style={tiltEnabled ? tilt.style : undefined}
 						>
 							{card}
 						</MotionRecipeCard>
@@ -166,6 +175,12 @@ function RecipeCardModalContent({
 					size="small"
 					checked={particlesEnabled}
 					onChange={(e) => setParticlesEnabled(e.target.checked)}
+				/>
+				<Checkbox
+					label="3D Card"
+					size="small"
+					checked={tiltEnabled}
+					onChange={(e) => setTiltEnabled(e.target.checked)}
 				/>
 			</div>
 		</>
