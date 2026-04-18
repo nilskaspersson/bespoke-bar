@@ -1,15 +1,15 @@
 "use client";
 
 import clsx from "clsx";
-import type { Ref } from "react";
+import Link from "next/link";
+import type { ComponentProps } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
-import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
-import { Grid } from "@/ui/Grid";
+import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
@@ -18,13 +18,12 @@ export function RecipesList({
 	recipes,
 	favoriteRecipeIds,
 	withActions,
-	ref,
 	withMotion = true,
-}: {
+	...props
+}: ComponentProps<"ul"> & {
 	recipes: RecipeWithSpecs[];
 	favoriteRecipeIds?: string[];
 	withActions?: boolean;
-	ref?: Ref<HTMLUListElement>;
 	withMotion?: boolean;
 }) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
@@ -37,7 +36,7 @@ export function RecipesList({
 	}
 
 	return (
-		<OverscrollList ref={ref} padding={6} gap={4}>
+		<ul {...props} className={clsx(props.className, styles.list)}>
 			{recipes.map((recipe) => {
 				const isFavorite = favoriteIdSet.has(recipe.id);
 				const isSelected =
@@ -45,7 +44,7 @@ export function RecipesList({
 				const selectRecipe = () => setRecipe(recipe, isFavorite);
 
 				return (
-					<OverscrollList.Item key={recipe.id}>
+					<li key={recipe.id} className={styles.item}>
 						<RecipeCard
 							recipe={recipe}
 							withLink={!withMotion}
@@ -79,21 +78,38 @@ export function RecipesList({
 								) : undefined
 							}
 						/>
-					</OverscrollList.Item>
+					</li>
 				);
 			})}
-		</OverscrollList>
+
+			<li className={styles.item}>
+				<Link href="/bar/recipes/create" className={styles.createSlot}>
+					<Icon name="plus" size={3} />
+					Create Recipe
+				</Link>
+			</li>
+		</ul>
 	);
 }
 
-export function RecipesListSkeleton() {
+export function RecipesListSkeleton({ count = 6 }: { count?: number }) {
 	return (
 		<SkeletonScreen>
-			<Grid gap={4}>
-				<Skeleton width="100%" height="169px" />
-				<Skeleton width="100%" height="169px" />
-				<Skeleton width="100%" height="169px" />
-			</Grid>
+			<ul className={styles.list}>
+				{Array.from({ length: count }, (_, i) => (
+					<li
+						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders have no identity
+						key={i}
+						className={styles.item}
+					>
+						<Skeleton
+							className={styles.cardSkeleton}
+							width="var(--recipe-card-width)"
+							height="var(--recipe-card-height)"
+						/>
+					</li>
+				))}
+			</ul>
 		</SkeletonScreen>
 	);
 }

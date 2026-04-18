@@ -43,8 +43,4 @@
 		fill: var(--mauve-8);
 		flex: 0 0 auto;
 	}
-
-	.count {
-		font-variant-numeric: tabular-nums;
-	}
 }

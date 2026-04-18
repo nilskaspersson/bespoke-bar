@@ -1,12 +1,48 @@
 @layer feature {
-	.card {
-		padding: var(--gap);
-		background-color: var(--mauve-2);
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: start;
+		gap: var(--gap--large);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.item {
+		display: grid;
+		content-visibility: auto;
+		contain-intrinsic-size: auto var(--recipe-card-width) auto
+			var(--recipe-card-height);
+	}
+
+	.createSlot {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-2);
+		width: var(--recipe-card-width);
+		max-width: 100%;
+		aspect-ratio: var(--recipe-card-ratio);
+		border: 1px dashed var(--mauve-6);
 		border-radius: var(--radius--large);
-		border: 1px solid var(--shine);
-		box-shadow: var(--shadow--low);
-		isolation: isolate;
-		transition: background-color var(--transition-duration);
+		color: var(--mauve-9);
+		text-decoration: none;
+		font-weight: 600;
+		transition-property: border-color, color, background-color;
+		transition-duration: var(--transition-duration);
+
+		&:is(:hover, :focus-visible) {
+			border-color: var(--accent-7);
+			color: var(--accent-11);
+			background-color: var(--accent-2);
+		}
+	}
+
+	.cardSkeleton {
+		max-width: 100%;
+		border-radius: var(--radius--large);
 	}
 
 	.hidden {
@@ -15,9 +51,5 @@
 
 	.pointer {
 		cursor: pointer;
-	}
-
-	.icon {
-		color: var(--mauve-8);
 	}
 }

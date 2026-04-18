@@ -20,13 +20,15 @@
 	.base {
 		display: grid;
 		gap: var(--space-1);
-		width: 500px;
+		width: var(--recipe-card-width);
 		max-width: 100%;
 	}
 
 	.card {
+		aspect-ratio: var(--recipe-card-ratio);
+		height: auto;
+
 		position: relative;
-		height: 260px;
 		padding: var(--gap);
 		background-color: var(--mauve-2);
 		border-radius: var(--radius--large);

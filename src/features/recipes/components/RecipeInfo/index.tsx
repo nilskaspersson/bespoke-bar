@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useDeferredValue, useState } from "react";
+import { useDeferredValue, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -9,11 +9,9 @@ import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { FormatterContext } from "@/hooks/useFormatter";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends RecipeWithSpecs>({
@@ -23,8 +21,6 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 	recipe: T;
 	isFavorite?: boolean;
 }) {
-	const { quantityFormatter } = use(FormatterContext);
-
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
 
@@ -47,11 +43,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 					withLink={false}
 					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
 					footer={<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />}
-				>
-					<Text as="div" size={1} fullWidth className={styles.count}>
-						Servings: {quantityFormatter.format(servings)}
-					</Text>
-				</RecipeCard>
+				/>
 			</section>
 
 			<aside className={styles.card}>

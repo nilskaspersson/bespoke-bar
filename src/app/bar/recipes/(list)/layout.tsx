@@ -3,7 +3,6 @@ import { PageHeader } from "@/components/PageHeader";
 import { SwitchListView } from "@/components/SwitchListView";
 import { StatLinks } from "@/features/recipes/components/StatLinks";
 import { LinkButton } from "@/ui/Button";
-import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { authOrForbidden } from "@/utils/auth";
@@ -11,7 +10,7 @@ import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
-		<Container as="article" className={styles.container}>
+		<article className={styles.container}>
 			<PageHeader
 				heading="Recipes"
 				actions={
@@ -45,7 +44,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			</Flex>
 
 			{children}
-		</Container>
+		</article>
 	);
 }
 

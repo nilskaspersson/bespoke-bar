@@ -131,6 +131,13 @@
 	--app-header--height: 73px;
 	--app-sidebar--width: 250px;
 
+	--recipe-card-ratio: calc(16 / 9);
+	--recipe-card-width: 400px;
+	--recipe-card-height: calc(
+		var(--recipe-card-width) /
+		var(--recipe-card-ratio)
+	);
+
 	/**
 	 * z-index
 	 */

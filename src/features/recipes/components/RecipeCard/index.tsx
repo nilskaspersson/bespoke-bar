@@ -48,7 +48,7 @@ export function RecipeCard<T extends BaseRecipe>({
 	const metrics = calculateRecipeMetrics(recipe);
 
 	const card = (
-		<Grid gap={4} className={styles.card}>
+		<Grid gap={4} className={styles.card} alignContent="space-between">
 			<Grid as="header" gap={1}>
 				<div className={styles.line}>
 					<Heading level="h3" serif size={5} className={styles.recipeName}>

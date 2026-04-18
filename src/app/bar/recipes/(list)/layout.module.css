@@ -4,6 +4,7 @@
 		gap: var(--gap);
 		padding-top: var(--app-inset);
 		padding-bottom: var(--gap);
+		padding-inline: var(--app-inset);
 		grid-template:
 			"header" auto
 			"navigation" auto
