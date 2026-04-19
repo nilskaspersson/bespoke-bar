@@ -102,11 +102,14 @@ export function RecipesListSkeleton({ count = 6 }: { count?: number }) {
 						key={i}
 						className={styles.item}
 					>
-						<Skeleton
-							className={styles.cardSkeleton}
-							width="var(--recipe-card-width)"
-							height="var(--recipe-card-height)"
-						/>
+						<div className={styles.skeletonCard}>
+							<Skeleton
+								className={styles.cardSkeleton}
+								width="var(--recipe-card-width)"
+								height="var(--recipe-card-height)"
+							/>
+							<div className={styles.skeletonActions} />
+						</div>
 					</li>
 				))}
 			</ul>

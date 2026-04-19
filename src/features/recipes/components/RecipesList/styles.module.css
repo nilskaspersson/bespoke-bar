@@ -40,9 +40,20 @@
 		}
 	}
 
+	.skeletonCard {
+		display: grid;
+		gap: var(--space-1);
+		width: var(--recipe-card-width);
+		max-width: 100%;
+	}
+
 	.cardSkeleton {
 		max-width: 100%;
 		border-radius: var(--radius--large);
+	}
+
+	.skeletonActions {
+		height: var(--space-5);
 	}
 
 	.hidden {

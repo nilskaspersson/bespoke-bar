@@ -11,6 +11,7 @@ import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { getRecipeName, getRecipeUrl } from "@/features/recipes/utils";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
+import styles from "./styles.module.css";
 
 type Props = {
 	recipe: RecipeWithSpecs;
@@ -31,7 +32,7 @@ export function RecipeCardActions({
 			{(actionProps) => (
 				<>
 					{withLink ? (
-						<li>
+						<li className={styles.item}>
 							<LinkButton
 								{...actionProps}
 								href={getRecipeUrl(recipe)}
@@ -43,7 +44,7 @@ export function RecipeCardActions({
 						</li>
 					) : null}
 
-					<li>
+					<li className={styles.item}>
 						<ToggleFavoriteRecipeButton
 							{...actionProps}
 							recipe={recipe}
@@ -53,13 +54,13 @@ export function RecipeCardActions({
 						</ToggleFavoriteRecipeButton>
 					</li>
 
-					<li>
+					<li className={styles.item}>
 						<CreateListEntryButton {...actionProps} recipe={recipe}>
 							<Icon name="plus" size={1} /> Add to list
 						</CreateListEntryButton>
 					</li>
 
-					<li>
+					<li className={styles.item}>
 						<RecipeActionsToggle
 							heading={<RecipeName recipe={recipe} />}
 							label={`Actions for ${getRecipeName(recipe)}`}
