@@ -11,7 +11,8 @@
 
 	.item {
 		content-visibility: auto;
-		contain-intrinsic-size: auto var(--recipe-card-width) auto var(--recipe-card-height);
+		contain-intrinsic-size: auto var(--recipe-card-width) auto
+			var(--recipe-card-height);
 		overflow-clip-margin: 1rem;
 	}
 

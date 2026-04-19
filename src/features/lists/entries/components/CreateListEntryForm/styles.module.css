@@ -3,6 +3,13 @@
 		min-height: 20rem;
 		width: var(--control-width--large);
 		max-width: 100%;
+		/**
+		 * Let grid children shrink below their intrinsic width. Without
+		 * this, the column auto-sizes to the widest child (the 400px
+		 * RecipeCard), pushing the whole grid past the drawer's bounds
+		 * on narrow viewports.
+		 */
+		grid-template-columns: minmax(0, 1fr);
 	}
 
 	.card {

@@ -25,12 +25,14 @@
 	}
 
 	.card {
+		contain: content;
 		aspect-ratio: var(--recipe-card-ratio);
 		height: auto;
 
 		position: relative;
 		padding: var(--gap);
-		background-color: var(--mauve-2);
+		background-color: var(--mauve-1);
+		background-image: linear-gradient(-45deg, var(--mauve-1), var(--mauve-2));
 		border-radius: var(--radius--large);
 		border: 1px solid var(--mauve-4);
 		box-shadow: var(--shadow--low);
@@ -49,18 +51,14 @@
 		inset: 0;
 		z-index: -1;
 		pointer-events: none;
-		background-image: radial-gradient(
-			circle at 1px 1px,
-			var(--tile-color) 1px,
-			transparent 0
-		);
+		background-image: radial-gradient(circle at 1px 1px,
+				var(--tile-color) 1px,
+				transparent 0);
 		background-size: var(--tile-size) var(--tile-size);
 		background-position: 100% 100%;
-		mask-image: radial-gradient(
-			ellipse 80% 80% at 100% 100%,
-			black var(--fade-start),
-			transparent var(--fade-end)
-		);
+		mask-image: radial-gradient(ellipse 80% 80% at 100% 100%,
+				black var(--fade-start),
+				transparent var(--fade-end));
 		transition-property: --fade-start, --fade-end, --tile-color;
 		transition-duration: 1s;
 	}

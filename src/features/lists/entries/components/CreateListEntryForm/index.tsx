@@ -236,7 +236,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 					<Icon name="arrow-down-long" size={6} className={styles.arrow} />
 
 					{firstEntry && entryFields && draftEntry ? (
-						<Fragment key={firstEntry.id}>
+						<div key={firstEntry.id}>
 							<input
 								type="hidden"
 								name={entryFields.recipeId.name}
@@ -266,7 +266,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 									</Grid>
 								</details>
 							</RecipeListEntryCard>
-						</Fragment>
+						</div>
 					) : null}
 
 					<FormErrors formRef={resolvedFormRef} />
