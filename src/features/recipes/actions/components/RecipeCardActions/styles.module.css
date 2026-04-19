@@ -7,7 +7,11 @@
 		transition-delay: var(--entry-delay);
 
 		@supports (transition-delay: calc(sibling-index() * 1ms)) {
-			transition-delay: calc(var(--entry-delay) + sibling-index() * (16.667ms * 2));
+			transition-delay: calc(
+				var(--entry-delay) +
+				sibling-index() *
+				(16.667ms * 2)
+			);
 		}
 	}
 
