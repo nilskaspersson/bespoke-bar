@@ -32,6 +32,13 @@
 		scrollbar-gutter: stable;
 	}
 
+	.status {
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0 var(--gap--large);
+	}
+
 	.list {
 		justify-content: center;
 	}

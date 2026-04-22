@@ -25,12 +25,10 @@ const baseActionProps = {
 
 export function RecipeActions({
 	recipe,
-	withLink,
 	isFavorite,
 	onDelete,
 }: {
 	recipe: RecipeWithSpecs;
-	withLink?: boolean;
 	isFavorite?: boolean;
 	onDelete?: () => void;
 }) {
@@ -45,18 +43,16 @@ export function RecipeActions({
 
 	return (
 		<menu className={styles.menu} aria-label="Recipe actions">
-			{withLink ? (
-				<li {...dismissProps}>
-					<LinkButton
-						{...baseActionProps}
-						href={getRecipeUrl(recipe)}
-						color="accent"
-					>
-						<Icon name="arrow-right" size={1} />
-						View
-					</LinkButton>
-				</li>
-			) : null}
+			<li {...dismissProps}>
+				<LinkButton
+					{...baseActionProps}
+					href={getRecipeUrl(recipe)}
+					color="accent"
+				>
+					<Icon name="arrow-right" size={1} />
+					View
+				</LinkButton>
+			</li>
 
 			<li {...dismissProps}>
 				<ToggleFavoriteRecipeButton

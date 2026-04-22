@@ -74,7 +74,6 @@ export function RecipesList({
 									<RecipeCardActions
 										recipe={recipe}
 										isFavorite={isFavorite}
-										withLink
 									/>
 								) : undefined
 							}

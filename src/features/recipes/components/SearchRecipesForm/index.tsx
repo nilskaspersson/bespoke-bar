@@ -113,7 +113,7 @@ export function SearchRecipesForm({
 					<Kbd shortcut="Esc" visual className={styles.esc} />
 				</div>
 
-				<Flex justifyContent="space-between">
+				<div className={styles.status}>
 					<Text as="p" size={1} light numeric>
 						{isLoading ? (
 							<Skeleton variant="text" height="1em" width="15ch" />
@@ -143,7 +143,7 @@ export function SearchRecipesForm({
 						/>{" "}
 						to open the first result
 					</Text>
-				</Flex>
+				</div>
 			</Grid>
 
 			<div className={styles.results}>
