@@ -12,7 +12,6 @@ import {
 	useState,
 } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
-import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import {
@@ -21,7 +20,7 @@ import {
 } from "@/features/recipes/utils/filterRecipes";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { trpc } from "@/trpc/client";
-import { Button } from "@/ui/Button";
+import { Button, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -29,8 +28,10 @@ import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
 import { Lightbox } from "@/ui/Lightbox";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
+import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
 
 export function SearchRecipesForm({
@@ -62,6 +63,10 @@ export function SearchRecipesForm({
 		() => filterRecipes(recipes, searchIndex, deferredSearch),
 		[deferredSearch, recipes, searchIndex],
 	);
+
+	const count = deferredSearch
+		? filteredRecipes.length
+		: (recipes?.length ?? 0);
 
 	const openFirstResult = useCallback(() => {
 		if (filteredRecipes.length === 0) {
@@ -109,9 +114,14 @@ export function SearchRecipesForm({
 				</div>
 
 				<Flex justifyContent="space-between">
-					<Text as="p" size={1} light numeric compact>
-						{filteredRecipes.length} matching{" "}
-						{filteredRecipes.length === 1 ? "recipe" : "recipes"}
+					<Text as="p" size={1} light numeric>
+						{isLoading ? (
+							<Skeleton variant="text" height="1em" width="15ch" />
+						) : deferredSearch ? (
+							`${count} matching ${pluralize(count, "recipe")}`
+						) : (
+							`${count} ${pluralize(count, "recipe")}`
+						)}
 					</Text>
 
 					<Text
@@ -142,17 +152,29 @@ export function SearchRecipesForm({
 				) : filteredRecipes.length === 0 ? (
 					<EmptyArea className={styles.empty} color="light">
 						<Heading level="h3" size={4}>
-							No recipes found
+							No matching recipes
 						</Heading>
 
-						<Button
-							variant="outline"
-							color="light"
-							size="small"
-							onClick={() => setSearch("")}
-						>
-							Clear search
-						</Button>
+						<Flex gap={2}>
+							<Button
+								variant="outline"
+								color="light"
+								size="small"
+								onClick={() => setSearch("")}
+							>
+								Clear search
+							</Button>
+
+							<LinkButton
+								href="/bar/recipes/create"
+								variant="outline"
+								color="accent"
+								size="small"
+							>
+								Create recipe
+							</LinkButton>
+
+						</Flex>
 					</EmptyArea>
 				) : (
 					<RecipesList
@@ -163,8 +185,6 @@ export function SearchRecipesForm({
 						className={styles.list}
 					/>
 				)}
-
-				<CreateRecipeSlot />
 			</div>
 
 			{actions ? (

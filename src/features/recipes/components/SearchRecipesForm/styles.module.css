@@ -25,6 +25,7 @@
 
 	.results {
 		display: grid;
+		justify-content: center;
 		gap: var(--gap--large);
 		padding-block: var(--gap--large);
 		overflow: auto;
@@ -65,7 +66,10 @@
 	}
 
 	.empty {
-		min-height: 8rem;
+		width: var(--recipe-card-width);
+		max-width: 100%;
+		aspect-ratio: var(--recipe-card-ratio);
+		height: auto;
 	}
 
 	.searchIcon {
