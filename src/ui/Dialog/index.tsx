@@ -1,7 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { ComponentProps, MouseEvent } from "react";
+import type { ComponentProps, MouseEvent, RefObject } from "react";
 import styles from "./styles.module.css";
 
 /**
@@ -36,10 +36,11 @@ export function Dialog({
 	withBlur = true,
 	ref,
 	...props
-}: ComponentProps<"dialog"> & {
+}: Omit<ComponentProps<"dialog">, "ref"> & {
 	isOpen?: boolean;
 	withBlur?: boolean;
 	onClose?: () => void;
+	ref?: RefObject<HTMLDialogElement | null>;
 }) {
 	/**
 	 * Always render the dialog node to have a stable ref to toggle

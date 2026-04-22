@@ -38,7 +38,7 @@ export function IngredientDialogForm({
 					variant="solid"
 					color="heavy"
 					fullWidth
-					onClick={() => ref.current?.close()}
+					onClick={() => ref?.current?.close()}
 				>
 					Apply
 				</Button>
