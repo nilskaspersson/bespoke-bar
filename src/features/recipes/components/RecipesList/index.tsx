@@ -71,10 +71,7 @@ export function RecipesList({
 							)}
 							footer={
 								withActions ? (
-									<RecipeCardActions
-										recipe={recipe}
-										isFavorite={isFavorite}
-									/>
+									<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
 								) : undefined
 							}
 						/>

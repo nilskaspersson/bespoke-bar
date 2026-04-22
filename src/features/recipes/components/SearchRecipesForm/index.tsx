@@ -173,7 +173,6 @@ export function SearchRecipesForm({
 							>
 								Create recipe
 							</LinkButton>
-
 						</Flex>
 					</EmptyArea>
 				) : (
