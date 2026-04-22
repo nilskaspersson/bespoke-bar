@@ -11,6 +11,7 @@ import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToCli
 import { LinkButton } from "@/ui/Button";
 import { useContextMenu } from "@/ui/ContextMenu";
 import { Icon } from "@/ui/Icon";
+import { handleKey } from "@/utils/keyboard";
 import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
 
@@ -34,10 +35,13 @@ export function RecipeActions({
 	onDelete?: () => void;
 }) {
 	const { closePopover: close } = useContextMenu();
-	const closeOnKey: React.KeyboardEventHandler = (e) => {
-		if (e.key === "Enter" || e.key === " ") close();
-	};
-	const dismissProps = { onClick: close, onKeyDown: closeOnKey } as const;
+	const dismissProps = {
+		onClick: close,
+		onKeyDown: handleKey([
+			["Enter", close],
+			[" ", close],
+		]),
+	} as const;
 
 	return (
 		<menu className={styles.menu} aria-label="Recipe actions">
