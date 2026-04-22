@@ -137,7 +137,6 @@ function RecipeCardModalContent({
 							recipe={recipe}
 							isFavorite={isFavorite}
 							onDelete={clear}
-							withLink
 						/>
 					}
 				/>

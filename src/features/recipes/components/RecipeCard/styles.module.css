@@ -26,8 +26,7 @@
 
 	.card {
 		contain: content;
-		aspect-ratio: var(--recipe-card-ratio);
-		height: auto;
+		min-height: var(--recipe-card-height);
 
 		position: relative;
 		padding: var(--gap);
