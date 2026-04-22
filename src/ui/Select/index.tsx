@@ -4,9 +4,10 @@ import { clsx } from "clsx";
 import { type UseSelectProps, useSelect } from "downshift";
 import { type ComponentProps, useId } from "react";
 import { useIndexedItems } from "@/hooks/useIndexedItems";
+import { usePopover } from "@/hooks/usePopover";
 import { ControlLabel } from "@/ui/ControlLabel";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
@@ -28,19 +29,6 @@ type Props<T> = {
 	selectProps?: Partial<UseSelectProps<Keyed<T>>>;
 };
 
-/**
- * This component is not quite idiomatic to downshift. There are two larger issues
- * with this structure:
- *
- * 1. WAI-ARIA patterns for select/comboboxes does not allow for the listbox and
- *    options to be separated, which means we couldn't support a footer or other
- *    supplementary nodes.
- * 2. Downshift needs the "Menu" to always be rendered, which further means we cannot
- *    even really style the Lightbox even if it was the list.
- *
- * But, I can't let perfect be the enemy of good. Maybe solve one of these issues
- * in the future.
- */
 export function Select<T>({
 	className,
 	compact = false,
@@ -62,8 +50,9 @@ export function Select<T>({
 
 	const itemsByValue = useIndexedItems(items, getItemValue);
 
+	const popover = usePopover({ type: "manual" });
+
 	const {
-		isOpen,
 		selectedItem,
 		getToggleButtonProps,
 		getLabelProps,
@@ -79,6 +68,15 @@ export function Select<T>({
 		scrollIntoView: (node) =>
 			node?.scrollIntoView({ behavior: "instant", block: "nearest" }),
 		...selectProps,
+		onIsOpenChange(changes) {
+			if (changes.isOpen) {
+				popover.openPopover();
+			} else {
+				popover.closePopover();
+			}
+
+			selectProps?.onIsOpenChange?.(changes);
+		},
 	});
 
 	return (
@@ -88,7 +86,10 @@ export function Select<T>({
 			className={clsx(styles.base, className)}
 			aria-describedby={helperText ? helperTextId : undefined}
 		>
-			<div className={styles.contain}>
+			<div
+				className={styles.contain}
+				style={{ anchorName: `--${popover.popoverId}` }}
+			>
 				<button
 					{...buttonProps}
 					{...getToggleButtonProps()}
@@ -109,40 +110,43 @@ export function Select<T>({
 						? itemToString(selectedItem)
 						: (placeholder ?? "Select…")}
 				</button>
-
-				<div {...getMenuProps()}>
-					<input
-						type="hidden"
-						name={name}
-						value={selectedItem ? getItemValue(selectedItem) : ""}
-					/>
-
-					{isOpen ? (
-						<OptionsList footer={footer}>
-							{items.map((item, index) => (
-								<OptionsList.Item
-									key={getKey(item)}
-									{...getItemProps({ item, index })}
-									isHighlighted={highlightedIndex === index}
-									isSelected={
-										selectedItem
-											? getItemValue(selectedItem) === getItemValue(item)
-											: false
-									}
-								>
-									{getItemLabel ? (
-										getItemLabel(item)
-									) : (
-										<Text size={3} heavy>
-											{itemToString(item)}
-										</Text>
-									)}
-								</OptionsList.Item>
-							))}
-						</OptionsList>
-					) : null}
-				</div>
 			</div>
+
+			<input
+				type="hidden"
+				name={name}
+				value={selectedItem ? getItemValue(selectedItem) : ""}
+			/>
+
+			<Menu
+				{...popover.contentProps}
+				isOpen
+				keepAnchored
+				style={{ width: "anchor-size(width)" }}
+				listProps={getMenuProps()}
+				footer={footer}
+			>
+				{items.map((item, index) => (
+					<Menu.Item
+						key={getKey(item)}
+						{...getItemProps({ item, index })}
+						isHighlighted={highlightedIndex === index}
+						isSelected={
+							selectedItem
+								? getItemValue(selectedItem) === getItemValue(item)
+								: false
+						}
+					>
+						{getItemLabel ? (
+							getItemLabel(item)
+						) : (
+							<Text size={3} heavy>
+								{itemToString(item)}
+							</Text>
+						)}
+					</Menu.Item>
+				))}
+			</Menu>
 
 			{helperText ? (
 				<Text size={1} id={helperTextId}>

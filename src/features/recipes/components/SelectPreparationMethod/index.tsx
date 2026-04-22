@@ -10,7 +10,7 @@ import {
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
 import { FormatterContext } from "@/hooks/useFormatter";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { Select } from "@/ui/Select";
 import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
@@ -41,7 +41,7 @@ export function SelectPreparationMethod(
 					withKey({
 						value: item,
 						label: (
-							<OptionsList.Label
+							<Menu.Label
 								description={
 									METHOD_TO_DEFAULT_DILUTION.has(item)
 										? `Default dilution: ${percentageFormatter.format(
@@ -51,7 +51,7 @@ export function SelectPreparationMethod(
 								}
 							>
 								{METHOD_TO_LABEL.get(item) ?? item}
-							</OptionsList.Label>
+							</Menu.Label>
 						),
 					}),
 				)

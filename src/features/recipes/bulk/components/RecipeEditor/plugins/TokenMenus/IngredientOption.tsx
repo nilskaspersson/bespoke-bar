@@ -4,12 +4,12 @@ import { type ComponentProps, use } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { FormatterContext } from "@/hooks/useFormatter";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 
 export function IngredientOption({
 	ingredient,
 	...props
-}: { ingredient: Ingredient } & ComponentProps<typeof OptionsList.Item>) {
+}: { ingredient: Ingredient } & ComponentProps<typeof Menu.Item>) {
 	const { percentageFormatter } = use(FormatterContext);
 
 	const category = ingredient.category
@@ -20,10 +20,8 @@ export function IngredientOption({
 	const description = [category, abv].filter(Boolean).join(", ") || undefined;
 
 	return (
-		<OptionsList.Item {...props}>
-			<OptionsList.Label description={description}>
-				{ingredient.name}
-			</OptionsList.Label>
-		</OptionsList.Item>
+		<Menu.Item {...props}>
+			<Menu.Label description={description}>{ingredient.name}</Menu.Label>
+		</Menu.Item>
 	);
 }

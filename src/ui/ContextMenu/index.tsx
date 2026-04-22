@@ -23,6 +23,15 @@ function getTransformOrigin(el: HTMLElement): string {
 	if (!popoverEl) return "top left";
 
 	const area = getComputedStyle(popoverEl).positionArea;
+
+	/**
+	 * The small-screen fallback in Popover drops anchor positioning and
+	 * centers the popover on the viewport — position-area resolves to
+	 * "none". Scale-in from center matches the centered geometry; scaling
+	 * from a corner looks like the menu snaps out of a random edge.
+	 */
+	if (area === "none") return "center";
+
 	const isTop = area.includes("top");
 	const isLeft = area.includes("left");
 

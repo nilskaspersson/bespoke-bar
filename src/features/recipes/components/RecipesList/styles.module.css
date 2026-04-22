@@ -16,30 +16,6 @@
 		overflow-clip-margin: 1rem;
 	}
 
-	.createSlot {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: var(--space-2);
-		width: var(--recipe-card-width);
-		max-width: 100%;
-		aspect-ratio: var(--recipe-card-ratio);
-		border: 1px dashed var(--mauve-6);
-		border-radius: var(--radius--large);
-		color: var(--mauve-9);
-		text-decoration: none;
-		font-weight: 600;
-		transition-property: border-color, color, background-color;
-		transition-duration: var(--transition-duration);
-
-		&:is(:hover, :focus-visible) {
-			border-color: var(--accent-7);
-			color: var(--accent-11);
-			background-color: var(--accent-2);
-		}
-	}
-
 	.skeletonCard {
 		display: grid;
 		gap: var(--space-1);

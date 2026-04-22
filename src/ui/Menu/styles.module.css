@@ -1,19 +1,19 @@
 @layer ui {
-	.lightbox {
+	.popover {
+		--offset: var(--space-1);
+	}
+
+	.surface {
 		--spacing: var(--space-2);
 
-		position: absolute;
-		top: calc(100% + var(--spacing));
-		left: 0;
 		width: 100%;
-		min-width: var(--control-width--small);
-		z-index: var(--z-popover);
 		text-align: initial;
 		padding-inline: var(--spacing);
 	}
 
 	.options {
 		--est-item-height: 40px;
+
 		max-height: calc(var(--est-item-height) * 5 + var(--spacing) * 2);
 		overflow-y: auto;
 		padding-block: var(--spacing);
@@ -23,17 +23,15 @@
 		display: grid;
 		margin-inline: var(--spacing);
 		border-bottom: 1px solid var(--mauve-6);
-		padding-block: calc(var(--spacing));
+		padding-block: var(--spacing);
 	}
 
 	.footer {
 		display: grid;
 		margin-inline: var(--spacing);
 		border-top: 1px solid var(--mauve-6);
-		padding-block: calc(var(--spacing));
+		padding-block: var(--spacing);
 	}
-
-	/* Item */
 
 	.item {
 		display: flex;
@@ -77,8 +75,6 @@
 		align-self: center;
 		color: var(--mauve-12);
 	}
-
-	/* Label */
 
 	.optionLabel {
 		width: 100%;

@@ -5,7 +5,7 @@ import { getListName } from "@/features/lists/utils";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
 import { Combobox } from "@/ui/Combobox";
 import { Icon } from "@/ui/Icon";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { collator } from "@/utils/collator";
 import styles from "./styles.module.css";
 
@@ -14,7 +14,7 @@ const itemToString = (item: RecipeListWithEntries | null) =>
 const getItemValue = (item: RecipeListWithEntries) => item.id;
 
 const getItemLabel = (item: RecipeListWithEntries) => (
-	<OptionsList.Label className={styles.label} description={item.description}>
+	<Menu.Label className={styles.label} description={item.description}>
 		<Icon
 			className={clsx(styles.icon, {
 				[styles.isFeatured]: item.isFeatured,
@@ -26,7 +26,7 @@ const getItemLabel = (item: RecipeListWithEntries) => (
 		<span className={styles.name}>{item.name}</span>
 
 		<RecipesCountBadge count={item.entries.length} size={0} />
-	</OptionsList.Label>
+	</Menu.Label>
 );
 
 export function SelectRecipeList({

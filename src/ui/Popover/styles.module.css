@@ -11,8 +11,14 @@
 		font-family: var(--font-sans-serif);
 		cursor: default;
 
-		opacity: 1;
-		transform: translate(0, 0);
+		/* Closed state — popover transitions to these when hidden. */
+		opacity: 0;
+		transform: translate(var(--slide-x), var(--slide-y));
+
+		&:popover-open {
+			opacity: 1;
+			transform: translate(0, 0);
+		}
 
 		position: fixed;
 		position-area: var(--area);
@@ -24,10 +30,67 @@
 		transition-duration: var(--transition-duration);
 		transition-timing-function: var(--swift-in);
 
-		@media (prefers-reduced-motion: no-preference) {
-			@starting-style {
-				opacity: 0;
-				transform: translate(var(--slide-x), var(--slide-y));
+		/**
+		 * Entry animation. Skipped when `.suppressEntryAnimation` is set —
+		 * without a starting-style block there's nothing for the popover
+		 * to transition *from*, so it just appears at its open values.
+		 * Used for popovers rebuilt mid-session (e.g. a Lexical typeahead
+		 * on every keystroke) where the animation would otherwise replay
+		 * as visual jitter.
+		 */
+		&:not(.suppressEntryAnimation) {
+			@media (prefers-reduced-motion: no-preference) {
+				@starting-style {
+					&:popover-open {
+						opacity: 0;
+						transform: translate(var(--slide-x), var(--slide-y));
+					}
+				}
+			}
+		}
+
+		/**
+		 * On narrow viewports, anchor positioning has no useful place to
+		 * go — the popover ends up clipped to a few columns of the screen
+		 * or overflowing it entirely. Bypass the anchor and center the
+		 * popover instead. `[popover]` keeps it in the top layer, so this
+		 * still escapes any ancestor overflow.
+		 */
+		@media (max-width: 40em) {
+			&[popover]:not(.keepAnchored) {
+				position-area: none;
+				position-try-fallbacks: none;
+				inset: 50% auto auto 50%;
+				translate: -50% -50%;
+				max-width: min(calc(100svw - 2rem), 28rem);
+				max-height: calc(100svh - 2rem);
+
+				/**
+				 * Override the anchor-directional slide-in with a fade + grow
+				 * from center. The directional slide assumes the popover sits
+				 * adjacent to its anchor — it reads as nonsense for a centered
+				 * surface.
+				 */
+				@media (prefers-reduced-motion: no-preference) {
+					@starting-style {
+						opacity: 0;
+						transform: scale(0.94);
+					}
+				}
+
+				&::backdrop {
+					background-color: hsl(from var(--mauve-1) h s l / 0.5);
+					backdrop-filter: blur(4px);
+					transition-behavior: allow-discrete;
+					transition-property:
+						opacity, display, overlay, background-color, backdrop-filter;
+					transition-duration: var(--transition-duration);
+
+					@starting-style {
+						background-color: hsl(from var(--mauve-1) h s l / 0);
+						backdrop-filter: blur(0);
+					}
+				}
 			}
 		}
 	}
@@ -37,84 +100,44 @@
 		--area: top;
 	}
 
-	.top-left {
-		--area: top left;
-	}
-
 	.top-right {
 		--area: top right;
 	}
 
-	.bottom {
-		--area: bottom;
-	}
+	/**
+	 * "bottom-start" places the menu just below the anchor, with the
+	 * inline start edges aligned. Inset references the *outer* anchor
+	 * edge (`anchor(bottom)`), which works equally well for element
+	 * anchors (the menu sits below the trigger) and zero-height
+	 * `PopoverAnchor` points (top === bottom).
+	 */
+	.bottom-start {
+		--area: none;
+		--fallback: flip-block, flip-inline, flip-block flip-inline;
+		--slide-y: calc(var(--offset) * -1);
 
-	.bottom-left {
-		--area: bottom left;
-	}
-
-	.bottom-right {
-		--area: bottom right;
-	}
-
-	.left {
-		--area: left;
-	}
-
-	.right {
-		--area: right;
+		position-try-order: normal;
+		inset: anchor(bottom) auto auto anchor(left);
 	}
 
 	/* Flip fallbacks */
-	.top,
-	.bottom {
+	.top {
 		--fallback: flip-block;
-	}
-
-	.left,
-	.right {
-		--fallback: flip-inline;
-	}
-
-	.top-left,
-	.top-right,
-	.bottom-left,
-	.bottom-right {
-		--fallback: flip-block, flip-inline, flip-block flip-inline;
-	}
-
-	/* Slide direction based on requested position */
-	.top,
-	.top-left,
-	.top-right {
 		--slide-y: var(--offset);
 	}
 
-	.bottom,
-	.bottom-left,
-	.bottom-right {
-		--slide-y: calc(var(--offset) * -1);
+	.top-right {
+		--fallback: flip-block, flip-inline, flip-block flip-inline;
+		--slide-y: var(--offset);
 	}
 
-	.left {
-		--slide-x: var(--offset);
-	}
-
-	.right {
-		--slide-x: calc(var(--offset) * -1);
-	}
-}
-
-::view-transition-old(.popover-exit) {
-	@media (prefers-reduced-motion: no-preference) {
-		animation: popover-exit var(--transition-duration--short) forwards;
-	}
-}
-
-@keyframes popover-exit {
-	to {
-		opacity: 0;
-		transform: scale(1.15);
-		filter: blur(4px);
+	.anchor {
+		position: fixed;
+		top: var(--anchorTop);
+		left: var(--anchorLeft);
+		width: var(--anchorWidth);
+		height: 0;
+		pointer-events: none;
+		anchor-name: var(--anchorName);
 	}
 }

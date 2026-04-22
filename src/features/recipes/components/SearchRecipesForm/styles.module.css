@@ -1,8 +1,9 @@
 @layer composition {
 	.dialog {
 		--offset-top: 10svh;
+		--inline-inset: var(--gap--large);
 
-		width: min(40rem, 100%);
+		width: min(calc(var(--recipe-card-width) + 2 * var(--inline-inset)), 100%);
 		margin-block: var(--offset-top) auto;
 	}
 
@@ -23,8 +24,15 @@
 	}
 
 	.results {
-		padding-block: var(--gap);
+		display: grid;
+		gap: var(--gap--large);
+		padding-block: var(--gap--large);
 		overflow: auto;
+		scrollbar-gutter: stable;
+	}
+
+	.list {
+		justify-content: center;
 	}
 
 	.search {

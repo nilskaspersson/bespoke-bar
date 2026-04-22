@@ -1,15 +1,14 @@
 "use client";
 
 import clsx from "clsx";
-import Link from "next/link";
 import type { ComponentProps } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
+import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
-import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
@@ -19,12 +18,14 @@ export function RecipesList({
 	favoriteRecipeIds,
 	withActions,
 	withMotion = true,
+	withCreate = true,
 	...props
 }: ComponentProps<"ul"> & {
 	recipes: RecipeWithSpecs[];
 	favoriteRecipeIds?: string[];
 	withActions?: boolean;
 	withMotion?: boolean;
+	withCreate?: boolean;
 }) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
@@ -82,20 +83,25 @@ export function RecipesList({
 				);
 			})}
 
-			<li className={styles.item}>
-				<Link href="/bar/recipes/create" className={styles.createSlot}>
-					<Icon name="plus" size={3} />
-					Create Recipe
-				</Link>
-			</li>
+			{withCreate ? (
+				<li className={styles.item}>
+					<CreateRecipeSlot />
+				</li>
+			) : null}
 		</ul>
 	);
 }
 
-export function RecipesListSkeleton({ count = 6 }: { count?: number }) {
+export function RecipesListSkeleton({
+	count = 6,
+	className,
+}: {
+	count?: number;
+	className?: string;
+}) {
 	return (
 		<SkeletonScreen>
-			<ul className={styles.list}>
+			<ul className={clsx(className, styles.list)}>
 				{Array.from({ length: count }, (_, i) => (
 					<li
 						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders have no identity

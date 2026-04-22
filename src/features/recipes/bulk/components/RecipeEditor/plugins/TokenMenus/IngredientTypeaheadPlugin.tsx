@@ -4,13 +4,11 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import type { TextNode } from "lexical";
 import { useCallback, useDeferredValue, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
 import { getIngredientId } from "@/features/ingredients/utils";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
-import { GhostTextController } from "./GhostTextController";
 import { IngredientOption } from "./IngredientOption";
-import { TokenMenu } from "./TokenMenu";
+import { useTypeaheadMenu } from "./useTypeaheadMenu";
 import {
 	createIngredientMenuOption,
 	createIngredientTriggerFn,
@@ -60,44 +58,29 @@ export function IngredientTypeaheadPlugin() {
 		[editor],
 	);
 
+	const menuRenderFn = useTypeaheadMenu({
+		options,
+		query,
+		getLabel: (option) => option.ingredient.name,
+		renderOption: ({ option, isHighlighted, onSelect, onHighlight }) => (
+			<IngredientOption
+				key={option.key}
+				ref={option.setRefElement}
+				ingredient={option.ingredient}
+				isHighlighted={isHighlighted}
+				onClick={onSelect}
+				onMouseEnter={onHighlight}
+			/>
+		),
+	});
+
 	return (
 		<LexicalTypeaheadMenuPlugin<IngredientMenuOption>
 			options={options}
 			triggerFn={triggerFn}
 			onQueryChange={setQuery}
 			onSelectOption={onSelectOption}
-			menuRenderFn={(
-				anchorElementRef,
-				{ selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
-			) => {
-				if (!anchorElementRef.current || options.length === 0) return null;
-				return createPortal(
-					<>
-						<GhostTextController
-							query={query}
-							options={options}
-							selectedIndex={selectedIndex}
-							getLabel={(option) => option.ingredient.name}
-						/>
-						<TokenMenu footerAction="complete">
-							{options.map((option, index) => (
-								<IngredientOption
-									key={option.key}
-									ref={option.setRefElement}
-									ingredient={option.ingredient}
-									isHighlighted={selectedIndex === index}
-									onClick={() => {
-										setHighlightedIndex(index);
-										selectOptionAndCleanUp(option);
-									}}
-									onMouseEnter={() => setHighlightedIndex(index)}
-								/>
-							))}
-						</TokenMenu>
-					</>,
-					anchorElementRef.current,
-				);
-			}}
+			menuRenderFn={menuRenderFn}
 		/>
 	);
 }

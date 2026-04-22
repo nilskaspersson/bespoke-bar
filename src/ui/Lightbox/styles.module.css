@@ -16,22 +16,6 @@
 		overflow: auto;
 		overscroll-behavior: contain;
 
-		transition-property: opacity, transform;
-		transition-duration: var(--transition-duration);
-		transition-behavior: allow-discrete;
-
-		@starting-style {
-			opacity: 0;
-		}
-
-		@media (prefers-reduced-motion: no-preference) {
-			transform-origin: top;
-
-			@starting-style {
-				transform: scaleY(0.96);
-			}
-		}
-
 		&.rounded {
 			--r: var(--radius--full);
 		}

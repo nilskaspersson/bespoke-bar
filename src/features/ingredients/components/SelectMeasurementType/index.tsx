@@ -6,7 +6,7 @@ import {
 	MEASUREMENT_TO_DESCRIPTION,
 	MEASUREMENT_TO_LABEL,
 } from "@/features/ingredients/constants";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { Select } from "@/ui/Select";
 import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
@@ -24,9 +24,9 @@ const OPTIONS = supportedMeasurements.options
 		withKey({
 			value: item,
 			label: (
-				<OptionsList.Label description={MEASUREMENT_TO_DESCRIPTION.get(item)}>
+				<Menu.Label description={MEASUREMENT_TO_DESCRIPTION.get(item)}>
 					{MEASUREMENT_TO_LABEL.get(item) ?? item}
-				</OptionsList.Label>
+				</Menu.Label>
 			),
 		}),
 	)

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ComponentProps, CSSProperties } from "react";
-import { startTransition, useCallback, useId, useRef, useState } from "react";
+import { useCallback, useId, useRef, useState } from "react";
 
 export type PopoverType = NonNullable<ComponentProps<"div">["popover"]>;
 
@@ -18,7 +18,6 @@ type UsePopoverOptions = {
 
 export type UsePopoverReturn = {
 	popoverId: string;
-	popoverRef: React.RefObject<HTMLDivElement | null>;
 	isOpen: boolean;
 	/**
 	 * Spread over the trigger element.
@@ -41,7 +40,6 @@ export type UsePopoverReturn = {
 	};
 	openPopover: () => void;
 	closePopover: () => void;
-	togglePopover: () => void;
 };
 
 export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
@@ -51,15 +49,19 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const openPopover = useCallback(() => {
-		popoverRef.current?.showPopover();
+		const el = popoverRef.current;
+
+		if (el?.isConnected) {
+			el.showPopover();
+		}
 	}, []);
 
 	const closePopover = useCallback(() => {
-		popoverRef.current?.hidePopover();
-	}, []);
+		const el = popoverRef.current;
 
-	const togglePopover = useCallback(() => {
-		popoverRef.current?.togglePopover();
+		if (el?.isConnected) {
+			el.hidePopover();
+		}
 	}, []);
 
 	/**
@@ -74,17 +76,7 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 	const onToggle: React.ToggleEventHandler<HTMLDivElement> = useCallback(
 		(e) => {
 			if (e.target !== e.currentTarget) return;
-
-			if (e.newState === "open") {
-				return setIsOpen(true);
-			}
-
-			/**
-			 * Use startTransition when closing to enable ViewTransition exit animations.
-			 */
-			startTransition(() => {
-				setIsOpen(false);
-			});
+			setIsOpen(e.newState === "open");
 		},
 		[],
 	);
@@ -108,12 +100,10 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 
 	return {
 		popoverId,
-		popoverRef,
 		isOpen,
 		triggerProps,
 		contentProps,
 		openPopover,
 		closePopover,
-		togglePopover,
 	};
 }

@@ -4,7 +4,6 @@ import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getSelection, $isRangeSelection, type TextNode } from "lexical";
 import { useCallback, useDeferredValue, useMemo, useState } from "react";
-import { createPortal } from "react-dom";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import {
 	getUnitLabel,
@@ -14,9 +13,8 @@ import {
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { searchByIndex } from "@/utils/search";
-import { GhostTextController } from "./GhostTextController";
-import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";
+import { useTypeaheadMenu } from "./useTypeaheadMenu";
 import {
 	createUnitMenuOption,
 	gateOnTextChange,
@@ -43,13 +41,17 @@ import {
  *     to replace and Tab becomes a no-op.
  */
 function createUnitTriggerFn() {
-	return gateOnTextChange((text: string) => {
+	return gateOnTextChange((rawText: string) => {
 		const selection = $getSelection();
 		if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
 		const anchor = selection.anchor;
 		if (anchor.type !== "text") return null;
 		if (anchor.offset !== anchor.getNode().getTextContentSize()) return null;
 
+		/**
+		 * Trim tail to match lexical internals
+		 */
+		const text = rawText.trimEnd();
 		const [quantity, quantityRemainder] = quantityTextParser(text);
 		if (quantity === null) return null;
 
@@ -59,15 +61,16 @@ function createUnitTriggerFn() {
 		const [unit] = unitTextParser(afterQuantity);
 		if (unit !== null) return null;
 
+		const leadOffset = text.length - afterQuantity.length;
+		const matchingString = rawText.slice(leadOffset);
+
 		return {
-			leadOffset: text.length - afterQuantity.length,
-			matchingString: afterQuantity,
-			replaceableString: afterQuantity,
+			leadOffset,
+			matchingString,
+			replaceableString: matchingString,
 		};
 	});
 }
-
-const getOptionLabel = (option: UnitMenuOption) => getUnitLabel(option.unit);
 
 export function UnitTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
@@ -119,44 +122,29 @@ export function UnitTypeaheadPlugin() {
 		[editor],
 	);
 
+	const menuRenderFn = useTypeaheadMenu({
+		options,
+		query,
+		getLabel: (option) => getUnitLabel(option.unit),
+		renderOption: ({ option, isHighlighted, onSelect, onHighlight }) => (
+			<UnitOption
+				key={option.key}
+				ref={option.setRefElement}
+				unit={option.unit}
+				isHighlighted={isHighlighted}
+				onClick={onSelect}
+				onMouseEnter={onHighlight}
+			/>
+		),
+	});
+
 	return (
 		<LexicalTypeaheadMenuPlugin<UnitMenuOption>
 			options={options}
 			triggerFn={triggerFn}
 			onQueryChange={setQuery}
 			onSelectOption={onSelectOption}
-			menuRenderFn={(
-				anchorElementRef,
-				{ selectedIndex, selectOptionAndCleanUp, setHighlightedIndex },
-			) => {
-				if (!anchorElementRef.current || options.length === 0) return null;
-				return createPortal(
-					<>
-						<GhostTextController
-							query={query}
-							options={options}
-							selectedIndex={selectedIndex}
-							getLabel={getOptionLabel}
-						/>
-						<TokenMenu footerAction="complete">
-							{options.map((option, index) => (
-								<UnitOption
-									key={option.key}
-									ref={option.setRefElement}
-									unit={option.unit}
-									isHighlighted={selectedIndex === index}
-									onClick={() => {
-										setHighlightedIndex(index);
-										selectOptionAndCleanUp(option);
-									}}
-									onMouseEnter={() => setHighlightedIndex(index)}
-								/>
-							))}
-						</TokenMenu>
-					</>,
-					anchorElementRef.current,
-				);
-			}}
+			menuRenderFn={menuRenderFn}
 		/>
 	);
 }

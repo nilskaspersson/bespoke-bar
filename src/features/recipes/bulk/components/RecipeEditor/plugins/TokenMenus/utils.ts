@@ -62,7 +62,7 @@ export function gateOnTextChange<T>(
  * exactly match an existing ingredient name.
  */
 export function createIngredientTriggerFn(knownIngredientNames: Set<string>) {
-	return gateOnTextChange((text) => {
+	return gateOnTextChange((rawText) => {
 		/**
 		 * Only fire when the cursor is at the end of its TextNode — i.e. the user
 		 * is actively appending. Clicking into the middle of an existing ingredient
@@ -74,19 +74,26 @@ export function createIngredientTriggerFn(knownIngredientNames: Set<string>) {
 		if (anchor.type !== "text") return null;
 		if (anchor.offset !== anchor.getNode().getTextContentSize()) return null;
 
+		/**
+		 * Trim tail to match lexical internals
+		 */
+		const text = rawText.trimEnd();
 		const [quantity, quantityRemainder] = quantityTextParser(text);
 		if (quantity === null) return null;
 
 		const [unit, unitRemainder] = unitTextParser(quantityRemainder.trimStart());
 		if (unit === null) return null;
 
-		const ingredientText = unitRemainder.trimStart();
-		if (ingredientText.length === 0) return null;
+		const ingredientCore = unitRemainder.trimStart();
+		if (ingredientCore.length === 0) return null;
 
-		if (knownIngredientNames.has(normalizeInput(ingredientText))) return null;
+		if (knownIngredientNames.has(normalizeInput(ingredientCore))) return null;
+
+		const leadOffset = text.length - ingredientCore.length;
+		const ingredientText = rawText.slice(leadOffset);
 
 		return {
-			leadOffset: text.length - ingredientText.length,
+			leadOffset,
 			matchingString: ingredientText,
 			replaceableString: ingredientText,
 		};

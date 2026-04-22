@@ -1,24 +1,4 @@
 @layer feature {
-	.typeahead {
-		width: var(--control-width);
-		z-index: var(--z-popover);
-
-		/**
-		 * LexicalTypeaheadMenuPlugin's internal useMenuAnchorRef tears down
-		 * and re-appends the portal container on every query change, which
-		 * re-fires Lightbox's enter transition on every keystroke. Drop
-		 * transitions entirely for this instance — nothing to animate, no
-		 * repeated flashes.
-		 */
-		transition: none;
-	}
-
-	.browsingPopover {
-		position: absolute;
-		z-index: var(--z-popover);
-		padding-block-start: var(--space-0);
-	}
-
 	.footer {
 		@media (hover: none) and (pointer: coarse) {
 			display: none;

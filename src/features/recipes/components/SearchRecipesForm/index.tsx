@@ -12,6 +12,7 @@ import {
 	useState,
 } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
+import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import {
@@ -20,7 +21,7 @@ import {
 } from "@/features/recipes/utils/filterRecipes";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { trpc } from "@/trpc/client";
-import { Button, LinkButton } from "@/ui/Button";
+import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -108,7 +109,7 @@ export function SearchRecipesForm({
 				</div>
 
 				<Flex justifyContent="space-between">
-					<Text as="p" size={1} light numeric>
+					<Text as="p" size={1} light numeric compact>
 						{filteredRecipes.length} matching{" "}
 						{filteredRecipes.length === 1 ? "recipe" : "recipes"}
 					</Text>
@@ -120,6 +121,7 @@ export function SearchRecipesForm({
 							[styles.disabled]: filteredRecipes.length === 0,
 						})}
 						light
+						compact
 					>
 						Press{" "}
 						<Kbd
@@ -136,44 +138,33 @@ export function SearchRecipesForm({
 
 			<div className={styles.results}>
 				{isLoading ? (
-					<RecipesList.Skeleton />
+					<RecipesList.Skeleton className={styles.list} />
 				) : filteredRecipes.length === 0 ? (
 					<EmptyArea className={styles.empty} color="light">
 						<Heading level="h3" size={4}>
 							No recipes found
 						</Heading>
 
-						<Flex as="menu" gap={2} wrap justifyContent="center">
-							<li>
-								<LinkButton
-									href="/bar/recipes/create"
-									variant="solid"
-									color="accent"
-									size="small"
-								>
-									Create recipe
-								</LinkButton>
-							</li>
-
-							<li>
-								<Button
-									variant="outline"
-									color="light"
-									size="small"
-									onClick={() => setSearch("")}
-								>
-									Clear search
-								</Button>
-							</li>
-						</Flex>
+						<Button
+							variant="outline"
+							color="light"
+							size="small"
+							onClick={() => setSearch("")}
+						>
+							Clear search
+						</Button>
 					</EmptyArea>
 				) : (
 					<RecipesList
 						recipes={filteredRecipes}
 						ref={listRef}
 						withMotion={false}
+						withCreate={false}
+						className={styles.list}
 					/>
 				)}
+
+				<CreateRecipeSlot />
 			</div>
 
 			{actions ? (
