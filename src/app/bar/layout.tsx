@@ -3,6 +3,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { Providers } from "@/components/Providers";
 import { SecondaryNavigation } from "@/components/SecondaryNavigation";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
+import { CreateListEntryDrawer } from "@/features/lists/entries/components/CreateListEntryDrawer";
 import { RecipeCardModal } from "@/features/recipes/components/RecipeCardModal/loader";
 import styles from "./layout.module.css";
 
@@ -21,6 +22,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			</div>
 
 			<IngredientEditorDrawer />
+			<CreateListEntryDrawer />
 			<RecipeCardModal />
 		</Providers>
 	);

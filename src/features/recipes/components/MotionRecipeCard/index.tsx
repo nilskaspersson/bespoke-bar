@@ -1,11 +1,9 @@
 "use client";
 
-import { clsx } from "clsx";
 import { m, type Transition } from "motion/react";
 import type { ComponentProps, ReactNode, Ref } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { SPRING_DAMPING, SPRING_STIFFNESS } from "@/utils/animate";
-import styles from "./styles.module.css";
 
 const transition: Transition = {
 	type: "spring",
@@ -31,7 +29,7 @@ export function MotionRecipeCard({
 }: MotionRecipeCardProps) {
 	if (!withMotion) {
 		return (
-			<div ref={ref} className={clsx(styles.card, className)}>
+			<div ref={ref} className={className}>
 				{children}
 			</div>
 		);
@@ -40,7 +38,7 @@ export function MotionRecipeCard({
 	return (
 		<m.div
 			ref={ref}
-			className={clsx(styles.card, className)}
+			className={className}
 			layoutId={`recipe-card-${recipe.id}`}
 			transition={transition}
 			{...props}

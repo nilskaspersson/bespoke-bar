@@ -1,27 +1,42 @@
 @layer feature {
-	.card {
-		padding: var(--gap);
-		background-color: var(--mauve-2);
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: start;
+		gap: var(--gap--large);
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.item {
+		content-visibility: auto;
+		contain-intrinsic-size: auto var(--recipe-card-width) auto
+			var(--recipe-card-height);
+		overflow-clip-margin: 1rem;
+	}
+
+	.skeletonCard {
+		display: grid;
+		gap: var(--space-1);
+		width: var(--recipe-card-width);
+		max-width: 100%;
+	}
+
+	.cardSkeleton {
+		max-width: 100%;
 		border-radius: var(--radius--large);
-		border: 1px solid var(--shine);
-		box-shadow: var(--shadow--low);
-		isolation: isolate;
-		transition: background-color var(--transition-duration);
+	}
+
+	.skeletonActions {
+		height: var(--space-5);
 	}
 
 	.hidden {
 		visibility: hidden;
 	}
 
-	.actions {
-		margin-top: var(--gap--tiny);
-	}
-
 	.pointer {
 		cursor: pointer;
-	}
-
-	.icon {
-		color: var(--mauve-8);
 	}
 }

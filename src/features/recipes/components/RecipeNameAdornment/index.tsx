@@ -5,7 +5,11 @@ import { ServingsBadge } from "@/features/recipes/components/ServingsBadge";
 import { Icon } from "@/ui/Icon";
 import { animate, keyframes } from "@/utils/animate";
 
-export function RecipeNameAdornment({ servings }: { servings?: number }) {
+type Props = {
+	servings?: number;
+};
+
+export function RecipeNameAdornment({ servings }: Props) {
 	const badgeRef = useRef<HTMLSpanElement>(null);
 	const prevServings = useRef(servings);
 

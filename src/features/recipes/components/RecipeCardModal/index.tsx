@@ -11,7 +11,7 @@ import {
 import { useShallow } from "zustand/react/shallow";
 import { WakeLock } from "@/components/WakeLock";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
@@ -23,6 +23,7 @@ import {
 	useRecipeCardModal,
 } from "@/features/recipes/stores/recipeCardModal";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { useCardTilt } from "@/hooks/useCardTilt";
 import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
@@ -43,9 +44,10 @@ export function RecipeCardModal() {
 		recipeCardModalStore.dialogRef = dialogRef;
 	}, [dialogRef]);
 
-	const { recipe, mounted } = useRecipeCardModal(
+	const { recipe, isFavorite, mounted } = useRecipeCardModal(
 		useShallow((s) => ({
 			recipe: s.recipe,
+			isFavorite: s.isFavorite,
 			mounted: s.mounted,
 		})),
 	);
@@ -67,21 +69,34 @@ export function RecipeCardModal() {
 			}}
 		>
 			<m.div layoutRoot className={styles.container}>
-				{recipe && mounted ? <RecipeCardModalContent recipe={recipe} /> : null}
+				{recipe && mounted ? (
+					<RecipeCardModalContent recipe={recipe} isFavorite={isFavorite} />
+				) : null}
 			</m.div>
 		</Dialog>
 	);
 }
 
-function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
+function RecipeCardModalContent({
+	recipe,
+	isFavorite,
+}: {
+	recipe: RecipeWithSpecs;
+	isFavorite: boolean;
+}) {
 	const clear = useRecipeCardModal((s) => s.clear);
 	const [particlesEnabled, setParticlesEnabled] = useLocalStorage(
 		"particles-enabled",
 		true,
 	);
+	const [tiltEnabled, setTiltEnabled] = useLocalStorage(
+		"card-tilt-enabled",
+		false,
+	);
 
 	const cardRef = useRef<HTMLDivElement>(null);
 	const canvasRef = useParticleEffect(cardRef, particlesEnabled);
+	const tilt = useCardTilt();
 
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
@@ -96,28 +111,36 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 			<canvas ref={canvasRef} className={styles.particles} />
 
 			<Container className={styles.content}>
-				<Grid gap={4}>
-					<MotionRecipeCard
-						withMotion
-						ref={cardRef}
-						recipe={recipe}
-						className={styles.card}
-						layout="position"
-					>
-						<RecipeCard
+				<RecipeCard
+					recipe={recipe}
+					servings={deferredServings}
+					convertUnits={conversionSystem}
+					snap={snap}
+					withLink
+					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
+					cardWrapper={(card) => (
+						<MotionRecipeCard
+							withMotion
+							ref={cardRef}
 							recipe={recipe}
-							servings={deferredServings}
-							convertUnits={conversionSystem}
-							snap={snap}
+							className={styles.card}
+							layout="position"
+							onMouseMove={tiltEnabled ? tilt.onMouseMove : undefined}
+							onMouseLeave={tiltEnabled ? tilt.onMouseLeave : undefined}
+							style={tiltEnabled ? tilt.style : undefined}
+						>
+							{card}
+						</MotionRecipeCard>
+					)}
+					footer={
+						<RecipeCardActions
+							recipe={recipe}
+							isFavorite={isFavorite}
+							onDelete={clear}
 							withLink
-							nameAdornment={
-								<RecipeNameAdornment servings={deferredServings} />
-							}
 						/>
-					</MotionRecipeCard>
-
-					<RecipeActions recipe={recipe} withLink onDelete={clear} />
-				</Grid>
+					}
+				/>
 
 				<Grid gap={4}>
 					<SelectServings value={deferredServings} onChange={setServings} />
@@ -152,6 +175,12 @@ function RecipeCardModalContent({ recipe }: { recipe: RecipeWithSpecs }) {
 					size="small"
 					checked={particlesEnabled}
 					onChange={(e) => setParticlesEnabled(e.target.checked)}
+				/>
+				<Checkbox
+					label="3D Card"
+					size="small"
+					checked={tiltEnabled}
+					onChange={(e) => setTiltEnabled(e.target.checked)}
 				/>
 			</div>
 		</>

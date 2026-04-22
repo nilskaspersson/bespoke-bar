@@ -1,15 +1,14 @@
 "use client";
 
 import clsx from "clsx";
-import type { Ref } from "react";
+import type { ComponentProps } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
+import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
-import { OverscrollList } from "@/features/recipes/components/OverscrollList";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
-import { Grid } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
@@ -18,14 +17,15 @@ export function RecipesList({
 	recipes,
 	favoriteRecipeIds,
 	withActions,
-	ref,
 	withMotion = true,
-}: {
+	withCreate = true,
+	...props
+}: ComponentProps<"ul"> & {
 	recipes: RecipeWithSpecs[];
 	favoriteRecipeIds?: string[];
 	withActions?: boolean;
-	ref?: Ref<HTMLUListElement>;
 	withMotion?: boolean;
+	withCreate?: boolean;
 }) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
@@ -37,7 +37,7 @@ export function RecipesList({
 	}
 
 	return (
-		<OverscrollList ref={ref} padding={6} gap={4}>
+		<ul {...props} className={clsx(props.className, styles.list)}>
 			{recipes.map((recipe) => {
 				const isFavorite = favoriteIdSet.has(recipe.id);
 				const isSelected =
@@ -45,52 +45,80 @@ export function RecipesList({
 				const selectRecipe = () => setRecipe(recipe, isFavorite);
 
 				return (
-					<OverscrollList.Item key={recipe.id}>
-						<MotionRecipeCard
-							withMotion={withMotion && !isSelected}
+					<li key={recipe.id} className={styles.item}>
+						<RecipeCard
 							recipe={recipe}
-							onClick={selectRecipe}
-							onKeyDown={handleKey([
-								["Enter", selectRecipe],
-								[" ", selectRecipe],
-							])}
-							role="button"
-							tabIndex={0}
-							className={clsx({
-								[styles.pointer]: withMotion,
-								[styles.hidden]: isSelected,
-							})}
-						>
-							<RecipeCard
-								recipe={recipe}
-								withLink={!withMotion}
-								nameAdornment={<RecipeNameAdornment />}
-							/>
-						</MotionRecipeCard>
-
-						{withActions ? (
-							<RecipeActions
-								recipe={recipe}
-								withLink
-								isFavorite={isFavorite}
-								className={styles.actions}
-							/>
-						) : null}
-					</OverscrollList.Item>
+							withLink={!withMotion}
+							nameAdornment={<RecipeNameAdornment />}
+							cardWrapper={(card) => (
+								<MotionRecipeCard
+									withMotion={withMotion && !isSelected}
+									recipe={recipe}
+									onClick={selectRecipe}
+									onKeyDown={handleKey([
+										["Enter", selectRecipe],
+										[" ", selectRecipe],
+									])}
+									role="button"
+									tabIndex={0}
+									className={clsx({
+										[styles.pointer]: withMotion,
+										[styles.hidden]: isSelected,
+									})}
+								>
+									{card}
+								</MotionRecipeCard>
+							)}
+							footer={
+								withActions ? (
+									<RecipeCardActions
+										recipe={recipe}
+										isFavorite={isFavorite}
+										withLink
+									/>
+								) : undefined
+							}
+						/>
+					</li>
 				);
 			})}
-		</OverscrollList>
+
+			{withCreate ? (
+				<li className={styles.item}>
+					<CreateRecipeSlot />
+				</li>
+			) : null}
+		</ul>
 	);
 }
 
-export function RecipesListSkeleton() {
+export function RecipesListSkeleton({
+	count = 6,
+	className,
+}: {
+	count?: number;
+	className?: string;
+}) {
 	return (
 		<SkeletonScreen>
-			<Grid gap={4}>
-				<Skeleton width="100%" height="169px" />
-				<Skeleton width="100%" height="169px" />
-				<Skeleton width="100%" height="169px" />
-			</Grid>
+			<ul className={clsx(className, styles.list)}>
+				{Array.from({ length: count }, (_, i) => (
+					<li
+						// biome-ignore lint/suspicious/noArrayIndexKey: skeleton placeholders have no identity
+						key={i}
+						className={styles.item}
+					>
+						<div className={styles.skeletonCard}>
+							<Skeleton
+								className={styles.cardSkeleton}
+								width="var(--recipe-card-width)"
+								height="var(--recipe-card-height)"
+							/>
+							<div className={styles.skeletonActions} />
+						</div>
+					</li>
+				))}
+			</ul>
 		</SkeletonScreen>
 	);
 }

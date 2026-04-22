@@ -1,29 +1,26 @@
 "use client";
 
-import { type ReactNode, use, useDeferredValue, useState } from "react";
+import { useDeferredValue, useState } from "react";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import type { UnitSystems } from "@/features/units/utils/convert";
-import { FormatterContext } from "@/hooks/useFormatter";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends RecipeWithSpecs>({
-	children,
 	recipe,
+	isFavorite,
 }: {
-	children?: ReactNode;
 	recipe: T;
+	isFavorite?: boolean;
 }) {
-	const { quantityFormatter } = use(FormatterContext);
-
 	const [servings, setServings] = useState(1);
 	const deferredServings = useDeferredValue(servings);
 
@@ -40,19 +37,13 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 			<section className={styles.primary}>
 				<RecipeCard
 					recipe={recipe}
-					className={styles.card}
 					servings={servings}
 					convertUnits={withConversionSystem}
 					snap={withSnap}
 					withLink={false}
 					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
-				>
-					<Text as="div" size={1} fullWidth className={styles.count}>
-						Servings: {quantityFormatter.format(servings)}
-					</Text>
-
-					{children}
-				</RecipeCard>
+					footer={<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />}
+				/>
 			</section>
 
 			<aside className={styles.card}>

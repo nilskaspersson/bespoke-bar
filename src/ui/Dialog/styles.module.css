@@ -34,8 +34,14 @@
 	 * NOTE: Backdrop blur will always cover the rest of the app—including
 	 * notifications, and other static elements we may want to keep in the foreground.
 	 * For that reason, we blur the #root instead.
+	 *
+	 * Top-layer popovers are painted outside of #root's stacking context and
+	 * so escape its filter. Apply the same blur to any open popover that hosts
+	 * an open blur dialog so nested confirm/delete dialogs get a consistent,
+	 * fully-blurred backdrop instead of a crisp menu floating on top.
 	 */
-	:global(#root):has(.blur[open]) {
+	:global(#root):has(.blur[open]),
+	[popover]:has(.blur[open]) {
 		filter: blur(calc(var(--space-1) * var(--progress, 1)));
 		transition: filter var(--transition-duration);
 	}

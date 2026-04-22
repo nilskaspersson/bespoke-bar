@@ -21,11 +21,31 @@ const defaultConfig = {
 
 type PromiseToast<T> = typeof sonnerToast.promise<T>;
 
+/**
+ * Server actions that call `redirect()` reject with a NEXT_REDIRECT error that
+ * Next.js intercepts at the framework level — it's a control-flow signal, not
+ * a failure. Swallow it here so callers don't have to wrap every action just
+ * to avoid a bogus error toast flashing right before the navigation.
+ */
+function ignoreRedirectError<T>(promise: Promise<T>): Promise<T> {
+	return promise.catch((error: unknown) => {
+		if (error instanceof Error && error.message.includes("NEXT_REDIRECT")) {
+			return undefined as T;
+		}
+		throw error;
+	});
+}
+
 function toastPromise<T>(
 	promise: Parameters<PromiseToast<T>>[0],
 	options?: Parameters<PromiseToast<T>>[1],
 ): ReturnType<PromiseToast<T>> {
-	return sonnerToast.promise(promise, {
+	const wrapped =
+		typeof promise === "function"
+			? () => ignoreRedirectError(promise())
+			: ignoreRedirectError(promise);
+
+	return sonnerToast.promise(wrapped, {
 		...defaultConfig,
 		...options,
 	});

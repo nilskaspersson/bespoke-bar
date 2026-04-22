@@ -56,7 +56,7 @@ export function ConfirmAction({
 				isOpen={isPending}
 				onClose={rejectAction}
 				heading={actionLabel}
-				buttonProps={buttonProps}
+				buttonProps={{ color: buttonProps?.color }}
 				resolveAction={resolveAction}
 				isSubmitting={isSubmitting}
 			/>

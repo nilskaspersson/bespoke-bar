@@ -13,13 +13,16 @@ import {
 	type LexicalEditor,
 } from "lexical";
 import {
+	type Dispatch,
 	type FocusEvent as ReactFocusEvent,
 	type KeyboardEvent as ReactKeyboardEvent,
+	type SetStateAction,
+	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from "react";
-import { createPortal } from "react-dom";
 import { getIngredientId } from "@/features/ingredients/utils";
 import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
@@ -29,7 +32,9 @@ import {
 } from "@/features/recipes/bulk/utils/tokenizeLine";
 import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
+import { usePopover } from "@/hooks/usePopover";
 import { Input } from "@/ui/Input";
+import { PopoverAnchor } from "@/ui/Popover";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
 import {
@@ -37,7 +42,6 @@ import {
 	locateTextNodeAtOffset,
 } from "../../utils/paragraphRange";
 import { IngredientOption } from "./IngredientOption";
-import styles from "./styles.module.css";
 import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";
 
@@ -178,11 +182,7 @@ function resolveBrowsingStateFromClick(
 export function TokenBrowsingPlugin() {
 	const [editor] = useLexicalComposerContext();
 	const [state, setState] = useState<BrowsingState | null>(null);
-	const { sortedIngredients, searchIndex, ingredientIndex } =
-		useRecipeIngredients();
-
-	const variant = state?.variant;
-	const query = state?.query ?? "";
+	const { ingredientIndex } = useRecipeIngredients();
 
 	useEffect(() => {
 		return editor.registerCommand(
@@ -213,24 +213,66 @@ export function TokenBrowsingPlugin() {
 		});
 	}, [editor]);
 
+	if (!state) return null;
+
+	return <BrowsingSession state={state} setState={setState} editor={editor} />;
+}
+
+/**
+ * Lives exactly as long as the browsing popover is meant to be open —
+ * mount runs `openPopover` once, unmount removes the element. The parent
+ * setting `state` to `null` is what drives the close, so there's no
+ * imperative state-to-DOM sync effect: "visible" is "mounted".
+ */
+function BrowsingSession({
+	state,
+	setState,
+	editor,
+}: {
+	state: BrowsingState;
+	setState: Dispatch<SetStateAction<BrowsingState | null>>;
+	editor: LexicalEditor;
+}) {
+	const popover = usePopover({ type: "manual" });
+	const { openPopover, popoverId } = popover;
+	const searchInputRef = useRef<HTMLInputElement>(null);
+	const anchorId = `${popoverId}-anchor`;
+
+	const { sortedIngredients, searchIndex } = useRecipeIngredients();
+
+	/**
+	 * Show the popover and land focus on the search input. Runs once on
+	 * mount — `openPopover` is stable via `useCallback`. Focus happens
+	 * *after* `showPopover` so the input isn't `display: none` at focus
+	 * time (which would silently no-op).
+	 */
+	useEffect(() => {
+		openPopover();
+		searchInputRef.current?.focus();
+	}, [openPopover]);
+
 	/**
 	 * Any pointer interaction outside the popover closes it. Document-level
 	 * capture phase so clicks on the page background, sidebar, etc. are
-	 * caught regardless of which element they land on.
+	 * caught regardless of which element they land on. `[popover]` elements
+	 * render in the top layer; we identify them via the popover id. The
+	 * listener only exists while this component is mounted — no extra
+	 * `isOpen` guard needed.
 	 */
-	const isOpen = state !== null;
 	useEffect(() => {
-		if (!isOpen) return;
 		function handlePointerDown(event: PointerEvent) {
 			if (!(event.target instanceof Element)) return;
-			if (event.target.closest(`.${styles.browsingPopover}`)) return;
+			if (event.target.closest(`#${CSS.escape(popoverId)}`)) return;
 			setState(null);
 			editor.focus();
 		}
 		document.addEventListener("pointerdown", handlePointerDown, true);
-		return () =>
+		return () => {
 			document.removeEventListener("pointerdown", handlePointerDown, true);
-	}, [isOpen, editor]);
+		};
+	}, [popoverId, editor, setState]);
+
+	const { variant, query } = state;
 
 	const filteredIngredients = useMemo(() => {
 		if (variant !== "ingredient") return [];
@@ -250,17 +292,14 @@ export function TokenBrowsingPlugin() {
 	const itemCount =
 		variant === "ingredient"
 			? filteredIngredients.length
-			: variant === "unit"
-				? filteredUnits.length
-				: 0;
+			: filteredUnits.length;
 
-	function closePopover() {
+	function closeMenu() {
 		setState(null);
 		editor.focus();
 	}
 
 	function commit(replacement: string) {
-		if (!state) return;
 		applyTokenReplacement(
 			editor,
 			state.paragraphKey,
@@ -268,11 +307,10 @@ export function TokenBrowsingPlugin() {
 			state.tokenEnd,
 			replacement,
 		);
-		closePopover();
+		closeMenu();
 	}
 
 	function commitSelected() {
-		if (!state) return;
 		if (state.variant === "ingredient") {
 			const selected = filteredIngredients[state.selectedIndex];
 			if (selected) commit(selected.name);
@@ -315,7 +353,7 @@ export function TokenBrowsingPlugin() {
 				return;
 			case "Escape":
 				event.preventDefault();
-				closePopover();
+				closeMenu();
 				return;
 		}
 	}
@@ -337,15 +375,32 @@ export function TokenBrowsingPlugin() {
 	 */
 	function onSearchBlur(event: ReactFocusEvent<HTMLInputElement>) {
 		if (event.relatedTarget && event.relatedTarget !== document.body) return;
-		closePopover();
+		closeMenu();
 	}
 
-	if (!state) return null;
+	/**
+	 * Callback ref that stores the element and, on each remount, grabs
+	 * focus. The input's `key` changes on token switch so React unmounts
+	 * and remounts the element; at that point the popover is already
+	 * visible, so `focus()` takes effect immediately. On the *first* mount
+	 * of a browsing session the popover is still `display: none`, so this
+	 * focus call is a no-op — the mount effect above calls focus again
+	 * after `showPopover` flips the popover visible.
+	 *
+	 * Stabilised with `useCallback` so React doesn't detach/reattach (and
+	 * refire `focus()`) on every unrelated re-render — e.g. typing in the
+	 * search input would otherwise trigger a pointless focus call per
+	 * keystroke.
+	 */
+	const assignSearchInput = useCallback((el: HTMLInputElement | null) => {
+		searchInputRef.current = el;
+		el?.focus();
+	}, []);
 
 	const searchInput = (
 		<Input
 			key={`${state.paragraphKey}:${state.tokenStart}`}
-			autoFocus
+			ref={assignSearchInput}
 			compact
 			fullWidth
 			placeholder="Type to filter…"
@@ -379,18 +434,30 @@ export function TokenBrowsingPlugin() {
 					/>
 				));
 
-	return createPortal(
-		<div
-			className={styles.browsingPopover}
-			style={{
-				top: state.anchorRect.bottom + window.scrollY,
-				left: state.anchorRect.left + window.scrollX,
-			}}
-		>
-			<TokenMenu footerAction="replace" header={searchInput}>
+	return (
+		<>
+			{/**
+			 * Anchor at the zero-height point just below the clicked token —
+			 * the `-start` popover variants align the menu to the anchor's
+			 * top edge, so the anchor position itself needs to be where we
+			 * want the menu to land.
+			 */}
+			<PopoverAnchor
+				top={state.anchorRect.bottom}
+				left={state.anchorRect.left}
+				width={state.anchorRect.width}
+				anchorName={`--${anchorId}`}
+			/>
+			<TokenMenu
+				{...popover.contentProps}
+				isOpen
+				anchorId={anchorId}
+				position="bottom-start"
+				footerAction="replace"
+				header={searchInput}
+			>
 				{options}
 			</TokenMenu>
-		</div>,
-		document.body,
+		</>
 	);
 }

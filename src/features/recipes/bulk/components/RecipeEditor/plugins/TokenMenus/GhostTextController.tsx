@@ -2,7 +2,7 @@
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getSelection, $isRangeSelection } from "lexical";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { getGhostCompletion } from "@/features/recipes/bulk/utils/getGhostCompletion";
 
 /**
@@ -32,6 +32,7 @@ export function GhostTextController<T>({
 	getLabel: (option: T) => string;
 }) {
 	const [editor] = useLexicalComposerContext();
+	const ghostedElement = useRef<HTMLElement | null>(null);
 	const active = options[selectedIndex ?? 0];
 	const ghostText =
 		query && active ? getGhostCompletion(query, getLabel(active)) : null;
@@ -41,21 +42,23 @@ export function GhostTextController<T>({
 		const text = ghostText;
 
 		function clear() {
-			editor
-				.getRootElement()
-				?.querySelector("[data-ghost]")
-				?.removeAttribute("data-ghost");
+			ghostedElement.current?.removeAttribute("data-ghost");
+			ghostedElement.current = null;
 		}
 
 		function apply() {
-			clear();
 			editor.read(() => {
 				const selection = $getSelection();
 				if (!$isRangeSelection(selection) || !selection.isCollapsed()) return;
 				const anchor = selection.anchor;
 				if (anchor.type !== "text") return;
 				const dom = editor.getElementByKey(anchor.getNode().getKey());
-				dom?.setAttribute("data-ghost", text);
+				if (!dom) return;
+				if (ghostedElement.current && ghostedElement.current !== dom) {
+					ghostedElement.current.removeAttribute("data-ghost");
+				}
+				dom.setAttribute("data-ghost", text);
+				ghostedElement.current = dom;
 			});
 		}
 

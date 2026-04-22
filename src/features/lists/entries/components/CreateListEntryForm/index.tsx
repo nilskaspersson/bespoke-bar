@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { Fragment, useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
@@ -24,7 +24,7 @@ import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
@@ -191,7 +191,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 									},
 								}}
 								renderCreateListItem={({ closeMenu, inputValue }) => (
-									<OptionsList.Item
+									<Menu.Item
 										onClick={() => {
 											form.update({
 												name: recipeList.name.name,
@@ -202,12 +202,10 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 											closeMenu?.();
 										}}
 									>
-										<OptionsList.Label
-											description={<i>"{inputValue.trim()}"</i>}
-										>
+										<Menu.Label description={<i>"{inputValue.trim()}"</i>}>
 											Create new List
-										</OptionsList.Label>
-									</OptionsList.Item>
+										</Menu.Label>
+									</Menu.Item>
 								)}
 							/>
 						)}
@@ -236,7 +234,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 					<Icon name="arrow-down-long" size={6} className={styles.arrow} />
 
 					{firstEntry && entryFields && draftEntry ? (
-						<Fragment key={firstEntry.id}>
+						<div key={firstEntry.id}>
 							<input
 								type="hidden"
 								name={entryFields.recipeId.name}
@@ -266,7 +264,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 									</Grid>
 								</details>
 							</RecipeListEntryCard>
-						</Fragment>
+						</div>
 					) : null}
 
 					<FormErrors formRef={resolvedFormRef} />

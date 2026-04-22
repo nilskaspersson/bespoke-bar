@@ -1,10 +1,15 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Kbd } from "@/ui/Kbd";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
+
+type Props = Omit<ComponentProps<typeof Menu>, "footer" | "children"> & {
+	children: ReactNode;
+	footerAction: "complete" | "replace";
+};
 
 /**
  * Shared menu scaffold for the ingredient and unit typeaheads (completing
@@ -16,20 +21,12 @@ import styles from "./styles.module.css";
  * descendant, which without this would tear the popover down mid-click
  * and break commit.
  */
-export function TokenMenu({
-	children,
-	footerAction,
-	header,
-}: {
-	children: ReactNode;
-	footerAction: "complete" | "replace";
-	header?: ReactNode;
-}) {
+export function TokenMenu({ children, footerAction, ...menuProps }: Props) {
 	return (
-		<OptionsList
-			className={styles.typeahead}
+		<Menu
+			{...menuProps}
 			onMouseDown={(e) => e.preventDefault()}
-			header={header}
+			style={{ width: "var(--control-width)" }}
 			footer={
 				<Text size={1} className={styles.footer}>
 					<Kbd shortcut="tab" visual variant="ghost" /> or{" "}
@@ -38,6 +35,6 @@ export function TokenMenu({
 			}
 		>
 			{children}
-		</OptionsList>
+		</Menu>
 	);
 }

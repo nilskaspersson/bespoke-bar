@@ -1,26 +1,46 @@
+"use client";
+
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Icon } from "@/ui/Icon";
 import { Lightbox } from "@/ui/Lightbox";
+import { Popover } from "@/ui/Popover";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-function OptionsListRoot({
-	className,
-	children,
-	footer,
+type MenuProps = ComponentProps<typeof Popover> & {
+	header?: ReactNode;
+	footer?: ReactNode;
+	children?: ReactNode;
+	listProps?: ComponentProps<"ul">;
+};
+
+function MenuRoot({
+	position = "bottom-start",
 	header,
-	...props
-}: ComponentProps<typeof Lightbox> & {
-	footer?: React.ReactNode;
-	header?: React.ReactNode;
-}) {
+	footer,
+	children,
+	className,
+	listProps,
+	...popoverProps
+}: MenuProps) {
 	return (
-		<Lightbox {...props} className={clsx(styles.lightbox, className)}>
-			{header ? <div className={styles.header}>{header}</div> : null}
-			<ul className={styles.options}>{children}</ul>
-			{footer ? <div className={styles.footer}>{footer}</div> : null}
-		</Lightbox>
+		<Popover
+			{...popoverProps}
+			position={position}
+			className={clsx(styles.popover, className)}
+		>
+			<Lightbox className={styles.surface}>
+				{header ? <div className={styles.header}>{header}</div> : null}
+				<ul
+					{...listProps}
+					className={clsx(styles.options, listProps?.className)}
+				>
+					{children}
+				</ul>
+				{footer ? <div className={styles.footer}>{footer}</div> : null}
+			</Lightbox>
+		</Popover>
 	);
 }
 
@@ -59,7 +79,7 @@ function Label({
 	description,
 	...props
 }: ComponentProps<typeof Text> & {
-	description?: React.ReactNode;
+	description?: ReactNode;
 }) {
 	return (
 		<>
@@ -83,4 +103,4 @@ function Label({
 	);
 }
 
-export const OptionsList = Object.assign(OptionsListRoot, { Item, Label });
+export const Menu = Object.assign(MenuRoot, { Item, Label });

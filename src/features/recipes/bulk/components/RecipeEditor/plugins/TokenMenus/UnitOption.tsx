@@ -3,15 +3,15 @@
 import type { ComponentProps } from "react";
 import type { Unit } from "@/db/schema/units";
 import { getUnitLabel } from "@/features/units/constants";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 
 export function UnitOption({
 	unit,
 	...props
-}: { unit: Unit } & ComponentProps<typeof OptionsList.Item>) {
+}: { unit: Unit } & ComponentProps<typeof Menu.Item>) {
 	return (
-		<OptionsList.Item {...props}>
-			<OptionsList.Label>{getUnitLabel(unit)}</OptionsList.Label>
-		</OptionsList.Item>
+		<Menu.Item {...props}>
+			<Menu.Label>{getUnitLabel(unit)}</Menu.Label>
+		</Menu.Item>
 	);
 }

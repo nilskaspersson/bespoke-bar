@@ -1,0 +1,11 @@
+@layer feature {
+	.menu {
+		display: grid;
+		gap: var(--space-0);
+	}
+
+	.item {
+		text-align: left;
+		justify-content: flex-start;
+	}
+}

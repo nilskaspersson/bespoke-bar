@@ -11,11 +11,12 @@ import {
 	useState,
 } from "react";
 import { useIndexedItems } from "@/hooks/useIndexedItems";
+import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";
 import { ControlLabel } from "@/ui/ControlLabel";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
-import { OptionsList } from "@/ui/OptionsList";
+import { Menu } from "@/ui/Menu";
 import { Text } from "@/ui/Text";
 import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
@@ -85,6 +86,8 @@ export function Combobox<T>({
 
 	const itemsByValue = useIndexedItems(items, getItemValue);
 
+	const popover = usePopover({ type: "manual" });
+
 	const [inputValue, setInputValue] = useState<string | null>(null);
 	const deferredInputValue = useDeferredValue<typeof inputValue>(inputValue);
 
@@ -135,6 +138,14 @@ export function Combobox<T>({
 
 			comboboxProps?.onInputValueChange?.({ inputValue, type });
 		},
+		onIsOpenChange(changes) {
+			if (changes.isOpen) {
+				popover.openPopover();
+			} else {
+				popover.closePopover();
+			}
+			comboboxProps?.onIsOpenChange?.(changes);
+		},
 		items: filteredItems,
 		itemToString,
 		/**
@@ -162,7 +173,11 @@ export function Combobox<T>({
 				[styles.large]: inputProps?.large,
 			})}
 		>
-			<div className={styles.contain} id={id}>
+			<div
+				className={styles.contain}
+				id={id}
+				style={{ anchorName: `--${popover.popoverId}` }}
+			>
 				<Input
 					{...inputProps}
 					{...comboboxInputProps}
@@ -200,64 +215,65 @@ export function Combobox<T>({
 						/>
 					</Button>
 				</menu>
-
-				<div {...getMenuProps()}>
-					<input
-						type="hidden"
-						name={name}
-						value={selectedItem ? getItemValue(selectedItem) : ""}
-					/>
-
-					{isOpen ? (
-						<OptionsList
-							footer={
-								items.length > filteredItems.length ? (
-									<Button
-										variant="outline"
-										size="tiny"
-										className={styles.reset}
-										onClick={() => {
-											reset();
-											openMenu();
-										}}
-									>
-										Clear filters
-									</Button>
-								) : null
-							}
-							header={header}
-						>
-							{filteredItems.map((item, index) => (
-								<OptionsList.Item
-									key={getKey(item)}
-									{...getItemProps({ item, index })}
-									isHighlighted={highlightedIndex === index}
-									isSelected={
-										selectedItem
-											? getItemValue(selectedItem) === getItemValue(item)
-											: false
-									}
-								>
-									{getItemLabel ? (
-										getItemLabel(item)
-									) : (
-										<Text size={3} heavy>
-											{itemToString(item)}
-										</Text>
-									)}
-								</OptionsList.Item>
-							))}
-
-							{Boolean(comboboxInputProps.value) && renderCreateListItem
-								? renderCreateListItem({
-										closeMenu,
-										inputValue: comboboxInputProps.value,
-									})
-								: null}
-						</OptionsList>
-					) : null}
-				</div>
 			</div>
+
+			<input
+				type="hidden"
+				name={name}
+				value={selectedItem ? getItemValue(selectedItem) : ""}
+			/>
+
+			<Menu
+				{...popover.contentProps}
+				isOpen
+				keepAnchored
+				style={{ width: "anchor-size(width)" }}
+				listProps={getMenuProps()}
+				header={header}
+				footer={
+					items.length > filteredItems.length ? (
+						<Button
+							variant="outline"
+							size="tiny"
+							className={styles.reset}
+							onClick={() => {
+								reset();
+								openMenu();
+							}}
+						>
+							Clear filters
+						</Button>
+					) : null
+				}
+			>
+				{filteredItems.map((item, index) => (
+					<Menu.Item
+						key={getKey(item)}
+						{...getItemProps({ item, index })}
+						isHighlighted={highlightedIndex === index}
+						isSelected={
+							selectedItem
+								? getItemValue(selectedItem) === getItemValue(item)
+								: false
+						}
+					>
+						{getItemLabel ? (
+							getItemLabel(item)
+						) : (
+							<Text size={3} heavy>
+								{itemToString(item)}
+							</Text>
+						)}
+					</Menu.Item>
+				))}
+
+				{Boolean(comboboxInputProps.value) && renderCreateListItem
+					? renderCreateListItem({
+							closeMenu,
+							inputValue: comboboxInputProps.value,
+						})
+					: null}
+			</Menu>
 
 			{helperText ? (
 				<Text size={1} id={helperTextId}>
