@@ -28,6 +28,17 @@
 				opacity: 0;
 			}
 		}
+
+		/**
+		 * Safari's modal <dialog> doesn't fully block body scroll the way Chrome
+		 * and Firefox do. Without this, touch-drag gestures inside the drawer can
+		 * be hijacked into page scroll / rubber-band, which cancels the pointer
+		 * capture Motion relies on and leaves the drawer in a stuck state.
+		 */
+		html:has(&:modal) {
+			overflow: hidden;
+			overscroll-behavior: none;
+		}
 	}
 
 	/**

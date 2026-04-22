@@ -4,7 +4,6 @@ import { clsx } from "clsx";
 import type { ComponentProps, ToggleEventHandler } from "react";
 import type { PopoverType } from "@/hooks/usePopover";
 
-import { stopPropagation } from "@/utils/events";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import styles from "./styles.module.css";
 
@@ -57,18 +56,19 @@ export function Popover({
 	...props
 }: Props) {
 	return (
-		// biome-ignore lint/a11y/noStaticElementInteractions: top-layer element; prevents keyboard/click events from leaking to elements beneath the popover
 		<div
-			className={clsx(className, styles.popover, styles[position], {
+			className={clsx(styles.overlay, {
 				[styles.keepAnchored]: keepAnchored,
 				[styles.suppressEntryAnimation]: suppressEntryAnimation,
 			})}
-			style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
-			onKeyDown={stopPropagation}
-			onClick={stopPropagation}
 			{...props}
 		>
-			{isOpen ? children : null}
+			<div
+				className={clsx(className, styles.popover, styles[position])}
+				style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
+			>
+				{isOpen ? children : null}
+			</div>
 		</div>
 	);
 }

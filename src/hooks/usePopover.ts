@@ -1,7 +1,13 @@
 "use client";
 
-import type { ComponentProps, CSSProperties } from "react";
+import type {
+	ComponentProps,
+	CSSProperties,
+	KeyboardEventHandler,
+	MouseEventHandler,
+} from "react";
 import { useCallback, useId, useRef, useState } from "react";
+import { stopPropagation } from "@/utils/events";
 
 export type PopoverType = NonNullable<ComponentProps<"div">["popover"]>;
 
@@ -36,6 +42,8 @@ export type UsePopoverReturn = {
 		anchorId: string;
 		popover: PopoverType;
 		onToggle: React.ToggleEventHandler<HTMLDivElement>;
+		onClick: MouseEventHandler<HTMLDivElement>;
+		onKeyDown: KeyboardEventHandler<HTMLDivElement>;
 		isOpen: boolean;
 	};
 	openPopover: () => void;
@@ -81,6 +89,12 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 		[],
 	);
 
+	/** Backdrop clicks land on the overlay host; treat as dismiss. */
+	const onClick: MouseEventHandler<HTMLDivElement> = useCallback((e) => {
+		e.stopPropagation();
+		if (e.target === e.currentTarget) e.currentTarget.hidePopover();
+	}, []);
+
 	const triggerProps = {
 		"aria-expanded": isOpen,
 		popoverTarget: popoverId,
@@ -95,6 +109,8 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 		anchorId: popoverId,
 		popover,
 		onToggle,
+		onClick,
+		onKeyDown: stopPropagation,
 		isOpen,
 	};
 
