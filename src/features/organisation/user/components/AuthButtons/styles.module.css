@@ -1,0 +1,17 @@
+@layer feature {
+	.base {
+		display: flex;
+		gap: var(--size-4);
+	}
+
+	.button {
+		position: relative;
+	}
+
+	.chip {
+		position: absolute;
+		top: -1.25em;
+		right: -1.5em;
+		transform: rotate(15deg);
+	}
+}

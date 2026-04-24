@@ -18,9 +18,11 @@ import {
 	createRecipeSearchIndex,
 	filterRecipes,
 } from "@/features/recipes/utils/filterRecipes";
+import { useDialog } from "@/hooks/useDialog";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { trpc } from "@/trpc/client";
-import { Button, LinkButton } from "@/ui/Button";
+import { Button, type ButtonProps, LinkButton } from "@/ui/Button";
+import { Dialog } from "@/ui/Dialog";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -33,6 +35,44 @@ import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
 import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
+
+export function SearchRecipesButton({ children, ...props }: ButtonProps) {
+	const { dialogRef, isOpen, showModal, closeModal } = useDialog();
+
+	function toggleDialog() {
+		if (dialogRef.current?.open) {
+			closeModal();
+		} else {
+			showModal();
+		}
+	}
+
+	return (
+		<>
+			<Button
+				{...props}
+				onClick={showModal}
+				endAdornment={<Kbd shortcut="mod+k" onTrigger={toggleDialog} />}
+			>
+				{children}
+			</Button>
+
+			<Dialog ref={dialogRef} isOpen={isOpen} className={styles.dialog}>
+				<SearchRecipesForm
+					actions={
+						<li>
+							<form method="dialog">
+								<Button type="submit" variant="ghost" size="tiny">
+									Cancel
+								</Button>
+							</form>
+						</li>
+					}
+				/>
+			</Dialog>
+		</>
+	);
+}
 
 export function SearchRecipesForm({
 	className,

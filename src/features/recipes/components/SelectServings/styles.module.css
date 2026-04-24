@@ -1,6 +1,12 @@
-.servings {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--gap--tiny);
-	align-items: center;
+@layer feature {
+	.servings {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap--tiny);
+		align-items: center;
+	}
+
+	.button {
+		background-color: var(--mauve-1);
+	}
 }

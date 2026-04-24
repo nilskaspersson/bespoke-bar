@@ -29,6 +29,12 @@ export function RecipeCardActions({
 			{(actionProps) => (
 				<>
 					<li className={styles.item}>
+						<CreateListEntryButton {...actionProps} recipe={recipe}>
+							<Icon name="plus" size={1} /> Add to list
+						</CreateListEntryButton>
+					</li>
+
+					<li className={styles.item}>
 						<ToggleFavoriteRecipeButton
 							{...actionProps}
 							recipe={recipe}
@@ -36,12 +42,6 @@ export function RecipeCardActions({
 						>
 							Favorite
 						</ToggleFavoriteRecipeButton>
-					</li>
-
-					<li className={styles.item}>
-						<CreateListEntryButton {...actionProps} recipe={recipe}>
-							<Icon name="plus" size={1} /> Add to list
-						</CreateListEntryButton>
 					</li>
 
 					<li className={styles.item}>

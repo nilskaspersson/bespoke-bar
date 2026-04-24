@@ -5,7 +5,6 @@ import { CLEAR_EDITOR_COMMAND, type LexicalEditor } from "lexical";
 import { useRouter } from "next/navigation";
 import {
 	type HTMLAttributes,
-	type ReactNode,
 	useCallback,
 	useDeferredValue,
 	useMemo,
@@ -27,7 +26,6 @@ import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
-import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
@@ -41,13 +39,11 @@ const DRAFT_STORAGE_KEY = "recipe-editor-draft";
 
 export function BulkDraftRecipesForm({
 	className,
-	info,
 	ingredients,
 	createRecipes,
 	...props
 }: {
 	ingredients: Ingredient[];
-	info?: ReactNode;
 	createRecipes: (recipes: RecipeFormData[]) => Promise<Recipe[]>;
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
 	const [withConversionSystem, setWithConversionSystem] =
@@ -131,7 +127,7 @@ export function BulkDraftRecipesForm({
 					initialText={persistedDraft}
 					onTextChange={handleTextChange}
 					statusBar={
-						<Flex gap={2} justifyContent="space-between">
+						<div className={styles.actions}>
 							<Text as="div" size={0} light numeric>
 								<div>
 									{recipeCount} new {recipeCount === 1 ? "Recipe" : "Recipes"}
@@ -143,7 +139,7 @@ export function BulkDraftRecipesForm({
 								</div>
 							</Text>
 
-							<Flex gap={2}>
+							<div className={styles.primary}>
 								<Button
 									variant="outline"
 									size="small"
@@ -169,13 +165,11 @@ export function BulkDraftRecipesForm({
 								>
 									Create
 								</SubmitButton>
-							</Flex>
-						</Flex>
+							</div>
+						</div>
 					}
 				/>
 			</div>
-
-			{info}
 
 			<Dialog ref={dialogRef} isOpen={isOpen}>
 				{mounted ? (

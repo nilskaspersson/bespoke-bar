@@ -59,7 +59,33 @@ export function EditorActionsPlugin() {
 		<EntityActions gap={2} className={styles.actions}>
 			{(actionProps) => (
 				<>
-					<Flex as="li" gap={1} alignItems="center">
+					<li className={styles.separator}>
+						<Button
+							{...actionProps}
+							color="red"
+							onClick={clear}
+							title="Clear editor"
+						>
+							<Icon name="trash" size={2} />
+						</Button>
+					</li>
+
+					<li>
+						<Button {...actionProps} onClick={() => applyTransform(roundLine)}>
+							Round values
+						</Button>
+					</li>
+
+					<li>
+						<Button
+							{...actionProps}
+							onClick={() => applyTransform(capitalizeLine)}
+						>
+							Capitalize
+						</Button>
+					</li>
+
+					<Flex as="li" gap={1} alignItems="center" wrap>
 						<Text size={0} light compact>
 							Convert to
 						</Text>
@@ -88,32 +114,6 @@ export function EditorActionsPlugin() {
 							</Button>
 						</ButtonGroup>
 					</Flex>
-
-					<li>
-						<Button {...actionProps} onClick={() => applyTransform(roundLine)}>
-							Round values
-						</Button>
-					</li>
-
-					<li>
-						<Button
-							{...actionProps}
-							onClick={() => applyTransform(capitalizeLine)}
-						>
-							Capitalize
-						</Button>
-					</li>
-
-					<li>
-						<Button
-							{...actionProps}
-							color="red"
-							onClick={clear}
-							title="Clear editor"
-						>
-							<Icon name="trash" size={2} />
-						</Button>
-					</li>
 				</>
 			)}
 		</EntityActions>

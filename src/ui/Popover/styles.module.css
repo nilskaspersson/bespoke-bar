@@ -70,6 +70,16 @@
 			--slide-y: var(--offset);
 		}
 
+		/** Outer-edge inset — popover sits above the anchor, right edges aligned. */
+		&.top-end {
+			--area: none;
+			--fallback: flip-block, flip-inline, flip-block flip-inline;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto anchor(right) anchor(top) auto;
+		}
+
 		/** Outer-edge inset (`anchor(bottom)`) works for both element and point anchors. */
 		&.bottom-start {
 			--area: none;

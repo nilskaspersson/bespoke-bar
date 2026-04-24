@@ -9,6 +9,7 @@ import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
+import { Grid } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
@@ -18,7 +19,7 @@ export function RecipesList({
 	favoriteRecipeIds,
 	withActions,
 	withMotion = true,
-	withCreate = true,
+	withCreate,
 	...props
 }: ComponentProps<"ul"> & {
 	recipes: RecipeWithSpecs[];
@@ -45,37 +46,33 @@ export function RecipesList({
 				const selectRecipe = () => setRecipe(recipe, isFavorite);
 
 				return (
-					<li key={recipe.id} className={styles.item}>
-						<RecipeCard
+					<Grid as="li" gap={1} key={recipe.id} className={styles.item}>
+						<MotionRecipeCard
+							withMotion={withMotion && !isSelected}
 							recipe={recipe}
-							withLink={!withMotion}
-							nameAdornment={<RecipeNameAdornment />}
-							cardWrapper={(card) => (
-								<MotionRecipeCard
-									withMotion={withMotion && !isSelected}
-									recipe={recipe}
-									onClick={selectRecipe}
-									onKeyDown={handleKey([
-										["Enter", selectRecipe],
-										[" ", selectRecipe],
-									])}
-									role="button"
-									tabIndex={0}
-									className={clsx({
-										[styles.pointer]: withMotion,
-										[styles.hidden]: isSelected,
-									})}
-								>
-									{card}
-								</MotionRecipeCard>
-							)}
-							footer={
-								withActions ? (
-									<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
-								) : undefined
-							}
-						/>
-					</li>
+							onClick={selectRecipe}
+							onKeyDown={handleKey([
+								["Enter", selectRecipe],
+								[" ", selectRecipe],
+							])}
+							role="button"
+							tabIndex={0}
+							className={clsx({
+								[styles.pointer]: withMotion,
+								[styles.hidden]: isSelected,
+							})}
+						>
+							<RecipeCard
+								recipe={recipe}
+								withLink={!withMotion}
+								nameAdornment={<RecipeNameAdornment />}
+							/>
+						</MotionRecipeCard>
+
+						{withActions ? (
+							<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
+						) : undefined}
+					</Grid>
 				);
 			})}
 

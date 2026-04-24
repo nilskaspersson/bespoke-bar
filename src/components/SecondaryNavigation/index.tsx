@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import { cacheLife } from "next/cache";
 import type { HTMLAttributes } from "react";
-import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesButton";
+import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesForm";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { NavLink } from "@/ui/NavLink";

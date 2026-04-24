@@ -1,5 +1,5 @@
 import type { EditorThemeClasses } from "lexical";
-import styles from "./RecipeEditor.module.css";
+import styles from "./styles.module.css";
 
 export const EDITOR_THEME: EditorThemeClasses = {
 	paragraph: styles.paragraph,

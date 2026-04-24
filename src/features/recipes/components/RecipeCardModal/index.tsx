@@ -1,5 +1,6 @@
 "use client";
 
+import { clsx } from "clsx";
 import { m } from "motion/react";
 import {
 	useDeferredValue,
@@ -27,11 +28,30 @@ import { useCardTilt } from "@/hooks/useCardTilt";
 import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
+import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
-import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
 import { Grid } from "@/ui/Grid";
+import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
+
+const BOXES_VARIANTS = {
+	initial: {},
+	animate: {
+		transition: { staggerChildren: 0.05, delayChildren: 0.25 },
+	},
+};
+
+const BOX_VARIANTS = {
+	initial: { opacity: 0, scale: 0.9, x: -16, y: -8 },
+	animate: {
+		opacity: 1,
+		scale: 1,
+		x: 0,
+		y: 0,
+		transition: { type: "spring", duration: 1.2, bounce: 0.2 },
+	},
+} as const;
 
 export function RecipeCardModal() {
 	const clear = useRecipeCardModal((s) => s.clear);
@@ -68,11 +88,19 @@ export function RecipeCardModal() {
 				clear();
 			}}
 		>
-			<m.div layoutRoot className={styles.container}>
-				{recipe && mounted ? (
-					<RecipeCardModalContent recipe={recipe} isFavorite={isFavorite} />
-				) : null}
-			</m.div>
+			<Button
+				className={styles.close}
+				onClick={clear}
+				icon
+				variant="ghost"
+				size="small"
+			>
+				<Icon name="xmark" size={5} />
+			</Button>
+
+			{recipe && mounted ? (
+				<RecipeCardModalContent recipe={recipe} isFavorite={isFavorite} />
+			) : null}
 		</Dialog>
 	);
 }
@@ -110,77 +138,93 @@ function RecipeCardModalContent({
 		<>
 			<canvas ref={canvasRef} className={styles.particles} />
 
-			<Container className={styles.content}>
-				<RecipeCard
-					recipe={recipe}
-					servings={deferredServings}
-					convertUnits={conversionSystem}
-					snap={snap}
-					withLink
-					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
-					cardWrapper={(card) => (
-						<MotionRecipeCard
-							withMotion
-							ref={cardRef}
-							recipe={recipe}
-							className={styles.card}
-							layout="position"
-							onMouseMove={tiltEnabled ? tilt.onMouseMove : undefined}
-							onMouseLeave={tiltEnabled ? tilt.onMouseLeave : undefined}
-							style={tiltEnabled ? tilt.style : undefined}
-						>
-							{card}
-						</MotionRecipeCard>
-					)}
-					footer={
-						<RecipeCardActions
-							recipe={recipe}
-							isFavorite={isFavorite}
-							onDelete={clear}
-						/>
-					}
-				/>
-
-				<Grid gap={4}>
-					<SelectServings value={deferredServings} onChange={setServings} />
-
-					<SelectUnitConversion
-						name="conversionSystem"
-						defaultValue={conversionSystem}
-						onChange={setConversionSystem}
-					/>
-
-					{conversionSystem ? (
-						<Checkbox
-							label="With rounding"
-							size="small"
-							checked={snap}
-							onChange={(e) => setSnap(e.target.checked)}
-						/>
-					) : null}
-
-					<RecipeMetrics
+			<div className={styles.content}>
+				<Grid gap={1}>
+					<MotionRecipeCard
+						withMotion
+						ref={cardRef}
 						recipe={recipe}
-						servings={deferredServings}
-						convertUnits={conversionSystem}
+						layout="position"
+						onMouseMove={tiltEnabled ? tilt.onMouseMove : undefined}
+						onMouseLeave={tiltEnabled ? tilt.onMouseLeave : undefined}
+						style={tiltEnabled ? tilt.style : undefined}
+					>
+						<RecipeCard
+							recipe={recipe}
+							servings={deferredServings}
+							convertUnits={conversionSystem}
+							className={styles.card}
+							snap={snap}
+							withLink
+							nameAdornment={
+								<RecipeNameAdornment servings={deferredServings} />
+							}
+						/>
+					</MotionRecipeCard>
+
+					<RecipeCardActions
+						recipe={recipe}
+						isFavorite={isFavorite}
+						onDelete={clear}
 					/>
 				</Grid>
-			</Container>
 
-			<div className={styles.toggles}>
-				<WakeLock size="small" />
-				<Checkbox
-					label="Particle effects"
-					size="small"
-					checked={particlesEnabled}
-					onChange={(e) => setParticlesEnabled(e.target.checked)}
-				/>
-				<Checkbox
-					label="3D Card"
-					size="small"
-					checked={tiltEnabled}
-					onChange={(e) => setTiltEnabled(e.target.checked)}
-				/>
+				<m.div
+					className={styles.boxes}
+					variants={BOXES_VARIANTS}
+					initial="initial"
+					animate="animate"
+				>
+					<m.div variants={BOX_VARIANTS}>
+						<Grid gap={4} className={styles.box}>
+							<SelectServings value={deferredServings} onChange={setServings} />
+
+							<SelectUnitConversion
+								name="conversionSystem"
+								defaultValue={conversionSystem}
+								onChange={setConversionSystem}
+							/>
+							{conversionSystem ? (
+								<Checkbox
+									label="With rounding"
+									size="small"
+									checked={snap}
+									onChange={(e) => setSnap(e.target.checked)}
+								/>
+							) : null}
+						</Grid>
+					</m.div>
+
+					<m.div variants={BOX_VARIANTS}>
+						<RecipeMetrics
+							recipe={recipe}
+							servings={deferredServings}
+							convertUnits={conversionSystem}
+							className={styles.box}
+						/>
+					</m.div>
+
+					<m.div
+						variants={BOX_VARIANTS}
+						className={clsx(styles.box, styles.toggles)}
+					>
+						<WakeLock size="small" />
+
+						<Checkbox
+							label="Particle effects"
+							size="small"
+							checked={particlesEnabled}
+							onChange={(e) => setParticlesEnabled(e.target.checked)}
+						/>
+
+						<Checkbox
+							label="3D Card"
+							size="small"
+							checked={tiltEnabled}
+							onChange={(e) => setTiltEnabled(e.target.checked)}
+						/>
+					</m.div>
+				</m.div>
 			</div>
 		</>
 	);

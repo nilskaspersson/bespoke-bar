@@ -10,10 +10,10 @@ import { withKey } from "@/utils/withKey";
 
 const OPTIONS = [
 	{
-		label: "Manual units",
+		label: "Original units",
 		options: [
 			withKey({
-				label: "Manual units",
+				label: "Original units",
 				value: "off",
 			}),
 		],

@@ -3,6 +3,7 @@
 		font-size: var(--size-6);
 		font-weight: 700;
 		color: var(--mauve-12);
+		white-space: nowrap;
 
 		@media (max-width: 400px) {
 			font-size: var(--size-5);

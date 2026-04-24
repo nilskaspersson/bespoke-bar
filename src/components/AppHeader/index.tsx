@@ -17,7 +17,7 @@ export async function AppHeader({
 			<div className={styles.container}>
 				<Logo />
 
-				<div className={styles.grid}>
+				<div className={styles.auth}>
 					<AuthButtonsLoader />
 				</div>
 			</div>

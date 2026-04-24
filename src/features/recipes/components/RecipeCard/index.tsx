@@ -25,8 +25,6 @@ type Props<T> = {
 	className?: string;
 	nameAdornment?: ReactNode;
 	children?: ReactNode;
-	footer?: ReactNode;
-	cardWrapper?: (card: ReactNode) => ReactNode;
 	servings?: number;
 	convertUnits?: UnitSystems | null;
 	snap?: boolean;
@@ -38,8 +36,6 @@ export function RecipeCard<T extends BaseRecipe>({
 	className,
 	nameAdornment,
 	children,
-	footer,
-	cardWrapper,
 	servings,
 	convertUnits,
 	snap,
@@ -47,8 +43,12 @@ export function RecipeCard<T extends BaseRecipe>({
 }: Props<T>) {
 	const metrics = calculateRecipeMetrics(recipe);
 
-	const card = (
-		<Grid gap={4} className={styles.card} alignContent="space-between">
+	return (
+		<Grid
+			gap={4}
+			className={clsx(styles.card, className)}
+			alignContent="space-between"
+		>
 			<Grid as="header" gap={1}>
 				<div className={styles.line}>
 					<Heading level="h3" serif size={5} className={styles.recipeName}>
@@ -128,12 +128,5 @@ export function RecipeCard<T extends BaseRecipe>({
 
 			{children}
 		</Grid>
-	);
-
-	return (
-		<div className={clsx(styles.base, className)}>
-			{cardWrapper ? cardWrapper(card) : card}
-			{footer}
-		</div>
 	);
 }

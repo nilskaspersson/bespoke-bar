@@ -1,37 +1,49 @@
-@layer feature {
+@layer composition {
 	.particles {
 		position: fixed;
 		inset: 0;
 		pointer-events: none;
 	}
 
-	.container {
-		display: grid;
-	}
-
 	.content {
 		display: flex;
-		/* flex-wrap: wrap; */
+		flex-wrap: wrap;
 		align-items: flex-start;
+		justify-content: center;
 		gap: var(--gap--large);
 		isolation: isolate;
-	}
-
-	.card {
-		box-shadow: var(--shadow--high);
-		border-color: var(--mauve-6);
+		margin-block: var(--space-8);
 	}
 
 	.actions {
 		margin-top: var(--gap--tiny);
 	}
 
+	.boxes {
+		display: grid;
+		gap: var(--space-4);
+	}
+
 	.toggles {
-		display: flex;
-		flex-direction: column;
+		display: grid;
 		gap: var(--gap--tiny);
+	}
+
+	.box {
+		background-color: var(--mauve-1);
+		border-radius: var(--radius--large);
+		padding: var(--gap);
+		border: 1px solid var(--mauve-4);
+		box-shadow: var(--shadow--high);
+	}
+
+	.card {
+		box-shadow: var(--shadow--high);
+	}
+
+	.close {
 		position: fixed;
-		bottom: var(--gap--small);
-		left: var(--gap--small);
+		top: var(--gap);
+		right: var(--gap);
 	}
 }

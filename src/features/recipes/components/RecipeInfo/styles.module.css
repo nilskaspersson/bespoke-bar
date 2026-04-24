@@ -20,7 +20,7 @@
 
 	.primary {
 		display: grid;
-		gap: var(--gap);
+		gap: var(--space-1);
 		position: sticky;
 		bottom: var(--gap);
 	}

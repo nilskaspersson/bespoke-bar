@@ -7,7 +7,7 @@ import type { PopoverType } from "@/hooks/usePopover";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import styles from "./styles.module.css";
 
-type AnchorPosition = "top" | "top-right" | "bottom-start";
+type AnchorPosition = "top" | "top-right" | "top-end" | "bottom-start";
 
 type Props = ComponentProps<"div"> & {
 	/**

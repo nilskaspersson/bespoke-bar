@@ -42,10 +42,9 @@ const nextConfig: NextConfig = {
 	},
 	devIndicators: { position: "bottom-right" },
 	poweredByHeader: false,
-	reactCompiler: true,
+	reactCompiler: !isDevelopment,
 	cacheComponents: true,
 	experimental: {
-		viewTransition: true,
 		authInterrupts: true,
 		inlineCss: true,
 		useLightningcss: true,

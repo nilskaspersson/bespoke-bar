@@ -42,8 +42,9 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 					snap={withSnap}
 					withLink={false}
 					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
-					footer={<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />}
 				/>
+
+				<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
 			</section>
 
 			<aside className={styles.card}>

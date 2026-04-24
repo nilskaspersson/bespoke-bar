@@ -5,6 +5,7 @@
 
 		width: min(calc(var(--recipe-card-width) + 2 * var(--inline-inset)), 100%);
 		margin-block: var(--offset-top) auto;
+		padding-inline: var(--gap);
 	}
 
 	.lightbox {
@@ -26,6 +27,7 @@
 	.results {
 		display: grid;
 		justify-content: center;
+		grid-template-columns: minmax(0, 1fr);
 		gap: var(--gap--large);
 		padding-block: var(--gap--large);
 		overflow: auto;
