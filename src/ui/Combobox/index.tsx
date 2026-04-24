@@ -128,7 +128,7 @@ export function Combobox<T>({
 			 */
 			if (
 				type === useCombobox.stateChangeTypes.InputChange &&
-				Boolean(selectedItem) &&
+				selectedItem &&
 				inputValue !== itemToString(selectedItem)
 			) {
 				selectItem(null);
@@ -267,7 +267,7 @@ export function Combobox<T>({
 					</Menu.Item>
 				))}
 
-				{Boolean(comboboxInputProps.value) && renderCreateListItem
+				{comboboxInputProps.value && renderCreateListItem
 					? renderCreateListItem({
 							closeMenu,
 							inputValue: comboboxInputProps.value,
