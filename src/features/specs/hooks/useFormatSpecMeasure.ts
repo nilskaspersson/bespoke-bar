@@ -5,7 +5,17 @@ import type { DraftSpec } from "@/db/schema/specs";
 import { useQuantityToBestUnit } from "@/features/units/hooks/useQuantityToBestUnit";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
+import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
+import { snapQuantity } from "@/features/units/utils/snapQuantity";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { round } from "@/utils";
+
+/**
+ * Strip IEEE-754 noise from computed quantities before they reach the display
+ * (e.g. 0.75 × 10.1 = 7.574999999999999). Two decimals matches the default
+ * `quantityFormatter` precision and is plenty for a pour.
+ */
+const DISPLAY_PRECISION = 2;
 
 export type SpecMeasure = {
 	quantity: number;
@@ -22,27 +32,43 @@ export function useFormatSpecMeasure<T extends DraftSpec>() {
 			spec,
 			servings,
 			convertUnits,
-			snap,
+			withRounding,
+			withBestUnit,
 		}: {
 			spec: T;
 			servings: number;
 			convertUnits?: UnitSystems | null;
-			snap?: boolean;
+			withRounding?: boolean;
+			withBestUnit?: boolean;
 		}): SpecMeasure => {
-			if (convertUnits) {
+			const effectiveSystem =
+				convertUnits ??
+				(withBestUnit ? getUnitSystemFromUnit(spec.unit) : null);
+
+			if (effectiveSystem) {
 				const result = quantityToBestUnit({
 					quantity: spec.quantity,
 					unit: spec.unit,
-					unitSystem: convertUnits,
+					unitSystem: effectiveSystem,
 					servings,
-					snap,
+					withRounding,
 				});
 
-				if (result) return result;
+				if (result) {
+					return {
+						...result,
+						quantity: round(result.quantity, DISPLAY_PRECISION),
+					};
+				}
 			}
 
-			const quantity = (spec.quantity ?? 0) * servings;
-			const unit = getFormattedUnit(spec.unit, spec.quantity);
+			const scaled = (spec.quantity ?? 0) * servings;
+			const snapped =
+				spec.unit && withRounding
+					? snapQuantity(scaled, spec.unit, { pour: true, batch: true })
+					: scaled;
+			const quantity = round(snapped, DISPLAY_PRECISION);
+			const unit = getFormattedUnit(spec.unit, quantity);
 
 			return {
 				quantity,

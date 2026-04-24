@@ -2,28 +2,24 @@
 
 import { clsx } from "clsx";
 import { m } from "motion/react";
-import {
-	useDeferredValue,
-	useEffect,
-	useLayoutEffect,
-	useRef,
-	useState,
-} from "react";
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { WakeLock } from "@/components/WakeLock";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
+import {
+	RecipeAdjustmentsControls,
+	RecipeAdjustmentsProvider,
+	useRecipeAdjustments,
+} from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
-import { SelectServings } from "@/features/recipes/components/SelectServings";
-import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import {
 	recipeCardModalStore,
 	useRecipeCardModal,
 } from "@/features/recipes/stores/recipeCardModal";
-import type { UnitSystems } from "@/features/units/utils/convert";
 import { useCardTilt } from "@/hooks/useCardTilt";
 import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -101,7 +97,9 @@ export function RecipeCardModal() {
 			</Button>
 
 			{recipe && mounted ? (
-				<RecipeCardModalContent recipe={recipe} isFavorite={isFavorite} />
+				<RecipeAdjustmentsProvider>
+					<RecipeCardModalContent recipe={recipe} isFavorite={isFavorite} />
+				</RecipeAdjustmentsProvider>
 			) : null}
 		</Dialog>
 	);
@@ -129,13 +127,8 @@ function RecipeCardModalContent({
 	const canvasRef = useParticleEffect(cardRef, particlesEnabled);
 	const tilt = useCardTilt();
 
-	const [servings, setServings] = useState(1);
-	const deferredServings = useDeferredValue(servings);
-
-	const [conversionSystem, setConversionSystem] = useState<UnitSystems | null>(
-		null,
-	);
-	const [snap, setSnap] = useState(false);
+	const { deferredServings, conversionSystem, withRounding, withBestUnit } =
+		useRecipeAdjustments();
 
 	return (
 		<>
@@ -157,7 +150,8 @@ function RecipeCardModalContent({
 							servings={deferredServings}
 							convertUnits={conversionSystem}
 							className={styles.card}
-							snap={snap}
+							withRounding={withRounding}
+							withBestUnit={withBestUnit}
 							withLink
 							nameAdornment={
 								<RecipeNameAdornment servings={deferredServings} />
@@ -180,23 +174,9 @@ function RecipeCardModalContent({
 					animate="animate"
 				>
 					<m.div variants={BOX_VARIANTS}>
-						<Grid gap={4} className={styles.box}>
-							<SelectServings value={deferredServings} onChange={setServings} />
-
-							<SelectUnitConversion
-								name="conversionSystem"
-								defaultValue={conversionSystem}
-								onChange={setConversionSystem}
-							/>
-							{conversionSystem ? (
-								<Checkbox
-									label="With rounding"
-									size="small"
-									checked={snap}
-									onChange={(e) => setSnap(e.target.checked)}
-								/>
-							) : null}
-						</Grid>
+						<div className={styles.box}>
+							<RecipeAdjustmentsControls />
+						</div>
 					</m.div>
 
 					<m.div variants={BOX_VARIANTS}>

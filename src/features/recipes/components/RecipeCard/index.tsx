@@ -27,7 +27,8 @@ type Props<T> = {
 	children?: ReactNode;
 	servings?: number;
 	convertUnits?: UnitSystems | null;
-	snap?: boolean;
+	withRounding?: boolean;
+	withBestUnit?: boolean;
 	withLink?: boolean;
 };
 
@@ -38,7 +39,8 @@ export function RecipeCard<T extends BaseRecipe>({
 	children,
 	servings,
 	convertUnits,
-	snap,
+	withRounding,
+	withBestUnit,
 	withLink = true,
 }: Props<T>) {
 	const metrics = calculateRecipeMetrics(recipe);
@@ -97,7 +99,8 @@ export function RecipeCard<T extends BaseRecipe>({
 					specs={recipe.specs}
 					servings={servings}
 					convertUnits={convertUnits}
-					snap={snap}
+					withRounding={withRounding}
+					withBestUnit={withBestUnit}
 				/>
 			) : (
 				<Grid gap={4}>

@@ -14,7 +14,7 @@ import styles from "./styles.module.css";
 export function DraftRecipeCard<T extends BaseRecipe>(props: {
 	recipe: T;
 	convertUnits?: UnitSystems | null;
-	snap?: boolean;
+	withRounding?: boolean;
 }) {
 	if (isEmptyDraftRecipe(props.recipe)) {
 		return null;
@@ -35,7 +35,7 @@ export function DraftRecipeCard<T extends BaseRecipe>(props: {
 					<SpecsList
 						specs={props.recipe.specs}
 						convertUnits={props.convertUnits}
-						snap={props.snap}
+						withRounding={props.withRounding}
 					/>
 
 					<Grid gap={1}>
