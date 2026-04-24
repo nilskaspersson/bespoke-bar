@@ -8,6 +8,7 @@ type RecipeCardModalState = {
 	isFavorite: boolean;
 	mounted: boolean;
 	setRecipe: (recipe: RecipeWithSpecs, isFavorite: boolean) => void;
+	setIsFavorite: (isFavorite: boolean) => void;
 	updateIngredient: (updated: Ingredient) => void;
 	clear: () => void;
 };
@@ -20,6 +21,9 @@ export const recipeCardModalStore = Object.assign(
 		setRecipe: (recipe, isFavorite) => {
 			recipeCardModalStore.dialogRef.current?.showModal();
 			set({ recipe, isFavorite, mounted: true });
+		},
+		setIsFavorite: (isFavorite) => {
+			set({ isFavorite });
 		},
 		updateIngredient: (updated) => {
 			const { recipe } = get();

@@ -52,6 +52,7 @@ export function SelectServings({
 							pill
 							min={1}
 							max={1000000000}
+							step="any"
 							onChange={(event) => {
 								const parsedValue = z.coerce
 									.number()

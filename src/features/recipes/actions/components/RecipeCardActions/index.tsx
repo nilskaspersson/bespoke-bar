@@ -16,12 +16,14 @@ type Props = {
 	recipe: RecipeWithSpecs;
 	isFavorite?: boolean;
 	onDelete?: () => void;
+	onToggleFavorite?: (isFavorite: boolean) => void;
 } & Omit<ComponentProps<typeof EntityActions>, "children">;
 
 export function RecipeCardActions({
 	recipe,
 	isFavorite = false,
 	onDelete,
+	onToggleFavorite,
 	...props
 }: Props) {
 	return (
@@ -39,6 +41,7 @@ export function RecipeCardActions({
 							{...actionProps}
 							recipe={recipe}
 							isFavorite={isFavorite}
+							onToggleFavorite={onToggleFavorite}
 						>
 							Favorite
 						</ToggleFavoriteRecipeButton>
@@ -53,6 +56,7 @@ export function RecipeCardActions({
 								recipe={recipe}
 								isFavorite={isFavorite}
 								onDelete={onDelete}
+								onToggleFavorite={onToggleFavorite}
 							/>
 						</RecipeActionsToggle>
 					</li>

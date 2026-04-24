@@ -94,6 +94,8 @@ export function RecipeCardModal() {
 				icon
 				variant="ghost"
 				size="small"
+				aria-label="Close"
+				title="Close"
 			>
 				<Icon name="xmark" size={5} />
 			</Button>
@@ -113,6 +115,7 @@ function RecipeCardModalContent({
 	isFavorite: boolean;
 }) {
 	const clear = useRecipeCardModal((s) => s.clear);
+	const setIsFavorite = useRecipeCardModal((s) => s.setIsFavorite);
 	const [particlesEnabled, setParticlesEnabled] = useLocalStorage(
 		"particles-enabled",
 		true,
@@ -166,6 +169,7 @@ function RecipeCardModalContent({
 						recipe={recipe}
 						isFavorite={isFavorite}
 						onDelete={clear}
+						onToggleFavorite={setIsFavorite}
 					/>
 				</Grid>
 

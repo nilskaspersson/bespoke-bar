@@ -19,12 +19,14 @@ export function ToggleFavoriteRecipeButton({
 	color,
 	className,
 	isQuickAction = false,
+	onToggleFavorite,
 	...buttonProps
 }: {
 	recipe: RecipeWithSpecs;
 	isFavorite: boolean;
 	externalToastId?: string;
 	isQuickAction?: boolean;
+	onToggleFavorite?: (isFavorite: boolean) => void;
 } & ButtonProps) {
 	const [optimisticIsFavorite, setOptimisticIsFavorite] = useOptimistic(
 		isFavorite,
@@ -34,6 +36,7 @@ export function ToggleFavoriteRecipeButton({
 	const handleToggleFavorite = async () => {
 		const newFavoriteState = !optimisticIsFavorite;
 		setOptimisticIsFavorite(newFavoriteState);
+		onToggleFavorite?.(newFavoriteState);
 
 		const toastId = externalToastId ?? Date.now().toString();
 
@@ -56,6 +59,7 @@ export function ToggleFavoriteRecipeButton({
 							isFavorite={newFavoriteState}
 							externalToastId={toastId}
 							isQuickAction
+							onToggleFavorite={onToggleFavorite}
 						>
 							<Icon name="arrow-rotate-left" size={0} />
 							Undo

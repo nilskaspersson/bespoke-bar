@@ -19,7 +19,7 @@ export function ServingsBadge({
 	const { quantityFormatter } = use(FormatterContext);
 
 	const formatServings = useCallback(
-		(v: number) => quantityFormatter.format(Math.round(v)),
+		(v: number) => quantityFormatter.format(v),
 		[quantityFormatter],
 	);
 
