@@ -84,6 +84,8 @@ export function useRecipeAdjustments(): RecipeAdjustmentsValue {
 	return value;
 }
 
+const COMMON_VALUES = [1, 2, 3, 4, 5];
+
 export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 	const {
 		deferredServings,
@@ -98,7 +100,11 @@ export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 
 	return (
 		<Grid gap={4} {...props}>
-			<SelectServings value={deferredServings} onChange={setServings} />
+			<SelectServings
+				value={deferredServings}
+				onChange={setServings}
+				commonValues={COMMON_VALUES}
+			/>
 
 			<SelectUnitConversion
 				name="conversionSystem"
