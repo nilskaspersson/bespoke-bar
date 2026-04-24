@@ -1,0 +1,5 @@
+@layer feature {
+	.popover {
+		min-width: 20rem;
+	}
+}

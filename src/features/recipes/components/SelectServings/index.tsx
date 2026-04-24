@@ -25,18 +25,23 @@ export function SelectServings({
 		<div className={clsx(className, styles.servings)}>
 			<ControlLabel label="Servings" htmlFor={servingsId}>
 				<Flex gap={1} alignItems="center">
-					{times(4).map((i) => (
-						<Button
-							key={i}
-							size="small"
-							icon
-							variant={value === i + 1 ? "solid" : "outline"}
-							color={value === i + 1 ? "heavy" : "light"}
-							onClick={() => onChange(i + 1)}
-						>
-							{i + 1}
-						</Button>
-					))}
+					{times(4).map((i) => {
+						const isCurrent = value === i + 1;
+
+						return (
+							<Button
+								key={i}
+								size="small"
+								icon
+								variant={isCurrent ? "solid" : "outline"}
+								color={isCurrent ? "heavy" : "light"}
+								onClick={() => onChange(i + 1)}
+								className={clsx({ [styles.button]: !isCurrent })}
+							>
+								{i + 1}
+							</Button>
+						);
+					})}
 
 					<div>
 						<Input

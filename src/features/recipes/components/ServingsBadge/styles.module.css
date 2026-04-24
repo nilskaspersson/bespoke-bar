@@ -3,6 +3,7 @@
 		position: relative;
 		top: calc(-1 * var(--space-1));
 		animation: servings-enter var(--transition-duration);
+		white-space: nowrap;
 	}
 
 	@keyframes servings-enter {

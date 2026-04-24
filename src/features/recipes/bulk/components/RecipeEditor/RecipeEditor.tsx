@@ -15,6 +15,7 @@ import {
 } from "lexical";
 import { type ReactNode, type RefObject, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
+import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
@@ -30,7 +31,7 @@ import { TextChangePlugin } from "./plugins/TextChangePlugin";
 import { IngredientTypeaheadPlugin } from "./plugins/TokenMenus/IngredientTypeaheadPlugin";
 import { TokenBrowsingPlugin } from "./plugins/TokenMenus/TokenBrowsingPlugin";
 import { UnitTypeaheadPlugin } from "./plugins/TokenMenus/UnitTypeaheadPlugin";
-import styles from "./RecipeEditor.module.css";
+import styles from "./styles.module.css";
 
 function seedEditorState(text: string) {
 	const root = $getRoot();
@@ -65,16 +66,25 @@ export function RecipeEditor({
 		<LexicalComposer initialConfig={config}>
 			<RecipeIngredientsProvider ingredients={ingredients}>
 				<div className={styles.root}>
-					<Flex gap={2} alignItems="center" className={styles.titleBar}>
-						<Icon
-							name="duotone-input-text"
-							size={3}
-							className={styles.titleIcon}
-						/>
+					<Flex
+						gap={2}
+						alignItems="center"
+						justifyContent="space-between"
+						className={styles.titleBar}
+					>
+						<Flex gap={2} alignItems="center">
+							<Icon
+								name="duotone-input-text"
+								size={3}
+								className={styles.titleIcon}
+							/>
 
-						<Text size={1} weight={600}>
-							Recipe editor
-						</Text>
+							<Text size={1} weight={600}>
+								Recipe editor
+							</Text>
+						</Flex>
+
+						<BulkDraftInfo />
 					</Flex>
 
 					<div className={styles.container}>

@@ -2,7 +2,7 @@ import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
-import styles from "./RecipeEditor.module.css";
+import styles from "./styles.module.css";
 
 export function RecipeEditorSkeleton() {
 	return (

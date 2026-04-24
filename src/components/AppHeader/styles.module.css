@@ -8,20 +8,22 @@
 		position: absolute;
 		inset: 0 0 auto;
 		z-index: var(--z-navigation);
-		contain: strict;
+		contain: content;
 	}
 
 	.container {
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: space-between;
 		gap: var(--gap);
 		padding-inline: var(--space-5);
+		padding-block: var(--space-5);
 	}
 
-	.grid {
+	.auth {
 		display: flex;
-		align-items: center;
+		justify-content: flex-end;
+		flex-wrap: wrap-reverse;
 		gap: var(--gap--tiny);
 	}
 }

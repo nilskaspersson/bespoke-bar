@@ -8,22 +8,19 @@ import { RecipeActions } from "@/features/recipes/actions/components/RecipeActio
 import { RecipeActionsToggle } from "@/features/recipes/actions/components/RecipeActionsToggle";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { getRecipeName, getRecipeUrl } from "@/features/recipes/utils";
-import { LinkButton } from "@/ui/Button";
+import { getRecipeName } from "@/features/recipes/utils";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 type Props = {
 	recipe: RecipeWithSpecs;
 	isFavorite?: boolean;
-	withLink?: boolean;
 	onDelete?: () => void;
 } & Omit<ComponentProps<typeof EntityActions>, "children">;
 
 export function RecipeCardActions({
 	recipe,
 	isFavorite = false,
-	withLink,
 	onDelete,
 	...props
 }: Props) {
@@ -31,18 +28,11 @@ export function RecipeCardActions({
 		<EntityActions justifyContent="flex-end" {...props}>
 			{(actionProps) => (
 				<>
-					{withLink ? (
-						<li className={styles.item}>
-							<LinkButton
-								{...actionProps}
-								href={getRecipeUrl(recipe)}
-								color="accent"
-							>
-								<Icon name="arrow-right" size={1} />
-								View
-							</LinkButton>
-						</li>
-					) : null}
+					<li className={styles.item}>
+						<CreateListEntryButton {...actionProps} recipe={recipe}>
+							<Icon name="plus" size={1} /> Add to list
+						</CreateListEntryButton>
+					</li>
 
 					<li className={styles.item}>
 						<ToggleFavoriteRecipeButton
@@ -55,19 +45,12 @@ export function RecipeCardActions({
 					</li>
 
 					<li className={styles.item}>
-						<CreateListEntryButton {...actionProps} recipe={recipe}>
-							<Icon name="plus" size={1} /> Add to list
-						</CreateListEntryButton>
-					</li>
-
-					<li className={styles.item}>
 						<RecipeActionsToggle
 							heading={<RecipeName recipe={recipe} />}
 							label={`Actions for ${getRecipeName(recipe)}`}
 						>
 							<RecipeActions
 								recipe={recipe}
-								withLink={withLink}
 								isFavorite={isFavorite}
 								onDelete={onDelete}
 							/>

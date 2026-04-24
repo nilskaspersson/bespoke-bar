@@ -11,6 +11,7 @@ import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToCli
 import { LinkButton } from "@/ui/Button";
 import { useContextMenu } from "@/ui/ContextMenu";
 import { Icon } from "@/ui/Icon";
+import { handleKey } from "@/utils/keyboard";
 import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
 
@@ -24,35 +25,34 @@ const baseActionProps = {
 
 export function RecipeActions({
 	recipe,
-	withLink,
 	isFavorite,
 	onDelete,
 }: {
 	recipe: RecipeWithSpecs;
-	withLink?: boolean;
 	isFavorite?: boolean;
 	onDelete?: () => void;
 }) {
 	const { closePopover: close } = useContextMenu();
-	const closeOnKey: React.KeyboardEventHandler = (e) => {
-		if (e.key === "Enter" || e.key === " ") close();
-	};
-	const dismissProps = { onClick: close, onKeyDown: closeOnKey } as const;
+	const dismissProps = {
+		onClick: close,
+		onKeyDown: handleKey([
+			["Enter", close],
+			[" ", close],
+		]),
+	} as const;
 
 	return (
 		<menu className={styles.menu} aria-label="Recipe actions">
-			{withLink ? (
-				<li {...dismissProps}>
-					<LinkButton
-						{...baseActionProps}
-						href={getRecipeUrl(recipe)}
-						color="accent"
-					>
-						<Icon name="arrow-right" size={1} />
-						View
-					</LinkButton>
-				</li>
-			) : null}
+			<li {...dismissProps}>
+				<LinkButton
+					{...baseActionProps}
+					href={getRecipeUrl(recipe)}
+					color="accent"
+				>
+					<Icon name="arrow-right" size={1} />
+					View
+				</LinkButton>
+			</li>
 
 			<li {...dismissProps}>
 				<ToggleFavoriteRecipeButton

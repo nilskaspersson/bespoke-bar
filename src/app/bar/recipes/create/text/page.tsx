@@ -2,8 +2,7 @@ import { Suspense } from "react";
 import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
-import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
-import { BulkDraftRecipes } from "@/features/recipes/bulk/components/BulkDraftRecipes";
+import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -27,9 +26,8 @@ async function BulkCreateRecipeWithAuth() {
 
 	return (
 		<OrgProvider>
-			<BulkDraftRecipes
+			<BulkDraftRecipesForm
 				ingredients={ingredients}
-				info={<BulkDraftInfo />}
 				createRecipes={createRecipesWithSpecsFromData}
 			/>
 		</OrgProvider>

@@ -17,17 +17,11 @@
 }
 
 @layer feature {
-	.base {
-		display: grid;
-		gap: var(--space-1);
-		width: var(--recipe-card-width);
-		max-width: 100%;
-	}
-
 	.card {
 		contain: content;
-		aspect-ratio: var(--recipe-card-ratio);
-		height: auto;
+		min-height: var(--recipe-card-height);
+		width: var(--recipe-card-width);
+		max-width: 100%;
 
 		position: relative;
 		padding: var(--gap);

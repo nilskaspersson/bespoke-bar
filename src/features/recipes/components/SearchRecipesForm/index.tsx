@@ -12,16 +12,17 @@ import {
 	useState,
 } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
-import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import {
 	createRecipeSearchIndex,
 	filterRecipes,
 } from "@/features/recipes/utils/filterRecipes";
+import { useDialog } from "@/hooks/useDialog";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { trpc } from "@/trpc/client";
-import { Button } from "@/ui/Button";
+import { Button, type ButtonProps, LinkButton } from "@/ui/Button";
+import { Dialog } from "@/ui/Dialog";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -29,9 +30,49 @@ import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
 import { Lightbox } from "@/ui/Lightbox";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
+import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
+
+export function SearchRecipesButton({ children, ...props }: ButtonProps) {
+	const { dialogRef, isOpen, showModal, closeModal } = useDialog();
+
+	function toggleDialog() {
+		if (dialogRef.current?.open) {
+			closeModal();
+		} else {
+			showModal();
+		}
+	}
+
+	return (
+		<>
+			<Button
+				{...props}
+				onClick={showModal}
+				endAdornment={<Kbd shortcut="mod+k" onTrigger={toggleDialog} />}
+			>
+				{children}
+			</Button>
+
+			<Dialog ref={dialogRef} isOpen={isOpen} className={styles.dialog}>
+				<SearchRecipesForm
+					actions={
+						<li>
+							<form method="dialog">
+								<Button type="submit" variant="ghost" size="tiny">
+									Cancel
+								</Button>
+							</form>
+						</li>
+					}
+				/>
+			</Dialog>
+		</>
+	);
+}
 
 export function SearchRecipesForm({
 	className,
@@ -62,6 +103,10 @@ export function SearchRecipesForm({
 		() => filterRecipes(recipes, searchIndex, deferredSearch),
 		[deferredSearch, recipes, searchIndex],
 	);
+
+	const count = deferredSearch
+		? filteredRecipes.length
+		: (recipes?.length ?? 0);
 
 	const openFirstResult = useCallback(() => {
 		if (filteredRecipes.length === 0) {
@@ -108,10 +153,15 @@ export function SearchRecipesForm({
 					<Kbd shortcut="Esc" visual className={styles.esc} />
 				</div>
 
-				<Flex justifyContent="space-between">
-					<Text as="p" size={1} light numeric compact>
-						{filteredRecipes.length} matching{" "}
-						{filteredRecipes.length === 1 ? "recipe" : "recipes"}
+				<div className={styles.status}>
+					<Text as="p" size={1} light numeric>
+						{isLoading ? (
+							<Skeleton variant="text" height="1em" width="15ch" />
+						) : deferredSearch ? (
+							`${count} matching ${pluralize(count, "recipe")}`
+						) : (
+							`${count} ${pluralize(count, "recipe")}`
+						)}
 					</Text>
 
 					<Text
@@ -133,7 +183,7 @@ export function SearchRecipesForm({
 						/>{" "}
 						to open the first result
 					</Text>
-				</Flex>
+				</div>
 			</Grid>
 
 			<div className={styles.results}>
@@ -142,17 +192,28 @@ export function SearchRecipesForm({
 				) : filteredRecipes.length === 0 ? (
 					<EmptyArea className={styles.empty} color="light">
 						<Heading level="h3" size={4}>
-							No recipes found
+							No matching recipes
 						</Heading>
 
-						<Button
-							variant="outline"
-							color="light"
-							size="small"
-							onClick={() => setSearch("")}
-						>
-							Clear search
-						</Button>
+						<Flex gap={2}>
+							<Button
+								variant="outline"
+								color="light"
+								size="small"
+								onClick={() => setSearch("")}
+							>
+								Clear search
+							</Button>
+
+							<LinkButton
+								href="/bar/recipes/create"
+								variant="outline"
+								color="accent"
+								size="small"
+							>
+								Create recipe
+							</LinkButton>
+						</Flex>
 					</EmptyArea>
 				) : (
 					<RecipesList
@@ -163,8 +224,6 @@ export function SearchRecipesForm({
 						className={styles.list}
 					/>
 				)}
-
-				<CreateRecipeSlot />
 			</div>
 
 			{actions ? (
