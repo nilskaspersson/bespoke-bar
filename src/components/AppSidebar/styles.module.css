@@ -39,21 +39,4 @@
 		min-height: 62px;
 		border-bottom: none;
 	}
-
-	:global(.cl-userButtonBox) {
-		.sidebar & {
-			/* biome-ignore lint/complexity/noImportantStyles: Necessary to override Clerk component internals */
-			flex-direction: row-reverse !important;
-			/* biome-ignore lint/complexity/noImportantStyles: Necessary to override Clerk component internals */
-			gap: 0 !important;
-		}
-	}
-
-	:global(.cl-userButtonOuterIdentifier) {
-		.sidebar & {
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
-		}
-	}
 }

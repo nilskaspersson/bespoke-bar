@@ -27,10 +27,12 @@ export function RecipeActions({
 	recipe,
 	isFavorite,
 	onDelete,
+	onToggleFavorite,
 }: {
 	recipe: RecipeWithSpecs;
 	isFavorite?: boolean;
 	onDelete?: () => void;
+	onToggleFavorite?: (isFavorite: boolean) => void;
 }) {
 	const { closePopover: close } = useContextMenu();
 	const dismissProps = {
@@ -59,6 +61,7 @@ export function RecipeActions({
 					{...baseActionProps}
 					recipe={recipe}
 					isFavorite={isFavorite ?? false}
+					onToggleFavorite={onToggleFavorite}
 				>
 					Favorite
 				</ToggleFavoriteRecipeButton>

@@ -1,7 +1,6 @@
 import { cacheLife } from "next/cache";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { FeaturedList } from "@/features/lists/featured/components/FeaturedList";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Container } from "@/ui/Container";
@@ -29,11 +28,7 @@ export default function BarPage() {
 
 async function FeaturedListWithAuth() {
 	const { orgId } = await authOrForbidden();
-	return (
-		<OrgProvider>
-			<FeaturedList orgId={orgId} />
-		</OrgProvider>
-	);
+	return <FeaturedList orgId={orgId} />;
 }
 
 async function BarPageShell({ children }: { children: ReactNode }) {

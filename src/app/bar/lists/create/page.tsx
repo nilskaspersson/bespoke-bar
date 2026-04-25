@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
@@ -34,14 +33,12 @@ async function CreateListWithAuth() {
 	const recipes = await getCachedBarRecipes(orgId);
 
 	return (
-		<OrgProvider>
-			<RecipeListForm recipes={recipes}>
-				<SubmitButton variant="solid" color="accent">
-					<Icon name="plus" />
-					Create List
-				</SubmitButton>
-			</RecipeListForm>
-		</OrgProvider>
+		<RecipeListForm recipes={recipes}>
+			<SubmitButton variant="solid" color="accent">
+				<Icon name="plus" />
+				Create List
+			</SubmitButton>
+		</RecipeListForm>
 	);
 }
 

@@ -18,7 +18,7 @@ export function OrganisationSettings() {
 	const { data: organisation, isLoading } = trpc.organisation.get.useQuery();
 
 	return (
-		<article className={styles.settings}>
+		<article>
 			<Heading level="h1" className={styles.heading}>
 				Settings
 			</Heading>

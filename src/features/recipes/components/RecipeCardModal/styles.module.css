@@ -13,6 +13,16 @@
 		gap: var(--gap--large);
 		isolation: isolate;
 		margin-block: var(--space-8);
+		margin-inline: var(--gap);
+	}
+
+	.primary {
+		width: var(--recipe-card-width);
+		max-width: 100%;
+	}
+
+	.meta {
+		padding-inline: var(--gap--small);
 	}
 
 	.actions {
@@ -22,6 +32,8 @@
 	.boxes {
 		display: grid;
 		gap: var(--space-4);
+		width: var(--recipe-card-width);
+		max-width: 100%;
 	}
 
 	.toggles {
@@ -33,7 +45,7 @@
 		background-color: var(--mauve-1);
 		border-radius: var(--radius--large);
 		padding: var(--gap);
-		border: 1px solid var(--mauve-4);
+		border: 2px dashed var(--mauve-4);
 		box-shadow: var(--shadow--high);
 	}
 

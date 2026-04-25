@@ -1,12 +1,35 @@
 @layer feature {
-	.servings {
+	.root {
 		display: flex;
-		flex-wrap: wrap;
+		flex-direction: column;
 		gap: var(--gap--tiny);
-		align-items: center;
+		max-width: 15ch;
 	}
 
-	.button {
+	.spinner {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		padding-inline: var(--space-1);
+	}
+
+	.input {
+		flex: 1 1 auto;
+		min-width: 3ch;
+		text-align: center;
+		font-variant-numeric: tabular-nums;
+		align-self: stretch;
+	}
+
+	.commonValues {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: var(--space-0);
+		min-inline-size: auto;
+	}
+
+	.quickAction {
 		background-color: var(--mauve-1);
 	}
 }

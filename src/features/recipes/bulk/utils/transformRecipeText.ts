@@ -76,7 +76,7 @@ export function roundLine(line: string): string {
 	const [qty, unit] = result;
 	return buildLine(
 		parsed.prefix,
-		snapQuantity(qty, unit),
+		snapQuantity(qty, unit, { pour: true }),
 		unit,
 		parsed.ingredient,
 	);

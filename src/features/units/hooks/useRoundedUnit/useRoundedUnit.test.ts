@@ -28,6 +28,12 @@ describe("roundUnit", () => {
 		expect(quantity).toBeCloseTo(3.38, 1);
 	});
 
+	it("should drop to tsp for sub-half-fl_oz imperial volumes", () => {
+		const [quantity, unit] = roundUnit(2.46, "imperial");
+		expect(unit).toBe("tsp");
+		expect(quantity).toBeCloseTo(0.5, 2);
+	});
+
 	it("should convert large metric volumes to liters", () => {
 		expect(roundUnit(1500, "metric")).toEqual([1.5, "l"]);
 	});

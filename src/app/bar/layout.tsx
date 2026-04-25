@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AppSidebar } from "@/components/AppSidebar";
+import { OrgProvider } from "@/components/OrgProvider";
 import { Providers } from "@/components/Providers";
 import { SecondaryNavigation } from "@/components/SecondaryNavigation";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
@@ -10,20 +11,22 @@ import styles from "./layout.module.css";
 export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<Providers>
-			<div className={styles.container}>
-				<AppSidebar
-					className={styles.navigation}
-					toggleButtonProps={{ className: styles.toggle }}
-				>
-					<SecondaryNavigation />
-				</AppSidebar>
+			<OrgProvider>
+				<div className={styles.container}>
+					<AppSidebar
+						className={styles.navigation}
+						toggleButtonProps={{ className: styles.toggle }}
+					>
+						<SecondaryNavigation />
+					</AppSidebar>
 
-				<div className={styles.main}>{children}</div>
-			</div>
+					<div className={styles.main}>{children}</div>
+				</div>
 
-			<IngredientEditorDrawer />
-			<CreateListEntryDrawer />
-			<RecipeCardModal />
+				<IngredientEditorDrawer />
+				<CreateListEntryDrawer />
+				<RecipeCardModal />
+			</OrgProvider>
 		</Providers>
 	);
 }

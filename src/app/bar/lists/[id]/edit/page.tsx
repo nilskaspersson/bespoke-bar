@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
@@ -62,7 +61,7 @@ async function EditRecipeListWithAuth({
 	}
 
 	return (
-		<OrgProvider>
+		<>
 			<nav>
 				<LinkButton
 					href={getRecipeListUrl(recipeList)}
@@ -81,6 +80,6 @@ async function EditRecipeListWithAuth({
 					Save changes
 				</SubmitButton>
 			</RecipeListForm>
-		</OrgProvider>
+		</>
 	);
 }

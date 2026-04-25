@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { PhotoToRecipe } from "@/features/recipes/photo/components/PhotoToRecipe";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
@@ -24,11 +23,7 @@ async function PhotoToRecipeWithAuth() {
 	const { orgId } = await authOrForbidden();
 	const ingredients = await getCachedIngredients(orgId);
 
-	return (
-		<OrgProvider>
-			<PhotoToRecipe ingredients={ingredients} />
-		</OrgProvider>
-	);
+	return <PhotoToRecipe ingredients={ingredients} />;
 }
 
 export const metadata: Metadata = {

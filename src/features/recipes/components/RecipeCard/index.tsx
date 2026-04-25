@@ -27,7 +27,8 @@ type Props<T> = {
 	children?: ReactNode;
 	servings?: number;
 	convertUnits?: UnitSystems | null;
-	snap?: boolean;
+	withRounding?: boolean;
+	withBestUnit?: boolean;
 	withLink?: boolean;
 };
 
@@ -38,14 +39,15 @@ export function RecipeCard<T extends BaseRecipe>({
 	children,
 	servings,
 	convertUnits,
-	snap,
+	withRounding,
+	withBestUnit,
 	withLink = true,
 }: Props<T>) {
 	const metrics = calculateRecipeMetrics(recipe);
 
 	return (
 		<Grid
-			gap={4}
+			gap={5}
 			className={clsx(styles.card, className)}
 			alignContent="space-between"
 		>
@@ -97,7 +99,8 @@ export function RecipeCard<T extends BaseRecipe>({
 					specs={recipe.specs}
 					servings={servings}
 					convertUnits={convertUnits}
-					snap={snap}
+					withRounding={withRounding}
+					withBestUnit={withBestUnit}
 				/>
 			) : (
 				<Grid gap={4}>
@@ -107,23 +110,13 @@ export function RecipeCard<T extends BaseRecipe>({
 				</Grid>
 			)}
 
-			{recipe.instructions || recipe.garnish ? (
-				<Grid gap={2}>
-					{recipe.instructions ? (
-						<Text as="p" size={3} serif>
-							{recipe.instructions}
-						</Text>
-					) : null}
-
-					{recipe.garnish ? (
-						<Text as="p" size={3} serif>
-							<Text as="span" heavy>
-								Garnish:
-							</Text>{" "}
-							{recipe.garnish}
-						</Text>
-					) : null}
-				</Grid>
+			{recipe.garnish ? (
+				<Text as="p" size={3} serif>
+					<Text as="span" heavy>
+						Garnish:
+					</Text>{" "}
+					{recipe.garnish}
+				</Text>
 			) : null}
 
 			{children}

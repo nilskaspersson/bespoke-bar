@@ -30,7 +30,16 @@ export function roundUnit(
 			return [round(convert(flOz).from("fl-oz").to("cup")), "cup"];
 		}
 
-		return [round(flOz), "fl_oz"];
+		if (flOz >= 0.5) {
+			return [round(flOz), "fl_oz"];
+		}
+
+		/**
+		 * Below half a fl-oz, fl-oz reads as a fraction smaller than the pour
+		 * grid (0.25 fl-oz). Drop to tsp so tiny imperial pours stay legible —
+		 * "0.5 tsp" rather than "0.08 fl oz".
+		 */
+		return [round(convert(volumeInMl).from("ml").to("tsp")), "tsp"];
 	}
 
 	if (volumeInMl >= 1000) {

@@ -208,7 +208,7 @@ export function BulkDraftRecipesForm({
 										<DraftRecipeCard
 											recipe={recipe}
 											convertUnits={withConversionSystem}
-											snap={withSnap}
+											withRounding={withSnap}
 										/>
 									</li>
 								))}

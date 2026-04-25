@@ -10,13 +10,15 @@ export function SpecsList<T extends DraftSpecWithDraftIngredient>({
 	specs,
 	servings,
 	convertUnits,
-	snap,
+	withRounding,
+	withBestUnit,
 	...props
 }: {
 	specs: Keyed<T>[];
 	servings?: number;
 	convertUnits?: UnitSystems | null;
-	snap?: boolean;
+	withRounding?: boolean;
+	withBestUnit?: boolean;
 } & Omit<ComponentProps<"div">, "children">) {
 	return (
 		<div {...props} className={styles.specs}>
@@ -28,7 +30,8 @@ export function SpecsList<T extends DraftSpecWithDraftIngredient>({
 							spec={spec}
 							servings={servings}
 							convertUnits={convertUnits}
-							snap={snap}
+							withRounding={withRounding}
+							withBestUnit={withBestUnit}
 						/>
 					</li>
 				))}

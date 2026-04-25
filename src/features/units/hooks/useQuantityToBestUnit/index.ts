@@ -49,14 +49,14 @@ export function useQuantityToBestUnit() {
 			unit: Unit | null | undefined;
 			unitSystem?: UnitSystems | null;
 			servings?: number;
-			snap?: boolean;
+			withRounding?: boolean;
 		}) => {
 			const parts = quantityToBestUnit(args);
 			if (!parts) return null;
-			let [quantity, unit] = parts;
-			if (args.snap) {
-				quantity = snapQuantity(quantity, unit);
-			}
+			const [raw, unit] = parts;
+			const quantity = args.withRounding
+				? snapQuantity(raw, unit, { pour: true, batch: true })
+				: raw;
 			return {
 				quantity,
 				unit: getFormattedUnit(unit, quantity),

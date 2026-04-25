@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import {
@@ -43,11 +42,7 @@ export default function IngredientsPage() {
 async function IngredientsWithAuth() {
 	const { orgId } = await authOrForbidden();
 
-	return (
-		<OrgProvider>
-			<IngredientsTableWithData orgId={orgId} />
-		</OrgProvider>
-	);
+	return <IngredientsTableWithData orgId={orgId} />;
 }
 
 async function IngredientsTableWithData({ orgId }: { orgId: string }) {

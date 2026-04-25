@@ -7,6 +7,8 @@ export type IconName =
 	| "angles-up-down"
 	| "arrow-down-from-line"
 	| "arrow-down-long"
+	| "arrow-down-to-arc"
+	| "arrow-down-to-dotted-line"
 	| "arrow-left"
 	| "arrow-right-from-bracket"
 	| "arrow-right-to-bracket"
