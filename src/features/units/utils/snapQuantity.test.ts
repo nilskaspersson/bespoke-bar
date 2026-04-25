@@ -76,6 +76,19 @@ describe("snapQuantity", () => {
 		});
 	});
 
+	describe("never rounds non-zero quantities to zero", () => {
+		it("bumps tiny positive quantities to one step", () => {
+			expect(snapQuantity(0.08, "fl_oz", POUR)).toBe(0.25);
+			expect(snapQuantity(0.4, "ml", POUR)).toBe(1);
+			expect(snapQuantity(0.04, "l", POUR)).toBe(0.1);
+		});
+
+		it("preserves true zero", () => {
+			expect(snapQuantity(0, "fl_oz", POUR)).toBe(0);
+			expect(snapQuantity(0, "ml", POUR)).toBe(0);
+		});
+	});
+
 	describe("batch rounding", () => {
 		it("rounds to 3 significant figures in the display unit", () => {
 			expect(snapQuantity(123.75, "fl_oz", BATCH)).toBe(124);

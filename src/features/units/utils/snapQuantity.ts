@@ -36,7 +36,13 @@ export function snapQuantity(
 
 	if (pour) {
 		const step = pourStepForUnit(unit, qty);
-		if (step > 0) result = Math.round(result / step) * step;
+		if (step > 0) {
+			const snapped = Math.round(result / step) * step;
+			/**
+			 * Never round a non-zero quantity down to zero.
+			 */
+			result = snapped === 0 && qty !== 0 ? step : snapped;
+		}
 	}
 
 	if (batch && result !== 0) {
