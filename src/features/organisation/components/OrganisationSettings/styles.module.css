@@ -8,11 +8,4 @@
 		line-height: 1.41176;
 		margin-bottom: calc(var(--space-4) + 11px);
 	}
-
-	.settings {
-		&:global(.cl-page:has(&)) {
-			flex: 1 1 auto;
-			place-self: stretch;
-		}
-	}
 }

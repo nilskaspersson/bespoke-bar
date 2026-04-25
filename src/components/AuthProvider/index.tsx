@@ -2,7 +2,6 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import { ui } from "@clerk/ui";
 import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { useTheme } from "@/hooks/useTheme";
@@ -23,9 +22,5 @@ export function AuthProvider({ children }: PropsWithChildren) {
 			[isMounted, resolvedTheme],
 		);
 
-	return (
-		<ClerkProvider appearance={appearance} ui={ui}>
-			{children}
-		</ClerkProvider>
-	);
+	return <ClerkProvider appearance={appearance}>{children}</ClerkProvider>;
 }

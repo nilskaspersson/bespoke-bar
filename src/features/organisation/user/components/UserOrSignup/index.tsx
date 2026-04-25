@@ -6,6 +6,20 @@ import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { Skeleton } from "@/ui/Skeleton";
 
+const userButtonAppearance = {
+	elements: {
+		userButtonBox: {
+			flexDirection: "row-reverse" as const,
+			gap: 0,
+		},
+		userButtonOuterIdentifier: {
+			whiteSpace: "nowrap" as const,
+			textOverflow: "ellipsis" as const,
+			overflow: "hidden" as const,
+		},
+	},
+};
+
 export function UserOrSignup() {
 	return (
 		<Suspense fallback={<UserOrSignupSkeleton />}>
@@ -24,7 +38,7 @@ export function UserOrSignup() {
 			</Show>
 
 			<Show when="signed-in">
-				<UserButton showName />
+				<UserButton showName appearance={userButtonAppearance} />
 			</Show>
 		</Suspense>
 	);
