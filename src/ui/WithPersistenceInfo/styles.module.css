@@ -1,0 +1,62 @@
+@layer ui {
+	.root {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
+
+	.indicator {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		color: var(--mauve-9);
+		cursor: help;
+	}
+
+	.savedHint {
+		--slide-offset: var(--space-3);
+
+		/* Reset native popover defaults. */
+		width: auto;
+		height: auto;
+		margin: 0;
+		border: none;
+		background: transparent;
+		overflow: visible;
+
+		/* Anchor to the icon's right side. */
+		position-area: right;
+		margin-left: var(--space-2);
+
+		font-size: var(--size-1);
+		font-weight: 500;
+		color: var(--iris-11);
+		white-space: nowrap;
+
+		/* Closed state — sits tucked against the anchor. */
+		opacity: 0;
+		transform: translateX(calc(var(--slide-offset) * -1));
+
+		transition-property: opacity, transform, display, overlay;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+		transition-behavior: allow-discrete;
+
+		&:popover-open {
+			opacity: 1;
+			transform: translateX(0);
+
+			/**
+			 * Skip the entry animation for users who prefer reduced motion —
+			 * exit transitions still run since they're driven by the
+			 * always-applied closed-state rules above.
+			 */
+			@media (prefers-reduced-motion: no-preference) {
+				@starting-style {
+					opacity: 0;
+					transform: translateX(calc(var(--slide-offset) * -1));
+				}
+			}
+		}
+	}
+}

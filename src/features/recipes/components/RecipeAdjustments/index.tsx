@@ -15,6 +15,10 @@ import type { UnitSystems } from "@/features/units/utils/convert";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
+import {
+	usePersistenceInfo,
+	WithPersistenceInfo,
+} from "@/ui/WithPersistenceInfo";
 
 type RecipeAdjustmentsValue = {
 	servings: number;
@@ -115,6 +119,9 @@ export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 		setWithBestUnit,
 	} = useRecipeAdjustments();
 
+	const roundingPersistence = usePersistenceInfo();
+	const bestUnitPersistence = usePersistenceInfo();
+
 	return (
 		<Grid gap={4} {...props}>
 			<SelectServings
@@ -130,19 +137,35 @@ export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 			/>
 
 			<Grid gap={2}>
-				<Checkbox
-					label="With rounding"
-					size="small"
-					checked={withRounding}
-					onChange={(e) => setWithRounding(e.target.checked)}
-				/>
+				<WithPersistenceInfo
+					persistent="session"
+					persistence={roundingPersistence}
+				>
+					<Checkbox
+						label="With rounding"
+						size="small"
+						checked={withRounding}
+						onChange={(e) => {
+							setWithRounding(e.target.checked);
+							roundingPersistence.notify();
+						}}
+					/>
+				</WithPersistenceInfo>
 
-				<Checkbox
-					label="Convert to best unit"
-					size="small"
-					checked={withBestUnit}
-					onChange={(e) => setWithBestUnit(e.target.checked)}
-				/>
+				<WithPersistenceInfo
+					persistent="session"
+					persistence={bestUnitPersistence}
+				>
+					<Checkbox
+						label="Convert to best unit"
+						size="small"
+						checked={withBestUnit}
+						onChange={(e) => {
+							setWithBestUnit(e.target.checked);
+							bestUnitPersistence.notify();
+						}}
+					/>
+				</WithPersistenceInfo>
 			</Grid>
 		</Grid>
 	);

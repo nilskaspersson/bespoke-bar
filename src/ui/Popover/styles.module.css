@@ -80,6 +80,12 @@
 			inset: auto anchor(right) anchor(top) auto;
 		}
 
+		&.right {
+			--area: right;
+			--fallback: flip-inline;
+			--slide-x: calc(var(--offset) * -1);
+		}
+
 		/** Outer-edge inset (`anchor(bottom)`) works for both element and point anchors. */
 		&.bottom-start {
 			--area: none;

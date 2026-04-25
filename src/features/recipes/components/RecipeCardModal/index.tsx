@@ -30,6 +30,10 @@ import { Dialog } from "@/ui/Dialog";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import {
+	usePersistenceInfo,
+	WithPersistenceInfo,
+} from "@/ui/WithPersistenceInfo";
 import styles from "./styles.module.css";
 
 const BOXES_VARIANTS = {
@@ -128,6 +132,9 @@ function RecipeCardModalContent({
 	const canvasRef = useParticleEffect(cardRef, particlesEnabled);
 	const tilt = useCardTilt();
 
+	const particlesPersistence = usePersistenceInfo();
+	const tiltPersistence = usePersistenceInfo();
+
 	const { deferredServings, conversionSystem, withRounding, withBestUnit } =
 		useRecipeAdjustments();
 
@@ -212,19 +219,35 @@ function RecipeCardModalContent({
 					>
 						<WakeLock size="small" />
 
-						<Checkbox
-							label="Particle effects"
-							size="small"
-							checked={particlesEnabled}
-							onChange={(e) => setParticlesEnabled(e.target.checked)}
-						/>
+						<WithPersistenceInfo
+							persistent="local"
+							persistence={particlesPersistence}
+						>
+							<Checkbox
+								label="Particle effects"
+								size="small"
+								checked={particlesEnabled}
+								onChange={(e) => {
+									setParticlesEnabled(e.target.checked);
+									particlesPersistence.notify();
+								}}
+							/>
+						</WithPersistenceInfo>
 
-						<Checkbox
-							label="3D Card"
-							size="small"
-							checked={tiltEnabled}
-							onChange={(e) => setTiltEnabled(e.target.checked)}
-						/>
+						<WithPersistenceInfo
+							persistent="local"
+							persistence={tiltPersistence}
+						>
+							<Checkbox
+								label="3D Card"
+								size="small"
+								checked={tiltEnabled}
+								onChange={(e) => {
+									setTiltEnabled(e.target.checked);
+									tiltPersistence.notify();
+								}}
+							/>
+						</WithPersistenceInfo>
 					</m.div>
 				</m.div>
 			</div>
