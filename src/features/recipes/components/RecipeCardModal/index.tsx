@@ -29,6 +29,7 @@ import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
+import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 const BOXES_VARIANTS = {
@@ -135,36 +136,53 @@ function RecipeCardModalContent({
 			<canvas ref={canvasRef} className={styles.particles} />
 
 			<div className={styles.content}>
-				<Grid gap={1}>
-					<MotionRecipeCard
-						withMotion
-						ref={cardRef}
-						recipe={recipe}
-						layout="position"
-						onMouseMove={tiltEnabled ? tilt.onMouseMove : undefined}
-						onMouseLeave={tiltEnabled ? tilt.onMouseLeave : undefined}
-						style={tiltEnabled ? tilt.style : undefined}
-					>
-						<RecipeCard
+				<Grid gap={4} className={styles.primary}>
+					<Grid gap={1}>
+						<MotionRecipeCard
+							withMotion
+							ref={cardRef}
 							recipe={recipe}
-							servings={deferredServings}
-							convertUnits={conversionSystem}
-							className={styles.card}
-							withRounding={withRounding}
-							withBestUnit={withBestUnit}
-							withLink
-							nameAdornment={
-								<RecipeNameAdornment servings={deferredServings} />
-							}
-						/>
-					</MotionRecipeCard>
+							layout="position"
+							onMouseMove={tiltEnabled ? tilt.onMouseMove : undefined}
+							onMouseLeave={tiltEnabled ? tilt.onMouseLeave : undefined}
+							style={tiltEnabled ? tilt.style : undefined}
+						>
+							<RecipeCard
+								recipe={recipe}
+								servings={deferredServings}
+								convertUnits={conversionSystem}
+								className={styles.card}
+								withRounding={withRounding}
+								withBestUnit={withBestUnit}
+								withLink
+								nameAdornment={
+									<RecipeNameAdornment servings={deferredServings} />
+								}
+							/>
+						</MotionRecipeCard>
 
-					<RecipeCardActions
-						recipe={recipe}
-						isFavorite={isFavorite}
-						onDelete={clear}
-						onToggleFavorite={setIsFavorite}
-					/>
+						<RecipeCardActions
+							recipe={recipe}
+							isFavorite={isFavorite}
+							onDelete={clear}
+							onToggleFavorite={setIsFavorite}
+						/>
+					</Grid>
+
+					{recipe.description ? (
+						<m.div
+							variants={BOXES_VARIANTS}
+							initial="initial"
+							animate="animate"
+							className={styles.meta}
+						>
+							<m.div variants={BOX_VARIANTS}>
+								<div className={styles.box}>
+									<Text>{recipe.description}</Text>
+								</div>
+							</m.div>
+						</m.div>
+					) : null}
 				</Grid>
 
 				<m.div

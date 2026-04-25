@@ -47,7 +47,7 @@ export function RecipeCard<T extends BaseRecipe>({
 
 	return (
 		<Grid
-			gap={4}
+			gap={5}
 			className={clsx(styles.card, className)}
 			alignContent="space-between"
 		>
@@ -110,23 +110,13 @@ export function RecipeCard<T extends BaseRecipe>({
 				</Grid>
 			)}
 
-			{recipe.instructions || recipe.garnish ? (
-				<Grid gap={2}>
-					{recipe.instructions ? (
-						<Text as="p" size={3} serif>
-							{recipe.instructions}
-						</Text>
-					) : null}
-
-					{recipe.garnish ? (
-						<Text as="p" size={3} serif>
-							<Text as="span" heavy>
-								Garnish:
-							</Text>{" "}
-							{recipe.garnish}
-						</Text>
-					) : null}
-				</Grid>
+			{recipe.garnish ? (
+				<Text as="p" size={3} serif>
+					<Text as="span" heavy>
+						Garnish:
+					</Text>{" "}
+					{recipe.garnish}
+				</Text>
 			) : null}
 
 			{children}
