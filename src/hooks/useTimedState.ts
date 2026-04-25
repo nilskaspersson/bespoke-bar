@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useState } from "react";
+import { useScheduledCallback } from "@/hooks/useScheduledCallback";
 
 /**
  * Creates a permanent reference to a value, with a function to temporarily
@@ -9,38 +10,17 @@ import { useCallback, useEffect, useRef, useState } from "react";
 export function useTimedState<T>(
 	originalValue: T,
 	timeout: number,
-): [T, (temporaryValue: T) => void] {
+): [T, (temporaryValue: T, overrideTimeout?: number) => void] {
 	const [value, setValue] = useState<T>(originalValue);
-	const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+	const schedule = useScheduledCallback();
 
 	const setTimedValue = useCallback(
 		(temporaryValue: T, overrideTimeout?: number) => {
-			/**
-			 * Clear any existing timeout
-			 */
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
-
 			setValue(temporaryValue);
-
-			/**
-			 * Schedule a revert back to the original value
-			 */
-			timeoutRef.current = setTimeout(() => {
-				setValue(originalValue);
-			}, overrideTimeout ?? timeout);
+			schedule(() => setValue(originalValue), overrideTimeout ?? timeout);
 		},
-		[originalValue, timeout],
+		[originalValue, timeout, schedule],
 	);
-
-	useEffect(() => {
-		return () => {
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
-		};
-	}, []);
 
 	return [value, setTimedValue];
 }
