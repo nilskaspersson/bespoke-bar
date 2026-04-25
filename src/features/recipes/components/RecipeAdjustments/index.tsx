@@ -138,7 +138,7 @@ export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 				/>
 
 				<Checkbox
-					label="With best unit"
+					label="Convert to best unit"
 					size="small"
 					checked={withBestUnit}
 					onChange={(e) => setWithBestUnit(e.target.checked)}
