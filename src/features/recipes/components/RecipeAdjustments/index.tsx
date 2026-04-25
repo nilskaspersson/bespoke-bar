@@ -12,6 +12,7 @@ import {
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
 import type { UnitSystems } from "@/features/units/utils/convert";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 
@@ -47,8 +48,16 @@ export function RecipeAdjustmentsProvider({
 	const [conversionSystem, setConversionSystem] = useState<UnitSystems | null>(
 		null,
 	);
-	const [withRounding, setWithRounding] = useState(true);
-	const [withBestUnit, setWithBestUnit] = useState(true);
+	const [withRounding, setWithRounding] = useLocalStorage(
+		"recipe-with-rounding",
+		true,
+		"session",
+	);
+	const [withBestUnit, setWithBestUnit] = useLocalStorage(
+		"recipe-with-best-unit",
+		true,
+		"session",
+	);
 
 	const value = useMemo<RecipeAdjustmentsValue>(
 		() => ({
@@ -62,7 +71,15 @@ export function RecipeAdjustmentsProvider({
 			setWithRounding,
 			setWithBestUnit,
 		}),
-		[servings, deferredServings, conversionSystem, withRounding, withBestUnit],
+		[
+			servings,
+			deferredServings,
+			conversionSystem,
+			withRounding,
+			withBestUnit,
+			setWithRounding,
+			setWithBestUnit,
+		],
 	);
 
 	return (
