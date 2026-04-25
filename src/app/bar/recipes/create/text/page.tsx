@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";
@@ -25,11 +24,9 @@ async function BulkCreateRecipeWithAuth() {
 	const ingredients = await getCachedIngredients(orgId);
 
 	return (
-		<OrgProvider>
-			<BulkDraftRecipesForm
-				ingredients={ingredients}
-				createRecipes={createRecipesWithSpecsFromData}
-			/>
-		</OrgProvider>
+		<BulkDraftRecipesForm
+			ingredients={ingredients}
+			createRecipes={createRecipesWithSpecsFromData}
+		/>
 	);
 }

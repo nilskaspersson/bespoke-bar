@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -65,8 +64,6 @@ async function EditIngredientWithAuth({
 	}
 
 	return (
-		<OrgProvider>
-			<EditIngredientPageForm ingredient={ingredient} redirectTo={returnTo} />
-		</OrgProvider>
+		<EditIngredientPageForm ingredient={ingredient} redirectTo={returnTo} />
 	);
 }

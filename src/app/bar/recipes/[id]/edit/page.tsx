@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
@@ -56,7 +55,7 @@ async function RecipeEditWithAuth({ params }: Props) {
 	}
 
 	return (
-		<OrgProvider>
+		<>
 			<nav>
 				<LinkButton
 					href={getRecipeUrl(recipe)}
@@ -70,6 +69,6 @@ async function RecipeEditWithAuth({ params }: Props) {
 			</nav>
 
 			<RecipeForm recipe={recipe} ingredients={ingredients} />
-		</OrgProvider>
+		</>
 	);
 }

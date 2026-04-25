@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
@@ -51,12 +50,10 @@ async function RecipeContent({ params }: Props) {
 	}
 
 	return (
-		<OrgProvider>
-			<RecipeArticle
-				recipe={recipe}
-				isFavorite={favoriteRecipeIds.includes(recipe.id)}
-			/>
-		</OrgProvider>
+		<RecipeArticle
+			recipe={recipe}
+			isFavorite={favoriteRecipeIds.includes(recipe.id)}
+		/>
 	);
 }
 

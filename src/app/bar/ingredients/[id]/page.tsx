@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
@@ -65,7 +64,7 @@ async function IngredientWithAuth({ params }: Props) {
 	);
 
 	return (
-		<OrgProvider>
+		<>
 			<Grid gap={4} justifyContent="center" className={styles.content}>
 				<header>
 					{ingredient.category ? (
@@ -140,7 +139,7 @@ async function IngredientWithAuth({ params }: Props) {
 					<RecipesList recipes={recipesUsingIngredient} withActions />
 				</Grid>
 			) : null}
-		</OrgProvider>
+		</>
 	);
 }
 

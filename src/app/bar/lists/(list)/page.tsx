@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { type ReactNode, Suspense } from "react";
-import { OrgProvider } from "@/components/OrgProvider";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
 import { RecipeListTable } from "@/features/lists/components/RecipeListTable";
@@ -46,11 +45,7 @@ export default function ListsPage() {
 async function ListsWithAuth() {
 	const { orgId } = await authOrForbidden();
 
-	return (
-		<OrgProvider>
-			<RecipeListData orgId={orgId} />
-		</OrgProvider>
-	);
+	return <RecipeListData orgId={orgId} />;
 }
 
 async function ListsPageContent({ children }: { children: ReactNode }) {
