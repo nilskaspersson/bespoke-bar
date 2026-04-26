@@ -1,10 +1,10 @@
 import { clsx } from "clsx";
 import type { SVGAttributes } from "react";
+import sprite from "@/libs/icons/sprite.svg";
+import type { IconName } from "@/libs/icons/types";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { Scale } from "@/utils/types";
-import iconsSvg from "./icons.svg";
 import styles from "./styles.module.css";
-import type { IconName } from "./types";
 
 type Props = {
 	size?: Scale;
@@ -32,7 +32,7 @@ export function Icon({
 				}),
 			)}
 		>
-			{name ? <use href={`${iconsSvg.src}#${name}`} /> : children}
+			{name ? <use href={`${sprite.src}#${name}`} /> : children}
 		</svg>
 	);
 }

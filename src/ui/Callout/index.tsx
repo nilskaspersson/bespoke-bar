@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
+import type { IconName } from "@/libs/icons/types";
 import { Icon } from "@/ui/Icon";
-import type { IconName } from "@/ui/Icon/types";
 import { Text } from "@/ui/Text";
 import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { Scale, SystemColor } from "@/utils/types";

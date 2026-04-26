@@ -4,8 +4,8 @@ import { clsx } from "clsx";
 import { type ReactNode, useCallback } from "react";
 import { type UsePopoverReturn, usePopover } from "@/hooks/usePopover";
 import { useScheduledCallback } from "@/hooks/useScheduledCallback";
+import type { IconName } from "@/libs/icons/types";
 import { Icon } from "@/ui/Icon";
-import type { IconName } from "@/ui/Icon/types";
 import type { Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 

@@ -2,8 +2,8 @@
 
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import type { IconName } from "@/libs/icons/types";
 import { Icon } from "@/ui/Icon";
-import type { IconName } from "@/ui/Icon/types";
 import { Text } from "@/ui/Text";
 import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";

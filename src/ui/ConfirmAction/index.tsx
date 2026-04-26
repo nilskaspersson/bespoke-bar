@@ -4,10 +4,10 @@ import type { ComponentProps, PropsWithChildren } from "react";
 import { useConfirmSubmit } from "@/hooks/useConfirmSubmit";
 import { useDialog } from "@/hooks/useDialog";
 import { useGracePeriod } from "@/hooks/useGracePeriod";
+import type { IconName } from "@/libs/icons/types";
 import { Alert } from "@/ui/Alert";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import type { IconName } from "@/ui/Icon/types";
 import { SubmitButton } from "@/ui/SubmitButton";
 
 export function ConfirmAction({
