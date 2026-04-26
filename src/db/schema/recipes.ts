@@ -17,12 +17,13 @@ import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
 import { glasswareEnum } from "@/db/schema/glassware";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
-import { RecipeTagsTable } from "@/db/schema/recipeTags";
+import { type RecipeTag, RecipeTagsTable } from "@/db/schema/recipeTags";
 import {
 	type DraftSpecWithDraftIngredient,
 	SpecsTable,
 	type SpecWithIngredient,
 } from "@/db/schema/specs";
+import type { Tag } from "@/db/schema/tags";
 import type { Identity } from "@/utils/types";
 import type { Keyed } from "@/utils/withKey";
 
@@ -65,6 +66,12 @@ export type Recipe = typeof RecipesTable.$inferSelect;
 
 export type RecipeWithSpecs = Recipe & {
 	specs: SpecWithIngredient[];
+};
+
+export type RecipeTagWithTag = RecipeTag & { tag: Tag };
+
+export type RecipeWithSpecsAndTags = RecipeWithSpecs & {
+	tags: RecipeTagWithTag[];
 };
 
 export type InsertRecipe = Omit<

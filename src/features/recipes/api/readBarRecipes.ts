@@ -15,6 +15,11 @@ const preparedReadBarRecipes = db.query.RecipesTable.findMany({
 				ingredient: true,
 			},
 		},
+		tags: {
+			with: {
+				tag: true,
+			},
+		},
 	},
 	orderBy: [desc(RecipesTable.createdAt)],
 }).prepare("readBarRecipes");
