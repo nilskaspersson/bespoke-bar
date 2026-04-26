@@ -17,6 +17,7 @@ import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
 import { glasswareEnum } from "@/db/schema/glassware";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
+import { RecipeTagsTable } from "@/db/schema/recipeTags";
 import {
 	type DraftSpecWithDraftIngredient,
 	SpecsTable,
@@ -62,6 +63,7 @@ export const RecipesTable = pgTable(
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({
 	specs: many(SpecsTable),
 	favorites: many(RecipeFavoritesTable),
+	tags: many(RecipeTagsTable),
 }));
 
 export type Recipe = typeof RecipesTable.$inferSelect;
