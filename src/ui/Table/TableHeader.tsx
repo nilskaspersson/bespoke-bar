@@ -5,9 +5,9 @@ import {
 } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
+import type { IconName } from "@/libs/icons/types";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import type { IconName } from "@/ui/Icon/types";
 import styles from "./styles.module.css";
 
 const SORT_ICON_MAP = new Map<SortDirection, IconName>([

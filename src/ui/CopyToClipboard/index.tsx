@@ -1,10 +1,10 @@
 "use client";
 
+import type { IconName } from "@/libs/icons/types";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { toast } from "@/ui/Toast";
 import type { Scale } from "@/utils/types";
-import type { IconName } from "../Icon/types";
 
 export function CopyToClipboard({
 	children,

@@ -3,7 +3,7 @@
 import type { ChangeEventHandler } from "react";
 import { ThemeSchema } from "@/app/_theme/constants";
 import { useTheme } from "@/hooks/useTheme";
-import type { IconName } from "@/ui/Icon/types";
+import type { IconName } from "@/libs/icons/types";
 import { OptionsSwitch } from "@/ui/OptionsSwitch";
 import { withKey } from "@/utils/withKey";
 
