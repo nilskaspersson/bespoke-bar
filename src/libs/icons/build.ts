@@ -1,23 +1,18 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { getIconData } from "@iconify/utils";
 import lucide from "@iconify-json/lucide/icons.json" with { type: "json" };
 import { ICONS } from "./config.ts";
 
 const start = performance.now();
-const here = join(fileURLToPath(import.meta.url), "..");
+const here = import.meta.dirname;
 const kits = { lucide };
 
 function loadLocal(name: string) {
 	const svg = readFileSync(join(here, "svgs", `${name}.svg`), "utf8");
-	const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1];
-	if (!viewBox) throw new Error(`No viewBox in svgs/${name}.svg`);
-	const body = svg
-		.replace(/^[\s\S]*?<svg[^>]*>/, "")
-		.replace(/<\/svg>\s*$/, "")
-		.trim();
-	return { viewBox, body };
+	const m = svg.match(/<svg[^>]*viewBox="([^"]+)"[^>]*>([\s\S]*?)<\/svg>/);
+	if (!m) throw new Error(`Invalid SVG: svgs/${name}.svg`);
+	return { viewBox: m[1], body: m[2].trim() };
 }
 
 function loadFromKit(kit: keyof typeof kits, name: string) {
@@ -26,11 +21,13 @@ function loadFromKit(kit: keyof typeof kits, name: string) {
 	return { viewBox: `0 0 ${data.width} ${data.height}`, body: data.body };
 }
 
-const localNames = Object.keys(ICONS).sort();
+const sortedIcons = Object.entries(ICONS).sort(([a], [b]) =>
+	a.localeCompare(b),
+);
+const localNames = sortedIcons.map(([n]) => n);
 
-const symbols = localNames
-	.map((name) => {
-		const source = ICONS[name as keyof typeof ICONS];
+const symbols = sortedIcons
+	.map(([name, source]) => {
 		const { viewBox, body } =
 			"local" in source
 				? loadLocal(name)
