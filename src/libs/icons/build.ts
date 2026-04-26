@@ -1,17 +1,16 @@
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { getIconData } from "@iconify/utils";
 import lucide from "@iconify-json/lucide/icons.json" with { type: "json" };
-import { ICONS } from "./config";
+import { ICONS } from "./config.ts";
 
+const start = performance.now();
 const here = join(fileURLToPath(import.meta.url), "..");
-const root = join(here, "../../..");
-const svgsDir = join(here, "svgs");
 const kits = { lucide };
 
 function loadLocal(name: string) {
-	const svg = readFileSync(join(svgsDir, `${name}.svg`), "utf8");
+	const svg = readFileSync(join(here, "svgs", `${name}.svg`), "utf8");
 	const viewBox = svg.match(/viewBox="([^"]+)"/)?.[1];
 	if (!viewBox) throw new Error(`No viewBox in svgs/${name}.svg`);
 	const body = svg
@@ -25,22 +24,6 @@ function loadFromKit(kit: keyof typeof kits, name: string) {
 	const data = getIconData(kits[kit], name);
 	if (!data) throw new Error(`Icon "${name}" not found in kit "${kit}"`);
 	return { viewBox: `0 0 ${data.width} ${data.height}`, body: data.body };
-}
-
-function findUnused(names: string[]) {
-	const re = new RegExp(`["'](${names.join("|")})["']`, "g");
-	const found = new Set<string>();
-	function walk(dir: string) {
-		for (const entry of readdirSync(dir, { withFileTypes: true })) {
-			const p = join(dir, entry.name);
-			if (entry.isDirectory()) walk(p);
-			else if (/\.tsx?$/.test(entry.name) && !p.startsWith(here)) {
-				for (const m of readFileSync(p, "utf8").matchAll(re)) found.add(m[1]);
-			}
-		}
-	}
-	walk(join(root, "src"));
-	return names.filter((n) => !found.has(n));
 }
 
 const localNames = Object.keys(ICONS).sort();
@@ -84,12 +67,6 @@ writeFileSync(
 );
 writeFileSync(join(here, "kits.types.ts"), `${header}\n${kitTypeExports}\n`);
 
-const unused = findUnused(localNames);
 console.log(
-	`Built ${localNames.length} icons → src/libs/icons/{sprite.svg,types.ts,kits.types.ts}`,
+	`Built ${localNames.length} icons in ${Math.round(performance.now() - start)}ms → src/libs/icons/{sprite.svg,types.ts,kits.types.ts}`,
 );
-if (unused.length) {
-	console.warn(
-		`\n${unused.length} icon(s) declared in config.ts but not referenced in src/:\n  ${unused.join(", ")}`,
-	);
-}
