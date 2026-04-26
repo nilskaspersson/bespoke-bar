@@ -21,11 +21,7 @@ export const RecipeFavoritesTable = pgTable(
 			table.userId,
 			table.recipeId,
 		),
-		index("idx_recipe_favorites_user_org").on(
-			table.orgId,
-			table.userId,
-			table.addedAt.desc(),
-		),
+		index("idx_recipe_favorites_user_org").on(table.orgId, table.userId),
 		index("idx_recipe_favorites_recipe").on(table.recipeId),
 	],
 );

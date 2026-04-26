@@ -51,12 +51,7 @@ export const RecipesTable = pgTable(
 		orgId: text("org_id").notNull(),
 	},
 	(table) => [
-		index("idx_recipes_org").on(table.orgId, table.createdAt.desc()),
-		index("idx_recipes_org_archived_created").on(
-			table.orgId,
-			table.archivedAt,
-			table.createdAt.desc(),
-		),
+		index("idx_recipes_org_archived").on(table.orgId, table.archivedAt),
 	],
 );
 

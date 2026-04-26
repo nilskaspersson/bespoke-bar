@@ -39,12 +39,7 @@ export const RecipeListsTable = pgTable(
 			table.orgId,
 		),
 		index("idx_lists_featured_org").on(table.orgId, table.isFeatured),
-		index("idx_lists_org").on(table.orgId, table.createdAt.desc()),
-		index("idx_lists_org_public").on(
-			table.orgId,
-			table.isPublic,
-			table.createdAt.desc(),
-		),
+		index("idx_lists_org_public").on(table.orgId, table.isPublic),
 	],
 );
 
