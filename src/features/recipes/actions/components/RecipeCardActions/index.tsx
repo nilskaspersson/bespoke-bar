@@ -2,7 +2,7 @@
 
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { CreateListEntryButton } from "@/features/lists/entries/components/CreateListEntryButton";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { RecipeActionsToggle } from "@/features/recipes/actions/components/RecipeActionsToggle";
@@ -13,7 +13,7 @@ import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 type Props = {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithRelations;
 	isFavorite?: boolean;
 	onDelete?: () => void;
 	onToggleFavorite?: (isFavorite: boolean) => void;

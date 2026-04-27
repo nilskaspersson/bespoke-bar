@@ -70,7 +70,7 @@ export type RecipeWithSpecs = Recipe & {
 
 export type RecipeTagWithTag = RecipeTag & { tag: Tag };
 
-export type RecipeWithSpecsAndTags = RecipeWithSpecs & {
+export type RecipeWithRelations = RecipeWithSpecs & {
 	tags: RecipeTagWithTag[];
 };
 

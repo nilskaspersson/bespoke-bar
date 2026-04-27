@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { ingredientEditorStore } from "@/features/ingredients/stores/ingredientEditor";
 
 type RecipeCardModalState = {
-	recipe: RecipeWithSpecs | null;
+	recipe: RecipeWithRelations | null;
 	isFavorite: boolean;
 	mounted: boolean;
-	setRecipe: (recipe: RecipeWithSpecs, isFavorite: boolean) => void;
+	setRecipe: (recipe: RecipeWithRelations, isFavorite: boolean) => void;
 	setIsFavorite: (isFavorite: boolean) => void;
 	updateIngredient: (updated: Ingredient) => void;
 	clear: () => void;

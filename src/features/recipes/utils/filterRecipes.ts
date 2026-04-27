@@ -11,18 +11,18 @@ function getRecipeSearchFields(recipe: RecipeWithSpecs): string[] {
 	];
 }
 
-export function createRecipeSearchIndex(
-	recipes: RecipeWithSpecs[] | undefined,
+export function createRecipeSearchIndex<T extends RecipeWithSpecs>(
+	recipes: T[] | undefined,
 ): Map<string, string> {
 	if (!recipes) return new Map();
 	return createSearchIndex(recipes, getRecipeId, getRecipeSearchFields);
 }
 
-export function filterRecipes(
-	recipes: RecipeWithSpecs[] | undefined,
+export function filterRecipes<T extends RecipeWithSpecs>(
+	recipes: T[] | undefined,
 	index: Map<string, string>,
 	query: string,
-): RecipeWithSpecs[] {
+): T[] {
 	if (!recipes) return [];
 	return searchByIndex(recipes, index, getRecipeId, query);
 }

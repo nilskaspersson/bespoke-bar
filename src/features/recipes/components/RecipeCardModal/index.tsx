@@ -5,7 +5,7 @@ import { m } from "motion/react";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { WakeLock } from "@/components/WakeLock";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import {
@@ -114,7 +114,7 @@ function RecipeCardModalContent({
 	recipe,
 	isFavorite,
 }: {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithRelations;
 	isFavorite: boolean;
 }) {
 	const clear = useRecipeCardModal((s) => s.clear);

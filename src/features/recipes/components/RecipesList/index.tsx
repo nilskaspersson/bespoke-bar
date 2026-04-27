@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import type { ComponentProps } from "react";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
@@ -22,7 +22,7 @@ export function RecipesList({
 	withCreate,
 	...props
 }: ComponentProps<"ul"> & {
-	recipes: RecipeWithSpecs[];
+	recipes: RecipeWithRelations[];
 	favoriteRecipeIds?: string[];
 	withActions?: boolean;
 	withMotion?: boolean;
