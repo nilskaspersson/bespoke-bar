@@ -45,8 +45,7 @@ export function RecipeTagsAction({
 	 */
 	const [optimisticTagOptions, addOptimisticTag] = useOptimistic<Tag[], Tag>(
 		tagOptions,
-		(current, tag) =>
-			[...current, tag].sort((a, b) => a.name.localeCompare(b.name)),
+		(current, tag) => [...current, tag],
 	);
 
 	const tagsById = useMemo(() => {

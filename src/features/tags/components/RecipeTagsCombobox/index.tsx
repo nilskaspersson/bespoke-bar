@@ -18,6 +18,7 @@ import { Kbd } from "@/ui/Kbd";
 import { Lightbox } from "@/ui/Lightbox";
 import { Popover } from "@/ui/Popover";
 import { Text } from "@/ui/Text";
+import { collator } from "@/utils/collator";
 import { handleKey, matchesShortcut } from "@/utils/keyboard";
 import {
 	createSearchIndex,
@@ -168,27 +169,29 @@ export function RecipeTagsCombobox({
 				{suggestions.length > 0 || showCreate ? (
 					<div className={styles.suggestions}>
 						<Flex as="ul" wrap gap={1} className={styles.suggestionsList}>
-							{suggestions.map((tag) => {
-								const isAssigned = draftSet.has(tag.id);
+							{suggestions
+								.toSorted((a, b) => collator.compare(a.name, b.name))
+								.map((tag) => {
+									const isAssigned = draftSet.has(tag.id);
 
-								return (
-									<li key={tag.id}>
-										<Chip
-											as="button"
-											type="button"
-											onClick={() => handleSuggestionClick(tag.id)}
-											variant={isAssigned ? "filled" : "outline"}
-											color={isAssigned ? "heavy" : "accent"}
-											size={1}
-											aria-pressed={isAssigned}
-											className={styles.tag}
-										>
-											<Icon name="tag" size={0} />
-											{tag.name}
-										</Chip>
-									</li>
-								);
-							})}
+									return (
+										<li key={tag.id}>
+											<Chip
+												as="button"
+												type="button"
+												onClick={() => handleSuggestionClick(tag.id)}
+												variant={isAssigned ? "filled" : "outline"}
+												color={isAssigned ? "heavy" : "accent"}
+												size={1}
+												aria-pressed={isAssigned}
+												className={styles.tag}
+											>
+												<Icon name="tag" size={0} />
+												{tag.name}
+											</Chip>
+										</li>
+									);
+								})}
 
 							{showCreate ? (
 								<li>
