@@ -14,6 +14,7 @@ type RecipeCardModalState = {
 		isFavorite: boolean,
 		tagOptions?: Tag[],
 	) => void;
+	syncRecipe: (recipe: RecipeWithRelations, tagOptions?: Tag[]) => void;
 	setIsFavorite: (isFavorite: boolean) => void;
 	updateIngredient: (updated: Ingredient) => void;
 	clear: () => void;
@@ -33,6 +34,13 @@ export const recipeCardModalStore = Object.assign(
 				tagOptions: tagOptions ?? null,
 				mounted: true,
 			});
+		},
+		/** Write-through update; skips dialog/mounted side-effects of setRecipe. */
+		syncRecipe: (recipe, tagOptions) => {
+			set((prev) => ({
+				recipe,
+				tagOptions: tagOptions ?? prev.tagOptions,
+			}));
 		},
 		setIsFavorite: (isFavorite) => {
 			set({ isFavorite });

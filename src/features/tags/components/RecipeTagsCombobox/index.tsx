@@ -17,6 +17,7 @@ import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
 import { Lightbox } from "@/ui/Lightbox";
 import { Popover } from "@/ui/Popover";
+import { Spinner } from "@/ui/Spinner";
 import { Text } from "@/ui/Text";
 import { collator } from "@/utils/collator";
 import { handleKey, matchesShortcut } from "@/utils/keyboard";
@@ -129,6 +130,7 @@ export function RecipeTagsCombobox({
 					onKeyDown={handleInputKeyDown}
 					autoComplete="off"
 					spellCheck={false}
+					aria-disabled={isCreating}
 					compact
 					fullWidth
 				/>
@@ -206,8 +208,12 @@ export function RecipeTagsCombobox({
 										aria-busy={isCreating}
 										className={styles.tag}
 									>
-										<Icon name="plus" size={0} />
-										New tag “{enterTarget}”
+										{isCreating ? (
+											<Spinner size={0} />
+										) : (
+											<Icon name="plus" size={0} />
+										)}
+										{isCreating ? "Creating…" : `New tag “${enterTarget}”`}
 									</Chip>
 								</li>
 							) : null}
