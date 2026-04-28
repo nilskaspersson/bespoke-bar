@@ -94,7 +94,6 @@ export function RecipeTagsAction({
 				variant="action"
 				{...buttonProps}
 				{...popover.triggerProps}
-				aria-label="Tags"
 				className={styles.trigger}
 			>
 				<Icon name="tags" size={1} />

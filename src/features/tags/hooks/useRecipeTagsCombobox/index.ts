@@ -40,22 +40,30 @@ export function useRecipeTagsCombobox({
 	const overLimit = draftedIds.length > MAX_TAGS_PER_RECIPE;
 	const isOverMax = deferredSearch.length > TAG_NAME_MAX_LENGTH;
 
+	const [isCreating, setIsCreating] = useState(false);
+
+	const toggleInDraft = (tagId: string, prev: string[] | null) => {
+		const current = prev ?? assignedTagIds;
+		return current.includes(tagId)
+			? current.filter((id) => id !== tagId)
+			: [...current, tagId];
+	};
+
 	const handleSuggestionClick = (tagId: string) => {
-		setDraft(
-			draftedIds.includes(tagId)
-				? draftedIds.filter((id) => id !== tagId)
-				: [...draftedIds, tagId],
-		);
+		setDraft((prev) => toggleInDraft(tagId, prev));
 	};
 
 	const handleCreate = async () => {
-		if (!deferredSearch || isOverMax) return;
+		if (isCreating || !deferredSearch || isOverMax) return;
+		setIsCreating(true);
 		try {
 			const tag = await onCreateTag(deferredSearch);
-			setDraft([...draftedIds, tag.id]);
+			setDraft((prev) => [...(prev ?? assignedTagIds), tag.id]);
 			setSearch("");
 		} catch {
 			// onCreateTag toasts on its own
+		} finally {
+			setIsCreating(false);
 		}
 	};
 
@@ -125,6 +133,7 @@ export function useRecipeTagsCombobox({
 		draftedIds,
 		overLimit,
 		isOverMax,
+		isCreating,
 		handleSuggestionClick,
 		handleCreate,
 		handleClearAll,

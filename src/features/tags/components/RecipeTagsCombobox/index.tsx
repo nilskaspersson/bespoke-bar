@@ -55,6 +55,7 @@ export function RecipeTagsCombobox({
 		draftedIds,
 		overLimit,
 		isOverMax,
+		isCreating,
 		handleSuggestionClick,
 		handleCreate,
 		handleClearAll,
@@ -119,10 +120,14 @@ export function RecipeTagsCombobox({
 				<Input
 					autoFocus
 					type="search"
+					name="tag-search"
+					aria-label="Search or create tag"
 					placeholder="Search or create…"
 					value={search}
 					onChange={(e) => setSearch(e.target.value)}
 					onKeyDown={handleInputKeyDown}
+					autoComplete="off"
+					spellCheck={false}
 					compact
 					fullWidth
 				/>
@@ -132,6 +137,7 @@ export function RecipeTagsCombobox({
 						size={1}
 						light={!isOverMax}
 						truncate
+						aria-live="polite"
 						className={clsx({
 							[styles.hidden]: !deferredSearch,
 							[styles.invalid]: isOverMax,
@@ -142,7 +148,7 @@ export function RecipeTagsCombobox({
 						) : (
 							<>
 								<Kbd shortcut="enter" visual /> to{" "}
-								{matchedTag ? "toggle" : "create"} "{enterTarget}"
+								{matchedTag ? "toggle" : "create"} “{enterTarget}”
 							</>
 						)}
 					</Text>
@@ -193,11 +199,12 @@ export function RecipeTagsCombobox({
 										color="accent"
 										size={1}
 										onClick={handleCreate}
-										aria-disabled={isOverMax}
+										aria-disabled={isOverMax || isCreating}
+										aria-busy={isCreating}
 										className={styles.tag}
 									>
 										<Icon name="plus" size={0} />
-										New tag "{enterTarget}"
+										New tag “{enterTarget}”
 									</Chip>
 								</li>
 							) : null}
