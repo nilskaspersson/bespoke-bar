@@ -127,6 +127,13 @@
       "when": 1777209193035,
       "tag": "0017_steady_sandman",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1777405887680,
+      "tag": "0018_daffy_electro",
+      "breakpoints": true
     }
   ]
 }
