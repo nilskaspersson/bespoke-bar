@@ -1,7 +1,6 @@
 import type { ComponentProps, ReactNode } from "react";
 import type { ButtonProps } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
-import styles from "./styles.module.css";
 
 export type ActionProps = {
 	variant?: ButtonProps["variant"];
@@ -21,10 +20,8 @@ export function EntityActions({
 	return (
 		<Flex as="menu" wrap alignItems="center" {...props}>
 			{children({
-				variant: "ghost",
-				size: "tiny",
+				variant: "action",
 				color: "light",
-				className: styles.action,
 				...actionProps,
 			})}
 		</Flex>

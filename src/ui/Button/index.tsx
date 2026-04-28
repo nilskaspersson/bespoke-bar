@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 type Props = {
 	icon?: boolean;
 	className?: string;
-	variant?: "solid" | "outline" | "base" | "ghost" | "text";
+	variant?: "solid" | "outline" | "base" | "ghost" | "text" | "action";
 	color?: SystemColor;
 	size?: "tiny" | "small" | "default" | "large";
 	fullWidth?: boolean;

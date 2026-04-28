@@ -1,0 +1,33 @@
+@layer feature {
+	.trigger {
+		&:not(:hover, :focus) {
+			color: var(--mauve-11);
+		}
+
+		transition:
+			transform var(--transition-duration--slow)
+			var(--transition-duration--slow),
+			opacity var(--transition-duration--slow) var(--transition-duration--slow),
+			color var(--transition-duration),
+			background-color var(--transition-duration);
+	}
+
+	@starting-style {
+		.trigger {
+			transform: translateY(calc(var(--space-2) * -1));
+			opacity: 0;
+		}
+	}
+
+	.popover {
+		--offset: var(--space-1);
+	}
+
+	.expand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		cursor: pointer;
+		justify-self: start;
+	}
+}

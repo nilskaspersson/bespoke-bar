@@ -20,6 +20,7 @@ import {
 	recipeCardModalStore,
 	useRecipeCardModal,
 } from "@/features/recipes/stores/recipeCardModal";
+import { RecipeTagsAction } from "@/features/tags/components/RecipeTagsAction";
 import { useCardTilt } from "@/hooks/useCardTilt";
 import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
@@ -27,6 +28,7 @@ import { useParticleEffect } from "@/hooks/useParticleEffect";
 import { Button } from "@/ui/Button";
 import { Checkbox } from "@/ui/Checkbox";
 import { Dialog } from "@/ui/Dialog";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
@@ -119,6 +121,7 @@ function RecipeCardModalContent({
 }) {
 	const clear = useRecipeCardModal((s) => s.clear);
 	const setIsFavorite = useRecipeCardModal((s) => s.setIsFavorite);
+	const tagOptions = useRecipeCardModal((s) => s.tagOptions);
 	const [particlesEnabled, setParticlesEnabled] = useLocalStorage(
 		"particles-enabled",
 		true,
@@ -168,12 +171,18 @@ function RecipeCardModalContent({
 							/>
 						</MotionRecipeCard>
 
-						<RecipeCardActions
-							recipe={recipe}
-							isFavorite={isFavorite}
-							onDelete={clear}
-							onToggleFavorite={setIsFavorite}
-						/>
+						<Flex gap={4} justifyContent="space-between">
+							{tagOptions ? (
+								<RecipeTagsAction recipe={recipe} tagOptions={tagOptions} />
+							) : null}
+
+							<RecipeCardActions
+								recipe={recipe}
+								isFavorite={isFavorite}
+								onDelete={clear}
+								onToggleFavorite={setIsFavorite}
+							/>
+						</Flex>
 					</Grid>
 
 					{recipe.description ? (

@@ -1,7 +1,0 @@
-@layer component {
-	.action {
-		display: flex;
-		align-items: center;
-		font-size: var(--size-1);
-	}
-}

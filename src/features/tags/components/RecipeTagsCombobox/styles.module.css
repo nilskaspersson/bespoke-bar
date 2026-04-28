@@ -1,0 +1,54 @@
+@layer feature {
+	.popover {
+		--offset: var(--space-1);
+	}
+
+	.surface {
+		display: grid;
+		grid-template-rows: auto auto 1fr auto;
+		gap: var(--space-2);
+		padding: var(--space-3);
+		width: 30ch;
+		min-height: 20rem;
+	}
+
+	.hidden {
+		visibility: hidden;
+	}
+
+	.counter {
+		flex: 0 0 auto;
+		white-space: nowrap;
+	}
+
+	.invalid {
+		color: var(--red-11);
+	}
+
+	.suggestions {
+		align-content: flex-start;
+		overflow-y: auto;
+		border: 1px dashed var(--mauve-6);
+		border-radius: var(--radius);
+		padding: var(--space-2);
+		background-color: var(--mauve-2);
+	}
+
+	.tag {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		cursor: pointer;
+		overflow-wrap: break-word;
+	}
+
+	.create {
+		border-color: var(--iris-7);
+		color: var(--iris-11);
+	}
+
+	.actions {
+		padding-top: var(--space-2);
+		border-top: 1px solid var(--mauve-6);
+	}
+}

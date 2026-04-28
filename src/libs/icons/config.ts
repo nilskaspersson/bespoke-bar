@@ -2,6 +2,8 @@
  * Source of truth for the icon sprite. Edit this file to add, rename, or
  * swap icons; then run `npm run icons:build` to regenerate `icons.svg` and
  * `types.ts`.
+ *
+ * https://icon-sets.iconify.design/lucide/
  */
 import type { LucideIconName } from "./kits.types";
 
@@ -58,6 +60,8 @@ export const ICONS = {
 	star: { kit: "lucide", name: "star" },
 	"sun-bright": { kit: "lucide", name: "sun" },
 	"table-list": { kit: "lucide", name: "table" },
+	tags: { kit: "lucide", name: "tags" },
+	tag: { kit: "lucide", name: "tag" },
 	trash: { kit: "lucide", name: "trash-2" },
 	"triangle-exclamation": { kit: "lucide", name: "triangle-alert" },
 	"wine-glass": { kit: "lucide", name: "wine" },

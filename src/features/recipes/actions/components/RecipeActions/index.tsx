@@ -1,7 +1,7 @@
 "use client";
 
 import { ShareAction } from "@/components/ShareAction";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { CreateListEntryButton } from "@/features/lists/entries/components/CreateListEntryButton";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
 import { DuplicateRecipeButton } from "@/features/recipes/actions/components/DuplicateRecipeButton";
@@ -29,7 +29,7 @@ export function RecipeActions({
 	onDelete,
 	onToggleFavorite,
 }: {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithRelations;
 	isFavorite?: boolean;
 	onDelete?: () => void;
 	onToggleFavorite?: (isFavorite: boolean) => void;

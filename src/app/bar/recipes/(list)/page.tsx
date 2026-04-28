@@ -10,6 +10,7 @@ import {
 	RecipesListSkeleton,
 } from "@/features/recipes/components/RecipesList";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
+import { getCachedTags } from "@/features/tags/api/listTags";
 import { authOrForbidden } from "@/utils/auth";
 
 export default async function RecipesPage() {
@@ -23,10 +24,11 @@ export default async function RecipesPage() {
 async function RecipeViewsWithData() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [recipes, favoriteRecipeIds, members] = await Promise.all([
+	const [recipes, favoriteRecipeIds, members, tagOptions] = await Promise.all([
 		getCachedBarRecipes(orgId),
 		getCachedUserFavoriteRecipeIds(orgId, userId),
 		readOrganisationMembers(),
+		getCachedTags(orgId),
 	]);
 
 	return (
@@ -35,6 +37,7 @@ async function RecipeViewsWithData() {
 				<RecipesList
 					recipes={recipes}
 					favoriteRecipeIds={favoriteRecipeIds}
+					tagOptions={tagOptions}
 					withActions
 				/>
 			}

@@ -3,12 +3,15 @@
 import clsx from "clsx";
 import type { ComponentProps } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
+import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
+import { RecipeTagsAction } from "@/features/tags/components/RecipeTagsAction";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { handleKey } from "@/utils/keyboard";
@@ -17,6 +20,7 @@ import styles from "./styles.module.css";
 export function RecipesList({
 	recipes,
 	favoriteRecipeIds,
+	tagOptions,
 	withActions,
 	withMotion = true,
 	withCreate,
@@ -24,6 +28,7 @@ export function RecipesList({
 }: ComponentProps<"ul"> & {
 	recipes: RecipeWithRelations[];
 	favoriteRecipeIds?: string[];
+	tagOptions?: Tag[];
 	withActions?: boolean;
 	withMotion?: boolean;
 	withCreate?: boolean;
@@ -43,7 +48,7 @@ export function RecipesList({
 				const isFavorite = favoriteIdSet.has(recipe.id);
 				const isSelected =
 					withActions && selectedRecipeId === recipe.id && modalMounted;
-				const selectRecipe = () => setRecipe(recipe, isFavorite);
+				const selectRecipe = () => setRecipe(recipe, isFavorite, tagOptions);
 
 				return (
 					<Grid as="li" gap={1} key={recipe.id} className={styles.item}>
@@ -70,7 +75,13 @@ export function RecipesList({
 						</MotionRecipeCard>
 
 						{withActions ? (
-							<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
+							<Flex gap={4} justifyContent="space-between">
+								{tagOptions ? (
+									<RecipeTagsAction recipe={recipe} tagOptions={tagOptions} />
+								) : null}
+
+								<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
+							</Flex>
 						) : undefined}
 					</Grid>
 				);

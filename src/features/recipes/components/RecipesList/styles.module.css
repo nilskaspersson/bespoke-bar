@@ -12,7 +12,7 @@
 	.item {
 		content-visibility: auto;
 		contain-intrinsic-size: auto var(--recipe-card-width) auto
-			var(--recipe-card-height);
+			calc(var(--recipe-card-height) + 24px);
 		overflow-clip-margin: 1rem;
 	}
 

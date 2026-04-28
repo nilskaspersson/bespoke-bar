@@ -1,6 +1,10 @@
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import { DEFAULT_RECIPE_NAME } from "@/features/recipes/constants";
-import { createSearchIndex, searchByIndex } from "@/utils/search";
+import {
+	createSearchIndex,
+	type SearchIndex,
+	searchByIndex,
+} from "@/utils/search";
 
 const getRecipeId = (recipe: RecipeWithSpecs) => recipe.id;
 
@@ -13,14 +17,14 @@ function getRecipeSearchFields(recipe: RecipeWithSpecs): string[] {
 
 export function createRecipeSearchIndex<T extends RecipeWithSpecs>(
 	recipes: T[] | undefined,
-): Map<string, string> {
-	if (!recipes) return new Map();
+): SearchIndex<T> {
+	if (!recipes) return new Map() as SearchIndex<T>;
 	return createSearchIndex(recipes, getRecipeId, getRecipeSearchFields);
 }
 
 export function filterRecipes<T extends RecipeWithSpecs>(
 	recipes: T[] | undefined,
-	index: Map<string, string>,
+	index: SearchIndex<T>,
 	query: string,
 ): T[] {
 	if (!recipes) return [];

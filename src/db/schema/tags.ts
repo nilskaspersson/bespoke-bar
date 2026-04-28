@@ -21,7 +21,7 @@ export const TagsTable = pgTable(
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
 		orgId: text("org_id").notNull(),
-		name: varchar("name", { length: 50 }).notNull(),
+		name: varchar("name", { length: 30 }).notNull(),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()
 			.notNull(),

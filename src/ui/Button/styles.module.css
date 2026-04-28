@@ -226,6 +226,22 @@
 		}
 	}
 
+	.action {
+		--button-inset: var(--space-2);
+		--button-height: var(--space-5);
+		--button-font-size: var(--size-1);
+
+		color: var(--mauve-12);
+
+		&:not([aria-disabled="true"]) {
+			&:hover,
+			&:focus-visible {
+				background-color: hsl(from var(--button-color) h s 90%);
+				color: hsl(from var(--button-color) h s 20%);
+			}
+		}
+	}
+
 	/**
 	 * Modifiers
 	 */

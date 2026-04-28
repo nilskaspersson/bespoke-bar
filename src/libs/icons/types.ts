@@ -50,6 +50,8 @@ export type IconName =
 	| "star"
 	| "sun-bright"
 	| "table-list"
+	| "tag"
+	| "tags"
 	| "trash"
 	| "triangle-exclamation"
 	| "wine-glass"

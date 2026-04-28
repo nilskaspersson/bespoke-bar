@@ -1,13 +1,19 @@
 import { create } from "zustand";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
+import type { Tag } from "@/db/schema/tags";
 import { ingredientEditorStore } from "@/features/ingredients/stores/ingredientEditor";
 
 type RecipeCardModalState = {
 	recipe: RecipeWithRelations | null;
 	isFavorite: boolean;
+	tagOptions: Tag[] | null;
 	mounted: boolean;
-	setRecipe: (recipe: RecipeWithRelations, isFavorite: boolean) => void;
+	setRecipe: (
+		recipe: RecipeWithRelations,
+		isFavorite: boolean,
+		tagOptions?: Tag[],
+	) => void;
 	setIsFavorite: (isFavorite: boolean) => void;
 	updateIngredient: (updated: Ingredient) => void;
 	clear: () => void;
@@ -17,10 +23,16 @@ export const recipeCardModalStore = Object.assign(
 	create<RecipeCardModalState>((set, get) => ({
 		recipe: null,
 		isFavorite: false,
+		tagOptions: null,
 		mounted: false,
-		setRecipe: (recipe, isFavorite) => {
+		setRecipe: (recipe, isFavorite, tagOptions) => {
 			recipeCardModalStore.dialogRef.current?.showModal();
-			set({ recipe, isFavorite, mounted: true });
+			set({
+				recipe,
+				isFavorite,
+				tagOptions: tagOptions ?? null,
+				mounted: true,
+			});
 		},
 		setIsFavorite: (isFavorite) => {
 			set({ isFavorite });
@@ -40,7 +52,12 @@ export const recipeCardModalStore = Object.assign(
 			});
 		},
 		clear: () => {
-			set({ recipe: null, isFavorite: false, mounted: false });
+			set({
+				recipe: null,
+				isFavorite: false,
+				tagOptions: null,
+				mounted: false,
+			});
 		},
 	})),
 	{
