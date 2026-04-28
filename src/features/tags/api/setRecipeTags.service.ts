@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 import { RecipeTagsTable } from "@/db/schema/recipeTags";
 import { TagsTable } from "@/db/schema/tags";
+import { MAX_TAGS_PER_RECIPE } from "@/features/tags/constants";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -13,6 +14,12 @@ export async function setRecipeTags(
 ): Promise<void> {
 	const { orgId } = auth;
 	const uniqueTagIds = Array.from(new Set(tagIds));
+
+	if (uniqueTagIds.length > MAX_TAGS_PER_RECIPE) {
+		throw new Error(
+			`Recipe tag limit is ${MAX_TAGS_PER_RECIPE}. Remove some before adding more.`,
+		);
+	}
 
 	await db.transaction(async (tx) => {
 		const recipe = await tx.query.RecipesTable.findFirst({

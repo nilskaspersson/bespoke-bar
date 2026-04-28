@@ -11,7 +11,6 @@ import styles from "./styles.module.css";
 type Props = {
 	assignedTagIds: string[];
 	tagsById: Map<string, Tag>;
-	onRemove: (tagId: string) => void;
 	onClose: () => void;
 	children?: ReactNode;
 };
@@ -19,7 +18,6 @@ type Props = {
 export function RecipeTagsPopoverContent({
 	assignedTagIds,
 	tagsById,
-	onRemove,
 	onClose,
 	children,
 }: Props) {
@@ -44,11 +42,7 @@ export function RecipeTagsPopoverContent({
 				</Button>
 			</Flex>
 
-			<RecipeTagCloud
-				assignedTagIds={assignedTagIds}
-				tagsById={tagsById}
-				onRemove={onRemove}
-			>
+			<RecipeTagCloud assignedTagIds={assignedTagIds} tagsById={tagsById}>
 				{children}
 			</RecipeTagCloud>
 		</Lightbox>

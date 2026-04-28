@@ -10,12 +10,4 @@
 		gap: var(--space-1);
 		overflow-wrap: break-word;
 	}
-
-	.remove {
-		transition: opacity var(--transition-duration);
-
-		&:not(:hover, :focus-visible) {
-			opacity: 0.5;
-		}
-	}
 }

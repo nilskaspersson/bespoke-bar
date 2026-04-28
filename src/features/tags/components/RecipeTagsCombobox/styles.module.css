@@ -9,7 +9,7 @@
 		gap: var(--space-2);
 		padding: var(--space-3);
 		width: 30ch;
-		min-height: 20rem;
+		height: 20rem;
 	}
 
 	.hidden {
@@ -26,12 +26,26 @@
 	}
 
 	.suggestions {
-		align-content: flex-start;
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-1);
+		min-height: 0;
 		overflow-y: auto;
 		border: 1px dashed var(--mauve-6);
 		border-radius: var(--radius);
 		padding: var(--space-2);
 		background-color: var(--mauve-2);
+	}
+
+	.suggestionsList {
+		align-content: flex-start;
+	}
+
+	.available {
+		margin-top: auto;
+		align-self: flex-end;
+		position: sticky;
+		bottom: 0;
 	}
 
 	.tag {
