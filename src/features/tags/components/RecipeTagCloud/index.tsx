@@ -2,10 +2,9 @@
 
 import { type ReactNode, useMemo } from "react";
 import type { Tag } from "@/db/schema/tags";
-import { Chip } from "@/ui/Chip";
+import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { collator } from "@/utils/collator";
 import styles from "./styles.module.css";
@@ -45,10 +44,7 @@ export function RecipeTagCloud({ assignedTagIds, tagsById, children }: Props) {
 					>
 						{sortedTags.map((tag) => (
 							<li key={tag.id}>
-								<Chip variant="outline" size={1} className={styles.tag}>
-									<Icon name="tag" size={0} />
-									{tag.name}
-								</Chip>
+								<RecipeTag tag={tag} />
 							</li>
 						))}
 					</Flex>

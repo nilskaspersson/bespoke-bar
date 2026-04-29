@@ -5,10 +5,8 @@ import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeDataTableSkeleton } from "@/features/recipes/components/RecipeDataTable";
 import { RecipeDataTableLoader } from "@/features/recipes/components/RecipeDataTable/Loader";
-import {
-	RecipesList,
-	RecipesListSkeleton,
-} from "@/features/recipes/components/RecipesList";
+import { RecipesListSkeleton } from "@/features/recipes/components/RecipesList";
+import { RecipesListFilters } from "@/features/recipes/components/RecipesListFilters";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { authOrForbidden } from "@/utils/auth";
@@ -34,11 +32,10 @@ async function RecipeViewsWithData() {
 	return (
 		<RecipeViews
 			list={
-				<RecipesList
+				<RecipesListFilters
 					recipes={recipes}
 					favoriteRecipeIds={favoriteRecipeIds}
 					tagOptions={tagOptions}
-					withActions
 				/>
 			}
 			table={

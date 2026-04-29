@@ -132,26 +132,18 @@ export function SearchRecipesForm({
 	return (
 		<Lightbox {...props} className={clsx(styles.lightbox, className)}>
 			<Grid as="header" gap={2} className={styles.header}>
-				<div className={styles.search}>
-					<Icon
-						name="magnifying-glass"
-						size={4}
-						className={styles.searchIcon}
-					/>
-
-					<Input
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-						placeholder="Type to filter recipes…"
-						fullWidth
-						autoFocus
-						rounded
-						size={7}
-						className={styles.searchInput}
-					/>
-
-					<Kbd shortcut="Esc" visual className={styles.esc} />
-				</div>
+				<Input
+					type="search"
+					value={search}
+					onChange={(e) => setSearch(e.target.value)}
+					placeholder="Type to filter recipes…"
+					autoFocus
+					size={7}
+					fullWidth
+					rounded
+					startAdornment={<Icon name="magnifying-glass" size={4} />}
+					endAdornment={<Kbd shortcut="Esc" visual />}
+				/>
 
 				<div className={styles.status}>
 					<Text as="p" size={1} light numeric>
@@ -219,7 +211,6 @@ export function SearchRecipesForm({
 					<RecipesList
 						recipes={filteredRecipes}
 						ref={listRef}
-						withMotion={false}
 						withCreate={false}
 						className={styles.list}
 					/>

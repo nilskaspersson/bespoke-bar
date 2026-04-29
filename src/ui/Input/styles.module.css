@@ -17,4 +17,38 @@
 		max-width: 100%;
 		border-radius: var(--radius--full);
 	}
+
+	.adornedWrapper {
+		width: fit-content;
+		position: relative;
+	}
+
+	.adornment {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		pointer-events: none;
+		display: flex;
+		align-items: center;
+
+		.adornedWrapper:has(:hover, :focus-within) & {
+			z-index: 3;
+		}
+
+		&.start {
+			left: var(--space-4);
+		}
+
+		&.end {
+			right: var(--space-4);
+		}
+	}
+
+	.hasStartAdornment {
+		padding-inline-start: var(--space-7);
+	}
+
+	.hasEndAdornment {
+		padding-inline-end: var(--space-7);
+	}
 }

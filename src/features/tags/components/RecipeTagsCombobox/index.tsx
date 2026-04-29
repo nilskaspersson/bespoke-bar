@@ -3,6 +3,7 @@
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
 import type { Tag } from "@/db/schema/tags";
+import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import {
 	MAX_TAGS_PER_RECIPE,
 	TAG_NAME_MAX_LENGTH,
@@ -36,7 +37,7 @@ type Props = {
 	onClosePopover: () => void;
 	tagOptions: Tag[];
 	assignedTagIds: string[];
-	onCreateTag: (name: string) => Promise<Tag>;
+	onCreateTag?: (name: string) => Promise<Tag>;
 	onCommit: (nextAssignedIds: string[]) => void;
 };
 
@@ -90,9 +91,12 @@ export function RecipeTagsCombobox({
 		[tagOptions, searchIndex, deferredSearch],
 	);
 
-	const showCreate = deferredSearch.length > 0 && !matchedTag;
+	const canCreate = !!onCreateTag;
+	const showCreate = canCreate && deferredSearch.length > 0 && !matchedTag;
 	const enterTarget =
 		matchedTag?.name ?? deferredSearch.slice(0, TAG_NAME_MAX_LENGTH);
+	const showEnterHint =
+		!!matchedTag || (canCreate && deferredSearch.length > 0);
 
 	const handleInputKeyDown = handleKey<HTMLInputElement>([
 		[
@@ -102,7 +106,7 @@ export function RecipeTagsCombobox({
 				if (matchedTag) {
 					handleSuggestionClick(matchedTag.id);
 					setSearch("");
-				} else if (deferredSearch) {
+				} else if (deferredSearch && canCreate) {
 					handleCreate();
 				}
 			},
@@ -142,18 +146,19 @@ export function RecipeTagsCombobox({
 						truncate
 						aria-live="polite"
 						className={clsx({
-							[styles.hidden]: !deferredSearch,
+							[styles.hidden]:
+								!deferredSearch || (!isOverMax && !showEnterHint),
 							[styles.invalid]: isOverMax,
 						})}
 					>
 						{isOverMax ? (
 							`Tag name must be ${TAG_NAME_MAX_LENGTH} characters or fewer`
-						) : (
+						) : showEnterHint ? (
 							<>
 								<Kbd shortcut="enter" visual /> to{" "}
 								{matchedTag ? "toggle" : "create"} “{enterTarget}”
 							</>
-						)}
+						) : null}
 					</Text>
 
 					<Text size={0} light numeric className={styles.counter}>
@@ -173,27 +178,15 @@ export function RecipeTagsCombobox({
 						<Flex as="ul" wrap gap={1} className={styles.suggestionsList}>
 							{suggestions
 								.toSorted((a, b) => collator.compare(a.name, b.name))
-								.map((tag) => {
-									const isAssigned = draftSet.has(tag.id);
-
-									return (
-										<li key={tag.id}>
-											<Chip
-												as="button"
-												type="button"
-												onClick={() => handleSuggestionClick(tag.id)}
-												variant={isAssigned ? "filled" : "outline"}
-												color={isAssigned ? "heavy" : "accent"}
-												size={1}
-												aria-pressed={isAssigned}
-												className={styles.tag}
-											>
-												<Icon name="tag" size={0} />
-												{tag.name}
-											</Chip>
-										</li>
-									);
-								})}
+								.map((tag) => (
+									<li key={tag.id}>
+										<RecipeTag
+											tag={tag}
+											selected={draftSet.has(tag.id)}
+											onClick={() => handleSuggestionClick(tag.id)}
+										/>
+									</li>
+								))}
 
 							{showCreate ? (
 								<li>

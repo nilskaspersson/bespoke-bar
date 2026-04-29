@@ -1,0 +1,12 @@
+@layer feature {
+	.tag {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		overflow-wrap: break-word;
+	}
+
+	.interactive {
+		cursor: pointer;
+	}
+}

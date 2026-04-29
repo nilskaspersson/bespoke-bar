@@ -20,7 +20,7 @@ type Args = {
 	popoverContentProps: ComponentProps<typeof Popover>;
 	onClosePopover: () => void;
 	assignedTagIds: string[];
-	onCreateTag: (name: string) => Promise<Tag>;
+	onCreateTag?: (name: string) => Promise<Tag>;
 	onCommit: (nextAssignedIds: string[]) => void;
 };
 
@@ -54,7 +54,7 @@ export function useRecipeTagsCombobox({
 	};
 
 	const handleCreate = async () => {
-		if (isCreating || !deferredSearch || isOverMax) return;
+		if (isCreating || !deferredSearch || isOverMax || !onCreateTag) return;
 		setIsCreating(true);
 		try {
 			const tag = await onCreateTag(deferredSearch);

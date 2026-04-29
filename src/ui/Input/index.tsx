@@ -1,5 +1,5 @@
 import { clsx } from "clsx";
-import { type ComponentProps, createElement } from "react";
+import { type ComponentProps, createElement, type ReactNode } from "react";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
 import styles from "./styles.module.css";
 
@@ -16,7 +16,12 @@ type BaseProps = {
 	"aria-invalid"?: boolean;
 };
 
-export type InputProps = BaseProps & ComponentProps<"input">;
+type AdornmentProps = {
+	startAdornment?: ReactNode;
+	endAdornment?: ReactNode;
+};
+
+export type InputProps = BaseProps & AdornmentProps & ComponentProps<"input">;
 export type TextareaProps = BaseProps & ComponentProps<"textarea">;
 
 export function Input({
@@ -27,9 +32,11 @@ export function Input({
 	large,
 	pill,
 	rounded,
+	startAdornment,
+	endAdornment,
 	...props
 }: InputProps): React.ReactNode {
-	return createElement("input", {
+	const input = createElement("input", {
 		type: "text",
 		...props,
 		className: clsx(
@@ -38,6 +45,8 @@ export function Input({
 			formControlStyles.control,
 			{
 				[styles.pill]: pill,
+				[styles.hasStartAdornment]: Boolean(startAdornment),
+				[styles.hasEndAdornment]: Boolean(endAdornment),
 				[formControlStyles.compact]: compact,
 				[formControlStyles.fullWidth]: fullWidth,
 				[formControlStyles.rounded]: rounded,
@@ -46,6 +55,32 @@ export function Input({
 			},
 		),
 	});
+
+	if (!startAdornment && !endAdornment) {
+		return input;
+	}
+
+	return (
+		<div
+			className={clsx(styles.adornedWrapper, {
+				[formControlStyles.fullWidth]: fullWidth,
+			})}
+		>
+			{startAdornment ? (
+				<span className={clsx(styles.adornment, styles.start)}>
+					{startAdornment}
+				</span>
+			) : null}
+
+			{input}
+
+			{endAdornment ? (
+				<span className={clsx(styles.adornment, styles.end)}>
+					{endAdornment}
+				</span>
+			) : null}
+		</div>
+	);
 }
 
 export function TextArea({

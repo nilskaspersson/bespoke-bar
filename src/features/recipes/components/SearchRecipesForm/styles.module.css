@@ -45,10 +45,6 @@
 		justify-content: center;
 	}
 
-	.search {
-		position: relative;
-	}
-
 	.shortcut {
 		justify-self: end;
 		transition: opacity var(--transition-duration--short);
@@ -79,26 +75,5 @@
 		max-width: 100%;
 		aspect-ratio: var(--recipe-card-ratio);
 		height: auto;
-	}
-
-	.searchIcon {
-		position: absolute;
-		left: var(--space-4);
-		top: 50%;
-		transform: translateY(-50%);
-		pointer-events: none;
-		z-index: 1;
-	}
-
-	.searchInput {
-		padding-inline: var(--space-7);
-	}
-
-	.esc {
-		position: absolute;
-		right: var(--space-4);
-		top: 50%;
-		transform: translateY(-50%);
-		pointer-events: none;
 	}
 }
