@@ -24,11 +24,6 @@ type Props = {
 	recipes: RecipeWithRelations[];
 	favoriteRecipeIds?: string[];
 	tagOptions?: Tag[];
-	/**
-	 * When true, a recipe must carry every selected tag. When false (default),
-	 * a recipe matches if it carries any of them — multi-select widens the
-	 * result, which is what most users expect from a tag filter.
-	 */
 	requireAll?: boolean;
 };
 
