@@ -35,18 +35,8 @@ export function RecipesList({
 }) {
 	const favoriteIdSet = new Set(favoriteRecipeIds);
 	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
-	const syncRecipe = useRecipeCardModal((s) => s.syncRecipe);
-	const selectedRecipe = useRecipeCardModal((s) => s.recipe);
-	const selectedRecipeId = selectedRecipe?.id;
+	const selectedRecipeId = useRecipeCardModal((s) => s.recipe?.id);
 	const modalMounted = useRecipeCardModal((s) => s.mounted);
-
-	/** Push revalidated server data into the modal snapshot. */
-	if (modalMounted && selectedRecipeId) {
-		const liveRecipe = recipes.find((r) => r.id === selectedRecipeId);
-		if (liveRecipe && liveRecipe !== selectedRecipe) {
-			syncRecipe(liveRecipe, tagOptions);
-		}
-	}
 
 	if (recipes.length === 0) {
 		return null;

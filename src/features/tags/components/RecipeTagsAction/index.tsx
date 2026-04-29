@@ -2,12 +2,16 @@
 
 import { useMemo, useOptimistic, useTransition } from "react";
 
-import type { RecipeWithRelations } from "@/db/schema/recipes";
+import type {
+	RecipeTagWithTag,
+	RecipeWithRelations,
+} from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 import { createTag } from "@/features/tags/api/createTag";
 import { setRecipeTags } from "@/features/tags/api/setRecipeTags";
 import { RecipeTagsCombobox } from "@/features/tags/components/RecipeTagsCombobox";
 import { RecipeTagsPopoverContent } from "@/features/tags/components/RecipeTagsPopoverContent";
+import { recipeTagsEditorStore } from "@/features/tags/stores/recipeTagsEditor";
 import { usePopover } from "@/hooks/usePopover";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
@@ -78,6 +82,24 @@ export function RecipeTagsAction({
 			dispatch(nextAssignedIds);
 			try {
 				await setRecipeTags(recipe.id, nextAssignedIds);
+				const now = new Date().toISOString();
+				const nextTags: RecipeTagWithTag[] = nextAssignedIds
+					.map((tagId) => {
+						const tag = tagsById.get(tagId);
+						if (!tag) return null;
+						return {
+							recipeId: recipe.id,
+							tagId,
+							orgId: tag.orgId,
+							createdAt: now,
+							tag,
+						};
+					})
+					.filter((rt): rt is RecipeTagWithTag => rt != null);
+				recipeTagsEditorStore.emitUpdate({
+					recipeId: recipe.id,
+					tags: nextTags,
+				});
 			} catch (e) {
 				toast.error("Could not update tags", {
 					description: errorMessageOrFallback(e, "Try again later."),
