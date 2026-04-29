@@ -6,7 +6,7 @@ import type {
 	KeyboardEventHandler,
 	MouseEventHandler,
 } from "react";
-import { useCallback, useId, useRef, useState } from "react";
+import { useCallback, useId, useMemo, useRef, useState } from "react";
 import { stopPropagation } from "@/utils/events";
 
 export type PopoverType = NonNullable<ComponentProps<"div">["popover"]>;
@@ -95,24 +95,30 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 		if (e.target === e.currentTarget) e.currentTarget.hidePopover();
 	}, []);
 
-	const triggerProps = {
-		"aria-expanded": isOpen,
-		popoverTarget: popoverId,
-		style: {
-			anchorName: `--${popoverId}`,
-		} satisfies CSSProperties,
-	};
+	const triggerProps = useMemo(
+		() => ({
+			"aria-expanded": isOpen,
+			popoverTarget: popoverId,
+			style: {
+				anchorName: `--${popoverId}`,
+			} satisfies CSSProperties,
+		}),
+		[isOpen, popoverId],
+	);
 
-	const contentProps = {
-		id: popoverId,
-		ref: popoverRef,
-		anchorId: popoverId,
-		popover,
-		onToggle,
-		onClick,
-		onKeyDown: stopPropagation,
-		isOpen,
-	};
+	const contentProps = useMemo(
+		() => ({
+			id: popoverId,
+			ref: popoverRef,
+			anchorId: popoverId,
+			popover,
+			onToggle,
+			onClick,
+			onKeyDown: stopPropagation,
+			isOpen,
+		}),
+		[popoverId, popover, onToggle, onClick, isOpen],
+	);
 
 	return {
 		popoverId,

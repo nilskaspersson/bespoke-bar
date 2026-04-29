@@ -2,6 +2,7 @@ import type { MotionValue } from "motion/react";
 
 export const SPRING_STIFFNESS = 400;
 export const SPRING_DAMPING = 35;
+export const TRANSITION_DURATION_SLOW_MS = 500;
 
 export function getWindowHeight(): number {
 	return typeof window !== "undefined" ? window.innerHeight : 0;

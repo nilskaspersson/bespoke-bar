@@ -9,66 +9,83 @@ import type { Tag } from "@/db/schema/tags";
 import { ingredientEditorStore } from "@/features/ingredients/stores/ingredientEditor";
 import { recipeTagsEditorStore } from "@/features/tags/stores/recipeTagsEditor";
 
-type RecipeCardModalState = {
-	recipe: RecipeWithRelations | null;
+type ModalCurrent = {
+	recipe: RecipeWithRelations;
 	isFavorite: boolean;
 	tagOptions: Tag[] | null;
-	mounted: boolean;
-	setRecipe: (
+	/**
+	 * The source card's rect at click time. Used for animations.
+	 */
+	sourceRect: DOMRect | null;
+};
+
+type RecipeCardModalState = {
+	current: ModalCurrent | null;
+	exitingId: Recipe["id"] | null;
+	open: (
 		recipe: RecipeWithRelations,
 		isFavorite: boolean,
 		tagOptions?: Tag[],
+		sourceRect?: DOMRect | null,
 	) => void;
+	closeWithExit: (recipeId: Recipe["id"]) => void;
+	finishExit: (recipeId: Recipe["id"]) => void;
+	close: () => void;
 	setIsFavorite: (isFavorite: boolean) => void;
 	updateIngredient: (updated: Ingredient) => void;
 	updateRecipeTags: (recipeId: Recipe["id"], tags: RecipeTagWithTag[]) => void;
-	clear: () => void;
 };
 
 export const recipeCardModalStore = Object.assign(
 	create<RecipeCardModalState>((set, get) => ({
-		recipe: null,
-		isFavorite: false,
-		tagOptions: null,
-		mounted: false,
-		setRecipe: (recipe, isFavorite, tagOptions) => {
+		current: null,
+		exitingId: null,
+		open: (recipe, isFavorite, tagOptions, sourceRect) => {
 			recipeCardModalStore.dialogRef.current?.showModal();
 			set({
-				recipe,
-				isFavorite,
-				tagOptions: tagOptions ?? null,
-				mounted: true,
+				current: {
+					recipe,
+					isFavorite,
+					tagOptions: tagOptions ?? null,
+					sourceRect: sourceRect ?? null,
+				},
 			});
 		},
+		closeWithExit: (recipeId) => {
+			set({ current: null, exitingId: recipeId });
+		},
+		finishExit: (recipeId) => {
+			if (get().exitingId === recipeId) set({ exitingId: null });
+		},
+		close: () => {
+			set({ current: null });
+		},
 		setIsFavorite: (isFavorite) => {
-			set({ isFavorite });
+			const { current } = get();
+			if (!current) return;
+			set({ current: { ...current, isFavorite } });
 		},
 		updateIngredient: (updated) => {
-			const { recipe } = get();
-			if (!recipe) return;
+			const { current } = get();
+			if (!current) return;
 			set({
-				recipe: {
-					...recipe,
-					specs: recipe.specs.map((spec) =>
-						spec.ingredient?.id === updated.id
-							? { ...spec, ingredient: updated }
-							: spec,
-					),
+				current: {
+					...current,
+					recipe: {
+						...current.recipe,
+						specs: current.recipe.specs.map((spec) =>
+							spec.ingredient?.id === updated.id
+								? { ...spec, ingredient: updated }
+								: spec,
+						),
+					},
 				},
 			});
 		},
 		updateRecipeTags: (recipeId, tags) => {
-			const { recipe } = get();
-			if (!recipe || recipe.id !== recipeId) return;
-			set({ recipe: { ...recipe, tags } });
-		},
-		clear: () => {
-			set({
-				recipe: null,
-				isFavorite: false,
-				tagOptions: null,
-				mounted: false,
-			});
+			const { current } = get();
+			if (!current || current.recipe.id !== recipeId) return;
+			set({ current: { ...current, recipe: { ...current.recipe, tags } } });
 		},
 	})),
 	{
