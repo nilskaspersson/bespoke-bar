@@ -1,4 +1,5 @@
 import { type RefObject, useEffect, useRef } from "react";
+import { TRANSITION_DURATION_SLOW_MS } from "@/utils/animate";
 import {
 	computeCardVelocity,
 	createLoopState,
@@ -58,12 +59,22 @@ export function useParticleEffect(
 
 		const particles: Particle[] = [];
 
-		seedBackdropParticles(
-			particles,
-			canvas.width,
-			canvas.height,
-			PARTICLE_COLORS,
-		);
+		/**
+		 * Backdrop particles are decorative ambient ones, unrelated to the
+		 * card's movement. Seeding ~200 of them on mount stutters the entry
+		 * animation frame. Defer until after the open transition would have
+		 * settled — the card-driven emit loop runs immediately so momentum
+		 * particles still spawn during the fly-in.
+		 */
+		const seedTimer = setTimeout(() => {
+			if (signal.aborted) return;
+			seedBackdropParticles(
+				particles,
+				canvas.width,
+				canvas.height,
+				PARTICLE_COLORS,
+			);
+		}, TRANSITION_DURATION_SLOW_MS);
 
 		const state = createLoopState(performance.now());
 
@@ -112,6 +123,7 @@ export function useParticleEffect(
 
 		return () => {
 			controller.abort();
+			clearTimeout(seedTimer);
 			cancelAnimationFrame(rafRef.current);
 			ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 		};

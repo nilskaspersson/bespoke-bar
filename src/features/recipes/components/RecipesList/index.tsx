@@ -1,88 +1,80 @@
 "use client";
 
 import clsx from "clsx";
-import type { ComponentProps } from "react";
+import { type ComponentProps, memo, useMemo } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
-import { MotionRecipeCard } from "@/features/recipes/components/MotionRecipeCard";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
-import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
-import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
+import { RecipeListCard } from "@/features/recipes/components/RecipeListCard";
 import { RecipeTagsAction } from "@/features/tags/components/RecipeTagsAction";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
-import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
-export function RecipesList({
-	recipes,
-	favoriteRecipeIds,
+type ActionsProps = {
+	recipe: RecipeWithRelations;
+	isFavorite: boolean;
+	tagOptions?: Tag[];
+};
+
+const RecipeListActions = memo(function RecipeListActions({
+	recipe,
+	isFavorite,
 	tagOptions,
-	withActions,
-	withMotion = true,
-	withCreate,
-	...props
-}: ComponentProps<"ul"> & {
+}: ActionsProps) {
+	return (
+		<Flex gap={4} justifyContent="space-between">
+			{tagOptions ? (
+				<RecipeTagsAction recipe={recipe} tagOptions={tagOptions} />
+			) : null}
+
+			<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
+		</Flex>
+	);
+});
+
+type ListProps = ComponentProps<"ul"> & {
 	recipes: RecipeWithRelations[];
 	favoriteRecipeIds?: string[];
 	tagOptions?: Tag[];
 	withActions?: boolean;
-	withMotion?: boolean;
 	withCreate?: boolean;
-}) {
-	const favoriteIdSet = new Set(favoriteRecipeIds);
-	const setRecipe = useRecipeCardModal((s) => s.setRecipe);
-	const selectedRecipeId = useRecipeCardModal((s) => s.recipe?.id);
-	const modalMounted = useRecipeCardModal((s) => s.mounted);
+};
 
-	if (recipes.length === 0) {
-		return null;
-	}
+function RecipesListImpl({
+	recipes,
+	favoriteRecipeIds,
+	tagOptions,
+	withActions,
+	withCreate,
+	...props
+}: ListProps) {
+	const favoriteIdSet = useMemo(
+		() => new Set(favoriteRecipeIds),
+		[favoriteRecipeIds],
+	);
 
 	return (
 		<ul {...props} className={clsx(props.className, styles.list)}>
 			{recipes.map((recipe) => {
 				const isFavorite = favoriteIdSet.has(recipe.id);
-				const isSelected =
-					withActions && selectedRecipeId === recipe.id && modalMounted;
-				const selectRecipe = () => setRecipe(recipe, isFavorite, tagOptions);
-
 				return (
 					<Grid as="li" gap={1} key={recipe.id} className={styles.item}>
-						<MotionRecipeCard
-							withMotion={withMotion && !isSelected}
+						<RecipeListCard
 							recipe={recipe}
-							onClick={selectRecipe}
-							onKeyDown={handleKey([
-								["Enter", selectRecipe],
-								[" ", selectRecipe],
-							])}
-							role="button"
-							tabIndex={0}
-							className={clsx({
-								[styles.pointer]: withMotion,
-								[styles.hidden]: isSelected,
-							})}
-						>
-							<RecipeCard
-								recipe={recipe}
-								withLink={!withMotion}
-								nameAdornment={<RecipeNameAdornment />}
-							/>
-						</MotionRecipeCard>
-
+							isFavorite={isFavorite}
+							tagOptions={tagOptions}
+							clickable={!!withActions}
+						/>
 						{withActions ? (
-							<Flex gap={4} justifyContent="space-between">
-								{tagOptions ? (
-									<RecipeTagsAction recipe={recipe} tagOptions={tagOptions} />
-								) : null}
-
-								<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
-							</Flex>
-						) : undefined}
+							<RecipeListActions
+								recipe={recipe}
+								isFavorite={isFavorite}
+								tagOptions={tagOptions}
+							/>
+						) : null}
 					</Grid>
 				);
 			})}
@@ -127,4 +119,6 @@ export function RecipesListSkeleton({
 	);
 }
 
-RecipesList.Skeleton = RecipesListSkeleton;
+export const RecipesList = Object.assign(memo(RecipesListImpl), {
+	Skeleton: RecipesListSkeleton,
+});

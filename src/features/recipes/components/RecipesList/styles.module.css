@@ -31,12 +31,4 @@
 	.skeletonActions {
 		height: var(--space-5);
 	}
-
-	.hidden {
-		visibility: hidden;
-	}
-
-	.pointer {
-		cursor: pointer;
-	}
 }

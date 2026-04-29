@@ -17,7 +17,6 @@ import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
-import { Text } from "@/ui/Text";
 
 const TOP_TAG_COUNT = 5;
 

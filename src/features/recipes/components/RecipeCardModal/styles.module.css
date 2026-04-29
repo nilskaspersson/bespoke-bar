@@ -47,6 +47,20 @@
 		padding: var(--gap);
 		border: 2px dashed var(--mauve-4);
 		box-shadow: var(--shadow--high);
+
+		animation: boxIn 0.8s var(--spring-lazy) backwards;
+		animation-delay: 0.25s;
+
+		@supports (animation-delay: calc(sibling-index() * 1ms)) {
+			animation-delay: calc(0.2s + sibling-index() * 0.05s);
+		}
+	}
+
+	@keyframes boxIn {
+		from {
+			opacity: 0;
+			transform: scale(0.9) translate(-16px, -8px);
+		}
 	}
 
 	.card {

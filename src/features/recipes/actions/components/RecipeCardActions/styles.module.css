@@ -2,12 +2,11 @@
 	.item {
 		--entry-delay: var(--transition-duration--slow);
 
-		transition-property: transform, opacity;
-		transition-duration: var(--transition-duration--slow);
-		transition-delay: var(--entry-delay);
+		animation: entry var(--transition-duration--slow) backwards;
+		animation-delay: var(--entry-delay);
 
-		@supports (transition-delay: calc(sibling-index() * 1ms)) {
-			transition-delay: calc(
+		@supports (animation-delay: calc(sibling-index() * 1ms)) {
+			animation-delay: calc(
 				var(--entry-delay) +
 				sibling-index() *
 				(16.667ms * 2)
@@ -15,8 +14,8 @@
 		}
 	}
 
-	@starting-style {
-		.item {
+	@keyframes entry {
+		from {
 			transform: translateY(calc(var(--space-2) * -1));
 			opacity: 0;
 		}
