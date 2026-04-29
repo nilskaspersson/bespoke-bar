@@ -2,6 +2,7 @@ import { updateTag } from "next/cache";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeList } from "@/db/schema/recipeLists";
 import type { Recipe } from "@/db/schema/recipes";
+import type { Tag } from "@/db/schema/tags";
 
 /**
  * We use cacheTag and updateTag as an event system; Every mutating action
@@ -93,6 +94,28 @@ export const cacheEvents = {
 					: `${orgId}:toggle-favorite`,
 		},
 	},
+	tag: {
+		create: {
+			emit: (orgId: string) => updateTag(`${orgId}:create-tag`),
+			tag: (orgId: string) => `${orgId}:create-tag`,
+		},
+		update: {
+			emit: (orgId: string, id: Tag["id"]) => {
+				updateTag(`${orgId}:update-tag`);
+				updateTag(`${orgId}:update-tag:${id}`);
+			},
+			tag: (orgId: string, id?: Tag["id"]) =>
+				id ? `${orgId}:update-tag:${id}` : `${orgId}:update-tag`,
+		},
+		delete: {
+			emit: (orgId: string, id: Tag["id"]) => {
+				updateTag(`${orgId}:delete-tag`);
+				updateTag(`${orgId}:delete-tag:${id}`);
+			},
+			tag: (orgId: string, id?: Tag["id"]) =>
+				id ? `${orgId}:delete-tag:${id}` : `${orgId}:delete-tag`,
+		},
+	},
 };
 
 /**
@@ -122,16 +145,22 @@ export const cacheTags = {
 		cacheEvents.recipe.update.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId, id),
 		cacheEvents.ingredient.update.tag(orgId),
+		cacheEvents.tag.update.tag(orgId),
+		cacheEvents.tag.delete.tag(orgId),
 	],
 	/**
 	 * Any modification- or creation of a recipe should invalidate the full list of
-	 * recipes. Ingredient updates are added to reflect name changes.
+	 * recipes. Ingredient updates are added to reflect name changes. Tag updates
+	 * and deletes are added because tags are part of the recipe payload — a rename
+	 * changes the visible name, and a delete removes it from every recipe.
 	 */
 	barRecipes: (orgId: string) => [
 		cacheEvents.recipe.create.tag(orgId),
 		cacheEvents.recipe.update.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
 		cacheEvents.ingredient.update.tag(orgId),
+		cacheEvents.tag.update.tag(orgId),
+		cacheEvents.tag.delete.tag(orgId),
 	],
 	/**
 	 * The list of Recipe Lists cares about all recipeList events, as well as
@@ -164,4 +193,9 @@ export const cacheTags = {
 			cacheEvents.favorite.toggle.tag(orgId, userId),
 		],
 	},
+	tagsList: (orgId: string) => [
+		cacheEvents.tag.create.tag(orgId),
+		cacheEvents.tag.update.tag(orgId),
+		cacheEvents.tag.delete.tag(orgId),
+	],
 };

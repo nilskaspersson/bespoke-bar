@@ -15,6 +15,11 @@ const preparedReadRecipe = db.query.RecipesTable.findFirst({
 				ingredient: true,
 			},
 		},
+		tags: {
+			with: {
+				tag: true,
+			},
+		},
 	},
 }).prepare("readRecipe");
 

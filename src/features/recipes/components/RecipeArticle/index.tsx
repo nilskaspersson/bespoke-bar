@@ -1,7 +1,7 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { Suspense } from "react";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeAuthorByline } from "@/features/recipes/components/RecipeAuthorByline";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
@@ -16,7 +16,7 @@ export function RecipeArticle({
 	className,
 	...props
 }: {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithRelations;
 	isFavorite?: boolean;
 } & Omit<ComponentProps<"article">, "children">) {
 	return (

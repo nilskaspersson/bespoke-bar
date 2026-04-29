@@ -113,6 +113,27 @@
       "when": 1769718517476,
       "tag": "0015_open_skaar",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1777206023158,
+      "tag": "0016_modern_living_tribunal",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1777209193035,
+      "tag": "0017_steady_sandman",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1777405887680,
+      "tag": "0018_daffy_electro",
+      "breakpoints": true
     }
   ]
 }

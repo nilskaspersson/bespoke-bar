@@ -1,7 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
 	check,
-	index,
 	pgTable,
 	real,
 	text,
@@ -46,9 +45,14 @@ export const IngredientsTable = pgTable(
 		aiEnrichedFields: text("ai_enriched_fields").array(),
 	},
 	(table) => [
+		/**
+		 * (orgId, normalized_name) ordering enforces case-insensitive uniqueness
+		 * within an org *and* serves org-scoped scans via leftmost-prefix —
+		 * one index, two jobs.
+		 */
 		uniqueIndex("unique_ingredient_name_case_insensitive").on(
-			sqlNormalizedString(table.name),
 			table.orgId,
+			sqlNormalizedString(table.name),
 		),
 		check(
 			"abv_valid_range",
@@ -62,7 +66,6 @@ export const IngredientsTable = pgTable(
 			"cost_requires_measurement_type",
 			sql`${table.unitCost} IS NULL OR ${table.measurementType} IS NOT NULL`,
 		),
-		index("idx_ingredients_org").on(table.orgId),
 	],
 );
 

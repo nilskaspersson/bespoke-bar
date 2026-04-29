@@ -10,12 +10,12 @@ import {
 } from "@/features/ingredients/utils/buildIngredientIndex";
 import { normalizeInput } from "@/utils";
 import { collator } from "@/utils/collator";
-import { createSearchIndex } from "@/utils/search";
+import { createSearchIndex, type SearchIndex } from "@/utils/search";
 
 type RecipeIngredientsValue = {
 	sortedIngredients: Ingredient[];
 	ingredientIndex: IngredientIndex;
-	searchIndex: Map<string, string>;
+	searchIndex: SearchIndex<Ingredient>;
 	knownNames: Set<string>;
 };
 

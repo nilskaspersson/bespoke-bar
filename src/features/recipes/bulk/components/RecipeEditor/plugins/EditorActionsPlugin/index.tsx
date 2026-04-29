@@ -93,7 +93,7 @@ export function EditorActionsPlugin() {
 						<ButtonGroup alignItems="center">
 							<Button
 								{...actionProps}
-								variant="outline"
+								className={styles.button}
 								title="Convert to metric"
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "metric"))
@@ -104,7 +104,7 @@ export function EditorActionsPlugin() {
 
 							<Button
 								{...actionProps}
-								variant="outline"
+								className={styles.button}
 								title="Convert to imperial"
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "imperial"))

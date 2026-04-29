@@ -17,11 +17,13 @@ import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
 import { glasswareEnum } from "@/db/schema/glassware";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
+import { type RecipeTag, RecipeTagsTable } from "@/db/schema/recipeTags";
 import {
 	type DraftSpecWithDraftIngredient,
 	SpecsTable,
 	type SpecWithIngredient,
 } from "@/db/schema/specs";
+import type { Tag } from "@/db/schema/tags";
 import type { Identity } from "@/utils/types";
 import type { Keyed } from "@/utils/withKey";
 
@@ -50,24 +52,26 @@ export const RecipesTable = pgTable(
 		orgId: text("org_id").notNull(),
 	},
 	(table) => [
-		index("idx_recipes_org").on(table.orgId, table.createdAt.desc()),
-		index("idx_recipes_org_archived_created").on(
-			table.orgId,
-			table.archivedAt,
-			table.createdAt.desc(),
-		),
+		index("idx_recipes_org_archived").on(table.orgId, table.archivedAt),
 	],
 );
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({
 	specs: many(SpecsTable),
 	favorites: many(RecipeFavoritesTable),
+	tags: many(RecipeTagsTable),
 }));
 
 export type Recipe = typeof RecipesTable.$inferSelect;
 
 export type RecipeWithSpecs = Recipe & {
 	specs: SpecWithIngredient[];
+};
+
+export type RecipeTagWithTag = RecipeTag & { tag: Tag };
+
+export type RecipeWithRelations = RecipeWithSpecs & {
+	tags: RecipeTagWithTag[];
 };
 
 export type InsertRecipe = Omit<

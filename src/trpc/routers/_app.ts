@@ -6,6 +6,7 @@ import { listEntryRouter } from "./listEntry";
 import { organisationRouter } from "./organisation";
 import { recipeRouter } from "./recipe";
 import { recipeListRouter } from "./recipeList";
+import { tagRouter } from "./tag";
 
 export const appRouter = router({
 	ingredient: ingredientRouter,
@@ -15,6 +16,7 @@ export const appRouter = router({
 	listEntry: listEntryRouter,
 	featured: featuredRouter,
 	organisation: organisationRouter,
+	tag: tagRouter,
 });
 
 export type AppRouter = typeof appRouter;

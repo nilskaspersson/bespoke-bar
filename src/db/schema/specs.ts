@@ -40,7 +40,6 @@ export const SpecsTable = pgTable(
 			"quantity_null_or_positive",
 			sql`${table.quantity} IS NULL OR ${table.quantity} > 0`,
 		),
-		index("idx_specs_recipe").on(table.recipeId),
 		index("idx_specs_ingredient").on(table.ingredientId),
 		index("idx_specs_recipe_ingredient").on(table.recipeId, table.ingredientId),
 	],

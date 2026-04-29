@@ -9,4 +9,8 @@
 		border-right: 1px solid var(--mauve-6);
 		padding-right: var(--space-2);
 	}
+
+	.button {
+		border: 1px solid var(--mauve-6);
+	}
 }

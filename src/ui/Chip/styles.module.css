@@ -59,4 +59,10 @@
 		font-size: max(0.5em, 11px);
 		color: var(--lc);
 	}
+
+	.outline {
+		background-color: transparent;
+		border-color: var(--mauve-6);
+		color: var(--mauve-11);
+	}
 }

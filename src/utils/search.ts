@@ -1,5 +1,11 @@
 import { normalizeInput } from "@/utils";
 
+declare const searchIndexBrand: unique symbol;
+
+export type SearchIndex<T> = Map<string, string> & {
+	readonly [searchIndexBrand]: T;
+};
+
 /**
  * Build a search index that maps item keys to pre-normalized
  * searchable text. Fields are joined with null characters to
@@ -9,13 +15,27 @@ export function createSearchIndex<T>(
 	items: T[],
 	getKey: (item: T) => string,
 	getSearchableText: (item: T) => string[],
-): Map<string, string> {
+): SearchIndex<T> {
 	return new Map(
 		items.map((item) => [
 			getKey(item),
 			getSearchableText(item).map(normalizeInput).join("\0"),
 		]),
-	);
+	) as SearchIndex<T>;
+}
+
+/**
+ * Find an item whose indexed text equals the normalized query exactly.
+ */
+export function findExactByIndex<T>(
+	items: T[],
+	index: SearchIndex<T>,
+	getKey: (item: T) => string,
+	query: string,
+): T | undefined {
+	if (!query) return undefined;
+	const q = normalizeInput(query);
+	return items.find((item) => index.get(getKey(item)) === q);
 }
 
 /**
@@ -25,7 +45,7 @@ export function createSearchIndex<T>(
  */
 export function searchByIndex<T>(
 	items: T[],
-	index: Map<string, string>,
+	index: SearchIndex<T>,
 	getKey: (item: T) => string,
 	query: string,
 ): T[] {

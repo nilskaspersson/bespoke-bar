@@ -1,6 +1,6 @@
 "use client";
 
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
@@ -14,7 +14,7 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import styles from "./styles.module.css";
 
-export function RecipeInfo<T extends RecipeWithSpecs>({
+export function RecipeInfo<T extends RecipeWithRelations>({
 	recipe,
 	isFavorite,
 }: {
@@ -32,7 +32,7 @@ export function RecipeInfo<T extends RecipeWithSpecs>({
 	);
 }
 
-function RecipeInfoContent<T extends RecipeWithSpecs>({
+function RecipeInfoContent<T extends RecipeWithRelations>({
 	recipe,
 	isFavorite,
 }: {
