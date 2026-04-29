@@ -76,7 +76,6 @@ function spawnExitClone(cardEl: HTMLElement, recipeId: string) {
 		margin: "0",
 		zIndex: "var(--z-modal)",
 		pointerEvents: "none",
-		transformOrigin: "top left",
 	});
 
 	document.body.appendChild(clone);
