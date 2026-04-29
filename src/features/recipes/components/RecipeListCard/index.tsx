@@ -67,7 +67,11 @@ export const RecipeListCard = memo(function RecipeListCard({
 				[styles.hidden]: isHidden,
 			})}
 		>
-			<RecipeCard recipe={recipe} nameAdornment={<RecipeNameAdornment />} />
+			<RecipeCard
+				recipe={recipe}
+				withLink={false}
+				nameAdornment={<RecipeNameAdornment />}
+			/>
 		</div>
 	);
 });

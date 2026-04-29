@@ -63,18 +63,18 @@ export function RecipesListFilters({
 	 * "All tags" button.
 	 */
 	const topTags = useMemo(() => {
-		if (!tagOptions || tagOptions.length === 0) return [];
-		const counts = new Map<string, number>();
+		const ranked = new Map<string, { tag: Tag; count: number }>();
 		for (const recipe of recipes) {
-			for (const rt of recipe.tags) {
-				counts.set(rt.tag.id, (counts.get(rt.tag.id) ?? 0) + 1);
+			for (const { tag } of recipe.tags) {
+				const existing = ranked.get(tag.id);
+				ranked.set(tag.id, { tag, count: (existing?.count ?? 0) + 1 });
 			}
 		}
-		return tagOptions
-			.filter((tag) => (counts.get(tag.id) ?? 0) > 0)
-			.sort((a, b) => (counts.get(b.id) ?? 0) - (counts.get(a.id) ?? 0))
-			.slice(0, TOP_TAG_COUNT);
-	}, [recipes, tagOptions]);
+		return [...ranked.values()]
+			.sort((a, b) => b.count - a.count)
+			.slice(0, TOP_TAG_COUNT)
+			.map((entry) => entry.tag);
+	}, [recipes]);
 
 	const toggleTag = (tagId: string) => {
 		setSelectedTagIds((prev) =>
