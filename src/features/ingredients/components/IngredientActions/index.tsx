@@ -6,7 +6,6 @@ import { EditIngredientButton } from "@/features/ingredients/components/EditIngr
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { getServerSideBaseURL } from "@/utils/url";
 
 export function IngredientActions({
 	ingredient,
@@ -45,13 +44,7 @@ export function IngredientActions({
 					</li>
 
 					<li>
-						<ShareAction
-							{...actionProps}
-							value={new URL(
-								getIngredientUrl(ingredient),
-								getServerSideBaseURL(),
-							).toString()}
-						>
+						<ShareAction {...actionProps} value={getIngredientUrl(ingredient)}>
 							Share link
 						</ShareAction>
 					</li>

@@ -42,7 +42,11 @@ export function RecipeTagsPopoverContent({
 				</Button>
 			</Flex>
 
-			<RecipeTagCloud assignedTagIds={assignedTagIds} tagsById={tagsById}>
+			<RecipeTagCloud
+				assignedTagIds={assignedTagIds}
+				tagsById={tagsById}
+				withOverflow
+			>
 				{children}
 			</RecipeTagCloud>
 		</Lightbox>

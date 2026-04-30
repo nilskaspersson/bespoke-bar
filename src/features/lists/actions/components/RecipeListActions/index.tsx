@@ -12,7 +12,6 @@ import { setFeaturedList } from "@/features/lists/featured/api/setFeaturedList";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
-import { getServerSideBaseURL } from "@/utils/url";
 
 export async function RecipeListActions({
 	list,
@@ -57,13 +56,7 @@ export async function RecipeListActions({
 			</li>
 
 			<li>
-				<ShareAction
-					{...actionProps}
-					value={new URL(
-						getRecipeListUrl(list),
-						getServerSideBaseURL(),
-					).toString()}
-				>
+				<ShareAction {...actionProps} value={getRecipeListUrl(list)}>
 					Share link
 				</ShareAction>
 			</li>

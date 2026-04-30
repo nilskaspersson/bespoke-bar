@@ -11,22 +11,25 @@ export function CopyToClipboard({
 	getValue,
 	iconSize,
 	iconName = "copy",
+	onClick,
 	...props
 }: {
 	getValue: () => string | null;
 	iconSize?: Scale;
 	iconName?: IconName;
-} & Omit<ButtonProps, "onClick">) {
+} & ButtonProps) {
 	return (
 		<Button
 			variant="base"
-			onClick={async () => {
+			onClick={async (event) => {
 				const value = getValue();
 
 				if (value) {
 					await navigator.clipboard.writeText(value);
 					toast.success("Copied to clipboard");
 				}
+
+				onClick?.(event);
 			}}
 			{...props}
 		>
