@@ -137,6 +137,10 @@ export function times(n: number): number[] {
 	return Array.from({ length: n }, (_, i) => i);
 }
 
+export function unique<T>(items: Iterable<T>): T[] {
+	return Array.from(new Set(items));
+}
+
 export function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }

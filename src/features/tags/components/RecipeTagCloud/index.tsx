@@ -1,5 +1,6 @@
 "use client";
 
+import { clsx } from "clsx";
 import { type ReactNode, useMemo } from "react";
 import type { Tag } from "@/db/schema/tags";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
@@ -12,10 +13,16 @@ import styles from "./styles.module.css";
 type Props = {
 	assignedTagIds: string[];
 	tagsById: Map<string, Tag>;
+	withOverflow?: boolean;
 	children?: ReactNode;
 };
 
-export function RecipeTagCloud({ assignedTagIds, tagsById, children }: Props) {
+export function RecipeTagCloud({
+	assignedTagIds,
+	tagsById,
+	withOverflow,
+	children,
+}: Props) {
 	const sortedTags = useMemo(
 		() =>
 			assignedTagIds
@@ -39,7 +46,7 @@ export function RecipeTagCloud({ assignedTagIds, tagsById, children }: Props) {
 						as="ul"
 						wrap
 						gap={1}
-						className={styles.cloud}
+						className={clsx({ [styles.cloud]: withOverflow })}
 						aria-label="Applied tags"
 					>
 						{sortedTags.map((tag) => (

@@ -1,0 +1,76 @@
+@layer feature {
+	.tag {
+		--inner-radius: calc(var(--radius--large) - 1px);
+
+		display: inline-flex;
+		align-items: stretch;
+		gap: 0;
+		border: 1px solid var(--mauve-7);
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-2);
+	}
+
+	.tag.dirty {
+		border-color: var(--iris-7);
+		background-color: var(--iris-2);
+	}
+
+	.tag.invalid {
+		border-color: var(--red-7);
+		background-color: var(--red-2);
+	}
+
+	.rename {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-1);
+		padding: var(--space-1) var(--space-2);
+		font-size: var(--size-1);
+		font-weight: 600;
+		color: inherit;
+		cursor: pointer;
+		overflow-wrap: break-word;
+		border-start-start-radius: var(--inner-radius);
+		border-end-start-radius: var(--inner-radius);
+	}
+
+	.rename:hover {
+		background-color: var(--mauve-3);
+	}
+
+	.tag.dirty .rename:hover {
+		background-color: var(--iris-3);
+	}
+
+	.delete {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0 var(--space-2);
+		border-left: 1px solid var(--mauve-6);
+		color: var(--mauve-11);
+		cursor: pointer;
+		border-start-end-radius: var(--inner-radius);
+		border-end-end-radius: var(--inner-radius);
+	}
+
+	.delete:hover {
+		background-color: var(--red-3);
+		color: var(--red-11);
+	}
+
+	.popover {
+		--offset: var(--space-1);
+	}
+
+	.surface {
+		display: grid;
+		gap: var(--space-2);
+		padding: var(--space-3);
+		width: 28ch;
+	}
+
+	.error {
+		color: var(--red-11);
+	}
+}

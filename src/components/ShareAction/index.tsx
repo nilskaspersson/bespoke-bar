@@ -11,8 +11,9 @@ import styles from "./styles.module.css";
 export function ShareAction({
 	value,
 	children,
+	onClick,
 	...props
-}: Omit<ButtonProps, "onClick"> & {
+}: ButtonProps & {
 	value: string;
 }) {
 	const isMounted = useIsMounted();
@@ -31,11 +32,14 @@ export function ShareAction({
 		);
 	}
 
+	const url = new URL(value, window.location.origin).toString();
+
 	if (!isShareSupported) {
 		return (
 			<CopyToClipboard
 				{...props}
-				getValue={() => value}
+				onClick={onClick}
+				getValue={() => url}
 				iconSize={1}
 				iconName="share"
 			>
@@ -45,7 +49,13 @@ export function ShareAction({
 	}
 
 	return (
-		<Button {...props} onClick={() => shareText(value)}>
+		<Button
+			{...props}
+			onClick={(event) => {
+				shareText(url);
+				onClick?.(event);
+			}}
+		>
 			<Icon name="share" size={1} />
 			{children}
 		</Button>

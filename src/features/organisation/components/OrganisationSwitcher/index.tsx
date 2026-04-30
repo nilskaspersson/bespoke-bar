@@ -4,7 +4,8 @@ import { OrganizationSwitcher as ClerkOrganizationSwitcher } from "@clerk/nextjs
 import { clsx } from "clsx";
 import { Suspense } from "react";
 import { AuthProvider } from "@/components/AuthProvider";
-import { OrganisationSettings } from "@/features/organisation/components/OrganisationSettings";
+import { OrganisationLocaleSettings } from "@/features/organisation/components/OrganisationLocaleSettings";
+import { TagsSettings } from "@/features/tags/components/TagsSettings";
 import { Icon } from "@/ui/Icon";
 import { Skeleton } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
@@ -26,7 +27,15 @@ export function OrganisationSwitcher({ className }: { className?: string }) {
 							url="settings"
 							labelIcon={<Icon name="gear" className={styles.icon} />}
 						>
-							<OrganisationSettings />
+							<OrganisationLocaleSettings />
+						</ClerkOrganizationSwitcher.OrganizationProfilePage>
+
+						<ClerkOrganizationSwitcher.OrganizationProfilePage
+							label="Recipe tags"
+							url="tags"
+							labelIcon={<Icon name="tags" className={styles.icon} />}
+						>
+							<TagsSettings />
 						</ClerkOrganizationSwitcher.OrganizationProfilePage>
 					</ClerkOrganizationSwitcher>
 				</AuthProvider>

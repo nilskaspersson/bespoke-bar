@@ -11,8 +11,6 @@ import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToCli
 import { LinkButton } from "@/ui/Button";
 import { useContextMenu } from "@/ui/ContextMenu";
 import { Icon } from "@/ui/Icon";
-import { handleKey } from "@/utils/keyboard";
-import { getServerSideBaseURL } from "@/utils/url";
 import styles from "./styles.module.css";
 
 const baseActionProps = {
@@ -35,19 +33,13 @@ export function RecipeActions({
 	onToggleFavorite?: (isFavorite: boolean) => void;
 }) {
 	const { closePopover: close } = useContextMenu();
-	const dismissProps = {
-		onClick: close,
-		onKeyDown: handleKey([
-			["Enter", close],
-			[" ", close],
-		]),
-	} as const;
 
 	return (
 		<menu className={styles.menu} aria-label="Recipe actions">
-			<li {...dismissProps}>
+			<li>
 				<LinkButton
 					{...baseActionProps}
+					onClick={close}
 					href={getRecipeUrl(recipe)}
 					color="accent"
 				>
@@ -56,9 +48,10 @@ export function RecipeActions({
 				</LinkButton>
 			</li>
 
-			<li {...dismissProps}>
+			<li>
 				<ToggleFavoriteRecipeButton
 					{...baseActionProps}
+					onClick={close}
 					recipe={recipe}
 					isFavorite={isFavorite ?? false}
 					onToggleFavorite={onToggleFavorite}
@@ -67,9 +60,10 @@ export function RecipeActions({
 				</ToggleFavoriteRecipeButton>
 			</li>
 
-			<li {...dismissProps}>
+			<li>
 				<LinkButton
 					{...baseActionProps}
+					onClick={close}
 					href={`/bar/recipes/${recipe.id}/edit`}
 					prefetch={false}
 					color="accent"
@@ -79,15 +73,20 @@ export function RecipeActions({
 				</LinkButton>
 			</li>
 
-			<li {...dismissProps}>
-				<CreateListEntryButton {...baseActionProps} recipe={recipe}>
+			<li>
+				<CreateListEntryButton
+					{...baseActionProps}
+					recipe={recipe}
+					onClick={close}
+				>
 					<Icon name="plus" size={1} /> Add to list
 				</CreateListEntryButton>
 			</li>
 
-			<li {...dismissProps}>
+			<li>
 				<CopySpecsToClipboard
 					{...baseActionProps}
+					onClick={close}
 					specs={recipe.specs}
 					iconSize={1}
 				>
@@ -95,9 +94,10 @@ export function RecipeActions({
 				</CopySpecsToClipboard>
 			</li>
 
-			<li {...dismissProps}>
+			<li>
 				<DuplicateRecipeButton
 					{...baseActionProps}
+					onClick={close}
 					recipe={recipe}
 					color="amber"
 				>
@@ -116,13 +116,11 @@ export function RecipeActions({
 				</DeleteRecipeButton>
 			</li>
 
-			<li {...dismissProps}>
+			<li>
 				<ShareAction
 					{...baseActionProps}
-					value={new URL(
-						getRecipeUrl(recipe),
-						getServerSideBaseURL(),
-					).toString()}
+					onClick={close}
+					value={getRecipeUrl(recipe)}
 				>
 					Share link
 				</ShareAction>
