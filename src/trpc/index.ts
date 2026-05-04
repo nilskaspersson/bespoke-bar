@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { AppError, type AppErrorPayload } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 
 export async function createContext() {
@@ -13,10 +14,13 @@ type Context = Awaited<ReturnType<typeof createContext>>;
 
 const t = initTRPC.context<Context>().create({
 	errorFormatter({ shape, error }) {
+		const appError =
+			error.cause instanceof AppError ? error.cause.payload : null;
+
 		return {
 			...shape,
 			message:
-				error.code === "INTERNAL_SERVER_ERROR"
+				error.code === "INTERNAL_SERVER_ERROR" && !appError
 					? "Internal server error"
 					: shape.message,
 			data: {
@@ -25,10 +29,15 @@ const t = initTRPC.context<Context>().create({
 					error.cause instanceof z.ZodError
 						? z.flattenError(error.cause)
 						: null,
+				appError,
 			},
 		};
 	},
 });
+
+export type TRPCErrorData = {
+	appError?: AppErrorPayload | null;
+};
 
 export const router = t.router;
 export const publicProcedure = t.procedure;

@@ -10,6 +10,7 @@ import * as preparationMethods from "./schema/preparationMethods";
 import * as recipeFavorites from "./schema/recipeFavorites";
 import * as recipeListEntries from "./schema/recipeListEntries";
 import * as recipeLists from "./schema/recipeLists";
+import * as recipeSlotGrants from "./schema/recipeSlotGrants";
 import * as recipes from "./schema/recipes";
 import * as recipeTags from "./schema/recipeTags";
 import * as specs from "./schema/specs";
@@ -31,6 +32,7 @@ const schema = {
 	...recipeListEntries,
 	...recipeLists,
 	...recipes,
+	...recipeSlotGrants,
 	...recipeTags,
 	...specs,
 	...tags,

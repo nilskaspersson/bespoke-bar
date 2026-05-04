@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getCachedRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
+import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { PhotoToRecipe } from "@/features/recipes/photo/components/PhotoToRecipe";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
@@ -21,9 +23,16 @@ export default function PhotoToRecipePage() {
 
 async function PhotoToRecipeWithAuth() {
 	const { orgId } = await authOrForbidden();
-	const ingredients = await getCachedIngredients(orgId);
+	const [ingredients, usage] = await Promise.all([
+		getCachedIngredients(orgId),
+		getCachedRecipeSlotUsage(orgId),
+	]);
 
-	return <PhotoToRecipe ingredients={ingredients} />;
+	return (
+		<RecipeSlotUsageProvider value={usage}>
+			<PhotoToRecipe ingredients={ingredients} />
+		</RecipeSlotUsageProvider>
+	);
 }
 
 export const metadata: Metadata = {

@@ -1,6 +1,8 @@
+import { clsx } from "clsx";
 import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
+import { getCachedRecipeSlotLimit } from "@/features/billing/api/getRecipeSlotLimit";
 import { getCachedCountBarRecipes } from "@/features/recipes/api/countBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { Flex } from "@/ui/Flex";
@@ -21,11 +23,13 @@ export async function StatLinks({ orgId, userId, ...props }: StatLinksProps) {
 		cacheEvents.recipe.create.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
 		cacheEvents.favorite.toggle.tag(orgId, userId),
+		cacheEvents.recipeSlotGrant.create.tag(orgId),
 	);
 
-	const [recipesCount, favoriteRecipes] = await Promise.all([
+	const [recipesCount, favoriteRecipes, recipeSlotLimit] = await Promise.all([
 		getCachedCountBarRecipes(orgId),
 		getCachedUserFavoriteRecipeIds(orgId, userId),
+		getCachedRecipeSlotLimit(orgId),
 	]);
 
 	return (
@@ -35,8 +39,25 @@ export async function StatLinks({ orgId, userId, ...props }: StatLinksProps) {
 					{recipesCount === 1 ? "Recipe" : "Recipes"}
 				</Text>
 
-				<Text as="div" size={5} weight={600} compact className={styles.count}>
+				<Text
+					as="div"
+					size={5}
+					weight={700}
+					compact
+					className={clsx(styles.count, {
+						[styles.overCap]: recipesCount > recipeSlotLimit,
+					})}
+				>
 					{recipesCount}
+
+					<Text
+						size={2}
+						weight={recipesCount >= recipeSlotLimit ? 700 : 500}
+						light={recipesCount < recipeSlotLimit}
+					>
+						{" / "}
+						{recipeSlotLimit}
+					</Text>
 				</Text>
 			</Link>
 

@@ -1,3 +1,4 @@
+import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
 import { Flex } from "@/ui/Flex";
 import { Icon } from "@/ui/Icon";
 import { Skeleton } from "@/ui/Skeleton";
@@ -13,6 +14,8 @@ export function RecipeEditorSkeleton() {
 				<Text size={1} weight={600}>
 					Recipe editor
 				</Text>
+
+				<BulkDraftInfo />
 			</Flex>
 
 			<div className={styles.skeleton} />

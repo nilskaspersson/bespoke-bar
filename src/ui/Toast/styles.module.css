@@ -53,6 +53,11 @@
 			color: var(--red-12);
 		}
 
+		.info & {
+			background-color: var(--iris-6);
+			color: var(--iris-12);
+		}
+
 		[data-front="false"][data-expanded="false"] & {
 			opacity: 0;
 		}

@@ -1,13 +1,16 @@
-import { useCallback } from "react";
+import { use, useCallback } from "react";
 import z from "zod";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
+import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
+import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
+import { errorMessageOrFallback } from "@/utils/api";
 import { getKey, type Keyed } from "@/utils/withKey";
 
 export function useCreateBulkDraftRecipes(
@@ -19,11 +22,21 @@ export function useCreateBulkDraftRecipes(
 		createMoreHref,
 	}: {
 		onSuccess?: (recipes: Recipe[]) => void;
-		onError?: (error: unknown) => void;
+		onError?: (error?: unknown) => void;
 		createMoreHref?: string;
 	} = {},
 ) {
+	const usage = use(RecipeSlotUsageContext);
+
 	return useCallback(() => {
+		const toastId = Date.now().toString();
+
+		if (usage && usage.remaining < recipes.length) {
+			showRecipeLimitReachedToast(usage, { id: toastId });
+			onError?.();
+			return;
+		}
+
 		const promise = (async () => {
 			const data = z.array(recipeFormSchema).parse(
 				recipes.map(({ specs, ...recipe }) => ({
@@ -41,8 +54,6 @@ export function useCreateBulkDraftRecipes(
 				onError?.(error);
 				throw error;
 			});
-
-		const toastId = Date.now().toString();
 
 		toast.promise(promise, {
 			id: toastId,
@@ -102,7 +113,10 @@ export function useCreateBulkDraftRecipes(
 					</ToastActions>
 				),
 			}),
-			error: () => "Recipe could not be created",
+			error: (error) => ({
+				message: "Recipe could not be created",
+				description: errorMessageOrFallback(error, "Try again later."),
+			}),
 		});
-	}, [recipes, createRecipes, onSuccess, onError, createMoreHref]);
+	}, [recipes, createRecipes, onSuccess, onError, createMoreHref, usage]);
 }

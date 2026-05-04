@@ -1,7 +1,6 @@
 @layer feature {
 	.link {
-		&:hover,
-		&:focus-visible {
+		&:has(:hover, :focus-visible) {
 			color: var(--iris-11);
 		}
 	}
@@ -13,5 +12,9 @@
 		.link:has(:hover, :focus-visible) & {
 			color: var(--iris-12);
 		}
+	}
+
+	.overCap {
+		color: var(--red-11);
 	}
 }

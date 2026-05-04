@@ -20,8 +20,6 @@ export const upsertRecipeSchema = insertRecipeSchema
 	.omit({
 		id: true,
 		orgId: true,
-		archivedAt: true,
-		archivedBy: true,
 		createdAt: true,
 		createdBy: true,
 		updatedAt: true,

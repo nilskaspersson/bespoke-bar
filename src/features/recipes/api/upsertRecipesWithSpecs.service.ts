@@ -2,6 +2,7 @@ import { after } from "next/server";
 import { db } from "@/db";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
+import { getRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
 import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
 import {
 	insertIngredientsInTransaction,
@@ -9,6 +10,7 @@ import {
 	upsertRecipeInTransaction,
 } from "@/features/recipes/api/utils/transactionHelpers";
 import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
+import { AppError } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -17,6 +19,23 @@ export async function upsertRecipesWithSpecs(
 	userInputRecipes: RecipeFormData[],
 ): Promise<Recipe[]> {
 	const { userId, orgId } = auth;
+
+	const newCount = userInputRecipes.filter(
+		(o) => o.recipe?.id === undefined,
+	).length;
+
+	if (newCount > 0) {
+		const { used, limit } = await getRecipeSlotUsage(orgId);
+
+		if (used + newCount > limit) {
+			throw new AppError({
+				code: "RECIPE_SLOT_LIMIT_REACHED",
+				used,
+				limit,
+				requested: newCount,
+			});
+		}
+	}
 
 	const ingredientsToCreate = extractIngredientsToCreate(
 		userInputRecipes,

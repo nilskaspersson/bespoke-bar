@@ -1,14 +1,11 @@
-import { and, desc, eq, isNull, sql } from "drizzle-orm";
+import { desc, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadBarRecipes = db.query.RecipesTable.findMany({
-	where: and(
-		eq(RecipesTable.orgId, sql.placeholder("orgId")),
-		isNull(RecipesTable.archivedAt),
-	),
+	where: eq(RecipesTable.orgId, sql.placeholder("orgId")),
 	with: {
 		specs: {
 			with: {

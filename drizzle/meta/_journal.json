@@ -134,6 +134,13 @@
       "when": 1777405887680,
       "tag": "0018_daffy_electro",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1777842240822,
+      "tag": "0019_high_proudstar",
+      "breakpoints": true
     }
   ]
 }

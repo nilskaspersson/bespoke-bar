@@ -16,6 +16,7 @@ const defaultConfig = {
 		description: styles.description,
 		success: styles.success,
 		error: styles.error,
+		info: styles.info,
 	},
 } as const;
 
@@ -87,12 +88,25 @@ function toastError(
 	});
 }
 
+type InfoToast = typeof sonnerToast.info;
+
+function toastInfo(
+	message: Parameters<InfoToast>[0],
+	options?: Parameters<InfoToast>[1],
+): ReturnType<InfoToast> {
+	return sonnerToast.info(message, {
+		...defaultConfig,
+		...options,
+	});
+}
+
 export const toast = {
 	...sonnerToast,
 	promise: toastPromise,
 	success: toastSuccess,
 	loading: toastLoading,
 	error: toastError,
+	info: toastInfo,
 };
 
 export function ToastActions({ className, children }: ComponentProps<"div">) {
