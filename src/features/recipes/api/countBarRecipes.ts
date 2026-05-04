@@ -1,4 +1,4 @@
-import { and, count, eq, isNull } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
@@ -8,7 +8,7 @@ export async function countBarRecipes(orgId: string) {
 	const [result] = await db
 		.select({ count: count() })
 		.from(RecipesTable)
-		.where(and(eq(RecipesTable.orgId, orgId), isNull(RecipesTable.archivedAt)));
+		.where(eq(RecipesTable.orgId, orgId));
 
 	return result.count;
 }

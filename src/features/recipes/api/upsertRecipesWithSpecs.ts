@@ -7,13 +7,21 @@ import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipesWithSpecs as upsertRecipesWithSpecsService } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
 import { getRecipeUrl } from "@/features/recipes/utils";
+import { AppError, getAppErrorMessage } from "@/utils/appError";
 import { authOrForbidden } from "@/utils/auth";
 
 export async function upsertRecipesWithSpecs(
 	userInputRecipes: RecipeFormData[],
 ) {
 	const auth = await authOrForbidden();
-	return upsertRecipesWithSpecsService(auth, userInputRecipes);
+	try {
+		return await upsertRecipesWithSpecsService(auth, userInputRecipes);
+	} catch (error) {
+		if (error instanceof AppError) {
+			throw new Error(getAppErrorMessage(error.payload));
+		}
+		throw error;
+	}
 }
 
 export async function upsertRecipeWithSpecsAction(formData: FormData) {
@@ -33,11 +41,13 @@ export async function upsertRecipeWithSpecsAction(formData: FormData) {
 
 	try {
 		result = await upsertRecipesWithSpecs(data);
-	} catch (_error) {
-		console.error(_error);
+	} catch (error) {
+		console.error(error);
 
 		return submission.reply({
-			formErrors: ["Failed to upsert recipe"],
+			formErrors: [
+				error instanceof Error ? error.message : "Failed to upsert recipe",
+			],
 		});
 	}
 

@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { getCachedRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
+import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";
@@ -21,12 +23,17 @@ export default function BulkCreateRecipePage() {
 
 async function BulkCreateRecipeWithAuth() {
 	const { orgId } = await authOrForbidden();
-	const ingredients = await getCachedIngredients(orgId);
+	const [ingredients, usage] = await Promise.all([
+		getCachedIngredients(orgId),
+		getCachedRecipeSlotUsage(orgId),
+	]);
 
 	return (
-		<BulkDraftRecipesForm
-			ingredients={ingredients}
-			createRecipes={createRecipesWithSpecsFromData}
-		/>
+		<RecipeSlotUsageProvider value={usage}>
+			<BulkDraftRecipesForm
+				ingredients={ingredients}
+				createRecipes={createRecipesWithSpecsFromData}
+			/>
+		</RecipeSlotUsageProvider>
 	);
 }

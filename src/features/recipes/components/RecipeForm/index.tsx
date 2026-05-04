@@ -2,11 +2,13 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useRef } from "react";
+import { use, useCallback, useRef } from "react";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
 import type { SpecWithIngredient } from "@/db/schema/specs";
+import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
+import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { upsertRecipeWithSpecsAction } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { EditRecipeSpecs } from "@/features/recipes/components/EditRecipeSpecs";
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
@@ -52,10 +54,17 @@ function initializeSpecFormEntry(spec?: SpecWithIngredient) {
 
 export function RecipeForm({ recipe, ingredients }: Props) {
 	const utils = trpc.useUtils();
+	const isNew = !recipe?.id;
+	const usage = use(RecipeSlotUsageContext);
 
 	const handleSubmit = useCallback(
 		async (formData: FormData) => {
 			const toastId = Date.now().toString();
+
+			if (isNew && usage && usage.remaining <= 0) {
+				showRecipeLimitReachedToast(usage, { id: toastId });
+				return;
+			}
 
 			const promise = upsertRecipeWithSpecsAction(formData);
 
@@ -74,7 +83,7 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 			await promise;
 			utils.recipe.list.invalidate();
 		},
-		[utils],
+		[utils, isNew, usage],
 	);
 
 	const [form, fields] = useForm<RecipeFormData>({

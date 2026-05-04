@@ -116,6 +116,12 @@ export const cacheEvents = {
 				id ? `${orgId}:delete-tag:${id}` : `${orgId}:delete-tag`,
 		},
 	},
+	recipeSlotGrant: {
+		create: {
+			emit: (orgId: string) => updateTag(`${orgId}:create-recipe-slot-grant`),
+			tag: (orgId: string) => `${orgId}:create-recipe-slot-grant`,
+		},
+	},
 };
 
 /**
@@ -197,5 +203,13 @@ export const cacheTags = {
 		cacheEvents.tag.create.tag(orgId),
 		cacheEvents.tag.update.tag(orgId),
 		cacheEvents.tag.delete.tag(orgId),
+	],
+	recipeSlotLimit: (orgId: string) => [
+		cacheEvents.recipeSlotGrant.create.tag(orgId),
+	],
+	recipeSlotUsage: (orgId: string) => [
+		cacheEvents.recipeSlotGrant.create.tag(orgId),
+		cacheEvents.recipe.create.tag(orgId),
+		cacheEvents.recipe.delete.tag(orgId),
 	],
 };

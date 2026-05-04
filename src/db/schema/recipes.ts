@@ -41,8 +41,6 @@ export const RecipesTable = pgTable(
 		glassware: glasswareEnum("glassware"),
 		garnish: varchar("garnish", { length: 100 }),
 		style: cocktailStylesEnum("style"),
-		archivedBy: text("archived_by"),
-		archivedAt: timestamp("archived_at", { mode: "string" }),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()
 			.notNull(),
@@ -51,9 +49,7 @@ export const RecipesTable = pgTable(
 		updatedBy: text("updated_by"),
 		orgId: text("org_id").notNull(),
 	},
-	(table) => [
-		index("idx_recipes_org_archived").on(table.orgId, table.archivedAt),
-	],
+	(table) => [index("idx_recipes_org_id").on(table.orgId)],
 );
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({

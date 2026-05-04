@@ -14,4 +14,8 @@
 			color: var(--iris-12);
 		}
 	}
+
+	.limit {
+		color: var(--mauve-10);
+	}
 }

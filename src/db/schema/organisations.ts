@@ -1,7 +1,15 @@
-import { pgTable, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+	integer,
+	pgTable,
+	text,
+	timestamp,
+	varchar,
+} from "drizzle-orm/pg-core";
 import { createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import type z from "zod";
+
+export const DEFAULT_BASE_RECIPE_SLOTS = 50;
 
 export const OrganisationsTable = pgTable("organisations", {
 	id: text("id")
@@ -12,6 +20,9 @@ export const OrganisationsTable = pgTable("organisations", {
 	defaultLocale: varchar("default_locale", { length: 10 })
 		.notNull()
 		.default("en-GB"),
+	baseRecipeSlots: integer("base_recipe_slots")
+		.notNull()
+		.default(DEFAULT_BASE_RECIPE_SLOTS),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 	createdBy: text("created_by").notNull(),
