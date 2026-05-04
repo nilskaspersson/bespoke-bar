@@ -1,3 +1,4 @@
+import { clsx } from "clsx";
 import { cacheLife, cacheTag } from "next/cache";
 import Link from "next/link";
 import type { ComponentProps } from "react";
@@ -38,9 +39,22 @@ export async function StatLinks({ orgId, userId, ...props }: StatLinksProps) {
 					{recipesCount === 1 ? "Recipe" : "Recipes"}
 				</Text>
 
-				<Text as="div" size={5} weight={600} compact className={styles.count}>
+				<Text
+					as="div"
+					size={5}
+					weight={700}
+					compact
+					className={clsx(styles.count, {
+						[styles.overCap]: recipesCount > recipeSlotLimit,
+					})}
+				>
 					{recipesCount}
-					<Text as="span" size={2} weight={400} className={styles.limit}>
+
+					<Text
+						size={2}
+						weight={recipesCount >= recipeSlotLimit ? 700 : 500}
+						light={recipesCount < recipeSlotLimit}
+					>
 						{" / "}
 						{recipeSlotLimit}
 					</Text>
