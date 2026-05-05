@@ -22,9 +22,13 @@ const rateLimiter = redis
 	: null;
 
 async function getEnabledRateLimiter() {
-	if (!rateLimiter) return null;
-	const enabled = (await get<boolean>("rate-limit-enabled")) ?? false;
-	return enabled ? rateLimiter : null;
+	if (!rateLimiter) {
+		return null;
+	}
+
+	const edgeRateLimitEnabled = await get<boolean>("rate-limit-enabled");
+
+	return edgeRateLimitEnabled ? rateLimiter : null;
 }
 
 /**
