@@ -1,18 +1,17 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { get } from "@vercel/edge-config";
-import { NextResponse } from "next/server";
+import { AppError } from "@/utils/appError";
 
-const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
-const token =
-	process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
+const url = process.env.UPSTASH_KV_REST_API_URL;
+const token = process.env.UPSTASH_KV_REST_API_TOKEN;
 
 /**
  * Guard construction so missing config is a fast no-op, not a per-request stall.
  */
 const redis = url && token ? new Redis({ url, token }) : null;
 
-export const rateLimiter = redis
+const rateLimiter = redis
 	? new Ratelimit({
 			redis,
 			limiter: Ratelimit.slidingWindow(30, "60s"),
@@ -21,72 +20,27 @@ export const rateLimiter = redis
 		})
 	: null;
 
-type RatelimitResponse = Awaited<ReturnType<Ratelimit["limit"]>>;
-
-async function isRateLimitEnabled(): Promise<boolean> {
-	return (await get<boolean>("rate-limit-enabled")) ?? false;
+async function getEnabledRateLimiter() {
+	if (!rateLimiter) return null;
+	const enabled = (await get<boolean>("rate-limit-enabled")) ?? false;
+	return enabled ? rateLimiter : null;
 }
 
-export async function checkRateLimit<T>(
-	userId: string,
-	onRateLimited: (result: RatelimitResponse) => T,
-): Promise<T | null> {
-	if (!rateLimiter) {
-		return null;
-	}
+export async function rateLimit(userId: string): Promise<void> {
+	const limiter = await getEnabledRateLimiter();
+	if (!limiter) return;
 
 	try {
-		const result = await rateLimiter.limit(userId);
+		const result = await limiter.limit(userId);
 
 		if (!result.success) {
-			return onRateLimited(result);
+			throw new AppError({
+				code: "RATE_LIMIT_EXCEEDED",
+				retryAfter: Math.max(1, Math.round((result.reset - Date.now()) / 1000)),
+			});
 		}
 	} catch (error) {
-		/**
-		 * If rate limiting errors, there's likely something wrong with the network, the
-		 * configuration, or similar, and not an actual limited request. Allow through.
-		 */
+		if (error instanceof AppError) throw error;
 		console.warn("Rate limiting failed, allowing request:", error);
 	}
-
-	return null;
-}
-
-export function createRateLimitMiddlewareResponse(
-	result: RatelimitResponse,
-): NextResponse {
-	const retryAfterSeconds = Math.round((result.reset - Date.now()) / 1000);
-
-	return NextResponse.json(
-		{
-			error: "Rate limit exceeded",
-			retryAfter: retryAfterSeconds,
-			message: "You're moving too fast!",
-		},
-		{
-			status: 429,
-			headers: {
-				"Retry-After": retryAfterSeconds.toString(),
-				"X-RateLimit-Limit": result.limit.toString(),
-				"X-RateLimit-Remaining": result.remaining.toString(),
-				"X-RateLimit-Reset": result.reset.toString(),
-			},
-		},
-	);
-}
-
-export async function shouldRateLimitRequest(
-	request: Request,
-): Promise<boolean> {
-	/**
-	 * Rate limit all non-GET requests.
-	 *
-	 * Always passing GET seems fine, since we cache all assets and endpoints, and
-	 * Vercel should protect us against overwhelming requests.
-	 */
-	if (request.method === "GET") {
-		return false;
-	}
-
-	return await isRateLimitEnabled();
 }

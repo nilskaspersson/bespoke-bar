@@ -165,3 +165,5 @@ export function getDifferentKeys<T extends Record<PropertyKey, unknown>>(
 
 	return diff;
 }
+
+export function noop() {}

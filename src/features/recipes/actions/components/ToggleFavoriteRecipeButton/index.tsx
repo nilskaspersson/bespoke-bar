@@ -8,7 +8,8 @@ import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { ToastActions, toast } from "@/ui/Toast";
-import { errorMessageOrFallback } from "@/utils/api";
+import { noop } from "@/utils";
+import { getErrorToast, unwrapAction } from "@/utils/api";
 import styles from "./styles.module.css";
 
 export function ToggleFavoriteRecipeButton({
@@ -40,7 +41,7 @@ export function ToggleFavoriteRecipeButton({
 
 		const toastId = externalToastId ?? Date.now().toString();
 
-		const promise = toggleRecipeFavorite(recipe.id);
+		const promise = unwrapAction(toggleRecipeFavorite(recipe.id));
 
 		toast.promise(promise, {
 			id: toastId,
@@ -80,13 +81,14 @@ export function ToggleFavoriteRecipeButton({
 					</ToastActions>
 				),
 			}),
-			error: (e) => ({
-				message: "Could not toggle favorite Recipe",
-				description: errorMessageOrFallback(e, "Try again later."),
-			}),
+			error: (e) =>
+				getErrorToast(e, {
+					message: "Could not toggle favorite Recipe",
+					description: "Try again later.",
+				}),
 		});
 
-		await promise;
+		await promise.catch(noop);
 	};
 
 	return (
