@@ -143,30 +143,69 @@ export const cacheTags = {
 		cacheEvents.ingredient.delete.tag(orgId),
 	],
 	/**
-	 * Saturated Recipes subscribe to updates and deletes, as well as ingredient
-	 * updates. ingredient.delete is deliberately absent, as there's a constraint
-	 * preventing deletion of an ingredient that is in use by a recipe.
+	 * Saturated Recipes subscribe to per-id recipe events, plus per-id ingredient
+	 * and tag events derived from the loaded data. ingredient.delete is omitted
+	 * by design — a FK constraint prevents deleting an ingredient in use.
 	 */
-	recipeWithIngredients: (orgId: string, id?: Recipe["id"]) => [
+	recipeWithIngredients: (
+		orgId: string,
+		id: Recipe["id"],
+		ingredientIds: Ingredient["id"][],
+		tagIds: Tag["id"][],
+	) => [
 		cacheEvents.recipe.update.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId, id),
-		cacheEvents.ingredient.update.tag(orgId),
-		cacheEvents.tag.update.tag(orgId),
-		cacheEvents.tag.delete.tag(orgId),
+		...ingredientIds.map((iid) =>
+			cacheEvents.ingredient.update.tag(orgId, iid),
+		),
+		...tagIds.map((tid) => cacheEvents.tag.update.tag(orgId, tid)),
+		...tagIds.map((tid) => cacheEvents.tag.delete.tag(orgId, tid)),
 	],
 	/**
-	 * Any modification- or creation of a recipe should invalidate the full list of
-	 * recipes. Ingredient updates are added to reflect name changes. Tag updates
-	 * and deletes are added because tags are part of the recipe payload — a rename
-	 * changes the visible name, and a delete removes it from every recipe.
+	 * Saturated bar-recipe list subscribes to org-wide recipe events plus per-id
+	 * ingredient and tag events deduped from the loaded data. Once an org grows
+	 * past the point where per-id tracking fits under the 64-tag cap on a
+	 * cached function, this falls back to org-wide ingredient/tag subscriptions
+	 * — granular while it's feasible, coarse once it isn't.
 	 */
-	barRecipes: (orgId: string) => [
+	barRecipes: (
+		orgId: string,
+		ingredientIds: Ingredient["id"][],
+		tagIds: Tag["id"][],
+	) => {
+		const baseTags = [
+			cacheEvents.recipe.create.tag(orgId),
+			cacheEvents.recipe.update.tag(orgId),
+			cacheEvents.recipe.delete.tag(orgId),
+		];
+
+		const tags = [
+			...baseTags,
+			...ingredientIds.map((iid) =>
+				cacheEvents.ingredient.update.tag(orgId, iid),
+			),
+			...tagIds.map((tid) => cacheEvents.tag.update.tag(orgId, tid)),
+			...tagIds.map((tid) => cacheEvents.tag.delete.tag(orgId, tid)),
+		];
+
+		if (tags.length > 60) {
+			return [
+				...baseTags,
+				cacheEvents.ingredient.update.tag(orgId),
+				cacheEvents.tag.update.tag(orgId),
+				cacheEvents.tag.delete.tag(orgId),
+			];
+		}
+
+		return tags;
+	},
+	/**
+	 * Just the count of recipes — only changes when a recipe is added or removed.
+	 * Ingredient and tag mutations don't affect the number, so don't subscribe.
+	 */
+	countBarRecipes: (orgId: string) => [
 		cacheEvents.recipe.create.tag(orgId),
-		cacheEvents.recipe.update.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
-		cacheEvents.ingredient.update.tag(orgId),
-		cacheEvents.tag.update.tag(orgId),
-		cacheEvents.tag.delete.tag(orgId),
 	],
 	/**
 	 * The list of Recipe Lists cares about all recipeList events, as well as

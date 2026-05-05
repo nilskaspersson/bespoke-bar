@@ -6,6 +6,7 @@ import {
 	recipeListEntryFormSchema,
 	type UpdateRecipeListEntry,
 } from "@/db/schema/recipeListEntries";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -14,9 +15,11 @@ export async function updateRecipeListEntry(
 	id: RecipeListEntry["id"],
 	userInputData: UpdateRecipeListEntry,
 ): Promise<RecipeListEntry> {
-	const validatedUserInputData = recipeListEntryFormSchema.parse(userInputData);
+	const { userId, orgId } = auth;
 
-	const { orgId } = auth;
+	await rateLimit(userId);
+
+	const validatedUserInputData = recipeListEntryFormSchema.parse(userInputData);
 
 	const [result] = await db
 		.update(RecipeListEntriesTable)

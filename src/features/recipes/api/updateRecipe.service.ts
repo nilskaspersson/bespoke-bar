@@ -6,6 +6,7 @@ import {
 	RecipesTable,
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -14,9 +15,11 @@ export async function updateRecipe(
 	id: Recipe["id"],
 	userInputRecipe: InsertRecipe,
 ): Promise<Recipe> {
-	const validatedUserInputRecipe = updateRecipeSchema.parse(userInputRecipe);
-
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
+
+	const validatedUserInputRecipe = updateRecipeSchema.parse(userInputRecipe);
 
 	const [result] = await db
 		.update(RecipesTable)

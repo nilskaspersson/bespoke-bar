@@ -5,6 +5,7 @@ import {
 	type RecipeListEntry,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -12,7 +13,9 @@ export async function removeRecipeFromList(
 	auth: Auth,
 	entryId: string,
 ): Promise<RecipeListEntry> {
-	const { orgId } = auth;
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const deletedEntry = await db.transaction(async (tx) => {
 		const [entry] = await tx

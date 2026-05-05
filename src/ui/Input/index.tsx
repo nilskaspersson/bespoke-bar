@@ -63,7 +63,7 @@ export function Input({
 	return (
 		<div
 			className={clsx(styles.adornedWrapper, {
-				[formControlStyles.fullWidth]: fullWidth,
+				[styles.fitContent]: !fullWidth,
 			})}
 		>
 			{startAdornment ? (

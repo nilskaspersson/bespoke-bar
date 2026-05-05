@@ -14,6 +14,13 @@ import { insertRecipeSchema } from "@/db/schema/recipes";
 import { insertSpecsSchema } from "@/db/schema/specs";
 
 /**
+ * Caps a recipe's spec count well above the most complex real cocktail (~13)
+ * while staying comfortably under the 64-tag-per-cached-function limit that
+ * `recipeWithIngredients` subscribes against.
+ */
+export const MAX_SPECS_PER_RECIPE = 20;
+
+/**
  * Recipes with specs and ingredients
  */
 export const upsertRecipeSchema = insertRecipeSchema
@@ -67,7 +74,13 @@ export const upsertSpecSchema = insertSpecsSchema
 
 export const recipeFormSchema = z.object({
 	recipe: upsertRecipeSchema.optional(),
-	specs: z.array(upsertSpecSchema).optional(),
+	specs: z
+		.array(upsertSpecSchema)
+		.max(
+			MAX_SPECS_PER_RECIPE,
+			`Recipes can have at most ${MAX_SPECS_PER_RECIPE} ingredients.`,
+		)
+		.optional(),
 });
 
 export type RecipeFormData = z.infer<typeof recipeFormSchema>;

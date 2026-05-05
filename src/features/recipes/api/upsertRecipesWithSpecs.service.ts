@@ -10,6 +10,7 @@ import {
 	upsertRecipeInTransaction,
 } from "@/features/recipes/api/utils/transactionHelpers";
 import { extractIngredientsToCreate } from "@/features/recipes/utils/schema";
+import { rateLimit } from "@/rateLimit";
 import { AppError } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
@@ -19,6 +20,8 @@ export async function upsertRecipesWithSpecs(
 	userInputRecipes: RecipeFormData[],
 ): Promise<Recipe[]> {
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const newCount = userInputRecipes.filter(
 		(o) => o.recipe?.id === undefined,

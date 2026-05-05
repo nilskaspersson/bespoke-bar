@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -8,7 +9,9 @@ export async function deleteRecipeList(
 	auth: Auth,
 	id: RecipeList["id"],
 ): Promise<void> {
-	const { orgId } = auth;
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	await db
 		.delete(RecipeListsTable)

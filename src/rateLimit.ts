@@ -1,72 +1,65 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { NextResponse } from "next/server";
+import { get } from "@vercel/edge-config";
+import { cache } from "react";
+import { AppError } from "@/utils/appError";
 
-const redis = Redis.fromEnv();
+const url = process.env.UPSTASH_KV_REST_API_URL;
+const token = process.env.UPSTASH_KV_REST_API_TOKEN;
 
-export const rateLimiter = new Ratelimit({
-	redis,
-	limiter: Ratelimit.slidingWindow(30, "60s"),
-	prefix: "rl:ops",
-	analytics: false,
-});
+/**
+ * Guard construction so missing config is a fast no-op, not a per-request stall.
+ */
+const redis = url && token ? new Redis({ url, token }) : null;
 
-type RatelimitResponse = Awaited<ReturnType<typeof rateLimiter.limit>>;
+/**
+ * In-process short-circuit for repeat calls from blocked users — spares
+ * Upstash quota during write spam (stuck buttons, abuse).
+ */
+const ephemeralCache = new Map<string, number>();
 
-export async function checkRateLimit<T>(
-	userId: string,
-	onRateLimited: (result: RatelimitResponse) => T,
-): Promise<T | null> {
+const rateLimiter = redis
+	? new Ratelimit({
+			redis,
+			limiter: Ratelimit.slidingWindow(30, "60s"),
+			prefix: "rl:ops",
+			analytics: false,
+			ephemeralCache,
+		})
+	: null;
+
+async function getEnabledRateLimiter() {
+	if (!rateLimiter) {
+		return null;
+	}
+
+	const edgeRateLimitEnabled = await get<boolean>("rate-limit-enabled");
+
+	return edgeRateLimitEnabled ? rateLimiter : null;
+}
+
+/**
+ * Request-scoped `cache` so a hypothetical multiple write-service calls
+ * within the same request only consume one quota hit.
+ */
+export const rateLimit = cache(async (userId: string): Promise<void> => {
+	const limiter = await getEnabledRateLimiter();
+	if (!limiter) return;
+
 	try {
-		const result = await rateLimiter.limit(userId);
+		const result = await limiter.limit(userId);
 
 		if (!result.success) {
-			return onRateLimited(result);
+			throw new AppError({
+				code: "RATE_LIMIT_EXCEEDED",
+				retryAfter: Math.max(1, Math.round((result.reset - Date.now()) / 1000)),
+			});
 		}
 	} catch (error) {
-		/**
-		 * If rate limiting errors, there's likely something wrong with the network, the
-		 * configuration, or similar, and not an actual limited request. Allow through.
-		 */
+		if (error instanceof AppError) {
+			throw error;
+		}
+
 		console.warn("Rate limiting failed, allowing request:", error);
 	}
-
-	return null;
-}
-
-export function createRateLimitMiddlewareResponse(
-	result: RatelimitResponse,
-): NextResponse {
-	const retryAfterSeconds = Math.round((result.reset - Date.now()) / 1000);
-
-	return NextResponse.json(
-		{
-			error: "Rate limit exceeded",
-			retryAfter: retryAfterSeconds,
-			message: "You're moving too fast!",
-		},
-		{
-			status: 429,
-			headers: {
-				"Retry-After": retryAfterSeconds.toString(),
-				"X-RateLimit-Limit": result.limit.toString(),
-				"X-RateLimit-Remaining": result.remaining.toString(),
-				"X-RateLimit-Reset": result.reset.toString(),
-			},
-		},
-	);
-}
-
-export function shouldRateLimitRequest(request: Request): boolean {
-	if (process.env.ENABLE_RATE_LIMITING !== "true") {
-		return false;
-	}
-
-	/**
-	 * Rate limit all non-GET requests.
-	 *
-	 * Always passing GET seems fine, since we cache all assets and endpoints, and
-	 * Vercel should protect us against overwhelming requests.
-	 */
-	return request.method !== "GET";
-}
+});

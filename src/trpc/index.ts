@@ -4,6 +4,16 @@ import { z } from "zod";
 import { AppError, type AppErrorPayload } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 
+type TRPCErrorCode = ConstructorParameters<typeof TRPCError>[0]["code"];
+
+/**
+ * Bridge between domain `AppError` enums and tRPC's HTTP-aligned codes.
+ */
+const APP_ERROR_TO_TRPC_CODE: Record<AppErrorPayload["code"], TRPCErrorCode> = {
+	RATE_LIMIT_EXCEEDED: "TOO_MANY_REQUESTS",
+	RECIPE_SLOT_LIMIT_REACHED: "FORBIDDEN",
+};
+
 export async function createContext() {
 	const { userId, orgId } = await auth();
 
@@ -47,10 +57,27 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 		throw new TRPCError({ code: "UNAUTHORIZED" });
 	}
 
-	return next({
-		ctx: {
-			userId: ctx.userId,
-			orgId: ctx.orgId,
-		} as Auth,
-	});
+	/**
+	 * Translate any `AppError` into a `TRPCError` with the matching HTTP code.
+	 * The mapping lives at the top of the file and is schema-driven, so the
+	 * status is consistent across every variant. `errorFormatter` still pulls
+	 * the original payload onto `data.appError` via `error.cause`.
+	 */
+	try {
+		return await next({
+			ctx: {
+				userId: ctx.userId,
+				orgId: ctx.orgId,
+			} as Auth,
+		});
+	} catch (error) {
+		if (error instanceof AppError) {
+			throw new TRPCError({
+				code: APP_ERROR_TO_TRPC_CODE[error.payload.code],
+				message: error.message,
+				cause: error,
+			});
+		}
+		throw error;
+	}
 });

@@ -5,12 +5,17 @@ import {
 	type UpdateOrganisationFormData,
 	updateOrganisationSchema,
 } from "@/db/schema/organisations";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 
 export async function updateLocalOrganisation(
 	auth: Auth,
 	userInput: UpdateOrganisationFormData,
 ) {
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
+
 	const validatedInput = updateOrganisationSchema.parse(userInput);
 
 	const [organisation] = await db
@@ -19,7 +24,7 @@ export async function updateLocalOrganisation(
 			...validatedInput,
 			updatedAt: sql`NOW()`,
 		})
-		.where(eq(OrganisationsTable.clerkOrgId, auth.orgId))
+		.where(eq(OrganisationsTable.clerkOrgId, orgId))
 		.returning();
 
 	return organisation;
