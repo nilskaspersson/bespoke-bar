@@ -1,10 +1,13 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 export async function toggleRecipeFavorite(auth: Auth, recipeId: string) {
+	await rateLimit(auth.userId);
+
 	const { userId, orgId } = auth;
 
 	const existingFavorite = await db.query.RecipeFavoritesTable.findFirst({
