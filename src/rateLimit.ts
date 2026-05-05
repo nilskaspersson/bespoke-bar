@@ -1,6 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { NextResponse } from "next/server";
+import { rateLimitEnabledFlag } from "@/flags";
 
 const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
 const token =
@@ -70,12 +71,18 @@ export function createRateLimitMiddlewareResponse(
 	);
 }
 
-export function shouldRateLimitRequest(request: Request): boolean {
+export async function shouldRateLimitRequest(
+	request: Request,
+): Promise<boolean> {
 	/**
 	 * Rate limit all non-GET requests.
 	 *
 	 * Always passing GET seems fine, since we cache all assets and endpoints, and
 	 * Vercel should protect us against overwhelming requests.
 	 */
-	return request.method !== "GET";
+	if (request.method === "GET") {
+		return false;
+	}
+
+	return await rateLimitEnabledFlag();
 }

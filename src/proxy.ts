@@ -1,5 +1,4 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { rateLimitEnabledFlag } from "@/flags";
 import {
 	checkRateLimit,
 	createRateLimitMiddlewareResponse,
@@ -18,13 +17,7 @@ export default clerkMiddleware(async (auth, req) => {
 		/**
 		 * Rate limit server actions on protected routes.
 		 */
-		if (shouldRateLimitRequest(req)) {
-			const rateLimitEnabled = await rateLimitEnabledFlag();
-
-			if (!rateLimitEnabled) {
-				return;
-			}
-
+		if (await shouldRateLimitRequest(req)) {
 			const rateLimitResponse = await checkRateLimit(
 				userId,
 				createRateLimitMiddlewareResponse,
