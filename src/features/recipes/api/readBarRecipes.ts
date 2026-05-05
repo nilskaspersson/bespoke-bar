@@ -28,6 +28,15 @@ async function readBarRecipes(orgId: string) {
 export async function getCachedBarRecipes(orgId: string) {
 	"use cache";
 	cacheLife("max");
-	cacheTag(...cacheTags.barRecipes(orgId));
-	return await readBarRecipes(orgId);
+	const recipes = await readBarRecipes(orgId);
+
+	const ingredientIds = new Set<string>();
+	const tagIds = new Set<string>();
+	for (const r of recipes) {
+		for (const s of r.specs) ingredientIds.add(s.ingredientId);
+		for (const rt of r.tags) tagIds.add(rt.tagId);
+	}
+
+	cacheTag(...cacheTags.barRecipes(orgId, [...ingredientIds], [...tagIds]));
+	return recipes;
 }

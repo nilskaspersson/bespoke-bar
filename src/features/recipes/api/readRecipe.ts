@@ -33,6 +33,14 @@ export async function readRecipe(orgId: string, recipeId: Recipe["id"]) {
 export async function getCachedRecipe(orgId: string, id: Recipe["id"]) {
 	"use cache";
 	cacheLife("max");
-	cacheTag(...cacheTags.recipeWithIngredients(orgId, id));
-	return await readRecipe(orgId, id);
+	const recipe = await readRecipe(orgId, id);
+	cacheTag(
+		...cacheTags.recipeWithIngredients(
+			orgId,
+			id,
+			recipe?.specs.map((s) => s.ingredientId) ?? [],
+			recipe?.tags.map((rt) => rt.tagId) ?? [],
+		),
+	);
+	return recipe;
 }

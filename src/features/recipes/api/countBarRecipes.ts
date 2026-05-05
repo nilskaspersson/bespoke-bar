@@ -16,6 +16,6 @@ export async function countBarRecipes(orgId: string) {
 export async function getCachedCountBarRecipes(orgId: string) {
 	"use cache";
 	cacheLife("max");
-	cacheTag(...cacheTags.barRecipes(orgId));
+	cacheTag(...cacheTags.countBarRecipes(orgId));
 	return await countBarRecipes(orgId);
 }
