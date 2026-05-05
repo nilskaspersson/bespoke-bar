@@ -19,8 +19,11 @@
 	}
 
 	.adornedWrapper {
-		width: fit-content;
 		position: relative;
+
+		&.fitContent {
+			width: fit-content;
+		}
 	}
 
 	.adornment {
