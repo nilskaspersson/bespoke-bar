@@ -1,6 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { get } from "@vercel/edge-config";
+import { cache } from "react";
 import { AppError } from "@/utils/appError";
 
 const url = process.env.UPSTASH_KV_REST_API_URL;
@@ -26,7 +27,11 @@ async function getEnabledRateLimiter() {
 	return enabled ? rateLimiter : null;
 }
 
-export async function rateLimit(userId: string): Promise<void> {
+/**
+ * Request-scoped `cache` so a hypothetical multiple write-service calls
+ * within the same request only consume one quota hit.
+ */
+export const rateLimit = cache(async (userId: string): Promise<void> => {
 	const limiter = await getEnabledRateLimiter();
 	if (!limiter) return;
 
@@ -40,7 +45,10 @@ export async function rateLimit(userId: string): Promise<void> {
 			});
 		}
 	} catch (error) {
-		if (error instanceof AppError) throw error;
+		if (error instanceof AppError) {
+			throw error;
+		}
+
 		console.warn("Rate limiting failed, allowing request:", error);
 	}
-}
+});
