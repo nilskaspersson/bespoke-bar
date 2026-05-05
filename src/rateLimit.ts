@@ -12,12 +12,19 @@ const token = process.env.UPSTASH_KV_REST_API_TOKEN;
  */
 const redis = url && token ? new Redis({ url, token }) : null;
 
+/**
+ * In-process short-circuit for repeat calls from blocked users — spares
+ * Upstash quota during write spam (stuck buttons, abuse).
+ */
+const ephemeralCache = new Map<string, number>();
+
 const rateLimiter = redis
 	? new Ratelimit({
 			redis,
 			limiter: Ratelimit.slidingWindow(30, "60s"),
 			prefix: "rl:ops",
 			analytics: false,
+			ephemeralCache,
 		})
 	: null;
 
