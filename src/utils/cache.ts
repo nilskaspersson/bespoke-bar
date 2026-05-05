@@ -163,9 +163,10 @@ export const cacheTags = {
 	],
 	/**
 	 * Saturated bar-recipe list subscribes to org-wide recipe events plus per-id
-	 * ingredient and tag events deduped from the loaded data. Falls back to
-	 * org-wide ingredient/tag subscriptions if the unique-id count would push
-	 * the cached function over the documented 64-tag cap.
+	 * ingredient and tag events deduped from the loaded data. Once an org grows
+	 * past the point where per-id tracking fits under the 64-tag cap on a
+	 * cached function, this falls back to org-wide ingredient/tag subscriptions
+	 * — granular while it's feasible, coarse once it isn't.
 	 */
 	barRecipes: (
 		orgId: string,
@@ -188,9 +189,6 @@ export const cacheTags = {
 		];
 
 		if (tags.length > 60) {
-			console.warn(
-				`[cache] barRecipes tag count ${tags.length} > 60, falling back to org-wide`,
-			);
 			return [
 				...baseTags,
 				cacheEvents.ingredient.update.tag(orgId),

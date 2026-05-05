@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { cacheTags } from "./cache";
 
 describe("cacheTags.recipeWithIngredients", () => {
@@ -80,7 +80,6 @@ describe("cacheTags.barRecipes", () => {
 	});
 
 	test("falls back to org-wide subscriptions above 60 tags", () => {
-		const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 		const ingredientIds = Array.from({ length: 70 }, (_, i) => `ing${i}`);
 
 		const tags = cacheTags.barRecipes("org1", ingredientIds, []);
@@ -93,13 +92,9 @@ describe("cacheTags.barRecipes", () => {
 			"org1:update-tag",
 			"org1:delete-tag",
 		]);
-		expect(warn).toHaveBeenCalledOnce();
-
-		warn.mockRestore();
 	});
 
 	test("stays per-id at exactly the 60-tag cushion", () => {
-		const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
 		// 3 base + 57 ingredients = 60 total, at the cushion but not over.
 		const ingredientIds = Array.from({ length: 57 }, (_, i) => `ing${i}`);
 
@@ -107,9 +102,6 @@ describe("cacheTags.barRecipes", () => {
 
 		expect(tags).toHaveLength(60);
 		expect(tags).toContain("org1:update-ingredient:ing0");
-		expect(warn).not.toHaveBeenCalled();
-
-		warn.mockRestore();
 	});
 });
 
