@@ -8,6 +8,7 @@ import {
 	type RecipeListEntryFormData,
 } from "@/db/schema/recipeListEntries";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -15,7 +16,9 @@ export async function addRecipeToList(
 	auth: Auth,
 	userInput: RecipeListEntryFormData,
 ): Promise<RecipeListEntry> {
-	const { orgId } = auth;
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	/**
 	 * Validate early to avoid querying the list. We will validate again later once we

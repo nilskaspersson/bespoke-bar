@@ -2,6 +2,7 @@ import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { insertTagSchema, type Tag, TagsTable } from "@/db/schema/tags";
 import { isUniqueConstraintViolation } from "@/db/utils";
+import { rateLimit } from "@/rateLimit";
 import { normalizeInput, unique } from "@/utils";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
@@ -16,6 +17,9 @@ export async function bulkUpdateTags(
 	input: BulkUpdateTagsInput,
 ): Promise<Tag[]> {
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
+
 	const nameSchema = insertTagSchema.pick({ name: true });
 
 	const updates = input.updates.map((u) => ({

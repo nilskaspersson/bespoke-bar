@@ -6,9 +6,9 @@ import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 export async function toggleRecipeFavorite(auth: Auth, recipeId: string) {
-	await rateLimit(auth.userId);
-
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const existingFavorite = await db.query.RecipeFavoritesTable.findFirst({
 		where: and(

@@ -6,6 +6,7 @@ import {
 	RecipeListsTable,
 } from "@/db/schema/recipeLists";
 import { generateDefaultRecipeListName } from "@/features/lists/utils";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -14,6 +15,8 @@ export async function createRecipeList(
 	userInputList: RecipeListFormData,
 ): Promise<RecipeList> {
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	/**
 	 * Use a timestamp as a fallback name

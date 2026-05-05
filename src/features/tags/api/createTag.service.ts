@@ -8,12 +8,15 @@ import {
 } from "@/db/schema/tags";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { MAX_TAGS_PER_ORG } from "@/features/tags/constants";
+import { rateLimit } from "@/rateLimit";
 import { normalizeInput } from "@/utils";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 export async function createTag(auth: Auth, input: InsertTag): Promise<Tag> {
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const validated = insertTagSchema.parse({
 		...input,

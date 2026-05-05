@@ -1,11 +1,14 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 export async function clearFeaturedList(auth: Auth) {
-	const { orgId } = auth;
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const [list] = await db
 		.update(RecipeListsTable)

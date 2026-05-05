@@ -16,6 +16,7 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
+import { unwrapAction } from "@/utils/api";
 import styles from "./styles.module.css";
 
 export function UploadPhotoForm({
@@ -65,7 +66,7 @@ export function UploadPhotoForm({
 				}
 
 				try {
-					await storeOCRConsent();
+					await unwrapAction(storeOCRConsent());
 				} catch (error) {
 					console.error(error);
 				}

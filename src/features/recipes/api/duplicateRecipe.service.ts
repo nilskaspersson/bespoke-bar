@@ -2,6 +2,7 @@ import type { RecipeFormData } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
+import { rateLimit } from "@/rateLimit";
 import { pick } from "@/utils";
 import type { Auth } from "@/utils/auth";
 
@@ -9,7 +10,9 @@ export async function duplicateRecipe(
 	auth: Auth,
 	recipeId: string,
 ): Promise<Recipe> {
-	const { orgId } = auth;
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const recipe = await getCachedRecipe(orgId, recipeId);
 

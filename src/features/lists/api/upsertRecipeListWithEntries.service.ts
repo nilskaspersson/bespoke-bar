@@ -5,6 +5,7 @@ import {
 	replaceRecipeListEntriesInTransaction,
 	upsertRecipeListInTransaction,
 } from "@/features/lists/api/utils/transactionHelpers";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -13,6 +14,8 @@ export async function upsertRecipeListWithEntries(
 	userInputList: RecipeListWithEntriesFormData,
 ): Promise<RecipeList> {
 	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const [result, isNew] = await db.transaction(async (tx) => {
 		const [list, isNew] = await upsertRecipeListInTransaction(

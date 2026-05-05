@@ -1,11 +1,14 @@
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { type RecipeList, RecipeListsTable } from "@/db/schema/recipeLists";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 export async function setFeaturedList(auth: Auth, listId: RecipeList["id"]) {
-	const { orgId } = auth;
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
 
 	const [prev, next] = await db.transaction(async (tx) => {
 		const [prev] = await tx

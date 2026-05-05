@@ -8,6 +8,7 @@ import {
 } from "@/db/schema/ingredients";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
+import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -15,10 +16,14 @@ export async function createIngredient(
 	auth: Auth,
 	userIngredient: DraftIngredient,
 ): Promise<Ingredient> {
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
+
 	const validatedUserInputIngredient = insertIngredientSchema.parse({
 		...userIngredient,
-		orgId: auth.orgId,
-		createdBy: auth.userId,
+		orgId: orgId,
+		createdBy: userId,
 	});
 
 	let ingredient: Ingredient;
@@ -40,11 +45,11 @@ export async function createIngredient(
 		throw error;
 	}
 
-	cacheEvents.ingredient.create.emit(auth.orgId);
+	cacheEvents.ingredient.create.emit(orgId);
 
 	after(async () => {
 		try {
-			await enrichIngredients(auth.orgId, ingredient);
+			await enrichIngredients(orgId, ingredient);
 		} catch (error) {
 			console.error("Ingredient enrichment failed:", error);
 		}
