@@ -1,7 +1,7 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { get } from "@vercel/edge-config";
 import { NextResponse } from "next/server";
-import { rateLimitEnabledFlag } from "@/flags";
 
 const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
 const token =
@@ -22,6 +22,10 @@ export const rateLimiter = redis
 	: null;
 
 type RatelimitResponse = Awaited<ReturnType<Ratelimit["limit"]>>;
+
+async function isRateLimitEnabled(): Promise<boolean> {
+	return (await get<boolean>("rate-limit-enabled")) ?? false;
+}
 
 export async function checkRateLimit<T>(
 	userId: string,
@@ -84,5 +88,5 @@ export async function shouldRateLimitRequest(
 		return false;
 	}
 
-	return await rateLimitEnabledFlag();
+	return await isRateLimitEnabled();
 }

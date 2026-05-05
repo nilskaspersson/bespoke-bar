@@ -1,13 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
+import { get } from "@vercel/edge-config";
 import { forbidden } from "next/navigation";
 import { cache } from "react";
 
-export function isAdminUser(userId: string): boolean {
-	const allowlist = (process.env.ADMIN_USER_IDS ?? "")
-		.split(",")
-		.map((id) => id.trim())
-		.filter(Boolean);
-
+export async function isAdminUser(userId: string): Promise<boolean> {
+	const allowlist = (await get<string[]>("admin-user-ids")) ?? [];
 	return allowlist.includes(userId);
 }
 
@@ -21,7 +18,7 @@ export const adminOrForbidden = cache(
 	async (): Promise<{ userId: string; orgId: string | undefined }> => {
 		const { userId, orgId } = await auth();
 
-		if (!userId || !isAdminUser(userId)) {
+		if (!userId || !(await isAdminUser(userId))) {
 			forbidden();
 		}
 
