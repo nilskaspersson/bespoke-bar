@@ -2,21 +2,34 @@ import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { NextResponse } from "next/server";
 
-const redis = Redis.fromEnv();
+const url = process.env.UPSTASH_REDIS_REST_URL ?? process.env.KV_REST_API_URL;
+const token =
+	process.env.UPSTASH_REDIS_REST_TOKEN ?? process.env.KV_REST_API_TOKEN;
 
-export const rateLimiter = new Ratelimit({
-	redis,
-	limiter: Ratelimit.slidingWindow(30, "60s"),
-	prefix: "rl:ops",
-	analytics: false,
-});
+/**
+ * Guard construction so missing config is a fast no-op, not a per-request stall.
+ */
+const redis = url && token ? new Redis({ url, token }) : null;
 
-type RatelimitResponse = Awaited<ReturnType<typeof rateLimiter.limit>>;
+export const rateLimiter = redis
+	? new Ratelimit({
+			redis,
+			limiter: Ratelimit.slidingWindow(30, "60s"),
+			prefix: "rl:ops",
+			analytics: false,
+		})
+	: null;
+
+type RatelimitResponse = Awaited<ReturnType<Ratelimit["limit"]>>;
 
 export async function checkRateLimit<T>(
 	userId: string,
 	onRateLimited: (result: RatelimitResponse) => T,
 ): Promise<T | null> {
+	if (!rateLimiter) {
+		return null;
+	}
+
 	try {
 		const result = await rateLimiter.limit(userId);
 
@@ -58,10 +71,6 @@ export function createRateLimitMiddlewareResponse(
 }
 
 export function shouldRateLimitRequest(request: Request): boolean {
-	if (process.env.ENABLE_RATE_LIMITING !== "true") {
-		return false;
-	}
-
 	/**
 	 * Rate limit all non-GET requests.
 	 *
