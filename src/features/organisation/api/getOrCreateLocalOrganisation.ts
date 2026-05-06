@@ -1,55 +1,76 @@
 import { eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { forbidden, redirect } from "next/navigation";
 import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
+import {
+	type Organisation,
+	OrganisationsTable,
+} from "@/db/schema/organisations";
+import { cacheTags } from "@/utils/cache";
+
+class OrganisationNotFound extends Error {}
 
 export async function getOrCreateLocalOrganisation(
-	orgId: string | undefined,
-	userId: string | undefined,
-) {
-	/**
-	 * No user, no org.
-	 */
-	if (!userId) {
-		forbidden();
+	orgId: string,
+	userId: string,
+): Promise<Organisation> {
+	try {
+		return await getCachedOrganisation(orgId);
+	} catch (error) {
+		/**
+		 * Rethrow if Error isn't OrganisationNotFound, otherwise proceed to create.
+		 */
+		if (!(error instanceof OrganisationNotFound)) {
+			throw error;
+		}
+
+		return createLocalOrganisation(orgId, userId);
 	}
+}
 
-	/**
-	 * If there's no Clerk org id, we can't create a local org. Throw a redirect to the
-	 * create org page.
-	 */
-	if (!orgId) {
-		redirect("/org/create");
-	}
-
-	const existingOrganisation = await getCachedOrganisation(orgId);
-
-	if (existingOrganisation) {
-		return existingOrganisation;
-	}
-
-	const [newOrganisation] = await db
+async function createLocalOrganisation(
+	orgId: string,
+	userId: string,
+): Promise<Organisation> {
+	const [inserted] = await db
 		.insert(OrganisationsTable)
 		.values({
 			clerkOrgId: orgId,
 			createdBy: userId,
 		})
+		.onConflictDoNothing({ target: OrganisationsTable.clerkOrgId })
 		.returning();
 
-	return newOrganisation;
-}
+	if (inserted) {
+		return inserted;
+	}
 
-async function getCachedOrganisation(orgId: string) {
-	"use cache";
-	cacheLife("max");
-	cacheTag(`organisation-${orgId}`);
-
-	const [existingOrganisation] = await db
+	const [organisation] = await db
 		.select()
 		.from(OrganisationsTable)
 		.where(eq(OrganisationsTable.clerkOrgId, orgId))
 		.limit(1);
 
-	return existingOrganisation;
+	return organisation;
+}
+
+async function getCachedOrganisation(orgId: string): Promise<Organisation> {
+	"use cache";
+	cacheLife("max");
+	cacheTag(...cacheTags.organisation(orgId));
+
+	const [organisation] = await db
+		.select()
+		.from(OrganisationsTable)
+		.where(eq(OrganisationsTable.clerkOrgId, orgId))
+		.limit(1);
+
+	/**
+	 * Throwing inside `"use cache"` skips caching for that invocation. This covers the
+	 * sign-up flow where we create the local org.
+	 */
+	if (!organisation) {
+		throw new OrganisationNotFound();
+	}
+
+	return organisation;
 }

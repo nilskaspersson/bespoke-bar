@@ -122,6 +122,12 @@ export const cacheEvents = {
 			tag: (orgId: string) => `${orgId}:create-recipe-slot-grant`,
 		},
 	},
+	organisation: {
+		update: {
+			emit: (orgId: string) => updateTag(`${orgId}:update-organisation`),
+			tag: (orgId: string) => `${orgId}:update-organisation`,
+		},
+	},
 };
 
 /**
@@ -251,4 +257,5 @@ export const cacheTags = {
 		cacheEvents.recipe.create.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
 	],
+	organisation: (orgId: string) => [cacheEvents.organisation.update.tag(orgId)],
 };

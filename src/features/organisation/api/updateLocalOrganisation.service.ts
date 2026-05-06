@@ -7,6 +7,7 @@ import {
 } from "@/db/schema/organisations";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
+import { cacheEvents } from "@/utils/cache";
 
 export async function updateLocalOrganisation(
 	auth: Auth,
@@ -26,6 +27,8 @@ export async function updateLocalOrganisation(
 		})
 		.where(eq(OrganisationsTable.clerkOrgId, orgId))
 		.returning();
+
+	cacheEvents.organisation.update.emit(orgId);
 
 	return organisation;
 }
