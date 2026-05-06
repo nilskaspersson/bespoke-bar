@@ -122,16 +122,10 @@ export const cacheEvents = {
 			tag: (orgId: string) => `${orgId}:create-recipe-slot-grant`,
 		},
 	},
-	/**
-	 * Keyed by `clerkOrgId` (not local `orgId`) because `getCachedOrganisation`
-	 * is read from `OrgProvider` before the local id is resolved. The asymmetry
-	 * with sibling events is intentional — don't pass `Auth.orgId` here.
-	 */
 	organisation: {
 		update: {
-			emit: (clerkOrgId: string) =>
-				updateTag(`${clerkOrgId}:update-organisation`),
-			tag: (clerkOrgId: string) => `${clerkOrgId}:update-organisation`,
+			emit: (orgId: string) => updateTag(`${orgId}:update-organisation`),
+			tag: (orgId: string) => `${orgId}:update-organisation`,
 		},
 	},
 };
@@ -257,13 +251,13 @@ export const cacheTags = {
 	],
 	recipeSlotLimit: (orgId: string) => [
 		cacheEvents.recipeSlotGrant.create.tag(orgId),
+		cacheEvents.organisation.update.tag(orgId),
 	],
 	recipeSlotUsage: (orgId: string) => [
 		cacheEvents.recipeSlotGrant.create.tag(orgId),
 		cacheEvents.recipe.create.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
+		cacheEvents.organisation.update.tag(orgId),
 	],
-	organisation: (clerkOrgId: string) => [
-		cacheEvents.organisation.update.tag(clerkOrgId),
-	],
+	organisation: (orgId: string) => [cacheEvents.organisation.update.tag(orgId)],
 };

@@ -14,11 +14,9 @@ export async function getOrCreateLocalOrganisation(
 	userId: string,
 ): Promise<Organisation> {
 	try {
-		return await getCachedOrganisation(clerkOrgId);
+		const localOrgId = await getCachedLocalOrgId(clerkOrgId);
+		return await getCachedOrganisation(localOrgId);
 	} catch (error) {
-		/**
-		 * Rethrow if Error isn't OrganisationNotFound, otherwise proceed to create.
-		 */
 		if (!(error instanceof OrganisationNotFound)) {
 			throw error;
 		}
@@ -27,16 +25,6 @@ export async function getOrCreateLocalOrganisation(
 	}
 }
 
-/**
- * Auth-path translation from Clerk org id to our local id. The mapping is
- * immutable for the lifetime of the row, so this cache entry never needs to
- * invalidate — settings updates only bust `getCachedOrganisation`, leaving
- * this one warm forever.
- *
- * Splitting it from the full-row lookup means `authOrForbidden` (called on
- * every protected request) doesn't get punished by org settings updates, and
- * the cache entry is tiny.
- */
 export async function getLocalOrgId(
 	clerkOrgId: string,
 	userId: string,
@@ -80,22 +68,19 @@ async function createLocalOrganisation(
 }
 
 async function getCachedOrganisation(
-	clerkOrgId: string,
+	localOrgId: string,
 ): Promise<Organisation> {
 	"use cache";
 	cacheLife("max");
-	cacheTag(...cacheTags.organisation(clerkOrgId));
+	cacheTag(...cacheTags.organisation(localOrgId));
 
 	const [organisation] = await db
 		.select()
 		.from(OrganisationsTable)
-		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
+		.where(eq(OrganisationsTable.id, localOrgId))
 		.limit(1);
 
-	/**
-	 * Throwing inside `"use cache"` skips caching for that invocation. This covers the
-	 * sign-up flow where we create the local org.
-	 */
+	/** Throwing inside `"use cache"` skips caching for that invocation. */
 	if (!organisation) {
 		throw new OrganisationNotFound();
 	}
@@ -103,6 +88,7 @@ async function getCachedOrganisation(
 	return organisation;
 }
 
+/** No cacheTag: clerkOrgId↔localId is immutable, no invalidation path exists. */
 async function getCachedLocalOrgId(clerkOrgId: string): Promise<string> {
 	"use cache";
 	cacheLife("max");
