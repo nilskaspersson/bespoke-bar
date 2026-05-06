@@ -7,7 +7,21 @@ import {
 } from "@/db/schema/organisations";
 import { cacheTags } from "@/utils/cache";
 
-class OrganisationNotFound extends Error {}
+/**
+ * Match by `name`, not `instanceof`: in production, `'use cache'` functions are
+ * bundled into separate chunks and may carry their own copy of this class, so
+ * the throw site and the catch site can disagree on prototype identity.
+ */
+class OrganisationNotFound extends Error {
+	constructor() {
+		super();
+		this.name = "OrganisationNotFound";
+	}
+}
+
+function isOrganisationNotFound(error: unknown): boolean {
+	return error instanceof Error && error.name === "OrganisationNotFound";
+}
 
 export async function getOrCreateLocalOrganisation(
 	clerkOrgId: string,
@@ -17,7 +31,7 @@ export async function getOrCreateLocalOrganisation(
 		const localOrgId = await getCachedLocalOrgId(clerkOrgId);
 		return await getCachedOrganisation(localOrgId);
 	} catch (error) {
-		if (!(error instanceof OrganisationNotFound)) {
+		if (!isOrganisationNotFound(error)) {
 			throw error;
 		}
 
@@ -32,7 +46,7 @@ export async function getLocalOrgId(
 	try {
 		return await getCachedLocalOrgId(clerkOrgId);
 	} catch (error) {
-		if (!(error instanceof OrganisationNotFound)) {
+		if (!isOrganisationNotFound(error)) {
 			throw error;
 		}
 
@@ -63,6 +77,12 @@ async function createLocalOrganisation(
 		.from(OrganisationsTable)
 		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
 		.limit(1);
+
+	if (!organisation) {
+		throw new Error(
+			`createLocalOrganisation: no row for ${clerkOrgId} after insert+select`,
+		);
+	}
 
 	return organisation;
 }
