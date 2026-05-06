@@ -1,9 +1,11 @@
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
+import { eq } from "drizzle-orm";
 import type { NextRequest } from "next/server";
-import {
-	deleteLocalOrganisation,
-	InvalidClerkOrgIdError,
-} from "@/features/organisation/api/deleteLocalOrganisation.service";
+import { db } from "@/db";
+import { OrganisationsTable } from "@/db/schema/organisations";
+import { deleteLocalOrganisation } from "@/features/organisation/api/deleteLocalOrganisation.service";
+
+const CLERK_ORG_ID_PATTERN = /^org_[A-Za-z0-9]{8,}$/;
 
 /**
  * Clerk webhook receiver. Subscribed events are configured in the Clerk
@@ -21,18 +23,27 @@ export async function POST(req: NextRequest) {
 	}
 
 	if (event.type === "organization.deleted") {
-		try {
-			const result = await deleteLocalOrganisation(event.data.id);
+		const clerkOrgId = event.data.id;
+
+		if (
+			typeof clerkOrgId !== "string" ||
+			!CLERK_ORG_ID_PATTERN.test(clerkOrgId)
+		) {
+			console.error("Refusing organization.deleted webhook with malformed id", {
+				id: clerkOrgId,
+			});
+			return new Response("Malformed event payload", { status: 400 });
+		}
+
+		const [row] = await db
+			.select({ id: OrganisationsTable.id })
+			.from(OrganisationsTable)
+			.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
+			.limit(1);
+
+		if (row) {
+			const result = await deleteLocalOrganisation(row.id);
 			console.info("organization.deleted processed", result);
-		} catch (error) {
-			if (error instanceof InvalidClerkOrgIdError) {
-				console.error(
-					"Refusing organization.deleted webhook with malformed id",
-					{ id: event.data.id },
-				);
-				return new Response("Malformed event payload", { status: 400 });
-			}
-			throw error;
 		}
 	}
 
