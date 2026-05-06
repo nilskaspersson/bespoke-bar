@@ -123,9 +123,25 @@ export const cacheEvents = {
 		},
 	},
 	organisation: {
+		/**
+		 * `create` and `delete` are keyed by `clerkOrgId` because the
+		 * lookup that subscribes to them runs before the local id is
+		 * known. `update` stays keyed by the local id, like every other
+		 * event.
+		 */
+		create: {
+			emit: (clerkOrgId: string) =>
+				updateTag(`${clerkOrgId}:create-organisation`),
+			tag: (clerkOrgId: string) => `${clerkOrgId}:create-organisation`,
+		},
 		update: {
 			emit: (orgId: string) => updateTag(`${orgId}:update-organisation`),
 			tag: (orgId: string) => `${orgId}:update-organisation`,
+		},
+		delete: {
+			emit: (clerkOrgId: string) =>
+				updateTag(`${clerkOrgId}:delete-organisation`),
+			tag: (clerkOrgId: string) => `${clerkOrgId}:delete-organisation`,
 		},
 	},
 };
@@ -260,4 +276,13 @@ export const cacheTags = {
 		cacheEvents.organisation.update.tag(orgId),
 	],
 	organisation: (orgId: string) => [cacheEvents.organisation.update.tag(orgId)],
+	/**
+	 * Used by the clerkOrgId → localOrgId lookup, which has to be keyed by
+	 * Clerk's id (the local one isn't known yet). Subscribes to create and
+	 * delete because both flip whether a row exists.
+	 */
+	organisationByClerkId: (clerkOrgId: string) => [
+		cacheEvents.organisation.create.tag(clerkOrgId),
+		cacheEvents.organisation.delete.tag(clerkOrgId),
+	],
 };

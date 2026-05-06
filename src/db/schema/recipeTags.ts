@@ -39,6 +39,8 @@ export const RecipeTagsTable = pgTable(
 		 * tag is removed — Postgres does not auto-index FK columns.
 		 */
 		index("idx_recipe_tags_tag_recipe").on(table.tagId, table.recipeId),
+		/** Serves ON DELETE CASCADE when an organisation is removed. */
+		index("idx_recipe_tags_org_id").on(table.orgId),
 	],
 );
 

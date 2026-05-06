@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { OrganisationsTable } from "@/db/schema/organisations";
+import { cacheEvents } from "@/utils/cache";
 
 export class InvalidLocalOrgIdError extends Error {
 	constructor(public readonly value: unknown) {
@@ -40,8 +41,18 @@ export async function deleteLocalOrganisation(
 		});
 	}
 
+	const row = deleted[0];
+
+	if (row) {
+		/**
+		 * Flip the clerkOrgId → localOrgId mapping cache so a stale session
+		 * token can't trigger a ghost bootstrap before its JWT refreshes.
+		 */
+		cacheEvents.organisation.delete.emit(row.clerkOrgId);
+	}
+
 	return {
-		deletedId: deleted[0]?.id ?? null,
-		deletedClerkOrgId: deleted[0]?.clerkOrgId ?? null,
+		deletedId: row?.id ?? null,
+		deletedClerkOrgId: row?.clerkOrgId ?? null,
 	};
 }

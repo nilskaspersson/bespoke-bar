@@ -1,0 +1,1 @@
+CREATE INDEX "idx_recipe_tags_org_id" ON "recipe_tags" USING btree ("org_id");

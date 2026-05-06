@@ -10,7 +10,17 @@ export async function OrgProvider({ children }: { children: React.ReactNode }) {
 		redirect("/setup");
 	}
 
-	const organisation = await getOrCreateLocalOrganisation(clerkOrgId, userId);
+	const organisation = await getOrCreateLocalOrganisation(
+		clerkOrgId,
+		userId,
+	).catch((error) => {
+		console.error("OrgProvider: bootstrap failed", {
+			clerkOrgId,
+			userId,
+			error,
+		});
+		throw error;
+	});
 
 	return (
 		<FormatterContextProvider

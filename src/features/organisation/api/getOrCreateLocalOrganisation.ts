@@ -1,22 +1,20 @@
 import { eq } from "drizzle-orm";
-import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 import { after } from "next/server";
 import { db } from "@/db";
 import {
 	type Organisation,
 	OrganisationsTable,
 } from "@/db/schema/organisations";
-import { cacheTags } from "@/utils/cache";
+import { cacheEvents, cacheTags } from "@/utils/cache";
 
 /**
  * Throwing inside `"use cache"` doesn't propagate cleanly through user-land
  * try/catch in production server-component renders — React intercepts the
  * throw and re-emits a wrapped render error before the caller sees it. So
- * we cache `null` for "no row yet" and flip via `revalidateTag` from the
- * bootstrap path.
+ * we cache `null` for "no row yet" and flip via `cacheEvents.organisation`
+ * from the bootstrap path.
  */
-const orgMappingTag = (clerkOrgId: string) =>
-	`organisation-mapping:${clerkOrgId}`;
 
 export async function getOrCreateLocalOrganisation(
 	clerkOrgId: string,
@@ -79,7 +77,7 @@ async function createLocalOrganisation(
 
 	/** Flip the cached `null` to a hit on the next request. */
 	after(() => {
-		updateTag(orgMappingTag(clerkOrgId));
+		cacheEvents.organisation.create.emit(clerkOrgId);
 	});
 
 	return organisation;
@@ -104,7 +102,7 @@ async function getCachedOrganisation(
 async function getCachedLocalOrgId(clerkOrgId: string): Promise<string | null> {
 	"use cache";
 	cacheLife("max");
-	cacheTag(orgMappingTag(clerkOrgId));
+	cacheTag(...cacheTags.organisationByClerkId(clerkOrgId));
 
 	const [row] = await db
 		.select({ id: OrganisationsTable.id })
