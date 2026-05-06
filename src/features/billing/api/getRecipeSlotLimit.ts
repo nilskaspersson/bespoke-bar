@@ -9,16 +9,16 @@ import { RecipeSlotGrantsTable } from "@/db/schema/recipeSlotGrants";
 import { cacheTags } from "@/utils/cache";
 
 /**
- * `orgId` is the Clerk org ID. The local `organisations` row may not have been
- * created yet — fall back to the schema default so the limit check stays
- * functional in that window.
+ * Falls back to the schema default if the org row is missing — defensive only,
+ * since the FK on `recipe_slot_grants.org_id` guarantees the parent row exists
+ * for any caller that already has slot grants.
  */
 export async function getRecipeSlotLimit(orgId: string): Promise<number> {
 	const [[org], [grants]] = await Promise.all([
 		db
 			.select({ baseRecipeSlots: OrganisationsTable.baseRecipeSlots })
 			.from(OrganisationsTable)
-			.where(eq(OrganisationsTable.clerkOrgId, orgId)),
+			.where(eq(OrganisationsTable.id, orgId)),
 		db
 			.select({
 				total: sql<number>`coalesce(sum(${RecipeSlotGrantsTable.amount}), 0)::int`,

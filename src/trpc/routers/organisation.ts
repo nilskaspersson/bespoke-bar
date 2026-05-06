@@ -5,7 +5,7 @@ import { protectedProcedure, router } from "@/trpc";
 
 export const organisationRouter = router({
 	get: protectedProcedure.query(({ ctx }) => {
-		return getOrCreateLocalOrganisation(ctx.orgId, ctx.userId);
+		return getOrCreateLocalOrganisation(ctx.clerkOrgId, ctx.userId);
 	}),
 
 	update: protectedProcedure

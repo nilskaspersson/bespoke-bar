@@ -7,20 +7,17 @@ import {
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
+import { OrganisationsTable } from "@/db/schema/organisations";
 
-/**
- * `orgId` is the Clerk org ID (matches `RecipesTable.orgId`), not a FK to
- * `OrganisationsTable.id`. The local `organisations` row may not exist yet
- * for a given Clerk org — recipes are written without that guarantee, and
- * grants follow the same convention.
- */
 export const RecipeSlotGrantsTable = pgTable(
 	"recipe_slot_grants",
 	{
 		id: text("id")
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 		amount: integer("amount").notNull(),
 		source: text("source", {
 			enum: [

@@ -35,7 +35,7 @@ export async function getRecipeSlotUsage(
 				WHERE ${RecipesTable.orgId} = ${orgId}) AS used,
 			(SELECT ${OrganisationsTable.baseRecipeSlots}
 				FROM ${OrganisationsTable}
-				WHERE ${OrganisationsTable.clerkOrgId} = ${orgId}) AS base,
+				WHERE ${OrganisationsTable.id} = ${orgId}) AS base,
 			(SELECT coalesce(sum(${RecipeSlotGrantsTable.amount}), 0)::int
 				FROM ${RecipeSlotGrantsTable}
 				WHERE ${RecipeSlotGrantsTable.orgId} = ${orgId}) AS grants

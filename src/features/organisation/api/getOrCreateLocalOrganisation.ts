@@ -10,11 +10,11 @@ import { cacheTags } from "@/utils/cache";
 class OrganisationNotFound extends Error {}
 
 export async function getOrCreateLocalOrganisation(
-	orgId: string,
+	clerkOrgId: string,
 	userId: string,
 ): Promise<Organisation> {
 	try {
-		return await getCachedOrganisation(orgId);
+		return await getCachedOrganisation(clerkOrgId);
 	} catch (error) {
 		/**
 		 * Rethrow if Error isn't OrganisationNotFound, otherwise proceed to create.
@@ -23,18 +23,44 @@ export async function getOrCreateLocalOrganisation(
 			throw error;
 		}
 
-		return createLocalOrganisation(orgId, userId);
+		return createLocalOrganisation(clerkOrgId, userId);
+	}
+}
+
+/**
+ * Auth-path translation from Clerk org id to our local id. The mapping is
+ * immutable for the lifetime of the row, so this cache entry never needs to
+ * invalidate — settings updates only bust `getCachedOrganisation`, leaving
+ * this one warm forever.
+ *
+ * Splitting it from the full-row lookup means `authOrForbidden` (called on
+ * every protected request) doesn't get punished by org settings updates, and
+ * the cache entry is tiny.
+ */
+export async function getLocalOrgId(
+	clerkOrgId: string,
+	userId: string,
+): Promise<string> {
+	try {
+		return await getCachedLocalOrgId(clerkOrgId);
+	} catch (error) {
+		if (!(error instanceof OrganisationNotFound)) {
+			throw error;
+		}
+
+		const created = await createLocalOrganisation(clerkOrgId, userId);
+		return created.id;
 	}
 }
 
 async function createLocalOrganisation(
-	orgId: string,
+	clerkOrgId: string,
 	userId: string,
 ): Promise<Organisation> {
 	const [inserted] = await db
 		.insert(OrganisationsTable)
 		.values({
-			clerkOrgId: orgId,
+			clerkOrgId,
 			createdBy: userId,
 		})
 		.onConflictDoNothing({ target: OrganisationsTable.clerkOrgId })
@@ -47,21 +73,23 @@ async function createLocalOrganisation(
 	const [organisation] = await db
 		.select()
 		.from(OrganisationsTable)
-		.where(eq(OrganisationsTable.clerkOrgId, orgId))
+		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
 		.limit(1);
 
 	return organisation;
 }
 
-async function getCachedOrganisation(orgId: string): Promise<Organisation> {
+async function getCachedOrganisation(
+	clerkOrgId: string,
+): Promise<Organisation> {
 	"use cache";
 	cacheLife("max");
-	cacheTag(...cacheTags.organisation(orgId));
+	cacheTag(...cacheTags.organisation(clerkOrgId));
 
 	const [organisation] = await db
 		.select()
 		.from(OrganisationsTable)
-		.where(eq(OrganisationsTable.clerkOrgId, orgId))
+		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
 		.limit(1);
 
 	/**
@@ -73,4 +101,21 @@ async function getCachedOrganisation(orgId: string): Promise<Organisation> {
 	}
 
 	return organisation;
+}
+
+async function getCachedLocalOrgId(clerkOrgId: string): Promise<string> {
+	"use cache";
+	cacheLife("max");
+
+	const [row] = await db
+		.select({ id: OrganisationsTable.id })
+		.from(OrganisationsTable)
+		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
+		.limit(1);
+
+	if (!row) {
+		throw new OrganisationNotFound();
+	}
+
+	return row.id;
 }

@@ -15,6 +15,7 @@ import {
 import { nanoid } from "nanoid";
 import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
 import { glasswareEnum } from "@/db/schema/glassware";
+import { OrganisationsTable } from "@/db/schema/organisations";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
 import { type RecipeTag, RecipeTagsTable } from "@/db/schema/recipeTags";
@@ -47,7 +48,9 @@ export const RecipesTable = pgTable(
 		createdBy: text("created_by").notNull(),
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 	},
 	(table) => [index("idx_recipes_org_id").on(table.orgId)],
 );
