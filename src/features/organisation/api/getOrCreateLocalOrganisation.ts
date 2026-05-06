@@ -1,5 +1,6 @@
 import { eq } from "drizzle-orm";
-import { cacheLife, cacheTag } from "next/cache";
+import { cacheLife, cacheTag, updateTag } from "next/cache";
+import { after } from "next/server";
 import { db } from "@/db";
 import {
 	type Organisation,
@@ -8,51 +9,42 @@ import {
 import { cacheTags } from "@/utils/cache";
 
 /**
- * Match by `name`, not `instanceof`: in production, `'use cache'` functions are
- * bundled into separate chunks and may carry their own copy of this class, so
- * the throw site and the catch site can disagree on prototype identity.
+ * Throwing inside `"use cache"` doesn't propagate cleanly through user-land
+ * try/catch in production server-component renders — React intercepts the
+ * throw and re-emits a wrapped render error before the caller sees it. So
+ * we cache `null` for "no row yet" and flip via `revalidateTag` from the
+ * bootstrap path.
  */
-class OrganisationNotFound extends Error {
-	constructor() {
-		super();
-		this.name = "OrganisationNotFound";
-	}
-}
-
-function isOrganisationNotFound(error: unknown): boolean {
-	return error instanceof Error && error.name === "OrganisationNotFound";
-}
+const orgMappingTag = (clerkOrgId: string) =>
+	`organisation-mapping:${clerkOrgId}`;
 
 export async function getOrCreateLocalOrganisation(
 	clerkOrgId: string,
 	userId: string,
 ): Promise<Organisation> {
-	try {
-		const localOrgId = await getCachedLocalOrgId(clerkOrgId);
-		return await getCachedOrganisation(localOrgId);
-	} catch (error) {
-		if (!isOrganisationNotFound(error)) {
-			throw error;
-		}
+	const localOrgId = await getCachedLocalOrgId(clerkOrgId);
 
-		return createLocalOrganisation(clerkOrgId, userId);
+	if (localOrgId) {
+		const cached = await getCachedOrganisation(localOrgId);
+		if (cached) {
+			return cached;
+		}
 	}
+
+	return createLocalOrganisation(clerkOrgId, userId);
 }
 
 export async function getLocalOrgId(
 	clerkOrgId: string,
 	userId: string,
 ): Promise<string> {
-	try {
-		return await getCachedLocalOrgId(clerkOrgId);
-	} catch (error) {
-		if (!isOrganisationNotFound(error)) {
-			throw error;
-		}
-
-		const created = await createLocalOrganisation(clerkOrgId, userId);
-		return created.id;
+	const cached = await getCachedLocalOrgId(clerkOrgId);
+	if (cached) {
+		return cached;
 	}
+
+	const created = await createLocalOrganisation(clerkOrgId, userId);
+	return created.id;
 }
 
 async function createLocalOrganisation(
@@ -68,15 +60,16 @@ async function createLocalOrganisation(
 		.onConflictDoNothing({ target: OrganisationsTable.clerkOrgId })
 		.returning();
 
-	if (inserted) {
-		return inserted;
-	}
+	let organisation: Organisation | undefined = inserted;
 
-	const [organisation] = await db
-		.select()
-		.from(OrganisationsTable)
-		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
-		.limit(1);
+	if (!organisation) {
+		const [selected] = await db
+			.select()
+			.from(OrganisationsTable)
+			.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
+			.limit(1);
+		organisation = selected;
+	}
 
 	if (!organisation) {
 		throw new Error(
@@ -84,12 +77,17 @@ async function createLocalOrganisation(
 		);
 	}
 
+	/** Flip the cached `null` to a hit on the next request. */
+	after(() => {
+		updateTag(orgMappingTag(clerkOrgId));
+	});
+
 	return organisation;
 }
 
 async function getCachedOrganisation(
 	localOrgId: string,
-): Promise<Organisation> {
+): Promise<Organisation | null> {
 	"use cache";
 	cacheLife("max");
 	cacheTag(...cacheTags.organisation(localOrgId));
@@ -100,18 +98,13 @@ async function getCachedOrganisation(
 		.where(eq(OrganisationsTable.id, localOrgId))
 		.limit(1);
 
-	/** Throwing inside `"use cache"` skips caching for that invocation. */
-	if (!organisation) {
-		throw new OrganisationNotFound();
-	}
-
-	return organisation;
+	return organisation ?? null;
 }
 
-/** No cacheTag: clerkOrgId↔localId is immutable, no invalidation path exists. */
-async function getCachedLocalOrgId(clerkOrgId: string): Promise<string> {
+async function getCachedLocalOrgId(clerkOrgId: string): Promise<string | null> {
 	"use cache";
 	cacheLife("max");
+	cacheTag(orgMappingTag(clerkOrgId));
 
 	const [row] = await db
 		.select({ id: OrganisationsTable.id })
@@ -119,9 +112,5 @@ async function getCachedLocalOrgId(clerkOrgId: string): Promise<string> {
 		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
 		.limit(1);
 
-	if (!row) {
-		throw new OrganisationNotFound();
-	}
-
-	return row.id;
+	return row?.id ?? null;
 }
