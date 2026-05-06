@@ -1,0 +1,9 @@
+@layer layout {
+	.base {
+		display: grid;
+		place-items: center;
+		padding: var(--gap);
+		flex: 1 1 auto;
+		min-height: 100lvh;
+	}
+}
