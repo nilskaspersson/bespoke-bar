@@ -1,7 +1,6 @@
 "use server";
 
 import { parseWithZod } from "@conform-to/zod/v4";
-import { revalidatePath } from "next/cache";
 import type { UpdateOrganisationFormData } from "@/db/schema/organisations";
 import { updateOrganisationFormSchema } from "@/db/schema/organisations";
 import { updateLocalOrganisation as updateLocalOrganisationService } from "@/features/organisation/api/updateLocalOrganisation.service";
@@ -32,8 +31,6 @@ export async function updateLocalOrganisationAction(formData: FormData) {
 			formErrors: ["Failed to update organisation"],
 		});
 	}
-
-	revalidatePath("/bar", "layout");
 
 	return submission.reply({
 		resetForm: false,
