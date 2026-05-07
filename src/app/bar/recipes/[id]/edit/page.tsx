@@ -4,10 +4,7 @@ import { getCachedIngredients } from "@/features/ingredients/api/readIngredients
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+import { stitchRecipe } from "@/features/recipes/utils/stitchRecipe";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -58,7 +55,7 @@ async function RecipeEditWithAuth({ params }: Props) {
 		notFound();
 	}
 
-	const recipe = stitchRecipeSpecs(rawRecipe, buildIngredientMap(ingredients));
+	const recipe = stitchRecipe(rawRecipe, { ingredients });
 
 	return (
 		<>

@@ -10,30 +10,32 @@ import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { updateRecipe } from "@/features/recipes/api/updateRecipe.service";
 import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
 import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+	stitchRecipe,
+	stitchRecipes,
+} from "@/features/recipes/utils/stitchRecipe";
+import { getCachedTags } from "@/features/tags/api/listTags";
 import { protectedProcedure, router } from "@/trpc";
 
 export const recipeRouter = router({
 	list: protectedProcedure.query(async ({ ctx }) => {
-		const [rawRecipes, ingredients] = await Promise.all([
+		const [rawRecipes, ingredients, tags] = await Promise.all([
 			getCachedBarRecipes(ctx.orgId),
 			getCachedIngredients(ctx.orgId),
+			getCachedTags(ctx.orgId),
 		]);
-		const ingredientMap = buildIngredientMap(ingredients);
-		return rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
+		return stitchRecipes(rawRecipes, { ingredients, tags });
 	}),
 
 	byId: protectedProcedure
 		.input(z.object({ id: z.string() }))
 		.query(async ({ ctx, input }) => {
-			const [rawRecipe, ingredients] = await Promise.all([
+			const [rawRecipe, ingredients, tags] = await Promise.all([
 				getCachedRecipe(ctx.orgId, input.id),
 				getCachedIngredients(ctx.orgId),
+				getCachedTags(ctx.orgId),
 			]);
 			if (!rawRecipe) return rawRecipe;
-			return stitchRecipeSpecs(rawRecipe, buildIngredientMap(ingredients));
+			return stitchRecipe(rawRecipe, { ingredients, tags });
 		}),
 
 	count: protectedProcedure.query(({ ctx }) => {

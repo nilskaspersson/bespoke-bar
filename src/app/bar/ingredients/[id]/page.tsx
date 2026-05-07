@@ -10,10 +10,8 @@ import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
-import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
+import { getCachedTags } from "@/features/tags/api/listTags";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
@@ -54,18 +52,18 @@ async function IngredientWithAuth({ params }: Props) {
 
 	const { orgId } = await authOrForbidden();
 
-	const [ingredient, rawRecipes, ingredients] = await Promise.all([
+	const [ingredient, rawRecipes, ingredients, tags] = await Promise.all([
 		getCachedIngredient(orgId, id),
 		getCachedBarRecipes(orgId),
 		getCachedIngredients(orgId),
+		getCachedTags(orgId),
 	]);
 
 	if (!ingredient) {
 		return notFound();
 	}
 
-	const ingredientMap = buildIngredientMap(ingredients);
-	const recipes = rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
+	const recipes = stitchRecipes(rawRecipes, { ingredients, tags });
 	const recipesUsingIngredient = getRecipesUsingIngredient(
 		ingredient.id,
 		recipes,

@@ -4,10 +4,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { Container } from "@/ui/Container";
 import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
@@ -40,8 +37,7 @@ async function CreateListWithAuth() {
 		getCachedIngredients(orgId),
 	]);
 
-	const ingredientMap = buildIngredientMap(ingredients);
-	const recipes = rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
+	const recipes = stitchRecipes(rawRecipes, { ingredients });
 
 	return (
 		<RecipeListForm recipes={recipes}>

@@ -70,10 +70,12 @@ export type RecipeWithSpecs<S extends Spec = SpecWithIngredient> = Recipe & {
 
 export type RecipeTagWithTag = RecipeTag & { tag: Tag };
 
-export type RecipeWithRelations<S extends Spec = SpecWithIngredient> =
-	RecipeWithSpecs<S> & {
-		tags: RecipeTagWithTag[];
-	};
+export type RecipeWithRelations<
+	S extends Spec = SpecWithIngredient,
+	T extends RecipeTag = RecipeTagWithTag,
+> = RecipeWithSpecs<S> & {
+	tags: T[];
+};
 
 export type InsertRecipe = Omit<
 	typeof RecipesTable.$inferInsert,

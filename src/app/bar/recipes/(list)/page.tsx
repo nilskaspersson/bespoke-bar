@@ -9,10 +9,7 @@ import { RecipeDataTableLoader } from "@/features/recipes/components/RecipeDataT
 import { RecipesListSkeleton } from "@/features/recipes/components/RecipesList";
 import { RecipesListFilters } from "@/features/recipes/components/RecipesListFilters";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
-import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -27,7 +24,7 @@ export default async function RecipesPage() {
 async function RecipeViewsWithData() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [rawRecipes, ingredients, favoriteRecipeIds, members, tagOptions] =
+	const [rawRecipes, ingredients, favoriteRecipeIds, members, tags] =
 		await Promise.all([
 			getCachedBarRecipes(orgId),
 			getCachedIngredients(orgId),
@@ -36,8 +33,7 @@ async function RecipeViewsWithData() {
 			getCachedTags(orgId),
 		]);
 
-	const ingredientMap = buildIngredientMap(ingredients);
-	const recipes = rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
+	const recipes = stitchRecipes(rawRecipes, { ingredients, tags });
 
 	return (
 		<RecipeViews
@@ -45,7 +41,7 @@ async function RecipeViewsWithData() {
 				<RecipesListFilters
 					recipes={recipes}
 					favoriteRecipeIds={favoriteRecipeIds}
-					tagOptions={tagOptions}
+					tagOptions={tags}
 				/>
 			}
 			table={

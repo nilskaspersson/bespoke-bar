@@ -164,17 +164,20 @@ export const cacheTags = {
 		cacheEvents.ingredient.update.tag(orgId),
 		cacheEvents.ingredient.delete.tag(orgId),
 	],
-	recipeWithTags: (orgId: string, id: Recipe["id"], tagIds: Tag["id"][]) => [
+	/**
+	 * Recipe payload no longer joins tag entities — junctions stay,
+	 * Tags are stitched in by callers from a separately-cached list. Only
+	 * `tag.delete` matters here because it cascades to the junction row.
+	 */
+	recipe: (orgId: string, id: Recipe["id"]) => [
 		cacheEvents.recipe.update.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId, id),
-		...tagIds.map((tid) => cacheEvents.tag.update.tag(orgId, tid)),
-		...tagIds.map((tid) => cacheEvents.tag.delete.tag(orgId, tid)),
+		cacheEvents.tag.delete.tag(orgId),
 	],
 	barRecipes: (orgId: string) => [
 		cacheEvents.recipe.create.tag(orgId),
 		cacheEvents.recipe.update.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
-		cacheEvents.tag.update.tag(orgId),
 		cacheEvents.tag.delete.tag(orgId),
 	],
 	/**

@@ -9,10 +9,8 @@ import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { getRecipeName } from "@/features/recipes/utils";
-import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+import { stitchRecipe } from "@/features/recipes/utils/stitchRecipe";
+import { getCachedTags } from "@/features/tags/api/listTags";
 import { Container } from "@/ui/Container";
 import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
@@ -45,9 +43,10 @@ async function RecipeContent({ params }: Props) {
 
 	const { orgId, userId } = await authOrForbidden();
 
-	const [rawRecipe, ingredients, favoriteRecipeIds] = await Promise.all([
+	const [rawRecipe, ingredients, tags, favoriteRecipeIds] = await Promise.all([
 		getCachedRecipe(orgId, id),
 		getCachedIngredients(orgId),
+		getCachedTags(orgId),
 		getCachedUserFavoriteRecipeIds(orgId, userId),
 	]);
 
@@ -55,7 +54,7 @@ async function RecipeContent({ params }: Props) {
 		notFound();
 	}
 
-	const recipe = stitchRecipeSpecs(rawRecipe, buildIngredientMap(ingredients));
+	const recipe = stitchRecipe(rawRecipe, { ingredients, tags });
 
 	return (
 		<RecipeArticle

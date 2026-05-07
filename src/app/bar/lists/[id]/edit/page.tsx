@@ -5,10 +5,10 @@ import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import {
 	buildIngredientMap,
 	stitchRecipeListEntries,
-	stitchRecipeSpecs,
 } from "@/features/specs/utils/stitchIngredients";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
@@ -67,9 +67,11 @@ async function EditRecipeListWithAuth({
 		notFound();
 	}
 
-	const ingredientMap = buildIngredientMap(ingredients);
-	const recipeList = stitchRecipeListEntries(rawRecipeList, ingredientMap);
-	const recipes = rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
+	const recipeList = stitchRecipeListEntries(
+		rawRecipeList,
+		buildIngredientMap(ingredients),
+	);
+	const recipes = stitchRecipes(rawRecipes, { ingredients });
 
 	return (
 		<>

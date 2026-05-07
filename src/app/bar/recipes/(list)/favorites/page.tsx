@@ -11,10 +11,8 @@ import {
 	RecipesListSkeleton,
 } from "@/features/recipes/components/RecipesList";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
-import {
-	buildIngredientMap,
-	stitchRecipeSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
+import { getCachedTags } from "@/features/tags/api/listTags";
 import { authOrForbidden } from "@/utils/auth";
 
 export default function FavoriteRecipesPage() {
@@ -28,18 +26,19 @@ export default function FavoriteRecipesPage() {
 async function FavoriteRecipesWithAuth() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [rawRecipes, ingredients, favoriteRecipeIds, members] =
+	const [rawRecipes, ingredients, tags, favoriteRecipeIds, members] =
 		await Promise.all([
 			getCachedBarRecipes(orgId),
 			getCachedIngredients(orgId),
+			getCachedTags(orgId),
 			getCachedUserFavoriteRecipeIds(orgId, userId),
 			readOrganisationMembers(),
 		]);
 
-	const ingredientMap = buildIngredientMap(ingredients);
-	const favoriteRecipes = rawRecipes
-		.filter((recipe) => favoriteRecipeIds.includes(recipe.id))
-		.map((r) => stitchRecipeSpecs(r, ingredientMap));
+	const favoriteRecipes = stitchRecipes(
+		rawRecipes.filter((recipe) => favoriteRecipeIds.includes(recipe.id)),
+		{ ingredients, tags },
+	);
 
 	return (
 		<RecipeViews

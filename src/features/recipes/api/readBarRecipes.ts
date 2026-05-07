@@ -8,11 +8,7 @@ const preparedReadBarRecipes = db.query.RecipesTable.findMany({
 	where: eq(RecipesTable.orgId, sql.placeholder("orgId")),
 	with: {
 		specs: true,
-		tags: {
-			with: {
-				tag: true,
-			},
-		},
+		tags: true,
 	},
 	orderBy: [desc(RecipesTable.createdAt)],
 }).prepare("readBarRecipes");

@@ -39,13 +39,6 @@ export function stitchSpecs(
 	});
 }
 
-export function stitchRecipeSpecs<R extends { specs: Spec[] }>(
-	recipe: R,
-	ingredients: IngredientMap,
-): Omit<R, "specs"> & { specs: SpecWithIngredient[] } {
-	return { ...recipe, specs: stitchSpecs(recipe.specs, ingredients) };
-}
-
 export function stitchRecipeListEntries(
 	list: RecipeListWithRecipes<Spec>,
 	ingredients: IngredientMap,
@@ -55,7 +48,10 @@ export function stitchRecipeListEntries(
 		entries: list.entries.map(
 			(entry): RecipeListEntryWithRecipe => ({
 				...entry,
-				recipe: stitchRecipeSpecs(entry.recipe, ingredients),
+				recipe: {
+					...entry.recipe,
+					specs: stitchSpecs(entry.recipe.specs, ingredients),
+				},
 			}),
 		),
 	};
