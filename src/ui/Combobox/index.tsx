@@ -118,24 +118,10 @@ export function Combobox<T>({
 		openMenu,
 		reset,
 		selectedItem,
-		selectItem,
 	} = useCombobox({
 		...comboboxProps,
 		onInputValueChange({ inputValue, type }) {
-			/**
-			 * Clear the selection on input. This enables a "free" input mode, where the search
-			 * can be used as a member of the form.
-			 */
-			if (
-				type === useCombobox.stateChangeTypes.InputChange &&
-				selectedItem &&
-				inputValue !== itemToString(selectedItem)
-			) {
-				selectItem(null);
-			}
-
 			setInputValue(inputValue.trim().toLowerCase());
-
 			comboboxProps?.onInputValueChange?.({ inputValue, type });
 		},
 		onIsOpenChange(changes) {

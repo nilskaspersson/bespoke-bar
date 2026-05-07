@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { readOrganisationMembers } from "@/features/organisation/api/readOrganisationMembers";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
@@ -8,6 +9,7 @@ import { RecipeDataTableLoader } from "@/features/recipes/components/RecipeDataT
 import { RecipesListSkeleton } from "@/features/recipes/components/RecipesList";
 import { RecipesListFilters } from "@/features/recipes/components/RecipesListFilters";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -22,12 +24,16 @@ export default async function RecipesPage() {
 async function RecipeViewsWithData() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [recipes, favoriteRecipeIds, members, tagOptions] = await Promise.all([
-		getCachedBarRecipes(orgId),
-		getCachedUserFavoriteRecipeIds(orgId, userId),
-		readOrganisationMembers(),
-		getCachedTags(orgId),
-	]);
+	const [rawRecipes, ingredients, favoriteRecipeIds, members, tags] =
+		await Promise.all([
+			getCachedBarRecipes(orgId),
+			getCachedIngredients(orgId),
+			getCachedUserFavoriteRecipeIds(orgId, userId),
+			readOrganisationMembers(),
+			getCachedTags(orgId),
+		]);
+
+	const recipes = stitchRecipes(rawRecipes, { ingredients, tags });
 
 	return (
 		<RecipeViews
@@ -35,7 +41,7 @@ async function RecipeViewsWithData() {
 				<RecipesListFilters
 					recipes={recipes}
 					favoriteRecipeIds={favoriteRecipeIds}
-					tagOptions={tagOptions}
+					tagOptions={tags}
 				/>
 			}
 			table={

@@ -1,11 +1,16 @@
 import { z } from "zod";
 import { recipeListWithEntriesFormSchema } from "@/db/schema/composite";
 import { recipeListFormSchema } from "@/db/schema/recipeLists";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createRecipeList } from "@/features/lists/api/createRecipeList.service";
 import { deleteRecipeList } from "@/features/lists/api/deleteRecipeList.service";
 import { getCachedRecipeLists } from "@/features/lists/api/readBarRecipeLists";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { upsertRecipeListWithEntries } from "@/features/lists/api/upsertRecipeListWithEntries.service";
+import {
+	buildIngredientMap,
+	stitchRecipeListEntries,
+} from "@/features/specs/utils/stitchIngredients";
 import { protectedProcedure, router } from "@/trpc";
 
 export const recipeListRouter = router({
@@ -15,8 +20,13 @@ export const recipeListRouter = router({
 
 	byId: protectedProcedure
 		.input(z.object({ id: z.string() }))
-		.query(({ ctx, input }) => {
-			return getCachedRecipeList(ctx.orgId, input.id);
+		.query(async ({ ctx, input }) => {
+			const [rawList, ingredients] = await Promise.all([
+				getCachedRecipeList(ctx.orgId, input.id),
+				getCachedIngredients(ctx.orgId),
+			]);
+			if (!rawList) return rawList;
+			return stitchRecipeListEntries(rawList, buildIngredientMap(ingredients));
 		}),
 
 	create: protectedProcedure

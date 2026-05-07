@@ -10,16 +10,8 @@ const preparedReadRecipe = db.query.RecipesTable.findFirst({
 		eq(RecipesTable.id, sql.placeholder("recipeId")),
 	),
 	with: {
-		specs: {
-			with: {
-				ingredient: true,
-			},
-		},
-		tags: {
-			with: {
-				tag: true,
-			},
-		},
+		specs: true,
+		tags: true,
 	},
 }).prepare("readRecipe");
 
@@ -33,14 +25,6 @@ export async function readRecipe(orgId: string, recipeId: Recipe["id"]) {
 export async function getCachedRecipe(orgId: string, id: Recipe["id"]) {
 	"use cache";
 	cacheLife("max");
-	const recipe = await readRecipe(orgId, id);
-	cacheTag(
-		...cacheTags.recipeWithIngredients(
-			orgId,
-			id,
-			recipe?.specs.map((s) => s.ingredientId) ?? [],
-			recipe?.tags.map((rt) => rt.tagId) ?? [],
-		),
-	);
-	return recipe;
+	cacheTag(...cacheTags.recipe(orgId, id));
+	return await readRecipe(orgId, id);
 }

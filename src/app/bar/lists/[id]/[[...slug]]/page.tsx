@@ -3,12 +3,17 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { PageHeader } from "@/components/PageHeader";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { EmptyListEntry } from "@/features/lists/components/EmptyListEntry";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
-import { getCachedFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
+import { getCachedFeaturedListId } from "@/features/lists/featured/api/readFeaturedList";
+import {
+	buildIngredientMap,
+	stitchRecipeListEntries,
+} from "@/features/specs/utils/stitchIngredients";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { authOrForbidden } from "@/utils/auth";
@@ -44,14 +49,20 @@ async function RecipeListContent({ params }: Props) {
 
 	const { orgId } = await authOrForbidden();
 
-	const [list, featuredList] = await Promise.all([
+	const [rawList, featuredListId, ingredients] = await Promise.all([
 		getCachedRecipeList(orgId, id),
-		getCachedFeaturedList(orgId),
+		getCachedFeaturedListId(orgId),
+		getCachedIngredients(orgId),
 	]);
 
-	if (!list) {
+	if (!rawList) {
 		notFound();
 	}
+
+	const list = stitchRecipeListEntries(
+		rawList,
+		buildIngredientMap(ingredients),
+	);
 
 	return (
 		<>
@@ -67,7 +78,7 @@ async function RecipeListContent({ params }: Props) {
 					<RecipeListActions
 						actionProps={actionProps}
 						list={list}
-						hasFeaturedList={Boolean(featuredList)}
+						hasFeaturedList={featuredListId !== null}
 						deleteRedirectTo={"/bar/lists"}
 					/>
 				)}

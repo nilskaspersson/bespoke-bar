@@ -13,7 +13,7 @@ export async function updateLocalOrganisation(
 	auth: Auth,
 	userInput: UpdateOrganisationFormData,
 ) {
-	const { userId, orgId, clerkOrgId } = auth;
+	const { userId, orgId } = auth;
 
 	await rateLimit(userId);
 
@@ -28,10 +28,7 @@ export async function updateLocalOrganisation(
 		.where(eq(OrganisationsTable.id, orgId))
 		.returning();
 
-	/**
-	 * Emit by clerkOrgId (not local id) because `getCachedOrganisation` is keyed by it.
-	 */
-	cacheEvents.organisation.update.emit(clerkOrgId);
+	cacheEvents.organisation.update.emit(orgId);
 
 	return organisation;
 }

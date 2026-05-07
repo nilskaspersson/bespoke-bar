@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
+import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { Container } from "@/ui/Container";
 import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
@@ -30,7 +32,12 @@ export default function CreateListPage() {
 
 async function CreateListWithAuth() {
 	const { orgId } = await authOrForbidden();
-	const recipes = await getCachedBarRecipes(orgId);
+	const [rawRecipes, ingredients] = await Promise.all([
+		getCachedBarRecipes(orgId),
+		getCachedIngredients(orgId),
+	]);
+
+	const recipes = stitchRecipes(rawRecipes, { ingredients });
 
 	return (
 		<RecipeListForm recipes={recipes}>

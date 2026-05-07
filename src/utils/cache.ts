@@ -165,62 +165,21 @@ export const cacheTags = {
 		cacheEvents.ingredient.delete.tag(orgId),
 	],
 	/**
-	 * Saturated Recipes subscribe to per-id recipe events, plus per-id ingredient
-	 * and tag events derived from the loaded data. ingredient.delete is omitted
-	 * by design — a FK constraint prevents deleting an ingredient in use.
+	 * Recipe payload no longer joins tag entities — junctions stay,
+	 * Tags are stitched in by callers from a separately-cached list. Only
+	 * `tag.delete` matters here because it cascades to the junction row.
 	 */
-	recipeWithIngredients: (
-		orgId: string,
-		id: Recipe["id"],
-		ingredientIds: Ingredient["id"][],
-		tagIds: Tag["id"][],
-	) => [
+	recipe: (orgId: string, id: Recipe["id"]) => [
 		cacheEvents.recipe.update.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId, id),
-		...ingredientIds.map((iid) =>
-			cacheEvents.ingredient.update.tag(orgId, iid),
-		),
-		...tagIds.map((tid) => cacheEvents.tag.update.tag(orgId, tid)),
-		...tagIds.map((tid) => cacheEvents.tag.delete.tag(orgId, tid)),
+		cacheEvents.tag.delete.tag(orgId),
 	],
-	/**
-	 * Saturated bar-recipe list subscribes to org-wide recipe events plus per-id
-	 * ingredient and tag events deduped from the loaded data. Once an org grows
-	 * past the point where per-id tracking fits under the 64-tag cap on a
-	 * cached function, this falls back to org-wide ingredient/tag subscriptions
-	 * — granular while it's feasible, coarse once it isn't.
-	 */
-	barRecipes: (
-		orgId: string,
-		ingredientIds: Ingredient["id"][],
-		tagIds: Tag["id"][],
-	) => {
-		const baseTags = [
-			cacheEvents.recipe.create.tag(orgId),
-			cacheEvents.recipe.update.tag(orgId),
-			cacheEvents.recipe.delete.tag(orgId),
-		];
-
-		const tags = [
-			...baseTags,
-			...ingredientIds.map((iid) =>
-				cacheEvents.ingredient.update.tag(orgId, iid),
-			),
-			...tagIds.map((tid) => cacheEvents.tag.update.tag(orgId, tid)),
-			...tagIds.map((tid) => cacheEvents.tag.delete.tag(orgId, tid)),
-		];
-
-		if (tags.length > 60) {
-			return [
-				...baseTags,
-				cacheEvents.ingredient.update.tag(orgId),
-				cacheEvents.tag.update.tag(orgId),
-				cacheEvents.tag.delete.tag(orgId),
-			];
-		}
-
-		return tags;
-	},
+	barRecipes: (orgId: string) => [
+		cacheEvents.recipe.create.tag(orgId),
+		cacheEvents.recipe.update.tag(orgId),
+		cacheEvents.recipe.delete.tag(orgId),
+		cacheEvents.tag.delete.tag(orgId),
+	],
 	/**
 	 * Just the count of recipes — only changes when a recipe is added or removed.
 	 * Ingredient and tag mutations don't affect the number, so don't subscribe.
@@ -239,21 +198,11 @@ export const cacheTags = {
 		cacheEvents.recipeList.delete.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
 	],
-	/**
-	 * Recipe Lists are in an awkward state, where we could technically use the
-	 * entry -> recipe mappings to subscribe to specific recipe- and ingredient
-	 * events, BUT a cached fn can NOT have more than 64 tags.
-	 *
-	 * That means we'd run into issues after ~20 recipes per list. Not sure if an
-	 * error is thrown or if further tags are ignored, but at least for now we'll
-	 * stick to global invalidation of those events.
-	 */
 	recipeListWithRecipes: (orgId: string, id?: RecipeList["id"]) => [
 		cacheEvents.recipeList.update.tag(orgId, id),
 		cacheEvents.recipeList.delete.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId),
 		cacheEvents.recipe.update.tag(orgId),
-		cacheEvents.ingredient.update.tag(orgId),
 	],
 	favorite: {
 		toggle: (orgId: string, userId: string) => [

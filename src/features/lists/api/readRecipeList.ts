@@ -16,11 +16,7 @@ const preparedReadRecipeList = db.query.RecipeListsTable.findFirst({
 			with: {
 				recipe: {
 					with: {
-						specs: {
-							with: {
-								ingredient: true,
-							},
-						},
+						specs: true,
 					},
 				},
 			},

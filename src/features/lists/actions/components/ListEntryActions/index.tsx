@@ -17,7 +17,7 @@ export function ListEntryActions({
 	entry: RecipeListEntryWithRecipe;
 }) {
 	return (
-		<EntityActions gap={2} actionProps={{ variant: "outline", color: "light" }}>
+		<EntityActions>
 			{(actionProps) => (
 				<>
 					<li>

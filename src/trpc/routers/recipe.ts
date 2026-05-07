@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { recipeFormSchema } from "@/db/schema/composite";
 import { updateRecipeSchema } from "@/db/schema/recipes";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedCountBarRecipes } from "@/features/recipes/api/countBarRecipes";
 import { deleteRecipe } from "@/features/recipes/api/deleteRecipe.service";
 import { duplicateRecipe } from "@/features/recipes/api/duplicateRecipe.service";
@@ -8,17 +9,33 @@ import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { updateRecipe } from "@/features/recipes/api/updateRecipe.service";
 import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
+import {
+	stitchRecipe,
+	stitchRecipes,
+} from "@/features/recipes/utils/stitchRecipe";
+import { getCachedTags } from "@/features/tags/api/listTags";
 import { protectedProcedure, router } from "@/trpc";
 
 export const recipeRouter = router({
-	list: protectedProcedure.query(({ ctx }) => {
-		return getCachedBarRecipes(ctx.orgId);
+	list: protectedProcedure.query(async ({ ctx }) => {
+		const [rawRecipes, ingredients, tags] = await Promise.all([
+			getCachedBarRecipes(ctx.orgId),
+			getCachedIngredients(ctx.orgId),
+			getCachedTags(ctx.orgId),
+		]);
+		return stitchRecipes(rawRecipes, { ingredients, tags });
 	}),
 
 	byId: protectedProcedure
 		.input(z.object({ id: z.string() }))
-		.query(({ ctx, input }) => {
-			return getCachedRecipe(ctx.orgId, input.id);
+		.query(async ({ ctx, input }) => {
+			const [rawRecipe, ingredients, tags] = await Promise.all([
+				getCachedRecipe(ctx.orgId, input.id),
+				getCachedIngredients(ctx.orgId),
+				getCachedTags(ctx.orgId),
+			]);
+			if (!rawRecipe) return rawRecipe;
+			return stitchRecipe(rawRecipe, { ingredients, tags });
 		}),
 
 	count: protectedProcedure.query(({ ctx }) => {
