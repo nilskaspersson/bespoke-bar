@@ -1,9 +1,15 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
 import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
+import {
+	buildIngredientMap,
+	stitchRecipeListEntries,
+	stitchRecipeSpecs,
+} from "@/features/specs/utils/stitchIngredients";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -51,14 +57,19 @@ async function EditRecipeListWithAuth({
 
 	const { orgId } = await authOrForbidden();
 
-	const [recipeList, recipes] = await Promise.all([
+	const [rawRecipeList, rawRecipes, ingredients] = await Promise.all([
 		getCachedRecipeList(orgId, id),
 		getCachedBarRecipes(orgId),
+		getCachedIngredients(orgId),
 	]);
 
-	if (!recipeList) {
+	if (!rawRecipeList) {
 		notFound();
 	}
+
+	const ingredientMap = buildIngredientMap(ingredients);
+	const recipeList = stitchRecipeListEntries(rawRecipeList, ingredientMap);
+	const recipes = rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
 
 	return (
 		<>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { readOrganisationMembers } from "@/features/organisation/api/readOrganisationMembers";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
@@ -10,6 +11,10 @@ import {
 	RecipesListSkeleton,
 } from "@/features/recipes/components/RecipesList";
 import { RecipeViews } from "@/features/recipes/components/RecipeViews";
+import {
+	buildIngredientMap,
+	stitchRecipeSpecs,
+} from "@/features/specs/utils/stitchIngredients";
 import { authOrForbidden } from "@/utils/auth";
 
 export default function FavoriteRecipesPage() {
@@ -23,15 +28,18 @@ export default function FavoriteRecipesPage() {
 async function FavoriteRecipesWithAuth() {
 	const { orgId, userId } = await authOrForbidden();
 
-	const [recipes, favoriteRecipeIds, members] = await Promise.all([
-		getCachedBarRecipes(orgId),
-		getCachedUserFavoriteRecipeIds(orgId, userId),
-		readOrganisationMembers(),
-	]);
+	const [rawRecipes, ingredients, favoriteRecipeIds, members] =
+		await Promise.all([
+			getCachedBarRecipes(orgId),
+			getCachedIngredients(orgId),
+			getCachedUserFavoriteRecipeIds(orgId, userId),
+			readOrganisationMembers(),
+		]);
 
-	const favoriteRecipes = recipes.filter((recipe) =>
-		favoriteRecipeIds.includes(recipe.id),
-	);
+	const ingredientMap = buildIngredientMap(ingredients);
+	const favoriteRecipes = rawRecipes
+		.filter((recipe) => favoriteRecipeIds.includes(recipe.id))
+		.map((r) => stitchRecipeSpecs(r, ingredientMap));
 
 	return (
 		<RecipeViews

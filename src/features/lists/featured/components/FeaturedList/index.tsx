@@ -1,28 +1,38 @@
-import { cacheLife, cacheTag } from "next/cache";
 import type { ComponentProps } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { EntityActions } from "@/components/EntityActions";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { RecipeListFilters } from "@/features/lists/components/RecipeListFilters";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
-import { readFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
+import { getCachedFeaturedList } from "@/features/lists/featured/api/readFeaturedList";
+import {
+	buildIngredientMap,
+	stitchRecipeListEntries,
+} from "@/features/specs/utils/stitchIngredients";
 import { LinkButton } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
-import { cacheTags } from "@/utils/cache";
 import styles from "./styles.module.css";
 
 type FeaturedListProps = Omit<ComponentProps<typeof Grid>, "children"> & {
 	orgId: string;
 };
 
+/**
+ * Not a `'use cache'` boundary on purpose: an outer cache would inherit
+ * `getCachedIngredients`'s tags and invalidate on every ingredient mutation.
+ */
 export async function FeaturedList({ orgId, ...props }: FeaturedListProps) {
-	"use cache";
-	cacheLife("max");
+	const [rawList, ingredients] = await Promise.all([
+		getCachedFeaturedList(orgId),
+		getCachedIngredients(orgId),
+	]);
 
-	const featuredList = await readFeaturedList(orgId);
-	cacheTag(...cacheTags.recipeListWithRecipes(orgId, featuredList?.id));
+	const featuredList = rawList
+		? stitchRecipeListEntries(rawList, buildIngredientMap(ingredients))
+		: null;
 
 	return (
 		<Grid as="section" gap={6} {...props}>

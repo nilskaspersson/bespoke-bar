@@ -11,12 +11,14 @@ import {
 	selectRecipeListSchema,
 } from "@/db/schema/recipeLists";
 import { insertRecipeSchema } from "@/db/schema/recipes";
-import { insertSpecsSchema } from "@/db/schema/specs";
+import {
+	insertSpecsSchema,
+	type Spec,
+	type SpecWithIngredient,
+} from "@/db/schema/specs";
 
 /**
- * Caps a recipe's spec count well above the most complex real cocktail (~13)
- * while staying comfortably under the 64-tag-per-cached-function limit that
- * `recipeWithIngredients` subscribes against.
+ * Caps the Recipe spec count well above any known cocktail.
  */
 export const MAX_SPECS_PER_RECIPE = 20;
 
@@ -113,6 +115,7 @@ export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
 
 export type RecipeListWithEntries = z.infer<typeof recipeListWithEntriesSchema>;
 
-export type RecipeListWithRecipes = RecipeList & {
-	entries: RecipeListEntryWithRecipe[];
-};
+export type RecipeListWithRecipes<S extends Spec = SpecWithIngredient> =
+	RecipeList & {
+		entries: RecipeListEntryWithRecipe<S>[];
+	};

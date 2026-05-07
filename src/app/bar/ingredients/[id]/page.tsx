@@ -4,11 +4,16 @@ import { Suspense } from "react";
 import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
+import {
+	buildIngredientMap,
+	stitchRecipeSpecs,
+} from "@/features/specs/utils/stitchIngredients";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
@@ -49,15 +54,18 @@ async function IngredientWithAuth({ params }: Props) {
 
 	const { orgId } = await authOrForbidden();
 
-	const [ingredient, recipes] = await Promise.all([
+	const [ingredient, rawRecipes, ingredients] = await Promise.all([
 		getCachedIngredient(orgId, id),
 		getCachedBarRecipes(orgId),
+		getCachedIngredients(orgId),
 	]);
 
 	if (!ingredient) {
 		return notFound();
 	}
 
+	const ingredientMap = buildIngredientMap(ingredients);
+	const recipes = rawRecipes.map((r) => stitchRecipeSpecs(r, ingredientMap));
 	const recipesUsingIngredient = getRecipesUsingIngredient(
 		ingredient.id,
 		recipes,

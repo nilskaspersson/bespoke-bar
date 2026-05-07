@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
@@ -8,6 +9,10 @@ import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { getRecipeName } from "@/features/recipes/utils";
+import {
+	buildIngredientMap,
+	stitchRecipeSpecs,
+} from "@/features/specs/utils/stitchIngredients";
 import { Container } from "@/ui/Container";
 import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
@@ -40,14 +45,17 @@ async function RecipeContent({ params }: Props) {
 
 	const { orgId, userId } = await authOrForbidden();
 
-	const [recipe, favoriteRecipeIds] = await Promise.all([
+	const [rawRecipe, ingredients, favoriteRecipeIds] = await Promise.all([
 		getCachedRecipe(orgId, id),
+		getCachedIngredients(orgId),
 		getCachedUserFavoriteRecipeIds(orgId, userId),
 	]);
 
-	if (!recipe) {
+	if (!rawRecipe) {
 		notFound();
 	}
+
+	const recipe = stitchRecipeSpecs(rawRecipe, buildIngredientMap(ingredients));
 
 	return (
 		<RecipeArticle

@@ -2,7 +2,6 @@
 
 import type { RecipeList } from "@/db/schema/recipeLists";
 import { ClearFeaturedListButton } from "@/features/lists/actions/components/ClearFeaturedListButton";
-import { trpc } from "@/trpc/client";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Icon } from "@/ui/Icon";
@@ -25,8 +24,6 @@ export function SetFeaturedListButton({
 	actionClearFeatured: () => Promise<unknown>;
 	requireConfirmation?: boolean;
 } & ButtonProps) {
-	const utils = trpc.useUtils();
-
 	const handleSetFeaturedList = async () => {
 		const promise = actionSetFeatured(list.id);
 
@@ -74,7 +71,6 @@ export function SetFeaturedListButton({
 		});
 
 		await promise;
-		utils.recipeList.list.invalidate();
 	};
 
 	if (!requireConfirmation) {

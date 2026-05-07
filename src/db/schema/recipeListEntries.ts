@@ -18,6 +18,7 @@ import { z } from "zod";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { RecipesTable, type RecipeWithSpecs } from "@/db/schema/recipes";
+import type { Spec, SpecWithIngredient } from "@/db/schema/specs";
 
 export const RecipeListEntriesTable = pgTable(
 	"recipe_list_entries",
@@ -84,9 +85,10 @@ export type UpdateRecipeListEntry = Pick<
 	"sortOrder" | "price" | "recipeId" | "listId"
 >;
 
-export type RecipeListEntryWithRecipe = RecipeListEntry & {
-	recipe: RecipeWithSpecs;
-};
+export type RecipeListEntryWithRecipe<S extends Spec = SpecWithIngredient> =
+	RecipeListEntry & {
+		recipe: RecipeWithSpecs<S>;
+	};
 
 export const selectRecipeListEntrySchema = createSelectSchema(
 	RecipeListEntriesTable,

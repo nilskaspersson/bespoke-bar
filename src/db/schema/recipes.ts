@@ -21,6 +21,7 @@ import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
 import { type RecipeTag, RecipeTagsTable } from "@/db/schema/recipeTags";
 import {
 	type DraftSpecWithDraftIngredient,
+	type Spec,
 	SpecsTable,
 	type SpecWithIngredient,
 } from "@/db/schema/specs";
@@ -63,15 +64,16 @@ export const recipesRelations = relations(RecipesTable, ({ many }) => ({
 
 export type Recipe = typeof RecipesTable.$inferSelect;
 
-export type RecipeWithSpecs = Recipe & {
-	specs: SpecWithIngredient[];
+export type RecipeWithSpecs<S extends Spec = SpecWithIngredient> = Recipe & {
+	specs: S[];
 };
 
 export type RecipeTagWithTag = RecipeTag & { tag: Tag };
 
-export type RecipeWithRelations = RecipeWithSpecs & {
-	tags: RecipeTagWithTag[];
-};
+export type RecipeWithRelations<S extends Spec = SpecWithIngredient> =
+	RecipeWithSpecs<S> & {
+		tags: RecipeTagWithTag[];
+	};
 
 export type InsertRecipe = Omit<
 	typeof RecipesTable.$inferInsert,
