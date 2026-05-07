@@ -15,6 +15,7 @@ import {
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
+import { OrganisationsTable } from "@/db/schema/organisations";
 import { RecipeListsTable } from "@/db/schema/recipeLists";
 import { RecipesTable, type RecipeWithSpecs } from "@/db/schema/recipes";
 
@@ -24,7 +25,9 @@ export const RecipeListEntriesTable = pgTable(
 		id: text("id")
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 		listId: text("list_id")
 			.notNull()
 			.references(() => RecipeListsTable.id, { onDelete: "cascade" }),

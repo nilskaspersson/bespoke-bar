@@ -16,6 +16,7 @@ import {
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
+import { OrganisationsTable } from "@/db/schema/organisations";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes, supportedMeasurements } from "@/db/schema/units";
 import { sqlNormalizedString } from "@/db/utils";
@@ -35,7 +36,9 @@ export const IngredientsTable = pgTable(
 		brand: varchar("brand", { length: 100 }),
 		unitCost: real("unitCost"),
 		measurementType: measurementTypes("measurementType"),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()
 			.notNull(),

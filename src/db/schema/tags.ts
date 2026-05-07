@@ -12,6 +12,7 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
+import { OrganisationsTable } from "@/db/schema/organisations";
 import { RecipeTagsTable } from "@/db/schema/recipeTags";
 
 export const TagsTable = pgTable(
@@ -20,7 +21,9 @@ export const TagsTable = pgTable(
 		id: text("id")
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 		name: varchar("name", { length: 30 }).notNull(),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()

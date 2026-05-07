@@ -1,55 +1,114 @@
 import { eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { forbidden, redirect } from "next/navigation";
+import { after } from "next/server";
 import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
+import {
+	type Organisation,
+	OrganisationsTable,
+} from "@/db/schema/organisations";
+import { cacheEvents, cacheTags } from "@/utils/cache";
+
+/**
+ * Throwing inside `"use cache"` doesn't propagate cleanly through user-land
+ * try/catch in production server-component renders — React intercepts the
+ * throw and re-emits a wrapped render error before the caller sees it. So
+ * we cache `null` for "no row yet" and flip via `cacheEvents.organisation`
+ * from the bootstrap path.
+ */
 
 export async function getOrCreateLocalOrganisation(
-	orgId: string | undefined,
-	userId: string | undefined,
-) {
-	/**
-	 * No user, no org.
-	 */
-	if (!userId) {
-		forbidden();
+	clerkOrgId: string,
+	userId: string,
+): Promise<Organisation> {
+	const localOrgId = await getCachedLocalOrgId(clerkOrgId);
+
+	if (localOrgId) {
+		const cached = await getCachedOrganisation(localOrgId);
+		if (cached) {
+			return cached;
+		}
 	}
 
-	/**
-	 * If there's no Clerk org id, we can't create a local org. Throw a redirect to the
-	 * create org page.
-	 */
-	if (!orgId) {
-		redirect("/org/create");
-	}
-
-	const existingOrganisation = await getCachedOrganisation(orgId);
-
-	if (existingOrganisation) {
-		return existingOrganisation;
-	}
-
-	const [newOrganisation] = await db
-		.insert(OrganisationsTable)
-		.values({
-			clerkOrgId: orgId,
-			createdBy: userId,
-		})
-		.returning();
-
-	return newOrganisation;
+	return createLocalOrganisation(clerkOrgId, userId);
 }
 
-async function getCachedOrganisation(orgId: string) {
+export async function getLocalOrgId(
+	clerkOrgId: string,
+	userId: string,
+): Promise<string> {
+	const cached = await getCachedLocalOrgId(clerkOrgId);
+	if (cached) {
+		return cached;
+	}
+
+	const created = await createLocalOrganisation(clerkOrgId, userId);
+	return created.id;
+}
+
+async function createLocalOrganisation(
+	clerkOrgId: string,
+	userId: string,
+): Promise<Organisation> {
+	const [inserted] = await db
+		.insert(OrganisationsTable)
+		.values({
+			clerkOrgId,
+			createdBy: userId,
+		})
+		.onConflictDoNothing({ target: OrganisationsTable.clerkOrgId })
+		.returning();
+
+	let organisation: Organisation | undefined = inserted;
+
+	if (!organisation) {
+		const [selected] = await db
+			.select()
+			.from(OrganisationsTable)
+			.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
+			.limit(1);
+		organisation = selected;
+	}
+
+	if (!organisation) {
+		throw new Error(
+			`createLocalOrganisation: no row for ${clerkOrgId} after insert+select`,
+		);
+	}
+
+	/** Flip the cached `null` to a hit on the next request. */
+	after(() => {
+		cacheEvents.organisation.create.emit(clerkOrgId);
+	});
+
+	return organisation;
+}
+
+async function getCachedOrganisation(
+	localOrgId: string,
+): Promise<Organisation | null> {
 	"use cache";
 	cacheLife("max");
-	cacheTag(`organisation-${orgId}`);
+	cacheTag(...cacheTags.organisation(localOrgId));
 
-	const [existingOrganisation] = await db
+	const [organisation] = await db
 		.select()
 		.from(OrganisationsTable)
-		.where(eq(OrganisationsTable.clerkOrgId, orgId))
+		.where(eq(OrganisationsTable.id, localOrgId))
 		.limit(1);
 
-	return existingOrganisation;
+	return organisation ?? null;
+}
+
+async function getCachedLocalOrgId(clerkOrgId: string): Promise<string | null> {
+	"use cache";
+	cacheLife("max");
+	cacheTag(...cacheTags.organisationByClerkId(clerkOrgId));
+
+	const [row] = await db
+		.select({ id: OrganisationsTable.id })
+		.from(OrganisationsTable)
+		.where(eq(OrganisationsTable.clerkOrgId, clerkOrgId))
+		.limit(1);
+
+	return row?.id ?? null;
 }

@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { get } from "@vercel/edge-config";
 import { forbidden } from "next/navigation";
 import { cache } from "react";
+import { getLocalOrgId } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 
 export async function isAdminUser(userId: string): Promise<boolean> {
 	const allowlist = (await get<string[]>("admin-user-ids")) ?? [];
@@ -15,13 +16,21 @@ export async function isAdminUser(userId: string): Promise<boolean> {
  * not via their own Clerk org membership.
  */
 export const adminOrForbidden = cache(
-	async (): Promise<{ userId: string; orgId: string | undefined }> => {
-		const { userId, orgId } = await auth();
+	async (): Promise<{
+		userId: string;
+		orgId: string | undefined;
+		clerkOrgId: string | undefined;
+	}> => {
+		const { userId, orgId: clerkOrgId } = await auth();
 
 		if (!userId || !(await isAdminUser(userId))) {
 			forbidden();
 		}
 
-		return { userId, orgId };
+		const orgId = clerkOrgId
+			? await getLocalOrgId(clerkOrgId, userId)
+			: undefined;
+
+		return { userId, orgId, clerkOrgId: clerkOrgId ?? undefined };
 	},
 );

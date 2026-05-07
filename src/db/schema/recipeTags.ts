@@ -6,6 +6,7 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
+import { OrganisationsTable } from "@/db/schema/organisations";
 import { RecipesTable } from "@/db/schema/recipes";
 import { TagsTable } from "@/db/schema/tags";
 
@@ -18,7 +19,9 @@ export const RecipeTagsTable = pgTable(
 		tagId: text("tag_id")
 			.notNull()
 			.references(() => TagsTable.id, { onDelete: "cascade" }),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()
 			.notNull(),
@@ -36,6 +39,8 @@ export const RecipeTagsTable = pgTable(
 		 * tag is removed — Postgres does not auto-index FK columns.
 		 */
 		index("idx_recipe_tags_tag_recipe").on(table.tagId, table.recipeId),
+		/** Serves ON DELETE CASCADE when an organisation is removed. */
+		index("idx_recipe_tags_org_id").on(table.orgId),
 	],
 );
 

@@ -6,6 +6,19 @@ import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { useTheme } from "@/hooks/useTheme";
 
+const localization: ComponentProps<typeof ClerkProvider>["localization"] = {
+	organizationProfile: {
+		profilePage: {
+			dangerSection: {
+				deleteOrganization: {
+					messageLine2:
+						"All Recipes will be permanently deleted. This action is permanent and irreversible.",
+				},
+			},
+		},
+	},
+};
+
 export function AuthProvider({ children }: PropsWithChildren) {
 	const { resolvedTheme } = useTheme();
 	const isMounted = useIsMounted();
@@ -22,5 +35,9 @@ export function AuthProvider({ children }: PropsWithChildren) {
 			[isMounted, resolvedTheme],
 		);
 
-	return <ClerkProvider appearance={appearance}>{children}</ClerkProvider>;
+	return (
+		<ClerkProvider appearance={appearance} localization={localization}>
+			{children}
+		</ClerkProvider>
+	);
 }

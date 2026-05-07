@@ -141,6 +141,20 @@
       "when": 1777842240822,
       "tag": "0019_high_proudstar",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1778071242507,
+      "tag": "0020_broken_maria_hill",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1778099310689,
+      "tag": "0021_slippery_zuras",
+      "breakpoints": true
     }
   ]
 }

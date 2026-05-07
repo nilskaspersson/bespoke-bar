@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { getLocalOrgId } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import { AppError, type AppErrorPayload } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 
@@ -15,9 +16,12 @@ const APP_ERROR_TO_TRPC_CODE: Record<AppErrorPayload["code"], TRPCErrorCode> = {
 };
 
 export async function createContext() {
-	const { userId, orgId } = await auth();
+	const { userId, orgId: clerkOrgId } = await auth();
 
-	return { userId, orgId };
+	const orgId =
+		userId && clerkOrgId ? await getLocalOrgId(clerkOrgId, userId) : null;
+
+	return { userId, orgId, clerkOrgId };
 }
 
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -53,7 +57,7 @@ export const router = t.router;
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-	if (!ctx.userId || !ctx.orgId) {
+	if (!ctx.userId || !ctx.orgId || !ctx.clerkOrgId) {
 		throw new TRPCError({ code: "UNAUTHORIZED" });
 	}
 
@@ -68,6 +72,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 			ctx: {
 				userId: ctx.userId,
 				orgId: ctx.orgId,
+				clerkOrgId: ctx.clerkOrgId,
 			} as Auth,
 		});
 	} catch (error) {

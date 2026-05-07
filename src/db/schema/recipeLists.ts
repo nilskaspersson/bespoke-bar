@@ -11,6 +11,7 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import z from "zod";
+import { OrganisationsTable } from "@/db/schema/organisations";
 import { RecipeListEntriesTable } from "@/db/schema/recipeListEntries";
 import { sqlNormalizedString } from "@/db/utils";
 
@@ -31,7 +32,9 @@ export const RecipeListsTable = pgTable(
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),
 		featuredAt: timestamp("featured_at", { mode: "string" }),
-		orgId: text("org_id").notNull(),
+		orgId: text("org_id")
+			.notNull()
+			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 	},
 	(table) => [
 		uniqueIndex("unique_list_name_case_insensitive").on(
