@@ -1,0 +1,10 @@
+@layer feature {
+	.input {
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+		border-color: hsl(from var(--mauve-7) h s l / 0.5);
+
+		&:has(:hover, :focus-within, :focus) {
+			background-color: hsl(from var(--mauve-1) h s l / 0.78);
+		}
+	}
+}

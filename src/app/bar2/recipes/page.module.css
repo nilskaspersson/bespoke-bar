@@ -1,0 +1,17 @@
+@layer page {
+	.welcome {
+		display: grid;
+		gap: var(--gap--large);
+		container-type: inline-size;
+		max-width: 60rem;
+		margin-inline: auto;
+		padding-block: var(--space-6);
+	}
+
+	.welcomeHeader {
+		display: grid;
+		gap: var(--space-2);
+		text-align: center;
+		text-wrap: balance;
+	}
+}

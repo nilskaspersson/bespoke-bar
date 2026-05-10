@@ -20,27 +20,32 @@ import {
 	WithPersistenceInfo,
 } from "@/ui/WithPersistenceInfo";
 
-type RecipeAdjustmentsValue = {
+type AdjustmentValues = {
 	servings: number;
-	deferredServings: number;
 	conversionSystem: UnitSystems | null;
 	withRounding: boolean;
 	withBestUnit: boolean;
+};
+
+type RawAdjustments = AdjustmentValues & {
 	setServings: (servings: number) => void;
 	setConversionSystem: (system: UnitSystems | null) => void;
 	setWithRounding: (value: boolean) => void;
 	setWithBestUnit: (value: boolean) => void;
 };
 
-const RecipeAdjustmentsContext = createContext<RecipeAdjustmentsValue | null>(
+type DeferredAdjustments = AdjustmentValues;
+
+const RawAdjustmentsContext = createContext<RawAdjustments | null>(null);
+const DeferredAdjustmentsContext = createContext<DeferredAdjustments | null>(
 	null,
 );
 
 /**
- * Owns the "adjustments" state (servings, unit conversion, rounding) for a
- * single recipe view. Wrap the subtree that needs to read or render this
- * state; `useRecipeAdjustments` and `RecipeAdjustmentsControls` resolve
- * against the nearest provider.
+ * Owns the "adjustments" state (servings, unit conversion, rounding). Splits
+ * into two contexts: raw (instant feedback for the inputs and dock chip) and
+ * deferred (cards subscribe here, so rapid input changes don't drag every
+ * card through an urgent re-render mid-keystroke).
  */
 export function RecipeAdjustmentsProvider({
 	children,
@@ -52,21 +57,23 @@ export function RecipeAdjustmentsProvider({
 	const [conversionSystem, setConversionSystem] = useState<UnitSystems | null>(
 		null,
 	);
+	const deferredConversionSystem = useDeferredValue(conversionSystem);
 	const [withRounding, setWithRounding] = useLocalStorage(
 		"recipe-with-rounding",
 		true,
 		"session",
 	);
+	const deferredWithRounding = useDeferredValue(withRounding);
 	const [withBestUnit, setWithBestUnit] = useLocalStorage(
 		"recipe-with-best-unit",
 		true,
 		"session",
 	);
+	const deferredWithBestUnit = useDeferredValue(withBestUnit);
 
-	const value = useMemo<RecipeAdjustmentsValue>(
+	const rawValue = useMemo<RawAdjustments>(
 		() => ({
 			servings,
-			deferredServings,
 			conversionSystem,
 			withRounding,
 			withBestUnit,
@@ -77,7 +84,6 @@ export function RecipeAdjustmentsProvider({
 		}),
 		[
 			servings,
-			deferredServings,
 			conversionSystem,
 			withRounding,
 			withBestUnit,
@@ -86,30 +92,63 @@ export function RecipeAdjustmentsProvider({
 		],
 	);
 
+	const deferredValue = useMemo<DeferredAdjustments>(
+		() => ({
+			servings: deferredServings,
+			conversionSystem: deferredConversionSystem,
+			withRounding: deferredWithRounding,
+			withBestUnit: deferredWithBestUnit,
+		}),
+		[
+			deferredServings,
+			deferredConversionSystem,
+			deferredWithRounding,
+			deferredWithBestUnit,
+		],
+	);
+
 	return (
-		<RecipeAdjustmentsContext value={value}>
-			{children}
-		</RecipeAdjustmentsContext>
+		<RawAdjustmentsContext value={rawValue}>
+			<DeferredAdjustmentsContext value={deferredValue}>
+				{children}
+			</DeferredAdjustmentsContext>
+		</RawAdjustmentsContext>
 	);
 }
 
-export function useRecipeAdjustments(): RecipeAdjustmentsValue {
-	const value = use(RecipeAdjustmentsContext);
+export function useRawAdjustments(): RawAdjustments {
+	const value = use(RawAdjustmentsContext);
 
 	if (!value) {
 		throw new Error(
-			"useRecipeAdjustments must be used within a RecipeAdjustmentsProvider",
+			"useRawAdjustments must be used within a RecipeAdjustmentsProvider",
 		);
 	}
 
 	return value;
 }
 
+export function useDeferredAdjustments(): DeferredAdjustments {
+	const value = use(DeferredAdjustmentsContext);
+
+	if (!value) {
+		throw new Error(
+			"useDeferredAdjustments must be used within a RecipeAdjustmentsProvider",
+		);
+	}
+
+	return value;
+}
+
+export function useOptionalDeferredAdjustments(): DeferredAdjustments | null {
+	return use(DeferredAdjustmentsContext);
+}
+
 const COMMON_VALUES = [1, 2, 3, 4, 5];
 
 export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 	const {
-		deferredServings,
+		servings,
 		conversionSystem,
 		withRounding,
 		withBestUnit,
@@ -117,7 +156,7 @@ export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 		setConversionSystem,
 		setWithRounding,
 		setWithBestUnit,
-	} = useRecipeAdjustments();
+	} = useRawAdjustments();
 
 	const roundingPersistence = usePersistenceInfo();
 	const bestUnitPersistence = usePersistenceInfo();
@@ -125,7 +164,7 @@ export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
 	return (
 		<Grid gap={4} {...props}>
 			<SelectServings
-				value={deferredServings}
+				value={servings}
 				onChange={setServings}
 				commonValues={COMMON_VALUES}
 			/>

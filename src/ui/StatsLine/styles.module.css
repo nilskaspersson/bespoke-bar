@@ -1,0 +1,7 @@
+@layer ui {
+	.overline {
+		font-variant: all-small-caps;
+		letter-spacing: 0.06em;
+		color: var(--mauve-11);
+	}
+}

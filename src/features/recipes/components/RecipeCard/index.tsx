@@ -1,8 +1,9 @@
 import { clsx } from "clsx";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { memo, type ReactNode, useMemo } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import {
 	COCKTAIL_STYLE_TO_LABEL,
 	GLASSWARE_TO_LABEL,
@@ -30,9 +31,10 @@ type Props<T> = {
 	withRounding?: boolean;
 	withBestUnit?: boolean;
 	withLink?: boolean;
+	animateNumbers?: boolean;
 };
 
-export function RecipeCard<T extends BaseRecipe>({
+function RecipeCardImpl<T extends BaseRecipe>({
 	recipe,
 	className,
 	nameAdornment,
@@ -42,12 +44,19 @@ export function RecipeCard<T extends BaseRecipe>({
 	withRounding,
 	withBestUnit,
 	withLink = true,
+	animateNumbers = true,
 }: Props<T>) {
-	const metrics = calculateRecipeMetrics(recipe);
+	const metrics = useMemo(() => calculateRecipeMetrics(recipe), [recipe]);
+
+	const adornment =
+		nameAdornment ??
+		(servings !== undefined ? (
+			<RecipeNameAdornment servings={servings} />
+		) : null);
 
 	return (
 		<Grid
-			gap={5}
+			gap={4}
 			className={clsx(styles.card, className)}
 			alignContent="space-between"
 		>
@@ -63,10 +72,10 @@ export function RecipeCard<T extends BaseRecipe>({
 						)}
 					</Heading>
 
-					{nameAdornment ? (
+					{adornment ? (
 						<>
 							<span className={styles.dots} />
-							{nameAdornment}
+							{adornment}
 						</>
 					) : null}
 				</div>
@@ -101,6 +110,7 @@ export function RecipeCard<T extends BaseRecipe>({
 					convertUnits={convertUnits}
 					withRounding={withRounding}
 					withBestUnit={withBestUnit}
+					animateNumbers={animateNumbers}
 				/>
 			) : (
 				<Grid gap={4}>
@@ -123,3 +133,5 @@ export function RecipeCard<T extends BaseRecipe>({
 		</Grid>
 	);
 }
+
+export const RecipeCard = memo(RecipeCardImpl) as typeof RecipeCardImpl;

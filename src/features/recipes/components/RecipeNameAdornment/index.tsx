@@ -9,6 +9,14 @@ type Props = {
 	servings?: number;
 };
 
+/**
+ * Skips the pulse for cards the browser isn't rendering.
+ */
+function isOnScreen(el: Element): boolean {
+	if (typeof el.checkVisibility !== "function") return true;
+	return el.checkVisibility({ contentVisibilityAuto: true });
+}
+
 export function RecipeNameAdornment({ servings }: Props) {
 	const badgeRef = useRef<HTMLSpanElement>(null);
 	const prevServings = useRef(servings);
@@ -16,9 +24,10 @@ export function RecipeNameAdornment({ servings }: Props) {
 	useEffect(() => {
 		const prev = prevServings.current;
 		const wasUpscaled = prev != null && prev > 1;
+		const el = badgeRef.current;
 
-		if (wasUpscaled && prev !== servings) {
-			animate(badgeRef.current, keyframes.get("pulse"));
+		if (wasUpscaled && prev !== servings && el && isOnScreen(el)) {
+			animate(el, keyframes.get("pulse"));
 		}
 
 		prevServings.current = servings;

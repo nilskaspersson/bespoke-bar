@@ -4,8 +4,8 @@ import clsx from "clsx";
 import { memo } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
+import { useOptionalDeferredAdjustments } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
-import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { recipeCardSourceProps } from "@/features/recipes/utils/recipeCardSource";
 import { handleKey } from "@/utils/keyboard";
@@ -31,6 +31,8 @@ export const RecipeListCard = memo(function RecipeListCard({
 			(s.current?.recipe.id === recipe.id || s.exitingId === recipe.id),
 	);
 
+	const adjustments = useOptionalDeferredAdjustments();
+
 	const selectRecipe = (
 		event:
 			| React.MouseEvent<HTMLDivElement>
@@ -46,7 +48,11 @@ export const RecipeListCard = memo(function RecipeListCard({
 				<RecipeCard
 					recipe={recipe}
 					withLink
-					nameAdornment={<RecipeNameAdornment />}
+					servings={adjustments?.servings}
+					convertUnits={adjustments?.conversionSystem}
+					withRounding={adjustments?.withRounding}
+					withBestUnit={adjustments?.withBestUnit}
+					animateNumbers={false}
 				/>
 			</div>
 		);
@@ -70,7 +76,11 @@ export const RecipeListCard = memo(function RecipeListCard({
 			<RecipeCard
 				recipe={recipe}
 				withLink={false}
-				nameAdornment={<RecipeNameAdornment />}
+				servings={adjustments?.servings}
+				convertUnits={adjustments?.conversionSystem}
+				withRounding={adjustments?.withRounding}
+				withBestUnit={adjustments?.withBestUnit}
+				animateNumbers={false}
 			/>
 		</div>
 	);

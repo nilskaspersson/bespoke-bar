@@ -1,0 +1,7 @@
+@layer feature {
+	.label {
+		text-transform: uppercase;
+		letter-spacing: 0.06em;
+		color: var(--mauve-11);
+	}
+}

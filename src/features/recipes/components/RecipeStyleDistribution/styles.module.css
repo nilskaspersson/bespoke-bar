@@ -1,0 +1,93 @@
+@layer feature {
+	.distribution {
+		display: grid;
+		gap: var(--space-2);
+	}
+
+	.bar {
+		display: flex;
+		gap: 2px;
+		height: 10px;
+		border-radius: 999px;
+		overflow: hidden;
+		background-color: hsl(from var(--mauve-4) h s l / 0.5);
+	}
+
+	.segment {
+		all: unset;
+		flex-shrink: 0;
+		flex-basis: 0;
+		min-width: var(--space-2);
+		cursor: pointer;
+		transition-property: opacity, transform;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+	}
+
+	.segment:hover,
+	.segment:focus-visible {
+		opacity: 0.85;
+	}
+
+	.segment:focus-visible {
+		outline: 2px solid var(--iris-11);
+		outline-offset: 2px;
+	}
+
+	.segmentActive {
+		transform: scaleY(1.4);
+	}
+
+	.segmentInactive {
+		opacity: 0.35;
+	}
+
+	.legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-1) var(--space-3);
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.legendItem {
+		all: unset;
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-1) var(--space-2);
+		border-radius: var(--radius);
+		color: var(--mauve-12);
+		cursor: pointer;
+		transition-property: background-color, opacity;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+	}
+
+	.legendItem:hover,
+	.legendItem:focus-visible {
+		background-color: hsl(from var(--mauve-3) h s l / 0.7);
+	}
+
+	.legendItem:focus-visible {
+		outline: 2px solid var(--iris-11);
+		outline-offset: 1px;
+	}
+
+	.legendItemActive {
+		background-color: hsl(from var(--mauve-3) h s l / 0.9);
+	}
+
+	.legendItemInactive {
+		opacity: 0.45;
+	}
+
+	.dot {
+		display: inline-block;
+		width: var(--space-2);
+		height: var(--space-2);
+		border-radius: 50%;
+		flex-shrink: 0;
+	}
+}

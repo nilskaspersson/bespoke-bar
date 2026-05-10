@@ -1,0 +1,13 @@
+@layer composition {
+	.nav {
+		display: flex;
+		align-self: center;
+		justify-content: center;
+	}
+
+	.button {
+		&[aria-current] {
+			z-index: 1;
+		}
+	}
+}

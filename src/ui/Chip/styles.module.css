@@ -31,7 +31,7 @@
 	}
 
 	.light {
-		--c: var(--mauve-11);
+		--c: var(--mauve-10);
 		--lc: var(--mauve-11);
 		--bgc: var(--mauve-3);
 	}
@@ -62,7 +62,7 @@
 
 	.outline {
 		background-color: transparent;
-		border-color: var(--mauve-6);
-		color: var(--mauve-11);
+		border-color: var(--c);
+		color: var(--lc);
 	}
 }

@@ -1,0 +1,5 @@
+@layer composition {
+	.dock {
+		padding-inline: var(--space-3);
+	}
+}

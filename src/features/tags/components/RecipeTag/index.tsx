@@ -24,7 +24,7 @@ export function RecipeTag({
 				type="button"
 				onClick={onClick}
 				variant={selected ? "filled" : "outline"}
-				color={selected ? "heavy" : "accent"}
+				color={selected ? "heavy" : "light"}
 				size={1}
 				aria-pressed={selected}
 				className={clsx(styles.tag, styles.interactive, className)}

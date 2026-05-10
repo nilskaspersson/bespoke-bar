@@ -5,10 +5,9 @@ import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeC
 import {
 	RecipeAdjustmentsControls,
 	RecipeAdjustmentsProvider,
-	useRecipeAdjustments,
+	useDeferredAdjustments,
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
-import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -39,20 +38,19 @@ function RecipeInfoContent<T extends RecipeWithRelations>({
 	recipe: T;
 	isFavorite?: boolean;
 }) {
-	const { deferredServings, conversionSystem, withRounding, withBestUnit } =
-		useRecipeAdjustments();
+	const { servings, conversionSystem, withRounding, withBestUnit } =
+		useDeferredAdjustments();
 
 	return (
 		<div className={styles.base}>
 			<section className={styles.primary}>
 				<RecipeCard
 					recipe={recipe}
-					servings={deferredServings}
+					servings={servings}
 					convertUnits={conversionSystem}
 					withRounding={withRounding}
 					withBestUnit={withBestUnit}
 					withLink={false}
-					nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
 				/>
 
 				<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
@@ -68,7 +66,7 @@ function RecipeInfoContent<T extends RecipeWithRelations>({
 
 					<RecipeMetrics
 						recipe={recipe}
-						servings={deferredServings}
+						servings={servings}
 						convertUnits={conversionSystem}
 					/>
 				</Grid>

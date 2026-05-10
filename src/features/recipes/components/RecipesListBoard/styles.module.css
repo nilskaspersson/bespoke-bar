@@ -1,0 +1,43 @@
+@layer layout {
+	.board {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+	}
+
+	.filtersSlot {
+		padding-block: var(--space-8);
+	}
+
+	.box {
+		flex: 1 1 auto;
+		border-radius: var(--radius--full);
+		padding: var(--space-2);
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+		border-left: 1px solid var(--shine);
+		border-top: 1px solid var(--shine);
+		box-shadow:
+			1px 1px 0 hsl(from var(--mauve-1) h s l / 0.5),
+			var(--shadow--high);
+	}
+
+	.listSlot {
+		--recipes-list-board-list-max-width: calc(
+			3 *
+			var(--recipe-card-width) +
+			2 *
+			var(--gap--large)
+		);
+
+		max-width: var(--recipes-list-board-list-max-width);
+		margin-inline: auto;
+		margin-top: var(--space-5);
+		padding-bottom: calc(var(--space-9) + var(--app-inset));
+		width: 100%;
+	}
+
+	.actionsSlot {
+		position: sticky;
+		bottom: var(--gap);
+		z-index: var(--z-navigation);
+	}
+}

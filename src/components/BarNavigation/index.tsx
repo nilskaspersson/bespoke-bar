@@ -47,10 +47,10 @@ export function BarNavigation({
 
 				<li className={styles.item}>
 					<Link
-						href="/bar/recipes"
-						inert={pathname === "/bar/recipes"}
+						href="/bar2"
+						inert={pathname === "/bar2"}
 						className={clsx(styles.link, {
-							[styles.isCurrent]: pathname.startsWith("/bar/recipes"),
+							[styles.isCurrent]: pathname.startsWith("/bar2"),
 						})}
 					>
 						<Icon

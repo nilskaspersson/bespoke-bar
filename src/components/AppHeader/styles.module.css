@@ -8,13 +8,14 @@
 		position: absolute;
 		inset: 0 0 auto;
 		z-index: var(--z-navigation);
-		contain: content;
+		overflow-clip-margin: 5rem;
+		contain: strict;
 	}
 
 	.container {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
+		display: grid;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: start;
 		gap: var(--gap);
 		padding-inline: var(--space-5);
 		padding-block: var(--space-5);

@@ -7,8 +7,9 @@ import styles from "./styles.module.css";
 
 export async function AppHeader({
 	className,
+	children,
 	...props
-}: Omit<ComponentProps<"header">, "children">) {
+}: ComponentProps<"header">) {
 	"use cache";
 	cacheLife("max");
 
@@ -16,6 +17,8 @@ export async function AppHeader({
 		<header className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>
 				<Logo />
+
+				<div>{children}</div>
 
 				<div className={styles.auth}>
 					<AuthButtonsLoader />

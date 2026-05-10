@@ -1,0 +1,85 @@
+@layer feature {
+	.dockArea {
+		position: relative;
+	}
+
+	.triggerWrap {
+		position: relative;
+	}
+
+	.summaryChip {
+		position: absolute;
+		top: 0;
+		left: 50%;
+		translate: -50% -50%;
+		padding: var(--space-1) var(--space-3);
+		background-color: var(--mauve-12);
+		color: var(--mauve-1);
+		border-radius: 999px;
+		font-size: var(--size-1);
+		font-weight: 600;
+		line-height: 1.2;
+		white-space: nowrap;
+		max-width: calc(100% + 2 * var(--space-4));
+		overflow: hidden;
+		text-overflow: ellipsis;
+		box-shadow: var(--shadow);
+		pointer-events: none;
+		z-index: 1;
+	}
+
+	.panel {
+		--panel-pad-inline: var(--space-5);
+		--panel-pad-block: var(--space-5);
+
+		position: fixed;
+		inset: auto 0 max(env(safe-area-inset-bottom), var(--space-4)) 0;
+		margin-inline: auto;
+		padding: var(--panel-pad-block) var(--panel-pad-inline);
+		width: min(34rem, calc(100vw - 2 * var(--space-3)));
+		max-height: min(70lvh, 36rem);
+		overflow-y: auto;
+		display: grid;
+		gap: var(--space-4);
+
+		background-color: hsl(from var(--mauve-12) h s l / 0.2);
+		color: var(--mauve-12);
+		backdrop-filter: blur(var(--space-2));
+		border: 1px solid hsl(from var(--mauve-12) h s l / 0.1);
+		border-radius: var(--space-6);
+		box-shadow: var(--shadow--high);
+	}
+
+	.closeButton {
+		all: unset;
+		position: absolute;
+		top: var(--space-3);
+		right: var(--space-3);
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--space-6);
+		height: var(--space-6);
+		border-radius: 50%;
+		cursor: pointer;
+		color: var(--mauve-11);
+		transition-property: background-color, color;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+	}
+
+	.closeButton:hover,
+	.closeButton:focus-visible {
+		background-color: hsl(from var(--mauve-4) h s l / 0.9);
+		color: var(--mauve-12);
+	}
+
+	.closeButton:focus-visible {
+		outline: 2px solid var(--iris-11);
+		outline-offset: 2px;
+	}
+
+	.controls {
+		gap: var(--space-4);
+	}
+}

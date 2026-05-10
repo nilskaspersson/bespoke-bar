@@ -16,10 +16,9 @@ import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeC
 import {
 	RecipeAdjustmentsControls,
 	RecipeAdjustmentsProvider,
-	useRecipeAdjustments,
+	useDeferredAdjustments,
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
-import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import {
 	recipeCardModalStore,
@@ -273,8 +272,8 @@ function CardSection({
 	const setIsFavorite = useRecipeCardModal((s) => s.setIsFavorite);
 	const tilt = useCardTilt();
 
-	const { deferredServings, conversionSystem, withRounding, withBestUnit } =
-		useRecipeAdjustments();
+	const { servings, conversionSystem, withRounding, withBestUnit } =
+		useDeferredAdjustments();
 
 	/**
 	 * Entry FLIP: measure the card's natural rect, compute the delta from the
@@ -310,13 +309,12 @@ function CardSection({
 	const card = (
 		<RecipeCard
 			recipe={recipe}
-			servings={deferredServings}
+			servings={servings}
 			convertUnits={conversionSystem}
 			className={styles.card}
 			withRounding={withRounding}
 			withBestUnit={withBestUnit}
 			withLink
-			nameAdornment={<RecipeNameAdornment servings={deferredServings} />}
 		/>
 	);
 
@@ -371,7 +369,7 @@ function BoxesSection({
 	particlesPersistence,
 	tiltPersistence,
 }: BoxesSectionProps) {
-	const { deferredServings, conversionSystem } = useRecipeAdjustments();
+	const { servings, conversionSystem } = useDeferredAdjustments();
 
 	return (
 		<div className={styles.boxes}>
@@ -381,7 +379,7 @@ function BoxesSection({
 
 			<RecipeMetrics
 				recipe={recipe}
-				servings={deferredServings}
+				servings={servings}
 				convertUnits={conversionSystem}
 				className={styles.box}
 			/>

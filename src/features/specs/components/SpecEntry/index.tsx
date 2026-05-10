@@ -20,6 +20,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	onChange,
 	spec,
 	servings = 1,
+	animateNumbers = true,
 	...props
 }: {
 	spec: T;
@@ -28,6 +29,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	withRounding?: boolean;
 	withBestUnit?: boolean;
 	servings?: number;
+	animateNumbers?: boolean;
 } & Omit<ComponentProps<typeof Text>, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 	const formatSpecMeasure = useFormatSpecMeasure();
@@ -52,7 +54,14 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 			<span className={styles.node}>
 				{spec.quantity && servings != null ? (
 					<>
-						<AnimatedNumber value={measure.quantity} format={formatQuantity} />{" "}
+						{animateNumbers ? (
+							<AnimatedNumber
+								value={measure.quantity}
+								format={formatQuantity}
+							/>
+						) : (
+							formatQuantity(measure.quantity)
+						)}{" "}
 						{measure.unit}
 					</>
 				) : (

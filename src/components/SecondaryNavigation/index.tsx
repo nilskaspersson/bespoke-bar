@@ -42,7 +42,7 @@ export async function SecondaryNavigation({
 
 				<li className={styles.item}>
 					<NavLink
-						href="/bar/recipes"
+						href="/bar2"
 						className={styles.link}
 						activeClassName={styles.isActive}
 					>

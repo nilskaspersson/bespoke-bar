@@ -1,0 +1,46 @@
+@layer composition {
+	.heroSlot {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: center;
+		max-width: 44rem;
+		margin-inline: auto;
+		width: 100%;
+	}
+
+	.search {
+		border-radius: 999px;
+	}
+
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-1);
+		justify-content: center;
+	}
+
+	.statsSlot {
+		display: grid;
+		gap: var(--space-2);
+		max-width: 40rem;
+		margin-inline: auto;
+		margin-top: var(--space-5);
+		width: 100%;
+	}
+
+	.statsRow {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		min-height: var(--space-7);
+	}
+
+	.statsTiles {
+		display: flex;
+		gap: var(--space-5);
+	}
+
+	.dock {
+		border-radius: 999px;
+	}
+}

@@ -3,6 +3,7 @@
 		display: inline-flex;
 		gap: 1px;
 		align-items: center;
+		user-select: none;
 	}
 
 	.key {

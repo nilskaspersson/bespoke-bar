@@ -1,0 +1,18 @@
+@layer feature {
+	.button {
+		text-align: left;
+		padding-inline: var(--space-1);
+		border-radius: var(--radius--small);
+		transition-property: background-color, box-shadow;
+		transition-duration: var(--transition-duration);
+
+		&[aria-pressed="true"] {
+			background-color: var(--mauve-2);
+			box-shadow: 0 0 0 var(--space-1) var(--mauve-2);
+		}
+	}
+
+	.overCap {
+		color: var(--red-11);
+	}
+}

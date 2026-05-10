@@ -1,11 +1,19 @@
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import { Flex } from "@/ui/Flex";
+
 import styles from "./styles.module.css";
 
-export function ButtonGroup({
-	className,
-	...props
-}: ComponentProps<typeof Flex>) {
-	return <Flex {...props} className={clsx(styles.group, className)} />;
+type Props = ComponentProps<"div"> & {
+	equalWidth?: boolean;
+};
+
+export function ButtonGroup({ className, equalWidth, ...props }: Props) {
+	return (
+		<div
+			{...props}
+			className={clsx(className, styles.group, {
+				[styles.equalWidth]: equalWidth,
+			})}
+		/>
+	);
 }
