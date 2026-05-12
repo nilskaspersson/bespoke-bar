@@ -1,10 +1,8 @@
-import { FRACTION_MAP } from "@/features/quantity/constants";
-
 // Floats, not followed by a slash
 const FLOAT_PATTERN = /^(\d+\.?\d*|\.\d+)(?!\s*\/)/;
 
-// Fractional characters or manual slash notation
-const FRACTION_PATTERN = /^([½¼¾⅓⅔⅛⅜⅝⅞]|\d+\s*\/\s*\d+)/;
+// Slash-notation fractions (precomposed Unicode glyphs are decomposed to this form via NFKC)
+const FRACTION_PATTERN = /^(\d+\s*\/\s*\d+)/;
 
 const tryParseFloat = (text: string): [number | null, string] => {
 	const match = text.match(FLOAT_PATTERN);
@@ -25,18 +23,39 @@ const tryParseFraction = (text: string): [number | null, string] => {
 		return [null, text];
 	}
 
-	let quantity: number;
-
-	if (match[0].includes("/")) {
-		// Number() trims whitespace for us, e.g. "1 / 2" == "1/2"
-		const [numerator, denominator] = match[0].split("/").map(Number);
-		quantity = numerator / denominator;
-	} else {
-		quantity = FRACTION_MAP.get(match[0]) ?? 0;
-	}
+	// Number() trims whitespace for us, e.g. "1 / 2" == "1/2"
+	const [numerator, denominator] = match[0].split("/").map(Number);
+	const quantity = numerator / denominator;
 
 	return [quantity > 0 ? quantity : null, text.slice(match[0].length)];
 };
+
+/**
+ * NFKC decomposes precomposed fraction glyphs (½, ¾, ⅓, …) into
+ * `digit + U+2044 + digit`. The regex below then injects a space when
+ * U+2044 sits between digits so the compact form `1½` parses as the
+ * mixed number `1 1/2` rather than `11/2`. ASCII-only inputs skip the
+ * normalize() call entirely.
+ */
+function hasNonAscii(text: string): boolean {
+	for (let i = 0; i < text.length; i++) {
+		if (text.charCodeAt(i) > 127) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function normalize(userInput: string): string {
+	if (!hasNonAscii(userInput)) {
+		return userInput.trim();
+	}
+
+	return userInput
+		.normalize("NFKC")
+		.replace(/(\d)⁄(\d)/g, " $1/$2")
+		.trim();
+}
 
 export function formatQuantity(userInput: string): number | null {
 	const [quantity] = quantityTextParser(userInput);
@@ -44,7 +63,7 @@ export function formatQuantity(userInput: string): number | null {
 }
 
 export function quantityTextParser(userInput: string): [number | null, string] {
-	const text = userInput.trim();
+	const text = normalize(userInput);
 
 	if (!text) {
 		return [null, text];
