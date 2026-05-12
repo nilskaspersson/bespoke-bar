@@ -64,6 +64,12 @@
 			--slide-y: var(--offset);
 		}
 
+		&.bottom {
+			--area: bottom;
+			--fallback: flip-block;
+			--slide-y: calc(var(--offset) * -1);
+		}
+
 		&.top-right {
 			--area: top right;
 			--fallback: flip-block, flip-inline, flip-block flip-inline;
@@ -94,6 +100,22 @@
 
 			position-try-order: normal;
 			inset: anchor(bottom) auto auto anchor(left);
+		}
+
+		/**
+		 * Popover bottom-edge aligns with anchor's bottom edge; popover extends
+		 * upward and overlaps the anchor. Use for surfaces that want to envelop
+		 * a sticky/floating trigger (e.g. a bottom-of-screen dock that expands
+		 * into a panel containing its own trigger).
+		 */
+		&.top-overlap {
+			--area: none;
+			--fallback: flip-block;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto auto anchor(bottom) anchor(center);
+			translate: -50% 0;
 		}
 
 		@media (max-width: 40em) {

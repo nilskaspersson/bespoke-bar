@@ -11,6 +11,8 @@ type AnchorPosition =
 	| "top"
 	| "top-right"
 	| "top-end"
+	| "top-overlap"
+	| "bottom"
 	| "bottom-start"
 	| "right";
 
