@@ -17,14 +17,8 @@
 		height: 900px;
 		pointer-events: none;
 		z-index: -1;
-		filter: blur(60px);
+		filter: blur(50px);
 		mask-image: linear-gradient(
-			to bottom,
-			black 0%,
-			black 40%,
-			transparent 100%
-		);
-		-webkit-mask-image: linear-gradient(
 			to bottom,
 			black 0%,
 			black 40%,

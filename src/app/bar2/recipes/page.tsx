@@ -43,7 +43,11 @@ async function RecipesPageWithData() {
 	if (recipes.length === 0) {
 		return (
 			<Container as="section" className={styles.intro}>
-				<Grid justifyContent="center" className={styles.content}>
+				<Grid
+					justifyContent="center"
+					alignContent="center"
+					className={styles.content}
+				>
 					<Grid as="hgroup" gap={3}>
 						<Heading level="h1" size={8} align="center">
 							Build your bar
@@ -55,7 +59,7 @@ async function RecipesPageWithData() {
 					</Grid>
 				</Grid>
 
-				<CreateRecipeNav />
+				<CreateRecipeNav onBoarding />
 			</Container>
 		);
 	}
