@@ -3,8 +3,16 @@
 		position: relative;
 	}
 
-	.triggerWrap {
-		position: relative;
+	.trigger {
+		transition-property: opacity, scale;
+		transition-duration: var(--transition-duration);
+		transition-timing-function: var(--swift-in);
+	}
+
+	.triggerHidden {
+		opacity: 0;
+		scale: 0.9;
+		pointer-events: none;
 	}
 
 	.summaryChip {
@@ -29,14 +37,8 @@
 	}
 
 	.panel {
-		--panel-pad-inline: var(--space-5);
-		--panel-pad-block: var(--space-5);
-
-		position: fixed;
-		inset: auto 0 max(env(safe-area-inset-bottom), var(--space-4)) 0;
-		margin-inline: auto;
-		padding: var(--panel-pad-block) var(--panel-pad-inline);
-		width: min(34rem, calc(100vw - 2 * var(--space-3)));
+		padding: var(--space-5);
+		width: min(34rem, calc(100svw - 2 * var(--space-3)));
 		max-height: min(70lvh, 36rem);
 		overflow-y: auto;
 		display: grid;
@@ -51,32 +53,10 @@
 	}
 
 	.closeButton {
-		all: unset;
 		position: absolute;
 		top: var(--space-3);
 		right: var(--space-3);
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: var(--space-6);
-		height: var(--space-6);
-		border-radius: 50%;
-		cursor: pointer;
-		color: var(--mauve-11);
-		transition-property: background-color, color;
-		transition-duration: var(--transition-duration);
-		transition-timing-function: var(--swift-in);
-	}
-
-	.closeButton:hover,
-	.closeButton:focus-visible {
-		background-color: hsl(from var(--mauve-4) h s l / 0.9);
-		color: var(--mauve-12);
-	}
-
-	.closeButton:focus-visible {
-		outline: 2px solid var(--iris-11);
-		outline-offset: 2px;
+		z-index: 1;
 	}
 
 	.controls {

@@ -2,22 +2,33 @@ import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { LinkButton } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
+import styles from "./page.module.css";
 
 export default function CreateRecipePage() {
 	return (
-		<Grid gap={6}>
-			<Text as="p">Choose a method to create your Recipe.</Text>
+		<section className={styles.intro}>
+			<Grid
+				justifyContent="center"
+				alignContent="center"
+				justifyItems="center"
+				gap={3}
+				className={styles.content}
+			>
+				<Text as="p" align="center">
+					Choose a method to create your Recipe.
+				</Text>
 
-			<CreateRecipeNav>
 				<LinkButton
 					href="/bar/recipes"
-					size="tiny"
-					variant="text"
+					size="small"
+					variant="ghost"
 					color="accent"
 				>
 					View all Recipes
 				</LinkButton>
-			</CreateRecipeNav>
-		</Grid>
+			</Grid>
+
+			<CreateRecipeNav />
+		</section>
 	);
 }

@@ -59,7 +59,7 @@ export function CreateRecipeNav({
 	);
 
 	return (
-		<Grid as="nav" {...props}>
+		<Grid as="nav" gap={4} {...props}>
 			<ul className={styles.list}>
 				{cards.map((card) => (
 					<li key={card.title} className={styles.item}>
