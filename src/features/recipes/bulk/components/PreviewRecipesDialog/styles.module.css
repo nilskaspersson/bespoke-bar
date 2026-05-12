@@ -1,0 +1,29 @@
+@layer feature {
+	.header {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0 var(--space-3);
+		padding: var(--space-2) var(--space-3);
+	}
+
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: start;
+		gap: var(--gap--large);
+		list-style: none;
+		margin: 0;
+		padding: var(--gap--large);
+		overflow: auto;
+		scrollbar-gutter: stable;
+	}
+
+	.footer {
+		display: flex;
+		align-items: center;
+		justify-content: flex-end;
+		gap: var(--space-2);
+	}
+}

@@ -8,9 +8,9 @@ import type { Tag } from "@/db/schema/tags";
 import { ClearFiltersPill } from "@/features/recipes/components/ClearFiltersPill";
 import { RecipeAdjustmentsProvider } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeAdjustmentsDock } from "@/features/recipes/components/RecipeAdjustmentsDock";
-import { RecipeList } from "@/features/recipes/components/RecipeList";
 import { RecipeListActions } from "@/features/recipes/components/RecipeListActions";
 import { RecipesFilterDrawer } from "@/features/recipes/components/RecipesFilterDrawer";
+import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { RecipesListHeader } from "@/features/recipes/components/RecipesListHeader";
 import { RecipesOverviewStats } from "@/features/recipes/components/RecipesOverviewStats";
 import { RecipesStatsBar } from "@/features/recipes/components/RecipesStatsBar";
@@ -21,7 +21,9 @@ import {
 } from "@/features/recipes/utils/filterRecipes";
 import { useTagSelection } from "@/features/tags/hooks/useTagSelection";
 import { useDialog } from "@/hooks/useDialog";
+import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
+import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export { RecipesListBoardSkeleton } from "./Skeleton";
@@ -133,14 +135,28 @@ export function RecipesListBoard({
 					/>
 				</Grid>
 
-				<RecipeList
-					className={styles.listSlot}
-					recipes={filteredRecipes}
-					favoriteRecipeIds={favoriteRecipeIds}
-					tagOptions={tagOptions}
-					hasFilters={hasFilters}
-					onResetFilters={handleResetFilters}
-				/>
+				<div className={styles.listSlot}>
+					{filteredRecipes.length === 0 ? (
+						<div className={styles.empty}>
+							<Text as="p" size={3} light>
+								No recipes match these filters.
+							</Text>
+
+							<Button variant="text" size="small" onClick={handleResetFilters}>
+								Reset filters
+							</Button>
+						</div>
+					) : (
+						<RecipesList
+							recipes={filteredRecipes}
+							favoriteRecipeIds={favoriteRecipeIds}
+							tagOptions={tagOptions}
+							withActions
+							withCreate={!hasFilters}
+							className={styles.list}
+						/>
+					)}
+				</div>
 
 				<RecipeListActions className={styles.actionsSlot}>
 					<RecipeAdjustmentsDock onOpenChange={setAdjustmentsOpen} />

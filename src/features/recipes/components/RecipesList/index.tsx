@@ -60,6 +60,7 @@ function RecipesListImpl({
 		<ul {...props} className={clsx(props.className, styles.list)}>
 			{recipes.map((recipe) => {
 				const isFavorite = favoriteIdSet.has(recipe.id);
+
 				return (
 					<Grid as="li" gap={1} key={recipe.id} className={styles.item}>
 						<RecipeListCard
@@ -68,6 +69,7 @@ function RecipesListImpl({
 							tagOptions={tagOptions}
 							clickable={!!withActions}
 						/>
+
 						{withActions ? (
 							<RecipeListActions
 								recipe={recipe}

@@ -14,25 +14,17 @@ import {
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Recipe } from "@/db/schema/recipes";
-import { DraftRecipeCard } from "@/features/recipes/bulk/components/DraftRecipeCard";
+import { PreviewRecipesDialog } from "@/features/recipes/bulk/components/PreviewRecipesDialog";
 import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
-import type { UnitSystems } from "@/features/units/utils/convert";
 import { useDialog } from "@/hooks/useDialog";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Button } from "@/ui/Button";
-import { Checkbox } from "@/ui/Checkbox";
-import { Container } from "@/ui/Container";
-import { Dialog } from "@/ui/Dialog";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Kbd } from "@/ui/Kbd";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
-import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 const DRAFT_STORAGE_KEY = "recipe-editor-draft";
@@ -46,10 +38,6 @@ export function BulkDraftRecipesForm({
 	ingredients: Ingredient[];
 	createRecipes: (recipes: RecipeFormData[]) => Promise<Recipe[]>;
 } & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
-	const [withConversionSystem, setWithConversionSystem] =
-		useState<UnitSystems | null>(null);
-	const [withSnap, setWithSnap] = useState(false);
-
 	const [persistedDraft, setPersistedDraft] = useLocalStorage<string>(
 		DRAFT_STORAGE_KEY,
 		"",
@@ -171,58 +159,13 @@ export function BulkDraftRecipesForm({
 				/>
 			</div>
 
-			<Dialog ref={dialogRef} isOpen={isOpen}>
-				{mounted ? (
-					<Container className={styles.dialog}>
-						<Grid gap={4}>
-							<div className={styles.dialogHeader}>
-								<Heading level="h2" size={5}>
-									Preview
-								</Heading>
-
-								<Text size={1} light compact>
-									{recipeCount} {recipeCount === 1 ? "recipe" : "recipes"}
-								</Text>
-							</div>
-
-							<div className={styles.dialogToolbar}>
-								<SelectUnitConversion
-									name="unitConversionSystem"
-									onChange={setWithConversionSystem}
-									defaultValue={withConversionSystem}
-								/>
-
-								{withConversionSystem ? (
-									<Checkbox
-										label="Round"
-										size="small"
-										checked={withSnap}
-										onChange={(e) => setWithSnap(e.target.checked)}
-									/>
-								) : null}
-							</div>
-
-							<ul className={styles.recipes}>
-								{draftRecipes.map((recipe) => (
-									<li key={getKey(recipe)} className={styles.recipe}>
-										<DraftRecipeCard
-											recipe={recipe}
-											convertUnits={withConversionSystem}
-											withRounding={withSnap}
-										/>
-									</li>
-								))}
-							</ul>
-
-							<div className={styles.dialogFooter}>
-								<Button variant="ghost" size="small" onClick={closeModal}>
-									Close
-								</Button>
-							</div>
-						</Grid>
-					</Container>
-				) : null}
-			</Dialog>
+			<PreviewRecipesDialog
+				dialogRef={dialogRef}
+				isOpen={isOpen}
+				mounted={mounted}
+				recipes={draftRecipes}
+				onClose={closeModal}
+			/>
 		</form>
 	);
 }

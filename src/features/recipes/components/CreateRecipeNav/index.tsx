@@ -77,7 +77,7 @@ export function CreateRecipeNav({
 								alignItems="center"
 								justifyContent="space-between"
 							>
-								<Flex>
+								<Flex gap={2}>
 									{card.caption ? (
 										<Chip variant="filled" size={1} compact weight={600}>
 											{card.caption}

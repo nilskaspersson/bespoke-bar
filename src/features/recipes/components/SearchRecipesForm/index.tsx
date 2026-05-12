@@ -3,7 +3,6 @@
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 import {
-	type ComponentProps,
 	type ReactNode,
 	useCallback,
 	useDeferredValue,
@@ -22,14 +21,13 @@ import { useDialog } from "@/hooks/useDialog";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { trpc } from "@/trpc/client";
 import { Button, type ButtonProps, LinkButton } from "@/ui/Button";
-import { Dialog } from "@/ui/Dialog";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
-import { Lightbox } from "@/ui/Lightbox";
+import { LightboxDialog } from "@/ui/LightboxDialog";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
@@ -57,7 +55,7 @@ export function SearchRecipesButton({ children, ...props }: ButtonProps) {
 				{children}
 			</Button>
 
-			<Dialog ref={dialogRef} isOpen={isOpen} className={styles.dialog}>
+			<LightboxDialog ref={dialogRef} isOpen={isOpen} className={styles.dialog}>
 				<SearchRecipesForm
 					actions={
 						<li>
@@ -69,19 +67,18 @@ export function SearchRecipesButton({ children, ...props }: ButtonProps) {
 						</li>
 					}
 				/>
-			</Dialog>
+			</LightboxDialog>
 		</>
 	);
 }
 
 export function SearchRecipesForm({
-	className,
 	onNavigate,
 	actions,
-	...props
-}: { onNavigate?: () => void; actions?: ReactNode } & ComponentProps<
-	typeof Lightbox
->) {
+}: {
+	onNavigate?: () => void;
+	actions?: ReactNode;
+}) {
 	const { push } = useRouter();
 	const pathname = usePathname();
 
@@ -130,53 +127,55 @@ export function SearchRecipesForm({
 	}, [filteredRecipes, pathname, push, onNavigate]);
 
 	return (
-		<Lightbox {...props} className={clsx(styles.lightbox, className)}>
-			<Grid as="header" gap={2} className={styles.header}>
-				<Input
-					type="search"
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-					placeholder="Type to filter recipes…"
-					autoFocus
-					size={7}
-					fullWidth
-					rounded
-					startAdornment={<Icon name="magnifying-glass" size={4} />}
-					endAdornment={<Kbd shortcut="Esc" visual />}
-				/>
+		<>
+			<LightboxDialog.Header>
+				<Grid gap={2}>
+					<Input
+						type="search"
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+						placeholder="Type to filter recipes…"
+						autoFocus
+						size={7}
+						fullWidth
+						rounded
+						startAdornment={<Icon name="magnifying-glass" size={4} />}
+						endAdornment={<Kbd shortcut="Esc" visual />}
+					/>
 
-				<div className={styles.status}>
-					<Text as="p" size={1} light numeric>
-						{isLoading ? (
-							<Skeleton variant="text" height="1em" width="15ch" />
-						) : deferredSearch ? (
-							`${count} matching ${pluralize(count, "recipe")}`
-						) : (
-							`${count} ${pluralize(count, "recipe")}`
-						)}
-					</Text>
+					<div className={styles.status}>
+						<Text as="p" size={1} light numeric>
+							{isLoading ? (
+								<Skeleton variant="text" height="1em" width="15ch" />
+							) : deferredSearch ? (
+								`${count} matching ${pluralize(count, "recipe")}`
+							) : (
+								`${count} ${pluralize(count, "recipe")}`
+							)}
+						</Text>
 
-					<Text
-						as="p"
-						size={1}
-						className={clsx(styles.shortcut, {
-							[styles.disabled]: filteredRecipes.length === 0,
-						})}
-						light
-						compact
-					>
-						Press{" "}
-						<Kbd
-							shortcut="mod+enter"
-							onTrigger={
-								filteredRecipes.length > 0 ? openFirstResult : undefined
-							}
-							ignoreInputEvents={false}
-						/>{" "}
-						to open the first result
-					</Text>
-				</div>
-			</Grid>
+						<Text
+							as="p"
+							size={1}
+							className={clsx(styles.shortcut, {
+								[styles.disabled]: filteredRecipes.length === 0,
+							})}
+							light
+							compact
+						>
+							Press{" "}
+							<Kbd
+								shortcut="mod+enter"
+								onTrigger={
+									filteredRecipes.length > 0 ? openFirstResult : undefined
+								}
+								ignoreInputEvents={false}
+							/>{" "}
+							to open the first result
+						</Text>
+					</div>
+				</Grid>
+			</LightboxDialog.Header>
 
 			<div className={styles.results}>
 				{isLoading ? (
@@ -218,10 +217,10 @@ export function SearchRecipesForm({
 			</div>
 
 			{actions ? (
-				<footer className={styles.footer}>
+				<LightboxDialog.Footer>
 					<menu className={styles.actions}>{actions}</menu>
-				</footer>
+				</LightboxDialog.Footer>
 			) : null}
-		</Lightbox>
+		</>
 	);
 }

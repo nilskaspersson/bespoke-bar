@@ -29,6 +29,25 @@
 		width: 100%;
 	}
 
+	.list {
+		margin-inline: auto;
+		width: fit-content;
+		justify-content: center;
+	}
+
+	.empty {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: center;
+		padding: var(--space-8) var(--space-4);
+		text-align: center;
+		border: 1px dashed var(--mauve-6);
+		border-radius: var(--radius--large);
+		background-color: hsl(from var(--mauve-2) h s l / 0.4);
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+
 	.actionsSlot {
 		position: sticky;
 		bottom: var(--gap);
