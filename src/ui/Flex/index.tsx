@@ -19,7 +19,7 @@ type Props<E extends ElementType> = {
 };
 
 export function Flex<E extends ElementType = "div">({
-	alignItems = "flex-start",
+	alignItems,
 	as = "div",
 	children,
 	direction = "row",
@@ -41,7 +41,7 @@ export function Flex<E extends ElementType = "div">({
 				toCSSVars({
 					jsxAlignItems: alignItems,
 					jsxJustifyContent: justifyContent,
-					jsxGap: gap != null ? `var(--space-${gap})` : 0,
+					jsxGap: gap ? `var(--space-${gap})` : undefined,
 				}),
 			),
 		},
