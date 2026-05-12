@@ -10,21 +10,18 @@ import { RecipeAdjustmentsProvider } from "@/features/recipes/components/RecipeA
 import { RecipeAdjustmentsDock } from "@/features/recipes/components/RecipeAdjustmentsDock";
 import { RecipeList } from "@/features/recipes/components/RecipeList";
 import { RecipeListActions } from "@/features/recipes/components/RecipeListActions";
-import { RecipeListFilters } from "@/features/recipes/components/RecipeListFilters";
-import type { StyleFilter } from "@/features/recipes/components/RecipeStyleDistribution";
+import { RecipesFilterDrawer } from "@/features/recipes/components/RecipesFilterDrawer";
+import { RecipesListHeader } from "@/features/recipes/components/RecipesListHeader";
 import { RecipesOverviewStats } from "@/features/recipes/components/RecipesOverviewStats";
-import { RecipesSearchInput } from "@/features/recipes/components/RecipesSearchInput";
 import { RecipesStatsBar } from "@/features/recipes/components/RecipesStatsBar";
-import { RecipesTagFilters } from "@/features/recipes/components/RecipesTagFilters";
+import { useCocktailStyleSelection } from "@/features/recipes/hooks/useCocktailStyleSelection";
 import {
 	createRecipeSearchIndex,
 	filterRecipes,
 } from "@/features/recipes/utils/filterRecipes";
-import { Button, LinkButton } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
+import { useTagSelection } from "@/features/tags/hooks/useTagSelection";
+import { useDialog } from "@/hooks/useDialog";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export { RecipesListBoardSkeleton } from "./Skeleton";
@@ -44,10 +41,17 @@ export function RecipesListBoard({
 }: Props) {
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
-	const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
-	const [selectedStyles, setSelectedStyles] = useState<StyleFilter[]>([]);
+	const tagSelection = useTagSelection();
+	const { selectedTagIds, clearTagIds } = tagSelection;
+	const cocktailStyleSelection = useCocktailStyleSelection();
+	const {
+		selectedCocktailStyles,
+		setSelectedCocktailStyles,
+		clearCocktailStyles,
+	} = cocktailStyleSelection;
 	const [favoritesOnly, setFavoritesOnly] = useState(false);
 	const [adjustmentsOpen, setAdjustmentsOpen] = useState(false);
+	const tagsDialog = useDialog();
 
 	const favoriteIdSet = useMemo(
 		() => new Set(favoriteRecipeIds),
@@ -73,8 +77,8 @@ export function RecipesListBoard({
 			});
 		}
 
-		if (selectedStyles.length > 0) {
-			const styleSet = new Set(selectedStyles);
+		if (selectedCocktailStyles.length > 0) {
+			const styleSet = new Set(selectedCocktailStyles);
 			result = result.filter((recipe) => styleSet.has(recipe.style ?? null));
 		}
 
@@ -84,85 +88,50 @@ export function RecipesListBoard({
 		searchIndex,
 		deferredSearch,
 		selectedTagIds,
-		selectedStyles,
+		selectedCocktailStyles,
 		favoritesOnly,
 		favoriteIdSet,
 	]);
 
 	function handleResetFilters() {
 		setSearch("");
-		setSelectedTagIds([]);
-		setSelectedStyles([]);
+		clearTagIds();
+		clearCocktailStyles();
 		setFavoritesOnly(false);
 	}
 
 	const hasFilters =
 		search.length > 0 ||
 		selectedTagIds.length > 0 ||
-		selectedStyles.length > 0 ||
+		selectedCocktailStyles.length > 0 ||
 		favoritesOnly;
 
 	return (
 		<RecipeAdjustmentsProvider>
 			<div className={styles.board}>
-				<RecipeListFilters
-					className={styles.filtersSlot}
-					hero={
-						<Grid gap={3}>
-							<Grid gap={2}>
-								<Flex gap={4} alignItems="center">
-									<Button icon size="large" variant="clear" color="light">
-										<Icon size={4} name="filter" />
-									</Button>
+				<Grid gap={8} className={styles.filtersSection}>
+					<RecipesListHeader
+						search={search}
+						onSearchChange={(event) => setSearch(event.target.value)}
+						filtersOpen={tagsDialog.isOpen}
+						onOpenFilters={tagsDialog.showModal}
+					/>
 
-									<div className={styles.box}>
-										<RecipesSearchInput
-											value={search}
-											onChange={(event) => setSearch(event.target.value)}
-										/>
-									</div>
-
-									<LinkButton
-										icon
-										size="large"
-										variant="clear"
-										color="light"
-										href="/bar/recipes/create"
-									>
-										<Icon size={4} name="plus" />
-									</LinkButton>
-								</Flex>
-
-								<Text as="div" size={1} compact align="center" fullWidth>
-									Filter by Recipe or Ingredient name.
-								</Text>
-							</Grid>
-
-							{/*<RecipesTagFilters
-								recipes={recipes}
-								tagOptions={tagOptions}
-								selectedTagIds={selectedTagIds}
-								onSelectedTagIdsChange={setSelectedTagIds}
-							/>*/}
-						</Grid>
-					}
-					statsBar={
-						<RecipesStatsBar
-							recipes={recipes}
-							selectedStyles={selectedStyles}
-							onSelectedStylesChange={setSelectedStyles}
-							extras={
-								<RecipesOverviewStats
-									favoriteCount={favoriteRecipeIds.length}
-									recipesCount={recipes.length}
-									recipeSlotLimit={recipeSlotLimit}
-									favoritesOnly={favoritesOnly}
-									onFavoritesOnlyChange={setFavoritesOnly}
-								/>
-							}
-						/>
-					}
-				/>
+					<RecipesStatsBar
+						recipes={recipes}
+						selectedStyles={selectedCocktailStyles}
+						onSelectedStylesChange={setSelectedCocktailStyles}
+						extras={
+							<RecipesOverviewStats
+								favoriteCount={favoriteRecipeIds.length}
+								recipesCount={recipes.length}
+								recipeSlotLimit={recipeSlotLimit}
+								favoritesOnly={favoritesOnly}
+								onFavoritesOnlyChange={setFavoritesOnly}
+							/>
+						}
+					/>
+				</Grid>
 
 				<RecipeList
 					className={styles.listSlot}
@@ -196,6 +165,17 @@ export function RecipesListBoard({
 					</AnimatePresence>
 				</RecipeListActions>
 			</div>
+
+			<RecipesFilterDrawer
+				{...tagsDialog}
+				{...tagSelection}
+				{...cocktailStyleSelection}
+				recipeCount={recipes.length}
+				matchingCount={filteredRecipes.length}
+				tagOptions={tagOptions}
+				hasFilters={hasFilters}
+				onResetFilters={handleResetFilters}
+			/>
 		</RecipeAdjustmentsProvider>
 	);
 }

@@ -90,7 +90,7 @@ export function EditorActionsPlugin() {
 							Convert to
 						</Text>
 
-						<ButtonGroup alignItems="center">
+						<ButtonGroup>
 							<Button
 								{...actionProps}
 								className={styles.button}

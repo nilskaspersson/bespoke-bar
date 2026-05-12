@@ -14,6 +14,10 @@ type Props = {
 	assignedTagIds: string[];
 	tagsById: Map<string, Tag>;
 	withOverflow?: boolean;
+	selectedTagIds?: string[];
+	onToggleTag?: (tagId: string) => void;
+	label?: string;
+	emptyLabel?: string;
 	children?: ReactNode;
 };
 
@@ -21,6 +25,10 @@ export function RecipeTagCloud({
 	assignedTagIds,
 	tagsById,
 	withOverflow,
+	selectedTagIds,
+	onToggleTag,
+	label = "Applied tags",
+	emptyLabel = "No tags applied",
 	children,
 }: Props) {
 	const sortedTags = useMemo(
@@ -36,7 +44,7 @@ export function RecipeTagCloud({
 		<>
 			{sortedTags.length === 0 ? (
 				<Text as="p" size={2} light>
-					No tags applied
+					{emptyLabel}
 				</Text>
 			) : null}
 
@@ -47,11 +55,15 @@ export function RecipeTagCloud({
 						wrap
 						gap={1}
 						className={clsx({ [styles.cloud]: withOverflow })}
-						aria-label="Applied tags"
+						aria-label={label}
 					>
 						{sortedTags.map((tag) => (
 							<li key={tag.id}>
-								<RecipeTag tag={tag} />
+								<RecipeTag
+									tag={tag}
+									selected={selectedTagIds?.includes(tag.id)}
+									onClick={onToggleTag ? () => onToggleTag(tag.id) : undefined}
+								/>
 							</li>
 						))}
 					</Flex>

@@ -1,0 +1,13 @@
+@layer composition {
+	.box {
+		flex: 1 1 auto;
+		border-radius: var(--radius--full);
+		padding: var(--space-2);
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+		border-left: 1px solid var(--shine);
+		border-top: 1px solid var(--shine);
+		box-shadow:
+			1px 1px 0 hsl(from var(--mauve-1) h s l / 0.5),
+			var(--shadow--high);
+	}
+}

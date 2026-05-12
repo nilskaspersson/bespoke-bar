@@ -65,11 +65,8 @@
 			}
 		}
 
-		&:where(:not(.base)) {
-			font-size: var(--button-font-size);
-		}
-
 		&:where(:not(.base, .text)) {
+			font-size: var(--button-font-size);
 			padding-inline: var(--button-inset);
 			height: var(--button-height);
 			border-radius: var(--radius--large);

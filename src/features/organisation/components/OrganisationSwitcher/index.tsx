@@ -2,7 +2,6 @@
 
 import { OrganizationSwitcher as ClerkOrganizationSwitcher } from "@clerk/nextjs";
 import { clsx } from "clsx";
-import { Suspense } from "react";
 import { AuthProvider } from "@/components/AuthProvider";
 import { OrganisationLocaleSettings } from "@/features/organisation/components/OrganisationLocaleSettings";
 import { TagsSettings } from "@/features/tags/components/TagsSettings";
@@ -12,35 +11,27 @@ import styles from "./styles.module.css";
 
 export function OrganisationSwitcher({ className }: { className?: string }) {
 	return (
-		<Suspense
-			fallback={
-				<OrganisationSwitcherSkeleton
-					className={clsx(className, styles.switcher)}
-				/>
-			}
-		>
-			<div className={clsx(className, styles.switcher)}>
-				<AuthProvider>
-					<ClerkOrganizationSwitcher hidePersonal>
-						<ClerkOrganizationSwitcher.OrganizationProfilePage
-							label="Locale & Currency"
-							url="settings"
-							labelIcon={<Icon name="gear" className={styles.icon} />}
-						>
-							<OrganisationLocaleSettings />
-						</ClerkOrganizationSwitcher.OrganizationProfilePage>
+		<div className={clsx(className, styles.switcher)}>
+			<AuthProvider>
+				<ClerkOrganizationSwitcher hidePersonal>
+					<ClerkOrganizationSwitcher.OrganizationProfilePage
+						label="Locale & Currency"
+						url="settings"
+						labelIcon={<Icon name="gear" className={styles.icon} />}
+					>
+						<OrganisationLocaleSettings />
+					</ClerkOrganizationSwitcher.OrganizationProfilePage>
 
-						<ClerkOrganizationSwitcher.OrganizationProfilePage
-							label="Recipe tags"
-							url="tags"
-							labelIcon={<Icon name="tags" className={styles.icon} />}
-						>
-							<TagsSettings />
-						</ClerkOrganizationSwitcher.OrganizationProfilePage>
-					</ClerkOrganizationSwitcher>
-				</AuthProvider>
-			</div>
-		</Suspense>
+					<ClerkOrganizationSwitcher.OrganizationProfilePage
+						label="Recipe tags"
+						url="tags"
+						labelIcon={<Icon name="tags" className={styles.icon} />}
+					>
+						<TagsSettings />
+					</ClerkOrganizationSwitcher.OrganizationProfilePage>
+				</ClerkOrganizationSwitcher>
+			</AuthProvider>
+		</div>
 	);
 }
 

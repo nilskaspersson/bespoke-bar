@@ -2,6 +2,10 @@
 	.drawer {
 		--inset: calc(var(--app-inset) / 2);
 		--maxHeight: 80svh;
+
+		&::backdrop {
+			transition: none;
+		}
 	}
 
 	.motion {

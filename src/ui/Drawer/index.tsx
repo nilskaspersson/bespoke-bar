@@ -62,6 +62,7 @@ function shouldDragClose(offset: number, velocity: number): boolean {
 
 type DrawerProps = {
 	actions?: ReactNode;
+	withCancel?: boolean;
 	header?: ReactNode;
 	isOpen?: boolean;
 	mounted?: boolean;
@@ -72,6 +73,7 @@ type DrawerProps = {
 export function Drawer({
 	children,
 	actions,
+	withCancel = true,
 	header,
 	className,
 	ref,
@@ -153,16 +155,18 @@ export function Drawer({
 
 					<footer className={styles.footer}>
 						<menu className={styles.actions}>
-							<li>
-								<Button
-									type="button"
-									variant="ghost"
-									size="tiny"
-									onClick={handleClose}
-								>
-									Cancel
-								</Button>
-							</li>
+							{withCancel ? (
+								<li>
+									<Button
+										type="button"
+										variant="ghost"
+										size="tiny"
+										onClick={handleClose}
+									>
+										Cancel
+									</Button>
+								</li>
+							) : null}
 
 							{actions}
 						</menu>

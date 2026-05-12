@@ -1,0 +1,61 @@
+/**
+ * Extended palette: just the `-11` shade for each Radix scale from Pink
+ * onwards. Used by the cocktail-style chips so they have distinct hues
+ * without pulling in 12 shades × 21 scales.
+ *
+ * Values copied from @radix-ui/colors. To refresh: install the package
+ * locally and grep `\-11:` in `node_modules/@radix-ui/colors/<name>.css`.
+ */
+
+@layer base {
+	:root,
+	[data-theme="light"],
+	[data-sonner-theme="light"] {
+		--tomato-11: #d13415;
+		--ruby-11: #ca244d;
+		--crimson-11: #cb1d63;
+		--pink-11: #c2298a;
+		--plum-11: #953ea3;
+		--purple-11: #8145b5;
+		--violet-11: #6550b9;
+		--indigo-11: #3a5bc7;
+		--blue-11: #0d74ce;
+		--cyan-11: #107d98;
+		--teal-11: #008573;
+		--jade-11: #208368;
+		--green-11: #218358;
+		--bronze-11: #7d5e54;
+		--gold-11: #71624b;
+		--brown-11: #815e46;
+		--orange-11: #cc4e00;
+		--yellow-11: #9e6c00;
+		--lime-11: #5c7c2f;
+		--mint-11: #027864;
+		--sky-11: #00749e;
+	}
+
+	[data-theme="dark"],
+	[data-sonner-theme="dark"] {
+		--tomato-11: #ff977d;
+		--ruby-11: #ff949d;
+		--crimson-11: #ff92ad;
+		--pink-11: #ff8dcc;
+		--plum-11: #e796f3;
+		--purple-11: #d19dff;
+		--violet-11: #baa7ff;
+		--indigo-11: #9eb1ff;
+		--blue-11: #70b8ff;
+		--cyan-11: #4ccce6;
+		--teal-11: #0bd8b6;
+		--jade-11: #1fd8a4;
+		--green-11: #3dd68c;
+		--bronze-11: #d4b3a5;
+		--gold-11: #cbb99f;
+		--brown-11: #dbb594;
+		--orange-11: #ffa057;
+		--yellow-11: #f5e147;
+		--lime-11: #bde56c;
+		--mint-11: #58d5ba;
+		--sky-11: #75c7f0;
+	}
+}

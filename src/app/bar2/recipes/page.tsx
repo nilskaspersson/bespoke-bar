@@ -11,6 +11,8 @@ import {
 } from "@/features/recipes/components/RecipesListBoard";
 import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
+import { Container } from "@/ui/Container";
+import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
@@ -40,19 +42,21 @@ async function RecipesPageWithData() {
 
 	if (recipes.length === 0) {
 		return (
-			<section className={styles.welcome}>
-				<header className={styles.welcomeHeader}>
-					<Heading level="h1" size={7}>
-						Build your bar
-					</Heading>
+			<Container as="section" className={styles.intro}>
+				<Grid justifyContent="center" className={styles.content}>
+					<Grid as="hgroup" gap={3}>
+						<Heading level="h1" size={8} align="center">
+							Build your bar
+						</Heading>
 
-					<Text as="p" size={3} light>
-						Add your first recipe — pick whichever method fits the source.
-					</Text>
-				</header>
+						<Text as="p" heavy size={3}>
+							Three ways to start creating Recipes. Pick what fits the moment!
+						</Text>
+					</Grid>
+				</Grid>
 
 				<CreateRecipeNav />
-			</section>
+			</Container>
 		);
 	}
 

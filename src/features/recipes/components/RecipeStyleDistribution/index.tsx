@@ -2,36 +2,32 @@
 
 import { clsx } from "clsx";
 import { useMemo } from "react";
-import type { CocktailStyle } from "@/db/schema/cocktailStyles";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
-import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
+import {
+	type CocktailStyleFilter,
+	getCocktailStyleColor,
+	getCocktailStyleLabel,
+	UNCLASSIFIED_COCKTAIL_STYLE_COLOR,
+} from "@/features/recipes/constants";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-const PALETTE = [
-	"var(--iris-9)",
-	"var(--red-9)",
-	"var(--amber-9)",
-	"var(--grass-9)",
-	"var(--mauve-10)",
-];
-
 const TOP_N = 5;
 
-export type StyleFilter = CocktailStyle | null;
+export type { CocktailStyleFilter };
 
 type Segment = {
 	key: string;
 	label: string;
 	count: number;
 	color: string;
-	styles: StyleFilter[];
+	styles: CocktailStyleFilter[];
 };
 
 type Props = {
 	recipes: RecipeWithRelations[];
-	selectedStyles: StyleFilter[];
-	onToggleStyles: (styles: StyleFilter[]) => void;
+	selectedStyles: CocktailStyleFilter[];
+	onToggleStyles: (styles: CocktailStyleFilter[]) => void;
 };
 
 export function RecipeStyleDistribution({
@@ -40,7 +36,7 @@ export function RecipeStyleDistribution({
 	onToggleStyles,
 }: Props) {
 	const segments = useMemo<Segment[]>(() => {
-		const counts = new Map<StyleFilter, number>();
+		const counts = new Map<CocktailStyleFilter, number>();
 		for (const recipe of recipes) {
 			const key = recipe.style ?? null;
 			counts.set(key, (counts.get(key) ?? 0) + 1);
@@ -50,13 +46,11 @@ export function RecipeStyleDistribution({
 		const top = ranked.slice(0, TOP_N);
 		const rest = ranked.slice(TOP_N);
 
-		const result: Segment[] = top.map(([style, count], i) => ({
+		const result: Segment[] = top.map(([style, count]) => ({
 			key: style ?? "unclassified",
-			label: style
-				? (COCKTAIL_STYLE_TO_LABEL.get(style) ?? style)
-				: "Unclassified",
+			label: getCocktailStyleLabel(style),
 			count,
-			color: PALETTE[i] ?? "var(--mauve-8)",
+			color: getCocktailStyleColor(style),
 			styles: [style],
 		}));
 
@@ -66,7 +60,7 @@ export function RecipeStyleDistribution({
 				key: "other-grouped",
 				label: `Other (${rest.length})`,
 				count: restTotal,
-				color: "var(--mauve-7)",
+				color: UNCLASSIFIED_COCKTAIL_STYLE_COLOR,
 				styles: rest.map(([s]) => s),
 			});
 		}

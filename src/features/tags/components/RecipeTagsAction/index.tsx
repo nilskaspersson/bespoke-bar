@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useOptimistic, useTransition } from "react";
+import { useOptimistic, useTransition } from "react";
 
 import type {
 	RecipeTagWithTag,
@@ -11,6 +11,7 @@ import { createTag } from "@/features/tags/api/createTag";
 import { setRecipeTags } from "@/features/tags/api/setRecipeTags";
 import { RecipeTagsCombobox } from "@/features/tags/components/RecipeTagsCombobox";
 import { RecipeTagsPopoverContent } from "@/features/tags/components/RecipeTagsPopoverContent";
+import { useTagsById } from "@/features/tags/hooks/useTagsById";
 import { recipeTagsEditorStore } from "@/features/tags/stores/recipeTagsEditor";
 import { usePopover } from "@/hooks/usePopover";
 import { Button, type ButtonProps } from "@/ui/Button";
@@ -52,11 +53,7 @@ export function RecipeTagsAction({
 		(current, tag) => [...current, tag],
 	);
 
-	const tagsById = useMemo(() => {
-		const map = new Map<string, Tag>();
-		for (const t of optimisticTagOptions) map.set(t.id, t);
-		return map;
-	}, [optimisticTagOptions]);
+	const tagsById = useTagsById(optimisticTagOptions);
 
 	const handleCreateTag = async (name: string): Promise<Tag> => {
 		try {

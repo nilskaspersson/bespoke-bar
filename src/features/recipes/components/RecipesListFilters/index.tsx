@@ -11,6 +11,7 @@ import {
 } from "@/features/recipes/utils/filterRecipes";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import { RecipeTagsCombobox } from "@/features/tags/components/RecipeTagsCombobox";
+import { useTagSelection } from "@/features/tags/hooks/useTagSelection";
 import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
@@ -37,7 +38,8 @@ export function RecipesListFilters({
 
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
-	const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+	const { selectedTagIds, setSelectedTagIds, toggleTagId, clearTagIds } =
+		useTagSelection();
 	const searchRef = useRef<HTMLInputElement>(null);
 
 	const searchIndex = useMemo(
@@ -76,17 +78,9 @@ export function RecipesListFilters({
 			.map((entry) => entry.tag);
 	}, [recipes]);
 
-	const toggleTag = (tagId: string) => {
-		setSelectedTagIds((prev) =>
-			prev.includes(tagId)
-				? prev.filter((id) => id !== tagId)
-				: [...prev, tagId],
-		);
-	};
-
 	const handleReset = () => {
 		setSearch("");
-		setSelectedTagIds([]);
+		clearTagIds();
 	};
 
 	const hasFilters = search.length > 0 || selectedTagIds.length > 0;
@@ -114,7 +108,7 @@ export function RecipesListFilters({
 							key={tag.id}
 							tag={tag}
 							selected={selectedTagIds.includes(tag.id)}
-							onClick={() => toggleTag(tag.id)}
+							onClick={() => toggleTagId(tag.id)}
 						/>
 					))}
 

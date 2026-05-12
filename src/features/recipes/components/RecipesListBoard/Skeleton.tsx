@@ -6,7 +6,7 @@ import styles from "./styles.module.css";
 export function RecipesListBoardSkeleton() {
 	return (
 		<SkeletonScreen className={styles.board}>
-			<div className={styles.filtersSlot}>
+			<div className={styles.filtersSection}>
 				<div className={skeletonStyles.heroSlot}>
 					<Skeleton
 						variant="input"

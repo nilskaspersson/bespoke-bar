@@ -1,0 +1,54 @@
+@layer feature {
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-1) var(--space-3);
+		border: 1px solid var(--style-color);
+		border-radius: var(--radius--full);
+		color: var(--style-color);
+		font-size: var(--size-1);
+		font-weight: 600;
+		line-height: 1;
+		background-color: transparent;
+	}
+
+	.interactive {
+		cursor: pointer;
+		transition-property: background-color, color;
+		transition-duration: var(--transition-duration);
+
+		&:hover,
+		&:focus-visible {
+			background-color: hsl(from var(--style-color) h s l / 0.15);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--style-color);
+			outline-offset: 1px;
+		}
+	}
+
+	.selected {
+		background-color: var(--style-color);
+		color: hsl(from var(--style-color) h s 98%);
+
+		&:hover,
+		&:focus-visible {
+			background-color: hsl(from var(--style-color) h s l / 0.85);
+		}
+	}
+
+	.dot {
+		display: inline-block;
+		width: var(--space-2);
+		height: var(--space-2);
+		border-radius: 50%;
+		background-color: var(--style-color);
+		flex-shrink: 0;
+	}
+
+	.selected .dot {
+		background-color: currentColor;
+	}
+}

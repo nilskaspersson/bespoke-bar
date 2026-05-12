@@ -3,8 +3,8 @@
 import type { ComponentProps, ReactNode } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import {
+	type CocktailStyleFilter,
 	RecipeStyleDistribution,
-	type StyleFilter,
 } from "@/features/recipes/components/RecipeStyleDistribution";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
@@ -13,8 +13,8 @@ import styles from "./styles.module.css";
 
 type Props = {
 	recipes: RecipeWithRelations[];
-	selectedStyles: StyleFilter[];
-	onSelectedStylesChange: (styles: StyleFilter[]) => void;
+	selectedStyles: CocktailStyleFilter[];
+	onSelectedStylesChange: (styles: CocktailStyleFilter[]) => void;
 	extras?: ReactNode;
 };
 
@@ -25,7 +25,7 @@ export function RecipesStatsBar({
 	extras,
 	...props
 }: Props & ComponentProps<"section">) {
-	function toggleStyles(toToggle: StyleFilter[]) {
+	function toggleStyles(toToggle: CocktailStyleFilter[]) {
 		const allSelected = toToggle.every((s) => selectedStyles.includes(s));
 		if (allSelected) {
 			const removed = new Set(toToggle);

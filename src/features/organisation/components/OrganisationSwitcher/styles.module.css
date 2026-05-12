@@ -6,6 +6,5 @@
 
 	.switcher {
 		min-height: 28px; /* Aligns with the Clerk button height */
-		margin: -8px;
 	}
 }

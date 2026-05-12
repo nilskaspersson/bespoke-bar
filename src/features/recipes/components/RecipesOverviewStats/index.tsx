@@ -4,7 +4,6 @@ import clsx from "clsx";
 import type { ComponentProps } from "react";
 import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
 import { StatsLine } from "@/ui/StatsLine";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";

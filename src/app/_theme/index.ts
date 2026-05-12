@@ -15,6 +15,7 @@ import "./colors/red.css";
 import "./colors/iris.css";
 import "./colors/amber.css";
 import "./colors/grass.css";
+import "./colors/extended-palette.css";
 
 /**
  * Color aliases, scaling, resets, and misc assignments
