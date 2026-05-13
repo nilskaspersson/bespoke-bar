@@ -158,7 +158,7 @@ export function RecipesListBoard({
 					)}
 				</div>
 
-				<RecipeListActions className={styles.actionsSlot}>
+				<RecipeListActions className={styles.dock}>
 					<RecipeAdjustmentsDock onOpenChange={setAdjustmentsOpen} />
 
 					<AnimatePresence mode="popLayout">

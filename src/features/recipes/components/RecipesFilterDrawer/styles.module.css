@@ -1,5 +1,0 @@
-@layer composition {
-	.body {
-		padding-block: var(--gap-large);
-	}
-}

@@ -12,12 +12,6 @@
 		grid-template-columns: minmax(0, 1fr);
 	}
 
-	.card {
-		padding: var(--gap);
-		border-radius: var(--radius);
-		background-color: var(--mauve-1);
-	}
-
 	.arrow {
 		justify-self: center;
 		color: var(--mauve-12);

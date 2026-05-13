@@ -48,12 +48,12 @@ export function RecipeTagCloud({
 				</Text>
 			) : null}
 
-			<Grid gap={1}>
+			<Grid gap={2}>
 				{sortedTags.length > 0 ? (
 					<Flex
 						as="ul"
 						wrap
-						gap={1}
+						gap={2}
 						className={clsx({ [styles.cloud]: withOverflow })}
 						aria-label={label}
 					>

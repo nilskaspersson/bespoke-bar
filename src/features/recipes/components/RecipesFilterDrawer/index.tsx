@@ -19,8 +19,6 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
 
-import styles from "./styles.module.css";
-
 const ALL_COCKTAIL_STYLES: CocktailStyleFilter[] = [
 	...COCKTAIL_STYLE_TO_LABEL.keys(),
 	null,
@@ -94,7 +92,7 @@ export function RecipesFilterDrawer({
 										{" "}
 										<Button
 											variant="text"
-											color="regular"
+											color="heavy"
 											size="tiny"
 											onClick={onResetFilters}
 										>
@@ -120,7 +118,7 @@ export function RecipesFilterDrawer({
 			}
 		>
 			{mounted ? (
-				<Grid gap={5} className={styles.body}>
+				<Grid gap={5}>
 					<Grid gap={3}>
 						<Heading level="h4" size={3}>
 							Tags

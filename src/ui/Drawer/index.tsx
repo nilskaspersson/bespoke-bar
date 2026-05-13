@@ -14,6 +14,7 @@ import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
+import { Flex } from "@/ui/Flex";
 import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
 import styles from "./styles.module.css";
 
@@ -154,7 +155,12 @@ export function Drawer({
 					<div className={styles.content}>{children}</div>
 
 					<footer className={styles.footer}>
-						<menu className={styles.actions}>
+						<Flex
+							as="menu"
+							justifyContent="space-between"
+							alignItems="center"
+							gap={2}
+						>
 							{withCancel ? (
 								<li>
 									<Button
@@ -169,7 +175,7 @@ export function Drawer({
 							) : null}
 
 							{actions}
-						</menu>
+						</Flex>
 					</footer>
 				</Container>
 			</m.div>

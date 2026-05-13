@@ -23,7 +23,7 @@
 		padding: var(--space-1) var(--space-3);
 		background-color: var(--mauve-12);
 		color: var(--mauve-1);
-		border-radius: 999px;
+		border-radius: var(--radius--full);
 		font-size: var(--size-1);
 		font-weight: 600;
 		line-height: 1.2;

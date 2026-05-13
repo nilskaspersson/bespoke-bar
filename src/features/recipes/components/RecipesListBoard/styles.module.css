@@ -2,6 +2,7 @@
 	.board {
 		display: grid;
 		grid-template-rows: auto 1fr auto;
+		padding-bottom: var(--gap);
 	}
 
 	.filtersSection {
@@ -16,10 +17,7 @@
 
 	.listSlot {
 		--recipes-list-board-list-max-width: calc(
-			3 *
-			var(--recipe-card-width) +
-			2 *
-			var(--gap--large)
+			3 * var(--recipe-card-width) + 2 * var(--gap--large)
 		);
 
 		max-width: var(--recipes-list-board-list-max-width);
@@ -48,7 +46,7 @@
 		margin-inline: auto;
 	}
 
-	.actionsSlot {
+	.dock {
 		position: sticky;
 		bottom: var(--gap);
 		z-index: var(--z-navigation);

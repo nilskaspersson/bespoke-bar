@@ -29,7 +29,7 @@ export function RecipeCocktailStyleCloud({
 	}
 
 	return (
-		<Flex as="ul" wrap gap={1} aria-label={label}>
+		<Flex as="ul" wrap gap={2} aria-label={label}>
 			{styles.map((style) => (
 				<li key={style ?? "unclassified"}>
 					<RecipeCocktailStyleChip
