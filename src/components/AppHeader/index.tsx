@@ -16,9 +16,11 @@ export async function AppHeader({
 	return (
 		<header className={clsx(styles.header, className)} {...props}>
 			<div className={styles.container}>
-				<Logo />
+				<div className={styles.logo}>
+					<Logo />
+				</div>
 
-				<div>{children}</div>
+				<div className={styles.nav}>{children}</div>
 
 				<div className={styles.auth}>
 					<AuthButtonsLoader />

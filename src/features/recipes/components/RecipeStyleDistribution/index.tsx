@@ -9,19 +9,21 @@ import {
 	getCocktailStyleLabel,
 	UNCLASSIFIED_COCKTAIL_STYLE_COLOR,
 } from "@/features/recipes/constants";
+import { usePopover } from "@/hooks/usePopover";
+import { Lightbox } from "@/ui/Lightbox";
+import { Popover } from "@/ui/Popover";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-const TOP_N = 5;
+const LEGEND_TOP_N = 3;
 
 export type { CocktailStyleFilter };
 
-type Segment = {
-	key: string;
+type StyleEntry = {
+	style: CocktailStyleFilter;
 	label: string;
 	count: number;
 	color: string;
-	styles: CocktailStyleFilter[];
 };
 
 type Props = {
@@ -35,85 +37,96 @@ export function RecipeStyleDistribution({
 	selectedStyles,
 	onToggleStyles,
 }: Props) {
-	const segments = useMemo<Segment[]>(() => {
+	const entries = useMemo<StyleEntry[]>(() => {
 		const counts = new Map<CocktailStyleFilter, number>();
 		for (const recipe of recipes) {
 			const key = recipe.style ?? null;
 			counts.set(key, (counts.get(key) ?? 0) + 1);
 		}
 
-		const ranked = [...counts.entries()].sort(([, a], [, b]) => b - a);
-		const top = ranked.slice(0, TOP_N);
-		const rest = ranked.slice(TOP_N);
-
-		const result: Segment[] = top.map(([style, count]) => ({
-			key: style ?? "unclassified",
-			label: getCocktailStyleLabel(style),
-			count,
-			color: getCocktailStyleColor(style),
-			styles: [style],
-		}));
-
-		if (rest.length > 0) {
-			const restTotal = rest.reduce((sum, [, count]) => sum + count, 0);
-			result.push({
-				key: "other-grouped",
-				label: `Other (${rest.length})`,
-				count: restTotal,
-				color: UNCLASSIFIED_COCKTAIL_STYLE_COLOR,
-				styles: rest.map(([s]) => s),
-			});
-		}
-
-		return result;
+		return [...counts.entries()]
+			.sort(([, a], [, b]) => b - a)
+			.map(([style, count]) => ({
+				style,
+				label: getCocktailStyleLabel(style),
+				count,
+				color: getCocktailStyleColor(style),
+			}));
 	}, [recipes]);
+
+	const top = entries.slice(0, LEGEND_TOP_N);
+	const rest = entries.slice(LEGEND_TOP_N);
+	const restTotal = rest.reduce((sum, e) => sum + e.count, 0);
 
 	const selectedSet = useMemo(() => new Set(selectedStyles), [selectedStyles]);
 	const hasSelection = selectedSet.size > 0;
 
-	if (segments.length === 0) return null;
+	const overflowPopover = usePopover({ type: "auto" });
 
-	function isSegmentActive(segment: Segment): boolean {
-		return segment.styles.every((s) => selectedSet.has(s));
-	}
+	if (entries.length === 0) return null;
+
+	const restStyles = rest.map((e) => e.style);
+	const restAllActive =
+		rest.length > 0 && restStyles.every((s) => selectedSet.has(s));
 
 	return (
 		<div className={styles.distribution}>
 			<div className={styles.bar}>
-				{segments.map((seg) => {
-					const active = isSegmentActive(seg);
+				{top.map((entry) => {
+					const active = selectedSet.has(entry.style);
 					return (
 						<button
 							type="button"
-							key={seg.key}
-							onClick={() => onToggleStyles(seg.styles)}
+							key={entry.label}
+							onClick={() => onToggleStyles([entry.style])}
 							className={clsx(styles.segment, {
 								[styles.segmentActive]: active,
 								[styles.segmentInactive]: hasSelection && !active,
 							})}
 							style={{
-								flexGrow: seg.count,
-								backgroundColor: seg.color,
+								flexGrow: entry.count,
+								backgroundColor: entry.color,
 							}}
 							aria-pressed={active}
-							title={`${seg.label}: ${seg.count}`}
+							title={`${entry.label}: ${entry.count}`}
 						>
 							<span className="sr-only">
-								{seg.label}: {seg.count}
+								{entry.label}: {entry.count}
 							</span>
 						</button>
 					);
 				})}
+
+				{rest.length > 0 ? (
+					<button
+						type="button"
+						onClick={() => onToggleStyles(restStyles)}
+						className={clsx(styles.segment, {
+							[styles.segmentActive]: restAllActive,
+							[styles.segmentInactive]: hasSelection && !restAllActive,
+						})}
+						style={{
+							flexGrow: restTotal,
+							backgroundColor: UNCLASSIFIED_COCKTAIL_STYLE_COLOR,
+						}}
+						aria-pressed={restAllActive}
+						title={`Other (${rest.length}): ${restTotal}`}
+					>
+						<span className="sr-only">
+							Other ({rest.length}): {restTotal}
+						</span>
+					</button>
+				) : null}
 			</div>
 
 			<ul className={styles.legend}>
-				{segments.map((seg) => {
-					const active = isSegmentActive(seg);
+				{top.map((entry) => {
+					const active = selectedSet.has(entry.style);
 					return (
-						<li key={seg.key}>
+						<li key={entry.label}>
 							<button
 								type="button"
-								onClick={() => onToggleStyles(seg.styles)}
+								onClick={() => onToggleStyles([entry.style])}
 								className={clsx(styles.legendItem, {
 									[styles.legendItemActive]: active,
 									[styles.legendItemInactive]: hasSelection && !active,
@@ -122,19 +135,86 @@ export function RecipeStyleDistribution({
 							>
 								<span
 									className={styles.dot}
-									style={{ backgroundColor: seg.color }}
+									style={{ backgroundColor: entry.color }}
 									aria-hidden
 								/>
 								<Text as="span" size={1} compact>
-									{seg.label}
+									{entry.label}
 								</Text>
 								<Text as="span" size={1} weight={700} compact>
-									{seg.count}
+									{entry.count}
 								</Text>
 							</button>
 						</li>
 					);
 				})}
+
+				{rest.length > 0 ? (
+					<li>
+						<button
+							type="button"
+							{...overflowPopover.triggerProps}
+							className={clsx(styles.legendItem, {
+								[styles.legendItemActive]: restAllActive,
+								[styles.legendItemInactive]: hasSelection && !restAllActive,
+							})}
+						>
+							<span
+								className={styles.dot}
+								style={{
+									backgroundColor: UNCLASSIFIED_COCKTAIL_STYLE_COLOR,
+								}}
+								aria-hidden
+							/>
+							<Text as="span" size={1} compact>
+								Other ({rest.length})
+							</Text>
+							<Text as="span" size={1} weight={700} compact>
+								{restTotal}
+							</Text>
+						</button>
+
+						<Popover
+							{...overflowPopover.contentProps}
+							position="bottom"
+							className={styles.popover}
+						>
+							<Lightbox className={styles.popoverSurface}>
+								<ul className={styles.overflowList}>
+									{rest.map((entry) => {
+										const active = selectedSet.has(entry.style);
+										return (
+											<li key={entry.label}>
+												<button
+													type="button"
+													onClick={() => onToggleStyles([entry.style])}
+													className={clsx(styles.legendItem, {
+														[styles.legendItemActive]: active,
+														[styles.legendItemInactive]:
+															hasSelection && !active,
+													})}
+													aria-pressed={active}
+												>
+													<span
+														className={styles.dot}
+														style={{ backgroundColor: entry.color }}
+														aria-hidden
+													/>
+													<Text as="span" size={1} compact>
+														{entry.label}
+													</Text>
+													<Text as="span" size={1} weight={700} compact>
+														{entry.count}
+													</Text>
+												</button>
+											</li>
+										);
+									})}
+								</ul>
+							</Lightbox>
+						</Popover>
+					</li>
+				) : null}
 			</ul>
 		</div>
 	);
