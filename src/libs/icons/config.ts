@@ -12,6 +12,7 @@ type IconSource = { kit: "lucide"; name: LucideIconName } | { local: true };
 export const ICONS = {
 	"angle-down": { kit: "lucide", name: "chevron-down" },
 	"angle-left": { kit: "lucide", name: "chevron-left" },
+	"angle-up": { kit: "lucide", name: "chevron-up" },
 	"angles-right": { kit: "lucide", name: "chevrons-right" },
 	"arrow-down-from-line": { kit: "lucide", name: "arrow-down-from-line" },
 	"arrow-down-long": { kit: "lucide", name: "arrow-down" },

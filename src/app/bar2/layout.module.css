@@ -1,6 +1,7 @@
 @layer layout {
 	.container {
 		display: grid;
+		grid-template-rows: 1fr auto;
 		flex: 1 1 auto;
 		min-height: 100lvh;
 		padding-inline: max(env(safe-area-inset-left), var(--app-inset))

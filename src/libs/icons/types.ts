@@ -2,8 +2,8 @@
 export type IconName =
 	| "angle-down"
 	| "angle-left"
+	| "angle-up"
 	| "angles-right"
-	| "arrow-big-right"
 	| "arrow-down-from-line"
 	| "arrow-down-long"
 	| "arrow-down-to-arc"

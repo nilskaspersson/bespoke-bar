@@ -86,6 +86,16 @@
 			inset: auto anchor(right) anchor(top) auto;
 		}
 
+		/** Outer-edge inset — popover sits above the anchor, left edges aligned. */
+		&.top-start {
+			--area: none;
+			--fallback: flip-block;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto auto anchor(top) anchor(left);
+		}
+
 		&.right {
 			--area: right;
 			--fallback: flip-inline;
@@ -100,6 +110,20 @@
 
 			position-try-order: normal;
 			inset: anchor(bottom) auto auto anchor(left);
+		}
+
+		/**
+		 * Popover bottom-left aligns with anchor's bottom-left; popover extends
+		 * upward and rightward, overlapping the anchor. Use when the trigger
+		 * should appear to morph into the panel from its own position.
+		 */
+		&.top-overlap-start {
+			--area: none;
+			--fallback: flip-block;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto auto anchor(bottom) anchor(left);
 		}
 
 		/**

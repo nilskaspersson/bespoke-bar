@@ -36,7 +36,7 @@ export const CATEGORY_DEFAULT_ABV = new Map<SystemCategory, number>([
 ]);
 
 /**
- * Note that deburr is expected to first handle accented characters, so we don't to
+ * Note that asciiFold is expected to first handle accented characters, so we don't to
  * consider f.e. cachaca -> cachaça here.
  */
 export const CATEGORY_ALIASES = new Map<SystemCategory, string[]>([
