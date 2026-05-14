@@ -1,7 +1,6 @@
 "use client";
 
-import type { ComponentProps } from "react";
-import { Chip } from "@/ui/Chip";
+import { Chip, type ChipProps } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import styles from "./styles.module.css";
 
@@ -17,7 +16,7 @@ export function TagRadioGroup({
 		label: string;
 		value: string;
 	}[];
-	chipProps?: Omit<ComponentProps<typeof Chip>, "as">;
+	chipProps?: Omit<ChipProps, "as">;
 }) {
 	return (
 		<Flex className={styles.base} role="radiogroup" gap={2}>

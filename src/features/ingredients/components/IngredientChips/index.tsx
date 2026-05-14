@@ -1,13 +1,13 @@
 "use client";
 
-import { type ComponentProps, use } from "react";
+import { use } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { FormatterContext } from "@/hooks/useFormatter";
-import { Chip } from "@/ui/Chip";
-import { Flex } from "@/ui/Flex";
+import { Chip, type ChipProps } from "@/ui/Chip";
+import { Flex, type FlexProps } from "@/ui/Flex";
 import styles from "./styles.module.css";
 
 export function IngredientChips({
@@ -19,9 +19,9 @@ export function IngredientChips({
 }: {
 	ingredient: Ingredient;
 	recipesCount?: number;
-	size?: ComponentProps<typeof Chip>["size"];
-	color?: ComponentProps<typeof Chip>["color"];
-} & Omit<ComponentProps<typeof Flex>, "children">) {
+	size?: ChipProps["size"];
+	color?: ChipProps["color"];
+} & Omit<FlexProps, "children">) {
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
 	const { percentageFormatter } = use(FormatterContext);
 

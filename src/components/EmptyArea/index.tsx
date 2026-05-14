@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
@@ -9,10 +8,9 @@ export function EmptyArea({
 	className,
 	color = "regular",
 	...props
-}: { children: React.ReactNode } & Omit<
-	ComponentProps<typeof Grid>,
-	"color"
-> & { color?: SystemColor }) {
+}: { children: React.ReactNode } & Omit<GridProps, "color"> & {
+		color?: SystemColor;
+	}) {
 	return (
 		<Grid
 			as="div"

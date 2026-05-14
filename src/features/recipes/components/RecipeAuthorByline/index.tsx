@@ -3,13 +3,13 @@ import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
 import { Skeleton } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import { Time } from "@/ui/Time";
 export async function RecipeAuthorByline({
 	createdBy,
 	createdAt,
 	...props
-}: ComponentProps<typeof Text> & {
+}: TextProps & {
 	createdBy: string;
 	createdAt: string;
 }) {

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-	type ComponentProps,
 	createContext,
 	type ReactNode,
 	use,
@@ -14,7 +13,7 @@ import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitCo
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Checkbox } from "@/ui/Checkbox";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import {
 	usePersistenceInfo,
 	WithPersistenceInfo,
@@ -146,7 +145,7 @@ export function useOptionalDeferredAdjustments(): DeferredAdjustments | null {
 
 const COMMON_VALUES = [1, 2, 3, 4, 5];
 
-export function RecipeAdjustmentsControls(props: ComponentProps<typeof Grid>) {
+export function RecipeAdjustmentsControls(props: GridProps) {
 	const {
 		servings,
 		conversionSystem,

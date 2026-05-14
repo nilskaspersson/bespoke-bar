@@ -1,9 +1,8 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
 import { useLooseRelativeTime } from "@/hooks/useLooseRelativeTime";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function Time({
@@ -14,7 +13,7 @@ export function Time({
 }: {
 	date: string;
 	relativeThreshold?: number;
-} & Omit<ComponentProps<typeof Text>, "children">) {
+} & Omit<TextProps, "children">) {
 	const formatLooseRelativeTime = useLooseRelativeTime();
 	const dateObj = new Date(date);
 	const displayText = formatLooseRelativeTime(dateObj, relativeThreshold);

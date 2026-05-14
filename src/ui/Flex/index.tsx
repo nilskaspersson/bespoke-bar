@@ -4,7 +4,7 @@ import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-type Props<E extends ElementType> = {
+export type FlexProps<E extends ElementType = "div"> = PolymorphicProps<E> & {
 	alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
 	as?: E;
 	wrap?: boolean;
@@ -27,7 +27,7 @@ export function Flex<E extends ElementType = "div">({
 	justifyContent,
 	wrap,
 	...slotProps
-}: PolymorphicProps<E> & Props<E>) {
+}: FlexProps<E>) {
 	return createElement(
 		as,
 		{

@@ -1,32 +1,37 @@
 import { clsx } from "clsx";
-import type { ComponentProps, ReactNode } from "react";
-import { Text } from "@/ui/Text";
+import type { ElementType, ReactNode } from "react";
+import { Text, type TextProps } from "@/ui/Text";
 import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
 type ChipVariant = "filled" | "outline";
 
-export function Chip({
+export type ChipProps<E extends ElementType = "span"> = TextProps<E> & {
+	label?: ReactNode;
+	color?: SystemColor;
+	variant?: ChipVariant;
+};
+
+export function Chip<E extends ElementType = "span">({
+	as,
 	label,
 	color = "accent",
 	variant = "filled",
 	children,
 	className,
 	size = 2,
+	compact = true,
+	weight = 600,
 	...props
-}: Omit<ComponentProps<typeof Text>, "color"> & {
-	label?: ReactNode;
-	color?: SystemColor;
-	variant?: ChipVariant;
-}) {
+}: ChipProps<E>) {
 	return (
 		<Text
-			as="span"
-			className={clsx(styles.chip, styles[color], styles[variant], className)}
-			compact
-			size={size}
-			weight={600}
 			{...props}
+			as={as ?? "span"}
+			className={clsx(styles.chip, styles[color], styles[variant], className)}
+			compact={compact}
+			size={size}
+			weight={weight}
 		>
 			{label ? <span className={styles.label}>{label}</span> : null}
 			{children}

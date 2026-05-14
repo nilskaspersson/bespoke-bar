@@ -1,10 +1,10 @@
 import { clsx } from "clsx";
 import Link from "next/link";
-import { type ComponentProps, useMemo } from "react";
+import { useMemo } from "react";
 import type { IconName } from "@/libs/icons/types";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
@@ -26,7 +26,7 @@ export function CreateRecipeNav({
 	className,
 	onBoarding,
 	...props
-}: ComponentProps<typeof Grid> & { onBoarding?: boolean }) {
+}: GridProps & { onBoarding?: boolean }) {
 	const cards: CardSpec[] = useMemo(
 		() =>
 			[

@@ -1,6 +1,6 @@
-import type { ComponentProps, ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { ButtonProps } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
+import { Flex, type FlexProps } from "@/ui/Flex";
 
 export type ActionProps = {
 	variant?: ButtonProps["variant"];
@@ -13,7 +13,7 @@ export function EntityActions({
 	children,
 	actionProps,
 	...props
-}: Omit<ComponentProps<typeof Flex>, "children"> & {
+}: Omit<FlexProps, "children"> & {
 	children: (actionProps: ActionProps) => ReactNode;
 	actionProps?: Partial<ActionProps>;
 }) {

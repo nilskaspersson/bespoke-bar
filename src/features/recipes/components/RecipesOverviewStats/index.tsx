@@ -1,9 +1,8 @@
 "use client";
 
 import clsx from "clsx";
-import type { ComponentProps } from "react";
 import { Button } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
+import { Flex, type FlexProps } from "@/ui/Flex";
 import { StatsLine } from "@/ui/StatsLine";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -23,7 +22,7 @@ export function RecipesOverviewStats({
 	favoritesOnly,
 	onFavoritesOnlyChange,
 	...props
-}: Props & ComponentProps<typeof Flex>) {
+}: Props & FlexProps) {
 	return (
 		<Flex gap={5} alignItems="flex-end" {...props}>
 			<Button

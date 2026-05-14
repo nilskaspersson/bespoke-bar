@@ -1,23 +1,25 @@
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
-import { use } from "react";
+import { type ElementType, use } from "react";
 import { FormatterContext } from "@/hooks/useFormatter";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-export function RecipeEntryProfitLabel({
+export function RecipeEntryProfitLabel<E extends ElementType = "span">({
+	as,
 	className,
 	cost,
 	price,
 	isIncomplete,
 	servings = 1,
+	noWrap = true,
+	numeric = true,
 	...props
 }: {
 	cost: number;
 	price: number;
 	isIncomplete?: boolean;
 	servings?: number;
-} & ComponentProps<typeof Text>) {
+} & TextProps<E>) {
 	const { currencyFormatter } = use(FormatterContext);
 
 	if (price == null) {
@@ -28,9 +30,10 @@ export function RecipeEntryProfitLabel({
 
 	return (
 		<Text
-			noWrap
-			numeric
 			{...props}
+			as={as ?? "span"}
+			noWrap={noWrap}
+			numeric={numeric}
 			className={clsx(className, {
 				[styles.negative]: Math.round(profit) <= 0,
 			})}

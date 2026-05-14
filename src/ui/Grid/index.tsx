@@ -4,7 +4,7 @@ import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-type Props<E extends ElementType> = {
+export type GridProps<E extends ElementType = "div"> = PolymorphicProps<E> & {
 	alignContent?: "start" | "end" | "center" | "stretch" | "space-between";
 	alignItems?: "start" | "end" | "center" | "stretch";
 	as?: E;
@@ -24,7 +24,7 @@ export function Grid<E extends ElementType = "div">({
 	justifyContent,
 	justifyItems,
 	...slotProps
-}: PolymorphicProps<E> & Props<E>) {
+}: GridProps<E>) {
 	return createElement(
 		as,
 		{

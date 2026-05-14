@@ -1,4 +1,3 @@
-import type { ComponentProps } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { EntityActions } from "@/components/EntityActions";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
@@ -11,12 +10,12 @@ import {
 	stitchRecipeListEntries,
 } from "@/features/specs/utils/stitchIngredients";
 import { LinkButton } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
-type FeaturedListProps = Omit<ComponentProps<typeof Grid>, "children"> & {
+type FeaturedListProps = Omit<GridProps, "children"> & {
 	orgId: string;
 };
 

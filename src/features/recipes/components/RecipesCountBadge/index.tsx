@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
@@ -9,10 +8,7 @@ export function RecipesCountBadge({
 	className,
 	color = "regular",
 	...props
-}: { count: number; color?: SystemColor } & Omit<
-	ComponentProps<typeof Text>,
-	"color"
->) {
+}: { count: number; color?: SystemColor } & Omit<TextProps, "color">) {
 	return (
 		<Text
 			as="span"

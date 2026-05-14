@@ -1,11 +1,11 @@
 "use client";
 
 import { clsx } from "clsx";
-import { type ComponentProps, useMemo } from "react";
+import { useMemo } from "react";
 import type { CocktailStyleFilter } from "@/features/recipes/constants";
 import type { CocktailStyleEntry } from "@/features/recipes/utils/cocktailStyleEntries";
 import { Button } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import { toCSSVars } from "@/utils/styles";
 import styles from "./styles.module.css";
 
@@ -23,7 +23,7 @@ export function CocktailStyleDistribution({
 	onToggleStyles,
 	children,
 	...props
-}: ComponentProps<"div"> & Props) {
+}: GridProps & Props) {
 	const selectedSet = useMemo(() => new Set(selectedStyles), [selectedStyles]);
 	const hasSelection = selectedSet.size > 0;
 

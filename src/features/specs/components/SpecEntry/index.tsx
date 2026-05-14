@@ -1,7 +1,6 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { ToggleIngredientCard } from "@/features/ingredients/components/ToggleIngredientCard";
 import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
@@ -9,7 +8,7 @@ import { useSpecQuantityFormatter } from "@/features/specs/hooks/useSpecQuantity
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { AnimatedNumber } from "@/ui/AnimatedNumber";
 import { Chip } from "@/ui/Chip";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
@@ -30,7 +29,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	withBestUnit?: boolean;
 	servings?: number;
 	animateNumbers?: boolean;
-} & Omit<ComponentProps<typeof Text>, "onChange">) {
+} & Omit<TextProps, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 	const formatSpecMeasure = useFormatSpecMeasure();
 	const formatQuantity = useSpecQuantityFormatter();
