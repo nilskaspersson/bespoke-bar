@@ -14,11 +14,13 @@
 		isolation: isolate;
 		margin-block: var(--space-8);
 		margin-inline: var(--gap);
+		pointer-events: none;
 	}
 
 	.primary {
 		width: var(--recipe-card-width);
 		max-width: 100%;
+		pointer-events: auto;
 	}
 
 	.meta {
@@ -47,6 +49,7 @@
 		padding: var(--gap);
 		border: 2px dashed var(--mauve-4);
 		box-shadow: var(--shadow--high);
+		pointer-events: auto;
 
 		animation: boxIn 0.8s var(--spring-lazy) backwards;
 		animation-delay: 0.25s;

@@ -1,6 +1,6 @@
 "use client";
 
-import { RecipeCocktailStyleChip } from "@/features/recipes/components/RecipeCocktailStyleChip";
+import { CocktailStyleChip } from "@/features/recipes/components/CocktailStyleChip";
 import type { CocktailStyleFilter } from "@/features/recipes/constants";
 import { Flex } from "@/ui/Flex";
 import { Text } from "@/ui/Text";
@@ -13,7 +13,7 @@ type Props = {
 	emptyLabel?: string;
 };
 
-export function RecipeCocktailStyleCloud({
+export function CocktailStyleCloud({
 	styles,
 	selectedStyles,
 	onToggleStyle,
@@ -32,7 +32,7 @@ export function RecipeCocktailStyleCloud({
 		<Flex as="ul" wrap gap={2} aria-label={label}>
 			{styles.map((style) => (
 				<li key={style ?? "unclassified"}>
-					<RecipeCocktailStyleChip
+					<CocktailStyleChip
 						style={style}
 						selected={selectedStyles.includes(style)}
 						onClick={() => onToggleStyle(style)}

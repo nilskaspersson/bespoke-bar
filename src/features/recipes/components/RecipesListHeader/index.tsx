@@ -53,7 +53,7 @@ export function RecipesListHeader({
 			</Flex>
 
 			<Text as="div" size={1} compact align="center" fullWidth>
-				Filter by Recipe or Ingredient name.
+				Filter by Recipe name or Ingredient.
 			</Text>
 		</Grid>
 	);

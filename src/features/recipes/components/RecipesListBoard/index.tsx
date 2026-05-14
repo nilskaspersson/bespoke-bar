@@ -3,12 +3,12 @@
 import { AnimatePresence, m } from "motion/react";
 import { useDeferredValue, useMemo, useState } from "react";
 
+import { BottomRailItems } from "@/components/BottomRail";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 import { ClearFiltersPill } from "@/features/recipes/components/ClearFiltersPill";
 import { RecipeAdjustmentsProvider } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeAdjustmentsDock } from "@/features/recipes/components/RecipeAdjustmentsDock";
-import { RecipeListActions } from "@/features/recipes/components/RecipeListActions";
 import { RecipesFilterDrawer } from "@/features/recipes/components/RecipesFilterDrawer";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { RecipesListHeader } from "@/features/recipes/components/RecipesListHeader";
@@ -48,6 +48,7 @@ export function RecipesListBoard({
 	const cocktailStyleSelection = useCocktailStyleSelection();
 	const {
 		selectedCocktailStyles,
+		deferredSelectedCocktailStyles,
 		setSelectedCocktailStyles,
 		clearCocktailStyles,
 	} = cocktailStyleSelection;
@@ -79,8 +80,8 @@ export function RecipesListBoard({
 			});
 		}
 
-		if (selectedCocktailStyles.length > 0) {
-			const styleSet = new Set(selectedCocktailStyles);
+		if (deferredSelectedCocktailStyles.length > 0) {
+			const styleSet = new Set(deferredSelectedCocktailStyles);
 			result = result.filter((recipe) => styleSet.has(recipe.style ?? null));
 		}
 
@@ -90,7 +91,7 @@ export function RecipesListBoard({
 		searchIndex,
 		deferredSearch,
 		selectedTagIds,
-		selectedCocktailStyles,
+		deferredSelectedCocktailStyles,
 		favoritesOnly,
 		favoriteIdSet,
 	]);
@@ -123,16 +124,15 @@ export function RecipesListBoard({
 						recipes={recipes}
 						selectedStyles={selectedCocktailStyles}
 						onSelectedStylesChange={setSelectedCocktailStyles}
-						extras={
-							<RecipesOverviewStats
-								favoriteCount={favoriteRecipeIds.length}
-								recipesCount={recipes.length}
-								recipeSlotLimit={recipeSlotLimit}
-								favoritesOnly={favoritesOnly}
-								onFavoritesOnlyChange={setFavoritesOnly}
-							/>
-						}
-					/>
+					>
+						<RecipesOverviewStats
+							favoriteCount={favoriteRecipeIds.length}
+							recipesCount={recipes.length}
+							recipeSlotLimit={recipeSlotLimit}
+							favoritesOnly={favoritesOnly}
+							onFavoritesOnlyChange={setFavoritesOnly}
+						/>
+					</RecipesStatsBar>
 				</Grid>
 
 				<div className={styles.listSlot}>
@@ -158,7 +158,7 @@ export function RecipesListBoard({
 					)}
 				</div>
 
-				<RecipeListActions className={styles.dock}>
+				<BottomRailItems>
 					<RecipeAdjustmentsDock onOpenChange={setAdjustmentsOpen} />
 
 					<AnimatePresence mode="popLayout">
@@ -179,7 +179,7 @@ export function RecipesListBoard({
 							</m.div>
 						) : null}
 					</AnimatePresence>
-				</RecipeListActions>
+				</BottomRailItems>
 			</div>
 
 			<RecipesFilterDrawer

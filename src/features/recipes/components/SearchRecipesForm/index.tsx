@@ -34,7 +34,11 @@ import { animate, keyframes } from "@/utils/animate";
 import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
 
-export function SearchRecipesButton({ children, ...props }: ButtonProps) {
+export function SearchRecipesButton({
+	children,
+	onClick,
+	...props
+}: ButtonProps) {
 	const { dialogRef, isOpen, showModal, closeModal } = useDialog();
 
 	function toggleDialog() {
@@ -45,11 +49,16 @@ export function SearchRecipesButton({ children, ...props }: ButtonProps) {
 		}
 	}
 
+	function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
+		onClick?.(event);
+		showModal();
+	}
+
 	return (
 		<>
 			<Button
 				{...props}
-				onClick={showModal}
+				onClick={handleClick}
 				endAdornment={<Kbd shortcut="mod+k" onTrigger={toggleDialog} />}
 			>
 				{children}

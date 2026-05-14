@@ -1,8 +1,11 @@
-import { useCallback, useState } from "react";
+import { useCallback, useDeferredValue, useState } from "react";
 import type { CocktailStyleFilter } from "@/features/recipes/constants";
 
 export function useCocktailStyleSelection(initial: CocktailStyleFilter[] = []) {
 	const [selectedCocktailStyles, setSelectedCocktailStyles] = useState(initial);
+	const deferredSelectedCocktailStyles = useDeferredValue(
+		selectedCocktailStyles,
+	);
 
 	const toggleCocktailStyle = useCallback((style: CocktailStyleFilter) => {
 		setSelectedCocktailStyles((prev) =>
@@ -17,6 +20,7 @@ export function useCocktailStyleSelection(initial: CocktailStyleFilter[] = []) {
 
 	return {
 		selectedCocktailStyles,
+		deferredSelectedCocktailStyles,
 		setSelectedCocktailStyles,
 		toggleCocktailStyle,
 		clearCocktailStyles,

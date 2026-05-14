@@ -3,6 +3,7 @@
 		text-align: left;
 		padding-inline: var(--space-1);
 		border-radius: var(--radius--small);
+		user-select: text;
 		transition-property: background-color, box-shadow;
 		transition-duration: var(--transition-duration);
 

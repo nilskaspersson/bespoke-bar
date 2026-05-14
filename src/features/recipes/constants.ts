@@ -63,7 +63,7 @@ export const COCKTAIL_STYLE_TO_LABEL = new Map<CocktailStyle, string>([
 export type CocktailStyleFilter = CocktailStyle | null;
 
 export const UNCLASSIFIED_COCKTAIL_STYLE_LABEL = "Unclassified";
-export const UNCLASSIFIED_COCKTAIL_STYLE_COLOR = "var(--mauve-10)";
+export const UNCLASSIFIED_COCKTAIL_STYLE_COLOR = "var(--mauve-8)";
 
 /**
  * Per-style color tokens. Styles listed alphabetically; colors walk the

@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import type { Tag } from "@/db/schema/tags";
-import { RecipeCocktailStyleCloud } from "@/features/recipes/components/RecipeCocktailStyleCloud";
+import { CocktailStyleCloud } from "@/features/recipes/components/CocktailStyleCloud";
 import {
 	COCKTAIL_STYLE_TO_LABEL,
 	type CocktailStyleFilter,
@@ -139,7 +139,7 @@ export function RecipesFilterDrawer({
 							Cocktail Styles
 						</Heading>
 
-						<RecipeCocktailStyleCloud
+						<CocktailStyleCloud
 							styles={ALL_COCKTAIL_STYLES}
 							selectedStyles={selectedCocktailStyles}
 							onToggleStyle={toggleCocktailStyle}

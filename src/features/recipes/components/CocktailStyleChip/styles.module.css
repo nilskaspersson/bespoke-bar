@@ -3,21 +3,31 @@
 		display: inline-flex;
 		align-items: center;
 		gap: var(--space-2);
-		padding: var(--space-1) var(--space-3);
-		border: 1px solid var(--style-color);
 		border-radius: var(--radius--full);
-		color: var(--style-color);
 		font-size: var(--size-1);
 		font-weight: 600;
 		line-height: 1;
 		background-color: transparent;
 	}
 
+	.outline {
+		padding: var(--space-1) var(--space-3);
+		border: 1px solid var(--style-color);
+		color: var(--style-color);
+	}
+
+	.legend {
+		padding: var(--space-1) var(--space-2);
+		color: var(--mauve-12);
+	}
+
 	.interactive {
 		cursor: pointer;
-		transition-property: background-color, color;
+		transition-property: background-color, color, opacity;
 		transition-duration: var(--transition-duration);
+	}
 
+	.outline.interactive {
 		&:hover,
 		&:focus-visible {
 			background-color: hsl(from var(--style-color) h s l / 0.15);
@@ -29,7 +39,19 @@
 		}
 	}
 
-	.selected {
+	.legend.interactive {
+		&:hover,
+		&:focus-visible {
+			background-color: hsl(from var(--mauve-12) h s l / 0.1);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--mauve-12);
+			outline-offset: 1px;
+		}
+	}
+
+	.outline.selected {
 		background-color: var(--style-color);
 		color: hsl(from var(--style-color) h s 98%);
 
@@ -37,6 +59,20 @@
 		&:focus-visible {
 			background-color: hsl(from var(--style-color) h s l / 0.85);
 		}
+	}
+
+	.legend.selected {
+		background-color: var(--mauve-12);
+		color: var(--mauve-1);
+
+		&:hover,
+		&:focus-visible {
+			background-color: hsl(from var(--mauve-12) h s l / 0.85);
+		}
+	}
+
+	.dim {
+		opacity: 0.5;
 	}
 
 	.dot {
@@ -48,7 +84,11 @@
 		flex-shrink: 0;
 	}
 
-	.selected .dot {
+	.outline.selected .dot {
 		background-color: currentColor;
+	}
+
+	.count {
+		font-weight: 700;
 	}
 }
