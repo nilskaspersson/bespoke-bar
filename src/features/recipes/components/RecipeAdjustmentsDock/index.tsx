@@ -57,7 +57,6 @@ export function RecipeAdjustmentsDock({ onOpenChange }: Props) {
 				variant="clear"
 				color="heavy"
 				rounded
-				size="large"
 				aria-label="Quick Adjust"
 				className={clsx(styles.trigger, {
 					[styles.triggerHidden]: popover.isOpen,

@@ -23,7 +23,6 @@ export function ClearFiltersPill({
 			variant="clear"
 			color="amber"
 			rounded
-			size="large"
 		>
 			<Icon name="xmark" size={4} />
 
