@@ -22,7 +22,7 @@ export function BottomRailHost({ children, left }: HostProps) {
 
 			<Grid
 				gap={2}
-				alignItems="center"
+				alignItems="end"
 				justifyContent="space-between"
 				className={styles.rail}
 			>

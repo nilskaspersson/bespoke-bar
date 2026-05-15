@@ -159,26 +159,28 @@ export function RecipesListBoard({
 				</div>
 
 				<BottomRailItems>
-					<RecipeAdjustmentsDock onOpenChange={setAdjustmentsOpen} />
+					<div className={styles.dockGroup}>
+						<RecipeAdjustmentsDock onOpenChange={setAdjustmentsOpen} />
 
-					<AnimatePresence mode="popLayout">
-						{hasFilters && !adjustmentsOpen ? (
-							<m.div
-								key="clear"
-								layout
-								initial={{ opacity: 0, scale: 0.4 }}
-								animate={{ opacity: 1, scale: 1 }}
-								exit={{ opacity: 0, scale: 0.4 }}
-								transition={{
-									type: "spring",
-									visualDuration: 0.3,
-									bounce: 0.4,
-								}}
-							>
-								<ClearFiltersPill onClick={handleResetFilters} />
-							</m.div>
-						) : null}
-					</AnimatePresence>
+						<AnimatePresence mode="popLayout">
+							{hasFilters && !adjustmentsOpen ? (
+								<m.div
+									key="clear"
+									layout
+									initial={{ opacity: 0, scale: 0.4 }}
+									animate={{ opacity: 1, scale: 1 }}
+									exit={{ opacity: 0, scale: 0.4 }}
+									transition={{
+										type: "spring",
+										visualDuration: 0.3,
+										bounce: 0.4,
+									}}
+								>
+									<ClearFiltersPill onClick={handleResetFilters} />
+								</m.div>
+							) : null}
+						</AnimatePresence>
+					</div>
 				</BottomRailItems>
 			</div>
 

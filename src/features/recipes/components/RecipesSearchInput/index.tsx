@@ -1,7 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import { type ComponentProps, useRef } from "react";
+import { type ComponentPropsWithoutRef, useRef } from "react";
 import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Kbd } from "@/ui/Kbd";
@@ -10,7 +10,7 @@ import styles from "./styles.module.css";
 export function RecipesSearchInput({
 	className,
 	...props
-}: ComponentProps<typeof Input>) {
+}: ComponentPropsWithoutRef<typeof Input>) {
 	const ref = useRef<HTMLInputElement>(null);
 
 	return (

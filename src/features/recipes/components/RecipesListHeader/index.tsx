@@ -1,10 +1,10 @@
 "use client";
 
+import { clsx } from "clsx";
 import type { ChangeEvent } from "react";
 import { RecipesSearchInput } from "@/features/recipes/components/RecipesSearchInput";
 import { Button, LinkButton } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -17,14 +17,16 @@ type Props = {
 };
 
 export function RecipesListHeader({
-	search,
-	onSearchChange,
+	className,
 	filtersOpen,
 	onOpenFilters,
-}: Props) {
+	onSearchChange,
+	search,
+	...props
+}: Props & GridProps) {
 	return (
-		<Grid gap={2}>
-			<Flex gap={4} alignItems="center">
+		<Grid gap={2} className={clsx(className, styles.root)} {...props}>
+			<div className={styles.row}>
 				<Button
 					icon
 					size="large"
@@ -33,12 +35,17 @@ export function RecipesListHeader({
 					aria-label="Filters"
 					aria-expanded={filtersOpen}
 					onClick={onOpenFilters}
+					className={styles.filters}
 				>
 					<Icon size={4} name="filter" />
 				</Button>
 
 				<div className={styles.box}>
-					<RecipesSearchInput value={search} onChange={onSearchChange} />
+					<RecipesSearchInput
+						value={search}
+						onChange={onSearchChange}
+						className={styles.search}
+					/>
 				</div>
 
 				<LinkButton
@@ -47,10 +54,11 @@ export function RecipesListHeader({
 					variant="clear"
 					color="light"
 					href="/bar/recipes/create"
+					className={styles.create}
 				>
 					<Icon size={4} name="plus" />
 				</LinkButton>
-			</Flex>
+			</div>
 
 			<Text as="div" size={1} compact align="center" fullWidth>
 				Filter by Recipe name or Ingredient.

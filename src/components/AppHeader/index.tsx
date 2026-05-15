@@ -1,8 +1,10 @@
 import { clsx } from "clsx";
 import { cacheLife } from "next/cache";
 import type { ComponentProps } from "react";
+import { OrganisationSwitcherLoader } from "@/features/organisation/components/OrganisationSwitcher/loader";
 import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 import { Flex } from "@/ui/Flex";
+import { Grid } from "@/ui/Grid";
 import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
 
@@ -16,10 +18,16 @@ export async function AppHeader({
 
 	return (
 		<header className={clsx(styles.header, className)} {...props}>
-			<Flex justifyContent="space-between" gap={4} className={styles.container}>
-				<div className={styles.logo}>
+			<Flex
+				justifyContent="space-between"
+				alignItems="flex-start"
+				gap={4}
+				className={styles.container}
+			>
+				<Grid gap={5}>
 					<Logo />
-				</div>
+					<OrganisationSwitcherLoader className={styles.switcher} />
+				</Grid>
 
 				<div className={styles.nav}>{children}</div>
 

@@ -1,6 +1,9 @@
 "use client";
 
-import { OrganizationSwitcher as ClerkOrganizationSwitcher } from "@clerk/nextjs";
+import {
+	OrganizationSwitcher as ClerkOrganizationSwitcher,
+	Show,
+} from "@clerk/nextjs";
 import { clsx } from "clsx";
 import { AuthProvider } from "@/components/AuthProvider";
 import { OrganisationLocaleSettings } from "@/features/organisation/components/OrganisationLocaleSettings";
@@ -11,27 +14,29 @@ import styles from "./styles.module.css";
 
 export function OrganisationSwitcher({ className }: { className?: string }) {
 	return (
-		<div className={clsx(className, styles.switcher)}>
-			<AuthProvider>
-				<ClerkOrganizationSwitcher hidePersonal>
-					<ClerkOrganizationSwitcher.OrganizationProfilePage
-						label="Locale & Currency"
-						url="settings"
-						labelIcon={<Icon name="gear" className={styles.icon} />}
-					>
-						<OrganisationLocaleSettings />
-					</ClerkOrganizationSwitcher.OrganizationProfilePage>
+		<Show when="signed-in">
+			<div className={clsx(className, styles.switcher)}>
+				<AuthProvider>
+					<ClerkOrganizationSwitcher hidePersonal>
+						<ClerkOrganizationSwitcher.OrganizationProfilePage
+							label="Locale & Currency"
+							url="settings"
+							labelIcon={<Icon name="gear" className={styles.icon} />}
+						>
+							<OrganisationLocaleSettings />
+						</ClerkOrganizationSwitcher.OrganizationProfilePage>
 
-					<ClerkOrganizationSwitcher.OrganizationProfilePage
-						label="Recipe tags"
-						url="tags"
-						labelIcon={<Icon name="tags" className={styles.icon} />}
-					>
-						<TagsSettings />
-					</ClerkOrganizationSwitcher.OrganizationProfilePage>
-				</ClerkOrganizationSwitcher>
-			</AuthProvider>
-		</div>
+						<ClerkOrganizationSwitcher.OrganizationProfilePage
+							label="Recipe tags"
+							url="tags"
+							labelIcon={<Icon name="tags" className={styles.icon} />}
+						>
+							<TagsSettings />
+						</ClerkOrganizationSwitcher.OrganizationProfilePage>
+					</ClerkOrganizationSwitcher>
+				</AuthProvider>
+			</div>
+		</Show>
 	);
 }
 

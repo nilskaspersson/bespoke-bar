@@ -14,12 +14,11 @@
 	}
 
 	.container {
-		padding-inline: var(--space-5);
-		padding-block: var(--space-5);
+		padding: var(--space-5);
 	}
 
-	.logo {
-		grid-area: logo;
+	.switcher {
+		margin: -8px;
 	}
 
 	.nav {
@@ -27,7 +26,6 @@
 	}
 
 	.auth {
-		grid-area: auth;
 		display: flex;
 		justify-content: flex-end;
 		flex-wrap: wrap-reverse;

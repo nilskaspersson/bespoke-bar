@@ -2,7 +2,6 @@
 
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
-import { OrganisationSwitcher } from "@/features/organisation/components/OrganisationSwitcher";
 import { Button } from "@/ui/Button";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
@@ -35,10 +34,7 @@ export function AuthButtons() {
 			</Show>
 
 			<Show when="signed-in">
-				<Flex gap={2}>
-					<OrganisationSwitcher />
-					<UserButton />
-				</Flex>
+				<UserButton />
 			</Show>
 		</Suspense>
 	);
@@ -47,7 +43,6 @@ export function AuthButtons() {
 export function AuthButtonsSkeleton() {
 	return (
 		<Flex gap={2}>
-			<Skeleton width="152px" height="28px" />
 			<Skeleton width="28px" height="28px" variant="circular" />
 		</Flex>
 	);

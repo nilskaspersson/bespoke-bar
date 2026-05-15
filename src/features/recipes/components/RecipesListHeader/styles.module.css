@@ -1,6 +1,27 @@
 @layer composition {
+	.root {
+		container-type: inline-size;
+	}
+
+	.row {
+		display: grid;
+		gap: var(--space-4);
+		grid-template-columns: auto 1fr auto;
+		grid-template-areas: "filters search create";
+		align-items: center;
+
+		@container (width < 450px) {
+			gap: var(--space-2);
+			grid-template-columns: 1fr auto auto;
+			grid-template-areas:
+				".      create filters"
+				"search search  search";
+			margin-top: calc((var(--space-7) + var(--space-2)) * -1);
+		}
+	}
+
 	.box {
-		flex: 1 1 auto;
+		grid-area: search;
 		border-radius: var(--radius--full);
 		padding: var(--space-2);
 		background-color: hsl(from var(--mauve-1) h s l / 0.5);
@@ -9,5 +30,19 @@
 		box-shadow:
 			1px 1px 0 hsl(from var(--mauve-1) h s l / 0.5),
 			var(--shadow--high);
+	}
+
+	.filters {
+		grid-area: filters;
+	}
+
+	.search {
+		@container (width < 450px) {
+			font-size: var(--size-5);
+		}
+	}
+
+	.create {
+		grid-area: create;
 	}
 }

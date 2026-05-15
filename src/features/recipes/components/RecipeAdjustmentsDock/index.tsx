@@ -58,14 +58,14 @@ export function RecipeAdjustmentsDock({ onOpenChange }: Props) {
 				color="heavy"
 				rounded
 				size="large"
-				aria-label="Quick adjust recipes"
+				aria-label="Quick Adjust"
 				className={clsx(styles.trigger, {
 					[styles.triggerHidden]: popover.isOpen,
 				})}
 			>
 				<Icon name="sliders-horizontal" size={2} />
 				<Text as="span" size={2} weight={600} compact>
-					Quick Adjust Recipes
+					Quick Adjust
 				</Text>
 				<Kbd shortcut="mod+e" variant="ghost" onTrigger={toggle} />
 			</Button>
@@ -76,7 +76,7 @@ export function RecipeAdjustmentsDock({ onOpenChange }: Props) {
 				position="top-overlap"
 				className={styles.panel}
 				role="dialog"
-				aria-label="Quick adjust recipes"
+				aria-label="Quick Adjust"
 			>
 				<Button
 					popoverTarget={popover.triggerProps.popoverTarget}
