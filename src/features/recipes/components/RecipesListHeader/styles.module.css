@@ -24,11 +24,11 @@
 		grid-area: search;
 		border-radius: var(--radius--full);
 		padding: var(--space-2);
-		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+		background-color: var(--glass--bg);
 		border-left: 1px solid var(--shine);
 		border-top: 1px solid var(--shine);
 		box-shadow:
-			1px 1px 0 hsl(from var(--mauve-1) h s l / 0.5),
+			1px 1px 0 var(--glass--bg),
 			var(--shadow--high);
 	}
 

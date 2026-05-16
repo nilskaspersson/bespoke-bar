@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { Suspense } from "react";
-import { PageHeader } from "@/components/PageHeader";
+import { BottomRailItems } from "@/components/BottomRail";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import {
 	IngredientTable,
@@ -17,24 +17,21 @@ import styles from "./page.module.css";
 export default function IngredientsPage() {
 	return (
 		<Container as="article" className={styles.container}>
-			<PageHeader
-				heading="Ingredients"
-				actions={
-					<LinkButton
-						href="/bar/ingredients/create"
-						variant="solid"
-						color="accent"
-						size="small"
-					>
-						Create Ingredient
-						<Icon name="duotone-wine-bottle" />
-					</LinkButton>
-				}
-			/>
-
 			<Suspense fallback={<IngredientTableSkeleton />}>
 				<IngredientsWithAuth />
 			</Suspense>
+
+			<BottomRailItems>
+				<LinkButton
+					href="/bar/ingredients/create"
+					variant="solid"
+					color="accent"
+					size="small"
+				>
+					Create Ingredient
+					<Icon name="duotone-wine-bottle" />
+				</LinkButton>
+			</BottomRailItems>
 		</Container>
 	);
 }

@@ -18,8 +18,6 @@ export function BottomRailHost({ children, left }: HostProps) {
 
 	return (
 		<SlotContext.Provider value={slot}>
-			{children}
-
 			<Grid
 				gap={2}
 				alignItems="end"
@@ -39,6 +37,8 @@ export function BottomRailHost({ children, left }: HostProps) {
 
 				<div className={styles.node} />
 			</Grid>
+
+			{children}
 		</SlotContext.Provider>
 	);
 }

@@ -36,7 +36,7 @@ export default async function LandingPage() {
 					</Grid>
 
 					<div className={styles.actions}>
-						<LinkButton href="/bar" variant="outline" color="heavy">
+						<LinkButton href="/bar/recipes" variant="outline" color="heavy">
 							To the bar <Icon name="arrow-right" size={4} />
 						</LinkButton>
 					</div>

@@ -167,10 +167,6 @@ function TagsSettingsForm({ tags }: { tags: Tag[] }) {
 				</Text>
 			) : (
 				<Grid gap={4}>
-					<Callout size={2} color="heavy">
-						Click on tags to rename them.
-					</Callout>
-
 					<Flex as="ul" wrap gap={1} aria-label="Recipe tags">
 						{visibleTags.map((tag) => {
 							const entry = draft.get(tag.id);
@@ -195,6 +191,10 @@ function TagsSettingsForm({ tags }: { tags: Tag[] }) {
 							);
 						})}
 					</Flex>
+
+					<Callout size={2} color="heavy" icon="circle-info" variant="inset">
+						Click on tags to rename them.
+					</Callout>
 				</Grid>
 			)}
 

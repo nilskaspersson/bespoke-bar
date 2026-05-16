@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
+import {
+	RECIPE_LIST_FORM_ID,
+	RecipeListForm,
+} from "@/features/lists/components/RecipeListForm";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { Container } from "@/ui/Container";
@@ -26,6 +30,18 @@ export default function CreateListPage() {
 			>
 				<CreateListWithAuth />
 			</Suspense>
+
+			<BottomRailItems>
+				<SubmitButton
+					variant="solid"
+					color="accent"
+					form={RECIPE_LIST_FORM_ID}
+					rounded
+				>
+					<Icon name="plus" />
+					Create List
+				</SubmitButton>
+			</BottomRailItems>
 		</Container>
 	);
 }
@@ -39,14 +55,7 @@ async function CreateListWithAuth() {
 
 	const recipes = stitchRecipes(rawRecipes, { ingredients });
 
-	return (
-		<RecipeListForm recipes={recipes}>
-			<SubmitButton variant="solid" color="accent">
-				<Icon name="plus" />
-				Create List
-			</SubmitButton>
-		</RecipeListForm>
-	);
+	return <RecipeListForm recipes={recipes} />;
 }
 
 export const metadata: Metadata = {

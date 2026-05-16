@@ -14,8 +14,8 @@
 
 		@media (max-width: 40em) {
 			&:not(.keepAnchored) {
-				background-color: hsl(from var(--mauve-1) h s l / 0.5);
-				backdrop-filter: blur(4px);
+				background-color: var(--glass--bg);
+				backdrop-filter: var(--glass--blur);
 				transition-property:
 					display, overlay, background-color, backdrop-filter;
 

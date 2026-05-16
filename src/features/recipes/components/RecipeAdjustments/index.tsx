@@ -174,7 +174,7 @@ export function RecipeAdjustmentsControls(props: GridProps) {
 				onChange={setConversionSystem}
 			/>
 
-			<Grid gap={2}>
+			<Grid gap={2} justifyContent="start" justifyItems="start">
 				<WithPersistenceInfo
 					persistent="session"
 					persistence={roundingPersistence}

@@ -19,6 +19,7 @@ import {
 } from "@/features/recipes/utils/filterRecipes";
 import { useDialog } from "@/hooks/useDialog";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
+import { useShortcut } from "@/hooks/useShortcut";
 import { trpc } from "@/trpc/client";
 import { Button, type ButtonProps, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
@@ -41,26 +42,24 @@ export function SearchRecipesButton({
 }: ButtonProps) {
 	const { dialogRef, isOpen, showModal, closeModal } = useDialog();
 
-	function toggleDialog() {
+	const toggleDialog = useCallback(() => {
 		if (dialogRef.current?.open) {
 			closeModal();
 		} else {
 			showModal();
 		}
-	}
+	}, [dialogRef, closeModal, showModal]);
 
 	function handleClick(event: React.MouseEvent<HTMLButtonElement>) {
 		onClick?.(event);
 		showModal();
 	}
 
+	useShortcut("mod+k", toggleDialog);
+
 	return (
 		<>
-			<Button
-				{...props}
-				onClick={handleClick}
-				endAdornment={<Kbd shortcut="mod+k" onTrigger={toggleDialog} />}
-			>
+			<Button {...props} onClick={handleClick}>
 				{children}
 			</Button>
 
@@ -138,6 +137,10 @@ export function SearchRecipesForm({
 	return (
 		<>
 			<LightboxDialog.Header>
+				<Heading level="h3" className={styles.heading}>
+					Quick search <Kbd shortcut="mod+k" visual />
+				</Heading>
+
 				<Grid gap={2}>
 					<Input
 						type="search"
@@ -191,7 +194,7 @@ export function SearchRecipesForm({
 					<RecipesList.Skeleton className={styles.list} />
 				) : filteredRecipes.length === 0 ? (
 					<EmptyArea className={styles.empty} color="light">
-						<Heading level="h3" size={4}>
+						<Heading level="h4" size={4}>
 							No matching recipes
 						</Heading>
 

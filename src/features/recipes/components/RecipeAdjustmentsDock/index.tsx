@@ -55,7 +55,7 @@ export function RecipeAdjustmentsDock({ onOpenChange }: Props) {
 			<Button
 				{...popover.triggerProps}
 				variant="clear"
-				color="heavy"
+				color="light"
 				rounded
 				aria-label="Quick Adjust"
 				className={clsx(styles.trigger, {

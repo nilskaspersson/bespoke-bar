@@ -18,11 +18,11 @@
 
 	.header {
 		padding-bottom: var(--gap--tiny);
-		border-bottom: 1px solid var(--mauve-6);
+		border-bottom: 1px solid var(--glass--border-color);
 	}
 
 	.footer {
 		padding-top: var(--gap--tiny);
-		border-top: 1px solid var(--mauve-6);
+		border-top: 1px solid var(--glass--border-color);
 	}
 }

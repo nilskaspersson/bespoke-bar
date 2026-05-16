@@ -1,0 +1,26 @@
+@layer composition {
+	.toggle {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.popoverHost {
+		--slide-y: 0;
+
+		inset: auto auto calc(anchor(bottom) - var(--space-2))
+			calc(anchor(left) - var(--space-2));
+
+		padding: 0;
+		background: transparent;
+		border: none;
+		box-shadow: none;
+	}
+
+	.morph {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--size-3);
+		height: var(--size-3);
+	}
+}

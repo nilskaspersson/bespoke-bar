@@ -1,6 +1,6 @@
 "use client";
 
-import type { ChangeEventHandler } from "react";
+import { type ChangeEventHandler, useId } from "react";
 import { ThemeSchema } from "@/app/_theme/constants";
 import { useTheme } from "@/hooks/useTheme";
 import type { IconName } from "@/libs/icons/types";
@@ -29,6 +29,7 @@ const THEME_OPTIONS = ThemeSchema.options
 
 export function ThemePicker() {
 	const { setTheme, theme } = useTheme();
+	const name = useId();
 
 	const handleThemeChange: ChangeEventHandler<HTMLInputElement> = (event) => {
 		const parsed = ThemeSchema.safeParse(event.target.value);
@@ -37,7 +38,7 @@ export function ThemePicker() {
 
 	return (
 		<OptionsSwitch
-			name="theme"
+			name={name}
 			options={THEME_OPTIONS}
 			legend="Choose theme"
 			value={theme}

@@ -17,10 +17,6 @@
 		padding: var(--space-5);
 	}
 
-	.switcher {
-		margin: -8px;
-	}
-
 	.nav {
 		grid-area: nav;
 	}

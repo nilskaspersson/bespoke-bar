@@ -1,14 +1,11 @@
 "use client";
 
 import { clsx } from "clsx";
-import { type ComponentProps, useCallback, useEffect, useRef } from "react";
+import { type ComponentProps, useCallback, useRef } from "react";
+import { useShortcut } from "@/hooks/useShortcut";
 import { usePlatform } from "@/stores/platform";
 import { animateChildren, keyframes } from "@/utils/animate";
-import {
-	isTextInputElement,
-	matchesShortcut,
-	parseShortcut,
-} from "@/utils/keyboard";
+import { parseShortcut } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -31,54 +28,21 @@ export function Kbd({
 	const platform = usePlatform((s) => s.platform);
 	const kbdRef = useRef<HTMLElement>(null);
 
-	const handleKeyDown = useCallback(
-		(event: KeyboardEvent) => {
-			if (
-				event.repeat ||
-				(ignoreInputEvents && isTextInputElement(event.target)) ||
-				!matchesShortcut(event, shortcut, platform) ||
-				visual
-			) {
-				return;
-			}
+	const handleTrigger = useCallback(() => {
+		animateChildren(kbdRef.current, keyframes.get("pulse"));
 
-			/**
-			 * Scope shortcuts to the nearest dialog boundary. If the Kbd lives inside a
-			 * dialog, only fire when the event target is also inside that same dialog.
-			 */
-			const scope = kbdRef.current?.closest("dialog");
-
-			if (scope && !scope.contains(event.target as Node)) {
-				return;
-			}
-
-			event.preventDefault();
-			event.stopPropagation();
-
-			animateChildren(kbdRef.current, keyframes.get("pulse"));
-
-			if (typeof onTrigger === "function") {
-				onTrigger();
-			} else {
-				kbdRef.current?.closest<HTMLElement>("button, a[href]")?.click();
-			}
-		},
-		[ignoreInputEvents, onTrigger, platform, shortcut, visual],
-	);
-
-	useEffect(() => {
-		if (!platform || visual) {
-			return;
+		if (typeof onTrigger === "function") {
+			onTrigger();
+		} else {
+			kbdRef.current?.closest<HTMLElement>("button, a[href]")?.click();
 		}
+	}, [onTrigger]);
 
-		const controller = new AbortController();
-
-		window.addEventListener("keydown", handleKeyDown, {
-			signal: controller.signal,
-		});
-
-		return () => controller.abort();
-	}, [handleKeyDown, platform, visual]);
+	useShortcut(shortcut, handleTrigger, {
+		ignoreInputEvents,
+		scopeRef: kbdRef,
+		enabled: !visual,
+	});
 
 	if (!platform) {
 		return null;

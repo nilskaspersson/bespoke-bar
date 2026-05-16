@@ -3,6 +3,7 @@
 		position: sticky;
 		bottom: max(env(safe-area-inset-bottom), var(--gap));
 		z-index: var(--z-navigation);
+		grid-row: 2;
 		grid-template-columns: 1fr auto 1fr;
 		pointer-events: none;
 		margin-inline: calc(var(--app-inset) * -0.5);

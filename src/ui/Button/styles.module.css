@@ -247,10 +247,10 @@
 	}
 
 	.clear {
-		background-color: hsl(from var(--button-color) h s l / 0.2);
+		background-color: hsl(from var(--button-color) h s l / 0.3);
 		color: var(--button-color-text, var(--button-color));
-		backdrop-filter: blur(var(--space-1));
-		border: 1px solid hsl(from var(--button-color) h s l / 0.1);
+		backdrop-filter: var(--glass--blur);
+		border: 1px solid hsl(from var(--button-color) h s l / 0.2);
 		box-shadow: var(--shadow--high);
 
 		&:not([aria-disabled="true"]) {
@@ -258,6 +258,15 @@
 			&:focus-visible {
 				background-color: hsl(from var(--button-color) h s l / 0.25);
 			}
+		}
+
+		/**
+		 * Nested backdrop-filter elements flicker against a translucent dialog's
+		 * own filter on repaint. Drop the blur on clear buttons while any dialog
+		 * is open so the surface above can sample cleanly.
+		 */
+		:root:has(dialog[open]) & {
+			backdrop-filter: none;
 		}
 	}
 

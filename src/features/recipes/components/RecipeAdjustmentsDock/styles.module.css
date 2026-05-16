@@ -44,10 +44,10 @@
 		display: grid;
 		gap: var(--space-4);
 
-		background-color: hsl(from var(--mauve-12) h s l / 0.2);
-		color: var(--mauve-12);
-		backdrop-filter: blur(var(--space-2));
-		border: 1px solid hsl(from var(--mauve-12) h s l / 0.1);
+		color: var(--glass--text);
+		background-color: var(--glass--bg);
+		backdrop-filter: var(--glass--blur);
+		border: 1px solid var(--glass--border-color);
 		border-radius: var(--space-6);
 		box-shadow: var(--shadow--high);
 	}
