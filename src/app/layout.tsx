@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { type PropsWithChildren, Suspense } from "react";
 import { AppFooter } from "@/components/AppFooter";
+import { AppHeader } from "@/components/AppHeader";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ScrollFix } from "@/components/ScrollFix";
 import { ThemeProvider } from "@/hooks/useTheme";
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 					<div className={styles.layout} id="root">
 						<Suspense>
 							<AuthProvider>
+								<AppHeader />
 								<main className={styles.main}>{children}</main>
 							</AuthProvider>
 						</Suspense>

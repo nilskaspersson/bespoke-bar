@@ -1,31 +1,45 @@
 @layer layout {
 	.body {
 		display: grid;
-
-		background-size: 100% 100lvh;
-		background-repeat: no-repeat;
 		background-color: var(--mauve-3);
-		background-image:
-			radial-gradient(
-				ellipse 120% 80% at 70% 20%,
-				var(--iris-2),
-				transparent 50%
-			),
-			radial-gradient(
-				ellipse 100% 60% at 30% 10%,
-				var(--red-2),
-				transparent 60%
-			),
-			radial-gradient(
-				ellipse 90% 70% at 50% 0%,
-				var(--amber-3),
-				transparent 65%
-			),
-			radial-gradient(
-				ellipse 110% 50% at 80% 30%,
-				var(--grass-3),
-				transparent 40%
+		isolation: isolate;
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0 0 auto;
+			height: 900px;
+			pointer-events: none;
+			z-index: -1;
+			filter: blur(50px);
+			mask-image: linear-gradient(
+				to bottom,
+				black 0%,
+				black 40%,
+				transparent 100%
 			);
+			background-image:
+				radial-gradient(
+					ellipse 70% 55% at 50% 10%,
+					hsl(from var(--iris-9) h s l / 0.55),
+					transparent 65%
+				),
+				radial-gradient(
+					ellipse 45% 40% at 25% 5%,
+					hsl(from var(--red-9) h s l / 0.32),
+					transparent 60%
+				),
+				radial-gradient(
+					ellipse 45% 40% at 75% 8%,
+					hsl(from var(--amber-9) h s l / 0.28),
+					transparent 60%
+				),
+				radial-gradient(
+					ellipse 50% 35% at 50% 25%,
+					hsl(from var(--grass-9) h s l / 0.18),
+					transparent 70%
+				);
+		}
 	}
 
 	.layout {

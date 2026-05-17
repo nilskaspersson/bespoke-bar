@@ -17,6 +17,7 @@ export function RecipesSearchInput({
 		<Input
 			type="text"
 			placeholder="Find your Recipes…"
+			autoComplete="off"
 			startAdornment={<Icon name="magnifying-glass" size={4} />}
 			endAdornment={
 				<Kbd shortcut="mod+f" onTrigger={() => ref.current?.focus()} />

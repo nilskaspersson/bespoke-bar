@@ -1,34 +1,35 @@
+import type { Metadata } from "next";
+import { PageHeader } from "@/components/PageHeader";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { LinkButton } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
-import { Text } from "@/ui/Text";
+import { Icon } from "@/ui/Icon";
 import styles from "./page.module.css";
 
 export default function CreateRecipePage() {
 	return (
-		<section className={styles.intro}>
-			<Grid
-				justifyContent="center"
-				alignContent="center"
-				justifyItems="center"
-				gap={3}
-				className={styles.content}
+		<>
+			<PageHeader
+				overline="Recipes"
+				icon="duotone-martini-glass"
+				heading="Create a Recipe"
+				tagline="Choose a method for creating your next cocktail."
 			>
-				<Text as="p" align="center">
-					Choose a method to create your Recipe.
-				</Text>
-
 				<LinkButton
 					href="/bar/recipes"
-					size="small"
-					variant="ghost"
+					variant="outline"
 					color="accent"
+					rounded
 				>
-					View all Recipes
+					<Icon name="arrow-left" />
+					All Recipes
 				</LinkButton>
-			</Grid>
+			</PageHeader>
 
-			<CreateRecipeNav />
-		</section>
+			<CreateRecipeNav className={styles.nav} />
+		</>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Create a Recipe",
+};

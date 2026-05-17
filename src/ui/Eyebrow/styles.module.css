@@ -1,0 +1,31 @@
+@layer ui {
+	.eyebrow {
+		display: inline-flex;
+		flex-direction: column;
+		align-items: center;
+		gap: var(--space-0);
+		color: var(--iris-11);
+		position: relative;
+		margin-bottom: var(--space-4);
+
+		&::before {
+			content: "";
+			position: absolute;
+			bottom: calc(100% + var(--space-3));
+			left: 50%;
+			width: 1px;
+			height: var(--space-7);
+			transform: translateX(-50%);
+			background-image: linear-gradient(
+				to bottom,
+				transparent,
+				hsl(from var(--iris-11) h s l / 0.5)
+			);
+		}
+	}
+
+	.label {
+		font-variant: all-small-caps;
+		letter-spacing: 0.1em;
+	}
+}

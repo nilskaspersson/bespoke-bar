@@ -18,6 +18,7 @@ export const ICONS = {
 	"arrow-down-long": { kit: "lucide", name: "arrow-down" },
 	"arrow-down-to-arc": { local: true },
 	"arrow-down-to-dotted-line": { local: true },
+	"arrow-left": { kit: "lucide", name: "arrow-left" },
 	"arrow-right": { kit: "lucide", name: "arrow-right" },
 	"arrow-rotate-left": { kit: "lucide", name: "rotate-ccw" },
 	"circle-check": { kit: "lucide", name: "circle-check" },

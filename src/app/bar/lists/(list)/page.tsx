@@ -18,20 +18,17 @@ import styles from "./page.module.css";
 export default function ListsPage() {
 	return (
 		<Container as="article" className={styles.container}>
-			<PageHeader
-				heading="Lists"
-				actions={
-					<LinkButton
-						href="/bar/lists/create"
-						variant="solid"
-						color="accent"
-						size="small"
-					>
-						Create List
-						<Icon name="duotone-memo-pad" />
-					</LinkButton>
-				}
-			/>
+			<PageHeader heading="Lists">
+				<LinkButton
+					href="/bar/lists/create"
+					variant="solid"
+					color="accent"
+					size="small"
+				>
+					Create List
+					<Icon name="duotone-memo-pad" />
+				</LinkButton>
+			</PageHeader>
 
 			<ListsPageContent>
 				<Suspense fallback={<RecipeListTable.Skeleton />}>

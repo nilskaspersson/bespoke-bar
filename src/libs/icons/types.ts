@@ -8,6 +8,7 @@ export type IconName =
 	| "arrow-down-long"
 	| "arrow-down-to-arc"
 	| "arrow-down-to-dotted-line"
+	| "arrow-left"
 	| "arrow-right"
 	| "arrow-rotate-left"
 	| "bars"

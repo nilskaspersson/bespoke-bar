@@ -1,46 +1,48 @@
 @layer composition {
-	.heroSlot {
+	.statsSlot {
 		display: grid;
-		gap: var(--space-3);
-		justify-items: center;
-		max-width: 44rem;
-		margin-inline: auto;
-		width: 100%;
+		gap: var(--space-2);
 	}
 
-	.search {
-		border-radius: 999px;
+	.statsRow {
+		display: flex;
+		justify-content: flex-end;
+		align-items: flex-end;
+		gap: var(--space-5);
+	}
+
+	.statTile {
+		display: grid;
+		gap: var(--space-1);
+		justify-items: end;
+	}
+
+	.distBar {
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		height: 10px;
+	}
+
+	.distSeg {
+		flex: var(--jsxFlexGrow) 0 var(--space-1);
+		height: 100%;
+		background-color: var(--mauve-6);
+
+		&:first-child {
+			border-top-left-radius: var(--radius--full);
+			border-bottom-left-radius: var(--radius--full);
+		}
+
+		&:last-child {
+			border-top-right-radius: var(--radius--full);
+			border-bottom-right-radius: var(--radius--full);
+		}
 	}
 
 	.chips {
 		display: flex;
 		flex-wrap: wrap;
-		gap: var(--space-1);
-		justify-content: center;
-	}
-
-	.statsSlot {
-		display: grid;
-		gap: var(--space-2);
-		max-width: 40rem;
-		margin-inline: auto;
-		margin-top: var(--space-5);
-		width: 100%;
-	}
-
-	.statsRow {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-end;
-		min-height: var(--space-7);
-	}
-
-	.statsTiles {
-		display: flex;
-		gap: var(--space-5);
-	}
-
-	.dock {
-		border-radius: 999px;
+		gap: var(--space-0);
 	}
 }

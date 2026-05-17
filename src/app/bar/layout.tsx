@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { AppHeader } from "@/components/AppHeader";
 import { AppNavToggle } from "@/components/AppNavToggle";
 import { BottomRailHost } from "@/components/BottomRail";
 import { OrgProvider } from "@/components/OrgProvider";
@@ -16,8 +15,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 	return (
 		<Providers>
 			<OrgProvider>
-				<AppHeader />
-
 				<div className={styles.container}>
 					<BottomRailHost
 						left={

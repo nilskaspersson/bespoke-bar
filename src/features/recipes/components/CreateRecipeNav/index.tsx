@@ -23,7 +23,6 @@ type CardSpec = {
 
 export function CreateRecipeNav({
 	children,
-	className,
 	onBoarding,
 	...props
 }: GridProps & { onBoarding?: boolean }) {
