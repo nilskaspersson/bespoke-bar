@@ -36,7 +36,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
 		);
 
 	return (
-		<ClerkProvider appearance={appearance} localization={localization}>
+		<ClerkProvider
+			appearance={appearance}
+			localization={localization}
+			signInFallbackRedirectUrl="/bar/recipes"
+			signUpFallbackRedirectUrl="/bar/recipes"
+		>
 			{children}
 		</ClerkProvider>
 	);
