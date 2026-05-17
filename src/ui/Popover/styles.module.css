@@ -14,8 +14,8 @@
 
 		@media (max-width: 40em) {
 			&:not(.keepAnchored) {
-				background-color: hsl(from var(--mauve-1) h s l / 0.5);
-				backdrop-filter: blur(4px);
+				background-color: var(--glass--bg);
+				backdrop-filter: var(--glass--blur);
 				transition-property:
 					display, overlay, background-color, backdrop-filter;
 
@@ -64,6 +64,12 @@
 			--slide-y: var(--offset);
 		}
 
+		&.bottom {
+			--area: bottom;
+			--fallback: flip-block;
+			--slide-y: calc(var(--offset) * -1);
+		}
+
 		&.top-right {
 			--area: top right;
 			--fallback: flip-block, flip-inline, flip-block flip-inline;
@@ -80,6 +86,16 @@
 			inset: auto anchor(right) anchor(top) auto;
 		}
 
+		/** Outer-edge inset — popover sits above the anchor, left edges aligned. */
+		&.top-start {
+			--area: none;
+			--fallback: flip-block;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto auto anchor(top) anchor(left);
+		}
+
 		&.right {
 			--area: right;
 			--fallback: flip-inline;
@@ -94,6 +110,36 @@
 
 			position-try-order: normal;
 			inset: anchor(bottom) auto auto anchor(left);
+		}
+
+		/**
+		 * Popover bottom-left aligns with anchor's bottom-left; popover extends
+		 * upward and rightward, overlapping the anchor. Use when the trigger
+		 * should appear to morph into the panel from its own position.
+		 */
+		&.top-overlap-start {
+			--area: none;
+			--fallback: flip-block;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto auto anchor(bottom) anchor(left);
+		}
+
+		/**
+		 * Popover bottom-edge aligns with anchor's bottom edge; popover extends
+		 * upward and overlaps the anchor. Use for surfaces that want to envelop
+		 * a sticky/floating trigger (e.g. a bottom-of-screen dock that expands
+		 * into a panel containing its own trigger).
+		 */
+		&.top-overlap {
+			--area: none;
+			--fallback: flip-block;
+			--slide-y: var(--offset);
+
+			position-try-order: normal;
+			inset: auto auto anchor(bottom) anchor(center);
+			translate: -50% 0;
 		}
 
 		@media (max-width: 40em) {

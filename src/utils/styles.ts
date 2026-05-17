@@ -29,18 +29,18 @@ export function toCSSVars(
 		return undefined;
 	}
 
-	return Object.keys(props).reduce(
-		(acc, key) => {
-			const value = props[key];
+	let result: Record<string, string | number> | undefined;
 
-			if (typeof value !== "undefined") {
-				acc[`--${key}`] = value;
-			}
+	for (const key of Object.keys(props)) {
+		const value = props[key];
 
-			return acc;
-		},
-		{} as Record<string, string | number>,
-	);
+		if (value !== undefined) {
+			result ??= {};
+			result[`--${key}`] = value;
+		}
+	}
+
+	return result;
 }
 
 export function mergeStyleSources(

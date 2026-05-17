@@ -9,6 +9,7 @@
 		aspect-ratio: 1 / 1;
 		color: var(--icon-color);
 		fill: var(--icon-color);
+		flex: 0 0 auto;
 		vertical-align: middle;
 		transition-property: color, fill;
 		transition-duration: var(--transition-duration);

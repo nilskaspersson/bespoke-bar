@@ -65,11 +65,8 @@
 			}
 		}
 
-		&:where(:not(.base)) {
-			font-size: var(--button-font-size);
-		}
-
 		&:where(:not(.base, .text)) {
+			font-size: var(--button-font-size);
 			padding-inline: var(--button-inset);
 			height: var(--button-height);
 			border-radius: var(--radius--large);
@@ -100,9 +97,12 @@
 	 */
 	.regular {
 		--button-color: var(--mauve-11);
+		--button-color-text: var(--mauve-12);
 	}
 
 	.light {
+		--button-color-text: var(--mauve-12);
+
 		[data-theme="dark"] & {
 			--text-lightness: 80%;
 			--button-color: var(--mauve-7);
@@ -126,18 +126,22 @@
 
 	.heavy {
 		--button-color: var(--mauve-12);
+		--button-color-text: var(--mauve-12);
 	}
 
 	.red {
 		--button-color: var(--red-11);
+		--button-color-text: var(--red-12);
 	}
 
 	.accent {
 		--button-color: var(--iris-11);
+		--button-color-text: var(--iris-12);
 	}
 
 	.amber {
 		--button-color: var(--amber-10);
+		--button-color-text: var(--amber-12);
 	}
 
 	/**
@@ -238,6 +242,41 @@
 			&:focus-visible {
 				background-color: hsl(from var(--button-color) h s 90%);
 				color: hsl(from var(--button-color) h s 20%);
+			}
+		}
+	}
+
+	.clear {
+		background-color: hsl(from var(--button-color) h s l / 0.3);
+		color: var(--button-color-text, var(--button-color));
+		backdrop-filter: var(--glass--blur);
+		border: 1px solid hsl(from var(--button-color) h s l / 0.2);
+		box-shadow: var(--shadow--high);
+
+		&:not([aria-disabled="true"]) {
+			&:hover,
+			&:focus-visible {
+				background-color: hsl(from var(--button-color) h s l / 0.25);
+			}
+		}
+
+		/**
+		 * Nested backdrop-filter elements flicker against a translucent dialog's
+		 * own filter on repaint. Drop the blur on clear buttons while any dialog
+		 * is open so the surface above can sample cleanly.
+		 */
+		:root:has(dialog[open]) & {
+			backdrop-filter: none;
+		}
+	}
+
+	.clear.light {
+		background-color: hsl(from var(--mauve-1) h s l / 0.5);
+
+		&:not([aria-disabled="true"]) {
+			&:hover,
+			&:focus-visible {
+				background-color: hsl(from var(--mauve-1) h s l / 0.78);
 			}
 		}
 	}

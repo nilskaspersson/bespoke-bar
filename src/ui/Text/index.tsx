@@ -4,7 +4,7 @@ import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { FontWeight, PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-export type TextProps<E extends ElementType> = {
+export type TextProps<E extends ElementType = "span"> = PolymorphicProps<E> & {
 	align?: "center" | "left" | "right";
 	as?: E;
 	balance?: boolean;
@@ -41,7 +41,7 @@ export function Text<E extends ElementType = "span">({
 	numeric,
 	weight,
 	...props
-}: PolymorphicProps<E> & TextProps<E>) {
+}: TextProps<E>) {
 	return createElement(
 		as,
 		{

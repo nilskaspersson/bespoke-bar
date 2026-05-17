@@ -124,12 +124,20 @@
 	--radius--large: calc(var(--radius) * 2);
 	--radius--huge: calc(var(--radius) * 4);
 	--radius--full: 9999px;
-	--shine: oklch(100% 0 0 / 0.075);
+	--shine: oklch(100% 0 0 / 0.1);
+
+	/**
+	 * Frosted "glass" surface — translucent panels that sit above content.
+	 * Apply as a stack: color + background + backdrop-filter + border.
+	 */
+	--glass--text: var(--mauve-12);
+	--glass--bg: hsl(from var(--mauve-1) h s l / 0.3);
+	--glass--blur: blur(var(--space-3));
+	--glass--border-color: hsl(from var(--mauve-12) h s l / 0.1);
 
 	--container: 90ch;
 
-	--app-header--height: 73px;
-	--app-sidebar--width: 250px;
+	--app-header--height: 80px;
 
 	--recipe-card-ratio: calc(16 / 9);
 	--recipe-card-width: 400px;

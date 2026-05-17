@@ -4,8 +4,8 @@ import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
 import { Button } from "@/ui/Button";
 import { Chip } from "@/ui/Chip";
+import { Flex } from "@/ui/Flex";
 import { Skeleton } from "@/ui/Skeleton";
-
 import styles from "./styles.module.css";
 
 export function AuthButtons() {
@@ -42,9 +42,8 @@ export function AuthButtons() {
 
 export function AuthButtonsSkeleton() {
 	return (
-		<>
-			<Skeleton width="56px" height="28px" />
-			<Skeleton width="64px" height="28px" />
-		</>
+		<Flex gap={2}>
+			<Skeleton width="28px" height="28px" variant="circular" />
+		</Flex>
 	);
 }

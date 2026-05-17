@@ -1,8 +1,12 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedRecipeList } from "@/features/lists/api/readRecipeList";
-import { RecipeListForm } from "@/features/lists/components/RecipeListForm";
+import {
+	RECIPE_LIST_FORM_ID,
+	RecipeListForm,
+} from "@/features/lists/components/RecipeListForm";
 import { getRecipeListUrl } from "@/features/lists/utils";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
@@ -40,6 +44,18 @@ export default function EditRecipeListPage({ params: paramsPromise }: Props) {
 					<EditRecipeListWithAuth paramsPromise={paramsPromise} />
 				</Suspense>
 			</Grid>
+
+			<BottomRailItems>
+				<SubmitButton
+					variant="solid"
+					color="accent"
+					form={RECIPE_LIST_FORM_ID}
+					rounded
+				>
+					<Icon name="pen" />
+					Save changes
+				</SubmitButton>
+			</BottomRailItems>
 		</Container>
 	);
 }
@@ -87,12 +103,7 @@ async function EditRecipeListWithAuth({
 				</LinkButton>
 			</nav>
 
-			<RecipeListForm recipeList={recipeList} recipes={recipes}>
-				<SubmitButton variant="solid" color="accent">
-					<Icon name="pen" />
-					Save changes
-				</SubmitButton>
-			</RecipeListForm>
+			<RecipeListForm recipeList={recipeList} recipes={recipes} />
 		</>
 	);
 }

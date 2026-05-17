@@ -8,7 +8,7 @@ export default async function CreateOrgPage() {
 	const { orgId } = await auth.protect();
 
 	if (orgId) {
-		redirect("/bar");
+		redirect("/bar/recipes");
 	}
 
 	return (
@@ -17,7 +17,7 @@ export default async function CreateOrgPage() {
 
 			<CreateOrganization
 				skipInvitationScreen
-				afterCreateOrganizationUrl="/bar"
+				afterCreateOrganizationUrl="/bar/recipes"
 			/>
 		</section>
 	);

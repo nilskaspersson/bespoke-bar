@@ -3,6 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { clsx } from "clsx";
 import { type ComponentPropsWithRef, useRef } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import { EmptyArea } from "@/components/EmptyArea";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
@@ -61,51 +62,54 @@ export function TableLayout<T extends Record<PropertyKey, unknown>>({
 				)}
 			</Grid>
 
-			<aside className={styles.sticky}>
-				{hasActiveFilter ? (
-					<div className={styles.statusContainer}>
-						<Text as="div" size={0} compact className={styles.status} heavy>
-							{table.getRowCount()} {table.getRowCount() === 1 ? "row" : "rows"}{" "}
-							matching "{table.getState().globalFilter}"
-						</Text>
-					</div>
-				) : null}
+			<BottomRailItems>
+				<div className={styles.dock}>
+					{hasActiveFilter ? (
+						<div className={styles.statusContainer}>
+							<Text as="div" size={0} compact className={styles.status} heavy>
+								{table.getRowCount()}{" "}
+								{table.getRowCount() === 1 ? "row" : "rows"} matching "
+								{table.getState().globalFilter}"
+							</Text>
+						</div>
+					) : null}
 
-				{!disableSearch ? (
-					<Lightbox rounded className={styles.search} theme="light">
-						<form
-							ref={formRef}
-							onSubmit={(e) => {
-								e.preventDefault();
-								baseRef.current?.scrollIntoView({
-									behavior: "smooth",
-									block: "start",
-								});
-							}}
-						>
-							<Input
-								type="search"
-								rounded
-								placeholder={searchPlaceholder ?? "Search…"}
-								onChange={(e) =>
-									table.setGlobalFilter(normalizeInput(e.target.value))
-								}
-							/>
+					{!disableSearch ? (
+						<Lightbox rounded className={styles.search} theme="light">
+							<form
+								ref={formRef}
+								onSubmit={(e) => {
+									e.preventDefault();
+									baseRef.current?.scrollIntoView({
+										behavior: "smooth",
+										block: "start",
+									});
+								}}
+							>
+								<Input
+									type="search"
+									rounded
+									placeholder={searchPlaceholder ?? "Search…"}
+									onChange={(e) =>
+										table.setGlobalFilter(normalizeInput(e.target.value))
+									}
+								/>
 
-							{hasActiveFilter ? (
-								<Button
-									variant="base"
-									icon
-									className={styles.clear}
-									onClick={clearSearch}
-								>
-									<Icon name="xmark" />
-								</Button>
-							) : null}
-						</form>
-					</Lightbox>
-				) : null}
-			</aside>
+								{hasActiveFilter ? (
+									<Button
+										variant="base"
+										icon
+										className={styles.clear}
+										onClick={clearSearch}
+									>
+										<Icon name="xmark" />
+									</Button>
+								) : null}
+							</form>
+						</Lightbox>
+					) : null}
+				</div>
+			</BottomRailItems>
 		</section>
 	);
 }

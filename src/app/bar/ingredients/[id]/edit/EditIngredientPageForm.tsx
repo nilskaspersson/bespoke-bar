@@ -5,6 +5,7 @@ import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { updateIngredientFormSchema } from "@/db/schema/ingredients";
 import { updateIngredientAction } from "@/features/ingredients/api/updateIngredient";
@@ -163,15 +164,15 @@ export function EditIngredientPageForm({ ingredient, redirectTo }: Props) {
 					/>
 
 					<FormErrors formRef={formRef} />
-
-					<div>
-						<SubmitButton variant="solid" color="accent">
-							<Icon name="circle-check" />
-							Save changes
-						</SubmitButton>
-					</div>
 				</Grid>
 			</form>
+
+			<BottomRailItems>
+				<SubmitButton variant="solid" color="accent" form={form.id} rounded>
+					<Icon name="circle-check" />
+					Save changes
+				</SubmitButton>
+			</BottomRailItems>
 		</FormProvider>
 	);
 }

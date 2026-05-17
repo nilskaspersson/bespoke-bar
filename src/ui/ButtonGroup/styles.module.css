@@ -1,5 +1,8 @@
 @layer ui {
 	.group {
+		display: grid;
+		grid-auto-flow: column;
+
 		> :where(button, a) + :where(button, a) {
 			margin-left: -1px;
 		}
@@ -17,5 +20,9 @@
 			border-top-left-radius: 0;
 			border-bottom-left-radius: 0;
 		}
+	}
+
+	.equalWidth {
+		grid-auto-columns: 1fr;
 	}
 }

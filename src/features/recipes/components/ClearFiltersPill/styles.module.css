@@ -1,0 +1,7 @@
+@layer feature {
+	.pill {
+		box-shadow: var(--shadow--high);
+		transition-property: background-color, color, opacity, transform;
+		transition-duration: var(--transition-duration);
+	}
+}

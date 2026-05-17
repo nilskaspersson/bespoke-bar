@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	boolean,
 	index,
@@ -38,8 +38,12 @@ export const RecipeListsTable = pgTable(
 	},
 	(table) => [
 		uniqueIndex("unique_list_name_case_insensitive").on(
-			sqlNormalizedString(table.name),
 			table.orgId,
+			sqlNormalizedString(table.name),
+		),
+		index("idx_lists_org_activity").on(
+			table.orgId,
+			sql`COALESCE(${table.updatedAt}, ${table.createdAt}) DESC`,
 		),
 		index("idx_lists_featured_org").on(table.orgId, table.isFeatured),
 		index("idx_lists_org_public").on(table.orgId, table.isPublic),

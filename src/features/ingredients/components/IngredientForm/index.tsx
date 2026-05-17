@@ -5,8 +5,6 @@ import { SelectMeasurementType } from "@/features/ingredients/components/SelectM
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 
 export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
@@ -56,13 +54,6 @@ export function IngredientForm({ ingredient }: { ingredient?: Ingredient }) {
 				name="brand"
 				defaultValue={ingredient?.brand ?? undefined}
 			/>
-
-			<div>
-				<SubmitButton variant="solid" color="accent">
-					<Icon name="circle-check" />
-					Save changes
-				</SubmitButton>
-			</div>
 		</Grid>
 	);
 }

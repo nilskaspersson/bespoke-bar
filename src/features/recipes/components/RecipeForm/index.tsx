@@ -3,6 +3,7 @@
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { use, useCallback, useRef } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
@@ -233,16 +234,18 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 				<FormErrors formRef={formRef} />
 			</Grid>
 
-			<SubmitButton
-				variant="solid"
-				color="accent"
-				form={form.id}
-				rounded
-				className={styles.submit}
-			>
-				<Icon name="circle-check" />
-				{recipeFields.id.value ? "Save changes" : "Create recipe"}
-			</SubmitButton>
+			<BottomRailItems>
+				<SubmitButton
+					variant="solid"
+					color="accent"
+					form={form.id}
+					rounded
+					className={styles.submit}
+				>
+					<Icon name="circle-check" />
+					{recipeFields.id.value ? "Save changes" : "Create recipe"}
+				</SubmitButton>
+			</BottomRailItems>
 		</FormProvider>
 	);
 }

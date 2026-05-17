@@ -23,6 +23,20 @@ describe("formatQuantity", () => {
 		["⅝", 0.625],
 		["⅞", 0.875],
 
+		// Rare precomposed fractions (gained via NFKC decomposition)
+		["⅕", 0.2],
+		["⅖", 0.4],
+		["⅗", 0.6],
+		["⅘", 0.8],
+		["⅙", 1 / 6],
+		["⅚", 5 / 6],
+
+		// U+2044 fraction slash (common in pasted recipes)
+		["1⁄2", 0.5],
+		["1⁄4", 0.25],
+		["3 1⁄3", 3 + 1 / 3],
+		["1⁄2 oz Fresh Lime Juice", 0.5],
+
 		// Simple fractions (slash notation)
 		["1/2", 0.5],
 		["1/4", 0.25],

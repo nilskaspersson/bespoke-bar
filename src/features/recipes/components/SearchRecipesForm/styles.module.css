@@ -1,27 +1,16 @@
 @layer composition {
 	.dialog {
-		--offset-top: 10svh;
 		--inline-inset: var(--gap--large);
 
 		width: min(calc(var(--recipe-card-width) + 2 * var(--inline-inset)), 100%);
-		margin-block: var(--offset-top) auto;
 		padding-inline: var(--gap);
 	}
 
-	.lightbox {
-		--r: calc(var(--radius--huge) * 1.25);
-
-		display: grid;
-		grid-template-rows: auto 1fr auto;
-
-		max-height: calc(100svh - var(--offset-top, 10svh) - var(--gap));
-		border-radius: var(--r) var(--r) var(--radius--large) var(--radius--large);
-		padding: var(--space-2);
-	}
-
-	.header {
-		border-bottom: 1px solid var(--mauve-6);
-		padding-bottom: var(--gap--tiny);
+	.heading {
+		display: flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--space-4) var(--space-4);
 	}
 
 	.results {
@@ -56,11 +45,6 @@
 		@media (hover: none) and (pointer: coarse) {
 			display: none;
 		}
-	}
-
-	.footer {
-		padding-top: var(--gap--tiny);
-		border-top: 1px solid var(--mauve-6);
 	}
 
 	.actions {

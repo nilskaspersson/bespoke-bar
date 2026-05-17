@@ -1,7 +1,6 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
 import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { ToggleIngredientCard } from "@/features/ingredients/components/ToggleIngredientCard";
 import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
@@ -9,7 +8,7 @@ import { useSpecQuantityFormatter } from "@/features/specs/hooks/useSpecQuantity
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { AnimatedNumber } from "@/ui/AnimatedNumber";
 import { Chip } from "@/ui/Chip";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
@@ -20,6 +19,7 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	onChange,
 	spec,
 	servings = 1,
+	animateNumbers = true,
 	...props
 }: {
 	spec: T;
@@ -28,7 +28,8 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 	withRounding?: boolean;
 	withBestUnit?: boolean;
 	servings?: number;
-} & Omit<ComponentProps<typeof Text>, "onChange">) {
+	animateNumbers?: boolean;
+} & Omit<TextProps, "onChange">) {
 	const isDraftIngredient = !spec.ingredientId;
 	const formatSpecMeasure = useFormatSpecMeasure();
 	const formatQuantity = useSpecQuantityFormatter();
@@ -52,7 +53,14 @@ export function SpecEntry<T extends DraftSpecWithDraftIngredient>({
 			<span className={styles.node}>
 				{spec.quantity && servings != null ? (
 					<>
-						<AnimatedNumber value={measure.quantity} format={formatQuantity} />{" "}
+						{animateNumbers ? (
+							<AnimatedNumber
+								value={measure.quantity}
+								format={formatQuantity}
+							/>
+						) : (
+							formatQuantity(measure.quantity)
+						)}{" "}
 						{measure.unit}
 					</>
 				) : (

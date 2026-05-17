@@ -33,7 +33,7 @@ describe("createSearchIndex", () => {
 		expect(index.size).toBe(0);
 	});
 
-	test("normalizes text (lowercase, deburr)", () => {
+	test("normalizes text (lowercase, asciiFold)", () => {
 		const items = [{ id: "1", name: "Curaçao", tags: ["liqueur"] }];
 		const index = createSearchIndex(items, getKey, getSearchableText);
 		const entry = index.get("1");
@@ -75,6 +75,13 @@ describe("searchByIndex", () => {
 		const items = [{ id: "1", name: "Curaçao", tags: [] }];
 		const idx = createSearchIndex(items, getKey, getSearchableText);
 		const result = searchByIndex(items, idx, getKey, "curacao");
+		expect(result).toHaveLength(1);
+	});
+
+	test("matches ASCII apostrophe against typographic apostrophe", () => {
+		const items = [{ id: "1", name: "Benton’s Old Fashioned", tags: [] }];
+		const idx = createSearchIndex(items, getKey, getSearchableText);
+		const result = searchByIndex(items, idx, getKey, "benton's");
 		expect(result).toHaveLength(1);
 	});
 

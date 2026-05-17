@@ -2,10 +2,17 @@
 	.base {
 		display: grid;
 		gap: var(--gap);
-		grid-template-rows: 1fr auto;
 		width: 100%;
 		margin-inline: auto;
 		scroll-margin-top: var(--gap--small);
+	}
+
+	.dock {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-2);
+		align-items: center;
+		justify-content: center;
 	}
 
 	.search {
@@ -20,23 +27,9 @@
 		top: calc(50% - 0.5rem);
 	}
 
-	.sticky {
-		--offset: var(--gap);
-
-		margin-inline: calc(var(--app-inset) / 2 * -1);
-		justify-self: center;
-		z-index: 1;
-		display: grid;
-		gap: var(--space-1);
-		position: sticky;
-		bottom: var(--offset);
-	}
-
 	.statusContainer {
 		display: flex;
 		justify-content: center;
-		contain: inline-size;
-		padding-inline: var(--gap);
 		text-align: center;
 	}
 

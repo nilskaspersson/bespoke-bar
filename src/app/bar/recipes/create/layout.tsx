@@ -1,5 +1,3 @@
-import { PageHeader } from "@/components/PageHeader";
-import { Container } from "@/ui/Container";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -7,11 +5,5 @@ export default async function Layout({
 }: {
 	children: React.ReactNode;
 }) {
-	return (
-		<Container as="article" className={styles.container}>
-			<PageHeader heading="Create Recipe" />
-
-			{children}
-		</Container>
-	);
+	return <article className={styles.container}>{children}</article>;
 }

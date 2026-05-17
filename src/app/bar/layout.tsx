@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { AppSidebar } from "@/components/AppSidebar";
+import { AppNavToggle } from "@/components/AppNavToggle";
+import { BottomRailHost } from "@/components/BottomRail";
 import { OrgProvider } from "@/components/OrgProvider";
 import { Providers } from "@/components/Providers";
-import { SecondaryNavigation } from "@/components/SecondaryNavigation";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
 import { CreateListEntryDrawer } from "@/features/lists/entries/components/CreateListEntryDrawer";
 import { RecipeCardModal } from "@/features/recipes/components/RecipeCardModal/loader";
+import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesForm";
+import { Flex } from "@/ui/Flex";
+import { Icon } from "@/ui/Icon";
 import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -13,14 +16,26 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 		<Providers>
 			<OrgProvider>
 				<div className={styles.container}>
-					<AppSidebar
-						className={styles.navigation}
-						toggleButtonProps={{ className: styles.toggle }}
-					>
-						<SecondaryNavigation />
-					</AppSidebar>
+					<BottomRailHost
+						left={
+							<Flex gap={2} alignItems="center">
+								<AppNavToggle />
 
-					<div className={styles.main}>{children}</div>
+								<SearchRecipesButton
+									variant="clear"
+									color="light"
+									rounded
+									icon
+									aria-label="Quick search"
+									title="Quick search"
+								>
+									<Icon name="magnifying-glass" size={3} />
+								</SearchRecipesButton>
+							</Flex>
+						}
+					>
+						{children}
+					</BottomRailHost>
 				</div>
 
 				<IngredientEditorDrawer />

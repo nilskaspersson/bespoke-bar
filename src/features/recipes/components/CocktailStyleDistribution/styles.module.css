@@ -1,0 +1,42 @@
+@layer feature {
+	.bar {
+		--bar-height: 10px;
+
+		display: flex;
+		align-items: center;
+		gap: 2px;
+		height: var(--bar-height);
+		contain: layout;
+	}
+
+	.segment {
+		flex: var(--jsxCount) 0 var(--space-1);
+		background-color: var(--jsxEntryColor);
+		height: var(--bar-height);
+		transition-property: height, opacity;
+		transition-duration: var(--transition-duration);
+
+		&:first-child {
+			border-top-left-radius: var(--radius--full);
+			border-bottom-left-radius: var(--radius--full);
+		}
+
+		&:last-child {
+			border-top-right-radius: var(--radius--full);
+			border-bottom-right-radius: var(--radius--full);
+		}
+
+		&:is(:hover, :focus-visible) {
+			opacity: 0.85;
+			will-change: height;
+		}
+
+		&[aria-pressed="true"] {
+			height: calc(var(--bar-height) * 1.4);
+		}
+
+		&.isInactive {
+			opacity: 0.333;
+		}
+	}
+}

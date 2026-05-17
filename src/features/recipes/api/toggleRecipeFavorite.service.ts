@@ -21,7 +21,13 @@ export async function toggleRecipeFavorite(auth: Auth, recipeId: string) {
 	if (existingFavorite) {
 		await db
 			.delete(RecipeFavoritesTable)
-			.where(eq(RecipeFavoritesTable.id, existingFavorite.id));
+			.where(
+				and(
+					eq(RecipeFavoritesTable.orgId, orgId),
+					eq(RecipeFavoritesTable.userId, userId),
+					eq(RecipeFavoritesTable.recipeId, recipeId),
+				),
+			);
 	} else {
 		await db.insert(RecipeFavoritesTable).values({
 			recipeId,

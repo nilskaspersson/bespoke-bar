@@ -5,7 +5,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { Icon } from "@/ui/Icon";
 import { Lightbox } from "@/ui/Lightbox";
 import { Popover } from "@/ui/Popover";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type MenuProps = ComponentProps<typeof Popover> & {
@@ -78,7 +78,7 @@ function Label({
 	className,
 	description,
 	...props
-}: ComponentProps<typeof Text> & {
+}: TextProps & {
 	description?: ReactNode;
 }) {
 	return (

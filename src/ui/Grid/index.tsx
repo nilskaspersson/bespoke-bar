@@ -4,7 +4,7 @@ import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-type Props<E extends ElementType> = {
+export type GridProps<E extends ElementType = "div"> = PolymorphicProps<E> & {
 	alignContent?: "start" | "end" | "center" | "stretch" | "space-between";
 	alignItems?: "start" | "end" | "center" | "stretch";
 	as?: E;
@@ -19,12 +19,12 @@ export function Grid<E extends ElementType = "div">({
 	alignItems,
 	as = "div",
 	children,
-	gap = 0,
+	gap,
 	inline,
 	justifyContent,
 	justifyItems,
 	...slotProps
-}: PolymorphicProps<E> & Props<E>) {
+}: GridProps<E>) {
 	return createElement(
 		as,
 		{
@@ -39,7 +39,7 @@ export function Grid<E extends ElementType = "div">({
 					jsxAlignItems: alignItems,
 					jsxJustifyContent: justifyContent,
 					jsxJustifyItems: justifyItems,
-					jsxGap: gap > 0 ? `var(--space-${gap})` : gap,
+					jsxGap: gap ? `var(--space-${gap})` : undefined,
 				}),
 			),
 		},

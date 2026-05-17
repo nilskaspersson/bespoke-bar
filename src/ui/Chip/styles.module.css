@@ -6,7 +6,6 @@
 		padding: calc(var(--inset) / 2) var(--inset);
 
 		color: var(--c);
-		background-color: var(--bgc);
 		border: 1px solid var(--bgc);
 		border-radius: var(--radius--large);
 		text-align: left;
@@ -31,7 +30,7 @@
 	}
 
 	.light {
-		--c: var(--mauve-11);
+		--c: var(--mauve-10);
 		--lc: var(--mauve-11);
 		--bgc: var(--mauve-3);
 	}
@@ -60,9 +59,11 @@
 		color: var(--lc);
 	}
 
+	.filled {
+		background-color: var(--bgc);
+	}
+
 	.outline {
-		background-color: transparent;
-		border-color: var(--mauve-6);
-		color: var(--mauve-11);
+		color: var(--lc);
 	}
 }

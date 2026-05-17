@@ -12,19 +12,23 @@ export function HGroup({
 }) {
 	return (
 		<hgroup {...props}>
-			{overline ? (
+			{typeof overline === "string" ? (
 				<Text as="p" size={1} light>
 					{overline}
 				</Text>
-			) : null}
+			) : (
+				overline
+			)}
 
 			{children}
 
-			{tagline ? (
+			{typeof tagline === "string" ? (
 				<Text as="p" size={1} light>
 					{tagline}
 				</Text>
-			) : null}
+			) : (
+				tagline
+			)}
 		</hgroup>
 	);
 }

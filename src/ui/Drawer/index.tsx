@@ -14,6 +14,7 @@ import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Dialog } from "@/ui/Dialog";
+import { Flex } from "@/ui/Flex";
 import { getWindowHeight, onMotionValueReached } from "@/utils/animate";
 import styles from "./styles.module.css";
 
@@ -62,6 +63,7 @@ function shouldDragClose(offset: number, velocity: number): boolean {
 
 type DrawerProps = {
 	actions?: ReactNode;
+	withCancel?: boolean;
 	header?: ReactNode;
 	isOpen?: boolean;
 	mounted?: boolean;
@@ -72,6 +74,7 @@ type DrawerProps = {
 export function Drawer({
 	children,
 	actions,
+	withCancel = true,
 	header,
 	className,
 	ref,
@@ -152,20 +155,27 @@ export function Drawer({
 					<div className={styles.content}>{children}</div>
 
 					<footer className={styles.footer}>
-						<menu className={styles.actions}>
-							<li>
-								<Button
-									type="button"
-									variant="ghost"
-									size="tiny"
-									onClick={handleClose}
-								>
-									Cancel
-								</Button>
-							</li>
+						<Flex
+							as="menu"
+							justifyContent="space-between"
+							alignItems="center"
+							gap={2}
+						>
+							{withCancel ? (
+								<li>
+									<Button
+										type="button"
+										variant="ghost"
+										size="tiny"
+										onClick={handleClose}
+									>
+										Cancel
+									</Button>
+								</li>
+							) : null}
 
 							{actions}
-						</menu>
+						</Flex>
 					</footer>
 				</Container>
 			</m.div>

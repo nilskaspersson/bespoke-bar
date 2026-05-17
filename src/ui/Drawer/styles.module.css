@@ -2,6 +2,10 @@
 	.drawer {
 		--inset: calc(var(--app-inset) / 2);
 		--maxHeight: 80svh;
+
+		&::backdrop {
+			transition: none;
+		}
 	}
 
 	.motion {
@@ -22,7 +26,8 @@
 			"content" 1fr
 			"footer" auto;
 		width: 100%;
-		border-radius: var(--radius--large);
+		border-radius: var(--radius--huge);
+		border: 1px solid var(--mauve-4);
 		background-color: var(--mauve-2);
 		box-shadow: var(--shadow--high);
 		max-height: calc(var(--maxHeight) - var(--inset));
@@ -43,7 +48,7 @@
 
 	.header {
 		grid-area: header;
-		padding: var(--gap) var(--app-inset);
+		padding: var(--gap--large) var(--app-inset);
 	}
 
 	.content {
@@ -51,7 +56,7 @@
 		overscroll-behavior: contain;
 		overflow: auto;
 		container-type: inline-size;
-		padding-bottom: var(--gap);
+		padding-bottom: var(--gap--large);
 		padding-inline: var(--app-inset);
 	}
 
@@ -59,17 +64,5 @@
 		grid-area: footer;
 		padding: var(--space-2) var(--app-inset);
 		border-top: 1px solid var(--mauve-4);
-	}
-
-	.actions {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: var(--gap);
-
-		/**
-		 * Offset for ghost button alignment
-		 */
-		margin-inline: calc(var(--space-2) * -1);
 	}
 }

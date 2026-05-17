@@ -1,0 +1,6 @@
+@layer composition {
+	.header {
+		padding-top: var(--gap--huge);
+		text-align: center;
+	}
+}

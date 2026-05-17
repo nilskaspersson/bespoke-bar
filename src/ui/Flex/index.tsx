@@ -4,7 +4,7 @@ import { mergeStyleSources, toCSSVars } from "@/utils/styles";
 import type { PolymorphicProps, Scale } from "@/utils/types";
 import styles from "./styles.module.css";
 
-type Props<E extends ElementType> = {
+export type FlexProps<E extends ElementType = "div"> = PolymorphicProps<E> & {
 	alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline";
 	as?: E;
 	wrap?: boolean;
@@ -19,7 +19,7 @@ type Props<E extends ElementType> = {
 };
 
 export function Flex<E extends ElementType = "div">({
-	alignItems = "flex-start",
+	alignItems,
 	as = "div",
 	children,
 	direction = "row",
@@ -27,7 +27,7 @@ export function Flex<E extends ElementType = "div">({
 	justifyContent,
 	wrap,
 	...slotProps
-}: PolymorphicProps<E> & Props<E>) {
+}: FlexProps<E>) {
 	return createElement(
 		as,
 		{
@@ -41,7 +41,7 @@ export function Flex<E extends ElementType = "div">({
 				toCSSVars({
 					jsxAlignItems: alignItems,
 					jsxJustifyContent: justifyContent,
-					jsxGap: gap != null ? `var(--space-${gap})` : 0,
+					jsxGap: gap ? `var(--space-${gap})` : undefined,
 				}),
 			),
 		},

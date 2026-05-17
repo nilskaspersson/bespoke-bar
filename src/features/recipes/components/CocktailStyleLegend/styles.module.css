@@ -1,0 +1,31 @@
+@layer feature {
+	.root {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		gap: var(--space-2);
+		align-items: start;
+		interpolate-size: allow-keywords;
+		position: relative;
+		padding-right: var(--space-5);
+	}
+
+	.toggle {
+		position: absolute;
+		inset: 0 0 auto auto;
+	}
+
+	.list {
+		--legend-row-height: calc(1lh + var(--space-1) * 2);
+
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-0);
+		max-height: var(--legend-row-height);
+		overflow: hidden;
+		transition: max-height var(--transition-duration) var(--swift-in);
+	}
+
+	.expanded {
+		max-height: max-content;
+	}
+}

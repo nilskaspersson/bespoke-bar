@@ -1,0 +1,28 @@
+@layer ui {
+	.dialog {
+		--offset-top: 10svh;
+
+		margin-block: var(--offset-top) auto;
+	}
+
+	.lightbox {
+		--r: calc(var(--radius--huge) * 1.25);
+
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+
+		max-height: calc(100svh - var(--offset-top, 10svh) - var(--gap));
+		border-radius: var(--r) var(--r) var(--radius--large) var(--radius--large);
+		padding: var(--space-2);
+	}
+
+	.header {
+		padding-bottom: var(--gap--tiny);
+		border-bottom: 1px solid var(--glass--border-color);
+	}
+
+	.footer {
+		padding-top: var(--gap--tiny);
+		border-top: 1px solid var(--glass--border-color);
+	}
+}

@@ -1,0 +1,54 @@
+@layer composition {
+	.panel {
+		padding: var(--space-2);
+		color: var(--glass--text);
+		background-color: var(--glass--bg);
+		backdrop-filter: var(--glass--blur);
+		border: 1px solid var(--glass--border-color);
+		border-radius: var(--radius--huge);
+		overflow: hidden;
+		isolation: isolate;
+		box-shadow: var(--shadow--high);
+	}
+
+	.block {
+		--inner-gap: var(--space-4);
+
+		display: grid;
+		gap: var(--inner-gap);
+
+		&:not(:first-child) {
+			padding-top: var(--inner-gap);
+			border-top: 1px solid var(--glass--border-color);
+		}
+
+		&:not(:last-child) {
+			padding-bottom: var(--inner-gap);
+		}
+
+		&.compact {
+			--inner-gap: var(--space-2);
+		}
+	}
+
+	.wakeLock {
+		padding-left: var(--space-1);
+	}
+
+	.item {
+		justify-content: flex-start;
+	}
+
+	.label {
+		flex: 1 1 auto;
+		text-align: start;
+	}
+
+	.morph {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: var(--size-3);
+		height: var(--size-3);
+	}
+}

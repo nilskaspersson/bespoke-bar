@@ -161,7 +161,7 @@ export function CreateListEntryForm({ recipe, onSuccess, formRef }: Props) {
 				<input type="submit" hidden form={form.id} />
 
 				<Grid gap={4} className={styles.grid}>
-					<Grid gap={2} className={styles.card}>
+					<Grid gap={2}>
 						{withNewList ? (
 							<TextField
 								label="New List name"

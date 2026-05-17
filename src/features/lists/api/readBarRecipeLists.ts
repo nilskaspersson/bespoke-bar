@@ -10,7 +10,11 @@ const preparedReadBarRecipeLists = db.query.RecipeListsTable.findMany({
 	with: {
 		entries: true,
 	},
-	orderBy: [desc(RecipeListsTable.createdAt)],
+	orderBy: [
+		desc(
+			sql`COALESCE(${RecipeListsTable.updatedAt}, ${RecipeListsTable.createdAt})`,
+		),
+	],
 }).prepare("readBarRecipeLists");
 
 export async function readBarRecipeLists(

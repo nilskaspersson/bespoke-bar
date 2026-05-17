@@ -155,6 +155,20 @@
       "when": 1778099310689,
       "tag": "0021_slippery_zuras",
       "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1778961758199,
+      "tag": "0022_eager_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1778961780016,
+      "tag": "0023_sudden_george_stacy",
+      "breakpoints": true
     }
   ]
 }

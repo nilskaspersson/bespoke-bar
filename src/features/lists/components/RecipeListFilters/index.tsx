@@ -1,18 +1,13 @@
 "use client";
 
-import {
-	type ComponentProps,
-	useDeferredValue,
-	useMemo,
-	useState,
-} from "react";
+import { useDeferredValue, useMemo, useState } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import type { RecipeListWithRecipes } from "@/db/schema/composite";
 import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
 import { RecipeEntryList } from "@/features/lists/entries/components/RecipeEntryList";
 import { Button, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Input } from "@/ui/Input";
 import { createSearchIndex, searchByIndex } from "@/utils/search";
@@ -31,7 +26,7 @@ export function RecipeListFilters({
 	editable,
 	withActions,
 	...props
-}: Omit<ComponentProps<typeof Grid>, "list"> & {
+}: Omit<GridProps, "list"> & {
 	list: RecipeListWithRecipes;
 	editable?: boolean;
 	withActions?: boolean;

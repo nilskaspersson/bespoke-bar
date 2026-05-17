@@ -10,7 +10,6 @@ export default async function CreateIngredientPage() {
 		<Container as="article" className={styles.container}>
 			<Grid gap={4}>
 				<PageHeader heading="Create Ingredient" />
-
 				<CreateIngredientForm />
 			</Grid>
 		</Container>

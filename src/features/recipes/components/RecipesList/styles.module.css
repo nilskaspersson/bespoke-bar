@@ -3,6 +3,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: start;
+		justify-content: center;
 		gap: var(--gap--large);
 		list-style: none;
 		margin: 0;

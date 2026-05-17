@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { type ReactNode, useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import {
 	type RecipeListWithRecipes,
 	recipeListWithEntriesFormSchema,
@@ -18,15 +18,16 @@ import { Grid } from "@/ui/Grid";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
 
+export const RECIPE_LIST_FORM_ID = "list-form";
+
 type Props = {
 	recipeList?: RecipeListWithRecipes;
 	recipes?: Recipe[];
-	children: ReactNode;
 };
 
-export function RecipeListForm({ recipes, recipeList, children }: Props) {
+export function RecipeListForm({ recipes, recipeList }: Props) {
 	const [form, fields] = useForm({
-		id: "list-form",
+		id: RECIPE_LIST_FORM_ID,
 		defaultValue: {
 			recipeList: {
 				id: recipeList?.id ?? "",
@@ -159,8 +160,6 @@ export function RecipeListForm({ recipes, recipeList, children }: Props) {
 					</div>
 
 					<FormErrors formRef={formRef} />
-
-					<div>{children}</div>
 				</Grid>
 			</form>
 		</FormProvider>

@@ -1,0 +1,63 @@
+@layer layout {
+	.board {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		padding-bottom: var(--gap);
+	}
+
+	.filtersSection {
+		padding-block: var(--space-8);
+
+		> * {
+			max-width: 40rem;
+			margin-inline: auto;
+			width: 100%;
+		}
+	}
+
+	.listSlot {
+		--recipes-list-board-list-max-width: calc(
+			3 *
+			var(--recipe-card-width) +
+			2 *
+			var(--gap--large)
+		);
+
+		max-width: var(--recipes-list-board-list-max-width);
+		margin-inline: auto;
+		margin-top: var(--space-5);
+		padding-bottom: calc(var(--space-9) + var(--app-inset));
+		width: 100%;
+	}
+
+	.list {
+		margin-inline: auto;
+		width: 100%;
+		max-width: fit-content;
+		justify-content: center;
+	}
+
+	.empty {
+		display: grid;
+		gap: var(--space-3);
+		justify-items: center;
+		padding: var(--space-8) var(--space-4);
+		text-align: center;
+		border: 1px dashed var(--mauve-6);
+		border-radius: var(--radius--large);
+		background-color: hsl(from var(--mauve-2) h s l / 0.4);
+		max-width: 40rem;
+		margin-inline: auto;
+	}
+
+	.dockGroup {
+		display: flex;
+		gap: var(--space-2);
+		align-items: center;
+
+		@media (max-width: 30rem) {
+			flex-direction: column-reverse;
+			align-items: flex-end;
+		}
+	}
+}

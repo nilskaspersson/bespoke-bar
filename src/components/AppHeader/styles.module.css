@@ -8,16 +8,17 @@
 		position: absolute;
 		inset: 0 0 auto;
 		z-index: var(--z-navigation);
-		contain: content;
+		overflow-clip-margin: 5rem;
+		contain: strict;
+		container-type: inline-size;
 	}
 
 	.container {
-		display: flex;
-		align-items: flex-start;
-		justify-content: space-between;
-		gap: var(--gap);
-		padding-inline: var(--space-5);
-		padding-block: var(--space-5);
+		padding: var(--space-5);
+	}
+
+	.nav {
+		grid-area: nav;
 	}
 
 	.auth {

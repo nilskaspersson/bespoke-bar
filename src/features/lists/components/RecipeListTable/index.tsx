@@ -1,10 +1,9 @@
-import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import type { RecipeListWithEntries } from "@/db/schema/composite";
 import { RecipeListActions } from "@/features/lists/actions/components/RecipeListActions";
 import { RecipeListFrame } from "@/features/lists/components/RecipeListFrame";
 import { getRecipeListUrl } from "@/features/lists/utils";
-import { Grid } from "@/ui/Grid";
+import { Grid, type GridProps } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
 
@@ -15,7 +14,7 @@ type Props = {
 export function RecipeListTable({
 	lists,
 	...props
-}: Props & Omit<ComponentProps<typeof Grid>, "list" | "children">) {
+}: Props & Omit<GridProps, "list" | "children">) {
 	const hasFeaturedList = lists.some((list) => list.isFeatured);
 
 	return (
