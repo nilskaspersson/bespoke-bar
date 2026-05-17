@@ -24,12 +24,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 								<SearchRecipesButton
 									variant="clear"
 									color="light"
+									size="large"
 									rounded
 									icon
 									aria-label="Quick search"
 									title="Quick search"
 								>
-									<Icon name="magnifying-glass" size={3} />
+									<Icon name="magnifying-glass" size={4} />
 								</SearchRecipesButton>
 							</Flex>
 						}
