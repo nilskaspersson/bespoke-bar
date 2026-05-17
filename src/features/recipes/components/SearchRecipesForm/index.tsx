@@ -14,9 +14,9 @@ import { EmptyArea } from "@/components/EmptyArea";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
 import {
+	applyRecipeFilters,
 	createRecipeSearchIndex,
-	filterRecipes,
-} from "@/features/recipes/utils/filterRecipes";
+} from "@/features/recipes/utils/applyRecipeFilters";
 import { useDialog } from "@/hooks/useDialog";
 import { useOnNavigation } from "@/hooks/useOnNavigation";
 import { useShortcut } from "@/hooks/useShortcut";
@@ -105,7 +105,13 @@ export function SearchRecipesForm({
 	);
 
 	const filteredRecipes = useMemo(
-		() => filterRecipes(recipes, searchIndex, deferredSearch),
+		() =>
+			applyRecipeFilters(recipes ?? [], searchIndex, {
+				query: deferredSearch,
+				favoriteIdSet: null,
+				selectedTagIds: [],
+				selectedStyles: [],
+			}),
 		[deferredSearch, recipes, searchIndex],
 	);
 

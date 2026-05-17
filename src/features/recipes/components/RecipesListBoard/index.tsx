@@ -16,9 +16,9 @@ import { RecipesOverviewStats } from "@/features/recipes/components/RecipesOverv
 import { RecipesStatsBar } from "@/features/recipes/components/RecipesStatsBar";
 import { useCocktailStyleSelection } from "@/features/recipes/hooks/useCocktailStyleSelection";
 import {
+	applyRecipeFilters,
 	createRecipeSearchIndex,
-	filterRecipes,
-} from "@/features/recipes/utils/filterRecipes";
+} from "@/features/recipes/utils/applyRecipeFilters";
 import { useTagSelection } from "@/features/tags/hooks/useTagSelection";
 import { useDialog } from "@/hooks/useDialog";
 import { Button } from "@/ui/Button";
@@ -66,35 +66,24 @@ export function RecipesListBoard({
 		[recipes],
 	);
 
-	const filteredRecipes = useMemo(() => {
-		let result = filterRecipes(recipes, searchIndex, deferredSearch);
-
-		if (favoritesOnly) {
-			result = result.filter((recipe) => favoriteIdSet.has(recipe.id));
-		}
-
-		if (selectedTagIds.length > 0) {
-			result = result.filter((recipe) => {
-				const recipeTagIds = new Set(recipe.tags.map((rt) => rt.tag.id));
-				return selectedTagIds.some((id) => recipeTagIds.has(id));
-			});
-		}
-
-		if (deferredSelectedCocktailStyles.length > 0) {
-			const styleSet = new Set(deferredSelectedCocktailStyles);
-			result = result.filter((recipe) => styleSet.has(recipe.style ?? null));
-		}
-
-		return result;
-	}, [
-		recipes,
-		searchIndex,
-		deferredSearch,
-		selectedTagIds,
-		deferredSelectedCocktailStyles,
-		favoritesOnly,
-		favoriteIdSet,
-	]);
+	const filteredRecipes = useMemo(
+		() =>
+			applyRecipeFilters(recipes, searchIndex, {
+				query: deferredSearch,
+				favoriteIdSet: favoritesOnly ? favoriteIdSet : null,
+				selectedTagIds,
+				selectedStyles: deferredSelectedCocktailStyles,
+			}),
+		[
+			recipes,
+			searchIndex,
+			deferredSearch,
+			selectedTagIds,
+			deferredSelectedCocktailStyles,
+			favoritesOnly,
+			favoriteIdSet,
+		],
+	);
 
 	function handleResetFilters() {
 		setSearch("");
