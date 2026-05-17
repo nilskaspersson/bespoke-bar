@@ -43,7 +43,7 @@ export const RecipeListEntriesTable = pgTable(
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 	},
 	(table) => [
-		index("idx_recipe_list_entries_org_list").on(table.orgId, table.listId),
+		index("idx_recipe_list_entries_org").on(table.orgId),
 		// A recipe can only appear once per list
 		uniqueIndex("idx_recipe_list_entries_unique").on(
 			table.listId,

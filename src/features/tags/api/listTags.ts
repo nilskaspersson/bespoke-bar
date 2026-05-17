@@ -6,7 +6,7 @@ import { cacheTags } from "@/utils/cache";
 
 const preparedListTags = db.query.TagsTable.findMany({
 	where: eq(TagsTable.orgId, sql.placeholder("orgId")),
-	orderBy: [asc(TagsTable.name)],
+	orderBy: [asc(sql`lower(${TagsTable.name})`)],
 }).prepare("listTags");
 
 async function listTags(orgId: string) {

@@ -1,0 +1,1 @@
+ALTER TABLE "recipe_favorites" ADD CONSTRAINT "recipe_favorites_org_id_user_id_recipe_id_pk" PRIMARY KEY("org_id","user_id","recipe_id");

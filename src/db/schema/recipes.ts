@@ -1,4 +1,4 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
 	index,
 	pgTable,
@@ -53,7 +53,12 @@ export const RecipesTable = pgTable(
 			.notNull()
 			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
 	},
-	(table) => [index("idx_recipes_org_id").on(table.orgId)],
+	(table) => [
+		index("idx_recipes_org_created").on(
+			table.orgId,
+			sql`${table.createdAt} DESC`,
+		),
+	],
 );
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({

@@ -1,15 +1,17 @@
 import { relations } from "drizzle-orm";
-import { index, pgTable, text, timestamp, unique } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
+import {
+	index,
+	pgTable,
+	primaryKey,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { RecipesTable } from "@/db/schema/recipes";
 
 export const RecipeFavoritesTable = pgTable(
 	"recipe_favorites",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
 		recipeId: text("recipe_id")
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
@@ -20,11 +22,7 @@ export const RecipeFavoritesTable = pgTable(
 		addedAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
 	},
 	(table) => [
-		unique("recipe_favorites_user_recipe_unique").on(
-			table.userId,
-			table.recipeId,
-		),
-		index("idx_recipe_favorites_user_org").on(table.orgId, table.userId),
+		primaryKey({ columns: [table.orgId, table.userId, table.recipeId] }),
 		index("idx_recipe_favorites_recipe").on(table.recipeId),
 	],
 );

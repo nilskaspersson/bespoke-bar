@@ -105,7 +105,7 @@ export async function bulkUpdateTags(
 
 			const nextTags = await tx.query.TagsTable.findMany({
 				where: eq(TagsTable.orgId, orgId),
-				orderBy: [asc(TagsTable.name)],
+				orderBy: [asc(sql`lower(${TagsTable.name})`)],
 			});
 
 			return {
