@@ -31,13 +31,14 @@ export function AppNavToggle() {
 					icon
 					aria-label="Navigation"
 					title="Navigation"
+					size="large"
 				>
 					<m.span
 						className={styles.morph}
 						animate={{ scale: popover.isOpen ? 0 : 1 }}
 						transition={chipPushTransition}
 					>
-						<Icon name="bars" size={3} />
+						<Icon name="bars" size={4} />
 					</m.span>
 				</Button>
 			</m.div>

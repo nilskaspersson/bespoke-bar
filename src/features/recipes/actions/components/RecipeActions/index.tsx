@@ -2,7 +2,7 @@
 
 import { ShareAction } from "@/components/ShareAction";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
-import { CreateListEntryButton } from "@/features/lists/entries/components/CreateListEntryButton";
+import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
 import { DuplicateRecipeButton } from "@/features/recipes/actions/components/DuplicateRecipeButton";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
@@ -74,13 +74,13 @@ export function RecipeActions({
 			</li>
 
 			<li>
-				<CreateListEntryButton
+				<CreateMenuEntryButton
 					{...baseActionProps}
 					recipe={recipe}
 					onClick={close}
 				>
-					<Icon name="plus" size={1} /> Add to list
-				</CreateListEntryButton>
+					<Icon name="plus" size={1} /> Add to Menu
+				</CreateMenuEntryButton>
 			</li>
 
 			<li>

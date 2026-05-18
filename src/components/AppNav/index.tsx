@@ -33,9 +33,9 @@ const ITEMS: readonly Item[] = [
 		icon: "duotone-wine-bottle",
 	},
 	{
-		href: "/bar/lists",
-		label: "Lists",
-		match: "/bar/lists",
+		href: "/bar/menus",
+		label: "Menus",
+		match: "/bar/menus",
 		icon: "duotone-memo-pad",
 	},
 	{

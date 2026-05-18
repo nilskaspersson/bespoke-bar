@@ -169,6 +169,13 @@
       "when": 1778961780016,
       "tag": "0023_sudden_george_stacy",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1779097840201,
+      "tag": "0024_glamorous_malcolm_colcord",
+      "breakpoints": true
     }
   ]
 }

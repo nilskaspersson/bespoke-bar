@@ -1,6 +1,6 @@
 import { updateTag } from "next/cache";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { RecipeList } from "@/db/schema/recipeLists";
+import type { Menu } from "@/db/schema/menus";
 import type { Recipe } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 
@@ -34,30 +34,26 @@ export const cacheEvents = {
 				id ? `${orgId}:delete-recipe:${id}` : `${orgId}:delete-recipe`,
 		},
 	},
-	recipeList: {
+	menu: {
 		create: {
-			emit: (orgId: string) => updateTag(`${orgId}:create-recipe-list`),
-			tag: (orgId: string) => `${orgId}:create-recipe-list`,
+			emit: (orgId: string) => updateTag(`${orgId}:create-menu`),
+			tag: (orgId: string) => `${orgId}:create-menu`,
 		},
 		update: {
-			emit: (orgId: string, id: RecipeList["id"]) => {
-				updateTag(`${orgId}:update-recipe-list`);
-				updateTag(`${orgId}:update-recipe-list:${id}`);
+			emit: (orgId: string, id: Menu["id"]) => {
+				updateTag(`${orgId}:update-menu`);
+				updateTag(`${orgId}:update-menu:${id}`);
 			},
-			tag: (orgId: string, id?: RecipeList["id"]) =>
-				id
-					? `${orgId}:update-recipe-list:${id}`
-					: `${orgId}:update-recipe-list`,
+			tag: (orgId: string, id?: Menu["id"]) =>
+				id ? `${orgId}:update-menu:${id}` : `${orgId}:update-menu`,
 		},
 		delete: {
-			emit: (orgId: string, id: RecipeList["id"]) => {
-				updateTag(`${orgId}:delete-recipe-list`);
-				updateTag(`${orgId}:delete-recipe-list:${id}`);
+			emit: (orgId: string, id: Menu["id"]) => {
+				updateTag(`${orgId}:delete-menu`);
+				updateTag(`${orgId}:delete-menu:${id}`);
 			},
-			tag: (orgId: string, id?: RecipeList["id"]) =>
-				id
-					? `${orgId}:delete-recipe-list:${id}`
-					: `${orgId}:delete-recipe-list`,
+			tag: (orgId: string, id?: Menu["id"]) =>
+				id ? `${orgId}:delete-menu:${id}` : `${orgId}:delete-menu`,
 		},
 	},
 	ingredient: {
@@ -148,7 +144,7 @@ export const cacheEvents = {
 
 /**
  * For use as spread args to `cacheTag`, f.e.:
- * cacheTag(...cacheTags.recipeLists(orgId));
+ * cacheTag(...cacheTags.menus(orgId));
  */
 export const cacheTags = {
 	/**
@@ -189,18 +185,18 @@ export const cacheTags = {
 		cacheEvents.recipe.delete.tag(orgId),
 	],
 	/**
-	 * The list of Recipe Lists cares about all recipeList events, as well as
-	 * deletion of recipes (we show a count of recipe assignments).
+	 * The Menus index cares about all menu events, as well as deletion
+	 * of recipes (we show a count of recipe assignments).
 	 */
-	recipeLists: (orgId: string) => [
-		cacheEvents.recipeList.create.tag(orgId),
-		cacheEvents.recipeList.update.tag(orgId),
-		cacheEvents.recipeList.delete.tag(orgId),
+	menus: (orgId: string) => [
+		cacheEvents.menu.create.tag(orgId),
+		cacheEvents.menu.update.tag(orgId),
+		cacheEvents.menu.delete.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
 	],
-	recipeListWithRecipes: (orgId: string, id?: RecipeList["id"]) => [
-		cacheEvents.recipeList.update.tag(orgId, id),
-		cacheEvents.recipeList.delete.tag(orgId, id),
+	menuWithRecipes: (orgId: string, id?: Menu["id"]) => [
+		cacheEvents.menu.update.tag(orgId, id),
+		cacheEvents.menu.delete.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId),
 		cacheEvents.recipe.update.tag(orgId),
 	],
