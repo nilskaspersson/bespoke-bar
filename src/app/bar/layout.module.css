@@ -6,6 +6,6 @@
 		min-height: 100lvh;
 		padding-inline: max(env(safe-area-inset-left), var(--app-inset))
 			max(env(safe-area-inset-right), var(--app-inset));
-		padding-block: calc(var(--app-header--height) + var(--space-3)) var(--gap);
+		padding-block: var(--app-header--height) var(--gap);
 	}
 }

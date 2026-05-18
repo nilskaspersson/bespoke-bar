@@ -31,7 +31,7 @@ export function CreateRecipeNav({
 			[
 				{
 					icon: "duotone-input-text",
-					title: "Text",
+					title: "Text Editor",
 					hook: "Paste from your notes",
 					description: "Text to Recipes and Ingredients.",
 					href: "/bar/recipes/create/text",

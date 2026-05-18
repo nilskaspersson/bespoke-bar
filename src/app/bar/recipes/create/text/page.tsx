@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
@@ -9,15 +10,24 @@ import { authOrForbidden } from "@/utils/auth";
 
 export default function BulkCreateRecipePage() {
 	return (
-		<Suspense
-			fallback={
-				<SkeletonScreen>
-					<Skeleton width="100%" height="60lvh" />
-				</SkeletonScreen>
-			}
-		>
-			<BulkCreateRecipeWithAuth />
-		</Suspense>
+		<>
+			<PageHeader
+				overline="Recipes"
+				icon="duotone-martini-glass"
+				heading="Text Editor"
+				tagline="Paste from your notes."
+			/>
+
+			<Suspense
+				fallback={
+					<SkeletonScreen>
+						<Skeleton width="100%" height="60lvh" />
+					</SkeletonScreen>
+				}
+			>
+				<BulkCreateRecipeWithAuth />
+			</Suspense>
+		</>
 	);
 }
 

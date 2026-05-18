@@ -4,5 +4,6 @@
 		gap: var(--gap--huge);
 		container-type: inline-size;
 		grid-template-rows: auto 1fr;
+		padding-bottom: var(--gap);
 	}
 }
