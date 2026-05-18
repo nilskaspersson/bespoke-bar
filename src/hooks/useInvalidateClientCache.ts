@@ -10,9 +10,9 @@ type CacheEvent =
 	| "recipe.create"
 	| "recipe.update"
 	| "recipe.delete"
-	| "recipeList.create"
-	| "recipeList.update"
-	| "recipeList.delete"
+	| "menu.create"
+	| "menu.update"
+	| "menu.delete"
 	| "favorite.toggle";
 
 /**
@@ -39,20 +39,20 @@ export function useInvalidateClientCache() {
 					case "ingredient.delete":
 						invalidate("ingredient", () => utils.ingredient.invalidate());
 						invalidate("recipe", () => utils.recipe.invalidate());
-						invalidate("recipeList", () => utils.recipeList.invalidate());
+						invalidate("menu", () => utils.menu.invalidate());
 						break;
 
 					case "recipe.create":
 					case "recipe.update":
 					case "recipe.delete":
 						invalidate("recipe", () => utils.recipe.invalidate());
-						invalidate("recipeList", () => utils.recipeList.invalidate());
+						invalidate("menu", () => utils.menu.invalidate());
 						break;
 
-					case "recipeList.create":
-					case "recipeList.update":
-					case "recipeList.delete":
-						invalidate("recipeList", () => utils.recipeList.invalidate());
+					case "menu.create":
+					case "menu.update":
+					case "menu.delete":
+						invalidate("menu", () => utils.menu.invalidate());
 						break;
 
 					case "favorite.toggle":

@@ -39,8 +39,8 @@ export async function AppFooter({
 								</li>
 
 								<li>
-									<Link href="/bar/lists" prefetch={false}>
-										Lists
+									<Link href="/bar/menus" prefetch={false}>
+										Menus
 									</Link>
 								</li>
 

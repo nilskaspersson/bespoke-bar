@@ -1,7 +1,7 @@
 import { cacheLife } from "next/cache";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
-import { FeaturedList } from "@/features/lists/featured/components/FeaturedList";
+import { FeaturedMenu } from "@/features/menus/featured/components/FeaturedMenu";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
@@ -20,15 +20,15 @@ export default function BarPage() {
 					</SkeletonScreen>
 				}
 			>
-				<FeaturedListWithAuth />
+				<FeaturedMenuWithAuth />
 			</Suspense>
 		</BarPageShell>
 	);
 }
 
-async function FeaturedListWithAuth() {
+async function FeaturedMenuWithAuth() {
 	const { orgId } = await authOrForbidden();
-	return <FeaturedList orgId={orgId} />;
+	return <FeaturedMenu orgId={orgId} />;
 }
 
 async function BarPageShell({ children }: { children: ReactNode }) {
@@ -41,7 +41,7 @@ async function BarPageShell({ children }: { children: ReactNode }) {
 				<hr />
 
 				<Heading level="h2" className={styles.subheading}>
-					Featured List
+					Featured Menu
 				</Heading>
 
 				{children}

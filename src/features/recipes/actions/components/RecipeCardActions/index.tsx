@@ -3,7 +3,7 @@
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
-import { CreateListEntryButton } from "@/features/lists/entries/components/CreateListEntryButton";
+import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { RecipeActionsToggle } from "@/features/recipes/actions/components/RecipeActionsToggle";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
@@ -31,9 +31,9 @@ export function RecipeCardActions({
 			{(actionProps) => (
 				<>
 					<li className={styles.item}>
-						<CreateListEntryButton {...actionProps} recipe={recipe}>
-							<Icon name="plus" size={1} /> Add to list
-						</CreateListEntryButton>
+						<CreateMenuEntryButton {...actionProps} recipe={recipe}>
+							<Icon name="plus" size={1} /> Add to Menu
+						</CreateMenuEntryButton>
 					</li>
 
 					<li className={styles.item}>

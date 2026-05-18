@@ -4,7 +4,7 @@ import { BottomRailHost } from "@/components/BottomRail";
 import { OrgProvider } from "@/components/OrgProvider";
 import { Providers } from "@/components/Providers";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
-import { CreateListEntryDrawer } from "@/features/lists/entries/components/CreateListEntryDrawer";
+import { CreateMenuEntryDrawer } from "@/features/menus/entries/components/CreateMenuEntryDrawer";
 import { RecipeCardModal } from "@/features/recipes/components/RecipeCardModal/loader";
 import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesForm";
 import { Flex } from "@/ui/Flex";
@@ -40,7 +40,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 				</div>
 
 				<IngredientEditorDrawer />
-				<CreateListEntryDrawer />
+				<CreateMenuEntryDrawer />
 				<RecipeCardModal />
 			</OrgProvider>
 		</Providers>

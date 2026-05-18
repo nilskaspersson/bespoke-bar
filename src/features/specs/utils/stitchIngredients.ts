@@ -1,6 +1,6 @@
-import type { RecipeListWithRecipes } from "@/db/schema/composite";
+import type { MenuWithRecipes } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { RecipeListEntryWithRecipe } from "@/db/schema/recipeListEntries";
+import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 import type { Spec, SpecWithIngredient } from "@/db/schema/specs";
 
 export type IngredientMap = Map<Ingredient["id"], Ingredient>;
@@ -39,14 +39,14 @@ export function stitchSpecs(
 	});
 }
 
-export function stitchRecipeListEntries(
-	list: RecipeListWithRecipes<Spec>,
+export function stitchMenuEntries(
+	menu: MenuWithRecipes<Spec>,
 	ingredients: IngredientMap,
-): RecipeListWithRecipes {
+): MenuWithRecipes {
 	return {
-		...list,
-		entries: list.entries.map(
-			(entry): RecipeListEntryWithRecipe => ({
+		...menu,
+		entries: menu.entries.map(
+			(entry): MenuEntryWithRecipe => ({
 				...entry,
 				recipe: {
 					...entry.recipe,

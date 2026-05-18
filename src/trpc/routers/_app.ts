@@ -3,10 +3,10 @@ import { billingRouter } from "./billing";
 import { favoriteRouter } from "./favorite";
 import { featuredRouter } from "./featured";
 import { ingredientRouter } from "./ingredient";
-import { listEntryRouter } from "./listEntry";
+import { menuRouter } from "./menu";
+import { menuEntryRouter } from "./menuEntry";
 import { organisationRouter } from "./organisation";
 import { recipeRouter } from "./recipe";
-import { recipeListRouter } from "./recipeList";
 import { tagRouter } from "./tag";
 
 export const appRouter = router({
@@ -14,8 +14,8 @@ export const appRouter = router({
 	ingredient: ingredientRouter,
 	recipe: recipeRouter,
 	favorite: favoriteRouter,
-	recipeList: recipeListRouter,
-	listEntry: listEntryRouter,
+	menu: menuRouter,
+	menuEntry: menuEntryRouter,
 	featured: featuredRouter,
 	organisation: organisationRouter,
 	tag: tagRouter,

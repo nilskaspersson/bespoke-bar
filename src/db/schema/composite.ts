@@ -1,15 +1,11 @@
 import { z } from "zod";
 import { draftIngredientFormSchema } from "@/db/schema/ingredients";
 import {
-	type RecipeListEntryWithRecipe,
-	recipeListEntryFormSchema,
-	selectRecipeListEntrySchema,
-} from "@/db/schema/recipeListEntries";
-import {
-	type RecipeList,
-	recipeListFormSchema,
-	selectRecipeListSchema,
-} from "@/db/schema/recipeLists";
+	type MenuEntryWithRecipe,
+	menuEntryFormSchema,
+	selectMenuEntrySchema,
+} from "@/db/schema/menuEntries";
+import { type Menu, menuFormSchema, selectMenuSchema } from "@/db/schema/menus";
 import { insertRecipeSchema } from "@/db/schema/recipes";
 import {
 	insertSpecsSchema,
@@ -90,20 +86,18 @@ export type RecipeFormData = z.infer<typeof recipeFormSchema>;
 export type IngredientFormData = z.infer<typeof draftIngredientFormSchema>;
 
 /**
- * Recipe lists with entries
+ * Recipe menus with entries
  */
-export const recipeListWithEntriesFormSchema = z.object({
-	recipeList: recipeListFormSchema,
-	entries: z.array(recipeListEntryFormSchema.omit({ listId: true })),
+export const menuWithEntriesFormSchema = z.object({
+	menu: menuFormSchema,
+	entries: z.array(menuEntryFormSchema.omit({ menuId: true })),
 });
 
-export type RecipeListWithEntriesFormData = z.infer<
-	typeof recipeListWithEntriesFormSchema
->;
+export type MenuWithEntriesFormData = z.infer<typeof menuWithEntriesFormSchema>;
 
-export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
+export const menuWithEntriesSchema = selectMenuSchema.extend({
 	entries: z.array(
-		selectRecipeListEntrySchema.extend({
+		selectMenuEntrySchema.extend({
 			createdAt: z.string(),
 			updatedAt: z.string().nullable(),
 		}),
@@ -113,9 +107,8 @@ export const recipeListWithEntriesSchema = selectRecipeListSchema.extend({
 	featuredAt: z.string().nullable(),
 });
 
-export type RecipeListWithEntries = z.infer<typeof recipeListWithEntriesSchema>;
+export type MenuWithEntries = z.infer<typeof menuWithEntriesSchema>;
 
-export type RecipeListWithRecipes<S extends Spec = SpecWithIngredient> =
-	RecipeList & {
-		entries: RecipeListEntryWithRecipe<S>[];
-	};
+export type MenuWithRecipes<S extends Spec = SpecWithIngredient> = Menu & {
+	entries: MenuEntryWithRecipe<S>[];
+};
