@@ -4,8 +4,7 @@
 		grid-template-rows: 1fr auto;
 		flex: 1 1 auto;
 		min-height: 100lvh;
-		padding-inline: max(env(safe-area-inset-left), var(--app-inset))
-			max(env(safe-area-inset-right), var(--app-inset));
+		padding-inline: var(--app-inset);
 		padding-block: var(--app-header--height) var(--gap);
 	}
 }

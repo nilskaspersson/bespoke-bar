@@ -2,7 +2,7 @@
 	.container {
 		display: grid;
 		gap: var(--gap--large);
-		padding-block: var(--app-inset) var(--gap--huge);
+		padding-block: var(--space-5) var(--gap--huge);
 		container-type: inline-size;
 		align-items: start;
 		grid-template:

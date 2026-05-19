@@ -2,6 +2,6 @@
 	.container {
 		display: grid;
 		gap: var(--gap--huge);
-		padding-bottom: var(--app-inset);
+		padding-bottom: var(--space-5);
 	}
 }

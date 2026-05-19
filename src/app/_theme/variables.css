@@ -71,7 +71,7 @@
 	--gap--large: var(--space-6);
 	--gap--huge: var(--space-9);
 
-	--app-inset: var(--space-6);
+	--app-inset: var(--space-5);
 
 	--control-height--small: 2.5rem;
 	--control-height: var(--space-7);

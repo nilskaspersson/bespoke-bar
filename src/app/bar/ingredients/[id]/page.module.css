@@ -4,7 +4,7 @@
 		align-items: start;
 		align-content: start;
 		gap: var(--space-7);
-		padding-top: var(--app-inset);
+		padding-top: var(--space-5);
 		padding-bottom: var(--gap--huge);
 	}
 
