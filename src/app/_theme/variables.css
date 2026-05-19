@@ -146,6 +146,13 @@
 		var(--recipe-card-ratio)
 	);
 
+	--recipe-preview-inset: var(--space-4);
+	--recipe-preview-width: calc(
+		var(--recipe-card-width) +
+		var(--recipe-preview-inset) *
+		2
+	);
+
 	/**
 	 * z-index
 	 */

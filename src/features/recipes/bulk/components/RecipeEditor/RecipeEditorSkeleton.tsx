@@ -8,12 +8,23 @@ import styles from "./styles.module.css";
 export function RecipeEditorSkeleton() {
 	return (
 		<div className={styles.root}>
-			<Flex gap={2} alignItems="center" className={styles.titleBar}>
-				<Icon name="duotone-input-text" size={3} className={styles.titleIcon} />
+			<Flex
+				gap={2}
+				alignItems="center"
+				justifyContent="space-between"
+				className={styles.titleBar}
+			>
+				<Flex gap={2} alignItems="center">
+					<Icon
+						name="duotone-input-text"
+						size={3}
+						className={styles.titleIcon}
+					/>
 
-				<Text size={1} weight={600}>
-					Recipe editor
-				</Text>
+					<Text size={1} weight={600}>
+						Text editor
+					</Text>
+				</Flex>
 
 				<BulkDraftInfo />
 			</Flex>
@@ -29,10 +40,9 @@ export function RecipeEditorSkeleton() {
 			</div>
 
 			<div className={styles.statusBar}>
-				<Flex justifyContent="flex-end" gap={2}>
-					<Skeleton variant="block" width="80px" height="var(--space-6)" />
-					<Skeleton variant="block" width="80px" height="var(--space-6)" />
-				</Flex>
+				<Text as="div" size={0}>
+					<Skeleton variant="text" width="160px" height="var(--space-2)" />
+				</Text>
 			</div>
 		</div>
 	);

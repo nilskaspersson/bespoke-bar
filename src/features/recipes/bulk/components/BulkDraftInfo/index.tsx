@@ -19,7 +19,7 @@ export function BulkDraftInfo() {
 				size="tiny"
 				color="light"
 				icon
-				aria-label="Recipe editor tips"
+				aria-label="Text editor tips"
 				{...popover.triggerProps}
 				onClick={stopPropagation}
 			>

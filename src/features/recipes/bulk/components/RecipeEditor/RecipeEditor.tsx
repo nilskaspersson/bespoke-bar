@@ -80,7 +80,7 @@ export function RecipeEditor({
 							/>
 
 							<Text size={1} weight={600}>
-								Recipe editor
+								Text editor
 							</Text>
 						</Flex>
 

@@ -1,7 +1,21 @@
 @layer feature {
-	.form {
+	.root {
 		display: grid;
+		justify-content: center;
+		align-self: start;
+		align-items: start;
 		gap: var(--gap);
+
+		@container (width > 900px) {
+			grid-template-columns: repeat(2, var(--recipe-preview-width));
+		}
+	}
+
+	.form {
+		@container (width > 900px) {
+			position: sticky;
+			top: var(--gap);
+		}
 	}
 
 	.editor {
@@ -16,17 +30,8 @@
 		pointer-events: none;
 	}
 
-	.actions {
-		display: flex;
-		gap: var(--space-2) var(--space-4);
-		flex-wrap: wrap;
-	}
-
-	.primary {
-		display: flex;
-		justify-content: flex-end;
-		flex-wrap: wrap;
-		gap: var(--space-2);
-		flex: 1 1 auto;
+	.preview {
+		align-self: stretch;
+		width: var(--recipe-preview-width);
 	}
 }

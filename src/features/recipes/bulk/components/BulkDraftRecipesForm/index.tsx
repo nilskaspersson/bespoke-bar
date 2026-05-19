@@ -4,24 +4,23 @@ import { clsx } from "clsx";
 import { CLEAR_EDITOR_COMMAND, type LexicalEditor } from "lexical";
 import { useRouter } from "next/navigation";
 import {
-	type HTMLAttributes,
+	type ComponentProps,
 	useCallback,
 	useDeferredValue,
+	useId,
 	useMemo,
 	useRef,
 	useState,
 } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Recipe } from "@/db/schema/recipes";
-import { PreviewRecipesDialog } from "@/features/recipes/bulk/components/PreviewRecipesDialog";
 import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { useDialog } from "@/hooks/useDialog";
+import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
-import { Button } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
 import { Kbd } from "@/ui/Kbd";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
@@ -37,7 +36,7 @@ export function BulkDraftRecipesForm({
 }: {
 	ingredients: Ingredient[];
 	createRecipes: (recipes: RecipeFormData[]) => Promise<Recipe[]>;
-} & Omit<HTMLAttributes<HTMLFormElement>, "action" | "children">) {
+} & Omit<ComponentProps<"div">, "children">) {
 	const [persistedDraft, setPersistedDraft] = useLocalStorage<string>(
 		DRAFT_STORAGE_KEY,
 		"",
@@ -99,73 +98,51 @@ export function BulkDraftRecipesForm({
 		baseFormAction();
 	}, [baseFormAction]);
 
-	const { dialogRef, isOpen, mounted, showModal, closeModal } = useDialog();
 	const recipeCount = draftRecipes.length;
+	const formId = useId();
 
 	return (
-		<form
-			{...props}
-			className={clsx(className, styles.form)}
-			action={formAction}
-		>
-			<div className={clsx(styles.editor, { [styles.disabled]: isSubmitting })}>
-				<RecipeEditor
-					editorRef={editorRef}
-					ingredients={ingredients}
-					initialText={persistedDraft}
-					onTextChange={handleTextChange}
-					statusBar={
-						<div className={styles.actions}>
+		<div {...props} className={clsx(className, styles.root)}>
+			<form id={formId} className={styles.form} action={formAction}>
+				<div
+					className={clsx(styles.editor, { [styles.disabled]: isSubmitting })}
+				>
+					<RecipeEditor
+						editorRef={editorRef}
+						ingredients={ingredients}
+						initialText={persistedDraft}
+						onTextChange={handleTextChange}
+						statusBar={
 							<Text as="div" size={0} light numeric>
-								<div>
-									{recipeCount} new {recipeCount === 1 ? "Recipe" : "Recipes"}
-								</div>
-
-								<div>
-									{newIngredientCount} new{" "}
-									{newIngredientCount === 1 ? "Ingredient" : "Ingredients"}
-								</div>
+								{recipeCount} new {recipeCount === 1 ? "Recipe" : "Recipes"},{" "}
+								{newIngredientCount} new{" "}
+								{newIngredientCount === 1 ? "Ingredient" : "Ingredients"}
 							</Text>
+						}
+					/>
+				</div>
+			</form>
 
-							<div className={styles.primary}>
-								<Button
-									variant="outline"
-									size="small"
-									onClick={recipeCount > 0 ? showModal : undefined}
-									aria-disabled={recipeCount === 0}
-								>
-									<Icon name="expand" size={1} />
-									Preview
-								</Button>
+			<DraftRecipesPreview recipes={draftRecipes} className={styles.preview} />
 
-								<SubmitButton
-									size="small"
-									variant="solid"
-									color={recipeCount > 0 ? "accent" : "light"}
-									disabled={recipeCount === 0}
-									endAdornment={
-										<Kbd
-											shortcut="mod+enter"
-											variant="ghost"
-											ignoreInputEvents={false}
-										/>
-									}
-								>
-									Create
-								</SubmitButton>
-							</div>
-						</div>
+			<BottomRailItems>
+				<SubmitButton
+					form={formId}
+					variant="clear"
+					rounded
+					color={"accent"}
+					aria-disabled={recipeCount === 0}
+					endAdornment={
+						<Kbd
+							shortcut="mod+enter"
+							variant="ghost"
+							ignoreInputEvents={false}
+						/>
 					}
-				/>
-			</div>
-
-			<PreviewRecipesDialog
-				dialogRef={dialogRef}
-				isOpen={isOpen}
-				mounted={mounted}
-				recipes={draftRecipes}
-				onClose={closeModal}
-			/>
-		</form>
+				>
+					Create
+				</SubmitButton>
+			</BottomRailItems>
+		</div>
 	);
 }
