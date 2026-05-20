@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { use, useCallback, useRef } from "react";
+import { type ReactNode, use, useCallback, useRef } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
@@ -18,9 +18,9 @@ import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
 import { trpc } from "@/trpc/client";
-import { ControlLabel } from "@/ui/ControlLabel";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
+import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { Text } from "@/ui/Text";
@@ -31,6 +31,7 @@ import styles from "./styles.module.css";
 type Props = {
 	recipe?: RecipeWithSpecs;
 	ingredients: Ingredient[];
+	children?: ReactNode;
 };
 
 function initializeSpecFormEntry(spec?: SpecWithIngredient) {
@@ -53,7 +54,7 @@ function initializeSpecFormEntry(spec?: SpecWithIngredient) {
 	};
 }
 
-export function RecipeForm({ recipe, ingredients }: Props) {
+export function RecipeForm({ recipe, ingredients, children }: Props) {
 	const utils = trpc.useUtils();
 	const isNew = !recipe?.id;
 	const usage = use(RecipeSlotUsageContext);
@@ -113,126 +114,154 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 
 	return (
 		<FormProvider context={form.context}>
-			<Grid
-				as="form"
-				action={handleSubmit}
-				ref={formRef}
-				id={form.id}
-				onSubmit={form.onSubmit}
-				noValidate
-				className={styles.container}
-			>
-				{/**
-				 * A native form submit (f.e. enter in form) looks for the first submit button of a
-				 * form and invokes that. Since we use conform for progressive enhancement with
-				 * alternative submit buttons with an expressed intent ("validate", "remove",
-				 * "insert"), we need to ensure the actual submit action is handled.
-				 */}
-				<input type="submit" hidden form={form.id} />
-
-				<input
-					type="hidden"
-					name={recipeFields.id.name}
-					value={recipeFields.id.value}
-				/>
-
-				<TextField
-					label="Recipe name"
-					name={recipeFields.name.name}
-					defaultValue={recipeFields.name.initialValue}
-					id={recipeFields.name.id}
-					large
-				/>
-
-				<hr className={styles.hr} />
-
-				<ControlLabel
-					htmlFor={fields.specs.name}
-					id={fields.specs.id}
-					label="Specs"
-					required
+			<div className={styles.layout}>
+				<Grid
+					as="form"
+					gap={6}
+					action={handleSubmit}
+					ref={formRef}
+					id={form.id}
+					onSubmit={form.onSubmit}
+					noValidate
+					autoComplete="off"
+					className={styles.form}
 				>
-					<EditRecipeSpecs
-						id={fields.specs.id}
-						name="specs"
-						ingredients={ingredients}
+					{/**
+					 * A native form submit (f.e. enter in form) looks for the first submit button of a
+					 * form and invokes that. Since we use conform for progressive enhancement with
+					 * alternative submit buttons with an expressed intent ("validate", "remove",
+					 * "insert"), we need to ensure the actual submit action is handled.
+					 */}
+					<input type="submit" hidden form={form.id} />
+
+					<input
+						type="hidden"
+						name={recipeFields.id.name}
+						value={recipeFields.id.value}
 					/>
-				</ControlLabel>
 
-				<hr className={styles.hr} />
+					<Grid gap={2}>
+						<Heading level="h3" size={3}>
+							Specs
+						</Heading>
 
-				<SelectPreparationMethod
-					label="Preparation method"
-					name={recipeFields.preparationMethod.name}
-					defaultValue={recipeFields.preparationMethod.initialValue}
-					selectProps={{
-						onSelectedItemChange: ({ selectedItem }) => {
-							if (!selectedItem) {
-								return;
-							}
-
-							form.update({
-								name: "recipe.dilutionTarget",
-								value: METHOD_TO_DEFAULT_DILUTION.get(selectedItem.value),
-							});
-						},
-					}}
-				/>
-
-				<SelectDilution
-					name={recipeFields.dilutionTarget.name}
-					defaultValue={recipeFields.dilutionTarget.defaultValue}
-				/>
-
-				<hr className={styles.hr} />
-
-				<details>
-					<Text as="summary" heavy compact weight={600}>
-						Style, description, instructions, glassware, garnish…
-					</Text>
-
-					<Grid as="fieldset" gap={6} className={styles.fieldset}>
-						<SelectCocktailStyle
-							label="Style"
-							name={recipeFields.style.name}
-							defaultValue={recipeFields.style.initialValue}
-						/>
-
-						<TextField
-							as="textarea"
-							label="Description"
-							name={recipeFields.description.name}
-							id={recipeFields.description.id}
-							defaultValue={recipeFields.description.initialValue}
-							helperText="Brief information about the recipe"
-						/>
-
-						<TextField
-							as="textarea"
-							label="Instructions"
-							name={recipeFields.instructions.name}
-							id={recipeFields.instructions.id}
-							defaultValue={recipeFields.instructions.initialValue}
-							helperText="Preparation instructions and notes"
-						/>
-
-						<SelectGlassware
-							label="Glassware"
-							name={recipeFields.glassware.name}
-							defaultValue={recipeFields.glassware.initialValue}
-						/>
-
-						<TextField
-							label="Garnish"
-							name={recipeFields.garnish.name}
-							id={recipeFields.garnish.id}
-							defaultValue={recipeFields.garnish.initialValue}
+						<EditRecipeSpecs
+							id={fields.specs.id}
+							name="specs"
+							ingredients={ingredients}
 						/>
 					</Grid>
-				</details>
 
-				<FormErrors formRef={formRef} />
-			</Grid>
+					<Grid gap={2}>
+						<Heading level="h3" size={3}>
+							Form
+						</Heading>
+
+						<div className={styles.box}>
+							<TextField
+								label="Recipe name"
+								name={recipeFields.name.name}
+								defaultValue={recipeFields.name.initialValue}
+								id={recipeFields.name.id}
+								large
+								fullWidth
+								placeholder="Name your creation"
+							/>
+
+							{/*<hr className={styles.hr} />*/}
+
+							{/*<ControlLabel
+						htmlFor={fields.specs.name}
+						id={fields.specs.id}
+						label="Specs"
+						required
+					>
+						<EditRecipeSpecs
+							id={fields.specs.id}
+							name="specs"
+							ingredients={ingredients}
+						/>
+					</ControlLabel>*/}
+
+							{/*<hr className={styles.hr} />*/}
+
+							<SelectPreparationMethod
+								label="Preparation method"
+								name={recipeFields.preparationMethod.name}
+								defaultValue={recipeFields.preparationMethod.initialValue}
+								selectProps={{
+									onSelectedItemChange: ({ selectedItem }) => {
+										if (!selectedItem) {
+											return;
+										}
+
+										form.update({
+											name: "recipe.dilutionTarget",
+											value: METHOD_TO_DEFAULT_DILUTION.get(selectedItem.value),
+										});
+									},
+								}}
+							/>
+
+							<SelectDilution
+								name={recipeFields.dilutionTarget.name}
+								defaultValue={recipeFields.dilutionTarget.defaultValue}
+							/>
+
+							<hr className={styles.hr} />
+
+							<details>
+								<Text as="summary" heavy compact weight={600}>
+									Style, description, instructions, glassware, garnish…
+								</Text>
+
+								<Grid as="fieldset" gap={6} className={styles.fieldset}>
+									<SelectCocktailStyle
+										label="Style"
+										name={recipeFields.style.name}
+										defaultValue={recipeFields.style.initialValue}
+									/>
+
+									<TextField
+										as="textarea"
+										label="Description"
+										name={recipeFields.description.name}
+										id={recipeFields.description.id}
+										defaultValue={recipeFields.description.initialValue}
+										helperText="Brief information about the recipe"
+									/>
+
+									<TextField
+										as="textarea"
+										label="Instructions"
+										name={recipeFields.instructions.name}
+										id={recipeFields.instructions.id}
+										defaultValue={recipeFields.instructions.initialValue}
+										helperText="Preparation instructions and notes"
+									/>
+
+									<SelectGlassware
+										label="Glassware"
+										name={recipeFields.glassware.name}
+										defaultValue={recipeFields.glassware.initialValue}
+									/>
+
+									<TextField
+										label="Garnish"
+										name={recipeFields.garnish.name}
+										id={recipeFields.garnish.id}
+										defaultValue={recipeFields.garnish.initialValue}
+									/>
+								</Grid>
+							</details>
+
+							<FormErrors formRef={formRef} />
+						</div>
+					</Grid>
+				</Grid>
+
+				{children}
+			</div>
 
 			<BottomRailItems>
 				<SubmitButton

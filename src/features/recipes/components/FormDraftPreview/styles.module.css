@@ -1,0 +1,9 @@
+@layer feature {
+	.sticky {
+		display: grid;
+		gap: var(--space-2);
+		align-self: start;
+		position: sticky;
+		top: var(--gap);
+	}
+}

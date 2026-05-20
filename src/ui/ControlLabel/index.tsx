@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
-import { Text } from "@/ui/Text";
+import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -11,7 +10,7 @@ type Props = {
 	htmlFor: string;
 	inline?: boolean;
 	id?: string;
-} & ComponentProps<"label">;
+} & TextProps<"label">;
 
 export function ControlLabel({
 	className,
@@ -31,7 +30,6 @@ export function ControlLabel({
 		>
 			{label ? (
 				<Text
-					{...props}
 					id={id}
 					as="label"
 					size={2}
@@ -41,6 +39,7 @@ export function ControlLabel({
 					className={clsx(styles.label, {
 						required,
 					})}
+					{...props}
 				>
 					<span className={styles.text}>{label}</span>
 				</Text>

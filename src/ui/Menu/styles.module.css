@@ -9,6 +9,13 @@
 		width: 100%;
 		text-align: initial;
 		padding-inline: var(--spacing);
+		background-color: var(--mauve-1);
+		color: var(--mauve-12);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--high);
+		border: 1px solid var(--glass--border-color);
+		overflow: auto;
+		overscroll-behavior: contain;
 	}
 
 	.options {

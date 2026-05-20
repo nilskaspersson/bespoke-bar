@@ -135,7 +135,7 @@
 	--glass--blur: blur(var(--space-3));
 	--glass--border-color: hsl(from var(--mauve-12) h s l / 0.1);
 
-	--container: 90ch;
+	--container: 70rem;
 
 	--app-header--height: 80px;
 
