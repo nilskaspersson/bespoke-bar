@@ -3,6 +3,7 @@
 		--inset: min(calc(var(--jsxSize, 0) / 2), var(--gap--large));
 
 		display: inline-flex;
+		align-items: baseline;
 		column-gap: var(--inset);
 		width: fit-content;
 		max-width: var(--line-length);

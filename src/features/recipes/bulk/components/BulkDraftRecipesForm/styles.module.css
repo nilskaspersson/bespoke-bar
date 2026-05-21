@@ -32,6 +32,7 @@
 
 	.preview {
 		align-self: stretch;
-		width: var(--recipe-preview-width);
+		max-width: var(--recipe-preview-width);
+		width: 100%;
 	}
 }

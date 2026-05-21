@@ -1,20 +1,21 @@
 "use client";
 
 import { useFormMetadata } from "@conform-to/react";
-import { useDeferredValue, useId, useMemo } from "react";
+import { type ComponentProps, useDeferredValue, useId, useMemo } from "react";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import { buildIngredientMap } from "@/features/specs/utils/stitchIngredients";
-import { Heading } from "@/ui/Heading";
+import { normalizeInput } from "@/utils";
 import type { Keyed } from "@/utils/withKey";
 import { recipePreviewSchema } from "./schema";
-import styles from "./styles.module.css";
 
 export function FormDraftPreview({
 	ingredients,
-}: {
+	...props
+}: Omit<ComponentProps<typeof DraftRecipesPreview>, "recipes"> & {
 	ingredients: Ingredient[];
 }) {
 	const { getFieldset } = useFormMetadata<RecipeFormData>();
@@ -35,6 +36,10 @@ export function FormDraftPreview({
 		() => buildIngredientMap(ingredients),
 		[ingredients],
 	);
+	const ingredientIndex = useMemo(
+		() => buildIngredientIndex(ingredients),
+		[ingredients],
+	);
 
 	const recipe = useMemo<Keyed<BaseRecipe>>(() => {
 		const parsed = recipePreviewSchema.safeParse({
@@ -50,9 +55,17 @@ export function FormDraftPreview({
 			: { recipe: undefined, specs: [] };
 
 		const specs = data.specs.map((spec, idx) => {
-			const resolved = spec.ingredientId
-				? ingredientMap.get(spec.ingredientId)
-				: undefined;
+			/**
+			 * Displayed name is the source of truth: if a name is present, resolve by name
+			 * (undefined → draft mode, even if `ingredientId` is still set from a stale prior
+			 * selection). Only fall back to id when there's no name to compare against.
+			 */
+			const resolved = spec.ingredient?.name
+				? ingredientIndex.get(normalizeInput(spec.ingredient.name))
+				: spec.ingredientId
+					? ingredientMap.get(spec.ingredientId)
+					: undefined;
+
 			return {
 				...spec,
 				_key: deferred.specs[idx]?.key ?? `spec-${idx}`,
@@ -65,15 +78,7 @@ export function FormDraftPreview({
 			specs,
 			_key: stableKey,
 		};
-	}, [deferred, ingredientMap, stableKey]);
+	}, [deferred, ingredientMap, ingredientIndex, stableKey]);
 
-	return (
-		<div className={styles.sticky}>
-			<Heading level="h3" size={3}>
-				Preview
-			</Heading>
-
-			<DraftRecipesPreview recipes={[recipe]} />
-		</div>
-	);
+	return <DraftRecipesPreview {...props} recipes={[recipe]} />;
 }

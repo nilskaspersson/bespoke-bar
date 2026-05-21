@@ -1,12 +1,11 @@
 "use server";
 
+import type { SubmissionResult } from "@conform-to/dom";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { redirect } from "next/navigation";
 import z from "zod";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { upsertRecipesWithSpecs as upsertRecipesWithSpecsService } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
-import { getRecipeUrl } from "@/features/recipes/utils";
 import { AppError, getAppErrorMessage } from "@/utils/appError";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -24,40 +23,40 @@ export async function upsertRecipesWithSpecs(
 	}
 }
 
-export async function upsertRecipeWithSpecsAction(formData: FormData) {
+export type UpsertRecipeWithSpecsActionResult = {
+	result: SubmissionResult;
+	recipes?: Recipe[];
+};
+
+export async function upsertRecipeWithSpecsAction(
+	formData: FormData,
+): Promise<UpsertRecipeWithSpecsActionResult> {
 	const submission = parseWithZod(formData, {
 		schema: recipeFormSchema,
 	});
 
 	if (submission.status !== "success") {
-		return submission.reply();
+		return { result: submission.reply() };
 	}
 
 	const data = Array.isArray(submission.value)
 		? submission.value
 		: [submission.value];
 
-	let result: Recipe[];
-
 	try {
-		result = await upsertRecipesWithSpecs(data);
+		const recipes = await upsertRecipesWithSpecs(data);
+		return { result: submission.reply(), recipes };
 	} catch (error) {
 		console.error(error);
 
-		return submission.reply({
-			formErrors: [
-				error instanceof Error ? error.message : "Failed to upsert recipe",
-			],
-		});
+		return {
+			result: submission.reply({
+				formErrors: [
+					error instanceof Error ? error.message : "Failed to upsert recipe",
+				],
+			}),
+		};
 	}
-
-	if (result.length === 1) {
-		redirect(getRecipeUrl(result[0]));
-	}
-
-	return submission.reply({
-		resetForm: true,
-	});
 }
 
 export async function createRecipesWithSpecsFromData(

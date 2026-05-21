@@ -1,7 +1,12 @@
 "use client";
 
 import { type FieldName, useField } from "@conform-to/react";
-import { type ReactNode, use, useId } from "react";
+import {
+	type UseComboboxState,
+	type UseComboboxStateChangeOptions,
+	useCombobox,
+} from "downshift";
+import { type ReactNode, use, useMemo } from "react";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_DEFAULT_ABV } from "@/features/categories/constants";
@@ -9,6 +14,10 @@ import { matchNameWithCategory } from "@/features/categories/utils/matchNameWith
 import { IngredientPicker } from "@/features/ingredients/components/IngredientPicker";
 import { DraftIngredientOverview } from "@/features/ingredients/draft/components/DraftIngredientOverview";
 import { IngredientDialogForm } from "@/features/ingredients/draft/components/IngredientDialogForm";
+import {
+	buildIngredientIndex,
+	type IngredientIndex,
+} from "@/features/ingredients/utils/buildIngredientIndex";
 import { QuantityControl } from "@/features/quantity/components/QuantityControl";
 import { SelectUnit } from "@/features/units/components/SelectUnit";
 import { isValidUnit } from "@/features/units/utils";
@@ -21,9 +30,48 @@ import { Chip } from "@/ui/Chip";
 import { Grid } from "@/ui/Grid";
 import { Menu } from "@/ui/Menu";
 import { Text } from "@/ui/Text";
+import { normalizeInput } from "@/utils";
 import styles from "./styles.module.css";
 
 type Spec = NonNullable<RecipeFormData["specs"]>[number];
+
+function asString(value: unknown): string {
+	return typeof value === "string" ? value : "";
+}
+
+/**
+ * Commit-on-click-or-blur semantics for the ingredient picker:
+ * - Typing alone never auto-selects an ingredient (so "Lime" doesn't lock you
+ *   out of typing "Lime Cordial").
+ * - Once an item is selected, typing past its name clears the selection.
+ * - On blur, if the typed text matches an existing ingredient, auto-select it
+ *   and snap the input to the canonical name.
+ */
+function makeIngredientPickerStateReducer(index: IngredientIndex) {
+	return (
+		state: UseComboboxState<Ingredient>,
+		{ type, changes }: UseComboboxStateChangeOptions<Ingredient>,
+	): Partial<UseComboboxState<Ingredient>> => {
+		if (type === useCombobox.stateChangeTypes.InputChange) {
+			if (
+				state.selectedItem &&
+				normalizeInput(changes.inputValue ?? "") !==
+					normalizeInput(state.selectedItem.name)
+			) {
+				return { ...changes, selectedItem: null };
+			}
+			return changes;
+		}
+		if (type === useCombobox.stateChangeTypes.InputBlur) {
+			const text = changes.inputValue ?? state.inputValue ?? "";
+			const matched = index.get(normalizeInput(text));
+			if (matched && matched !== state.selectedItem) {
+				return { ...changes, selectedItem: matched, inputValue: matched.name };
+			}
+		}
+		return changes;
+	};
+}
 
 export function EditRecipeSpecItem({
 	name,
@@ -36,29 +84,37 @@ export function EditRecipeSpecItem({
 	ingredients: Ingredient[];
 	withOptional?: boolean;
 }) {
-	const { dialogRef, isOpen: isDialogOpen, showModal } = useDialog();
+	const { dialogRef, showModal } = useDialog();
 	const { percentageFormatter } = use(FormatterContext);
-
-	const searchName = useId();
-	const [searchField] = useField<string>(searchName);
 
 	const [field, form] = useField(name);
 	const spec = field.getFieldset();
 	const ingredient = spec.ingredient.getFieldset();
 
-	const newIngredientName = searchField.value?.trim() ?? "";
+	const ingredientIndex = useMemo(
+		() => buildIngredientIndex(ingredients),
+		[ingredients],
+	);
 
-	const isNewIngredient =
-		newIngredientName &&
-		!spec.ingredientId.value &&
-		!ingredients.some((o) => o.name === newIngredientName);
+	/**
+	 * The combobox's displayed name is the single source of truth for which
+	 * ingredient this spec refers to. `ingredientId` is derived: if the name
+	 * matches an existing ingredient (case-insensitive), the picker's hidden
+	 * input emits that id; otherwise it submits empty and the server creates a
+	 * new ingredient from the accompanying `ingredient` subtree.
+	 */
+	const currentName = asString(ingredient.name.value);
+	const matchedIngredient = currentName.trim()
+		? ingredientIndex.get(normalizeInput(currentName))
+		: undefined;
+	const isNewIngredient = !matchedIngredient && currentName.trim().length > 0;
 
 	return (
 		<li className={styles.item}>
 			<input
 				type="hidden"
 				name={spec.id.name}
-				value={spec.id.defaultValue ?? spec.id.value}
+				value={asString(spec.id.value)}
 			/>
 
 			<div className={styles.line}>
@@ -66,15 +122,17 @@ export function EditRecipeSpecItem({
 					<div className={styles.inner}>
 						<div className={styles.meta}>
 							<QuantityControl
+								key={spec.quantity.key}
 								name={spec.quantity.name}
-								defaultValue={spec.quantity.defaultValue}
+								defaultValue={spec.quantity.initialValue}
 								compact
 								className={styles.quantity}
 							/>
 
 							<SelectUnit
+								key={spec.unit.key}
 								name={spec.unit.name}
-								defaultValue={spec.unit.defaultValue}
+								defaultValue={spec.unit.initialValue}
 								placeholder="Unit"
 								compact
 								rounded
@@ -90,20 +148,33 @@ export function EditRecipeSpecItem({
 								className={styles.ingredientPicker}
 								ingredients={ingredients}
 								name={spec.ingredientId.name}
-								defaultValue={spec.ingredientId.defaultValue}
+								defaultValue={
+									ingredientIndex.get(
+										normalizeInput(asString(ingredient.name.initialValue)),
+									)?.id
+								}
 								toggleButtonProps={{
 									className: styles.ingredientInput,
 								}}
 								comboboxProps={{
+									inputValue: currentName,
+									stateReducer:
+										makeIngredientPickerStateReducer(ingredientIndex),
 									onInputValueChange: ({ inputValue }) => {
 										form.update({
 											name: ingredient.name.name,
 											value: inputValue.trim(),
 										});
 									},
+									onSelectedItemChange: ({ selectedItem }) => {
+										if (!selectedItem) return;
+										form.update({
+											name: ingredient.name.name,
+											value: selectedItem.name,
+										});
+									},
 								}}
 								inputProps={{
-									name: searchName,
 									compact: true,
 									rounded: true,
 									className: styles.ingredientInput,
@@ -114,41 +185,31 @@ export function EditRecipeSpecItem({
 									<Menu.Item
 										onClick={() => {
 											closeMenu?.();
+											const trimmed = inputValue.trim();
+											const category = matchNameWithCategory(trimmed);
+											const abv = category
+												? CATEGORY_DEFAULT_ABV.get(category)
+												: undefined;
+											const measurementType = isValidUnit(spec.unit.value)
+												? (getMeasurementFromUnit(spec.unit.value) ?? "")
+												: "";
 
 											form.update({
-												name: ingredient.name.name,
-												value: inputValue.trim(),
+												name: spec.ingredient.name,
+												value: {
+													name: trimmed,
+													description: "",
+													brand: "",
+													unitCost: "",
+													category: category ?? "",
+													measurementType,
+													abv: abv ? percentageFormatter.format(abv) : "",
+												},
 											});
-
-											if (isValidUnit(spec.unit.value)) {
-												form.update({
-													name: ingredient.measurementType.name,
-													value: getMeasurementFromUnit(spec.unit.value) ?? "",
-												});
-											}
-
-											const category = matchNameWithCategory(inputValue.trim());
-
-											if (category) {
-												form.update({
-													name: ingredient.category.name,
-													value: category,
-												});
-
-												const abv = CATEGORY_DEFAULT_ABV.get(category);
-
-												form.update({
-													name: ingredient.abv.name,
-													value: abv
-														? percentageFormatter.format(abv)
-														: undefined,
-												});
-											}
-
 											showModal();
 										}}
 									>
-										<Menu.Label description={<i>"{newIngredientName}"</i>}>
+										<Menu.Label description={<i>"{currentName.trim()}"</i>}>
 											Create new ingredient
 										</Menu.Label>
 									</Menu.Item>
@@ -161,7 +222,7 @@ export function EditRecipeSpecItem({
 						<details className={styles.newInfo}>
 							<Text as="summary" size={1} compact>
 								<Text className={styles.ingredientName} heavy>
-									New ingredient: <b>{newIngredientName}</b>
+									New ingredient: <b>{currentName.trim()}</b>
 								</Text>{" "}
 								<Chip size={0} color="regular">
 									New
@@ -185,21 +246,19 @@ export function EditRecipeSpecItem({
 						</details>
 					) : null}
 
+					{/**
+					 * Always mount the dialog's content so its `ingredient.*` inputs are
+					 * present in `FormData`. Conform's `MutationObserver` listens for
+					 * `name`-attribute mutations (which React triggers on every render)
+					 * and rebuilds `meta.value` from `FormData` — fields not in the DOM
+					 * at that moment get wiped. Keeping the dialog content mounted (the
+					 * `<dialog>` element itself stays visually closed until `showModal()`)
+					 * ensures the ingredient subtree survives that rebuild.
+					 */}
 					<IngredientDialogForm
 						name={spec.ingredient.name}
 						ref={dialogRef}
-						isOpen={isDialogOpen}
-						onClose={() => {
-							/**
-							 * Keep Combobox search in sync with the ingredient name. There is an unwanted
-							 * behaviour where the Combobox updates its search value when the control is
-							 * focused again. I cannot find a way to prevent this.
-							 */
-							form.update({
-								name: searchName,
-								value: field.getFieldset().ingredient.getFieldset().name.value,
-							});
-						}}
+						isOpen
 					/>
 				</div>
 
@@ -208,6 +267,7 @@ export function EditRecipeSpecItem({
 
 			{withOptional ? (
 				<Checkbox
+					key={spec.optional.key}
 					name={spec.optional.name}
 					defaultChecked={spec.optional.defaultChecked}
 					id={spec.optional.id}

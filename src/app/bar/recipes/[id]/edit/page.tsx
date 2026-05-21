@@ -73,7 +73,10 @@ async function RecipeEditWithAuth({ params }: Props) {
 			</nav>
 
 			<RecipeForm recipe={recipe} ingredients={ingredients}>
-				<FormDraftPreview ingredients={ingredients} />
+				<FormDraftPreview
+					ingredients={ingredients}
+					className={styles.preview}
+				/>
 			</RecipeForm>
 		</>
 	);

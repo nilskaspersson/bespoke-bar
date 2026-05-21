@@ -27,7 +27,7 @@ export function SelectDilution({
 			required={field.required}
 			label={
 				displayValue != null
-					? `Dilution: ${percentageFormatter.format(
+					? `Target dilution: ${percentageFormatter.format(
 							Number(displayValue),
 						)} of final volume`
 					: "Dilution of final volume"

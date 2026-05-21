@@ -118,11 +118,6 @@
 		margin-right: calc(var(--space-6) + var(--g));
 	}
 
-	.addButton {
-		background-color: var(--mauve-2);
-		border-color: var(--mauve-6);
-	}
-
 	.newInfo {
 		display: grid;
 		gap: var(--gap);

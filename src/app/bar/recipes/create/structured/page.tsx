@@ -9,6 +9,7 @@ import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { Container } from "@/ui/Container";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
+import styles from "./page.module.css";
 
 export default function CreateRecipePage() {
 	return (
@@ -45,7 +46,10 @@ async function CreateRecipeWithAuth() {
 	return (
 		<RecipeSlotUsageProvider value={usage}>
 			<RecipeForm ingredients={ingredients}>
-				<FormDraftPreview ingredients={ingredients} />
+				<FormDraftPreview
+					ingredients={ingredients}
+					className={styles.preview}
+				/>
 			</RecipeForm>
 		</RecipeSlotUsageProvider>
 	);
