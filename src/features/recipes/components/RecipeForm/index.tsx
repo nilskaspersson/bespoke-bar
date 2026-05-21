@@ -21,10 +21,11 @@ import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
+import { Button } from "@/ui/Button";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
+import { Kbd } from "@/ui/Kbd";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
@@ -134,14 +135,6 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 					autoComplete="off"
 					className={styles.form}
 				>
-					{/**
-					 * A native form submit (f.e. enter in form) looks for the first submit button of a
-					 * form and invokes that. Since we use conform for progressive enhancement with
-					 * alternative submit buttons with an expressed intent ("validate", "remove",
-					 * "insert"), we need to ensure the actual submit action is handled.
-					 */}
-					<input type="submit" hidden form={form.id} />
-
 					<input
 						type="hidden"
 						name={recipeFields.id.name}
@@ -254,16 +247,26 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 					formId={form.id}
 				/>
 
-				<SubmitButton
+				<Button
+					type="button"
 					variant="clear"
 					color="accent"
-					form={form.id}
 					rounded
 					disabled={submitting}
+					onClick={() => {
+						formRef.current?.requestSubmit();
+					}}
+					endAdornment={
+						<Kbd
+							shortcut="mod+enter"
+							variant="ghost"
+							ignoreInputEvents={false}
+						/>
+					}
 				>
 					<Icon name="circle-check" />
 					{recipeFields.id.value ? "Save changes" : "Create recipe"}
-				</SubmitButton>
+				</Button>
 			</BottomRailItems>
 		</FormProvider>
 	);

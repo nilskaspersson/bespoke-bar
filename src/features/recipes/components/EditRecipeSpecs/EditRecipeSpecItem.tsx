@@ -40,12 +40,12 @@ function asString(value: unknown): string {
 }
 
 /**
- * Commit-on-click-or-blur semantics for the ingredient picker:
- * - Typing alone never auto-selects an ingredient (so "Lime" doesn't lock you
- *   out of typing "Lime Cordial").
+ * Commit-on-click-or-commit-key semantics for the ingredient picker:
+ * - Typing alone never auto-selects (so "Lime" doesn't lock you out of typing
+ *   "Lime Cordial").
  * - Once an item is selected, typing past its name clears the selection.
- * - On blur, if the typed text matches an existing ingredient, auto-select it
- *   and snap the input to the canonical name.
+ * - On blur OR Enter, if the typed text matches an existing ingredient,
+ *   auto-select it and snap the input to the canonical name.
  */
 function makeIngredientPickerStateReducer(index: IngredientIndex) {
 	return (
@@ -62,7 +62,10 @@ function makeIngredientPickerStateReducer(index: IngredientIndex) {
 			}
 			return changes;
 		}
-		if (type === useCombobox.stateChangeTypes.InputBlur) {
+		if (
+			type === useCombobox.stateChangeTypes.InputBlur ||
+			type === useCombobox.stateChangeTypes.InputKeyDownEnter
+		) {
 			const text = changes.inputValue ?? state.inputValue ?? "";
 			const matched = index.get(normalizeInput(text));
 			if (matched && matched !== state.selectedItem) {

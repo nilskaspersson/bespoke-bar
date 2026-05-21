@@ -90,16 +90,22 @@ export function EditRecipeSpecs({
 				</Grid>
 
 				<div className={clsx(styles.card, styles.add)}>
+					{/**
+					 * `type="button"` (not `type="submit"`) so it can't become the form's
+					 * implicit-submission target on Enter. The save button lives outside
+					 * the form (portaled to the BottomRail) and is reached via click or
+					 * the BottomRail's `mod+Enter` shortcut — there are no submit
+					 * descendants in the form, so plain Enter does nothing.
+					 */}
 					<Button
-						type="submit"
+						type="button"
 						variant="clear"
 						color="light"
 						rounded
 						fullWidth
-						{...form.insert.getButtonProps({
-							name: fields.name,
-							defaultValue: EMPTY_SPEC,
-						})}
+						onClick={() => {
+							form.insert({ name: fields.name, defaultValue: EMPTY_SPEC });
+						}}
 					>
 						Add additional spec
 					</Button>
