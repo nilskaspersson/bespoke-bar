@@ -41,7 +41,7 @@
 		}
 
 		@media (hover: none) and (pointer: coarse) {
-			opacity: 0;
+			display: none;
 		}
 
 		&.isModifier {
