@@ -71,6 +71,7 @@ function makeIngredientPickerStateReducer(index: IngredientIndex) {
 			if (matched && matched !== state.selectedItem) {
 				return { ...changes, selectedItem: matched, inputValue: matched.name };
 			}
+			return { ...changes, inputValue: text.trim() };
 		}
 		return changes;
 	};
@@ -166,7 +167,7 @@ export function EditRecipeSpecItem({
 									onInputValueChange: ({ inputValue }) => {
 										form.update({
 											name: ingredient.name.name,
-											value: inputValue.trim(),
+											value: inputValue,
 										});
 									},
 									onSelectedItemChange: ({ selectedItem }) => {
