@@ -3,7 +3,6 @@ import type { ComponentProps } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { EMPTY_RECIPE } from "@/features/recipes/constants";
-import { Grid } from "@/ui/Grid";
 import { getKey, type Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
@@ -16,7 +15,7 @@ export function DraftRecipesPreview({
 }) {
 	return (
 		<aside className={clsx(styles.panel, className)} {...props}>
-			<Grid as="ul" gap={4}>
+			<ul className={styles.list}>
 				{recipes.length === 0 ? (
 					<li key="placeholder">
 						<RecipeCard recipe={EMPTY_RECIPE} />
@@ -28,7 +27,7 @@ export function DraftRecipesPreview({
 						</li>
 					))
 				)}
-			</Grid>
+			</ul>
 		</aside>
 	);
 }

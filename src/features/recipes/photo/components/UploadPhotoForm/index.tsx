@@ -10,6 +10,7 @@ import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPh
 import { useConfirm } from "@/hooks/useConfirm";
 import { useDialog } from "@/hooks/useDialog";
 import { Callout } from "@/ui/Callout";
+import { Chip } from "@/ui/Chip";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { FileInput } from "@/ui/FileInput";
 import { Grid } from "@/ui/Grid";
@@ -23,10 +24,13 @@ export function UploadPhotoForm({
 	onSuccess,
 	onChange,
 	className,
+	children,
+	usageInfo,
 	...props
-}: Omit<ComponentProps<"form">, "onChange" | "children" | "action"> & {
+}: Omit<ComponentProps<"form">, "onChange" | "action"> & {
 	onSuccess: (extractedText: string) => void;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
+	usageInfo?: React.ReactNode;
 }) {
 	const {
 		action: submitPhotoAction,
@@ -85,6 +89,17 @@ export function UploadPhotoForm({
 			action={submitPhotoAction}
 			className={clsx(styles.base, className)}
 		>
+			{usageInfo ? (
+				<Chip
+					className={styles.usageInfo}
+					size={1}
+					variant="outline"
+					color="amber"
+				>
+					{usageInfo}
+				</Chip>
+			) : null}
+
 			<Grid gap={6} justifyItems="center">
 				<Heading level="h2" size={4} align="center">
 					Upload an image of a recipe
@@ -117,9 +132,11 @@ export function UploadPhotoForm({
 					</FileInput>
 				</Grid>
 
-				<Callout variant="solid" color="regular" icon="circle-info" size={2}>
+				<Callout variant="solid" color="light" icon="circle-info" size={1}>
 					Multiple recipes can be extracted from an image.
 				</Callout>
+
+				{children}
 			</Grid>
 
 			<ConfirmAction.Alert

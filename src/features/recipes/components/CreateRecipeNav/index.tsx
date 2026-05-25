@@ -1,6 +1,5 @@
 import { clsx } from "clsx";
 import Link from "next/link";
-import { useMemo } from "react";
 import type { IconName } from "@/libs/icons/types";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
@@ -10,7 +9,10 @@ import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
+export type CreateRecipeMethod = "text" | "photo" | "structured";
+
 type CardSpec = {
+	method: CreateRecipeMethod;
 	icon: IconName;
 	title: string;
 	hook: string;
@@ -21,47 +23,62 @@ type CardSpec = {
 	featured?: boolean;
 };
 
+function getCards(onBoarding?: boolean): CardSpec[] {
+	return [
+		{
+			method: "text",
+			icon: "duotone-input-text",
+			title: "Text Editor",
+			hook: "Paste from your notes",
+			description: "Text to Recipes and Ingredients.",
+			href: "/bar/recipes/create/text",
+			caption: onBoarding ? "Good starting point" : undefined,
+			featured: onBoarding,
+		},
+		{
+			method: "photo",
+			icon: "duotone-image",
+			title: "Photo",
+			hook: "Snap a napkin",
+			description: "Create Recipes from a photo.",
+			href: "/bar/recipes/create/photo",
+			meta: "3 free per day",
+		},
+		{
+			method: "structured",
+			icon: "duotone-table-tree",
+			title: "Structured",
+			hook: "Full control",
+			description: "Create a Recipe with a structured form.",
+			href: "/bar/recipes/create/structured",
+		},
+	];
+}
+
 export function CreateRecipeNav({
+	active,
 	children,
+	className,
+	compact,
 	onBoarding,
 	...props
-}: GridProps & { onBoarding?: boolean }) {
-	const cards: CardSpec[] = useMemo(
-		() =>
-			[
-				{
-					icon: "duotone-input-text",
-					title: "Text Editor",
-					hook: "Paste from your notes",
-					description: "Text to Recipes and Ingredients.",
-					href: "/bar/recipes/create/text",
-					caption: onBoarding ? "Good starting point" : undefined,
-					featured: onBoarding,
-				},
-				{
-					icon: "duotone-image",
-					title: "Photo",
-					hook: "Snap a napkin",
-					description: "Create Recipes from a photo.",
-					href: "/bar/recipes/create/photo",
-					meta: "3 free per day",
-				},
-				{
-					icon: "duotone-table-tree",
-					title: "Structured",
-					hook: "Full control",
-					description: "Create a Recipe with a structured form.",
-					href: "/bar/recipes/create/structured",
-				},
-			] as const,
-		[onBoarding],
-	);
+}: GridProps & {
+	active?: CreateRecipeMethod;
+	compact?: boolean;
+	onBoarding?: boolean;
+}) {
+	const cards = getCards(onBoarding);
 
 	return (
-		<Grid as="nav" gap={4} {...props}>
+		<Grid
+			as="nav"
+			gap={4}
+			className={clsx(className, styles.nav, { [styles.compact]: compact })}
+			{...props}
+		>
 			<ul className={styles.list}>
 				{cards.map((card) => (
-					<li key={card.title} className={styles.item}>
+					<li key={card.method} className={styles.item}>
 						<Link
 							href={card.href}
 							className={clsx(styles.card, {
@@ -69,46 +86,61 @@ export function CreateRecipeNav({
 							})}
 							aria-label={card.title}
 							aria-description={card.description}
+							aria-current={card.method === active ? "page" : undefined}
 						>
-							<Flex
-								className={styles.top}
-								gap={2}
-								alignItems="center"
-								justifyContent="space-between"
-							>
-								<Flex gap={2}>
-									{card.caption ? (
-										<Chip variant="filled" size={1} compact weight={600}>
-											{card.caption}
-										</Chip>
-									) : null}
+							{!compact ? (
+								<Flex
+									className={styles.top}
+									gap={2}
+									alignItems="center"
+									justifyContent="space-between"
+								>
+									<Flex gap={2}>
+										{card.caption ? (
+											<Chip variant="filled" size={1} compact weight={600}>
+												{card.caption}
+											</Chip>
+										) : null}
 
-									{card.meta ? (
-										<Chip size={1} variant="outline" color="amber">
-											{card.meta}
-										</Chip>
-									) : null}
+										{card.meta ? (
+											<Chip size={1} variant="outline" color="amber">
+												{card.meta}
+											</Chip>
+										) : null}
+									</Flex>
+
+									<Icon name="arrow-right" size={4} className={styles.arrow} />
 								</Flex>
-
-								<Icon name="arrow-right" size={4} className={styles.arrow} />
-							</Flex>
+							) : null}
 
 							<Grid gap={4} justifyItems="center" className={styles.content}>
-								<Icon name={card.icon} size={7} className={styles.icon} />
+								<Icon
+									name={card.icon}
+									size={compact ? 4 : 7}
+									className={styles.icon}
+								/>
 
 								<hgroup>
-									<Heading level="h3" size={5} className={styles.label}>
+									<Heading
+										level="h3"
+										size={compact ? 2 : 5}
+										className={styles.label}
+									>
 										{card.title}
 									</Heading>
 
-									<Text size={2} as="p" weight={500} className={styles.hook}>
-										{card.hook}
-									</Text>
+									{!compact ? (
+										<Text size={2} as="p" weight={500} className={styles.hook}>
+											{card.hook}
+										</Text>
+									) : null}
 								</hgroup>
 
-								<Text size={1} as="p">
-									{card.description}
-								</Text>
+								{!compact ? (
+									<Text size={1} as="p">
+										{card.description}
+									</Text>
+								) : null}
 							</Grid>
 						</Link>
 					</li>

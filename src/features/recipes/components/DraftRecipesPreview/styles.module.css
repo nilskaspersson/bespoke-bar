@@ -1,7 +1,6 @@
 @layer feature {
 	.panel {
 		isolation: isolate;
-		width: var(--recipe-preview-width);
 		padding: var(--recipe-preview-inset);
 		contain: layout paint;
 		border-radius: var(--radius--large);
@@ -36,5 +35,15 @@
 					transparent 4px
 				);
 		}
+	}
+
+	.list {
+		display: grid;
+		grid-template-columns: repeat(
+				auto-fit,
+				minmax(min(var(--recipe-card-width), 100%), var(--recipe-card-width))
+			);
+		gap: var(--space-4);
+		justify-content: center;
 	}
 }

@@ -1,7 +1,13 @@
 @layer feature {
 	.base {
-		padding: var(--space-6);
+		padding: var(--space-8) var(--space-6) var(--space-6);
 		background-color: var(--mauve-2);
+		position: relative;
+	}
+
+	.usageInfo {
+		position: absolute;
+		inset: var(--space-3) auto auto var(--space-3);
 	}
 
 	.separator {

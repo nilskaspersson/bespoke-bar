@@ -2,12 +2,11 @@
 	.footer {
 		background-color: var(--mauve-2);
 		color: var(--mauve-10);
-		border-top: 1px solid hsl(from var(--mauve-6) h s l / 0.5);
 	}
 
 	.contain {
 		padding: var(--space-5) var(--app-inset);
-		padding-top: var(--gap--huge);
+		padding-top: calc(var(--gap--huge) * 2);
 	}
 
 	.nav {

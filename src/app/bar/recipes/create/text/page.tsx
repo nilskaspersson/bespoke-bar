@@ -5,6 +5,7 @@ import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlo
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";
+import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import { authOrForbidden } from "@/utils/auth";
 
@@ -16,7 +17,9 @@ export default function BulkCreateRecipePage() {
 				icon="duotone-martini-glass"
 				heading="Text Editor"
 				tagline="Paste from your notes."
-			/>
+			>
+				<CreateRecipeNav active="text" compact />
+			</PageHeader>
 
 			<Suspense
 				fallback={

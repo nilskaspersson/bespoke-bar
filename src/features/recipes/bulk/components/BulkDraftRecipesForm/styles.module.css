@@ -20,7 +20,6 @@
 
 	.editor {
 		display: grid;
-		min-height: 20rem;
 		transition-property: opacity;
 		transition-duration: var(--transition-duration);
 	}

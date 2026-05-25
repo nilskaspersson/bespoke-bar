@@ -8,5 +8,6 @@
 		align-self: start;
 		position: sticky;
 		top: var(--gap);
+		width: var(--recipe-preview-width);
 	}
 }
