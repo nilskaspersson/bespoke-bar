@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
+import { useCallback, useRef } from "react";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 import {
 	checkOCRConsent,
@@ -9,6 +10,7 @@ import {
 import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPhotoAction";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useDialog } from "@/hooks/useDialog";
+import { useFileDrop } from "@/hooks/useFileDrop";
 import { Callout } from "@/ui/Callout";
 import { Chip } from "@/ui/Chip";
 import { ConfirmAction } from "@/ui/ConfirmAction";
@@ -49,6 +51,34 @@ export function UploadPhotoForm({
 	const { dialogRef: ocrConsentDialogRef, showModal: showOCRConsentDialog } =
 		useDialog();
 
+	const imageInputRef = useRef<HTMLInputElement>(null);
+
+	const handleDroppedFiles = useCallback((files: FileList) => {
+		const input = imageInputRef.current;
+		if (!input || input.disabled) return;
+
+		const file = Array.from(files).find(
+			(candidate) =>
+				ACCEPTED_IMAGE_TYPES.includes(candidate.type) || candidate.type === "",
+		);
+
+		if (!file) return;
+
+		/**
+		 * Hand the file to the "Select an image" input and fire a native change so
+		 * the consent prompt + auto-submit below run exactly as for a manual pick.
+		 */
+		const data = new DataTransfer();
+		data.items.add(file);
+		input.files = data.files;
+		input.dispatchEvent(new Event("change", { bubbles: true }));
+	}, []);
+
+	const { dropZoneRef, isDraggingOver, isFileDragging, dropHandlers } =
+		useFileDrop<HTMLFormElement>({
+			onFiles: handleDroppedFiles,
+		});
+
 	const fileInputProps: Partial<ComponentProps<typeof FileInput>> = {
 		name: "image",
 		accept: ACCEPTED_IMAGE_TYPES.join(","),
@@ -86,9 +116,23 @@ export function UploadPhotoForm({
 	return (
 		<form
 			{...props}
+			ref={dropZoneRef}
+			{...dropHandlers}
 			action={submitPhotoAction}
-			className={clsx(styles.base, className)}
+			className={clsx(styles.base, className, {
+				[styles.draggingOver]: isDraggingOver,
+			})}
 		>
+			{isFileDragging ? (
+				<div className={styles.overlay}>
+					<Icon name="arrow-down-to-dotted-line" size={6} />
+
+					<Text size={3} weight={600} heavy align="center">
+						{isDraggingOver ? "Release to parse recipes!" : "Drop file here."}
+					</Text>
+				</div>
+			) : null}
+
 			{usageInfo ? (
 				<Chip
 					className={styles.usageInfo}
@@ -108,6 +152,7 @@ export function UploadPhotoForm({
 				<Grid gap={2} justifyItems="center">
 					<FileInput
 						{...fileInputProps}
+						ref={imageInputRef}
 						buttonProps={{
 							variant: "solid",
 							color: "accent",
@@ -123,12 +168,24 @@ export function UploadPhotoForm({
 					<FileInput
 						{...fileInputProps}
 						capture="environment"
+						className={styles.captureButton}
 						buttonProps={{
 							variant: "outline",
 							color: "accent",
 						}}
 					>
 						<Icon name="camera" /> Take a photo
+					</FileInput>
+
+					<FileInput
+						{...fileInputProps}
+						className={styles.dropButton}
+						buttonProps={{
+							variant: "outline",
+							color: "accent",
+						}}
+					>
+						<Icon name="arrow-down-to-dotted-line" /> Drop a file
 					</FileInput>
 				</Grid>
 

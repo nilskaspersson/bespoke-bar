@@ -5,6 +5,35 @@
 		position: relative;
 	}
 
+	.draggingOver {
+		--borderStyle: solid;
+		--borderColor: var(--borderColorActive, var(--iris-11));
+	}
+
+	/*
+	 * Shown whenever a file is dragged anywhere over the window (not just this
+	 * card), so the drop target is obvious the moment a drag starts. Purely
+	 * decorative — `pointer-events: none` lets the drag reach the form beneath.
+	 */
+	.overlay {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: var(--space-3);
+		padding: var(--space-4);
+		border-radius: inherit;
+		color: var(--iris-11);
+		background-color: color-mix(in srgb, var(--iris-3) 80%, transparent);
+		backdrop-filter: var(--glass--blur);
+		text-align: center;
+		pointer-events: none;
+		animation: uploadOverlayIn var(--transition-duration) ease;
+	}
+
 	.usageInfo {
 		position: absolute;
 		inset: var(--space-3) auto auto var(--space-3);
@@ -24,5 +53,30 @@
 			height: 1px;
 			background-color: var(--mauve-6);
 		}
+	}
+
+	/*
+	 * `capture` is only honoured by touch devices; elsewhere it silently opens a
+	 * file picker, so we show the drag-and-drop affordance instead. Pure CSS keeps
+	 * the markup identical across server/client — no hydration flash.
+	 */
+	.captureButton {
+		display: none;
+	}
+
+	@media (hover: none) and (pointer: coarse) {
+		.captureButton {
+			display: revert-layer;
+		}
+
+		.dropButton {
+			display: none;
+		}
+	}
+}
+
+@keyframes uploadOverlayIn {
+	from {
+		opacity: 0;
 	}
 }
