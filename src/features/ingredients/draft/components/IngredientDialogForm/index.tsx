@@ -52,46 +52,53 @@ export function IngredientDialogForm({
 			>
 				<TextField
 					label="Ingredient name"
+					key={ingredient.name.key}
 					name={ingredient.name.name}
-					defaultValue={ingredient.name.defaultValue}
+					defaultValue={ingredient.name.initialValue}
 				/>
 
 				<SelectCategory
+					key={ingredient.category.key}
 					name={ingredient.category.name}
-					value={ingredient.category.value ?? ""}
+					defaultValue={ingredient.category.initialValue ?? ""}
 				/>
 
 				<TextField
 					as="textarea"
 					label="Description"
+					key={ingredient.description.key}
 					name={ingredient.description.name}
-					defaultValue={ingredient.description.defaultValue}
+					defaultValue={ingredient.description.initialValue}
 					rows={3}
 				/>
 
 				<SelectAbv
 					label="Alcohol by volume (ABV)"
+					key={ingredient.abv.key}
 					name={ingredient.abv.name}
-					defaultValue={ingredient.abv.defaultValue}
+					defaultValue={ingredient.abv.initialValue}
 					helperText="Percentage value from 0-100%. Up to two decimal places."
 					ingredient={undefined}
 				/>
 
 				<SelectMeasurementType
+					key={ingredient.measurementType.key}
 					name={ingredient.measurementType.name}
-					defaultValue={ingredient.measurementType.defaultValue}
+					defaultValue={ingredient.measurementType.initialValue}
 				/>
 
 				<SelectUnitCost
 					label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType.value)}`}
+					key={ingredient.unitCost.key}
 					name={ingredient.unitCost.name}
-					defaultValue={ingredient.unitCost.defaultValue}
+					defaultValue={ingredient.unitCost.initialValue}
 				/>
 
 				<TextField
 					label="Brand"
+					key={ingredient.brand.key}
 					name={ingredient.brand.name}
-					defaultValue={ingredient.brand.defaultValue}
+					defaultValue={ingredient.brand.initialValue}
 				/>
 
 				{children}

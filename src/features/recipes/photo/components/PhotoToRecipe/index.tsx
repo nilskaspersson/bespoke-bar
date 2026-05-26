@@ -15,6 +15,8 @@ import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/use
 import { OutputPreview } from "@/features/recipes/photo/components/OutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
+import { Callout } from "@/ui/Callout";
+import { Grid } from "@/ui/Grid";
 import { ImageUploadPreview } from "@/ui/ImageUploadPreview";
 import styles from "./styles.module.css";
 
@@ -77,6 +79,7 @@ export function PhotoToRecipe({
 				className={clsx(styles.step, styles.stepUpload, {
 					[styles.hasImagePreview]: hasSelectedImage,
 				})}
+				usageInfo="Daily usage 0/3"
 			/>
 
 			<hr
@@ -101,18 +104,24 @@ export function PhotoToRecipe({
 				})}
 			/>
 
-			<OutputPreview
-				ref={outputContainerRef}
-				draftRecipes={draftRecipes}
-				disabled={!hasParsedText}
-				ingredients={ingredients}
-				ocrText={ocrText}
-				onChangeDraftRecipesText={setDraftRecipeText}
-				className={clsx(styles.step, styles.stepOutput, {
-					[styles.hasParsedText]: hasParsedText,
-					[styles.hasDraftRecipes]: hasDraftRecipes,
-				})}
-			/>
+			<Grid gap={2}>
+				<OutputPreview
+					ref={outputContainerRef}
+					draftRecipes={draftRecipes}
+					disabled={!hasParsedText}
+					ingredients={ingredients}
+					ocrText={ocrText}
+					onChangeDraftRecipesText={setDraftRecipeText}
+					className={clsx(styles.step, styles.stepOutput, {
+						[styles.hasParsedText]: hasParsedText,
+						[styles.hasDraftRecipes]: hasDraftRecipes,
+					})}
+				/>
+
+				<Callout size={1} icon="circle-exclamation" variant="inset">
+					Text extraction can be inaccurate. Double-check extracted recipes.
+				</Callout>
+			</Grid>
 		</div>
 	);
 }

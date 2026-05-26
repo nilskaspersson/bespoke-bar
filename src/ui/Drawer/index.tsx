@@ -149,7 +149,7 @@ export function Drawer({
 				dragElastic={DRAG_ELASTIC}
 				onDragEnd={handleDragEnd}
 			>
-				<Container className={styles.container} padding={false}>
+				<Container className={styles.container}>
 					{header ? <header className={styles.header}>{header}</header> : null}
 
 					<div className={styles.content}>{children}</div>

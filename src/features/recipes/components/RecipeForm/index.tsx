@@ -1,8 +1,10 @@
 "use client";
 
+import type { SubmissionResult } from "@conform-to/dom";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { use, useCallback, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { type ReactNode, use, useRef, useState } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
@@ -12,17 +14,18 @@ import { showRecipeLimitReachedToast } from "@/features/billing/components/Recip
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { upsertRecipeWithSpecsAction } from "@/features/recipes/api/upsertRecipesWithSpecs";
 import { EditRecipeSpecs } from "@/features/recipes/components/EditRecipeSpecs";
+import { RecipeFormSettings } from "@/features/recipes/components/RecipeFormSettings";
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
-import { trpc } from "@/trpc/client";
-import { ControlLabel } from "@/ui/ControlLabel";
+import { getRecipeUrl } from "@/features/recipes/utils";
+import { Button } from "@/ui/Button";
 import { FormErrors } from "@/ui/FormErrors";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
+import { Kbd } from "@/ui/Kbd";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
@@ -31,6 +34,7 @@ import styles from "./styles.module.css";
 type Props = {
 	recipe?: RecipeWithSpecs;
 	ingredients: Ingredient[];
+	children?: ReactNode;
 };
 
 function initializeSpecFormEntry(spec?: SpecWithIngredient) {
@@ -53,42 +57,17 @@ function initializeSpecFormEntry(spec?: SpecWithIngredient) {
 	};
 }
 
-export function RecipeForm({ recipe, ingredients }: Props) {
-	const utils = trpc.useUtils();
+export function RecipeForm({ recipe, ingredients, children }: Props) {
+	const router = useRouter();
 	const isNew = !recipe?.id;
 	const usage = use(RecipeSlotUsageContext);
 
-	const handleSubmit = useCallback(
-		async (formData: FormData) => {
-			const toastId = Date.now().toString();
-
-			if (isNew && usage && usage.remaining <= 0) {
-				showRecipeLimitReachedToast(usage, { id: toastId });
-				return;
-			}
-
-			const promise = upsertRecipeWithSpecsAction(formData);
-
-			toast.promise(promise, {
-				id: toastId,
-				loading: "Saving changes…",
-				success: () => ({
-					message: "Changes saved",
-				}),
-				error: () => ({
-					message: "Could not save changes",
-					description: "Try again later.",
-				}),
-			});
-
-			await promise;
-			utils.recipe.list.invalidate();
-		},
-		[utils, isNew, usage],
-	);
+	const [lastResult, setLastResult] = useState<SubmissionResult>();
+	const [submitting, setSubmitting] = useState(false);
 
 	const [form, fields] = useForm<RecipeFormData>({
 		id: recipe?.id ? `recipe-form-${recipe.id}` : "new-recipe-form",
+		lastResult,
 		onValidate({ formData }) {
 			return parseWithZod(formData, {
 				schema: recipeFormSchema,
@@ -105,146 +84,189 @@ export function RecipeForm({ recipe, ingredients }: Props) {
 				initializeSpecFormEntry(),
 			],
 		},
+		async onSubmit(event, { formData }) {
+			event.preventDefault();
+
+			if (isNew && usage && usage.remaining <= 0) {
+				showRecipeLimitReachedToast(usage);
+				return;
+			}
+
+			setSubmitting(true);
+			const { result, recipes } = await upsertRecipeWithSpecsAction(formData);
+			setSubmitting(false);
+			setLastResult(result);
+
+			if (result.status === "error") {
+				toast.error("Could not save changes", {
+					description: "Check the form for issues and try again.",
+				});
+				return;
+			}
+
+			toast.success(isNew ? "Recipe created" : "Changes saved");
+
+			if (recipes?.length === 1) {
+				router.push(getRecipeUrl(recipes[0]));
+			}
+		},
 	});
 
 	const recipeFields = fields.recipe.getFieldset();
 
 	const formRef = useRef<HTMLFormElement>(null);
 
+	const initialOptional = recipe?.specs.some((spec) => spec.optional) ?? false;
+	const [withOptionalSpecs, setWithOptionalSpecs] = useState(initialOptional);
+
 	return (
 		<FormProvider context={form.context}>
-			<Grid
-				as="form"
-				action={handleSubmit}
-				ref={formRef}
-				id={form.id}
-				onSubmit={form.onSubmit}
-				noValidate
-				className={styles.container}
-			>
-				{/**
-				 * A native form submit (f.e. enter in form) looks for the first submit button of a
-				 * form and invokes that. Since we use conform for progressive enhancement with
-				 * alternative submit buttons with an expressed intent ("validate", "remove",
-				 * "insert"), we need to ensure the actual submit action is handled.
-				 */}
-				<input type="submit" hidden form={form.id} />
-
-				<input
-					type="hidden"
-					name={recipeFields.id.name}
-					value={recipeFields.id.value}
-				/>
-
-				<TextField
-					label="Recipe name"
-					name={recipeFields.name.name}
-					defaultValue={recipeFields.name.initialValue}
-					id={recipeFields.name.id}
-					large
-				/>
-
-				<hr className={styles.hr} />
-
-				<ControlLabel
-					htmlFor={fields.specs.name}
-					id={fields.specs.id}
-					label="Specs"
-					required
+			<div className={styles.layout}>
+				<Grid
+					as="form"
+					gap={6}
+					ref={formRef}
+					id={form.id}
+					onSubmit={form.onSubmit}
+					onReset={() => {
+						setWithOptionalSpecs(initialOptional);
+					}}
+					noValidate
+					autoComplete="off"
+					className={styles.form}
 				>
+					<input
+						type="hidden"
+						name={recipeFields.id.name}
+						value={recipeFields.id.value ?? ""}
+					/>
+
 					<EditRecipeSpecs
 						id={fields.specs.id}
 						name="specs"
 						ingredients={ingredients}
+						withOptional={withOptionalSpecs}
 					/>
-				</ControlLabel>
 
-				<hr className={styles.hr} />
-
-				<SelectPreparationMethod
-					label="Preparation method"
-					name={recipeFields.preparationMethod.name}
-					defaultValue={recipeFields.preparationMethod.initialValue}
-					selectProps={{
-						onSelectedItemChange: ({ selectedItem }) => {
-							if (!selectedItem) {
-								return;
-							}
-
-							form.update({
-								name: "recipe.dilutionTarget",
-								value: METHOD_TO_DEFAULT_DILUTION.get(selectedItem.value),
-							});
-						},
-					}}
-				/>
-
-				<SelectDilution
-					name={recipeFields.dilutionTarget.name}
-					defaultValue={recipeFields.dilutionTarget.defaultValue}
-				/>
-
-				<hr className={styles.hr} />
-
-				<details>
-					<Text as="summary" heavy compact weight={600}>
-						Style, description, instructions, glassware, garnish…
-					</Text>
-
-					<Grid as="fieldset" gap={6} className={styles.fieldset}>
-						<SelectCocktailStyle
-							label="Style"
-							name={recipeFields.style.name}
-							defaultValue={recipeFields.style.initialValue}
-						/>
-
+					<div className={styles.box}>
 						<TextField
-							as="textarea"
-							label="Description"
-							name={recipeFields.description.name}
-							id={recipeFields.description.id}
-							defaultValue={recipeFields.description.initialValue}
-							helperText="Brief information about the recipe"
+							label="Recipe name"
+							key={recipeFields.name.key}
+							name={recipeFields.name.name}
+							defaultValue={recipeFields.name.initialValue}
+							id={recipeFields.name.id}
+							placeholder="Name your creation…"
 						/>
 
-						<TextField
-							as="textarea"
-							label="Instructions"
-							name={recipeFields.instructions.name}
-							id={recipeFields.instructions.id}
-							defaultValue={recipeFields.instructions.initialValue}
-							helperText="Preparation instructions and notes"
+						<SelectPreparationMethod
+							label="Preparation method"
+							key={recipeFields.preparationMethod.key}
+							name={recipeFields.preparationMethod.name}
+							defaultValue={recipeFields.preparationMethod.initialValue}
+							selectProps={{
+								onSelectedItemChange: ({ selectedItem }) => {
+									if (!selectedItem) {
+										return;
+									}
+
+									form.update({
+										name: "recipe.dilutionTarget",
+										value: METHOD_TO_DEFAULT_DILUTION.get(selectedItem.value),
+									});
+								},
+							}}
 						/>
 
-						<SelectGlassware
-							label="Glassware"
-							name={recipeFields.glassware.name}
-							defaultValue={recipeFields.glassware.initialValue}
+						<SelectDilution
+							key={recipeFields.dilutionTarget.key}
+							name={recipeFields.dilutionTarget.name}
+							defaultValue={recipeFields.dilutionTarget.initialValue}
 						/>
 
-						<TextField
-							label="Garnish"
-							name={recipeFields.garnish.name}
-							id={recipeFields.garnish.id}
-							defaultValue={recipeFields.garnish.initialValue}
-						/>
-					</Grid>
-				</details>
+						<details>
+							<Text as="summary" heavy compact weight={600}>
+								Style, description, instructions, glassware, garnish…
+							</Text>
 
-				<FormErrors formRef={formRef} />
-			</Grid>
+							<Grid as="fieldset" gap={6} className={styles.fieldset}>
+								<SelectCocktailStyle
+									label="Style"
+									key={recipeFields.style.key}
+									name={recipeFields.style.name}
+									defaultValue={recipeFields.style.initialValue}
+								/>
+
+								<TextField
+									as="textarea"
+									label="Description"
+									key={recipeFields.description.key}
+									name={recipeFields.description.name}
+									id={recipeFields.description.id}
+									defaultValue={recipeFields.description.initialValue}
+									helperText="Brief information about the recipe"
+								/>
+
+								<TextField
+									as="textarea"
+									label="Instructions"
+									key={recipeFields.instructions.key}
+									name={recipeFields.instructions.name}
+									id={recipeFields.instructions.id}
+									defaultValue={recipeFields.instructions.initialValue}
+									helperText="Preparation instructions and notes"
+								/>
+
+								<SelectGlassware
+									label="Glassware"
+									key={recipeFields.glassware.key}
+									name={recipeFields.glassware.name}
+									defaultValue={recipeFields.glassware.initialValue}
+								/>
+
+								<TextField
+									label="Garnish"
+									key={recipeFields.garnish.key}
+									name={recipeFields.garnish.name}
+									id={recipeFields.garnish.id}
+									defaultValue={recipeFields.garnish.initialValue}
+								/>
+							</Grid>
+						</details>
+
+						<FormErrors formRef={formRef} />
+					</div>
+				</Grid>
+
+				{children}
+			</div>
 
 			<BottomRailItems>
-				<SubmitButton
-					variant="solid"
+				<RecipeFormSettings
+					optional={withOptionalSpecs}
+					onOptionalChange={setWithOptionalSpecs}
+					formId={form.id}
+				/>
+
+				<Button
+					type="button"
+					variant="clear"
 					color="accent"
-					form={form.id}
 					rounded
-					className={styles.submit}
+					disabled={submitting}
+					onClick={() => {
+						formRef.current?.requestSubmit();
+					}}
+					endAdornment={
+						<Kbd
+							shortcut="mod+enter"
+							variant="ghost"
+							ignoreInputEvents={false}
+						/>
+					}
 				>
 					<Icon name="circle-check" />
 					{recipeFields.id.value ? "Save changes" : "Create recipe"}
-				</SubmitButton>
+				</Button>
 			</BottomRailItems>
 		</FormProvider>
 	);

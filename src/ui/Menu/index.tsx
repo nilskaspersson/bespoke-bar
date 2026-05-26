@@ -3,7 +3,6 @@
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import { Icon } from "@/ui/Icon";
-import { Lightbox } from "@/ui/Lightbox";
 import { Popover } from "@/ui/Popover";
 import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
@@ -30,7 +29,7 @@ function MenuRoot({
 			position={position}
 			className={clsx(styles.popover, className)}
 		>
-			<Lightbox className={styles.surface}>
+			<div className={styles.surface}>
 				{header ? <div className={styles.header}>{header}</div> : null}
 				<ul
 					{...listProps}
@@ -39,7 +38,7 @@ function MenuRoot({
 					{children}
 				</ul>
 				{footer ? <div className={styles.footer}>{footer}</div> : null}
-			</Lightbox>
+			</div>
 		</Popover>
 	);
 }

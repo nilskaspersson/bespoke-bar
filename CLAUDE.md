@@ -1,18 +1,24 @@
 # CLAUDE.md
 
-## Commands
+## Stack & priorities
+Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Vercel.
 
-- `npm run lint` / `npm run lint -- --fix` — Biome (lint + format)
+- Optimize aggressively.
+- Default to static rendering; use composition to achieve more statically rendered components.
+- Lean heavily into Zod for validation, type coercing, and runtime type checks.
+
+## Commands
+- `npm run lint -- --fix path/to/file` — Biome (lint + format). Always run this after touching files.
 - `npm run test -- path/to/test.ts` — single test
 
 ## Key Rules
-
 - **Multi-tenant**: All DB queries must be scoped by `orgId` from `authOrForbidden()` (`src/utils/auth.ts`)
+- All DB queries should attempt to read from cache, and all mutations should clear related caches (see cache event model at `src/utils/cache.ts`)
+
+## Nits
 - Prefer `function` over `const` for function declarations
 - Tabs for indentation
-- Run `npm run lint -- --fix` after every edit
+- Write few comments, kept very brief. Comment only what's genuinely hard to follow. Don't narrate the decision flow or restate what the code already says.
 
-## Skills
-
-- `vercel-react-best-practices` — invoke for performance review or new components/pages
-- `web-design-guidelines` — invoke for UI review or before completing significant UI changes
+## Next.js docs
+- Next.js bundles its full, version-pinned docs at `node_modules/next/dist/docs/` (`01-app` = App Router, which we use). Prefer these over web search or training data for Next.js APIs (Cache Components, `use cache`/`cacheLife`/`cacheTag`/`updateTag`, routing, metadata)

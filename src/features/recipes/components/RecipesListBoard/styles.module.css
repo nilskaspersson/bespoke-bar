@@ -26,7 +26,7 @@
 		max-width: var(--recipes-list-board-list-max-width);
 		margin-inline: auto;
 		margin-top: var(--space-5);
-		padding-bottom: calc(var(--space-9) + var(--app-inset));
+		padding-bottom: calc(var(--space-9) + var(--space-5));
 		width: 100%;
 	}
 

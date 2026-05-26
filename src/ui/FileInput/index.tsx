@@ -14,6 +14,7 @@ export function FileInput({
 }) {
 	return (
 		<label
+			aria-disabled={props.disabled}
 			className={clsx(
 				styles.label,
 				className,

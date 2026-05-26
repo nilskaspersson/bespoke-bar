@@ -27,7 +27,7 @@
 
 	.item {
 		--border-width: 1px;
-		--border: var(--border-width) solid hsl(from var(--mauve-12) h s l / 0.2);
+		--border: var(--border-width) solid var(--glass--border-color);
 
 		display: flex;
 		justify-content: center;
@@ -59,14 +59,14 @@
 
 		@container (width >= 570px) {
 			&:first-child {
-				border-top-left-radius: var(--radius--large);
-				border-bottom-left-radius: var(--radius--large);
+				border-top-left-radius: var(--radius--huge);
+				border-bottom-left-radius: var(--radius--huge);
 				border-left: var(--border);
 			}
 
 			&:last-child {
-				border-top-right-radius: var(--radius--large);
-				border-bottom-right-radius: var(--radius--large);
+				border-top-right-radius: var(--radius--huge);
+				border-bottom-right-radius: var(--radius--huge);
 				border-right: var(--border);
 			}
 
@@ -81,17 +81,57 @@
 		--interacting: 0;
 
 		display: grid;
-		grid-template-rows: var(--space-7) 1fr var(--space-7);
 		gap: var(--space-5);
 		text-align: center;
 		text-wrap: balance;
 		overflow: hidden;
 		width: 100%;
 		background-color: var(--mauve-2);
-		background-image: linear-gradient(to top, var(--bg-from), var(--bg-to));
 		isolation: isolate;
 		position: relative;
 		border-radius: inherit;
+
+		.nav:not(.compact) & {
+			grid-template-rows: var(--space-7) 1fr var(--space-7);
+			background-image: linear-gradient(to top, var(--bg-from), var(--bg-to));
+
+			&::before {
+				content: "";
+				position: absolute;
+				inset: auto calc(var(--border-width) * -1)
+					calc(var(--border-width) * -1);
+				height: 100%;
+				z-index: -1;
+				pointer-events: none;
+				transition: --grid-c var(--transition-duration);
+				background-image:
+					linear-gradient(to right, var(--grid-c) 1px, transparent 1px),
+					linear-gradient(to top, var(--grid-c) 1px, transparent 1px);
+				background-size: 10px 10px;
+				background-position: bottom left;
+				mask-composite: intersect;
+				mask-image:
+					repeating-linear-gradient(
+						to right,
+						black 0px,
+						black 1.5px,
+						transparent 1.5px,
+						transparent 4px
+					),
+					repeating-linear-gradient(
+						to top,
+						black 0px,
+						black 1.5px,
+						transparent 1.5px,
+						transparent 4px
+					),
+					radial-gradient(
+						ellipse 85% 70% at 50% 100%,
+						#000 35%,
+						transparent 70%
+					);
+			}
+		}
 
 		&:is(:hover, :focus-visible):not([inert]) {
 			--interacting: 1;
@@ -115,40 +155,12 @@
 				0 0 60px -20px var(--iris-10);
 		}
 
-		&[inert] {
-			opacity: 0.5;
+		&[aria-current="page"] {
+			background-color: var(--iris-2);
 		}
 
-		&::before {
-			content: "";
-			position: absolute;
-			inset: auto calc(var(--border-width) * -1) calc(var(--border-width) * -1);
-			height: 100%;
-			z-index: -1;
-			pointer-events: none;
-			transition: --grid-c var(--transition-duration);
-			background-image:
-				linear-gradient(to right, var(--grid-c) 1px, transparent 1px),
-				linear-gradient(to top, var(--grid-c) 1px, transparent 1px);
-			background-size: 10px 10px;
-			background-position: bottom left;
-			mask-composite: intersect;
-			mask-image:
-				repeating-linear-gradient(
-					to right,
-					black 0px,
-					black 1.5px,
-					transparent 1.5px,
-					transparent 4px
-				),
-				repeating-linear-gradient(
-					to top,
-					black 0px,
-					black 1.5px,
-					transparent 1.5px,
-					transparent 4px
-				),
-				radial-gradient(ellipse 85% 70% at 50% 100%, #000 35%, transparent 70%);
+		&[inert] {
+			opacity: 0.5;
 		}
 	}
 
@@ -170,6 +182,13 @@
 
 	.content {
 		padding-inline: var(--gap);
+
+		.nav:is(.compact) & {
+			display: inline-flex;
+			gap: var(--space-2);
+			padding-block: var(--space-2);
+			justify-content: center;
+		}
 	}
 
 	.arrow {

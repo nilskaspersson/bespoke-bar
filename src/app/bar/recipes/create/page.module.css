@@ -1,6 +1,5 @@
-@layer page {
+@layer layout {
 	.nav {
 		align-self: end;
-		padding-bottom: var(--gap--large);
 	}
 }

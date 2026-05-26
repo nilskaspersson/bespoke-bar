@@ -20,15 +20,29 @@ const cspHeader = `
 
 const nextConfig: NextConfig = {
 	async headers() {
+		const securityHeaders = [
+			{
+				key: "Content-Security-Policy",
+				value: cspHeader.replace(/\n/g, ""),
+			},
+		];
+
+		// The `.app` TLD is itself on the browser HSTS preload list, so HTTPS
+		// (incl. first visit) is already enforced for every *.app host — this
+		// header is defense-in-depth. HSTS is ignored over plain HTTP, so only
+		// emit it in prod where every response is TLS. No `preload` directive /
+		// hstspreload.org submission needed: the TLD already covers us.
+		if (!isDevelopment) {
+			securityHeaders.push({
+				key: "Strict-Transport-Security",
+				value: "max-age=63072000; includeSubDomains",
+			});
+		}
+
 		return [
 			{
 				source: "/(.*)",
-				headers: [
-					{
-						key: "Content-Security-Policy",
-						value: cspHeader.replace(/\n/g, ""),
-					},
-				],
+				headers: securityHeaders,
 			},
 		];
 	},

@@ -1,27 +1,28 @@
 @layer feature {
-	.container {
+	.layout {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--gap--large);
+		align-items: start;
+		justify-content: center;
+	}
+
+	.form {
+		width: fit-content;
+	}
+
+	.box {
 		display: grid;
 		gap: var(--gap--large);
-		margin-inline: calc(var(--app-inset) * -1);
-		padding-inline: var(--app-inset);
+		padding: var(--space-5);
+		background-color: var(--glass--bg);
+		border-radius: var(--radius--large);
+		border: 1px solid var(--glass--border-color);
 	}
 
 	.fieldset {
 		padding: var(--gap);
 		border: 1px dashed var(--mauve-9);
 		border-radius: var(--radius);
-	}
-
-	.submit {
-		position: sticky;
-		bottom: var(--gap);
-		justify-self: end;
-		z-index: 10;
-		margin-top: var(--gap--large);
-	}
-
-	.hr {
-		border-top: 1px solid var(--mauve-6);
-		margin: 0;
 	}
 }

@@ -36,7 +36,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 					<div className={styles.layout} id="root">
 						<Suspense>
 							<AuthProvider>
-								<AppHeader />
+								<AppHeader className={styles.header} />
 								<main className={styles.main}>{children}</main>
 							</AuthProvider>
 						</Suspense>

@@ -71,7 +71,7 @@
 	--gap--large: var(--space-6);
 	--gap--huge: var(--space-9);
 
-	--app-inset: var(--space-6);
+	--app-inset: var(--space-5);
 
 	--control-height--small: 2.5rem;
 	--control-height: var(--space-7);
@@ -135,7 +135,7 @@
 	--glass--blur: blur(var(--space-3));
 	--glass--border-color: hsl(from var(--mauve-12) h s l / 0.1);
 
-	--container: 90ch;
+	--container: 70rem;
 
 	--app-header--height: 80px;
 
@@ -144,6 +144,13 @@
 	--recipe-card-height: calc(
 		var(--recipe-card-width) /
 		var(--recipe-card-ratio)
+	);
+
+	--recipe-preview-inset: var(--space-4);
+	--recipe-preview-width: calc(
+		var(--recipe-card-width) +
+		var(--recipe-preview-inset) *
+		2
 	);
 
 	/**

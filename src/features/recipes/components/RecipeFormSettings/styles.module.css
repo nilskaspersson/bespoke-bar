@@ -1,0 +1,21 @@
+@layer feature {
+	.panel {
+		padding: var(--space-5);
+		width: min(24rem, calc(100svw - 2 * var(--space-3)));
+		max-height: min(70lvh, 24rem);
+		overflow-y: auto;
+		display: grid;
+		gap: var(--space-4);
+
+		color: var(--glass--text);
+		background-color: var(--glass--bg);
+		backdrop-filter: var(--glass--blur);
+		border: 1px solid var(--glass--border-color);
+		border-radius: var(--space-6);
+		box-shadow: var(--shadow--high);
+	}
+
+	.resetButton {
+		justify-self: start;
+	}
+}

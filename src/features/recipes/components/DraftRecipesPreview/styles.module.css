@@ -1,0 +1,49 @@
+@layer feature {
+	.panel {
+		isolation: isolate;
+		padding: var(--recipe-preview-inset);
+		contain: layout paint;
+		border-radius: var(--radius--large);
+		border: 1px solid var(--mauve-5);
+		overflow: hidden;
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: -1px;
+			z-index: -1;
+			pointer-events: none;
+			background-image:
+				linear-gradient(to right, var(--mauve-6) 1px, transparent 1px),
+				linear-gradient(to top, var(--mauve-6) 1px, transparent 1px);
+			background-size: 10px 10px;
+			background-position: bottom left;
+			mask-composite: intersect;
+			mask-image:
+				repeating-linear-gradient(
+					to right,
+					black 0px,
+					black 1.5px,
+					transparent 1.5px,
+					transparent 4px
+				),
+				repeating-linear-gradient(
+					to top,
+					black 0px,
+					black 1.5px,
+					transparent 1.5px,
+					transparent 4px
+				);
+		}
+	}
+
+	.list {
+		display: grid;
+		grid-template-columns: repeat(
+				auto-fit,
+				minmax(min(var(--recipe-card-width), 100%), var(--recipe-card-width))
+			);
+		gap: var(--space-4);
+		justify-content: center;
+	}
+}

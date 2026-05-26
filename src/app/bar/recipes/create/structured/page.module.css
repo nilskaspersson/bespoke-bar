@@ -1,9 +1,4 @@
 @layer feature {
-	.container {
-		padding-top: var(--space-5);
-		padding-bottom: var(--gap--huge);
-	}
-
 	.preview {
 		align-self: start;
 		position: sticky;

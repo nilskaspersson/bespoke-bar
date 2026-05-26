@@ -11,7 +11,7 @@ export default function CreateRecipePage() {
 			<PageHeader
 				overline="Recipes"
 				icon="duotone-martini-glass"
-				heading="Create a Recipe"
+				heading="Create Recipes"
 				tagline="Choose a method for creating your next cocktail."
 			>
 				<LinkButton

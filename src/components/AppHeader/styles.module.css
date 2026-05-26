@@ -1,10 +1,7 @@
 @layer composition {
 	.header {
 		display: grid;
-		/**
-		 * min-height to respect safe-area-inset-top
-		 */
-		min-height: var(--app-header--height);
+		min-height: calc(var(--app-header--height) + env(safe-area-inset-top));
 		position: absolute;
 		inset: 0 0 auto;
 		z-index: var(--z-navigation);
@@ -14,7 +11,7 @@
 	}
 
 	.container {
-		padding: var(--space-5);
+		padding: var(--space-5) var(--app-inset);
 	}
 
 	.nav {

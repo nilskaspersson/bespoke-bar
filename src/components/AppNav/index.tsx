@@ -3,7 +3,6 @@
 import { clsx } from "clsx";
 import { m } from "motion/react";
 import type { Route } from "next";
-import { usePathname } from "next/navigation";
 import { ThemePicker } from "@/components/ThemePicker";
 import { WakeLock } from "@/components/WakeLock";
 import type { IconName } from "@/libs/icons/types";
@@ -80,13 +79,6 @@ type Props = {
 };
 
 export function AppNav({ onClose }: Props) {
-	const pathname = usePathname();
-
-	const active =
-		ITEMS.find((item) => pathname.startsWith(item.match)) ??
-		ITEMS.find((item) => item.href === "/bar/recipes") ??
-		ITEMS[0];
-
 	return (
 		<div className={styles.panel}>
 			<m.div className={styles.block} {...cascade(CASCADE_PREFERENCES)}>
@@ -110,7 +102,7 @@ export function AppNav({ onClose }: Props) {
 				<ul>
 					{ITEMS.map((item, index) => {
 						const reverseIndex = ITEMS.length - 1 - index;
-						const isActive = item.href === active.href;
+
 						return (
 							<m.li
 								key={item.href}
@@ -122,14 +114,7 @@ export function AppNav({ onClose }: Props) {
 									color="accent"
 									fullWidth
 									className={styles.item}
-									onClick={
-										isActive
-											? (event) => {
-													event.preventDefault();
-													onClose();
-												}
-											: onClose
-									}
+									onClick={onClose}
 								>
 									<Icon name={item.icon} size={2} />
 									<Text size={2}>{item.label}</Text>

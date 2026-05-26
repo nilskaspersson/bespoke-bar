@@ -1,3 +1,4 @@
+import { Container } from "@/ui/Container";
 import styles from "./layout.module.css";
 
 export default async function Layout({
@@ -5,5 +6,9 @@ export default async function Layout({
 }: {
 	children: React.ReactNode;
 }) {
-	return <article className={styles.container}>{children}</article>;
+	return (
+		<Container as="article" className={styles.container}>
+			{children}
+		</Container>
+	);
 }

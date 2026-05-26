@@ -163,7 +163,7 @@ function TagsSettingsForm({ tags }: { tags: Tag[] }) {
 				<Text as="p" size={2} light>
 					{isDirty
 						? "All tags are marked for deletion. Press Apply changes to confirm."
-						: "No tags yet. Tags are created from the recipe editor."}
+						: "No tags yet."}
 				</Text>
 			) : (
 				<Grid gap={4}>
