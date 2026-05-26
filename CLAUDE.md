@@ -14,6 +14,7 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 ## Key Rules
 - **Multi-tenant**: All DB queries must be scoped by `orgId` from `authOrForbidden()` (`src/utils/auth.ts`)
 - All DB queries should attempt to read from cache, and all mutations should clear related caches (see cache event model at `src/utils/cache.ts`)
+- If unsure about a domain term (e.g. Quota, Use, Grant), check `CONTEXT.md`.
 
 ## Nits
 - Prefer `function` over `const` for function declarations
