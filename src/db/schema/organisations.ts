@@ -10,6 +10,7 @@ import { nanoid } from "nanoid";
 import type z from "zod";
 
 export const DEFAULT_BASE_RECIPE_SLOTS = 50;
+export const DEFAULT_BASE_OCR_QUOTA = 3;
 
 export const OrganisationsTable = pgTable("organisations", {
 	id: text("id")
@@ -23,6 +24,9 @@ export const OrganisationsTable = pgTable("organisations", {
 	baseRecipeSlots: integer("base_recipe_slots")
 		.notNull()
 		.default(DEFAULT_BASE_RECIPE_SLOTS),
+	baseOCRQuota: integer("base_ocr_quota")
+		.notNull()
+		.default(DEFAULT_BASE_OCR_QUOTA),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 	createdBy: text("created_by").notNull(),
