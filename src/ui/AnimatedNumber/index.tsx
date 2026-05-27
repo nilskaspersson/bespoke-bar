@@ -25,14 +25,6 @@ const ROLL_TRANSITION: Transition = {
 	bounce: 0.35,
 };
 
-/**
- * Renders a number that rolls to its new value: the old value scrolls out of a
- * clipped slot as the new one scrolls in — up on an increase, down on a
- * decrease — so holding a +/- control reads as fast-scrolling digits. A hidden
- * sizer keeps the slot at the current value's width (following text never
- * shifts) and on the surrounding text's baseline. The first value appears
- * without animation; only later changes roll.
- */
 export function AnimatedNumber({
 	value,
 	format = DEFAULT_FORMAT,
@@ -49,7 +41,6 @@ export function AnimatedNumber({
 		setSwap([value, Math.sign(value - previous)]);
 	}
 
-	/** Reduced motion crossfades in place instead of rolling. */
 	const slide = prefersReducedMotion ? 0 : direction;
 	const formatted = format(value);
 

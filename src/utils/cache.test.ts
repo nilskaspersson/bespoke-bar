@@ -65,3 +65,35 @@ describe("cacheTags.countBarRecipes", () => {
 		expect(tags.some((t) => t.includes("tag"))).toBe(false);
 	});
 });
+
+describe("cacheTags.ocrQuotaLimit", () => {
+	test("subscribes to grant create and org update only", () => {
+		const tags = cacheTags.ocrQuotaLimit("org1");
+
+		expect(tags).toEqual([
+			"org1:create-ocr-quota-grant",
+			"org1:update-organisation",
+		]);
+	});
+
+	test("does not subscribe to the frequent per-Use event", () => {
+		const tags = cacheTags.ocrQuotaLimit("org1");
+
+		expect(tags.some((t) => t.includes("ocr-quota-use"))).toBe(false);
+	});
+});
+
+describe("cacheTags.ocrQuotaUsage", () => {
+	test("subscribes only to the use event", () => {
+		const tags = cacheTags.ocrQuotaUsage("org1");
+
+		expect(tags).toEqual(["org1:create-ocr-quota-use"]);
+	});
+
+	test("does not subscribe to the rare grant or org event", () => {
+		const tags = cacheTags.ocrQuotaUsage("org1");
+
+		expect(tags.some((t) => t.includes("grant"))).toBe(false);
+		expect(tags.some((t) => t.includes("organisation"))).toBe(false);
+	});
+});

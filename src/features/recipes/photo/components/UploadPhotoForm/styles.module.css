@@ -1,6 +1,6 @@
 @layer feature {
 	.base {
-		padding: var(--space-8) var(--space-6) var(--space-6);
+		padding: var(--space-8) var(--space-6);
 		background-color: var(--mauve-2);
 		position: relative;
 	}
@@ -57,8 +57,7 @@
 
 	/*
 	 * `capture` is only honoured by touch devices; elsewhere it silently opens a
-	 * file picker, so we show the drag-and-drop affordance instead. Pure CSS keeps
-	 * the markup identical across server/client — no hydration flash.
+	 * file picker, so we show the drag-and-drop / paste hint instead.
 	 */
 	.captureButton {
 		display: none;
@@ -69,7 +68,7 @@
 			display: revert-layer;
 		}
 
-		.dropButton {
+		.dropHint {
 			display: none;
 		}
 	}

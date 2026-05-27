@@ -11,10 +11,12 @@ import {
 } from "react";
 
 import type { Ingredient } from "@/db/schema/ingredients";
+import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicator";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { OutputPreview } from "@/features/recipes/photo/components/OutputPreview";
+import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
+import { trpc } from "@/trpc/client";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { ImageUploadPreview } from "@/ui/ImageUploadPreview";
@@ -25,6 +27,7 @@ export function PhotoToRecipe({
 	className,
 	...props
 }: { ingredients: Ingredient[] } & ComponentProps<"div">) {
+	const rootRef = useRef<HTMLDivElement>(null);
 	const outputContainerRef = useRef<HTMLDivElement>(null);
 	const imagePreviewRef = useRef<HTMLImageElement>(null);
 
@@ -32,7 +35,15 @@ export function PhotoToRecipe({
 	const [draftRecipeText, setDraftRecipeText] = useState("");
 	const deferredDraftRecipeText = useDeferredValue(draftRecipeText);
 
-	const { imagePreviewUrl, createImagePreview } = useImageUploadPreview();
+	const [isParsing, setIsParsing] = useState(false);
+
+	const { imagePreviewUrl, createImagePreview, clearImagePreview } =
+		useImageUploadPreview();
+
+	const { data: ocrQuota } = trpc.billing.ocrQuotaState.useQuery(undefined, {
+		refetchOnMount: "always",
+	});
+	const isAtOCRQuotaCap = ocrQuota?.remaining === 0;
 
 	const draftRecipes = useBulkDraftTextToBaseRecipes(
 		deferredDraftRecipeText,
@@ -67,19 +78,29 @@ export function PhotoToRecipe({
 		[createImagePreview],
 	);
 
+	const resetFlow = useCallback(() => {
+		clearImagePreview();
+		setDraftRecipeText("");
+		setOcrText("");
+
+		rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+	}, [clearImagePreview]);
+
 	const hasSelectedImage = Boolean(imagePreviewUrl);
 	const hasParsedText = Boolean(ocrText);
 	const hasDraftRecipes = draftRecipes.length > 0;
 
 	return (
-		<div {...props} className={clsx(className, styles.base)}>
+		<div {...props} ref={rootRef} className={clsx(className, styles.base)}>
 			<UploadPhotoForm
 				onChange={imageChangeHandler}
 				onSuccess={onSubmitPhotoSuccess}
+				onParsingChange={setIsParsing}
 				className={clsx(styles.step, styles.stepUpload, {
 					[styles.hasImagePreview]: hasSelectedImage,
 				})}
-				usageInfo="Daily usage 0/3"
+				usageInfo={<OCRQuotaIndicator locked={isAtOCRQuotaCap} />}
+				disabled={isAtOCRQuotaCap}
 			/>
 
 			<hr
@@ -105,13 +126,16 @@ export function PhotoToRecipe({
 			/>
 
 			<Grid gap={2}>
-				<OutputPreview
+				<OCROutputPreview
 					ref={outputContainerRef}
 					draftRecipes={draftRecipes}
 					disabled={!hasParsedText}
 					ingredients={ingredients}
 					ocrText={ocrText}
+					canClear={(hasSelectedImage || hasParsedText) && !isParsing}
 					onChangeDraftRecipesText={setDraftRecipeText}
+					onClear={resetFlow}
+					onRecipesCreated={resetFlow}
 					className={clsx(styles.step, styles.stepOutput, {
 						[styles.hasParsedText]: hasParsedText,
 						[styles.hasDraftRecipes]: hasDraftRecipes,

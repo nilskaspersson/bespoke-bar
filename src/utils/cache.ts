@@ -1,4 +1,4 @@
-import { updateTag } from "next/cache";
+import { revalidateTag, updateTag } from "next/cache";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Menu } from "@/db/schema/menus";
 import type { Recipe } from "@/db/schema/recipes";
@@ -118,6 +118,27 @@ export const cacheEvents = {
 			tag: (orgId: string) => `${orgId}:create-recipe-slot-grant`,
 		},
 	},
+	ocrQuotaGrant: {
+		create: {
+			emit: (orgId: string) => updateTag(`${orgId}:create-ocr-quota-grant`),
+			tag: (orgId: string) => `${orgId}:create-ocr-quota-grant`,
+		},
+	},
+	ocrQuotaUse: {
+		create: {
+			/**
+			 * Emitted from the `/api/photo/parse` Route Handler (recordOCRUse /
+			 * refundOCRUse), where `updateTag` is illegal. `revalidateTag` with
+			 * `{ expire: 0 }` expires the tag immediately, so the client's post-Use
+			 * refetch of `billing.ocrQuotaState` reads the fresh count. The `"max"`
+			 * profile would serve stale-while-revalidate and leave the indicator one
+			 * Use behind on that refetch.
+			 */
+			emit: (orgId: string) =>
+				revalidateTag(`${orgId}:create-ocr-quota-use`, { expire: 0 }),
+			tag: (orgId: string) => `${orgId}:create-ocr-quota-use`,
+		},
+	},
 	organisation: {
 		/**
 		 * `create` and `delete` are keyed by `clerkOrgId` because the
@@ -220,6 +241,11 @@ export const cacheTags = {
 		cacheEvents.recipe.delete.tag(orgId),
 		cacheEvents.organisation.update.tag(orgId),
 	],
+	ocrQuotaLimit: (orgId: string) => [
+		cacheEvents.ocrQuotaGrant.create.tag(orgId),
+		cacheEvents.organisation.update.tag(orgId),
+	],
+	ocrQuotaUsage: (orgId: string) => [cacheEvents.ocrQuotaUse.create.tag(orgId)],
 	organisation: (orgId: string) => [cacheEvents.organisation.update.tag(orgId)],
 	/**
 	 * Used by the clerkOrgId → localOrgId lookup, which has to be keyed by

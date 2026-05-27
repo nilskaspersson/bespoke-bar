@@ -13,34 +13,51 @@ import {
 	type DisplayMode,
 	DisplayModeSwitch,
 } from "@/features/recipes/photo/components/DisplayModeSwitch";
+import { trpc } from "@/trpc/client";
 import { Button } from "@/ui/Button";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Kbd } from "@/ui/Kbd";
+import { Text } from "@/ui/Text";
 import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
-export function OutputPreview({
+export function OCROutputPreview({
+	canClear,
 	className,
 	disabled,
 	draftRecipes,
 	ingredients,
 	ocrText,
 	onChangeDraftRecipesText,
+	onClear,
+	onRecipesCreated,
 	...props
 }: ComponentProps<"section"> & {
+	canClear?: boolean;
 	disabled?: boolean;
 	draftRecipes: Keyed<BaseRecipe>[];
 	ingredients: Ingredient[];
 	ocrText: string;
 	onChangeDraftRecipesText: (text: string) => void;
+	onClear?: () => void;
+	onRecipesCreated?: () => void;
 }) {
 	const [displayMode, setDisplayMode] = useState<DisplayMode>("PREVIEW");
+
+	const utils = trpc.useUtils();
 
 	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
 		draftRecipes,
 		createRecipesWithSpecsFromData,
+		{
+			onSuccess: () => {
+				onRecipesCreated?.();
+				utils.billing.ocrQuotaState.invalidate();
+			},
+		},
 	);
 
 	const hasDraftRecipes = draftRecipes.length > 0;
@@ -79,6 +96,30 @@ export function OutputPreview({
 			</section>
 
 			<BottomRailItems>
+				{canClear ? (
+					<ConfirmAction
+						action={async () => {
+							onClear?.();
+						}}
+						actionLabel="Clear form"
+						buttonProps={{
+							variant: "clear",
+							color: "amber",
+							rounded: true,
+							size: "default",
+						}}
+						notice="Extracting the image again will count as another daily use."
+						description={
+							<Text as="p" heavy>
+								This clears the selected image and any Recipes extracted from
+								it.
+							</Text>
+						}
+					>
+						Clear
+					</ConfirmAction>
+				) : null}
+
 				<Button
 					variant="clear"
 					rounded
@@ -93,14 +134,9 @@ export function OutputPreview({
 						/>
 					}
 				>
-					{hasDraftRecipes ? (
-						<>
-							Create {draftRecipes.length}{" "}
-							{draftRecipes.length > 1 ? "recipes" : "recipe"}
-						</>
-					) : (
-						"Create"
-					)}
+					{hasDraftRecipes
+						? `Create ${draftRecipes.length} ${draftRecipes.length > 1 ? "recipes" : "recipe"}`
+						: "Create"}
 				</Button>
 			</BottomRailItems>
 		</>

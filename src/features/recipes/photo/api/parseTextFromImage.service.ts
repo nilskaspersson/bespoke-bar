@@ -2,6 +2,7 @@ import z from "zod";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 import { parseTextFromImage } from "@/features/recipes/photo/api/vision";
 import { findRecipeInTextWithLLM } from "@/features/recipes/photo/utils/findRecipeInTextWithLLM";
+import { AppError } from "@/utils/appError";
 
 const fileSchema = z.file();
 fileSchema.max(10 * 1024 * 1024); // 10 MB
@@ -33,12 +34,15 @@ export async function parseTextFromImageService(formData: FormData) {
 		ocrResult.fullTextAnnotation?.text,
 	);
 
+	/**
+	 * "Picture of a horse". Vision returned a 2xx but no recipe came out (empty OCR,
+	 * or the LLM found none).
+	 */
 	if (recipeText === "") {
-		throw new Error("No recipe found in image");
+		throw new AppError({ code: "NO_RECIPE_FOUND" });
 	}
 
 	return {
-		success: true,
 		rawOcrText: ocrResult.fullTextAnnotation?.text,
 		extractedText: recipeText,
 	};

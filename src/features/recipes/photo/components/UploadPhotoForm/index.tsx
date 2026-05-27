@@ -11,6 +11,7 @@ import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPh
 import { useConfirm } from "@/hooks/useConfirm";
 import { useDialog } from "@/hooks/useDialog";
 import { useFileDrop } from "@/hooks/useFileDrop";
+import { usePasteFile } from "@/hooks/usePasteFile";
 import { Callout } from "@/ui/Callout";
 import { Chip } from "@/ui/Chip";
 import { ConfirmAction } from "@/ui/ConfirmAction";
@@ -25,21 +26,31 @@ import styles from "./styles.module.css";
 export function UploadPhotoForm({
 	onSuccess,
 	onChange,
+	onParsingChange,
 	className,
 	children,
 	usageInfo,
+	disabled,
 	...props
 }: Omit<ComponentProps<"form">, "onChange" | "action"> & {
 	onSuccess: (extractedText: string) => void;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
+	onParsingChange?: (parsing: boolean) => void;
 	usageInfo?: React.ReactNode;
+	disabled?: boolean;
 }) {
 	const {
 		action: submitPhotoAction,
 		isPending: isParsingPhotoText,
 		startLoading,
 		dismissLoading,
-	} = useSubmitPhotoAction({ onSuccess });
+	} = useSubmitPhotoAction({
+		onSuccess: (extractedText) => {
+			onSuccess(extractedText);
+			onParsingChange?.(false);
+		},
+		onError: () => onParsingChange?.(false),
+	});
 
 	const {
 		confirmAction: confirmOCRConsent,
@@ -79,13 +90,16 @@ export function UploadPhotoForm({
 			onFiles: handleDroppedFiles,
 		});
 
+	usePasteFile({ onFiles: handleDroppedFiles });
+
 	const fileInputProps: Partial<ComponentProps<typeof FileInput>> = {
 		name: "image",
 		accept: ACCEPTED_IMAGE_TYPES.join(","),
-		disabled: isParsingPhotoText,
+		disabled: isParsingPhotoText || disabled,
 		onChange: async (event) => {
 			onChange?.(event);
 
+			onParsingChange?.(true);
 			startLoading();
 
 			const isOCRConsentConfirmed = await checkOCRConsent();
@@ -96,6 +110,7 @@ export function UploadPhotoForm({
 
 				if (!confirmed) {
 					dismissLoading();
+					onParsingChange?.(false);
 					return;
 				}
 
@@ -133,16 +148,7 @@ export function UploadPhotoForm({
 				</div>
 			) : null}
 
-			{usageInfo ? (
-				<Chip
-					className={styles.usageInfo}
-					size={1}
-					variant="outline"
-					color="amber"
-				>
-					{usageInfo}
-				</Chip>
-			) : null}
+			{usageInfo ? <div className={styles.usageInfo}>{usageInfo}</div> : null}
 
 			<Grid gap={6} justifyItems="center">
 				<Heading level="h2" size={4} align="center">
@@ -177,16 +183,9 @@ export function UploadPhotoForm({
 						<Icon name="camera" /> Take a photo
 					</FileInput>
 
-					<FileInput
-						{...fileInputProps}
-						className={styles.dropButton}
-						buttonProps={{
-							variant: "outline",
-							color: "accent",
-						}}
-					>
-						<Icon name="arrow-down-to-dotted-line" /> Drop a file
-					</FileInput>
+					<Text heavy size={3} className={styles.dropHint}>
+						Drag & drop, or paste an image
+					</Text>
 				</Grid>
 
 				<Callout variant="solid" color="light" icon="circle-info" size={1}>
