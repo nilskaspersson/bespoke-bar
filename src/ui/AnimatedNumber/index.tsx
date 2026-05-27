@@ -1,56 +1,90 @@
 "use client";
 
 import { clsx } from "clsx";
-import { type ComponentPropsWithoutRef, useLayoutEffect, useRef } from "react";
-import { tween } from "@/utils/animate";
+import {
+	AnimatePresence,
+	m,
+	type Transition,
+	useReducedMotion,
+	type Variants,
+} from "motion/react";
+import { type ComponentPropsWithoutRef, useState } from "react";
 import styles from "./styles.module.css";
 
 type Props = {
 	value: number;
-	format?: (value: number, precision?: number) => string;
-	duration?: number;
+	format?: (value: number) => string;
 	className?: string;
 };
 
-const DEFAULT_FORMAT = (v: number) => v.toString();
-const DEFAULT_DURATION = 400;
+const DEFAULT_FORMAT = (value: number) => value.toString();
+
+const ROLL_TRANSITION: Transition = {
+	type: "spring",
+	visualDuration: 0.25,
+	bounce: 0.35,
+};
 
 /**
- * Renders a number that animates smoothly between values.
- * Preserves the target's decimal precision throughout the transition,
- * and passes it to `format` for consistent display (e.g., locale formatting).
+ * Renders a number that rolls to its new value: the old value scrolls out of a
+ * clipped slot as the new one scrolls in — up on an increase, down on a
+ * decrease — so holding a +/- control reads as fast-scrolling digits. A hidden
+ * sizer keeps the slot at the current value's width (following text never
+ * shifts) and on the surrounding text's baseline. The first value appears
+ * without animation; only later changes roll.
  */
 export function AnimatedNumber({
 	value,
 	format = DEFAULT_FORMAT,
-	duration = DEFAULT_DURATION,
 	className,
 	...props
 }: Props & ComponentPropsWithoutRef<"span">) {
-	const ref = useRef<HTMLSpanElement>(null);
-	const displayRef = useRef(value);
+	const prefersReducedMotion = useReducedMotion();
+	const [[previous, direction], setSwap] = useState<[number, number]>([
+		value,
+		0,
+	]);
 
-	useLayoutEffect(() => {
-		const from = displayRef.current;
+	if (previous !== value) {
+		setSwap([value, Math.sign(value - previous)]);
+	}
 
-		if (ref.current) {
-			ref.current.textContent = format(from);
-		}
-
-		if (from === value) return;
-
-		return tween(from, value, duration, (current, precision) => {
-			displayRef.current = current;
-
-			if (ref.current) {
-				ref.current.textContent = format(current, precision);
-			}
-		});
-	}, [value, format, duration]);
+	/** Reduced motion crossfades in place instead of rolling. */
+	const slide = prefersReducedMotion ? 0 : direction;
+	const formatted = format(value);
 
 	return (
-		<span {...props} ref={ref} className={clsx(className, styles.number)}>
-			{format(value)}
+		<span {...props} className={clsx(className, styles.number)}>
+			<span aria-hidden className={styles.sizer}>
+				{formatted}
+			</span>
+
+			<AnimatePresence initial={false} custom={slide}>
+				<m.span
+					key={formatted}
+					custom={slide}
+					className={styles.value}
+					variants={rollVariants}
+					initial="enter"
+					animate="settled"
+					exit="exit"
+					transition={ROLL_TRANSITION}
+				>
+					{formatted}
+				</m.span>
+			</AnimatePresence>
 		</span>
 	);
 }
+
+const rollVariants: Variants = {
+	enter: (slide: number) => ({
+		y: `${slide * 100}%`,
+		opacity: slide === 0 ? 0 : 1,
+	}),
+	settled: { y: "0%", opacity: 1 },
+	exit: (slide: number) => ({
+		y: `${slide * -100}%`,
+		opacity: slide === 0 ? 0 : 1,
+	}),
+};
