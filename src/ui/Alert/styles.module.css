@@ -6,7 +6,7 @@
 			"notice" auto
 			"actions" auto;
 
-		max-height: 100%;
+		max-height: 100svh;
 		min-height: 0;
 		font-size: var(--size-3);
 		word-wrap: break-word;
