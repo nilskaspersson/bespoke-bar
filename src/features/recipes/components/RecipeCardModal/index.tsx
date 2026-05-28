@@ -49,16 +49,10 @@ const TRANSITION_DURATION = TRANSITION_DURATION_SLOW_MS;
 const TRANSITION_EASING = readCssVar("--swift-in");
 
 /**
- * Spawns a detached DOM clone of the modal card at its current position and
- * animates it back to the list-card with the matching `data-recipe-id`. The
- * clone lives at body level so the dialog can close immediately while the
- * card keeps animating.
- *
- * On narrow viewports the modal and list cards shrink to different widths via
- * `max-width: 100%`. Rather than tween the size, the clone is popped straight
- * to the destination list-card size and only its position is animated, so it
- * lands pixel-matched on the list card (mirroring the entry, which pops to the
- * modal width) with no size animation or scale distortion.
+ * Clones the modal card to body level (so the dialog can close while the clone
+ * animates back to the matching list card) and sizes it to the destination up
+ * front rather than tweening: on narrow screens the two cards differ in width,
+ * and animating the size would distort the card's text.
  */
 function spawnExitClone(cardEl: HTMLElement, recipeId: string) {
 	const fromRect = cardEl.getBoundingClientRect();
@@ -76,8 +70,6 @@ function spawnExitClone(cardEl: HTMLElement, recipeId: string) {
 		sourceCardRect && sourceCardRect.width > 0 ? sourceCardRect : null;
 
 	const clone = cardEl.cloneNode(true) as HTMLElement;
-
-	// Pop to the destination size up front so only `transform` animates.
 	const size = targetRect ?? fromRect;
 
 	Object.assign(clone.style, {
