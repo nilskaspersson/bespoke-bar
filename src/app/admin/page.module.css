@@ -1,0 +1,15 @@
+@layer layout {
+	.root {
+		padding: var(--app-header--height) var(--app-inset) var(--gap);
+	}
+
+	.section {
+		flex: 1 1 20rem;
+		align-content: start;
+		padding: var(--space-5);
+		background-color: var(--mauve-1);
+		border: 1px solid var(--mauve-6);
+		border-radius: var(--radius--large);
+		box-shadow: var(--shadow--low);
+	}
+}

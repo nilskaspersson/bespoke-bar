@@ -11,6 +11,15 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 		code: z.literal("RATE_LIMIT_EXCEEDED"),
 		retryAfter: z.number(),
 	}),
+	z.object({
+		code: z.literal("OCR_QUOTA_REACHED"),
+		limit: z.number(),
+		used: z.number(),
+		retryAfter: z.number(),
+	}),
+	z.object({
+		code: z.literal("NO_RECIPE_FOUND"),
+	}),
 ]);
 
 export type AppErrorPayload = z.infer<typeof appErrorSchema>;
@@ -19,6 +28,19 @@ export type AppErrorToast = {
 	message: string;
 	description: string;
 };
+
+export function formatRetryAfter(seconds: number): string {
+	if (seconds < 60) {
+		const n = Math.max(1, Math.round(seconds));
+		return `${n} second${n === 1 ? "" : "s"}`;
+	}
+	if (seconds < 3600) {
+		const n = Math.round(seconds / 60);
+		return `${n} minute${n === 1 ? "" : "s"}`;
+	}
+	const n = Math.round(seconds / 3600);
+	return `${n} hour${n === 1 ? "" : "s"}`;
+}
 
 /**
  * Schema-driven toast content for an AppError. The pair `{ message, description }`
@@ -37,6 +59,19 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			return {
 				message: "Slow down",
 				description: `Try again in ${payload.retryAfter} second${payload.retryAfter === 1 ? "" : "s"}.`,
+			};
+		}
+		case "OCR_QUOTA_REACHED": {
+			return {
+				message: "Photo-to-Recipe quota reached",
+				description: `You've used all ${payload.limit} of your Photo-to-Recipe uses. The next one unlocks in ${formatRetryAfter(payload.retryAfter)}.`,
+			};
+		}
+		case "NO_RECIPE_FOUND": {
+			return {
+				message: "No recipe found",
+				description:
+					"We couldn't read a recipe from the provided image. Try another photo.",
 			};
 		}
 	}

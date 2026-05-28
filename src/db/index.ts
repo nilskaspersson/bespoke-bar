@@ -7,6 +7,8 @@ import * as glassware from "./schema/glassware";
 import * as ingredients from "./schema/ingredients";
 import * as menuEntries from "./schema/menuEntries";
 import * as menus from "./schema/menus";
+import * as ocrQuotaGrants from "./schema/ocrQuotaGrants";
+import * as ocrQuotaUses from "./schema/ocrQuotaUses";
 import * as organisations from "./schema/organisations";
 import * as preparationMethods from "./schema/preparationMethods";
 import * as recipeFavorites from "./schema/recipeFavorites";
@@ -28,6 +30,8 @@ const schema = {
 	...ingredients,
 	...menuEntries,
 	...menus,
+	...ocrQuotaGrants,
+	...ocrQuotaUses,
 	...organisations,
 	...preparationMethods,
 	...recipeFavorites,
@@ -50,3 +54,6 @@ export { db };
 export type DatabaseTransaction = Parameters<
 	Parameters<typeof db.transaction>[0]
 >[0];
+
+/** Accepts either the pooled `db` or a transaction handle, for queries shared between the two. */
+export type DatabaseExecutor = typeof db | DatabaseTransaction;

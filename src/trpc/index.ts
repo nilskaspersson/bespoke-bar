@@ -13,6 +13,8 @@ type TRPCErrorCode = ConstructorParameters<typeof TRPCError>[0]["code"];
 const APP_ERROR_TO_TRPC_CODE: Record<AppErrorPayload["code"], TRPCErrorCode> = {
 	RATE_LIMIT_EXCEEDED: "TOO_MANY_REQUESTS",
 	RECIPE_SLOT_LIMIT_REACHED: "FORBIDDEN",
+	OCR_QUOTA_REACHED: "TOO_MANY_REQUESTS",
+	NO_RECIPE_FOUND: "UNPROCESSABLE_CONTENT",
 };
 
 export async function createContext() {

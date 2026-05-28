@@ -9,45 +9,82 @@ import {
 	useRef,
 	useState,
 } from "react";
-
+import { BottomRailItems } from "@/components/BottomRail";
 import type { Ingredient } from "@/db/schema/ingredients";
+import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicator";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
+import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { OutputPreview } from "@/features/recipes/photo/components/OutputPreview";
+import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { trpc } from "@/trpc/client";
+import { Button } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Grid } from "@/ui/Grid";
 import { ImageUploadPreview } from "@/ui/ImageUploadPreview";
+import { Kbd } from "@/ui/Kbd";
+import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
+
+const DRAFT_STORAGE_KEY = "recipe-photo-draft";
+
+type PhotoDraft = { ocrText: string; draftText: string };
+
+const EMPTY_DRAFT: PhotoDraft = { ocrText: "", draftText: "" };
 
 export function PhotoToRecipe({
 	ingredients,
 	className,
 	...props
 }: { ingredients: Ingredient[] } & ComponentProps<"div">) {
+	const rootRef = useRef<HTMLDivElement>(null);
 	const outputContainerRef = useRef<HTMLDivElement>(null);
 	const imagePreviewRef = useRef<HTMLImageElement>(null);
 
-	const [ocrText, setOcrText] = useState("");
-	const [draftRecipeText, setDraftRecipeText] = useState("");
-	const deferredDraftRecipeText = useDeferredValue(draftRecipeText);
+	const [draft, setDraft] = useLocalStorage<PhotoDraft>(
+		DRAFT_STORAGE_KEY,
+		EMPTY_DRAFT,
+		"session",
+	);
+	const { ocrText, draftText } = draft;
+	const deferredDraftText = useDeferredValue(draftText);
 
-	const { imagePreviewUrl, createImagePreview } = useImageUploadPreview();
+	const [isParsing, setIsParsing] = useState(false);
+
+	const { imagePreviewUrl, createImagePreview, clearImagePreview } =
+		useImageUploadPreview();
+
+	const { data: ocrQuota } = trpc.billing.ocrQuotaState.useQuery(undefined, {
+		refetchOnMount: "always",
+	});
+	const isAtOCRQuotaCap = ocrQuota?.remaining === 0;
 
 	const draftRecipes = useBulkDraftTextToBaseRecipes(
-		deferredDraftRecipeText,
+		deferredDraftText,
 		ingredients,
 	);
 
-	const onSubmitPhotoSuccess = useCallback((extractedText: string) => {
-		setDraftRecipeText(extractedText);
-		setOcrText(extractedText);
+	const onSubmitPhotoSuccess = useCallback(
+		(extractedText: string) => {
+			setDraft({ ocrText: extractedText, draftText: extractedText });
 
-		outputContainerRef.current?.scrollIntoView({
-			behavior: "smooth",
-			block: "center",
-		});
-	}, []);
+			outputContainerRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		},
+		[setDraft],
+	);
+
+	const handleDraftTextChange = useCallback(
+		(text: string) => {
+			setDraft((prev) => ({ ...prev, draftText: text }));
+		},
+		[setDraft],
+	);
 
 	const imageChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
 		(event) => {
@@ -56,30 +93,45 @@ export function PhotoToRecipe({
 			if (!file) return;
 
 			createImagePreview(file);
-			setDraftRecipeText("");
-			setOcrText("");
+			setDraft(EMPTY_DRAFT);
 
 			imagePreviewRef.current?.scrollIntoView({
 				behavior: "smooth",
 				block: "center",
 			});
 		},
-		[createImagePreview],
+		[createImagePreview, setDraft],
+	);
+
+	const resetFlow = useCallback(() => {
+		clearImagePreview();
+		setDraft(EMPTY_DRAFT);
+
+		rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+	}, [clearImagePreview, setDraft]);
+
+	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
+		draftRecipes,
+		createRecipesWithSpecsFromData,
+		{ onSuccess: resetFlow },
 	);
 
 	const hasSelectedImage = Boolean(imagePreviewUrl);
 	const hasParsedText = Boolean(ocrText);
 	const hasDraftRecipes = draftRecipes.length > 0;
+	const canReset = (hasSelectedImage || hasParsedText) && !isParsing;
 
 	return (
-		<div {...props} className={clsx(className, styles.base)}>
+		<div {...props} ref={rootRef} className={clsx(className, styles.base)}>
 			<UploadPhotoForm
 				onChange={imageChangeHandler}
 				onSuccess={onSubmitPhotoSuccess}
+				onParsingChange={setIsParsing}
 				className={clsx(styles.step, styles.stepUpload, {
 					[styles.hasImagePreview]: hasSelectedImage,
 				})}
-				usageInfo="Daily usage 0/3"
+				usageInfo={<OCRQuotaIndicator locked={isAtOCRQuotaCap} />}
+				disabled={isAtOCRQuotaCap || hasSelectedImage}
 			/>
 
 			<hr
@@ -105,13 +157,14 @@ export function PhotoToRecipe({
 			/>
 
 			<Grid gap={2}>
-				<OutputPreview
+				<OCROutputPreview
 					ref={outputContainerRef}
 					draftRecipes={draftRecipes}
 					disabled={!hasParsedText}
 					ingredients={ingredients}
 					ocrText={ocrText}
-					onChangeDraftRecipesText={setDraftRecipeText}
+					draftText={draftText}
+					onChangeDraftRecipesText={handleDraftTextChange}
 					className={clsx(styles.step, styles.stepOutput, {
 						[styles.hasParsedText]: hasParsedText,
 						[styles.hasDraftRecipes]: hasDraftRecipes,
@@ -122,6 +175,51 @@ export function PhotoToRecipe({
 					Text extraction can be inaccurate. Double-check extracted recipes.
 				</Callout>
 			</Grid>
+
+			<BottomRailItems>
+				{canReset ? (
+					<ConfirmAction
+						action={async () => {
+							resetFlow();
+						}}
+						actionLabel="Clear form"
+						buttonProps={{
+							variant: "clear",
+							color: "amber",
+							rounded: true,
+							size: "default",
+						}}
+						notice="Extracting the image again will count as another daily use."
+						description={
+							<Text as="p" heavy>
+								This clears the selected image and any Recipes extracted from
+								it.
+							</Text>
+						}
+					>
+						Reset
+					</ConfirmAction>
+				) : null}
+
+				<Button
+					variant="clear"
+					rounded
+					color="accent"
+					aria-disabled={!hasDraftRecipes}
+					onClick={hasDraftRecipes ? submitBulkRecipesAction : undefined}
+					endAdornment={
+						<Kbd
+							shortcut="mod+enter"
+							variant="ghost"
+							ignoreInputEvents={false}
+						/>
+					}
+				>
+					{hasDraftRecipes
+						? `Create ${draftRecipes.length} ${draftRecipes.length > 1 ? "recipes" : "recipe"}`
+						: "Create"}
+				</Button>
+			</BottomRailItems>
 		</div>
 	);
 }

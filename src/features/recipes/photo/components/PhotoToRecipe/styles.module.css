@@ -7,6 +7,8 @@
 
 		container-type: inline-size;
 		container-name: photo-to-recipe;
+
+		scroll-margin-top: var(--app-inset);
 	}
 
 	.step {

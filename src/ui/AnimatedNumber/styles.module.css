@@ -1,5 +1,24 @@
 @layer ui {
 	.number {
+		/* Clip the rolling values to a single-line slot without an overflow
+		   container — that would move the baseline to the box edge. Negative
+		   horizontal insets stop a wider outgoing value from being side-clipped. */
+		position: relative;
+		display: inline-block;
+		clip-path: inset(0 -100vw);
 		font-variant-numeric: tabular-nums;
+	}
+
+	/* Invisible copy of the current value: owns the slot's width/height and the
+	   component's baseline while the visible values roll over it, absolutely
+	   positioned and out of flow. */
+	.sizer {
+		visibility: hidden;
+	}
+
+	.value {
+		position: absolute;
+		top: 0;
+		left: 0;
 	}
 }
