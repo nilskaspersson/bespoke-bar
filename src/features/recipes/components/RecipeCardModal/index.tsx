@@ -53,6 +53,12 @@ const TRANSITION_EASING = readCssVar("--swift-in");
  * animates it back to the list-card with the matching `data-recipe-id`. The
  * clone lives at body level so the dialog can close immediately while the
  * card keeps animating.
+ *
+ * On narrow viewports the modal and list cards shrink to different widths via
+ * `max-width: 100%`. Rather than tween the size, the clone is popped straight
+ * to the destination list-card size and only its position is animated, so it
+ * lands pixel-matched on the list card (mirroring the entry, which pops to the
+ * modal width) with no size animation or scale distortion.
  */
 function spawnExitClone(cardEl: HTMLElement, recipeId: string) {
 	const fromRect = cardEl.getBoundingClientRect();
@@ -64,14 +70,22 @@ function spawnExitClone(cardEl: HTMLElement, recipeId: string) {
 
 	recipeCardModalStore.getState().closeWithExit(recipeId);
 
+	const sourceEl = findRecipeCardEl(recipeId);
+	const sourceCardRect = sourceEl?.getBoundingClientRect();
+	const targetRect =
+		sourceCardRect && sourceCardRect.width > 0 ? sourceCardRect : null;
+
 	const clone = cardEl.cloneNode(true) as HTMLElement;
+
+	// Pop to the destination size up front so only `transform` animates.
+	const size = targetRect ?? fromRect;
 
 	Object.assign(clone.style, {
 		position: "absolute",
 		top: `${fromRect.top + window.scrollY}px`,
 		left: `${fromRect.left + window.scrollX}px`,
-		width: `${fromRect.width}px`,
-		height: `${fromRect.height}px`,
+		width: `${size.width}px`,
+		height: `${size.height}px`,
 		margin: "0",
 		zIndex: "var(--z-modal)",
 		pointerEvents: "none",
@@ -79,22 +93,18 @@ function spawnExitClone(cardEl: HTMLElement, recipeId: string) {
 
 	document.body.appendChild(clone);
 
-	const sourceEl = findRecipeCardEl(recipeId);
-	const targetRect = sourceEl?.getBoundingClientRect();
-
-	const keyframes =
-		targetRect && targetRect.width > 0
-			? [
-					{ transform: "none", opacity: 1 },
-					{
-						transform: `translate(${targetRect.left - fromRect.left}px, ${targetRect.top - fromRect.top}px)`,
-						opacity: 1,
-					},
-				]
-			: [
-					{ opacity: 1, transform: "none" },
-					{ opacity: 0, transform: "scale(0.92)" },
-				];
+	const keyframes = targetRect
+		? [
+				{ transform: "none", opacity: 1 },
+				{
+					transform: `translate(${targetRect.left - fromRect.left}px, ${targetRect.top - fromRect.top}px)`,
+					opacity: 1,
+				},
+			]
+		: [
+				{ opacity: 1, transform: "none" },
+				{ opacity: 0, transform: "scale(0.92)" },
+			];
 
 	const animation = clone.animate(keyframes, {
 		duration: TRANSITION_DURATION,

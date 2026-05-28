@@ -27,4 +27,12 @@
 		border-radius: var(--radius);
 		margin-top: var(--gap--tiny);
 	}
+
+	.card {
+		@container (width < 400px) {
+			display: flex;
+			justify-content: center;
+			margin-inline: calc(var(--space-4) * -1);
+		}
+	}
 }

@@ -10,7 +10,7 @@ import { RemoveMenuEntryButton } from "@/features/menus/actions/components/Remov
 import { SelectMenu } from "@/features/menus/components/SelectMenu";
 import { appendMenuEntryAction } from "@/features/menus/entries/api/appendMenuEntry";
 import { removeRecipeFromMenu } from "@/features/menus/entries/api/removeRecipeFromMenu";
-import { MenuEntryCard } from "@/features/menus/entries/components/MenuEntryCard";
+import { MenuEntryNameAdornment } from "@/features/menus/entries/components/MenuEntryNameAdornment";
 import { MenuEntryPriceCalculation } from "@/features/menus/entries/components/MenuEntryPriceCalculation";
 import {
 	createDraftMenuEntry,
@@ -18,6 +18,7 @@ import {
 	isMenu,
 	isMenuWithEntries,
 } from "@/features/menus/utils";
+import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { trpc } from "@/trpc/client";
 import { Button, LinkButton } from "@/ui/Button";
 import { CurrencyInput } from "@/ui/CurrencyInput";
@@ -169,7 +170,12 @@ export function CreateMenuEntryForm({ recipe, onSuccess, formRef }: Props) {
 								defaultValue={entryFields.recipeId.defaultValue}
 							/>
 
-							<MenuEntryCard entry={draftEntry} />
+							<div className={styles.card}>
+								<RecipeCard
+									recipe={draftEntry.recipe}
+									nameAdornment={<MenuEntryNameAdornment entry={draftEntry} />}
+								/>
+							</div>
 
 							<details>
 								<Text as="summary" size={2}>

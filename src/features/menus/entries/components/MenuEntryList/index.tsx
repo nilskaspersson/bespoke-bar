@@ -1,6 +1,9 @@
 import { clsx } from "clsx";
 import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
-import { MenuEntryCard } from "@/features/menus/entries/components/MenuEntryCard";
+import { MenuEntryActions } from "@/features/menus/actions/components/MenuEntryActions";
+import { MenuEntryNameAdornment } from "@/features/menus/entries/components/MenuEntryNameAdornment";
+import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+import { Grid } from "@/ui/Grid";
 import styles from "./styles.module.css";
 
 export function MenuEntryList({
@@ -21,13 +24,16 @@ export function MenuEntryList({
 	return (
 		<ul className={clsx(styles.recipes, className)}>
 			{entries.map((entry) => (
-				<li key={entry.id}>
-					<MenuEntryCard
-						entry={entry}
-						editable={editable}
-						withActions={withActions}
+				<Grid as="li" key={entry.id} gap={1}>
+					<RecipeCard
+						recipe={entry}
+						nameAdornment={
+							<MenuEntryNameAdornment entry={entry} editable={editable} />
+						}
 					/>
-				</li>
+
+					{withActions ? <MenuEntryActions entry={entry} /> : null}
+				</Grid>
 			))}
 		</ul>
 	);

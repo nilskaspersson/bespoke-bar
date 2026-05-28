@@ -12,6 +12,7 @@
 		word-wrap: break-word;
 		padding: var(--gap--tiny);
 		color: var(--mauve-11);
+		margin-inline: var(--space-2);
 	}
 
 	.contain {
