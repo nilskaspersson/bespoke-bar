@@ -11,8 +11,9 @@ import {
 import type { Menu } from "@/db/schema/menus";
 import { SelectRecipe } from "@/features/menus/components/SelectRecipe";
 import { addRecipeToMenuAction } from "@/features/menus/entries/api/addRecipeToMenu";
-import { MenuEntryCard } from "@/features/menus/entries/components/MenuEntryCard";
+import { MenuEntryNameAdornment } from "@/features/menus/entries/components/MenuEntryNameAdornment";
 import { createDraftMenuEntry } from "@/features/menus/utils";
+import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { useIndexedItems } from "@/hooks/useIndexedItems";
 import { trpc } from "@/trpc/client";
 import { CurrencyInput } from "@/ui/CurrencyInput";
@@ -141,7 +142,12 @@ export function AddRecipeForm({ formId, menu, onSuccess }: Props) {
 
 					<Grid gap={4}>
 						<Heading level="h5">Preview</Heading>
-						{draftEntry ? <MenuEntryCard entry={draftEntry} /> : null}
+						{draftEntry ? (
+							<RecipeCard
+								recipe={draftEntry.recipe}
+								nameAdornment={<MenuEntryNameAdornment entry={draftEntry} />}
+							/>
+						) : null}
 					</Grid>
 				</div>
 			</form>
