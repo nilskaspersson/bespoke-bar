@@ -9,17 +9,23 @@ import {
 	useRef,
 	useState,
 } from "react";
-
+import { BottomRailItems } from "@/components/BottomRail";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicator";
+import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
+import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
 import { trpc } from "@/trpc/client";
+import { Button } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
+import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Grid } from "@/ui/Grid";
 import { ImageUploadPreview } from "@/ui/ImageUploadPreview";
+import { Kbd } from "@/ui/Kbd";
+import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function PhotoToRecipe({
@@ -86,9 +92,16 @@ export function PhotoToRecipe({
 		rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
 	}, [clearImagePreview]);
 
+	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
+		draftRecipes,
+		createRecipesWithSpecsFromData,
+		{ onSuccess: resetFlow },
+	);
+
 	const hasSelectedImage = Boolean(imagePreviewUrl);
 	const hasParsedText = Boolean(ocrText);
 	const hasDraftRecipes = draftRecipes.length > 0;
+	const canReset = (hasSelectedImage || hasParsedText) && !isParsing;
 
 	return (
 		<div {...props} ref={rootRef} className={clsx(className, styles.base)}>
@@ -100,7 +113,7 @@ export function PhotoToRecipe({
 					[styles.hasImagePreview]: hasSelectedImage,
 				})}
 				usageInfo={<OCRQuotaIndicator locked={isAtOCRQuotaCap} />}
-				disabled={isAtOCRQuotaCap}
+				disabled={isAtOCRQuotaCap || hasSelectedImage}
 			/>
 
 			<hr
@@ -132,10 +145,7 @@ export function PhotoToRecipe({
 					disabled={!hasParsedText}
 					ingredients={ingredients}
 					ocrText={ocrText}
-					canClear={(hasSelectedImage || hasParsedText) && !isParsing}
 					onChangeDraftRecipesText={setDraftRecipeText}
-					onClear={resetFlow}
-					onRecipesCreated={resetFlow}
 					className={clsx(styles.step, styles.stepOutput, {
 						[styles.hasParsedText]: hasParsedText,
 						[styles.hasDraftRecipes]: hasDraftRecipes,
@@ -146,6 +156,51 @@ export function PhotoToRecipe({
 					Text extraction can be inaccurate. Double-check extracted recipes.
 				</Callout>
 			</Grid>
+
+			<BottomRailItems>
+				{canReset ? (
+					<ConfirmAction
+						action={async () => {
+							resetFlow();
+						}}
+						actionLabel="Clear form"
+						buttonProps={{
+							variant: "clear",
+							color: "amber",
+							rounded: true,
+							size: "default",
+						}}
+						notice="Extracting the image again will count as another daily use."
+						description={
+							<Text as="p" heavy>
+								This clears the selected image and any Recipes extracted from
+								it.
+							</Text>
+						}
+					>
+						Reset
+					</ConfirmAction>
+				) : null}
+
+				<Button
+					variant="clear"
+					rounded
+					color="accent"
+					aria-disabled={!hasDraftRecipes}
+					onClick={hasDraftRecipes ? submitBulkRecipesAction : undefined}
+					endAdornment={
+						<Kbd
+							shortcut="mod+enter"
+							variant="ghost"
+							ignoreInputEvents={false}
+						/>
+					}
+				>
+					{hasDraftRecipes
+						? `Create ${draftRecipes.length} ${draftRecipes.length > 1 ? "recipes" : "recipe"}`
+						: "Create"}
+				</Button>
+			</BottomRailItems>
 		</div>
 	);
 }

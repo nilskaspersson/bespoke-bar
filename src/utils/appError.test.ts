@@ -45,7 +45,7 @@ describe("getAppErrorToast NO_RECIPE_FOUND", () => {
 
 		expect(toast.message).toBe("No recipe found");
 		expect(toast.description).toBe(
-			"We couldn't read a recipe from that image. It still counts as a use, so try a clearer photo.",
+			"We couldn't read a recipe from the provided image. Try another photo.",
 		);
 	});
 });

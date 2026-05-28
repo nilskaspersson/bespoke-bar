@@ -71,7 +71,7 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			return {
 				message: "No recipe found",
 				description:
-					"We couldn't read a recipe from that image. It still counts as a use, so try a clearer photo.",
+					"We couldn't read a recipe from the provided image. Try another photo.",
 			};
 		}
 	}

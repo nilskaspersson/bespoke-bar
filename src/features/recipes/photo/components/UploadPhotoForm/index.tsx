@@ -96,6 +96,10 @@ export function UploadPhotoForm({
 		accept: ACCEPTED_IMAGE_TYPES.join(","),
 		disabled: isParsingPhotoText || disabled,
 		onChange: async (event) => {
+			const file = event.target.files?.[0];
+
+			if (!file) return;
+
 			onChange?.(event);
 
 			onParsingChange?.(true);
@@ -120,10 +124,9 @@ export function UploadPhotoForm({
 				}
 			}
 
-			/**
-			 * Automatically submit the form
-			 */
-			event.target.form?.requestSubmit();
+			const formData = new FormData();
+			formData.append("image", file);
+			await submitPhotoAction(formData);
 		},
 	};
 
@@ -132,7 +135,6 @@ export function UploadPhotoForm({
 			{...props}
 			ref={dropZoneRef}
 			{...dropHandlers}
-			action={submitPhotoAction}
 			className={clsx(styles.base, className, {
 				[styles.draggingOver]: isDraggingOver,
 			})}
