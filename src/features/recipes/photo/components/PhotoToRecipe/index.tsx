@@ -18,6 +18,7 @@ import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/use
 import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { trpc } from "@/trpc/client";
 import { Button } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
@@ -28,6 +29,12 @@ import { Kbd } from "@/ui/Kbd";
 import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
+const DRAFT_STORAGE_KEY = "recipe-photo-draft";
+
+type PhotoDraft = { ocrText: string; draftText: string };
+
+const EMPTY_DRAFT: PhotoDraft = { ocrText: "", draftText: "" };
+
 export function PhotoToRecipe({
 	ingredients,
 	className,
@@ -37,9 +44,13 @@ export function PhotoToRecipe({
 	const outputContainerRef = useRef<HTMLDivElement>(null);
 	const imagePreviewRef = useRef<HTMLImageElement>(null);
 
-	const [ocrText, setOcrText] = useState("");
-	const [draftRecipeText, setDraftRecipeText] = useState("");
-	const deferredDraftRecipeText = useDeferredValue(draftRecipeText);
+	const [draft, setDraft] = useLocalStorage<PhotoDraft>(
+		DRAFT_STORAGE_KEY,
+		EMPTY_DRAFT,
+		"session",
+	);
+	const { ocrText, draftText } = draft;
+	const deferredDraftText = useDeferredValue(draftText);
 
 	const [isParsing, setIsParsing] = useState(false);
 
@@ -52,19 +63,28 @@ export function PhotoToRecipe({
 	const isAtOCRQuotaCap = ocrQuota?.remaining === 0;
 
 	const draftRecipes = useBulkDraftTextToBaseRecipes(
-		deferredDraftRecipeText,
+		deferredDraftText,
 		ingredients,
 	);
 
-	const onSubmitPhotoSuccess = useCallback((extractedText: string) => {
-		setDraftRecipeText(extractedText);
-		setOcrText(extractedText);
+	const onSubmitPhotoSuccess = useCallback(
+		(extractedText: string) => {
+			setDraft({ ocrText: extractedText, draftText: extractedText });
 
-		outputContainerRef.current?.scrollIntoView({
-			behavior: "smooth",
-			block: "center",
-		});
-	}, []);
+			outputContainerRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		},
+		[setDraft],
+	);
+
+	const handleDraftTextChange = useCallback(
+		(text: string) => {
+			setDraft((prev) => ({ ...prev, draftText: text }));
+		},
+		[setDraft],
+	);
 
 	const imageChangeHandler: ChangeEventHandler<HTMLInputElement> = useCallback(
 		(event) => {
@@ -73,24 +93,22 @@ export function PhotoToRecipe({
 			if (!file) return;
 
 			createImagePreview(file);
-			setDraftRecipeText("");
-			setOcrText("");
+			setDraft(EMPTY_DRAFT);
 
 			imagePreviewRef.current?.scrollIntoView({
 				behavior: "smooth",
 				block: "center",
 			});
 		},
-		[createImagePreview],
+		[createImagePreview, setDraft],
 	);
 
 	const resetFlow = useCallback(() => {
 		clearImagePreview();
-		setDraftRecipeText("");
-		setOcrText("");
+		setDraft(EMPTY_DRAFT);
 
 		rootRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-	}, [clearImagePreview]);
+	}, [clearImagePreview, setDraft]);
 
 	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
 		draftRecipes,
@@ -145,7 +163,8 @@ export function PhotoToRecipe({
 					disabled={!hasParsedText}
 					ingredients={ingredients}
 					ocrText={ocrText}
-					onChangeDraftRecipesText={setDraftRecipeText}
+					draftText={draftText}
+					onChangeDraftRecipesText={handleDraftTextChange}
 					className={clsx(styles.step, styles.stepOutput, {
 						[styles.hasParsedText]: hasParsedText,
 						[styles.hasDraftRecipes]: hasDraftRecipes,

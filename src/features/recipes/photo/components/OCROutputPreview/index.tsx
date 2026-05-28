@@ -22,6 +22,7 @@ export function OCROutputPreview({
 	draftRecipes,
 	ingredients,
 	ocrText,
+	draftText,
 	onChangeDraftRecipesText,
 	...props
 }: ComponentProps<"section"> & {
@@ -29,6 +30,7 @@ export function OCROutputPreview({
 	draftRecipes: Keyed<BaseRecipe>[];
 	ingredients: Ingredient[];
 	ocrText: string;
+	draftText: string;
 	onChangeDraftRecipesText: (text: string) => void;
 }) {
 	const [displayMode, setDisplayMode] = useState<DisplayMode>("PREVIEW");
@@ -54,14 +56,14 @@ export function OCROutputPreview({
 			</Activity>
 
 			<Activity mode={displayMode === "EDIT" ? "visible" : "hidden"}>
-				{!disabled && (
+				{!disabled ? (
 					<RecipeEditor
 						key={ocrText}
 						ingredients={ingredients}
-						initialText={ocrText}
+						initialText={draftText}
 						onTextChange={onChangeDraftRecipesText}
 					/>
-				)}
+				) : null}
 			</Activity>
 		</section>
 	);
