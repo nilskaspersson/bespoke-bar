@@ -1,26 +1,28 @@
-import { and, eq, gt, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { OCRQuotaUsesTable } from "@/db/schema/ocrQuotaUses";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { getOCRQuotaLimit } from "@/features/billing/api/getOCRQuotaLimit";
-import {
-	OCR_QUOTA_WINDOW_HOURS,
-	OCR_QUOTA_WINDOW_MS,
-} from "@/features/billing/constants";
+import { getOCRUsageInWindow } from "@/features/billing/api/getOCRUsageInWindow";
+import { OCR_QUOTA_WINDOW_MS } from "@/features/billing/constants";
 import { AppError } from "@/utils/appError";
 
 /**
- * Reserve a Photo-to-Recipe Use. In one transaction: row-lock the org (the
- * same serialisation point slot-limits uses), take a fresh windowed count,
- * check it against the live ceiling, and insert the Use. Returns as soon as the
- * row is committed and does no further work — so the caller always receives the
- * `useId` and can refund it if delivery then fails. Cache invalidation is the
- * caller's job (see `/api/photo/parse`); keeping the reservation free of any
- * post-commit step means nothing can strand a committed Use.
+ * Reserve a Photo-to-Recipe Use. The quota ceiling is read first, outside the
+ * lock: grants move rarely, so a slightly stale ceiling at worst mis-gates by a
+ * single Use, and keeping it out of the transaction avoids acquiring a second
+ * pooled connection while the row lock is held. Then, in one transaction:
+ * row-lock the org (the same serialisation point slot-limits uses), take a
+ * fresh windowed count, compare it to the ceiling, and insert the Use. Returns
+ * as soon as the row is committed and does no further work — so the caller
+ * always receives the `useId` and can refund it if delivery then fails. Cache
+ * invalidation is the caller's job (see `/api/photo/parse`); keeping the
+ * reservation free of any post-commit step means nothing can strand a
+ * committed Use.
  *
- * The lock is held for ~1ms — never for the Vision call — and serialises
- * concurrent Uses for the same org, so two requests can't both pass off a stale
- * count.
+ * The lock spans only the count and the insert — never the ceiling lookup or
+ * the Vision call — and serialises concurrent Uses for the same org, so two
+ * requests can't both pass off a stale count.
  */
 export async function recordOCRUse({
 	orgId,
@@ -29,6 +31,8 @@ export async function recordOCRUse({
 	orgId: string;
 	userId: string;
 }): Promise<{ useId: string }> {
+	const limit = await getOCRQuotaLimit(orgId);
+
 	const useId = await db.transaction(async (tx) => {
 		await tx
 			.select({ id: OrganisationsTable.id })
@@ -36,37 +40,16 @@ export async function recordOCRUse({
 			.where(eq(OrganisationsTable.id, orgId))
 			.for("update");
 
-		const [usage] = await tx
-			.select({
-				used: sql<number>`count(*)::int`,
-				oldestEpochMs: sql<
-					string | null
-				>`(extract(epoch from min(${OCRQuotaUsesTable.createdAt})) * 1000)::bigint`,
-			})
-			.from(OCRQuotaUsesTable)
-			.where(
-				and(
-					eq(OCRQuotaUsesTable.orgId, orgId),
-					gt(
-						OCRQuotaUsesTable.createdAt,
-						sql`now() - make_interval(hours => ${OCR_QUOTA_WINDOW_HOURS}::int)`,
-					),
-				),
-			);
-
-		const used = usage?.used ?? 0;
-		const limit = await getOCRQuotaLimit(orgId);
+		const { used, oldestUseAtMs } = await getOCRUsageInWindow(tx, orgId);
 
 		if (used >= limit) {
-			const oldestEpochMs =
-				usage?.oldestEpochMs == null ? null : Number(usage.oldestEpochMs);
 			const retryAfter =
-				oldestEpochMs == null
+				oldestUseAtMs == null
 					? 1
 					: Math.max(
 							1,
 							Math.ceil(
-								(oldestEpochMs + OCR_QUOTA_WINDOW_MS - Date.now()) / 1000,
+								(oldestUseAtMs + OCR_QUOTA_WINDOW_MS - Date.now()) / 1000,
 							),
 						);
 

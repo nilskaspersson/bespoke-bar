@@ -7,7 +7,7 @@ describe("deriveOCRQuotaState", () => {
 		const state = deriveOCRQuotaState({
 			limit: 3,
 			used: 1,
-			oldestCountingUseAt: "2026-05-26T10:00:00.000Z",
+			oldestUseAtMs: Date.parse("2026-05-26T10:00:00.000Z"),
 		});
 
 		expect(state).toEqual({
@@ -19,17 +19,17 @@ describe("deriveOCRQuotaState", () => {
 	});
 
 	test("at the cap, nextAvailableAt is the oldest Use plus the window", () => {
-		const oldest = "2026-05-26T10:00:00.000Z";
+		const oldestMs = Date.parse("2026-05-26T10:00:00.000Z");
 
 		const state = deriveOCRQuotaState({
 			limit: 3,
 			used: 3,
-			oldestCountingUseAt: oldest,
+			oldestUseAtMs: oldestMs,
 		});
 
 		expect(state.remaining).toBe(0);
 		expect(state.nextAvailableAt).toBe(
-			new Date(Date.parse(oldest) + OCR_QUOTA_WINDOW_MS).toISOString(),
+			new Date(oldestMs + OCR_QUOTA_WINDOW_MS).toISOString(),
 		);
 	});
 
@@ -37,7 +37,7 @@ describe("deriveOCRQuotaState", () => {
 		const state = deriveOCRQuotaState({
 			limit: 3,
 			used: 5,
-			oldestCountingUseAt: "2026-05-26T10:00:00.000Z",
+			oldestUseAtMs: Date.parse("2026-05-26T10:00:00.000Z"),
 		});
 
 		expect(state.remaining).toBe(0);
@@ -48,7 +48,7 @@ describe("deriveOCRQuotaState", () => {
 		const state = deriveOCRQuotaState({
 			limit: 0,
 			used: 0,
-			oldestCountingUseAt: null,
+			oldestUseAtMs: null,
 		});
 
 		expect(state.remaining).toBe(0);

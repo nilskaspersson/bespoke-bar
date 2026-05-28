@@ -54,3 +54,6 @@ export { db };
 export type DatabaseTransaction = Parameters<
 	Parameters<typeof db.transaction>[0]
 >[0];
+
+/** Accepts either the pooled `db` or a transaction handle, for queries shared between the two. */
+export type DatabaseExecutor = typeof db | DatabaseTransaction;

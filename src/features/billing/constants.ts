@@ -7,8 +7,9 @@
  * frees the oldest Use a couple of hours earlier each day, so the unlock keeps
  * pace with roughly-daily use instead of marching forward.
  *
- * Single source of truth for both the SQL window predicate (`getOCRQuotaUsage`,
- * `recordOCRUse`) and the client-facing `nextAvailableAt` (`getOCRQuotaState`),
+ * Single source of truth for both the SQL window predicate (`getOCRUsageInWindow`,
+ * used by the gate and the cached projection) and the client-facing
+ * `nextAvailableAt` (`getOCRQuotaState`),
  * so the gate and the countdown can never disagree.
  */
 export const OCR_QUOTA_WINDOW_HOURS = 22;

@@ -19,19 +19,17 @@ export type OCRQuotaState = {
 export function deriveOCRQuotaState({
 	limit,
 	used,
-	oldestCountingUseAt,
+	oldestUseAtMs,
 }: {
 	limit: number;
 	used: number;
-	oldestCountingUseAt: string | null;
+	oldestUseAtMs: number | null;
 }): OCRQuotaState {
 	const remaining = Math.max(0, limit - used);
 
 	const nextAvailableAt =
-		remaining === 0 && oldestCountingUseAt
-			? new Date(
-					new Date(oldestCountingUseAt).getTime() + OCR_QUOTA_WINDOW_MS,
-				).toISOString()
+		remaining === 0 && oldestUseAtMs != null
+			? new Date(oldestUseAtMs + OCR_QUOTA_WINDOW_MS).toISOString()
 			: null;
 
 	return { limit, used, remaining, nextAvailableAt };
@@ -53,6 +51,6 @@ export async function getCachedOCRQuotaState(
 	return deriveOCRQuotaState({
 		limit,
 		used: usage.used,
-		oldestCountingUseAt: usage.oldestCountingUseAt,
+		oldestUseAtMs: usage.oldestUseAtMs,
 	});
 }
