@@ -4,6 +4,10 @@
 		gap: 1px;
 		align-items: center;
 		user-select: none;
+
+		@media (hover: none) and (pointer: coarse) {
+			display: none;
+		}
 	}
 
 	.key {
@@ -38,10 +42,6 @@
 
 		@starting-style {
 			opacity: 0;
-		}
-
-		@media (hover: none) and (pointer: coarse) {
-			display: none;
 		}
 
 		&.isModifier {
