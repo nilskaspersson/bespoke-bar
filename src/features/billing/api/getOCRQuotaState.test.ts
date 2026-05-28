@@ -18,7 +18,7 @@ describe("deriveOCRQuotaState", () => {
 		});
 	});
 
-	test("at the cap, nextAvailableAt is the oldest Use + 24h", () => {
+	test("at the cap, nextAvailableAt is the oldest Use plus the window", () => {
 		const oldest = "2026-05-26T10:00:00.000Z";
 
 		const state = deriveOCRQuotaState({

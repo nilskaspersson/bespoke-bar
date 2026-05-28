@@ -4,9 +4,10 @@ import { parseTextFromImage } from "@/features/recipes/photo/api/vision";
 import { findRecipeInTextWithLLM } from "@/features/recipes/photo/utils/findRecipeInTextWithLLM";
 import { AppError } from "@/utils/appError";
 
-const fileSchema = z.file();
-fileSchema.max(10 * 1024 * 1024); // 10 MB
-fileSchema.mime(ACCEPTED_IMAGE_TYPES);
+const fileSchema = z
+	.file()
+	.max(10 * 1024 * 1024) // 10 MB
+	.mime(ACCEPTED_IMAGE_TYPES);
 
 export async function parseTextFromImageService(formData: FormData) {
 	const imageEntries = formData.getAll("image");

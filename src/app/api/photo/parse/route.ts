@@ -8,6 +8,7 @@ import {
 	refundOCRUse,
 } from "@/features/billing/api/recordOCRUse.service";
 import { parseTextFromImageService } from "@/features/recipes/photo/api/parseTextFromImage.service";
+import { errorMessageOrFallback } from "@/utils/api";
 import { AppError } from "@/utils/appError";
 import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
@@ -110,8 +111,7 @@ export async function POST(req: NextRequest) {
 		await refundOCRUse(useId, orgId);
 		cacheEvents.ocrQuotaUse.create.emit(orgId);
 
-		const message =
-			error instanceof Error ? error.message : "Failed to parse image";
+		const message = errorMessageOrFallback(error, "Failed to parse image");
 		return Response.json({ ok: false, error: { message } }, { status: 400 });
 	}
 }

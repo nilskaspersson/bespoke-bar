@@ -13,7 +13,6 @@ import {
 	type DisplayMode,
 	DisplayModeSwitch,
 } from "@/features/recipes/photo/components/DisplayModeSwitch";
-import { trpc } from "@/trpc/client";
 import { Button } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Flex } from "@/ui/Flex";
@@ -47,16 +46,11 @@ export function OCROutputPreview({
 }) {
 	const [displayMode, setDisplayMode] = useState<DisplayMode>("PREVIEW");
 
-	const utils = trpc.useUtils();
-
 	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
 		draftRecipes,
 		createRecipesWithSpecsFromData,
 		{
-			onSuccess: () => {
-				onRecipesCreated?.();
-				utils.billing.ocrQuotaState.invalidate();
-			},
+			onSuccess: () => onRecipesCreated?.(),
 		},
 	);
 

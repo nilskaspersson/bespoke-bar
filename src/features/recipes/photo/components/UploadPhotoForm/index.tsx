@@ -13,7 +13,6 @@ import { useDialog } from "@/hooks/useDialog";
 import { useFileDrop } from "@/hooks/useFileDrop";
 import { usePasteFile } from "@/hooks/usePasteFile";
 import { Callout } from "@/ui/Callout";
-import { Chip } from "@/ui/Chip";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { FileInput } from "@/ui/FileInput";
 import { Grid } from "@/ui/Grid";
