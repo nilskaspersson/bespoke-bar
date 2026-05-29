@@ -11,6 +11,16 @@
 		background: none;
 	}
 
+	/**
+	 * Promoting the toaster to the top layer applies the popover UA `inset: 0`,
+	 * which over-constrains Sonner's edge positioning (it only sets `top`/`right`)
+	 * and pins the toaster to the top-left. Clear it at zero specificity so
+	 * Sonner's offset rules still win.
+	 */
+	:global(:where([data-sonner-toaster][popover])) {
+		inset: auto;
+	}
+
 	.toast {
 		--p: var(--space-4);
 
