@@ -4,6 +4,7 @@ import { clsx } from "clsx";
 import { Activity, type ComponentProps, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { DraftRecipesStatusBar } from "@/features/recipes/bulk/components/DraftRecipesStatusBar";
 import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import {
@@ -62,6 +63,7 @@ export function OCROutputPreview({
 						ingredients={ingredients}
 						initialText={draftText}
 						onTextChange={onChangeDraftRecipesText}
+						statusBar={<DraftRecipesStatusBar recipes={draftRecipes} />}
 					/>
 				) : null}
 			</Activity>
