@@ -8,6 +8,7 @@ import {
 } from "@/features/ingredients/utils/getIngredientMetaDataWithLLM";
 import { isEmpty } from "@/utils";
 import { cacheEvents } from "@/utils/cache";
+import { reserveEnrichmentBudget } from "@/utils/enrichmentQuota";
 
 const ENRICHABLE_FIELDS = ingredientEnrichmentSchema.keyof().options;
 const MAX_ENRICHMENT_BATCH_SIZE = 50;
@@ -82,6 +83,16 @@ export async function enrichIngredients(
 	const ingredientArray = allIngredients.slice(0, MAX_ENRICHMENT_BATCH_SIZE);
 
 	if (ingredientArray.length === 0) {
+		return 0;
+	}
+
+	if (!(await reserveEnrichmentBudget(orgId, ingredientArray.length))) {
+		if (process.env.NODE_ENV === "development") {
+			console.info(
+				"[ingredient-enrichment] skipped — enrichment quota reached",
+				JSON.stringify({ orgId, items: ingredientArray.length }),
+			);
+		}
 		return 0;
 	}
 

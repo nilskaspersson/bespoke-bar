@@ -61,4 +61,50 @@ describe("matchNameWithCategory", () => {
 		expect(matchNameWithCategory("Angostura")).toBe("cocktail_bitters");
 		expect(matchNameWithCategory("Peychaud's")).toBe("cocktail_bitters");
 	});
+
+	it("should match carbonated mixers as soda (not beer)", () => {
+		expect(matchNameWithCategory("Soda water")).toBe("soda");
+		expect(matchNameWithCategory("Tonic water")).toBe("soda");
+		expect(matchNameWithCategory("Ginger beer")).toBe("soda");
+		expect(matchNameWithCategory("Ginger ale")).toBe("soda");
+		expect(matchNameWithCategory("Cola")).toBe("soda");
+	});
+
+	it("should match fresh herbs", () => {
+		expect(matchNameWithCategory("Mint")).toBe("herb");
+		expect(matchNameWithCategory("Fresh basil")).toBe("herb");
+	});
+
+	it("should match bittersweet aperitivi and amari", () => {
+		expect(matchNameWithCategory("Campari")).toBe("aperitif");
+		expect(matchNameWithCategory("Aperol")).toBe("aperitif");
+		expect(matchNameWithCategory("Fernet-Branca")).toBe("amaro");
+		expect(matchNameWithCategory("Cynar")).toBe("amaro");
+	});
+
+	it("should match herbal liqueurs", () => {
+		expect(matchNameWithCategory("Green Chartreuse")).toBe("herbal_liqueur");
+		expect(matchNameWithCategory("Bénédictine")).toBe("herbal_liqueur");
+	});
+
+	it("should prefer liqueur over the citrus modifier (orange curaçao)", () => {
+		expect(matchNameWithCategory("Maraschino")).toBe("liqueur");
+		expect(matchNameWithCategory("Orange Curaçao")).toBe("liqueur");
+		expect(matchNameWithCategory("Crème de Violette")).toBe("liqueur");
+	});
+
+	it("should match non-citrus juices without hijacking citrus juices", () => {
+		expect(matchNameWithCategory("Pineapple juice")).toBe("juice");
+		expect(matchNameWithCategory("Cranberry juice")).toBe("juice");
+		expect(matchNameWithCategory("Fresh lime juice")).toBe("citrus");
+		expect(matchNameWithCategory("Orange juice")).toBe("citrus");
+	});
+
+	it("should match agave and the long tail of flavored syrups", () => {
+		expect(matchNameWithCategory("Agave")).toBe("syrup");
+		expect(matchNameWithCategory("Agave syrup")).toBe("syrup");
+		expect(matchNameWithCategory("Cinnamon syrup")).toBe("syrup");
+		expect(matchNameWithCategory("Vanilla syrup")).toBe("syrup");
+		expect(matchNameWithCategory("Honey syrup")).toBe("honey");
+	});
 });

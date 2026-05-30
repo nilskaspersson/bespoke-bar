@@ -8,6 +8,7 @@ import {
 } from "@/db/schema/ingredients";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 import { type InsertSpec, type Spec, SpecsTable } from "@/db/schema/specs";
+import { clearTouchedAiMarks } from "@/features/recipes/api/utils/aiEnrichedFields";
 
 export type IngredientIdsByName = Map<Ingredient["name"], Ingredient["id"]>;
 
@@ -21,10 +22,21 @@ export async function upsertRecipeInTransaction(
 	 * Update existing recipe if request includes a recipe with an id
 	 */
 	if (recipe?.id) {
+		const [current] = await tx
+			.select({ aiEnrichedFields: RecipesTable.aiEnrichedFields })
+			.from(RecipesTable)
+			.where(
+				and(eq(RecipesTable.id, recipe.id), eq(RecipesTable.orgId, orgId)),
+			);
+
 		const [updatedRecipe] = await tx
 			.update(RecipesTable)
 			.set({
 				...recipe,
+				aiEnrichedFields: clearTouchedAiMarks(
+					current?.aiEnrichedFields,
+					recipe,
+				),
 				updatedBy: userId,
 				updatedAt: sql`NOW()`,
 			})

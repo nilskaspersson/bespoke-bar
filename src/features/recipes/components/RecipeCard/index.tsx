@@ -7,6 +7,7 @@ import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdo
 import {
 	COCKTAIL_STYLE_TO_LABEL,
 	GLASSWARE_TO_LABEL,
+	ICE_TO_LABEL,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
 import { AbvChip } from "@/features/recipes/metrics/components/AbvChip";
@@ -98,6 +99,12 @@ function RecipeCardImpl<T extends BaseRecipe>({
 					{recipe.glassware ? (
 						<Chip color="light" size={1}>
 							{GLASSWARE_TO_LABEL.get(recipe.glassware)}
+						</Chip>
+					) : null}
+
+					{recipe.ice && recipe.ice !== "none" ? (
+						<Chip color="light" size={1}>
+							{ICE_TO_LABEL.get(recipe.ice)}
 						</Chip>
 					) : null}
 				</Flex>

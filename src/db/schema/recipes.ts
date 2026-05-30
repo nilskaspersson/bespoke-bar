@@ -15,6 +15,7 @@ import {
 import { nanoid } from "nanoid";
 import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
 import { glasswareEnum } from "@/db/schema/glassware";
+import { iceEnum } from "@/db/schema/ice";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
@@ -41,8 +42,10 @@ export const RecipesTable = pgTable(
 		preparationMethod: preparationMethodEnum("preparation_method"),
 		dilutionTarget: real("dilution_target"),
 		glassware: glasswareEnum("glassware"),
+		ice: iceEnum("ice"),
 		garnish: varchar("garnish", { length: 100 }),
 		style: cocktailStylesEnum("style"),
+		aiEnrichedFields: text("ai_enriched_fields").array(),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()
 			.notNull(),
@@ -100,6 +103,7 @@ export type BaseRecipe = Identity<
 			| "dilutionTarget"
 			| "garnish"
 			| "glassware"
+			| "ice"
 			| "instructions"
 			| "name"
 			| "preparationMethod"

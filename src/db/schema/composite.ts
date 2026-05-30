@@ -28,6 +28,7 @@ export const upsertRecipeSchema = insertRecipeSchema
 		createdAt: true,
 		createdBy: true,
 		updatedAt: true,
+		aiEnrichedFields: true,
 	})
 	.extend({
 		id: z.string().optional(),

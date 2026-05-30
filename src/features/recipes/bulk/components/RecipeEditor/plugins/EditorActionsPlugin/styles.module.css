@@ -3,8 +3,6 @@
 		padding: var(--space-2);
 		border-top: 1px solid var(--mauve-6);
 		background-color: var(--mauve-2);
-		border-bottom-left-radius: inherit;
-		border-bottom-right-radius: inherit;
 	}
 
 	.separator {

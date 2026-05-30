@@ -6,6 +6,8 @@ import {
 	RecipesTable,
 	updateRecipeSchema,
 } from "@/db/schema/recipes";
+import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
+import { clearTouchedAiMarks } from "@/features/recipes/api/utils/aiEnrichedFields";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
@@ -21,10 +23,16 @@ export async function updateRecipe(
 
 	const validatedUserInputRecipe = updateRecipeSchema.parse(userInputRecipe);
 
+	const current = await getCachedRecipe(orgId, id);
+
 	const [result] = await db
 		.update(RecipesTable)
 		.set({
 			...validatedUserInputRecipe,
+			aiEnrichedFields: clearTouchedAiMarks(
+				current?.aiEnrichedFields,
+				validatedUserInputRecipe,
+			),
 			updatedAt: sql`NOW()`,
 			updatedBy: userId,
 		})

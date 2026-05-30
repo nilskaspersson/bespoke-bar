@@ -9,7 +9,11 @@ export function Logo({
 	...props
 }: Partial<ComponentProps<typeof Link>>) {
 	return (
-		<Link href="/" className={clsx(styles.logo, className)} {...props}>
+		<Link
+			href="/bar/recipes"
+			className={clsx(styles.logo, className)}
+			{...props}
+		>
 			Bespoke Bar{" "}
 			<Chip size={0} className={styles.beta}>
 				Beta

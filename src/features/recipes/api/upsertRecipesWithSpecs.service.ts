@@ -4,6 +4,7 @@ import type { RecipeFormData } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { getRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
 import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
+import { enrichRecipes } from "@/features/recipes/api/enrichRecipes";
 import {
 	insertIngredientsInTransaction,
 	replaceSpecsInTransaction,
@@ -96,6 +97,23 @@ export async function upsertRecipesWithSpecs(
 			cacheEvents.recipe.update.emit(orgId, recipe.id);
 		}
 	});
+
+	const newRecipeIds = recipes
+		.filter(([, isNew]) => isNew)
+		.map(([recipe]) => recipe.id);
+
+	if (newRecipeIds.length > 0) {
+		/**
+		 * Lazily enrich newly created recipes (style + derived glassware/prep).
+		 */
+		after(async () => {
+			try {
+				await enrichRecipes(orgId, newRecipeIds);
+			} catch (error) {
+				console.error("Recipe enrichment failed:", error);
+			}
+		});
+	}
 
 	if (createdIngredients.length > 0) {
 		cacheEvents.ingredient.create.emit(orgId);

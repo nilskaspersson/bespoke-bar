@@ -1,12 +1,5 @@
-import { GoogleGenAI } from "@google/genai";
-import { getGCPCredentials } from "@/utils/gcp";
-
-const ai = new GoogleGenAI({
-	vertexai: true,
-	project: process.env.GCP_PROJECT_ID,
-	location: "us-central1",
-	googleAuthOptions: getGCPCredentials(),
-});
+import { genAI } from "@/utils/genai";
+import { isTimeoutError, stripTagDelimiters } from "@/utils/llm";
 
 const NO_RECIPES_FOUND = "NO_RECIPES_FOUND";
 
@@ -63,9 +56,9 @@ export async function findRecipeInTextWithLLM(
 	}
 
 	try {
-		const response = await ai.models.generateContent({
+		const response = await genAI.models.generateContent({
 			model: "gemini-2.5-flash-lite",
-			contents: `<detected_text>${userText}</detected_text>`,
+			contents: `<detected_text>${stripTagDelimiters(userText)}</detected_text>`,
 			config: {
 				systemInstruction: SYSTEM_PROMPT,
 				temperature: 0, // no randomness, should preserve input best
@@ -83,12 +76,7 @@ export async function findRecipeInTextWithLLM(
 
 		return text;
 	} catch (error) {
-		const isTimeout =
-			error instanceof Error &&
-			(error.message.includes("DEADLINE_EXCEEDED") ||
-				error.message.includes("timeout"));
-
-		if (isTimeout) {
+		if (isTimeoutError(error)) {
 			/**
 			 * TODO: Retry, or suggest trying later/with a smaller image?
 			 */

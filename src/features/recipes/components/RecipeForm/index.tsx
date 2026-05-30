@@ -18,6 +18,7 @@ import { RecipeFormSettings } from "@/features/recipes/components/RecipeFormSett
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
+import { SelectIce } from "@/features/recipes/components/SelectIce";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
 import { getRecipeUrl } from "@/features/recipes/utils";
@@ -185,7 +186,7 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 
 						<details>
 							<Text as="summary" heavy compact weight={600}>
-								Style, description, instructions, glassware, garnish…
+								Style, description, instructions, glassware, ice, garnish…
 							</Text>
 
 							<Grid as="fieldset" gap={6} className={styles.fieldset}>
@@ -221,6 +222,14 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 									key={recipeFields.glassware.key}
 									name={recipeFields.glassware.name}
 									defaultValue={recipeFields.glassware.initialValue}
+								/>
+
+								<SelectIce
+									label="Ice"
+									helperText="To serve the drink over"
+									key={recipeFields.ice.key}
+									name={recipeFields.ice.name}
+									defaultValue={recipeFields.ice.initialValue}
 								/>
 
 								<TextField
