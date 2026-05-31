@@ -144,8 +144,7 @@
 		}
 
 		&:not(:active:hover) {
-			transition-property:
-				color, border-color, background-color, --bg-from, --bg-to;
+			transition-property: color, background-color, --bg-from, --bg-to;
 			transition-duration: var(--transition-duration);
 		}
 

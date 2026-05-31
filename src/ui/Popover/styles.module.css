@@ -164,6 +164,35 @@
 		}
 	}
 
+	/**
+	 * Bare popover (no overlay backdrop): the element itself is the popover, so
+	 * its show/hide transition keys off its own `:popover-open` rather than the
+	 * overlay's, and it resets the native `inset`. Reuses `.popover` for
+	 * position-area; uses a small opacity-led entry (not the menu slide) so it
+	 * never sweeps over the anchor mid-animation and break hover. See `BarePopover`.
+	 */
+	.bare {
+		inset: auto;
+
+		opacity: 0;
+		transform: translateY(var(--space-1));
+
+		transition-property: opacity, transform, display, overlay;
+		transition-behavior: allow-discrete;
+
+		&:popover-open {
+			opacity: 1;
+			transform: none;
+
+			@media (prefers-reduced-motion: no-preference) {
+				@starting-style {
+					opacity: 0;
+					transform: translateY(var(--space-1));
+				}
+			}
+		}
+	}
+
 	.anchor {
 		position: fixed;
 		top: var(--anchorTop);

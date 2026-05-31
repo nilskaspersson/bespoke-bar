@@ -31,6 +31,7 @@ export async function updateRecipe(
 			...validatedUserInputRecipe,
 			aiEnrichedFields: clearTouchedAiMarks(
 				current?.aiEnrichedFields,
+				current ?? {},
 				validatedUserInputRecipe,
 			),
 			updatedAt: sql`NOW()`,

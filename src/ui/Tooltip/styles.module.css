@@ -1,0 +1,15 @@
+@layer ui {
+	.surface {
+		width: max-content;
+		max-width: min(32ch, calc(100vw - 2rem));
+		margin: 0 0 var(--space-2);
+		padding: var(--space-1) var(--space-2);
+		font-size: var(--size-1);
+
+		background-color: var(--mauve-12);
+		color: var(--mauve-1);
+		border: none;
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+	}
+}

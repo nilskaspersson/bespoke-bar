@@ -14,9 +14,12 @@ import { recipePreviewSchema } from "./schema";
 
 export function FormDraftPreview({
 	ingredients,
+	aiEnrichedFields,
 	...props
 }: Omit<ComponentProps<typeof DraftRecipesPreview>, "recipes"> & {
 	ingredients: Ingredient[];
+	/** Persisted Auto-filled marks; surfaced on the preview card (static until save). */
+	aiEnrichedFields?: string[] | null;
 }) {
 	const { getFieldset } = useFormMetadata<RecipeFormData>();
 	const fields = getFieldset();
@@ -75,10 +78,11 @@ export function FormDraftPreview({
 
 		return {
 			...data.recipe,
+			aiEnrichedFields,
 			specs,
 			_key: stableKey,
 		};
-	}, [deferred, ingredientMap, ingredientIndex, stableKey]);
+	}, [deferred, ingredientMap, ingredientIndex, stableKey, aiEnrichedFields]);
 
 	return <DraftRecipesPreview {...props} recipes={[recipe]} />;
 }

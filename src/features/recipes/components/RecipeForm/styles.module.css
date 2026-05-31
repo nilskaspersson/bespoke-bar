@@ -25,4 +25,10 @@
 		border: 1px dashed var(--mauve-9);
 		border-radius: var(--radius);
 	}
+
+	.enrichedLabel {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+	}
 }

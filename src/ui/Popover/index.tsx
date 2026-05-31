@@ -83,6 +83,40 @@ export function Popover({
 }
 
 /**
+ * A {@link Popover} without the overlay backdrop — the element *is* the popover,
+ * so its open/close transition keys off its own `:popover-open`. Same props and
+ * positioning as `Popover`, minus the full-viewport click-catcher, so it can sit
+ * over an anchor the pointer is hovering (hints / tooltips) without stealing the
+ * hover. Light dismiss (outside-click, Escape) still applies via the popover type.
+ */
+export function BarePopover({
+	anchorId,
+	children,
+	className,
+	position = "top",
+	style,
+	isOpen,
+	...props
+}: ComponentProps<"div"> & {
+	id: string;
+	anchorId: string;
+	position?: AnchorPosition;
+	popover: PopoverType;
+	isOpen: boolean;
+	onToggle?: ToggleEventHandler<HTMLDivElement>;
+}) {
+	return (
+		<div
+			{...props}
+			className={clsx(className, styles.popover, styles.bare, styles[position])}
+			style={mergeStyleSources(style, { positionAnchor: `--${anchorId}` })}
+		>
+			{isOpen ? children : null}
+		</div>
+	);
+}
+
+/**
  * Invisible fixed-position element that acts as a CSS anchor for a
  * popover. Use when the "trigger" is a position rather than a DOM
  * element — e.g. the clicked token's location in the recipe editor's

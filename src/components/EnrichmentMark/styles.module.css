@@ -1,0 +1,24 @@
+@layer component {
+	.mark {
+		display: inline-flex;
+		align-items: center;
+		color: inherit;
+		cursor: help;
+		border-radius: var(--radius--full);
+		transition-property: opacity, color;
+		transition-duration: var(--transition-duration);
+
+		&:not(:hover, :focus-visible) {
+			opacity: 0.5;
+		}
+
+		&:is(:hover, :focus-visible) {
+			color: var(--amber-11);
+		}
+
+		&:focus-visible {
+			outline: 2px solid var(--amber-8);
+			outline-offset: 2px;
+		}
+	}
+}

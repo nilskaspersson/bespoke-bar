@@ -27,6 +27,11 @@ describe("percentageToRatioSchema", () => {
 			expect(percentageToRatioSchema.parse("33.33")).toBe(0.3333);
 			expect(percentageToRatioSchema.parse("66.666")).toBe(0.6667);
 			expect(percentageToRatioSchema.parse("12.3658")).toBe(0.1237);
+			// Float32 read-back of a 0.4 `real` column rounds back to a clean 0.4, so
+			// an Auto-filled abv isn't mistaken for an edit on resubmit.
+			expect(percentageToRatioSchema.parse(`${Math.fround(0.4) * 100}`)).toBe(
+				0.4,
+			);
 		});
 
 		it("should handle null and undefined inputs", () => {

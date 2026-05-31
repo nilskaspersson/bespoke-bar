@@ -23,7 +23,13 @@ export async function upsertRecipeInTransaction(
 	 */
 	if (recipe?.id) {
 		const [current] = await tx
-			.select({ aiEnrichedFields: RecipesTable.aiEnrichedFields })
+			.select({
+				aiEnrichedFields: RecipesTable.aiEnrichedFields,
+				style: RecipesTable.style,
+				glassware: RecipesTable.glassware,
+				ice: RecipesTable.ice,
+				preparationMethod: RecipesTable.preparationMethod,
+			})
 			.from(RecipesTable)
 			.where(
 				and(eq(RecipesTable.id, recipe.id), eq(RecipesTable.orgId, orgId)),
@@ -35,6 +41,7 @@ export async function upsertRecipeInTransaction(
 				...recipe,
 				aiEnrichedFields: clearTouchedAiMarks(
 					current?.aiEnrichedFields,
+					current ?? {},
 					recipe,
 				),
 				updatedBy: userId,
