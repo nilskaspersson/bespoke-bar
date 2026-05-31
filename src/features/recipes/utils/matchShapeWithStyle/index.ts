@@ -1,7 +1,8 @@
 import type { SystemCategory } from "@/db/schema/categories";
 import type { CocktailStyle } from "@/db/schema/cocktailStyles";
+import type { Ingredient } from "@/db/schema/ingredients";
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
-import type { Unit } from "@/db/schema/units";
+import type { Spec } from "@/db/schema/specs";
 import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { calculateSpecsVolumes } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 
@@ -71,15 +72,8 @@ const CATEGORY_TO_ROLE = {
 	other: "other",
 } satisfies Record<SystemCategory, ShapeRole>;
 
-type ShapeSpec = {
-	quantity?: number | null;
-	unit?: Unit | null;
-	optional?: boolean | null;
-	ingredient?: {
-		name?: string | null;
-		category?: SystemCategory | null;
-		abv?: number | null;
-	} | null;
+type ShapeSpec = Partial<Pick<Spec, "quantity" | "unit" | "optional">> & {
+	ingredient?: Partial<Pick<Ingredient, "name" | "category" | "abv">> | null;
 };
 
 export type ShapeRecipe = {

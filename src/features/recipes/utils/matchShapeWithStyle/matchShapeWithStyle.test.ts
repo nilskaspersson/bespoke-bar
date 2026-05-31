@@ -22,7 +22,7 @@ function recipe(
 			optional: s.optional,
 			quantity: s.quantity ?? null,
 			unit: s.unit ?? null,
-			ingredient: { name: s.name ?? null, category: s.category ?? null },
+			ingredient: { name: s.name, category: s.category ?? null },
 		})),
 	};
 }

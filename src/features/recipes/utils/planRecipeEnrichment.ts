@@ -1,30 +1,19 @@
 import type { CocktailStyle } from "@/db/schema/cocktailStyles";
-import type { Glassware } from "@/db/schema/glassware";
-import type { Ice } from "@/db/schema/ice";
-import type { PreparationMethod } from "@/db/schema/preparationMethods";
+import type { Recipe } from "@/db/schema/recipes";
+import type { RecipeEnrichableField } from "@/features/recipes/api/utils/aiEnrichedFields";
 import { STYLE_TO_SERVE } from "@/features/recipes/constants";
+import type { RecipeMeta } from "@/features/recipes/utils/getRecipeMetaDataWithLLM";
 import { isEmpty } from "@/utils";
 
-type TargetFields = {
-	style: CocktailStyle | null;
-	glassware: Glassware | null;
-	ice: Ice | null;
-	preparationMethod: PreparationMethod | null;
-};
+type TargetFields = Pick<Recipe, RecipeEnrichableField>;
 
 /** Serve from the LLM, trusted when it resolved the style; null fields fall back to the style map. */
-type LlmServe = {
-	glassware?: Glassware | null;
-	preparationMethod?: PreparationMethod | null;
-	ice?: Ice | null;
-};
+type LlmServe = Partial<Omit<RecipeMeta, "style">>;
 
-export type RecipeEnrichmentPlan = {
-	style?: CocktailStyle;
-	glassware?: Glassware;
-	ice?: Ice;
-	preparationMethod?: PreparationMethod;
-	aiEnrichedFields: Array<"style" | "glassware" | "ice" | "preparationMethod">;
+export type RecipeEnrichmentPlan = Partial<
+	Pick<Recipe, RecipeEnrichableField>
+> & {
+	aiEnrichedFields: RecipeEnrichableField[];
 };
 
 /**

@@ -115,7 +115,7 @@ export function getCocktailStyleLabel(style: CocktailStyleFilter): string {
 /** Default serve per major family — defaults the user can override. */
 export const STYLE_TO_SERVE = new Map<
 	CocktailStyle,
-	{ glassware?: Glassware; preparationMethod?: PreparationMethod; ice?: Ice }
+	Pick<BaseRecipe, "glassware" | "preparationMethod" | "ice">
 >([
 	["sour", { glassware: "coupe", preparationMethod: "shaken", ice: "none" }],
 	["fizz", { glassware: "fizz", preparationMethod: "shaken", ice: "cubed" }],

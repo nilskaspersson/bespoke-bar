@@ -2,7 +2,11 @@ import { z } from "zod";
 import { type CocktailStyle, cocktailStyles } from "@/db/schema/cocktailStyles";
 import { glasswares } from "@/db/schema/glassware";
 import { ice } from "@/db/schema/ice";
+import type { Ingredient } from "@/db/schema/ingredients";
 import { preparationMethods } from "@/db/schema/preparationMethods";
+import type { Recipe } from "@/db/schema/recipes";
+import type { Spec } from "@/db/schema/specs";
+import { formatSpecLine } from "@/features/specs/utils/formatSpecLine";
 import { genAI } from "@/utils/genai";
 import { isTimeoutError, stripTagDelimiters } from "@/utils/llm";
 
@@ -29,12 +33,18 @@ const responseSchema = z.toJSONSchema(batchMetaSchema, {
 	target: "openapi-3.0",
 });
 
-export type RecipeMetaInput = {
-	id: string;
-	name?: string | null;
-	shape: string;
+export type RecipeMetaInput = Pick<Recipe, "id" | "name"> & {
+	ingredients: Array<
+		Pick<Spec, "quantity" | "unit"> & Pick<Ingredient, "name">
+	>;
 	tentativeStyle?: CocktailStyle | null;
 };
+
+/** A build-line spec for the LLM; name sanitized as untrusted input, unnamed labelled. */
+function describeSpec(spec: RecipeMetaInput["ingredients"][number]): string {
+	const name = stripTagDelimiters(spec.name?.trim() || "") || "(unnamed)";
+	return formatSpecLine({ quantity: spec.quantity, unit: spec.unit, name });
+}
 
 /** One batched flash-lite call classifying recipes by family + serve; soft-fails to an empty Map. */
 export async function getRecipeMetaDataBatchWithLLM(
@@ -49,11 +59,12 @@ export async function getRecipeMetaDataBatchWithLLM(
 	const contents = inputs
 		.map((input) => {
 			const name = stripTagDelimiters(input.name?.trim() || "(unnamed)");
-			const shape = stripTagDelimiters(input.shape);
+			const build =
+				input.ingredients.map(describeSpec).join("; ") || "(no ingredients)";
 			const guess = input.tentativeStyle
 				? `; structural guess (low confidence): ${input.tentativeStyle}`
 				: "";
-			return `<recipe id="${input.id}">name: ${name}; build: ${shape}${guess}</recipe>`;
+			return `<recipe id="${input.id}">name: ${name}; build: ${build}${guess}</recipe>`;
 		})
 		.join("\n");
 

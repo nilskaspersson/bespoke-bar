@@ -2,12 +2,12 @@ import { type AnyColumn, and, eq, inArray, type SQL, sql } from "drizzle-orm";
 import { db } from "@/db";
 import type { CocktailStyle } from "@/db/schema/cocktailStyles";
 import { RecipesTable } from "@/db/schema/recipes";
+import type { RecipeEnrichableField } from "@/features/recipes/api/utils/aiEnrichedFields";
 import {
 	getRecipeMetaDataBatchWithLLM,
 	type RecipeMeta,
 } from "@/features/recipes/utils/getRecipeMetaDataWithLLM";
 import {
-	describeShape,
 	matchShapeWithStyle,
 	STYLE_CONFIDENCE_THRESHOLD,
 } from "@/features/recipes/utils/matchShapeWithStyle";
@@ -165,6 +165,17 @@ function classifyByShape(recipes: EnrichableRecipe[]) {
 	return { resolvedStyleById, deferred, traces };
 }
 
+/** Core (non-optional) specs as name + amount — the ground-truth build for the LLM. */
+function coreSpecs(recipe: EnrichableRecipe) {
+	return (recipe.specs ?? [])
+		.filter((spec) => !spec.optional)
+		.map((spec) => ({
+			name: spec.ingredient?.name ?? null,
+			quantity: spec.quantity,
+			unit: spec.unit,
+		}));
+}
+
 /**
  * The only paid step, gated by the per-org quota. For each deferred recipe, upgrade
  * the resolved style with the LLM's verdict and capture its serve fields — but a
@@ -190,7 +201,7 @@ async function resolveDeferredWithLLM(
 		deferred.map(({ recipe, match }) => ({
 			id: recipe.id,
 			name: recipe.name,
-			shape: describeShape(match.shape),
+			ingredients: coreSpecs(recipe),
 			tentativeStyle: match.style,
 		})),
 	);
@@ -257,8 +268,6 @@ const ENUM_COLUMNS = [
 	},
 ] as const;
 
-type EnumKey = (typeof ENUM_COLUMNS)[number]["key"];
-
 /**
  * One batch UPDATE for the whole set: each column is a per-row CASE, so different
  * recipes receive different values from a single statement.
@@ -298,7 +307,7 @@ async function writeEnrichment(
 function coalescedFillCase(
 	column: AnyColumn,
 	pending: PendingUpdate[],
-	key: EnumKey,
+	key: RecipeEnrichableField,
 	cast: string,
 ): SQL | undefined {
 	const arms = pending.flatMap(({ id, plan }) => {

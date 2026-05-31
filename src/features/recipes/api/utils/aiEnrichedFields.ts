@@ -5,7 +5,7 @@ const recipeAiEnrichedFieldsSchema = z
 	.array(z.enum(["style", "glassware", "ice", "preparationMethod"]))
 	.nullish();
 
-type RecipeEnrichableField = NonNullable<
+export type RecipeEnrichableField = NonNullable<
 	z.infer<typeof recipeAiEnrichedFieldsSchema>
 >[number];
 
