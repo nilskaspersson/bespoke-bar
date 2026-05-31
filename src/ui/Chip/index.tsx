@@ -8,6 +8,7 @@ type ChipVariant = "filled" | "outline";
 
 export type ChipProps<E extends ElementType = "span"> = TextProps<E> & {
 	label?: ReactNode;
+	icon?: ReactNode;
 	color?: SystemColor;
 	variant?: ChipVariant;
 };
@@ -15,6 +16,7 @@ export type ChipProps<E extends ElementType = "span"> = TextProps<E> & {
 export function Chip<E extends ElementType = "span">({
 	as,
 	label,
+	icon,
 	color = "accent",
 	variant = "filled",
 	children,
@@ -33,6 +35,7 @@ export function Chip<E extends ElementType = "span">({
 			size={size}
 			weight={weight}
 		>
+			{icon ? <span className={styles.icon}>{icon}</span> : null}
 			{label ? <span className={styles.label}>{label}</span> : null}
 			{children}
 		</Text>
