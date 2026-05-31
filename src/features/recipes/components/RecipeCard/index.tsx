@@ -1,6 +1,7 @@
 import { clsx } from "clsx";
 import Link from "next/link";
 import { memo, type ReactNode, useMemo } from "react";
+import { EnrichmentMark } from "@/components/EnrichmentMark";
 import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
@@ -49,6 +50,8 @@ function RecipeCardImpl<T extends BaseRecipe>({
 }: Props<T>) {
 	const metrics = useMemo(() => calculateRecipeMetrics(recipe), [recipe]);
 
+	const enrichedFields = new Set(recipe.aiEnrichedFields ?? []);
+
 	const adornment =
 		nameAdornment ??
 		(servings !== undefined ? (
@@ -83,13 +86,27 @@ function RecipeCardImpl<T extends BaseRecipe>({
 
 				<Flex as="div" wrap gap={1}>
 					{recipe.style ? (
-						<Chip color="light" size={1}>
+						<Chip
+							color="light"
+							size={1}
+							icon={
+								enrichedFields.has("style") ? <EnrichmentMark /> : undefined
+							}
+						>
 							{COCKTAIL_STYLE_TO_LABEL.get(recipe.style)}
 						</Chip>
 					) : null}
 
 					{recipe.preparationMethod ? (
-						<Chip color="light" size={1}>
+						<Chip
+							color="light"
+							size={1}
+							icon={
+								enrichedFields.has("preparationMethod") ? (
+									<EnrichmentMark />
+								) : undefined
+							}
+						>
 							{METHOD_TO_LABEL.get(recipe.preparationMethod)}
 						</Chip>
 					) : null}
@@ -97,13 +114,23 @@ function RecipeCardImpl<T extends BaseRecipe>({
 					<AbvChip abv={metrics.abv} />
 
 					{recipe.glassware ? (
-						<Chip color="light" size={1}>
+						<Chip
+							color="light"
+							size={1}
+							icon={
+								enrichedFields.has("glassware") ? <EnrichmentMark /> : undefined
+							}
+						>
 							{GLASSWARE_TO_LABEL.get(recipe.glassware)}
 						</Chip>
 					) : null}
 
 					{recipe.ice && recipe.ice !== "none" ? (
-						<Chip color="light" size={1}>
+						<Chip
+							color="light"
+							size={1}
+							icon={enrichedFields.has("ice") ? <EnrichmentMark /> : undefined}
+						>
 							{ICE_TO_LABEL.get(recipe.ice)}
 						</Chip>
 					) : null}

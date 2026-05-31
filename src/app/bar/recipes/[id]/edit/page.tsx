@@ -75,6 +75,7 @@ async function RecipeEditWithAuth({ params }: Props) {
 			<RecipeForm recipe={recipe} ingredients={ingredients}>
 				<FormDraftPreview
 					ingredients={ingredients}
+					aiEnrichedFields={recipe.aiEnrichedFields}
 					className={styles.preview}
 				/>
 			</RecipeForm>

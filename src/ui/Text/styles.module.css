@@ -15,9 +15,10 @@
 	}
 
 	.text {
-		font-size: var(--jsxFontSize);
-		font-weight: var(--jsxFontWeight);
-		text-align: var(--jsxTextAlign);
+		font-size: var(--jsxFontSize, 1em);
+		font-weight: var(--jsxFontWeight, 400);
+		text-align: var(--jsxTextAlign, left);
+		font-family: var(--font-sans-serif, sans-serif);
 
 		text-wrap: pretty;
 		line-height: var(--line-height);

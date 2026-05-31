@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
+import { EnrichmentMark } from "@/components/EnrichmentMark";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { IngredientActions } from "@/features/ingredients/components/IngredientActions";
@@ -28,6 +29,8 @@ export function IngredientCard({
 	const { percentageFormatter } = use(FormatterContext);
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
 
+	const enrichedFields = new Set(ingredient.aiEnrichedFields ?? []);
+
 	return (
 		<div className={clsx(styles.card, className)} {...props}>
 			<Grid gap={4} className={styles.content}>
@@ -41,27 +44,47 @@ export function IngredientCard({
 					</HGroup>
 
 					{ingredient.description ? (
-						<Text as="p" light size={2}>
-							{ingredient.description}
-						</Text>
+						<Flex gap={2} alignItems="baseline">
+							{enrichedFields.has("description") ? <EnrichmentMark /> : null}
+
+							<Text as="p" light size={2}>
+								{ingredient.description}
+							</Text>
+						</Flex>
 					) : null}
 				</Grid>
 
 				<Flex gap={2} wrap className={styles.badges}>
 					{ingredient.category ? (
-						<Chip size={1} color="light">
+						<Chip
+							size={1}
+							color="light"
+							icon={
+								enrichedFields.has("category") ? <EnrichmentMark /> : undefined
+							}
+						>
 							{CATEGORY_TO_LABEL.get(ingredient.category)}
 						</Chip>
 					) : null}
 
 					{ingredient.abv != null ? (
-						<Chip size={1} color="light">
+						<Chip
+							size={1}
+							color="light"
+							icon={enrichedFields.has("abv") ? <EnrichmentMark /> : undefined}
+						>
 							<Abv /> {percentageFormatter.format(ingredient.abv)}
 						</Chip>
 					) : null}
 
 					{ingredient.brand ? (
-						<Chip size={1} color="light">
+						<Chip
+							size={1}
+							color="light"
+							icon={
+								enrichedFields.has("brand") ? <EnrichmentMark /> : undefined
+							}
+						>
 							{ingredient.brand}
 						</Chip>
 					) : null}

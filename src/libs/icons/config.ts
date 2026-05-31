@@ -42,6 +42,7 @@ export const ICONS = {
 	"sliders-horizontal": { kit: "lucide", name: "sliders-horizontal" },
 	"sort-down": { kit: "lucide", name: "sort-desc" },
 	"sort-up": { kit: "lucide", name: "sort-asc" },
+	sparkles: { kit: "lucide", name: "sparkles" },
 	"sun-bright": { kit: "lucide", name: "sun" },
 	"table-list": { kit: "lucide", name: "table" },
 	"triangle-exclamation": { kit: "lucide", name: "triangle-alert" },

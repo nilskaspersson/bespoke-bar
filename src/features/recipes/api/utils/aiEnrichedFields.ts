@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { isEmpty } from "@/utils";
+import { clearTouchedAiMarks as clearMarks } from "@/utils/aiEnrichedFields";
 
 const recipeAiEnrichedFieldsSchema = z
 	.array(z.enum(["style", "glassware", "ice", "preparationMethod"]))
@@ -9,16 +9,19 @@ export type RecipeEnrichableField = NonNullable<
 	z.infer<typeof recipeAiEnrichedFieldsSchema>
 >[number];
 
+type RecipeFieldValues = Partial<Record<RecipeEnrichableField, unknown>>;
+
 /**
- * Recompute `ai_enriched_fields` after a user edit: a mark survives only while
- * the field stays empty. safeParse so a bad stored array can't block the write.
+ * Recipe-typed adapter over the shared {@link clearMarks}: parses the stored mark
+ * array (safeParse so a bad value can't block the write), then keeps only marks
+ * whose stored value the user left unchanged.
  */
 export function clearTouchedAiMarks(
-	current: unknown,
-	submitted: Partial<Record<RecipeEnrichableField, unknown>>,
+	currentMarks: unknown,
+	stored: RecipeFieldValues,
+	submitted: RecipeFieldValues,
 ): RecipeEnrichableField[] | null {
-	const parsed = recipeAiEnrichedFieldsSchema.safeParse(current);
+	const parsed = recipeAiEnrichedFieldsSchema.safeParse(currentMarks);
 	const marked = parsed.success ? (parsed.data ?? []) : [];
-	const kept = marked.filter((field) => isEmpty(submitted[field]));
-	return kept.length > 0 ? kept : null;
+	return clearMarks(marked, stored, submitted);
 }

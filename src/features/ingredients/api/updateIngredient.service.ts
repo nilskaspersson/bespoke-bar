@@ -8,8 +8,9 @@ import {
 } from "@/db/schema/ingredients";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { ingredientEnrichmentSchema } from "@/features/ingredients/utils/getIngredientMetaDataWithLLM";
+import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { rateLimit } from "@/rateLimit";
-import { isEmpty } from "@/utils";
+import { clearTouchedAiMarks } from "@/utils/aiEnrichedFields";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
@@ -34,14 +35,28 @@ export async function updateIngredient(
 		throw new Error("Ingredient not found");
 	}
 
-	const aiFields = aiEnrichedFieldsSchema.parse(current.aiEnrichedFields) ?? [];
-	const aiEnrichedFields = aiFields.filter((k) => isEmpty(validatedInput[k]));
+	const parsedMarks = aiEnrichedFieldsSchema.safeParse(
+		current.aiEnrichedFields,
+	);
+	const markedFields = parsedMarks.success ? (parsedMarks.data ?? []) : [];
+	/**
+	 * Compare abv in the form's space: its parser rounds to the precision a user
+	 * can enter, so the stored value (a `real` column, full float32 precision)
+	 * isn't read as an edit when the same value is resubmitted.
+	 */
+	const toFormAbv = (abv: number | null | undefined) =>
+		abv == null ? abv : percentageToRatioSchema.parse(`${abv * 100}`);
+	const aiEnrichedFields = clearTouchedAiMarks(
+		markedFields,
+		{ ...current, abv: toFormAbv(current.abv) },
+		{ ...validatedInput, abv: toFormAbv(validatedInput.abv) },
+	);
 
 	const [result] = await db
 		.update(IngredientsTable)
 		.set({
 			...validatedInput,
-			aiEnrichedFields: aiEnrichedFields.length > 0 ? aiEnrichedFields : null,
+			aiEnrichedFields,
 			updatedAt: sql`NOW()`,
 			updatedBy: userId,
 		})

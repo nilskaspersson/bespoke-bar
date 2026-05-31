@@ -6,6 +6,7 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { useRouter } from "next/navigation";
 import { type ReactNode, use, useRef, useState } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
+import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeWithSpecs } from "@/db/schema/recipes";
@@ -37,6 +38,18 @@ type Props = {
 	ingredients: Ingredient[];
 	children?: ReactNode;
 };
+
+/** Reflects the persisted Auto-filled state next to a field label (static until save). */
+function enrichableLabel(label: string, enriched: boolean) {
+	return enriched ? (
+		<span className={styles.enrichedLabel}>
+			{label}
+			<EnrichmentMark />
+		</span>
+	) : (
+		label
+	);
+}
 
 function initializeSpecFormEntry(spec?: SpecWithIngredient) {
 	return {
@@ -115,6 +128,8 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 
 	const recipeFields = fields.recipe.getFieldset();
 
+	const enrichedFields = new Set(recipe?.aiEnrichedFields ?? []);
+
 	const formRef = useRef<HTMLFormElement>(null);
 
 	const initialOptional = recipe?.specs.some((spec) => spec.optional) ?? false;
@@ -160,7 +175,10 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 						/>
 
 						<SelectPreparationMethod
-							label="Preparation method"
+							label={enrichableLabel(
+								"Preparation method",
+								enrichedFields.has("preparationMethod"),
+							)}
 							key={recipeFields.preparationMethod.key}
 							name={recipeFields.preparationMethod.name}
 							defaultValue={recipeFields.preparationMethod.initialValue}
@@ -191,7 +209,7 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 
 							<Grid as="fieldset" gap={6} className={styles.fieldset}>
 								<SelectCocktailStyle
-									label="Style"
+									label={enrichableLabel("Style", enrichedFields.has("style"))}
 									key={recipeFields.style.key}
 									name={recipeFields.style.name}
 									defaultValue={recipeFields.style.initialValue}
@@ -218,14 +236,17 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 								/>
 
 								<SelectGlassware
-									label="Glassware"
+									label={enrichableLabel(
+										"Glassware",
+										enrichedFields.has("glassware"),
+									)}
 									key={recipeFields.glassware.key}
 									name={recipeFields.glassware.name}
 									defaultValue={recipeFields.glassware.initialValue}
 								/>
 
 								<SelectIce
-									label="Ice"
+									label={enrichableLabel("Ice", enrichedFields.has("ice"))}
 									helperText="To serve the drink over"
 									key={recipeFields.ice.key}
 									name={recipeFields.ice.name}

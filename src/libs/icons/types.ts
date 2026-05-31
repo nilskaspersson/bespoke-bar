@@ -51,6 +51,7 @@ export type IconName =
 	| "sort"
 	| "sort-down"
 	| "sort-up"
+	| "sparkles"
 	| "star"
 	| "sun-bright"
 	| "table-list"

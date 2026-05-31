@@ -161,7 +161,10 @@ export const selectIngredientSchema = createSelectSchema(IngredientsTable);
  */
 const insertBase = createInsertSchema(IngredientsTable);
 const draftBase = insertBase.omit(INGREDIENT_SYSTEM_FIELDS);
-const updateBase = createUpdateSchema(IngredientsTable);
+/** `aiEnrichedFields` is server-owned (set by Enrichment, recomputed on edit) — never client-submittable. */
+const updateBase = createUpdateSchema(IngredientsTable).omit({
+	aiEnrichedFields: true,
+});
 
 /** DB insert schema */
 export const insertIngredientSchema = refineIngredient(

@@ -99,6 +99,7 @@ export type BaseRecipe = Identity<
 		Pick<
 			Recipe,
 			| "id"
+			| "aiEnrichedFields"
 			| "description"
 			| "dilutionTarget"
 			| "garnish"
@@ -116,4 +117,7 @@ export type BaseRecipe = Identity<
 
 export const selectRecipeSchema = createSelectSchema(RecipesTable);
 export const insertRecipeSchema = createInsertSchema(RecipesTable);
-export const updateRecipeSchema = createUpdateSchema(RecipesTable);
+/** `aiEnrichedFields` is server-owned (set by Enrichment, recomputed on edit) — never client-submittable. */
+export const updateRecipeSchema = createUpdateSchema(RecipesTable).omit({
+	aiEnrichedFields: true,
+});

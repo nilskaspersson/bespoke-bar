@@ -26,7 +26,11 @@ A separate finite pool of **Uses** an **Organisation** could buy as a pack, drai
 ### Enrichment
 
 **Enrichment**:
-When a Recipe or Ingredient is created, a best-effort, fire-and-forget attempt to auto-populate its _empty_ metadata fields — a Recipe's **Cocktail Style**, glassware, ice, and preparation method; an Ingredient's category, abv, and description. Optional and silent: it never blocks or delays creation, and a failure leaves the field empty for the user to fill. Qualify as **Recipe Enrichment** / **Ingredient Enrichment** when a statement applies to only one.
+When a Recipe or Ingredient is created, a best-effort, fire-and-forget attempt to auto-populate its _empty_ metadata fields — a Recipe's **Cocktail Style**, glassware, ice, and preparation method; an Ingredient's category, abv, brand, and description. Non-blocking: it never delays or fails creation, and a failure leaves the field empty for the user to fill. It does not interrupt the user, but the fields it fills are not invisible — each is marked **Auto-filled** until the user changes it. Qualify as **Recipe Enrichment** / **Ingredient Enrichment** when a statement applies to only one.
+
+**Auto-filled** (field state):
+A metadata field whose current value was populated by **Enrichment** and has not since been changed by the user. Tracked per-field and surfaced in the UI with a sparkle indicator (accessible name "Auto-filled"). A field stops being Auto-filled the instant the user changes its value; re-saving an unchanged value keeps the state. A value the user typed that merely coincides with what Enrichment would have chosen is not Auto-filled.
+_Avoid_: "AI-suggested", "AI-generated", "Enriched" (as the field-state label) — in user-facing copy say **Auto-filled**.
 
 ### Recipes
 

@@ -59,7 +59,11 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 	const openPopover = useCallback(() => {
 		const el = popoverRef.current;
 
-		if (el?.isConnected) {
+		/**
+		 * Idempotent: showPopover() throws if already open, and callers may toggle faster
+		 * than the async `isOpen` state settles.
+		 */
+		if (el?.isConnected && !el.matches(":popover-open")) {
 			el.showPopover();
 		}
 	}, []);
@@ -67,7 +71,7 @@ export function usePopover(options: UsePopoverOptions = {}): UsePopoverReturn {
 	const closePopover = useCallback(() => {
 		const el = popoverRef.current;
 
-		if (el?.isConnected) {
+		if (el?.isConnected && el.matches(":popover-open")) {
 			el.hidePopover();
 		}
 	}, []);
