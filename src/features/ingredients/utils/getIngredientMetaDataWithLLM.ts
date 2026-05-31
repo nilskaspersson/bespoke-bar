@@ -1,15 +1,8 @@
-import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 import { systemCategories } from "@/db/schema/categories";
 import { supportedMeasurements } from "@/db/schema/units";
-import { getGCPCredentials } from "@/utils/gcp";
-
-const ai = new GoogleGenAI({
-	vertexai: true,
-	project: process.env.GCP_PROJECT_ID,
-	location: "us-central1",
-	googleAuthOptions: getGCPCredentials(),
-});
+import { genAI } from "@/utils/genai";
+import { isTimeoutError, stripTagDelimiters } from "@/utils/llm";
 
 const enrichmentFieldsSchema = z.object({
 	description: z
@@ -70,12 +63,21 @@ export async function getIngredientMetaDataBatchWithLLM(
 		return results;
 	}
 
+	// Re-key the model's echoed name back to the caller's original, since the
+	// tag carries the sanitized form.
+	const originalBySanitized = new Map<string, string>();
+	const contents = validNames
+		.map((name) => {
+			const safe = stripTagDelimiters(name);
+			originalBySanitized.set(safe, name);
+			return `<ingredient>${safe}</ingredient>`;
+		})
+		.join("\n");
+
 	try {
-		const response = await ai.models.generateContent({
+		const response = await genAI.models.generateContent({
 			model: "gemini-2.5-flash-lite",
-			contents: validNames
-				.map((name) => `<ingredient>${name}</ingredient>`)
-				.join("\n"),
+			contents,
 			config: {
 				systemInstruction: SYSTEM_PROMPT,
 				temperature: 0,
@@ -102,17 +104,12 @@ export async function getIngredientMetaDataBatchWithLLM(
 
 		for (const item of validated.data) {
 			const { name, ...enrichment } = item;
-			results.set(name, enrichment);
+			results.set(originalBySanitized.get(name) ?? name, enrichment);
 		}
 
 		return results;
 	} catch (error) {
-		const isTimeout =
-			error instanceof Error &&
-			(error.message.includes("DEADLINE_EXCEEDED") ||
-				error.message.includes("timeout"));
-
-		if (isTimeout) {
+		if (isTimeoutError(error)) {
 			console.warn("LLM request timed out for ingredient enrichment");
 		} else {
 			console.warn("LLM enrichment failed:", error);

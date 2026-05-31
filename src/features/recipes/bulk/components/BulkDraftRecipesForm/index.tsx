@@ -8,7 +8,6 @@ import {
 	useCallback,
 	useDeferredValue,
 	useId,
-	useMemo,
 	useRef,
 	useState,
 } from "react";
@@ -16,6 +15,7 @@ import { BottomRailItems } from "@/components/BottomRail";
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Recipe } from "@/db/schema/recipes";
+import { DraftRecipesStatusBar } from "@/features/recipes/bulk/components/DraftRecipesStatusBar";
 import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
@@ -23,7 +23,6 @@ import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesP
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { Kbd } from "@/ui/Kbd";
 import { SubmitButton } from "@/ui/SubmitButton";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 const DRAFT_STORAGE_KEY = "recipe-editor-draft";
@@ -58,18 +57,6 @@ export function BulkDraftRecipesForm({
 		deferredDraftValue,
 		ingredients,
 	);
-
-	const newIngredientCount = useMemo(() => {
-		const names = new Set<string>();
-		for (const recipe of draftRecipes) {
-			for (const spec of recipe.specs ?? []) {
-				if (!spec.ingredientId && spec.ingredient?.name) {
-					names.add(spec.ingredient.name.toLowerCase());
-				}
-			}
-		}
-		return names.size;
-	}, [draftRecipes]);
 
 	const router = useRouter();
 	const onSuccess = useCallback(() => {
@@ -112,13 +99,7 @@ export function BulkDraftRecipesForm({
 						ingredients={ingredients}
 						initialText={persistedDraft}
 						onTextChange={handleTextChange}
-						statusBar={
-							<Text as="div" size={0} light numeric>
-								{recipeCount} new {recipeCount === 1 ? "Recipe" : "Recipes"},{" "}
-								{newIngredientCount} new{" "}
-								{newIngredientCount === 1 ? "Ingredient" : "Ingredients"}
-							</Text>
-						}
+						statusBar={<DraftRecipesStatusBar recipes={draftRecipes} />}
 					/>
 				</div>
 			</form>

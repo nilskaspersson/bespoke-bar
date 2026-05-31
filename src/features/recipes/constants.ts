@@ -1,5 +1,6 @@
 import type { CocktailStyle } from "@/db/schema/cocktailStyles";
 import type { Glassware } from "@/db/schema/glassware";
+import type { Ice } from "@/db/schema/ice";
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
 import type { BaseRecipe } from "@/db/schema/recipes";
 
@@ -44,6 +45,12 @@ export const GLASSWARE_TO_LABEL = new Map<Glassware, string>([
 	["wine", "Wine"],
 ]);
 
+export const ICE_TO_LABEL = new Map<Ice, string>([
+	["none", "No ice"],
+	["cubed", "Ice cubes"],
+	["crushed", "Crushed ice"],
+]);
+
 export const COCKTAIL_STYLE_TO_LABEL = new Map<CocktailStyle, string>([
 	["aperitif", "Aperitif"],
 	["cooler", "Cooler"],
@@ -52,7 +59,9 @@ export const COCKTAIL_STYLE_TO_LABEL = new Map<CocktailStyle, string>([
 	["flip", "Flip"],
 	["highball", "Highball"],
 	["julep", "Julep"],
+	["manhattan", "Manhattan"],
 	["martini", "Martini"],
+	["negroni", "Negroni"],
 	["oldFashioned", "Old Fashioned"],
 	["other", "Other"],
 	["punch", "Punch"],
@@ -79,7 +88,9 @@ export const COCKTAIL_STYLE_COLOR = new Map<CocktailStyle, string>([
 	["flip", "var(--pink-11)"],
 	["highball", "var(--plum-11)"],
 	["julep", "var(--violet-11)"],
+	["manhattan", "var(--bronze-11)"],
 	["martini", "var(--indigo-11)"],
+	["negroni", "var(--amber-11)"],
 	["oldFashioned", "var(--blue-11)"],
 	["other", "var(--sky-11)"],
 	["punch", "var(--cyan-11)"],
@@ -100,3 +111,47 @@ export function getCocktailStyleLabel(style: CocktailStyleFilter): string {
 		? (COCKTAIL_STYLE_TO_LABEL.get(style) ?? style)
 		: UNCLASSIFIED_COCKTAIL_STYLE_LABEL;
 }
+
+/** Default serve per major family — defaults the user can override. */
+export const STYLE_TO_SERVE = new Map<
+	CocktailStyle,
+	Pick<BaseRecipe, "glassware" | "preparationMethod" | "ice">
+>([
+	["sour", { glassware: "coupe", preparationMethod: "shaken", ice: "none" }],
+	["fizz", { glassware: "fizz", preparationMethod: "shaken", ice: "cubed" }],
+	[
+		"highball",
+		{ glassware: "highball", preparationMethod: "built", ice: "cubed" },
+	],
+	[
+		"martini",
+		{ glassware: "martini", preparationMethod: "stirred", ice: "none" },
+	],
+	[
+		"manhattan",
+		{ glassware: "coupe", preparationMethod: "stirred", ice: "none" },
+	],
+	[
+		"negroni",
+		{ glassware: "rocks", preparationMethod: "stirred", ice: "cubed" },
+	],
+	[
+		"oldFashioned",
+		{ glassware: "rocks", preparationMethod: "built", ice: "cubed" },
+	],
+	["spritz", { glassware: "wine", preparationMethod: "built", ice: "cubed" }],
+	[
+		"smash",
+		{ glassware: "rocks", preparationMethod: "shaken", ice: "crushed" },
+	],
+	["julep", { glassware: "julep", preparationMethod: "built", ice: "crushed" }],
+	["flip", { glassware: "coupe", preparationMethod: "shaken", ice: "none" }],
+	[
+		"tiki",
+		{ glassware: "tiki_mug", preparationMethod: "shaken", ice: "crushed" },
+	],
+	[
+		"cooler",
+		{ glassware: "highball", preparationMethod: "built", ice: "cubed" },
+	],
+]);

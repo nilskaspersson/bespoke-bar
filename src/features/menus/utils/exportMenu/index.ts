@@ -5,6 +5,7 @@ import {
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
 import { getRecipeName } from "@/features/recipes/utils";
+import { formatSpecLine } from "@/features/specs/utils/formatSpecLine";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 
 export type ExportOptions = {
@@ -70,20 +71,11 @@ function formatIngredient(
 		return spec.ingredient.name;
 	}
 
-	const parts: string[] = [];
-
-	if (spec.quantity != null) {
-		parts.push(String(spec.quantity));
-	}
-
-	const unitStr = getFormattedUnit(spec.unit, spec.quantity);
-
-	if (unitStr) {
-		parts.push(unitStr);
-	}
-
-	parts.push(spec.ingredient.name);
-	return parts.join(" ");
+	return formatSpecLine({
+		quantity: spec.quantity,
+		unit: spec.unit,
+		name: spec.ingredient.name,
+	});
 }
 
 export function getExportFilename(

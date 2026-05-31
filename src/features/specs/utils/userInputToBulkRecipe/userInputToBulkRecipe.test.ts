@@ -135,6 +135,7 @@ describe("userInputToBulkRecipe", () => {
 							...EMPTY_INGREDIENT,
 							name: "cinnamon syrup",
 							measurementType: "volume",
+							category: "syrup",
 						},
 						ingredientId: undefined,
 					},

@@ -6,6 +6,7 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 - Optimize aggressively.
 - Default to static rendering; use composition to achieve more statically rendered components.
 - Lean heavily into Zod for validation, type coercing, and runtime type checks.
+- When working with Recipes, Ingredients, Menus, or other databse entries, ALWAYS use- or derive the schema and type from those existing declarations.
 
 ## Commands
 - `npm run lint -- --fix path/to/file` — Biome (lint + format). Always run this after touching files.

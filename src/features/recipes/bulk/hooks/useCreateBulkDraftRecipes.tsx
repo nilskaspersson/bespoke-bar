@@ -1,6 +1,10 @@
 import { use, useCallback } from "react";
 import z from "zod";
-import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
+import {
+	MAX_SPECS_PER_RECIPE,
+	type RecipeFormData,
+	recipeFormSchema,
+} from "@/db/schema/composite";
 import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
 import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
@@ -10,7 +14,8 @@ import { LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
-import { errorMessageOrFallback } from "@/utils/api";
+import { getErrorToast } from "@/utils/api";
+import { AppError } from "@/utils/appError";
 import { getKey, type Keyed } from "@/utils/withKey";
 
 export function useCreateBulkDraftRecipes(
@@ -38,6 +43,17 @@ export function useCreateBulkDraftRecipes(
 		}
 
 		const promise = (async () => {
+			const overLimit = recipes.find(
+				(recipe) => (recipe.specs?.length ?? 0) > MAX_SPECS_PER_RECIPE,
+			);
+			if (overLimit) {
+				throw new AppError({
+					code: "RECIPE_SPEC_LIMIT_REACHED",
+					limit: MAX_SPECS_PER_RECIPE,
+					recipeName: overLimit.name,
+				});
+			}
+
 			const data = z.array(recipeFormSchema).parse(
 				recipes.map(({ specs, ...recipe }) => ({
 					recipe,
@@ -113,10 +129,11 @@ export function useCreateBulkDraftRecipes(
 					</ToastActions>
 				),
 			}),
-			error: (error) => ({
-				message: "Recipe could not be created",
-				description: errorMessageOrFallback(error, "Try again later."),
-			}),
+			error: (error) =>
+				getErrorToast(error, {
+					message: "Recipe could not be created",
+					description: "Try again later.",
+				}),
 		});
 	}, [recipes, createRecipes, onSuccess, onError, createMoreHref, usage]);
 }

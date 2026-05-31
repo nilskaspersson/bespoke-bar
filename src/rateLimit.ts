@@ -28,14 +28,17 @@ const rateLimiter = redis
 		})
 	: null;
 
+/** The shared kill switch: whether Upstash-based limiting is currently on. */
+export async function isLimitingEnabled(): Promise<boolean> {
+	return (await get<boolean>("rate-limit-enabled")) ?? false;
+}
+
 async function getEnabledRateLimiter() {
 	if (!rateLimiter) {
 		return null;
 	}
 
-	const edgeRateLimitEnabled = await get<boolean>("rate-limit-enabled");
-
-	return edgeRateLimitEnabled ? rateLimiter : null;
+	return (await isLimitingEnabled()) ? rateLimiter : null;
 }
 
 /**

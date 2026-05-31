@@ -22,3 +22,17 @@ A signed-amount entry that permanently raises an **Organisation's** **Quota** ce
 
 **Reservoir** (deferred):
 A separate finite pool of **Uses** an **Organisation** could buy as a pack, drained independently of the **Quota**. Not implemented; the schema is designed so it can be added additively later without backfilling.
+
+### Enrichment
+
+**Enrichment**:
+When a Recipe or Ingredient is created, a best-effort, fire-and-forget attempt to auto-populate its _empty_ metadata fields — a Recipe's **Cocktail Style**, glassware, ice, and preparation method; an Ingredient's category, abv, and description. Optional and silent: it never blocks or delays creation, and a failure leaves the field empty for the user to fill. Qualify as **Recipe Enrichment** / **Ingredient Enrichment** when a statement applies to only one.
+
+### Recipes
+
+**Cocktail Style**:
+The single broad family a Recipe belongs to (sour, martini, manhattan, negroni, fizz, highball, …), from a closed, curated set. Deliberately coarse — it captures the _major_ family, for filtering and at-a-glance grouping, not sub-genres. Finer character ("herbal", "sparkling", or a specific named drink like "Aviation") is expressed with tags, never new Style values. A Recipe has at most one. Shortened to **Style** in running text.
+_Avoid_ minting a new Style for a recognisable drink (an Aviation is a `sour`); that nuance is a tag.
+
+**Unclassified** vs **Other**:
+**Unclassified** (no Style set) means "unknown / not yet determined" and stays a candidate for **Enrichment**. **Other** is an explicit Style value meaning "deliberately none of these." Enrichment may leave a Recipe **Unclassified** but never assigns **Other**.

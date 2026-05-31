@@ -8,6 +8,11 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 		requested: z.number(),
 	}),
 	z.object({
+		code: z.literal("RECIPE_SPEC_LIMIT_REACHED"),
+		limit: z.number(),
+		recipeName: z.string().nullish(),
+	}),
+	z.object({
 		code: z.literal("RATE_LIMIT_EXCEEDED"),
 		retryAfter: z.number(),
 	}),
@@ -52,7 +57,14 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			const free = Math.max(0, payload.limit - payload.used);
 			return {
 				message: "Recipe limit reached",
-				description: `You can only add ${free} more recipe${free === 1 ? "" : "s"} (${payload.used} / ${payload.limit} used).`,
+				description: `You can only add ${free} more Recipe${free === 1 ? "" : "s"} (${payload.used} / ${payload.limit} used).`,
+			};
+		}
+		case "RECIPE_SPEC_LIMIT_REACHED": {
+			const name = payload.recipeName?.trim();
+			return {
+				message: "Too many ingredients",
+				description: `${name ? `"${name}"` : "A Recipe"} can have at most ${payload.limit} ingredients.`,
 			};
 		}
 		case "RATE_LIMIT_EXCEEDED": {
