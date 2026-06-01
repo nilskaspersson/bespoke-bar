@@ -189,4 +189,28 @@ describe("userInputToBulkRecipe", () => {
 			},
 		]);
 	});
+
+	test.each([
+		// Space-grouped quantity, multi-word name preserved verbatim
+		["1 500 ml Crème de Cassis", 1500, "ml", "Crème de Cassis"],
+		["1 234 567 ml Water", 1234567, "ml", "Water"],
+		["12 345 cl Cold Brew", 12345, "cl", "Cold Brew"],
+		// Comma decimal and dot/comma grouping
+		["4,5 cl Gin", 4.5, "cl", "Gin"],
+		["1.500,5 ml Batch base", 1500.5, "ml", "Batch base"],
+		// A comma inside the ingredient name is left untouched
+		["30 ml Salt, to taste", 30, "ml", "Salt, to taste"],
+		// Non-grouping spaces stay delimiters; name intact
+		["2 cucumber slices", 2, null, "cucumber slices"],
+		["1 3/4 oz Rye Whiskey", 1.75, "fl_oz", "Rye Whiskey"],
+		// Number-led name with no quantity collapses (accepted collision), name intact
+		["1 800 Tequila", 1800, null, "Tequila"],
+	])("keeps the ingredient name intact: %s", (input, quantity, unit, name) => {
+		const [recipe] = userInputToBulkRecipe(input, []);
+		const [spec] = recipe.specs ?? [];
+
+		expect(spec?.quantity).toBe(quantity);
+		expect(spec?.unit).toBe(unit);
+		expect(spec?.ingredient.name).toBe(name);
+	});
 });

@@ -10,7 +10,48 @@ describe("formatQuantity", () => {
 		["0.5", 0.5],
 		[".5", 0.5],
 		["10", 10],
-		["123.456", 123.456],
+		["123.45", 123.45],
+		/**
+		 * Handle locale-formatted quantities copied from any source: comma decimals and
+		 * grouping separators both resolve. Since the source locale is unknown, roles are
+		 * inferred from convention — a trailing run of exactly 3 digits reads as grouping
+		 * (formatted quantities don't carry 3 decimal places); any other trailing length,
+		 * or a leading-zero integer, reads as a decimal.
+		 */
+		["2,5", 2.5],
+		["1,5", 1.5],
+		["0,5", 0.5],
+		[",5", 0.5],
+		["4,5 cl Gin", 4.5],
+		["0,125", 0.125],
+		["1,500", 1500],
+		["1,505", 1505],
+		["12,345", 12345],
+		["123.456", 123456],
+		["1.500,5", 1500.5],
+		["1,500.5", 1500.5],
+		["12,345.6", 12345.6],
+		["1.000.000", 1000000],
+		["1,234,567", 1234567],
+
+		/**
+		 * Space grouping. A 3-digit run after the quantity can only be grouping
+		 * (units never start with a digit), so plain ASCII spaces and the no-break
+		 * variants formatters emit (U+00A0; U+202F for fr-*) are both collapsed.
+		 */
+		["1 500", 1500],
+		["1\u00a0500", 1500],
+		["1\u202f500", 1500],
+		["12 345", 12345],
+		["1 234 567", 1234567],
+		["1\u00a0234\u00a0567", 1234567],
+		["1 500,5", 1500.5],
+		["1\u00a0500,5", 1500.5],
+		["1 500 cl Gin", 1500],
+		// Only a full 3-digit group collapses; otherwise the space is a delimiter
+		["1 50", 1],
+		["1 5000", 1],
+		["2 cucumber", 2],
 
 		// Unicode fractions
 		["½", 0.5],
