@@ -1,17 +1,57 @@
-// Floats, not followed by a slash
-const FLOAT_PATTERN = /^(\d+\.?\d*|\.\d+)(?!\s*\/)/;
+// A numeric run, not followed by a slash. Captures grouping and decimal
+// separators (`.`/`,`) so locale-formatted quantities copied off a RecipeCard
+// (e.g. "4,5", "1.500,5") round-trip back through the editor; `parseLocaleNumber`
+// disambiguates the separators.
+const NUMBER_PATTERN = /^(\d+(?:[.,]\d+)*|[.,]\d+)(?!\s*\/)/;
 
 // Slash-notation fractions (precomposed Unicode glyphs are decomposed to this form via NFKC)
 const FRACTION_PATTERN = /^(\d+\s*\/\s*\d+)/;
 
+/**
+ * Resolve a numeric token that may use `.` or `,` for grouping and/or the decimal
+ * point. We can't know the locale a copied spec was formatted in (a user might
+ * paste specs from anywhere) so we infer separator roles from a convention
+ * formatted numbers broadly share rather than from a known locale:
+ *
+ * - the rightmost separator is the decimal point,
+ * - unless it closes a 3-digit group on a >= 1000 integer; formatted quantities
+ *   don't carry 3 decimal places, so a trailing run of exactly 3 digits reads as
+ *   grouping, not precision (any other length stays decimal),
+ * - a leading-zero integer (e.g. "0,125" = ⅛) is always a decimal.
+ *
+ * Everything left of the decimal point has its grouping separators stripped.
+ */
+function parseLocaleNumber(raw: string): number {
+	const lastSeparator = Math.max(raw.lastIndexOf("."), raw.lastIndexOf(","));
+
+	if (lastSeparator === -1) {
+		return Number.parseFloat(raw);
+	}
+
+	const integerDigits = raw.slice(0, lastSeparator).replace(/[.,]/g, "");
+	const trailing = raw.slice(lastSeparator + 1);
+
+	const isGrouping =
+		trailing.length === 3 && integerDigits !== "" && integerDigits !== "0";
+
+	return Number.parseFloat(
+		isGrouping
+			? integerDigits + trailing
+			: `${integerDigits || "0"}.${trailing}`,
+	);
+}
+
 const tryParseFloat = (text: string): [number | null, string] => {
-	const match = text.match(FLOAT_PATTERN);
+	const match = text.match(NUMBER_PATTERN);
 
 	if (!match) {
 		return [null, text];
 	}
 
-	const quantity = Number.parseFloat(match[0]);
+	/**
+	 * Note: Best-effort guess
+	 */
+	const quantity = parseLocaleNumber(match[0]);
 
 	return [quantity > 0 ? quantity : null, text.slice(match[0].length)];
 };

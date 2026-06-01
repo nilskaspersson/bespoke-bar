@@ -10,7 +10,29 @@ describe("formatQuantity", () => {
 		["0.5", 0.5],
 		[".5", 0.5],
 		["10", 10],
-		["123.456", 123.456],
+		["123.45", 123.45],
+		/**
+		 * Handle locale-formatted quantities copied from any source: comma decimals and
+		 * grouping separators both resolve. Since the source locale is unknown, roles are
+		 * inferred from convention — a trailing run of exactly 3 digits reads as grouping
+		 * (formatted quantities don't carry 3 decimal places); any other trailing length,
+		 * or a leading-zero integer, reads as a decimal.
+		 */
+		["2,5", 2.5],
+		["1,5", 1.5],
+		["0,5", 0.5],
+		[",5", 0.5],
+		["4,5 cl Gin", 4.5],
+		["0,125", 0.125],
+		["1,500", 1500],
+		["1,505", 1505],
+		["12,345", 12345],
+		["123.456", 123456],
+		["1.500,5", 1500.5],
+		["1,500.5", 1500.5],
+		["12,345.6", 12345.6],
+		["1.000.000", 1000000],
+		["1,234,567", 1234567],
 
 		// Unicode fractions
 		["½", 0.5],
