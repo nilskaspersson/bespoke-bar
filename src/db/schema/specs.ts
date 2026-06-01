@@ -2,9 +2,9 @@ import { relations, sql } from "drizzle-orm";
 import {
 	boolean,
 	check,
+	doublePrecision,
 	index,
 	pgTable,
-	real,
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
@@ -25,7 +25,7 @@ export const SpecsTable = pgTable(
 		recipeId: text("recipe_id")
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
-		quantity: real("quantity"),
+		quantity: doublePrecision("quantity"),
 		unit: unitEnum("unit"),
 		ingredientId: text("ingredient_id")
 			.notNull()

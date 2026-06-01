@@ -1,8 +1,9 @@
 import { relations, sql } from "drizzle-orm";
 import {
 	check,
+	doublePrecision,
+	numeric,
 	pgTable,
-	real,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -32,9 +33,9 @@ export const IngredientsTable = pgTable(
 		name: varchar("name", { length: 100 }).notNull(),
 		description: varchar("description", { length: 5000 }),
 		category: systemCategoryEnum("category"),
-		abv: real("abv"),
+		abv: doublePrecision("abv"),
 		brand: varchar("brand", { length: 100 }),
-		unitCost: real("unitCost"),
+		unitCost: numeric("unitCost", { precision: 12, scale: 4, mode: "number" }),
 		measurementType: measurementTypes("measurementType"),
 		orgId: text("org_id")
 			.notNull()

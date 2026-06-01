@@ -21,9 +21,11 @@ describe("currencySchema", () => {
 		expect(currencySchema.parse("$.99")).toBe(0.99);
 	});
 
-	it("should round to 2 decimal places", () => {
-		expect(currencySchema.parse("123.456")).toBe(123.46);
-		expect(currencySchema.parse("0.999")).toBe(1.0);
+	it("should preserve entered precision (display rounding is handled by Intl)", () => {
+		expect(currencySchema.parse("123.456")).toBe(123.456);
+		expect(currencySchema.parse("0.999")).toBe(0.999);
+		// 3-decimal currencies (e.g. KWD) must not be truncated
+		expect(currencySchema.parse("1.234")).toBe(1.234);
 	});
 
 	it("should reject invalid values", () => {

@@ -2,8 +2,8 @@ import { relations } from "drizzle-orm";
 import {
 	index,
 	integer,
+	numeric,
 	pgTable,
-	real,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -36,7 +36,7 @@ export const MenuEntriesTable = pgTable(
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		sortOrder: integer("sort_order"),
-		price: real("price"),
+		price: numeric("price", { precision: 12, scale: 4, mode: "number" }),
 		createdAt: timestamp("created_at", { mode: "string" })
 			.defaultNow()
 			.notNull(),
