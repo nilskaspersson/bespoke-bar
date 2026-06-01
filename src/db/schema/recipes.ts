@@ -1,8 +1,8 @@
 import { relations, sql } from "drizzle-orm";
 import {
+	doublePrecision,
 	index,
 	pgTable,
-	real,
 	text,
 	timestamp,
 	varchar,
@@ -40,7 +40,7 @@ export const RecipesTable = pgTable(
 		description: varchar("description", { length: 5000 }),
 		instructions: varchar("instructions", { length: 5000 }),
 		preparationMethod: preparationMethodEnum("preparation_method"),
-		dilutionTarget: real("dilution_target"),
+		dilutionTarget: doublePrecision("dilution_target"),
 		glassware: glasswareEnum("glassware"),
 		ice: iceEnum("ice"),
 		garnish: varchar("garnish", { length: 100 }),
