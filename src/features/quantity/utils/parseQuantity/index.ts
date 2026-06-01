@@ -86,12 +86,31 @@ function hasNonAscii(text: string): boolean {
 	return false;
 }
 
+/**
+ * Collapse a space-grouped integer at the start of the input (e.g. "1 500" or
+ * "1 234 567" -> "1234567"). Plain ASCII spaces and the no-break variants that
+ * locale formatters emit (U+00A0; U+202F for fr-*) are both treated as group
+ * separators: a unit never starts with a digit, so a 3-digit run after the
+ * quantity can only be grouping. Each group must be exactly 3 digits and end at
+ * a decimal, space, or line end, which keeps mixed numbers ("1 3/4") and counts
+ * ("2 cucumber") untouched. Runs before NFKC, which folds no-break spaces into
+ * plain ones.
+ */
+const LEADING_GROUPED_NUMBER = /^\d{1,3}(?:[ \u00a0\u202f]\d{3})+(?=[.,]|\s|$)/;
+const GROUP_SEPARATORS = /[ \u00a0\u202f]/g;
+
 function normalize(userInput: string): string {
-	if (!hasNonAscii(userInput)) {
-		return userInput.trim();
+	const collapsed = userInput
+		.trim()
+		.replace(LEADING_GROUPED_NUMBER, (match) =>
+			match.replace(GROUP_SEPARATORS, ""),
+		);
+
+	if (!hasNonAscii(collapsed)) {
+		return collapsed;
 	}
 
-	return userInput
+	return collapsed
 		.normalize("NFKC")
 		.replace(/(\d)⁄(\d)/g, " $1/$2")
 		.trim();

@@ -34,6 +34,25 @@ describe("formatQuantity", () => {
 		["1.000.000", 1000000],
 		["1,234,567", 1234567],
 
+		/**
+		 * Space grouping. A 3-digit run after the quantity can only be grouping
+		 * (units never start with a digit), so plain ASCII spaces and the no-break
+		 * variants formatters emit (U+00A0; U+202F for fr-*) are both collapsed.
+		 */
+		["1 500", 1500],
+		["1\u00a0500", 1500],
+		["1\u202f500", 1500],
+		["12 345", 12345],
+		["1 234 567", 1234567],
+		["1\u00a0234\u00a0567", 1234567],
+		["1 500,5", 1500.5],
+		["1\u00a0500,5", 1500.5],
+		["1 500 cl Gin", 1500],
+		// Only a full 3-digit group collapses; otherwise the space is a delimiter
+		["1 50", 1],
+		["1 5000", 1],
+		["2 cucumber", 2],
+
 		// Unicode fractions
 		["½", 0.5],
 		["¼", 0.25],
