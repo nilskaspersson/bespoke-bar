@@ -15,6 +15,7 @@ import {
 import {
 	type ReactNode,
 	type RefObject,
+	type ToggleEventHandler,
 	useLayoutEffect,
 	useRef,
 	useState,
@@ -158,6 +159,20 @@ function TypeaheadContent<T extends MenuOption>({
 		openPopover();
 	});
 
+	/**
+	 * Sync the native dismissal back to Lexical.
+	 */
+	const closeOnNativeDismiss: ToggleEventHandler<HTMLDivElement> = (event) => {
+		popover.contentProps.onToggle(event);
+		if (event.target !== event.currentTarget || event.newState !== "closed") {
+			return;
+		}
+		editor.update(() => {
+			const selection = $getSelection();
+			if ($isRangeSelection(selection)) selection.anchor.getNode().markDirty();
+		});
+	};
+
 	const [anchorRect, setAnchorRect] = useState<DOMRect | null>(
 		sessionAnchorRect.current,
 	);
@@ -191,6 +206,7 @@ function TypeaheadContent<T extends MenuOption>({
 
 					<TokenMenu
 						{...popover.contentProps}
+						onToggle={closeOnNativeDismiss}
 						anchorId={anchorId}
 						position="bottom-start"
 						footerAction="complete"

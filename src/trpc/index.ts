@@ -16,6 +16,7 @@ const APP_ERROR_TO_TRPC_CODE: Record<AppErrorPayload["code"], TRPCErrorCode> = {
 	RECIPE_SPEC_LIMIT_REACHED: "BAD_REQUEST",
 	OCR_QUOTA_REACHED: "TOO_MANY_REQUESTS",
 	NO_RECIPE_FOUND: "UNPROCESSABLE_CONTENT",
+	NO_RECIPES_PROVIDED: "BAD_REQUEST",
 };
 
 export async function createContext() {

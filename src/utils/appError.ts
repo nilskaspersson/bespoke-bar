@@ -25,6 +25,9 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 	z.object({
 		code: z.literal("NO_RECIPE_FOUND"),
 	}),
+	z.object({
+		code: z.literal("NO_RECIPES_PROVIDED"),
+	}),
 ]);
 
 export type AppErrorPayload = z.infer<typeof appErrorSchema>;
@@ -84,6 +87,12 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 				message: "No recipe found",
 				description:
 					"We couldn't read a recipe from the provided image. Try another photo.",
+			};
+		}
+		case "NO_RECIPES_PROVIDED": {
+			return {
+				message: "Nothing to create",
+				description: "Add at least one Recipe.",
 			};
 		}
 	}
