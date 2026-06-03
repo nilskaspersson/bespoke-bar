@@ -1,6 +1,9 @@
 import { use, useCallback } from "react";
 import type { Unit } from "@/db/schema/units";
-import { convert, type UnitSystems } from "@/features/units/utils/convert";
+import {
+	convertFactor,
+	type UnitSystems,
+} from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { round } from "@/utils";
@@ -16,18 +19,18 @@ export function roundUnit(
 	}
 
 	if (unitSystem === "imperial") {
-		const flOz = convert(volumeInMl).from("ml").to("fl-oz");
+		const flOz = volumeInMl * convertFactor("ml", "fl-oz");
 
 		if (flOz >= 128) {
-			return [round(convert(flOz).from("fl-oz").to("gal")), "gal"];
+			return [round(flOz * convertFactor("fl-oz", "gal")), "gal"];
 		}
 
 		if (flOz >= 64) {
-			return [round(convert(flOz).from("fl-oz").to("qt")), "qt"];
+			return [round(flOz * convertFactor("fl-oz", "qt")), "qt"];
 		}
 
 		if (flOz >= 8) {
-			return [round(convert(flOz).from("fl-oz").to("cup")), "cup"];
+			return [round(flOz * convertFactor("fl-oz", "cup")), "cup"];
 		}
 
 		if (flOz >= 0.5) {
@@ -39,19 +42,19 @@ export function roundUnit(
 		 * grid (0.25 fl-oz). Drop to tsp so tiny imperial pours stay legible —
 		 * "0.5 tsp" rather than "0.08 fl oz".
 		 */
-		return [round(convert(volumeInMl).from("ml").to("tsp")), "tsp"];
+		return [round(volumeInMl * convertFactor("ml", "tsp")), "tsp"];
 	}
 
 	if (volumeInMl >= 1000) {
-		return [round(convert(volumeInMl).from("ml").to("l")), "l"];
+		return [round(volumeInMl * convertFactor("ml", "l")), "l"];
 	}
 
 	if (volumeInMl >= 200) {
-		return [round(convert(volumeInMl).from("ml").to("dl")), "dl"];
+		return [round(volumeInMl * convertFactor("ml", "dl")), "dl"];
 	}
 
 	if (volumeInMl >= 10) {
-		return [round(convert(volumeInMl).from("ml").to("cl")), "cl"];
+		return [round(volumeInMl * convertFactor("ml", "cl")), "cl"];
 	}
 
 	return [round(volumeInMl), "ml"];

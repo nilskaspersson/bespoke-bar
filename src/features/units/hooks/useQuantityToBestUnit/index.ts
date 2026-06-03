@@ -6,7 +6,10 @@ import {
 	type MeasureParts,
 	roundUnit,
 } from "@/features/units/hooks/useRoundedUnit";
-import { convert, type UnitSystems } from "@/features/units/utils/convert";
+import {
+	convertFactor,
+	type UnitSystems,
+} from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
 import { snapQuantity } from "@/features/units/utils/snapQuantity";
@@ -30,7 +33,7 @@ export function quantityToBestUnit({
 
 	if (!libUnit) return [qty, unit];
 
-	const volumeInMl = convert(qty).from(libUnit).to("ml");
+	const volumeInMl = qty * convertFactor(libUnit, "ml");
 	const nativeUnitSystem = getUnitSystemFromUnit(unit);
 
 	if (nativeUnitSystem === "bartending" && volumeInMl <= 10) {

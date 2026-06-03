@@ -7,7 +7,7 @@ import { BottomRailItems } from "@/components/BottomRail";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 import { ClearFiltersPill } from "@/features/recipes/components/ClearFiltersPill";
-import { RecipeAdjustmentsProvider } from "@/features/recipes/components/RecipeAdjustments";
+import { useHydrateRecipeAdjustments } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeAdjustmentsDock } from "@/features/recipes/components/RecipeAdjustmentsDock";
 import { RecipesFilterDrawer } from "@/features/recipes/components/RecipesFilterDrawer";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
@@ -41,6 +41,8 @@ export function RecipesListBoard({
 	tagOptions,
 	recipeSlotLimit,
 }: Props) {
+	useHydrateRecipeAdjustments();
+
 	const [search, setSearch] = useState("");
 	const deferredSearch = useDeferredValue(search);
 	const tagSelection = useTagSelection();
@@ -99,7 +101,7 @@ export function RecipesListBoard({
 		favoritesOnly;
 
 	return (
-		<RecipeAdjustmentsProvider>
+		<>
 			<div className={styles.board}>
 				<Grid gap={8} className={styles.filtersSection}>
 					<RecipesListHeader
@@ -183,6 +185,6 @@ export function RecipesListBoard({
 				hasFilters={hasFilters}
 				onResetFilters={handleResetFilters}
 			/>
-		</RecipeAdjustmentsProvider>
+		</>
 	);
 }

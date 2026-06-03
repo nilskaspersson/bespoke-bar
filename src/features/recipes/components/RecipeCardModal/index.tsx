@@ -15,7 +15,6 @@ import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
-	RecipeAdjustmentsProvider,
 	useDeferredAdjustments,
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -167,16 +166,14 @@ export function RecipeCardModal() {
 			</Button>
 
 			{current ? (
-				<RecipeAdjustmentsProvider>
-					<RecipeCardModalContent
-						recipe={current.recipe}
-						isFavorite={current.isFavorite}
-						tagOptions={current.tagOptions}
-						sourceRect={current.sourceRect}
-						cardRef={cardRef}
-						onRequestClose={handleClose}
-					/>
-				</RecipeAdjustmentsProvider>
+				<RecipeCardModalContent
+					recipe={current.recipe}
+					isFavorite={current.isFavorite}
+					tagOptions={current.tagOptions}
+					sourceRect={current.sourceRect}
+					cardRef={cardRef}
+					onRequestClose={handleClose}
+				/>
 			) : null}
 		</Dialog>
 	);

@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { memo } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
-import { useOptionalDeferredAdjustments } from "@/features/recipes/components/RecipeAdjustments";
+import { useDeferredAdjustments } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { recipeCardSourceProps } from "@/features/recipes/utils/recipeCardSource";
@@ -31,7 +31,7 @@ export const RecipeListCard = memo(function RecipeListCard({
 			(s.current?.recipe.id === recipe.id || s.exitingId === recipe.id),
 	);
 
-	const adjustments = useOptionalDeferredAdjustments();
+	const adjustments = useDeferredAdjustments();
 
 	const selectRecipe = (
 		event:
@@ -48,10 +48,10 @@ export const RecipeListCard = memo(function RecipeListCard({
 				<RecipeCard
 					recipe={recipe}
 					withLink
-					servings={adjustments?.servings}
-					convertUnits={adjustments?.conversionSystem}
-					withRounding={adjustments?.withRounding}
-					withBestUnit={adjustments?.withBestUnit}
+					servings={adjustments.servings}
+					convertUnits={adjustments.conversionSystem}
+					withRounding={adjustments.withRounding}
+					withBestUnit={adjustments.withBestUnit}
 					animateNumbers={false}
 				/>
 			</div>
