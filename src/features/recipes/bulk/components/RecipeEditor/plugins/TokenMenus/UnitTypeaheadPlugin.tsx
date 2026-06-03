@@ -3,7 +3,13 @@
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getSelection, $isRangeSelection, type TextNode } from "lexical";
-import { useCallback, useDeferredValue, useMemo, useState } from "react";
+import {
+	type RefObject,
+	useCallback,
+	useDeferredValue,
+	useMemo,
+	useState,
+} from "react";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import {
 	getUnitLabel,
@@ -13,6 +19,7 @@ import {
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { searchByIndex } from "@/utils/search";
+import { useHistoricUpdateRef } from "./HistoricUpdateGuard";
 import { UnitOption } from "./UnitOption";
 import { useTypeaheadMenu } from "./useTypeaheadMenu";
 import {
@@ -40,7 +47,7 @@ import {
  *     leaving `newNode = undefined`. The select handler then has nothing
  *     to replace and Tab becomes a no-op.
  */
-function createUnitTriggerFn() {
+function createUnitTriggerFn(historicRef: RefObject<boolean>) {
 	return gateOnTextChange((rawText: string) => {
 		const selection = $getSelection();
 		if (!$isRangeSelection(selection) || !selection.isCollapsed()) return null;
@@ -69,15 +76,19 @@ function createUnitTriggerFn() {
 			matchingString,
 			replaceableString: matchingString,
 		};
-	});
+	}, historicRef);
 }
 
 export function UnitTypeaheadPlugin() {
 	const [editor] = useLexicalComposerContext();
+	const historicRef = useHistoricUpdateRef();
 	const [query, setQuery] = useState<string | null>(null);
 	const deferredQuery = useDeferredValue(query);
 
-	const triggerFn = useMemo(createUnitTriggerFn, []);
+	const triggerFn = useMemo(
+		() => createUnitTriggerFn(historicRef),
+		[historicRef],
+	);
 
 	const options = useMemo(() => {
 		if (!deferredQuery) return [];

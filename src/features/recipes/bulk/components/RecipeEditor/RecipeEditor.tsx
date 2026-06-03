@@ -28,6 +28,10 @@ import { EscapeFocusPlugin } from "./plugins/EscapeFocusPlugin";
 import { ParagraphBreakPlugin } from "./plugins/ParagraphBreakPlugin";
 import { SyntaxHighlightPlugin } from "./plugins/SyntaxHighlightPlugin";
 import { TextChangePlugin } from "./plugins/TextChangePlugin";
+import {
+	HistoricUpdateGuard,
+	HistoricUpdateProvider,
+} from "./plugins/TokenMenus/HistoricUpdateGuard";
 import { IngredientTypeaheadPlugin } from "./plugins/TokenMenus/IngredientTypeaheadPlugin";
 import { TokenBrowsingPlugin } from "./plugins/TokenMenus/TokenBrowsingPlugin";
 import { UnitTypeaheadPlugin } from "./plugins/TokenMenus/UnitTypeaheadPlugin";
@@ -107,8 +111,11 @@ export function RecipeEditor({
 						<TextChangePlugin onTextChange={onTextChange} />
 						<ParagraphBreakPlugin />
 						<SyntaxHighlightPlugin />
-						<IngredientTypeaheadPlugin />
-						<UnitTypeaheadPlugin />
+						<HistoricUpdateProvider>
+							<HistoricUpdateGuard />
+							<IngredientTypeaheadPlugin />
+							<UnitTypeaheadPlugin />
+						</HistoricUpdateProvider>
 						<TokenBrowsingPlugin />
 						<EscapeFocusPlugin />
 						{editorRef ? <EditorRefPlugin editorRef={editorRef} /> : null}
