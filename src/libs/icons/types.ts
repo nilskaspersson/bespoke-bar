@@ -46,6 +46,7 @@ export type IconName =
 	| "pen"
 	| "pen-to-square"
 	| "plus"
+	| "redo"
 	| "share"
 	| "sliders-horizontal"
 	| "sort"
@@ -59,5 +60,6 @@ export type IconName =
 	| "tags"
 	| "trash"
 	| "triangle-exclamation"
+	| "undo"
 	| "wine-glass"
 	| "xmark";

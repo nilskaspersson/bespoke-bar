@@ -12,5 +12,9 @@
 
 	.button {
 		border: 1px solid var(--mauve-6);
+
+		&[aria-disabled="true"] {
+			opacity: 0.5;
+		}
 	}
 }

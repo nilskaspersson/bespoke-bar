@@ -7,6 +7,7 @@ import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { getIngredientId } from "@/features/ingredients/utils";
 import { searchByIndex } from "@/utils/search";
 import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
+import { useHistoricUpdateRef } from "./HistoricUpdateGuard";
 import { IngredientOption } from "./IngredientOption";
 import { useTypeaheadMenu } from "./useTypeaheadMenu";
 import {
@@ -21,10 +22,11 @@ export function IngredientTypeaheadPlugin() {
 	const [query, setQuery] = useState<string | null>(null);
 	const deferredQuery = useDeferredValue(query);
 	const { sortedIngredients, searchIndex, knownNames } = useRecipeIngredients();
+	const historicRef = useHistoricUpdateRef();
 
 	const triggerFn = useMemo(
-		() => createIngredientTriggerFn(knownNames),
-		[knownNames],
+		() => createIngredientTriggerFn(knownNames, historicRef),
+		[knownNames, historicRef],
 	);
 
 	const options = useMemo(() => {

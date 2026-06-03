@@ -1,13 +1,19 @@
 "use client";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
+import { mergeRegister } from "@lexical/utils";
 import {
 	$createParagraphNode,
 	$createTextNode,
 	$getRoot,
 	$isParagraphNode,
+	CAN_REDO_COMMAND,
+	CAN_UNDO_COMMAND,
+	COMMAND_PRIORITY_LOW,
+	REDO_COMMAND,
+	UNDO_COMMAND,
 } from "lexical";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import {
 	capitalizeLine,
@@ -23,6 +29,37 @@ import styles from "./styles.module.css";
 
 export function EditorActionsPlugin() {
 	const [editor] = useLexicalComposerContext();
+	const [canUndo, setCanUndo] = useState(false);
+	const [canRedo, setCanRedo] = useState(false);
+
+	useEffect(() => {
+		return mergeRegister(
+			editor.registerCommand(
+				CAN_UNDO_COMMAND,
+				(payload) => {
+					setCanUndo(payload);
+					return false;
+				},
+				COMMAND_PRIORITY_LOW,
+			),
+			editor.registerCommand(
+				CAN_REDO_COMMAND,
+				(payload) => {
+					setCanRedo(payload);
+					return false;
+				},
+				COMMAND_PRIORITY_LOW,
+			),
+		);
+	}, [editor]);
+
+	const undo = useCallback(() => {
+		editor.dispatchCommand(UNDO_COMMAND, undefined);
+	}, [editor]);
+
+	const redo = useCallback(() => {
+		editor.dispatchCommand(REDO_COMMAND, undefined);
+	}, [editor]);
 
 	const applyTransform = useCallback(
 		(transform: (line: string) => string) => {
@@ -59,6 +96,30 @@ export function EditorActionsPlugin() {
 		<EntityActions gap={2} className={styles.actions}>
 			{(actionProps) => (
 				<>
+					<li className={styles.separator}>
+						<ButtonGroup>
+							<Button
+								{...actionProps}
+								className={styles.button}
+								onClick={canUndo ? undo : undefined}
+								aria-disabled={!canUndo}
+								title="Undo"
+							>
+								<Icon name="undo" size={2} />
+							</Button>
+
+							<Button
+								{...actionProps}
+								className={styles.button}
+								onClick={canRedo ? redo : undefined}
+								aria-disabled={!canRedo}
+								title="Redo"
+							>
+								<Icon name="redo" size={2} />
+							</Button>
+						</ButtonGroup>
+					</li>
+
 					<li className={styles.separator}>
 						<Button
 							{...actionProps}

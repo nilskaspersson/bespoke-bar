@@ -1,5 +1,6 @@
 import { MenuOption } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
+import type { RefObject } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { Unit } from "@/db/schema/units";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
@@ -39,16 +40,20 @@ export function createUnitMenuOption(unit: Unit): UnitMenuOption {
  *
  * State lives in a closure per factory call, so each typeahead plugin
  * holds its own "last seen text" and can't trample the other.
+ *
+ * `historicRef` (true during undo/redo) gates those updates out too — their
+ * restored states would otherwise re-fire the trigger at a query boundary.
  */
 export function gateOnTextChange<T>(
 	compute: (text: string) => T | null,
+	historicRef: RefObject<boolean>,
 ): (text: string) => T | null {
 	let lastRootText = "";
 	return (text) => {
 		const rootText = $getRoot().getTextContent();
 		const changed = rootText !== lastRootText;
 		lastRootText = rootText;
-		if (!changed) return null;
+		if (!changed || historicRef.current) return null;
 		return compute(text);
 	};
 }
@@ -61,7 +66,10 @@ export function gateOnTextChange<T>(
  * unit, and at least one character of ingredient text that doesn't
  * exactly match an existing ingredient name.
  */
-export function createIngredientTriggerFn(knownIngredientNames: Set<string>) {
+export function createIngredientTriggerFn(
+	knownIngredientNames: Set<string>,
+	historicRef: RefObject<boolean>,
+) {
 	return gateOnTextChange((rawText) => {
 		/**
 		 * Only fire when the cursor is at the end of its TextNode — i.e. the user
@@ -97,5 +105,5 @@ export function createIngredientTriggerFn(knownIngredientNames: Set<string>) {
 			matchingString: ingredientText,
 			replaceableString: ingredientText,
 		};
-	});
+	}, historicRef);
 }

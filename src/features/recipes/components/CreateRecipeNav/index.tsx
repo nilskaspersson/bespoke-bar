@@ -130,7 +130,13 @@ export function CreateRecipeNav({
 									</Heading>
 
 									{!compact ? (
-										<Text size={2} as="p" weight={500} className={styles.hook}>
+										<Text
+											size={2}
+											as="p"
+											align="center"
+											weight={500}
+											className={styles.hook}
+										>
 											{card.hook}
 										</Text>
 									) : null}

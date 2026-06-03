@@ -21,6 +21,7 @@ import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCrea
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
+import { Button } from "@/ui/Button";
 import { Kbd } from "@/ui/Kbd";
 import { SubmitButton } from "@/ui/SubmitButton";
 import styles from "./styles.module.css";
@@ -69,6 +70,10 @@ export function BulkDraftRecipesForm({
 		editorRef.current?.setEditable(true);
 	}, []);
 
+	const clear = useCallback(() => {
+		editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+	}, []);
+
 	const baseFormAction = useCreateBulkDraftRecipes(
 		draftRecipes,
 		createRecipes,
@@ -86,6 +91,7 @@ export function BulkDraftRecipesForm({
 	}, [baseFormAction]);
 
 	const recipeCount = draftRecipes.length;
+	const hasContent = deferredDraftValue.trim().length > 0;
 	const formId = useId();
 
 	return (
@@ -107,12 +113,23 @@ export function BulkDraftRecipesForm({
 			<DraftRecipesPreview recipes={draftRecipes} className={styles.preview} />
 
 			<BottomRailItems>
+				<Button
+					type="button"
+					variant="clear"
+					color="amber"
+					rounded
+					aria-disabled={!hasContent}
+					onClick={hasContent ? clear : undefined}
+				>
+					Clear
+				</Button>
+
 				<SubmitButton
 					form={formId}
 					variant="clear"
 					rounded
 					color={"accent"}
-					aria-disabled={recipeCount === 0}
+					disabled={recipeCount === 0}
 					endAdornment={
 						<Kbd
 							shortcut="mod+enter"

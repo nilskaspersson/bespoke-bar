@@ -22,6 +22,10 @@ export async function upsertRecipesWithSpecs(
 ): Promise<Recipe[]> {
 	const { userId, orgId } = auth;
 
+	if (userInputRecipes.length === 0) {
+		throw new AppError({ code: "NO_RECIPES_PROVIDED" });
+	}
+
 	await rateLimit(userId);
 
 	const newCount = userInputRecipes.filter(
