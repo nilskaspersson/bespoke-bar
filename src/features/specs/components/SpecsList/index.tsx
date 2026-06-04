@@ -23,7 +23,7 @@ export function SpecsList<T extends DraftSpecWithDraftIngredient>({
 	animateNumbers?: boolean;
 } & Omit<ComponentProps<"div">, "children">) {
 	return (
-		<div {...props} className={styles.specs}>
+		<div {...props}>
 			<Grid as="ul" gap={2} className={styles.list}>
 				{specs.map((spec) => (
 					<li key={getKey(spec)} className={styles.item}>

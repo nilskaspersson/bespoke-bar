@@ -169,3 +169,33 @@ function RecipeCardImpl<T extends BaseRecipe>({
 }
 
 export const RecipeCard = memo(RecipeCardImpl) as typeof RecipeCardImpl;
+
+/**
+ * Lightweight stand-in for off-screen cards: the card shell + name only, no
+ * specs/chips/metrics. Keeps the name in the DOM so native find-in-page still
+ * works, and reserves card-sized space (via `.card`'s min-height) so the swap
+ * to the full card stays stable.
+ */
+export function RecipeCardPlaceholder<T extends BaseRecipe>({
+	recipe,
+	className,
+}: {
+	recipe: T;
+	className?: string;
+}) {
+	return (
+		<Grid
+			gap={4}
+			className={clsx(styles.card, className)}
+			alignContent="space-between"
+		>
+			<Grid as="header" gap={1}>
+				<div className={styles.line}>
+					<Heading level="h3" serif size={5} className={styles.recipeName}>
+						<RecipeName recipe={recipe} />
+					</Heading>
+				</div>
+			</Grid>
+		</Grid>
+	);
+}

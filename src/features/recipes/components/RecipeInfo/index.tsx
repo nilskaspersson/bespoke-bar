@@ -4,8 +4,8 @@ import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
-	RecipeAdjustmentsProvider,
-	useDeferredAdjustments,
+	useAdjustments,
+	useHydrateRecipeAdjustments,
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
@@ -24,11 +24,7 @@ export function RecipeInfo<T extends RecipeWithRelations>({
 		return null;
 	}
 
-	return (
-		<RecipeAdjustmentsProvider>
-			<RecipeInfoContent recipe={recipe} isFavorite={isFavorite} />
-		</RecipeAdjustmentsProvider>
-	);
+	return <RecipeInfoContent recipe={recipe} isFavorite={isFavorite} />;
 }
 
 function RecipeInfoContent<T extends RecipeWithRelations>({
@@ -38,8 +34,10 @@ function RecipeInfoContent<T extends RecipeWithRelations>({
 	recipe: T;
 	isFavorite?: boolean;
 }) {
+	useHydrateRecipeAdjustments();
+
 	const { servings, conversionSystem, withRounding, withBestUnit } =
-		useDeferredAdjustments();
+		useAdjustments();
 
 	return (
 		<div className={styles.base}>

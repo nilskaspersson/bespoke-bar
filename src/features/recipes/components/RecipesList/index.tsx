@@ -1,13 +1,14 @@
 "use client";
 
 import clsx from "clsx";
-import { type ComponentProps, memo, useMemo } from "react";
+import { type ComponentProps, memo, useMemo, useRef } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { RecipeListCard } from "@/features/recipes/components/RecipeListCard";
 import { RecipeTagsAction } from "@/features/tags/components/RecipeTagsAction";
+import { useInView } from "@/hooks/useInView";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
@@ -43,6 +44,58 @@ type ListProps = ComponentProps<"ul"> & {
 	withCreate?: boolean;
 };
 
+const EAGER_CARD_COUNT = 12;
+
+/**
+ * Owns the per-item IntersectionObserver and gates BOTH the card and its actions
+ * row behind visibility — so an off-screen item mounts neither the full card body
+ * nor the actions subtree (just a name placeholder). `.item`'s
+ * `contain-intrinsic-size` reserves the full height, so collapsing is shift-free.
+ */
+const RecipeListItem = memo(function RecipeListItem({
+	recipe,
+	isFavorite,
+	tagOptions,
+	withActions,
+	eager,
+}: {
+	recipe: RecipeWithRelations;
+	isFavorite: boolean;
+	tagOptions?: Tag[];
+	withActions?: boolean;
+	eager: boolean;
+}) {
+	const ref = useRef<HTMLLIElement>(null);
+
+	const inView = useInView(ref, {
+		rootMargin: "200px 0px",
+		initialInView: eager,
+	});
+
+	return (
+		<Grid as="li" ref={ref} gap={1} className={styles.item}>
+			<RecipeListCard
+				recipe={recipe}
+				isFavorite={isFavorite}
+				tagOptions={tagOptions}
+				clickable={withActions}
+				inView={inView}
+			/>
+
+			{withActions &&
+				(inView ? (
+					<RecipeListActions
+						recipe={recipe}
+						isFavorite={isFavorite}
+						tagOptions={tagOptions}
+					/>
+				) : (
+					<div aria-hidden className={styles.actionsSpacer} />
+				))}
+		</Grid>
+	);
+});
+
 function RecipesListImpl({
 	recipes,
 	favoriteRecipeIds,
@@ -58,28 +111,16 @@ function RecipesListImpl({
 
 	return (
 		<ul {...props} className={clsx(props.className, styles.list)}>
-			{recipes.map((recipe) => {
-				const isFavorite = favoriteIdSet.has(recipe.id);
-
-				return (
-					<Grid as="li" gap={1} key={recipe.id} className={styles.item}>
-						<RecipeListCard
-							recipe={recipe}
-							isFavorite={isFavorite}
-							tagOptions={tagOptions}
-							clickable={!!withActions}
-						/>
-
-						{withActions ? (
-							<RecipeListActions
-								recipe={recipe}
-								isFavorite={isFavorite}
-								tagOptions={tagOptions}
-							/>
-						) : null}
-					</Grid>
-				);
-			})}
+			{recipes.map((recipe, index) => (
+				<RecipeListItem
+					key={recipe.id}
+					recipe={recipe}
+					isFavorite={favoriteIdSet.has(recipe.id)}
+					tagOptions={tagOptions}
+					withActions={withActions}
+					eager={index < EAGER_CARD_COUNT}
+				/>
+			))}
 
 			{withCreate ? (
 				<li className={styles.item}>

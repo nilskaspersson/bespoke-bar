@@ -20,6 +20,51 @@ export function clamp(n: number, min: number, max: number): number {
 	return Math.min(Math.max(n, min), max);
 }
 
+export function debounce<Args extends unknown[]>(
+	fn: (...args: Args) => void,
+	wait: number,
+	{
+		leading = false,
+		trailing = true,
+	}: {
+		leading?: boolean;
+		trailing?: boolean;
+	} = {},
+): ((...args: Args) => void) & { cancel: () => void } {
+	let timer: ReturnType<typeof setTimeout> | null = null;
+	let trailingArgs: Args | null = null;
+
+	function debounced(...args: Args): void {
+		if (timer === null && leading) {
+			fn(...args);
+		} else {
+			trailingArgs = args;
+		}
+
+		if (timer !== null) {
+			clearTimeout(timer);
+		}
+
+		timer = setTimeout(() => {
+			timer = null;
+			if (trailing && trailingArgs !== null) {
+				fn(...trailingArgs);
+				trailingArgs = null;
+			}
+		}, wait);
+	}
+
+	debounced.cancel = () => {
+		if (timer !== null) {
+			clearTimeout(timer);
+		}
+		timer = null;
+		trailingArgs = null;
+	};
+
+	return debounced;
+}
+
 export function round(value: number, decimals = 2): number {
 	const factor = 10 ** decimals;
 	return Math.round(value * factor) / factor;

@@ -1,17 +1,13 @@
 "use client";
 
-import {
-	createContext,
-	type ReactNode,
-	use,
-	useDeferredValue,
-	useMemo,
-	useState,
-} from "react";
+import { useDeferredValue, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
-import type { UnitSystems } from "@/features/units/utils/convert";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
+import {
+	type AdjustmentValues,
+	recipeAdjustmentsStore,
+} from "@/features/recipes/stores/recipeAdjustments";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid, type GridProps } from "@/ui/Grid";
 import {
@@ -19,128 +15,54 @@ import {
 	WithPersistenceInfo,
 } from "@/ui/WithPersistenceInfo";
 
-type AdjustmentValues = {
-	servings: number;
-	conversionSystem: UnitSystems | null;
-	withRounding: boolean;
-	withBestUnit: boolean;
-};
+export type { AdjustmentValues };
 
-type RawAdjustments = AdjustmentValues & {
-	setServings: (servings: number) => void;
-	setConversionSystem: (system: UnitSystems | null) => void;
-	setWithRounding: (value: boolean) => void;
-	setWithBestUnit: (value: boolean) => void;
-};
-
-type DeferredAdjustments = AdjustmentValues;
-
-const RawAdjustmentsContext = createContext<RawAdjustments | null>(null);
-const DeferredAdjustmentsContext = createContext<DeferredAdjustments | null>(
-	null,
-);
+export function useRawAdjustments() {
+	return recipeAdjustmentsStore(
+		useShallow((s) => ({
+			servings: s.servings,
+			conversionSystem: s.conversionSystem,
+			withRounding: s.withRounding,
+			withBestUnit: s.withBestUnit,
+			setServings: s.setServings,
+			setConversionSystem: s.setConversionSystem,
+			setWithRounding: s.setWithRounding,
+			setWithBestUnit: s.setWithBestUnit,
+		})),
+	);
+}
 
 /**
- * Owns the "adjustments" state (servings, unit conversion, rounding). Splits
- * into two contexts: raw (instant feedback for the inputs and dock chip) and
- * deferred (cards subscribe here, so rapid input changes don't drag every
- * card through an urgent re-render mid-keystroke).
+ * Read-only adjustments for the cards. `useDeferredValue` yields the cards'
+ * re-render to React at lower priority, so editing servings updates the control
+ * (which reads `useRawAdjustments`) urgently while the cards catch up when React
+ * is idle — the input stays responsive without a manual debounce/throttle.
+ * Deferring at the read, not the write: store updates can't be deferred (they're
+ * synchronous via `useSyncExternalStore`). `useShallow` keeps the selected object
+ * stable so this only defers on real changes.
  */
-export function RecipeAdjustmentsProvider({
-	children,
-}: {
-	children: ReactNode;
-}) {
-	const [servings, setServings] = useState(1);
-	const deferredServings = useDeferredValue(servings);
-	const [conversionSystem, setConversionSystem] = useState<UnitSystems | null>(
-		null,
-	);
-	const deferredConversionSystem = useDeferredValue(conversionSystem);
-	const [withRounding, setWithRounding] = useLocalStorage(
-		"recipe-with-rounding",
-		true,
-		"session",
-	);
-	const deferredWithRounding = useDeferredValue(withRounding);
-	const [withBestUnit, setWithBestUnit] = useLocalStorage(
-		"recipe-with-best-unit",
-		true,
-		"session",
-	);
-	const deferredWithBestUnit = useDeferredValue(withBestUnit);
-
-	const rawValue = useMemo<RawAdjustments>(
-		() => ({
-			servings,
-			conversionSystem,
-			withRounding,
-			withBestUnit,
-			setServings,
-			setConversionSystem,
-			setWithRounding,
-			setWithBestUnit,
-		}),
-		[
-			servings,
-			conversionSystem,
-			withRounding,
-			withBestUnit,
-			setWithRounding,
-			setWithBestUnit,
-		],
+export function useAdjustments(): AdjustmentValues {
+	const values = recipeAdjustmentsStore(
+		useShallow((s) => ({
+			servings: s.servings,
+			conversionSystem: s.conversionSystem,
+			withRounding: s.withRounding,
+			withBestUnit: s.withBestUnit,
+		})),
 	);
 
-	const deferredValue = useMemo<DeferredAdjustments>(
-		() => ({
-			servings: deferredServings,
-			conversionSystem: deferredConversionSystem,
-			withRounding: deferredWithRounding,
-			withBestUnit: deferredWithBestUnit,
-		}),
-		[
-			deferredServings,
-			deferredConversionSystem,
-			deferredWithRounding,
-			deferredWithBestUnit,
-		],
-	);
-
-	return (
-		<RawAdjustmentsContext value={rawValue}>
-			<DeferredAdjustmentsContext value={deferredValue}>
-				{children}
-			</DeferredAdjustmentsContext>
-		</RawAdjustmentsContext>
-	);
+	return useDeferredValue(values);
 }
 
-export function useRawAdjustments(): RawAdjustments {
-	const value = use(RawAdjustmentsContext);
-
-	if (!value) {
-		throw new Error(
-			"useRawAdjustments must be used within a RecipeAdjustmentsProvider",
-		);
-	}
-
-	return value;
-}
-
-export function useDeferredAdjustments(): DeferredAdjustments {
-	const value = use(DeferredAdjustmentsContext);
-
-	if (!value) {
-		throw new Error(
-			"useDeferredAdjustments must be used within a RecipeAdjustmentsProvider",
-		);
-	}
-
-	return value;
-}
-
-export function useOptionalDeferredAdjustments(): DeferredAdjustments | null {
-	return use(DeferredAdjustmentsContext);
+/**
+ * Rehydrates the persisted toggles from sessionStorage after mount, so SSR'd
+ * cards render the default first (matching the server) and then sync — rather
+ * than mismatching during hydration. Call once per adjustments-bearing surface.
+ */
+export function useHydrateRecipeAdjustments() {
+	useEffect(() => {
+		void recipeAdjustmentsStore.persist.rehydrate();
+	}, []);
 }
 
 const COMMON_VALUES = [1, 2, 3, 4, 5];

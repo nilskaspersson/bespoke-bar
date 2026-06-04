@@ -1,11 +1,13 @@
 "use client";
 
 import clsx from "clsx";
-import { memo } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
-import { useOptionalDeferredAdjustments } from "@/features/recipes/components/RecipeAdjustments";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+import { useAdjustments } from "@/features/recipes/components/RecipeAdjustments";
+import {
+	RecipeCard,
+	RecipeCardPlaceholder,
+} from "@/features/recipes/components/RecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { recipeCardSourceProps } from "@/features/recipes/utils/recipeCardSource";
 import { handleKey } from "@/utils/keyboard";
@@ -15,14 +17,16 @@ type Props = {
 	recipe: RecipeWithRelations;
 	isFavorite: boolean;
 	tagOptions?: Tag[];
-	clickable: boolean;
+	clickable: boolean | undefined;
+	inView: boolean;
 };
 
-export const RecipeListCard = memo(function RecipeListCard({
+export function RecipeListCard({
 	recipe,
 	isFavorite,
 	tagOptions,
 	clickable,
+	inView = true,
 }: Props) {
 	const open = useRecipeCardModal((s) => s.open);
 	const isHidden = useRecipeCardModal(
@@ -30,8 +34,6 @@ export const RecipeListCard = memo(function RecipeListCard({
 			clickable &&
 			(s.current?.recipe.id === recipe.id || s.exitingId === recipe.id),
 	);
-
-	const adjustments = useOptionalDeferredAdjustments();
 
 	const selectRecipe = (
 		event:
@@ -42,20 +44,14 @@ export const RecipeListCard = memo(function RecipeListCard({
 		open(recipe, isFavorite, tagOptions, rect);
 	};
 
+	const card = inView ? (
+		<RecipeListCardBody recipe={recipe} withLink={!clickable} />
+	) : (
+		<RecipeCardPlaceholder recipe={recipe} />
+	);
+
 	if (!clickable) {
-		return (
-			<div {...recipeCardSourceProps(recipe)}>
-				<RecipeCard
-					recipe={recipe}
-					withLink
-					servings={adjustments?.servings}
-					convertUnits={adjustments?.conversionSystem}
-					withRounding={adjustments?.withRounding}
-					withBestUnit={adjustments?.withBestUnit}
-					animateNumbers={false}
-				/>
-			</div>
-		);
+		return <div {...recipeCardSourceProps(recipe)}>{card}</div>;
 	}
 
 	return (
@@ -73,15 +69,29 @@ export const RecipeListCard = memo(function RecipeListCard({
 				[styles.hidden]: isHidden,
 			})}
 		>
-			<RecipeCard
-				recipe={recipe}
-				withLink={false}
-				servings={adjustments?.servings}
-				convertUnits={adjustments?.conversionSystem}
-				withRounding={adjustments?.withRounding}
-				withBestUnit={adjustments?.withBestUnit}
-				animateNumbers={false}
-			/>
+			{card}
 		</div>
 	);
-});
+}
+
+function RecipeListCardBody({
+	recipe,
+	withLink,
+}: {
+	recipe: RecipeWithRelations;
+	withLink: boolean;
+}) {
+	const adjustments = useAdjustments();
+
+	return (
+		<RecipeCard
+			recipe={recipe}
+			withLink={withLink}
+			servings={adjustments.servings}
+			convertUnits={adjustments.conversionSystem}
+			withRounding={adjustments.withRounding}
+			withBestUnit={adjustments.withBestUnit}
+			animateNumbers={false}
+		/>
+	);
+}

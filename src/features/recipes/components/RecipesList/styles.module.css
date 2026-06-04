@@ -4,7 +4,7 @@
 		flex-wrap: wrap;
 		align-items: start;
 		justify-content: center;
-		gap: var(--gap--large);
+		gap: var(--gap--huge) var(--gap--large);
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -15,6 +15,11 @@
 		contain-intrinsic-size: auto var(--recipe-card-width) auto
 			calc(var(--recipe-card-height) + 24px);
 		overflow-clip-margin: 1rem;
+	}
+
+	/* Reserves the actions-row height for off-screen items */
+	.actionsSpacer {
+		height: var(--space-5);
 	}
 
 	.skeletonCard {
