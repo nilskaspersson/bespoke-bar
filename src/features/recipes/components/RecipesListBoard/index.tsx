@@ -114,7 +114,7 @@ export function RecipesListBoard({
 						<Text as="p" size={1} compact align="center" fullWidth>
 							{filteredRecipes.length !== recipes.length ? (
 								<>
-									<Text as="span" numeric size={1} compact>
+									<Text as="span" numeric size={1} compact heavy weight={500}>
 										{filteredRecipes.length}
 									</Text>{" "}
 									matching {pluralize(filteredRecipes.length, "Recipe")}.
