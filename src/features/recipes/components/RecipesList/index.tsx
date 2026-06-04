@@ -43,6 +43,8 @@ type ListProps = ComponentProps<"ul"> & {
 	withCreate?: boolean;
 };
 
+const EAGER_CARD_COUNT = 12;
+
 function RecipesListImpl({
 	recipes,
 	favoriteRecipeIds,
@@ -58,7 +60,7 @@ function RecipesListImpl({
 
 	return (
 		<ul {...props} className={clsx(props.className, styles.list)}>
-			{recipes.map((recipe) => {
+			{recipes.map((recipe, index) => {
 				const isFavorite = favoriteIdSet.has(recipe.id);
 
 				return (
@@ -68,6 +70,7 @@ function RecipesListImpl({
 							isFavorite={isFavorite}
 							tagOptions={tagOptions}
 							clickable={!!withActions}
+							eager={index < EAGER_CARD_COUNT}
 						/>
 
 						{withActions ? (

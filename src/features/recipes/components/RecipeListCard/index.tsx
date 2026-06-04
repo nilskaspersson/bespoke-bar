@@ -20,6 +20,8 @@ type Props = {
 	isFavorite: boolean;
 	tagOptions?: Tag[];
 	clickable: boolean;
+	/** Render the full card on first paint (above-the-fold); see EAGER_CARD_COUNT. */
+	eager?: boolean;
 };
 
 export const RecipeListCard = memo(function RecipeListCard({
@@ -27,11 +29,12 @@ export const RecipeListCard = memo(function RecipeListCard({
 	isFavorite,
 	tagOptions,
 	clickable,
+	eager = false,
 }: Props) {
 	const ref = useRef<HTMLDivElement>(null);
 	const inView = useInView(ref, {
 		rootMargin: "200px 0px",
-		initialInView: true,
+		initialInView: eager,
 	});
 
 	const open = useRecipeCardModal((s) => s.open);
@@ -87,9 +90,11 @@ export const RecipeListCard = memo(function RecipeListCard({
 
 /**
  * Only mounted for in-view cards, so off-screen placeholders don't subscribe to
- * adjustments and don't re-render on scaling.
+ * adjustments and don't re-render on scaling. Memoized so store-driven
+ * re-renders of `RecipeListCard` (e.g. `isHidden` on modal open) don't reconcile
+ * into the card subtree — it only re-renders on `recipe` or adjustment changes.
  */
-function RecipeListCardBody({
+const RecipeListCardBody = memo(function RecipeListCardBody({
 	recipe,
 	withLink,
 }: {
@@ -109,4 +114,4 @@ function RecipeListCardBody({
 			animateNumbers={false}
 		/>
 	);
-}
+});
