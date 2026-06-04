@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useDeferredValue, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { SelectServings } from "@/features/recipes/components/SelectServings";
 import { SelectUnitConversion } from "@/features/recipes/components/SelectUnitConversion";
@@ -33,21 +33,25 @@ export function useRawAdjustments() {
 }
 
 /**
- * Cards subscribe here. Servings comes from the store's leading+trailing
- * debounced `committedServings`, so a rapid scrub re-renders the list only on
- * the first step and once it settles — not on every step. The toggles aren't
- * debounced (they change rarely). `useShallow` keeps the object stable so
- * unchanged subscriptions don't re-render.
+ * Read-only adjustments for the cards. `useDeferredValue` yields the cards'
+ * re-render to React at lower priority, so editing servings updates the control
+ * (which reads `useRawAdjustments`) urgently while the cards catch up when React
+ * is idle — the input stays responsive without a manual debounce/throttle.
+ * Deferring at the read, not the write: store updates can't be deferred (they're
+ * synchronous via `useSyncExternalStore`). `useShallow` keeps the selected object
+ * stable so this only defers on real changes.
  */
-export function useDeferredAdjustments(): AdjustmentValues {
-	return recipeAdjustmentsStore(
+export function useAdjustments(): AdjustmentValues {
+	const values = recipeAdjustmentsStore(
 		useShallow((s) => ({
-			servings: s.committedServings,
+			servings: s.servings,
 			conversionSystem: s.conversionSystem,
 			withRounding: s.withRounding,
 			withBestUnit: s.withBestUnit,
 		})),
 	);
+
+	return useDeferredValue(values);
 }
 
 /**

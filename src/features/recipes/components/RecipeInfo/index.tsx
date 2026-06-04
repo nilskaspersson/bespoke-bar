@@ -4,7 +4,7 @@ import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
-	useDeferredAdjustments,
+	useAdjustments,
 	useHydrateRecipeAdjustments,
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
@@ -37,7 +37,7 @@ function RecipeInfoContent<T extends RecipeWithRelations>({
 	useHydrateRecipeAdjustments();
 
 	const { servings, conversionSystem, withRounding, withBestUnit } =
-		useDeferredAdjustments();
+		useAdjustments();
 
 	return (
 		<div className={styles.base}>

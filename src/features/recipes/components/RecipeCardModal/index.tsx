@@ -15,7 +15,7 @@ import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
-	useDeferredAdjustments,
+	useAdjustments,
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
@@ -272,7 +272,7 @@ function CardSection({
 	const tilt = useCardTilt();
 
 	const { servings, conversionSystem, withRounding, withBestUnit } =
-		useDeferredAdjustments();
+		useAdjustments();
 
 	/**
 	 * Entry FLIP: measure the card's natural rect, compute the delta from the
@@ -368,7 +368,7 @@ function BoxesSection({
 	particlesPersistence,
 	tiltPersistence,
 }: BoxesSectionProps) {
-	const { servings, conversionSystem } = useDeferredAdjustments();
+	const { servings, conversionSystem } = useAdjustments();
 
 	return (
 		<div className={styles.boxes}>

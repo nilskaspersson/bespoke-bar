@@ -24,6 +24,7 @@ import { useDialog } from "@/hooks/useDialog";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
+import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
 
 export { RecipesListBoardSkeleton } from "./Skeleton";
@@ -109,7 +110,20 @@ export function RecipesListBoard({
 						onSearchChange={(event) => setSearch(event.target.value)}
 						filtersOpen={tagsDialog.isOpen}
 						onOpenFilters={tagsDialog.showModal}
-					/>
+					>
+						<Text as="p" size={1} compact align="center" fullWidth>
+							{filteredRecipes.length !== recipes.length ? (
+								<>
+									<Text as="span" numeric size={1} compact>
+										{filteredRecipes.length}
+									</Text>{" "}
+									matching {pluralize(filteredRecipes.length, "Recipe")}.
+								</>
+							) : (
+								"Filter by Recipe name or Ingredient."
+							)}
+						</Text>
+					</RecipesListHeader>
 
 					<RecipesStatsBar
 						recipes={recipes}

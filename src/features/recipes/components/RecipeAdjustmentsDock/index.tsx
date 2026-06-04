@@ -8,6 +8,7 @@ import {
 } from "@/features/recipes/components/RecipeAdjustments";
 import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";
+import { Chip } from "@/ui/Chip";
 import { Icon } from "@/ui/Icon";
 import { Kbd } from "@/ui/Kbd";
 import { Popover } from "@/ui/Popover";
@@ -95,7 +96,11 @@ export function RecipeAdjustmentsDock({ onOpenChange }: Props) {
 				<RecipeAdjustmentsControls className={styles.controls} />
 			</Popover>
 
-			{showChip ? <span className={styles.summaryChip}>{summary}</span> : null}
+			{showChip ? (
+				<Chip color="accent" size={1} className={styles.summaryChip}>
+					{summary}
+				</Chip>
+			) : null}
 		</div>
 	);
 }

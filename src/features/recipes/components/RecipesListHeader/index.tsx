@@ -6,7 +6,6 @@ import { RecipesSearchInput } from "@/features/recipes/components/RecipesSearchI
 import { Button, LinkButton } from "@/ui/Button";
 import { Grid, type GridProps } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -22,6 +21,7 @@ export function RecipesListHeader({
 	onOpenFilters,
 	onSearchChange,
 	search,
+	children,
 	...props
 }: Props & GridProps) {
 	return (
@@ -60,9 +60,7 @@ export function RecipesListHeader({
 				</LinkButton>
 			</div>
 
-			<Text as="div" size={1} compact align="center" fullWidth>
-				Filter by Recipe name or Ingredient.
-			</Text>
+			{children}
 		</Grid>
 	);
 }
