@@ -17,6 +17,11 @@
 		overflow-clip-margin: 1rem;
 	}
 
+	/* Reserves the actions-row height for off-screen items */
+	.actionsSpacer {
+		height: var(--space-5);
+	}
+
 	.skeletonCard {
 		display: grid;
 		gap: var(--space-1);

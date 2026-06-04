@@ -1,7 +1,6 @@
 "use client";
 
 import clsx from "clsx";
-import { memo, useRef } from "react";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
 import type { Tag } from "@/db/schema/tags";
 import { useAdjustments } from "@/features/recipes/components/RecipeAdjustments";
@@ -11,7 +10,6 @@ import {
 } from "@/features/recipes/components/RecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { recipeCardSourceProps } from "@/features/recipes/utils/recipeCardSource";
-import { useInView } from "@/hooks/useInView";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
@@ -19,24 +17,17 @@ type Props = {
 	recipe: RecipeWithRelations;
 	isFavorite: boolean;
 	tagOptions?: Tag[];
-	clickable: boolean;
-	/** Render the full card on first paint (above-the-fold); see EAGER_CARD_COUNT. */
-	eager?: boolean;
+	clickable: boolean | undefined;
+	inView: boolean;
 };
 
-export const RecipeListCard = memo(function RecipeListCard({
+export function RecipeListCard({
 	recipe,
 	isFavorite,
 	tagOptions,
 	clickable,
-	eager = false,
+	inView = true,
 }: Props) {
-	const ref = useRef<HTMLDivElement>(null);
-	const inView = useInView(ref, {
-		rootMargin: "200px 0px",
-		initialInView: eager,
-	});
-
 	const open = useRecipeCardModal((s) => s.open);
 	const isHidden = useRecipeCardModal(
 		(s) =>
@@ -60,17 +51,12 @@ export const RecipeListCard = memo(function RecipeListCard({
 	);
 
 	if (!clickable) {
-		return (
-			<div ref={ref} {...recipeCardSourceProps(recipe)}>
-				{card}
-			</div>
-		);
+		return <div {...recipeCardSourceProps(recipe)}>{card}</div>;
 	}
 
 	return (
 		// biome-ignore lint/a11y/useSemanticElements: card subtree contains other interactive elements; a real <button> would nest interactives.
 		<div
-			ref={ref}
 			{...recipeCardSourceProps(recipe)}
 			onClick={selectRecipe}
 			onKeyDown={handleKey([
@@ -86,15 +72,9 @@ export const RecipeListCard = memo(function RecipeListCard({
 			{card}
 		</div>
 	);
-});
+}
 
-/**
- * Only mounted for in-view cards, so off-screen placeholders don't subscribe to
- * adjustments and don't re-render on scaling. Memoized so store-driven
- * re-renders of `RecipeListCard` (e.g. `isHidden` on modal open) don't reconcile
- * into the card subtree — it only re-renders on `recipe` or adjustment changes.
- */
-const RecipeListCardBody = memo(function RecipeListCardBody({
+function RecipeListCardBody({
 	recipe,
 	withLink,
 }: {
@@ -114,4 +94,4 @@ const RecipeListCardBody = memo(function RecipeListCardBody({
 			animateNumbers={false}
 		/>
 	);
-});
+}
