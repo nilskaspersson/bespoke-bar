@@ -1,8 +1,0 @@
-@layer layout {
-	.container {
-		display: grid;
-		gap: var(--gap);
-		padding-top: var(--space-5);
-		padding-bottom: var(--gap);
-	}
-}

@@ -40,14 +40,13 @@ export function RecipeMetrics<T extends BaseRecipe>({
 				convertUnits={convertUnits}
 			/>
 
-			{typeof servings === "number" && servings > 1 ? (
-				<VolumeInfo
-					diluted={asDiluted}
-					recipe={recipe}
-					servings={servings}
-					convertUnits={convertUnits}
-				/>
-			) : null}
+			<VolumeInfo
+				diluted={asDiluted}
+				recipe={recipe}
+				servings={servings}
+				convertUnits={convertUnits}
+				disabled={typeof servings !== "number" || servings <= 1}
+			/>
 
 			<CostInfo
 				recipe={recipe}

@@ -43,7 +43,7 @@ export function AddRecipeDialog({ menu, children, ...props }: Props) {
 				mounted={mounted}
 				onExitComplete={unmount}
 				header={
-					<HGroup overline="Add recipe to">
+					<HGroup overline="Add recipe to" floatingOverline>
 						<Heading level="h3" size={6}>
 							{menu.name}
 						</Heading>

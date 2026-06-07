@@ -14,7 +14,7 @@
 	}
 
 	.content {
-		padding: var(--gap--small);
+		padding: var(--gap--large) var(--gap--small) var(--gap--small);
 	}
 
 	.actions {

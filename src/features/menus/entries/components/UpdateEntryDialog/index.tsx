@@ -46,7 +46,7 @@ export function UpdateEntryDialog({
 				mounted={mounted}
 				onExitComplete={unmount}
 				header={
-					<HGroup overline="Update sales price">
+					<HGroup overline="Update sales price" floatingOverline>
 						<Heading level="h3" size={6}>
 							{entry.recipe.name}
 						</Heading>

@@ -20,6 +20,7 @@ type Props = {
 	size?: "tiny" | "small" | "default" | "large";
 	fullWidth?: boolean;
 	rounded?: boolean;
+	startAdornment?: ReactNode;
 	endAdornment?: ReactNode;
 };
 
@@ -32,6 +33,7 @@ export function Button({
 	icon,
 	fullWidth,
 	rounded,
+	startAdornment,
 	endAdornment,
 	...props
 }: Props & Omit<ComponentProps<"button">, "color">) {
@@ -47,9 +49,12 @@ export function Button({
 				icon,
 				fullWidth,
 				rounded,
+				startAdornment,
 				endAdornment,
 			})}
 		>
+			{startAdornment}
+
 			<span className={styles.label}>{children}</span>
 
 			{endAdornment}
@@ -68,6 +73,7 @@ export function LinkButton({
 	size,
 	fullWidth,
 	rounded,
+	startAdornment,
 	endAdornment,
 	...props
 }: Props & { href: Route } & ComponentProps<typeof Link>) {
@@ -82,10 +88,14 @@ export function LinkButton({
 				icon,
 				fullWidth,
 				rounded,
+				startAdornment,
 				endAdornment,
 			})}
 		>
+			{startAdornment}
+
 			<span className={styles.label}>{children}</span>
+
 			{endAdornment}
 		</Link>
 	);
@@ -99,6 +109,7 @@ export function generateButtonClassName({
 	icon,
 	fullWidth,
 	rounded,
+	startAdornment,
 	endAdornment,
 }: Props) {
 	return clsx(
@@ -113,6 +124,7 @@ export function generateButtonClassName({
 			[styles.icon]: icon,
 			[styles.fullWidth]: fullWidth,
 			[styles.rounded]: rounded,
+			[styles.hasStartAdornment]: Boolean(startAdornment),
 			[styles.hasEndAdornment]: Boolean(endAdornment),
 		},
 	);

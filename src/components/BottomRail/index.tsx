@@ -2,6 +2,7 @@
 
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { createPortal } from "react-dom";
+import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import styles from "./styles.module.css";
@@ -47,6 +48,9 @@ type ItemsProps = { children: ReactNode };
 
 export function BottomRailItems({ children }: ItemsProps) {
 	const slot = useContext(SlotContext);
-	if (!slot) return null;
+	const isMounted = useIsMounted();
+
+	if (!isMounted || !slot) return null;
+
 	return createPortal(children, slot);
 }

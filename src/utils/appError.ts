@@ -28,6 +28,10 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 	z.object({
 		code: z.literal("NO_RECIPES_PROVIDED"),
 	}),
+	z.object({
+		code: z.literal("INGREDIENT_IN_USE"),
+		recipeCount: z.number(),
+	}),
 ]);
 
 export type AppErrorPayload = z.infer<typeof appErrorSchema>;
@@ -93,6 +97,12 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			return {
 				message: "Nothing to create",
 				description: "Add at least one Recipe.",
+			};
+		}
+		case "INGREDIENT_IN_USE": {
+			return {
+				message: "Ingredient in use",
+				description: `Used in ${payload.recipeCount} ${payload.recipeCount === 1 ? "Recipe" : "Recipes"}. Remove it from all Recipes before deleting.`,
 			};
 		}
 	}

@@ -3,4 +3,13 @@
 		text-wrap: balance;
 		word-break: break-word;
 	}
+
+	.summary {
+		transition: opacity var(--transition-duration);
+
+		&[aria-disabled="true"] {
+			opacity: 0.5;
+			pointer-events: none;
+		}
+	}
 }
