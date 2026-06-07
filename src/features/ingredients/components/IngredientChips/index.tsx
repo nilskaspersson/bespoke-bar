@@ -1,55 +1,110 @@
 "use client";
 
-import { use } from "react";
+import { type ReactNode, use } from "react";
+import { EnrichmentMark } from "@/components/EnrichmentMark";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
+import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";
 import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { FormatterContext } from "@/hooks/useFormatter";
+import { Button } from "@/ui/Button";
 import { Chip, type ChipProps } from "@/ui/Chip";
 import { Flex, type FlexProps } from "@/ui/Flex";
 import styles from "./styles.module.css";
+
+function EditableChip({
+	children,
+	ingredient,
+}: {
+	children: ReactNode;
+	ingredient: Ingredient;
+}) {
+	const open = useIngredientEditor((s) => s.open);
+
+	return (
+		<Button
+			variant="base"
+			title="Edit ingredient"
+			onClick={() => open(ingredient)}
+		>
+			{children}
+		</Button>
+	);
+}
 
 export function IngredientChips({
 	ingredient,
 	recipesCount,
 	size = 3,
 	color = "regular",
+	editable = false,
 	...props
 }: {
 	ingredient: Ingredient;
 	recipesCount?: number;
 	size?: ChipProps["size"];
 	color?: ChipProps["color"];
+	editable?: boolean;
 } & Omit<FlexProps, "children">) {
 	const formatIngredientUnitCost = useFormatIngredientUnitCost();
 	const { percentageFormatter } = use(FormatterContext);
 
+	const enrichedFields = new Set(ingredient.aiEnrichedFields ?? []);
+
+	function fieldValue(value: ReactNode, field: keyof Ingredient) {
+		if (!enrichedFields.has(field)) {
+			return value;
+		}
+
+		return (
+			<Flex as="span" gap={1} alignItems="center">
+				<EnrichmentMark />
+				{value}
+			</Flex>
+		);
+	}
+
 	return (
 		<Flex gap={2} wrap justifyContent="center" {...props}>
-			<Chip label={<Abv />} size={size} color={color} className={styles.chip}>
-				{ingredient.abv != null
-					? percentageFormatter.format(ingredient.abv)
-					: "-"}
-			</Chip>
+			<EditableChip ingredient={ingredient}>
+				<Chip label={<Abv />} size={size} color={color} className={styles.chip}>
+					{fieldValue(
+						ingredient.abv != null
+							? percentageFormatter.format(ingredient.abv)
+							: "-",
+						"abv",
+					)}
+				</Chip>
+			</EditableChip>
 
-			<Chip label="Brand" size={size} color={color} className={styles.chip}>
-				{ingredient.brand ?? "-"}
-			</Chip>
+			<EditableChip ingredient={ingredient}>
+				<Chip
+					label="Brand"
+					size={size}
+					color={color}
+					className={styles.chip}
+					icon={enrichedFields.has("brand") ? <EnrichmentMark /> : null}
+				>
+					{ingredient.brand ?? "-"}
+				</Chip>
+			</EditableChip>
 
-			<Chip
-				label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType)}`}
-				size={size}
-				color={color}
-				className={styles.chip}
-			>
-				{ingredient.unitCost && ingredient.measurementType
-					? formatIngredientUnitCost(
-							ingredient.unitCost,
-							ingredient.measurementType,
-						)
-					: "-"}
-			</Chip>
+			<EditableChip ingredient={ingredient}>
+				<Chip
+					label={`Cost per ${getMeasurementPriceUnit(ingredient.measurementType)}`}
+					size={size}
+					color={color}
+					className={styles.chip}
+				>
+					{ingredient.unitCost && ingredient.measurementType
+						? formatIngredientUnitCost(
+								ingredient.unitCost,
+								ingredient.measurementType,
+							)
+						: "-"}
+				</Chip>
+			</EditableChip>
 
 			{recipesCount != null ? (
 				<Chip label="Recipes" size={size} color={color} className={styles.chip}>

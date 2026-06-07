@@ -19,4 +19,10 @@
 		color: var(--red-9);
 		text-decoration: none;
 	}
+
+	.touch-hidden {
+		@media (hover: none) and (pointer: coarse) {
+			display: none;
+		}
+	}
 }

@@ -56,7 +56,10 @@ export function ConfirmAction({
 				isOpen={isPending}
 				onClose={rejectAction}
 				heading={actionLabel}
-				buttonProps={{ color: buttonProps?.color }}
+				buttonProps={{
+					color: buttonProps?.color,
+					"aria-disabled": buttonProps?.["aria-disabled"],
+				}}
 				resolveAction={resolveAction}
 				isSubmitting={isSubmitting}
 			/>
@@ -95,8 +98,10 @@ ConfirmAction.Alert = function ConfirmActionAlert({
 					<ConfirmButton
 						{...buttonProps}
 						onClick={buttonProps?.["aria-disabled"] ? undefined : resolveAction}
-						aria-disabled={buttonProps?.["aria-disabled"]}
-						disabled={isSubmitting}
+						aria-disabled={
+							buttonProps?.disabled || buttonProps?.["aria-disabled"]
+						}
+						disabled={buttonProps?.disabled || isSubmitting}
 						variant="solid"
 						size="small"
 					>
@@ -118,7 +123,9 @@ function ConfirmButton({ children, ...props }: ButtonProps) {
 		<Button
 			{...props}
 			disabled={props.disabled || isInGracePeriod}
-			aria-disabled={props["aria-disabled"] || isInGracePeriod}
+			aria-disabled={
+				props["aria-disabled"] || props.disabled || isInGracePeriod
+			}
 		>
 			{children}
 		</Button>

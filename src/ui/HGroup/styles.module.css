@@ -1,0 +1,11 @@
+@layer ui {
+	.hgroup {
+		position: relative;
+	}
+
+	.overline {
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+	}
+}

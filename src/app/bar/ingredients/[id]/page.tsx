@@ -1,26 +1,32 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
+import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
-import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
+import { EditIngredientButton } from "@/features/ingredients/components/EditIngredientButton";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import { RecipesList } from "@/features/recipes/components/RecipesList";
+import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
+import {
+	RecipesList,
+	RecipesListSkeleton,
+} from "@/features/recipes/components/RecipesList";
 import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
-import { LinkButton } from "@/ui/Button";
-import { Container } from "@/ui/Container";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
+import { HGroup } from "@/ui/HGroup";
 import { Icon } from "@/ui/Icon";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
+import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
+import { pluralize } from "@/utils/formatting";
 import styles from "./page.module.css";
 
 type Props = {
@@ -29,17 +35,40 @@ type Props = {
 
 export default function IngredientPage({ params }: Props) {
 	return (
-		<Container as="article" className={styles.container}>
-			<Suspense
-				fallback={
-					<SkeletonScreen>
-						<Skeleton width="100%" height="60lvh" />
-					</SkeletonScreen>
-				}
-			>
+		<article>
+			<Suspense fallback={<IngredientPageSkeleton />}>
 				<IngredientWithAuth params={params} />
 			</Suspense>
-		</Container>
+		</article>
+	);
+}
+
+function IngredientPageSkeleton() {
+	return (
+		<Grid gap={9}>
+			<Grid as="section" gap={6}>
+				<Grid gap={2}>
+					<Skeleton variant="text" width="6rem" height="0.9rem" />
+					<Skeleton variant="text" width="min(60%, 20rem)" height="2.5rem" />
+				</Grid>
+
+				<Flex gap={2} wrap>
+					<Skeleton variant="text" width="5rem" height="1.75rem" />
+					<Skeleton variant="text" width="4.5rem" height="1.75rem" />
+					<Skeleton variant="text" width="6.5rem" height="1.75rem" />
+				</Flex>
+
+				<Grid gap={2}>
+					<Skeleton variant="text" width="100%" height="1rem" />
+					<Skeleton variant="text" width="72%" height="1rem" />
+				</Grid>
+			</Grid>
+
+			<Grid gap={4}>
+				<Skeleton variant="text" width="11rem" height="1.5rem" />
+				<RecipesListSkeleton count={3} />
+			</Grid>
+		</Grid>
 	);
 }
 
@@ -50,14 +79,16 @@ async function IngredientWithAuth({ params }: Props) {
 		notFound();
 	}
 
-	const { orgId } = await authOrForbidden();
+	const { orgId, userId } = await authOrForbidden();
 
-	const [ingredient, rawRecipes, ingredients, tags] = await Promise.all([
-		getCachedIngredient(orgId, id),
-		getCachedBarRecipes(orgId),
-		getCachedIngredients(orgId),
-		getCachedTags(orgId),
-	]);
+	const [ingredient, rawRecipes, ingredients, tags, favoriteRecipeIds] =
+		await Promise.all([
+			getCachedIngredient(orgId, id),
+			getCachedBarRecipes(orgId),
+			getCachedIngredients(orgId),
+			getCachedTags(orgId),
+			getCachedUserFavoriteRecipeIds(orgId, userId),
+		]);
 
 	if (!ingredient) {
 		return notFound();
@@ -69,82 +100,92 @@ async function IngredientWithAuth({ params }: Props) {
 		recipes,
 	);
 
+	const enrichedFields = new Set(ingredient.aiEnrichedFields ?? []);
+
 	return (
 		<>
-			<Grid gap={4} justifyContent="center" className={styles.content}>
-				<header>
-					{ingredient.category ? (
-						<Text as="div" size={2} compact>
-							{CATEGORY_TO_LABEL.get(ingredient.category)}
-						</Text>
+			<Grid gap={9}>
+				<Grid as="section" gap={6}>
+					<HGroup
+						floatingOverline
+						overline={
+							ingredient.category
+								? CATEGORY_TO_LABEL.get(ingredient.category)
+								: null
+						}
+					>
+						<Heading level="h1" size={7}>
+							{ingredient.name}
+						</Heading>
+					</HGroup>
+
+					<IngredientChips
+						ingredient={ingredient}
+						recipesCount={recipesUsingIngredient.length}
+						justifyContent="flex-start"
+						editable
+					/>
+
+					{ingredient.description ? (
+						<Flex gap={2} alignItems="baseline">
+							{enrichedFields.has("description") ? <EnrichmentMark /> : null}
+
+							<Text as="p" heavy>
+								{ingredient.description}
+							</Text>
+						</Flex>
 					) : null}
+				</Grid>
 
-					<Heading level="h1">{ingredient.name}</Heading>
-				</header>
+				{recipesUsingIngredient.length > 0 ? (
+					<Grid as="aside" gap={4}>
+						<Heading level="h2" size={4}>
+							Used in {recipesUsingIngredient.length}{" "}
+							{pluralize(recipesUsingIngredient.length, "recipe")}:
+						</Heading>
 
-				<hr />
-
-				<IngredientChips
-					ingredient={ingredient}
-					recipesCount={recipesUsingIngredient.length}
-				/>
-
-				<hr />
-
-				{ingredient.description ? (
-					<Text as="p" heavy>
-						{ingredient.description}
-					</Text>
+						<RecipesList
+							recipes={recipesUsingIngredient}
+							favoriteRecipeIds={favoriteRecipeIds}
+							tagOptions={tags}
+							withActions
+							className={styles.usageList}
+						/>
+					</Grid>
 				) : null}
 			</Grid>
 
-			<Flex
-				as="menu"
-				gap={4}
-				className={styles.actions}
-				justifyContent="center"
-			>
-				<LinkButton
-					href={`/bar/ingredients/${id}/edit`}
-					variant="outline"
+			<BottomRailItems>
+				<EditIngredientButton
+					ingredient={ingredient}
+					variant="clear"
 					color="heavy"
-					size="small"
+					rounded
 				>
 					Edit
-				</LinkButton>
+				</EditIngredientButton>
 
 				<DeleteIngredient
 					ingredient={ingredient}
+					redirectTo="/bar/ingredients"
+					variant="clear"
+					size="default"
+					rounded
 					aria-disabled={recipesUsingIngredient.length > 0}
+					icon
 					notice={
 						recipesUsingIngredient.length > 0 ? (
 							<>
-								This ingredient is used in recipes and{" "}
-								<strong>cannot be deleted</strong>. Remove it from all recipes
+								This ingredient is used by Recipes and{" "}
+								<strong>cannot be deleted</strong>. Remove it from all Recipes
 								first.
 							</>
 						) : undefined
 					}
-					action={deleteIngredient.bind(null, {
-						id: ingredient.id,
-						redirectTo: "/bar/ingredients",
-					})}
 				>
-					<Icon name="trash" /> Delete
+					<Icon name="trash" />
 				</DeleteIngredient>
-			</Flex>
-
-			{recipesUsingIngredient.length > 0 ? (
-				<Grid as="aside" gap={4} justifyItems="center">
-					<Heading level="h2" size={4} className={styles.heading}>
-						{recipesUsingIngredient.length}{" "}
-						{recipesUsingIngredient.length === 1 ? "recipe" : "recipes"} use{" "}
-						{ingredient.name}
-					</Heading>
-
-					<RecipesList recipes={recipesUsingIngredient} withActions />
-				</Grid>
-			) : null}
+			</BottomRailItems>
 		</>
 	);
 }

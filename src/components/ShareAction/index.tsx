@@ -25,8 +25,8 @@ export function ShareAction({
 				inert
 				aria-disabled="true"
 				className={clsx(props.className, styles.unmounted)}
+				endAdornment={<Icon name="share" size={1} />}
 			>
-				<Icon name="share" size={1} />
 				{children}
 			</Button>
 		);
@@ -55,8 +55,8 @@ export function ShareAction({
 				shareText(url);
 				onClick?.(event);
 			}}
+			endAdornment={<Icon name="share" size={1} />}
 		>
-			<Icon name="share" size={1} />
 			{children}
 		</Button>
 	);

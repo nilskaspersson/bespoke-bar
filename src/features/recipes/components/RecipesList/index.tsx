@@ -9,7 +9,6 @@ import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot
 import { RecipeListCard } from "@/features/recipes/components/RecipeListCard";
 import { RecipeTagsAction } from "@/features/tags/components/RecipeTagsAction";
 import { useInView } from "@/hooks/useInView";
-import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
@@ -26,13 +25,17 @@ const RecipeListActions = memo(function RecipeListActions({
 	tagOptions,
 }: ActionsProps) {
 	return (
-		<Flex gap={4} justifyContent="space-between">
+		<div className={styles.actions}>
 			{tagOptions ? (
 				<RecipeTagsAction recipe={recipe} tagOptions={tagOptions} />
 			) : null}
 
-			<RecipeCardActions recipe={recipe} isFavorite={isFavorite} />
-		</Flex>
+			<RecipeCardActions
+				recipe={recipe}
+				isFavorite={isFavorite}
+				className={styles.cardActions}
+			/>
+		</div>
 	);
 });
 
@@ -90,7 +93,7 @@ const RecipeListItem = memo(function RecipeListItem({
 						tagOptions={tagOptions}
 					/>
 				) : (
-					<div aria-hidden className={styles.actionsSpacer} />
+					<div aria-hidden className={styles.actions} />
 				))}
 		</Grid>
 	);
@@ -153,7 +156,8 @@ export function RecipesListSkeleton({
 								width="var(--recipe-card-width)"
 								height="var(--recipe-card-height)"
 							/>
-							<div className={styles.skeletonActions} />
+
+							<div className={styles.actions} />
 						</div>
 					</li>
 				))}

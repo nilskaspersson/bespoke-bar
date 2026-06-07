@@ -60,7 +60,7 @@
 				}
 			}
 
-			&.hasEndAdornment {
+			&:is(.hasStartAdornment, .hasEndAdornment) {
 				justify-content: space-between;
 			}
 		}

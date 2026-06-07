@@ -7,6 +7,8 @@ import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ScrollFix } from "@/components/ScrollFix";
+import { AuthButtonsSkeleton } from "@/features/organisation/user/components/AuthButtons";
+import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { Toaster } from "@/ui/Toast/Toaster";
 import { NavigationObserver } from "@/utils/navigation";
@@ -34,12 +36,17 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 				<ThemeProvider>
 					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 					<div className={styles.layout} id="root">
-						<Suspense>
-							<AuthProvider>
-								<AppHeader className={styles.header} />
+						<AuthProvider>
+							<AppHeader className={styles.header}>
+								<Suspense fallback={<AuthButtonsSkeleton />}>
+									<AuthButtonsLoader />
+								</Suspense>
+							</AppHeader>
+
+							<Suspense fallback={<main className={styles.main} />}>
 								<main className={styles.main}>{children}</main>
-							</AuthProvider>
-						</Suspense>
+							</Suspense>
+						</AuthProvider>
 
 						<Suspense>
 							<AppFooter className={styles.footer} />

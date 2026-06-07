@@ -1,55 +1,33 @@
 import type { Metadata } from "next";
-import { cacheLife, cacheTag } from "next/cache";
-import { Suspense } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import {
-	IngredientTable,
-	IngredientTableSkeleton,
-} from "@/features/ingredients/components/IngredientsTable";
+import { PageHeader } from "@/components/PageHeader";
+import { CreateIngredientButton } from "@/features/ingredients/components/CreateIngredientButton";
 import { LinkButton } from "@/ui/Button";
-import { Container } from "@/ui/Container";
-import { Icon } from "@/ui/Icon";
-import { authOrForbidden } from "@/utils/auth";
-import { cacheTags } from "@/utils/cache";
-import styles from "./page.module.css";
+import { Callout } from "@/ui/Callout";
+import { Flex } from "@/ui/Flex";
 
 export default function IngredientsPage() {
 	return (
-		<Container as="article" className={styles.container}>
-			<Suspense fallback={<IngredientTableSkeleton />}>
-				<IngredientsWithAuth />
-			</Suspense>
+		<PageHeader
+			tagline="Curate Ingredients for your Recipes."
+			overline="Ingredients"
+			icon="duotone-wine-bottle"
+			heading="Stock the bar"
+		>
+			<Flex gap={4}>
+				<CreateIngredientButton variant="outline" color="accent">
+					Create ingredient
+				</CreateIngredientButton>
 
-			<BottomRailItems>
-				<LinkButton
-					href="/bar/ingredients/create"
-					variant="solid"
-					color="accent"
-					size="small"
-				>
-					Create Ingredient
-					<Icon name="duotone-wine-bottle" />
+				<LinkButton href="/bar/recipes/create" variant="solid" color="accent">
+					Create Recipe
 				</LinkButton>
-			</BottomRailItems>
-		</Container>
+			</Flex>
+
+			<Callout color="accent" size={2} icon="circle-info">
+				Ingredients are also created automatically when you create Recipes.
+			</Callout>
+		</PageHeader>
 	);
-}
-
-async function IngredientsWithAuth() {
-	const { orgId } = await authOrForbidden();
-
-	return <IngredientsTableWithData orgId={orgId} />;
-}
-
-async function IngredientsTableWithData({ orgId }: { orgId: string }) {
-	"use cache";
-	cacheLife("max");
-	cacheTag(...cacheTags.ingredientsList(orgId));
-
-	const ingredients = await getCachedIngredients(orgId);
-
-	return <IngredientTable ingredients={ingredients} />;
 }
 
 export const metadata: Metadata = {

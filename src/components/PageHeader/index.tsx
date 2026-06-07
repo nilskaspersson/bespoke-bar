@@ -26,7 +26,9 @@ export function PageHeader({
 		<Grid as="header" className={styles.header} gap={6} justifyItems="center">
 			<HGroup
 				overline={
-					overline ? <Eyebrow icon={icon}>{overline}</Eyebrow> : undefined
+					overline || icon ? (
+						<Eyebrow icon={icon}>{overline}</Eyebrow>
+					) : undefined
 				}
 				tagline={
 					tagline ? (

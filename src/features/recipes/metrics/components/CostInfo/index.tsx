@@ -30,9 +30,17 @@ export function CostInfo<T extends BaseRecipe>({
 	return (
 		<details {...props}>
 			<Text as="summary" size={1} compact>
-				{typeof servings === "number" && servings === 1
-					? "Cost per serving: "
-					: `Total cost (${quantityFormatter.format(servings)} servings): `}
+				{typeof servings === "number" && servings === 1 ? (
+					"Cost per serving: "
+				) : (
+					<>
+						Total cost (
+						<Text numeric compact size={1}>
+							{quantityFormatter.format(servings)}
+						</Text>{" "}
+						servings):{" "}
+					</>
+				)}
 
 				<Text heavy weight={600}>
 					{currencyFormatter.format(cost * servings)}
@@ -44,7 +52,7 @@ export function CostInfo<T extends BaseRecipe>({
 				{servings > 1 ? (
 					<Callout size={1} color="regular">
 						Cost per serving:{" "}
-						<Text compact heavy weight={600}>
+						<Text compact heavy weight={600} numeric>
 							{currencyFormatter.format(cost)}
 							{isIncomplete ? "*" : null}
 						</Text>

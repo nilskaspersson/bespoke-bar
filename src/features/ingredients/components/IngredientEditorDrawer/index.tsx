@@ -2,6 +2,7 @@
 
 import { useEffect, useId } from "react";
 import { useShallow } from "zustand/react/shallow";
+import { CreateIngredientDrawerForm } from "@/features/ingredients/components/CreateIngredientDrawerForm";
 import { EditIngredientForm } from "@/features/ingredients/components/EditIngredientForm";
 import {
 	ingredientEditorStore,
@@ -22,13 +23,16 @@ export function IngredientEditorDrawer() {
 		ingredientEditorStore.dialogRef = dialogRef;
 	}, [dialogRef]);
 
-	const { ingredient, pending, clear } = useIngredientEditor(
+	const { mode, ingredient, pending, clear } = useIngredientEditor(
 		useShallow((s) => ({
+			mode: s.mode,
 			ingredient: s.ingredient,
 			pending: s.pending,
 			clear: s.clear,
 		})),
 	);
+
+	const isCreate = mode === "create";
 
 	return (
 		<Drawer
@@ -38,9 +42,12 @@ export function IngredientEditorDrawer() {
 			onExitComplete={unmount}
 			onClose={clear}
 			header={
-				<HGroup overline="Edit ingredient">
+				<HGroup
+					overline={isCreate ? "New ingredient" : "Edit ingredient"}
+					floatingOverline
+				>
 					<Heading level="h3" size={6}>
-						{ingredient?.name ?? "Ingredient"}
+						{isCreate ? "New ingredient" : (ingredient?.name ?? "Ingredient")}
 					</Heading>
 				</HGroup>
 			}
@@ -66,7 +73,9 @@ export function IngredientEditorDrawer() {
 				</li>
 			}
 		>
-			{ingredient ? (
+			{isCreate ? (
+				<CreateIngredientDrawerForm formId={formId} />
+			) : ingredient ? (
 				<EditIngredientForm formId={formId} ingredient={ingredient} />
 			) : null}
 		</Drawer>

@@ -53,14 +53,7 @@
 		--bgc: var(--mauve-12);
 	}
 
-	.chip:has(.icon) {
-		display: inline-flex;
-		align-items: center;
-		gap: calc(var(--inset) / 2);
-	}
-
 	.icon {
-		display: inline-flex;
 		color: var(--lc);
 	}
 

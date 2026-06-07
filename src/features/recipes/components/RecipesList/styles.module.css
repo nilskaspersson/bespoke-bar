@@ -11,15 +11,25 @@
 	}
 
 	.item {
+		grid-template-columns: minmax(0, 1fr);
 		content-visibility: auto;
 		contain-intrinsic-size: auto var(--recipe-card-width) auto
 			calc(var(--recipe-card-height) + 24px);
 		overflow-clip-margin: 1rem;
 	}
 
-	/* Reserves the actions-row height for off-screen items */
-	.actionsSpacer {
+	.actions {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: var(--space-4);
 		height: var(--space-5);
+		width: var(--recipe-card-width);
+		max-width: 100%;
+	}
+
+	.cardActions {
+		grid-column: 2;
 	}
 
 	.skeletonCard {
@@ -32,9 +42,5 @@
 	.cardSkeleton {
 		max-width: 100%;
 		border-radius: var(--radius--large);
-	}
-
-	.skeletonActions {
-		height: var(--space-5);
 	}
 }

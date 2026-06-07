@@ -1,7 +1,6 @@
 import { clsx } from "clsx";
 import { cacheLife } from "next/cache";
 import type { ComponentProps } from "react";
-import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 import { Flex } from "@/ui/Flex";
 import { Logo } from "@/ui/Logo";
 import styles from "./styles.module.css";
@@ -24,11 +23,7 @@ export async function AppHeader({
 			>
 				<Logo />
 
-				<div className={styles.nav}>{children}</div>
-
-				<div className={styles.auth}>
-					<AuthButtonsLoader />
-				</div>
+				<div className={styles.auth}>{children}</div>
 			</Flex>
 		</header>
 	);

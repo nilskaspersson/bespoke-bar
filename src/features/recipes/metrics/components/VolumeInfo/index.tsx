@@ -11,18 +11,21 @@ import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
 import { getKey } from "@/utils/withKey";
+import styles from "./styles.module.css";
 
 export function VolumeInfo<T extends BaseRecipe>({
 	recipe,
 	diluted = true,
 	servings = 1,
 	convertUnits = "metric",
+	disabled,
 	...props
 }: {
 	recipe: T;
 	diluted?: boolean;
 	servings?: number;
 	convertUnits?: UnitSystems | null;
+	disabled?: boolean;
 } & Omit<ComponentProps<"details">, "children">) {
 	const { quantityFormatter, percentageFormatter } = use(FormatterContext);
 	const roundUnit = useRoundedUnit();
@@ -43,83 +46,107 @@ export function VolumeInfo<T extends BaseRecipe>({
 
 	return (
 		<details {...props}>
-			<Text as="summary" size={1} compact>
-				{typeof servings === "number" && servings === 1
-					? "Volume per serving: "
-					: `Total volume (${quantityFormatter.format(servings)} servings): `}
-				<Text heavy weight={600}>
-					{displayVolume}
-				</Text>
+			<Text
+				as="summary"
+				size={1}
+				compact
+				className={styles.summary}
+				aria-disabled={disabled || undefined}
+				tabIndex={disabled ? -1 : undefined}
+			>
+				{disabled ? (
+					"Total volume"
+				) : (
+					<>
+						{typeof servings === "number" && servings === 1 ? (
+							"Volume per serving: "
+						) : (
+							<>
+								Total volume (
+								<Text numeric compact size={1}>
+									{quantityFormatter.format(servings)}
+								</Text>{" "}
+								servings):{" "}
+							</>
+						)}
+
+						<Text heavy weight={600} size={1} compact numeric>
+							{displayVolume}
+						</Text>
+					</>
+				)}
 			</Text>
 
-			<Grid gap={2} justifyItems="start">
-				<Text as="table" size={1}>
-					<tbody>
-						<tr>
-							<th>Undiluted volume</th>
-							<td>{originalVolume}</td>
-						</tr>
+			{!disabled && (
+				<Grid gap={2} justifyItems="start">
+					<Text as="table" size={1}>
+						<tbody>
+							<tr>
+								<th>Undiluted volume</th>
+								<td>{originalVolume}</td>
+							</tr>
 
-						<tr>
-							<th>Water</th>
-							<td>
-								{dilutionVolume} (
-								{percentageFormatter.format(
-									recipeMetrics.dilutionOfOriginalVolume,
-								)}{" "}
-								of undiluted volume)
-							</td>
-						</tr>
+							<tr>
+								<th>Water</th>
+								<td>
+									{dilutionVolume} (
+									{percentageFormatter.format(
+										recipeMetrics.dilutionOfOriginalVolume,
+									)}{" "}
+									of undiluted volume)
+								</td>
+							</tr>
 
-						<tr>
-							<th>Water percentage</th>
-							<td>
-								{percentageFormatter.format(
-									recipeMetrics.dilutionOfFinalVolume,
-								)}
-							</td>
-						</tr>
+							<tr>
+								<th>Water percentage</th>
+								<td>
+									{percentageFormatter.format(
+										recipeMetrics.dilutionOfFinalVolume,
+									)}
+								</td>
+							</tr>
 
-						<tr>
-							<th>Final volume</th>
-							<td>{finalVolume}</td>
-						</tr>
-					</tbody>
-				</Text>
+							<tr>
+								<th>Final volume</th>
+								<td>{finalVolume}</td>
+							</tr>
+						</tbody>
+					</Text>
 
-				{hasEstimatedVolumes ? (
-					<Callout
-						size={1}
-						icon="circle-exclamation"
-						color="light"
-						heading="Volume estimates:"
-					>
-						<Text as="ul" list>
-							{recipe.specs
-								?.filter((spec) => isBartendingUnit(spec.unit))
-								.map((spec) => {
-									if (!spec.quantity || !spec.unit) {
-										return null;
-									}
+					{hasEstimatedVolumes ? (
+						<Callout
+							size={1}
+							icon="circle-exclamation"
+							color="light"
+							heading="Volume estimates:"
+						>
+							<Text as="ul" list>
+								{recipe.specs
+									?.filter((spec) => isBartendingUnit(spec.unit))
+									.map((spec) => {
+										if (!spec.quantity || !spec.unit) {
+											return null;
+										}
 
-									const unitData = convert().describe(spec.unit);
-									const qty = spec.quantity * servings;
-									const estimated = roundUnit(
-										convert(spec.quantity).from(spec.unit).to("ml") * qty,
-										convertUnits,
-									);
+										const unitData = convert().describe(spec.unit);
+										const qty = spec.quantity * servings;
+										const estimated = roundUnit(
+											convert(spec.quantity).from(spec.unit).to("ml") * qty,
+											convertUnits,
+										);
 
-									return (
-										<li key={getKey(spec)}>
-											{qty} {qty > 1 ? unitData.plural : unitData.singular}{" "}
-											{spec.ingredient.name} = {estimated}
-										</li>
-									);
-								})}
-						</Text>
-					</Callout>
-				) : null}
-			</Grid>
+										return (
+											<li key={getKey(spec)}>
+												{qty} {qty > 1 ? unitData.plural : unitData.singular}{" "}
+												{spec.ingredient.name} = {estimated}
+											</li>
+										);
+									})}
+							</Text>
+						</Callout>
+					) : null}
+				</Grid>
+			)}
 		</details>
 	);
 }

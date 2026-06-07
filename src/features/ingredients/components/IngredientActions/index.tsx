@@ -26,8 +26,8 @@ export function IngredientActions({
 								href={getIngredientUrl(ingredient)}
 								color="accent"
 								prefetch={false}
+								endAdornment={<Icon name="arrow-right" size={1} />}
 							>
-								<Icon name="arrow-right" size={1} />
 								View
 							</LinkButton>
 						</li>
@@ -39,7 +39,7 @@ export function IngredientActions({
 							ingredient={ingredient}
 							color="accent"
 						>
-							Edit
+							Quick edit
 						</EditIngredientButton>
 					</li>
 

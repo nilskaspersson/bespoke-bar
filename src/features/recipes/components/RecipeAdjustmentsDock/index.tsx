@@ -63,14 +63,14 @@ export function RecipeAdjustmentsDock({ onOpenChange }: Props) {
 				className={clsx(styles.trigger, {
 					[styles.triggerHidden]: popover.isOpen,
 				})}
+				startAdornment={<Icon name="sliders-horizontal" size={3} />}
+				endAdornment={
+					<Kbd shortcut="mod+e" variant="ghost" onTrigger={toggle} />
+				}
 			>
-				<Icon name="sliders-horizontal" size={3} />
-
 				<Text as="span" size={2} weight={600} compact>
 					Quick Adjust
 				</Text>
-
-				<Kbd shortcut="mod+e" variant="ghost" onTrigger={toggle} />
 			</Button>
 
 			<Popover

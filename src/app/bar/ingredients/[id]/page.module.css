@@ -1,26 +1,5 @@
 @layer layout {
-	.container {
-		display: grid;
-		align-items: start;
-		align-content: start;
-		gap: var(--space-7);
-		padding-top: var(--space-5);
-		padding-bottom: var(--gap--huge);
-	}
-
-	.content {
-		text-align: center;
-	}
-
-	.actions {
-		justify-self: center;
-		padding: var(--space-4) var(--space-6);
-		box-shadow: var(--shadow);
-		background-color: var(--mauve-2);
-		border-radius: var(--radius--full);
-	}
-
-	.heading {
-		text-align: center;
+	.usageList {
+		justify-content: flex-start;
 	}
 }

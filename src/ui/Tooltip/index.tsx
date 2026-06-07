@@ -18,17 +18,10 @@ import styles from "./styles.module.css";
 
 export type TooltipProps<E extends ElementType = "span"> =
 	PolymorphicProps<E> & {
-		/** The hint body, shown on hover and focus. */
 		content: ReactNode;
-		/**
-		 * The trigger element — a focusable `span` by default. Pass a `Button`,
-		 * `Link`, etc. to wrap an interactive trigger; its own click/keyboard
-		 * activation is preserved.
-		 */
 		as?: E;
 	};
 
-/** Trigger props the Tooltip composes its own behaviour onto. */
 type Composed = {
 	style?: CSSProperties;
 	tabIndex?: number;
@@ -44,8 +37,7 @@ type Composed = {
  * Anchors a hover/focus hint to its trigger and owns the trigger behaviour:
  * focusability, open on hover (mouse) and focus, click/Enter/Space capture (so the
  * trigger's activation can't leak to an ancestor), the anchored surface, and the
- * `aria-describedby` link. You supply the element (`as`) and its own props; the
- * Tooltip composes on top, so a wrapped button/link still activates.
+ * `aria-describedby` link.
  */
 export function Tooltip<E extends ElementType = "span">({
 	as,

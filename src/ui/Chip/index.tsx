@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import type { ElementType, ReactNode } from "react";
+import { Flex } from "@/ui/Flex";
 import { Text, type TextProps } from "@/ui/Text";
 import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
@@ -35,9 +36,12 @@ export function Chip<E extends ElementType = "span">({
 			size={size}
 			weight={weight}
 		>
-			{icon ? <span className={styles.icon}>{icon}</span> : null}
 			{label ? <span className={styles.label}>{label}</span> : null}
-			{children}
+
+			<Flex gap={1}>
+				{icon ? <span className={styles.icon}>{icon}</span> : null}
+				{children}
+			</Flex>
 		</Text>
 	);
 }

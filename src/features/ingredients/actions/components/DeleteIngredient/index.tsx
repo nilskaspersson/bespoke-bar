@@ -2,27 +2,52 @@
 
 import type { PropsWithChildren } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
+import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
 import type { ButtonProps } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";
 import { Text } from "@/ui/Text";
+import { toast } from "@/ui/Toast";
+import { getErrorToast, unwrapAction } from "@/utils/api";
 
 export function DeleteIngredient({
-	action,
 	children,
 	className,
 	ingredient,
 	notice,
+	redirectTo,
 	...props
 }: PropsWithChildren<{
-	action: () => Promise<void>;
 	ingredient: Ingredient;
 	notice?: React.ReactNode;
+	redirectTo?: string;
 }> &
 	ButtonProps) {
+	async function handleDelete() {
+		const promise = unwrapAction(
+			deleteIngredient({ id: ingredient.id, redirectTo }),
+		);
+
+		toast.promise(promise, {
+			loading: "Deleting…",
+			success: () => ({ message: `Deleted ${ingredient.name}` }),
+			error: (error) =>
+				getErrorToast(error, {
+					message: "Could not delete ingredient",
+					description: "Try again later.",
+				}),
+		});
+
+		try {
+			await promise;
+		} catch {
+			// Surfaced via the toast above; swallow so it doesn't reach error.tsx.
+		}
+	}
+
 	return (
 		<ConfirmAction
 			className={className}
-			action={action}
+			action={handleDelete}
 			actionLabel="Delete Ingredient"
 			iconName="trash"
 			buttonProps={{

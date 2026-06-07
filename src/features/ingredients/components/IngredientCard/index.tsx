@@ -35,7 +35,7 @@ export function IngredientCard({
 		<div className={clsx(styles.card, className)} {...props}>
 			<Grid gap={4} className={styles.content}>
 				<Grid gap={2}>
-					<HGroup overline="Ingredient">
+					<HGroup overline="Ingredient" floatingOverline>
 						<Heading level="h3" serif size={6}>
 							<Link href={getIngredientUrl(ingredient)} prefetch={false}>
 								{ingredient.name}

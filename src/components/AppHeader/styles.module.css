@@ -14,10 +14,6 @@
 		padding: var(--space-5) var(--app-inset);
 	}
 
-	.nav {
-		grid-area: nav;
-	}
-
 	.auth {
 		display: flex;
 		justify-content: flex-end;
