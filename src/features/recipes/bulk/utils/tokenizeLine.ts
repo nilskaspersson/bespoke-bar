@@ -3,7 +3,7 @@ import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { normalizeInput } from "@/utils";
 
-export type TokenType = "quantity" | "unit" | "ingredient" | "recipe-name";
+type TokenType = "quantity" | "unit" | "ingredient" | "recipe-name";
 
 export type Token = {
 	type: TokenType;

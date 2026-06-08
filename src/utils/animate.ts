@@ -91,6 +91,7 @@ export function animate(
 
 /**
  * Animate multiple elements with staggered delay
+ * @public
  */
 export function animateStaggered(
 	elements: HTMLCollection | Element[] | NodeListOf<Element> | null | undefined,

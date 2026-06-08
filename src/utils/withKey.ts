@@ -8,15 +8,11 @@ type WithId<T> = Identity<T & { id: string }>;
 
 export type Keyed<T> = WithKey<T> | WithId<T>;
 
-export function hasKey<T extends Record<PropertyKey, unknown>>(
-	o: T,
-): o is WithKey<T> {
+function hasKey<T extends Record<PropertyKey, unknown>>(o: T): o is WithKey<T> {
 	return Object.hasOwn(o, KEY_NAME);
 }
 
-export function hasId<T extends Record<PropertyKey, unknown>>(
-	o: T,
-): o is WithId<T> {
+function hasId<T extends Record<PropertyKey, unknown>>(o: T): o is WithId<T> {
 	return Object.hasOwn(o, "id") && typeof o.id === "string";
 }
 
@@ -32,6 +28,7 @@ export function withoutKey<T extends Record<PropertyKey, unknown>>(
 	return omit(o, KEY_NAME);
 }
 
+/** @public */
 export function isKeyed<T extends Record<PropertyKey, unknown>>(
 	o: T,
 ): o is Keyed<T> {

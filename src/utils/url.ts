@@ -13,6 +13,7 @@ export function namedEntityToUrlSlug<T extends { name?: string | null }>(o: T) {
 /**
  * @param input "Corpse reviver #2"
  * @returns "corpse-reviver-2"
+ * @public
  */
 export function toUrlFriendlyString(input: string) {
 	return input
@@ -40,6 +41,7 @@ export function isValidPageUrl(
 	return slug.every((segment) => PATTERN_URL_FRIENDLY_SLUG.test(segment));
 }
 
+/** @public */
 export function getServerSideBaseURL(): string {
 	if (
 		process.env.VERCEL_ENV === "production" &&

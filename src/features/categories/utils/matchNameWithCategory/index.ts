@@ -19,7 +19,7 @@ const MODIFIER_CATEGORIES = new Set<SystemCategory>([
  * Calculate a matching score between input and alias.
  * @returns a score between 0 and 1, where 1 is a perfect match.
  */
-export function calculateMatchScore(input: string, alias: string): number {
+function calculateMatchScore(input: string, alias: string): number {
 	/**
 	 * Perfect match!
 	 */

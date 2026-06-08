@@ -1,6 +1,6 @@
 "use server";
 
-import type { SubmissionResult } from "@conform-to/dom";
+import type { SubmissionResult } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import z from "zod";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
@@ -9,9 +9,7 @@ import { upsertRecipesWithSpecs as upsertRecipesWithSpecsService } from "@/featu
 import { AppError, getAppErrorMessage } from "@/utils/appError";
 import { authOrForbidden } from "@/utils/auth";
 
-export async function upsertRecipesWithSpecs(
-	userInputRecipes: RecipeFormData[],
-) {
+async function upsertRecipesWithSpecs(userInputRecipes: RecipeFormData[]) {
 	const auth = await authOrForbidden();
 	try {
 		return await upsertRecipesWithSpecsService(auth, userInputRecipes);

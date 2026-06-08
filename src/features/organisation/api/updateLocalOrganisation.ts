@@ -6,9 +6,7 @@ import { updateOrganisationFormSchema } from "@/db/schema/organisations";
 import { updateLocalOrganisation as updateLocalOrganisationService } from "@/features/organisation/api/updateLocalOrganisation.service";
 import { authOrForbidden } from "@/utils/auth";
 
-export async function updateLocalOrganisation(
-	userInput: UpdateOrganisationFormData,
-) {
+async function updateLocalOrganisation(userInput: UpdateOrganisationFormData) {
 	const auth = await authOrForbidden();
 	return updateLocalOrganisationService(auth, userInput);
 }

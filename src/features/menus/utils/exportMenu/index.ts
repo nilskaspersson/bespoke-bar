@@ -47,6 +47,7 @@ const defaultExportOptions: ExportOptions = {
 	includeInstructions: false,
 };
 
+/** @public */
 export function parseExportOptions(params: URLSearchParams): ExportOptions {
 	return {
 		includeMenuName: params.get("includeMenuName") === "true",

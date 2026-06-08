@@ -7,7 +7,7 @@ import { matchNameWithCategory } from "@/features/categories/utils/matchNameWith
 import { calculateSpecsVolumes } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 
 /** Ingredient categories collapsed to the roles that discriminate families (exhaustive via `satisfies`). */
-export type ShapeRole =
+type ShapeRole =
 	| "spirit"
 	| "fortified"
 	| "aperitivo"
@@ -398,7 +398,7 @@ export function matchShapeWithStyle(recipe: ShapeRecipe): StyleMatch {
 	return { style: null, confidence: 0, rule: null, shape };
 }
 
-/** Compact shape summary for debugging and as the LLM prior. */
+/** @public */
 export function describeShape(shape: RecipeShape): string {
 	const roles = Object.entries(shape.roleCounts)
 		.map(([role, n]) => (n > 1 ? `${role}×${n}` : role))

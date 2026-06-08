@@ -11,6 +11,7 @@ import { upsertMenuWithEntries as upsertMenuWithEntriesService } from "@/feature
 import { getMenuUrl } from "@/features/menus/utils";
 import { authOrForbidden } from "@/utils/auth";
 
+/** @public */
 export async function upsertMenuWithEntries(
 	userInputMenu: MenuWithEntriesFormData,
 ): Promise<Menu> {

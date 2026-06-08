@@ -24,6 +24,7 @@ const preparedReadMenu = db.query.MenusTable.findFirst({
 	},
 }).prepare("readMenu");
 
+/** @public */
 export async function readMenu(orgId: string, id: Menu["id"]) {
 	const menu = await preparedReadMenu.execute({
 		menuId: id,

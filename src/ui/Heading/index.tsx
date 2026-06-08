@@ -13,7 +13,7 @@ type Props = {
 	noWrap?: boolean;
 };
 
-export const HEADING_LEVEL_TO_SCALE = new Map<HeadingLevel, Scale>([
+const HEADING_LEVEL_TO_SCALE = new Map<HeadingLevel, Scale>([
 	["h1", 8],
 	["h2", 7],
 	["h3", 5],

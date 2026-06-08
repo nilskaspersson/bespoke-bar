@@ -11,8 +11,8 @@ import {
 	createVolumeFormatter,
 } from "@/utils/formatting";
 
-export const DEFAULT_LOCALE = "en-GB";
-export const DEFAULT_CURRENCY = "EUR";
+const DEFAULT_LOCALE = "en-GB";
+const DEFAULT_CURRENCY = "EUR";
 
 export const FormatterContext = createContext({
 	currencyFormatter: createCurrencyFormatter(DEFAULT_LOCALE, DEFAULT_CURRENCY),

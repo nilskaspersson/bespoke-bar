@@ -12,8 +12,6 @@ const LazyRecipeEditor = dynamic(
 	{ ssr: false, loading: () => <RecipeEditorSkeleton /> },
 );
 
-export { RecipeEditorSkeleton };
-
 export function RecipeEditor(props: ComponentProps<typeof LazyRecipeEditor>) {
 	return <LazyRecipeEditor {...props} />;
 }
