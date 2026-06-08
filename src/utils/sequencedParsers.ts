@@ -1,5 +1,6 @@
 export type Parser<T> = (remainder: string) => [T, remainder: string];
 
+/** @public */
 export type ExtractParserType<P> = P extends Parser<infer T> ? T : never;
 
 /**

@@ -3,7 +3,7 @@ import { db } from "@/db";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { cacheEvents } from "@/utils/cache";
 
-export class InvalidLocalOrgIdError extends Error {
+class InvalidLocalOrgIdError extends Error {
 	constructor(public readonly value: unknown) {
 		super(`Invalid local org id: ${JSON.stringify(value)}`);
 		this.name = "InvalidLocalOrgIdError";

@@ -118,14 +118,3 @@ export async function getIngredientMetaDataBatchWithLLM(
 		return results;
 	}
 }
-
-/**
- * Enrich a single ingredient name with LLM-generated data.
- * Convenience wrapper around getIngredientMetaDataBatchWithLLM.
- */
-export async function getIngredientMetaDataWithLLM(
-	ingredientName: string,
-): Promise<IngredientEnrichment | null> {
-	const results = await getIngredientMetaDataBatchWithLLM([ingredientName]);
-	return results.get(ingredientName) ?? null;
-}

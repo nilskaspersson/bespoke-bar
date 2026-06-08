@@ -73,14 +73,14 @@ export const COCKTAIL_STYLE_TO_LABEL = new Map<CocktailStyle, string>([
 
 export type CocktailStyleFilter = CocktailStyle | null;
 
-export const UNCLASSIFIED_COCKTAIL_STYLE_LABEL = "Unclassified";
-export const UNCLASSIFIED_COCKTAIL_STYLE_COLOR = "var(--mauve-8)";
+const UNCLASSIFIED_COCKTAIL_STYLE_LABEL = "Unclassified";
+const UNCLASSIFIED_COCKTAIL_STYLE_COLOR = "var(--mauve-8)";
 
 /**
  * Per-style color tokens. Styles listed alphabetically; colors walk the
  * Radix `-11` palette in hue order for a pleasant gradient.
  */
-export const COCKTAIL_STYLE_COLOR = new Map<CocktailStyle, string>([
+const COCKTAIL_STYLE_COLOR = new Map<CocktailStyle, string>([
 	["aperitif", "var(--tomato-11)"],
 	["cooler", "var(--red-11)"],
 	["digestif", "var(--ruby-11)"],

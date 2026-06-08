@@ -22,7 +22,7 @@ const readFeaturedMenuPrepared = db.query.MenusTable.findFirst({
 	},
 }).prepare("readFeaturedMenu");
 
-export async function readFeaturedMenu(orgId: string) {
+async function readFeaturedMenu(orgId: string) {
 	return await readFeaturedMenuPrepared.execute({ orgId });
 }
 

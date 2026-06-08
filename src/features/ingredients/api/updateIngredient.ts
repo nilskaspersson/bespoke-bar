@@ -7,6 +7,7 @@ import { isUniqueConstraintViolation } from "@/db/utils";
 import { updateIngredient as updateIngredientService } from "@/features/ingredients/api/updateIngredient.service";
 import { authOrForbidden } from "@/utils/auth";
 
+/** @public */
 export async function updateIngredient(
 	id: string,
 	userInputIngredient: Partial<DraftIngredient>,

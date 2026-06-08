@@ -11,6 +11,7 @@ const preparedReadIngredient = db.query.IngredientsTable.findFirst({
 	),
 }).prepare("readIngredient");
 
+/** @public */
 export async function readIngredient(orgId: string, id: Ingredient["id"]) {
 	return await preparedReadIngredient.execute({
 		orgId,

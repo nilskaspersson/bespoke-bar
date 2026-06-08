@@ -1,7 +1,10 @@
 "use client";
 
-import type { SubmissionResult } from "@conform-to/dom";
-import { FormProvider, useForm } from "@conform-to/react";
+import {
+	FormProvider,
+	type SubmissionResult,
+	useForm,
+} from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { type ComponentProps, useRef, useState } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";

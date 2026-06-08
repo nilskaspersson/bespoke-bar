@@ -2,6 +2,7 @@ import type { KeyboardEvent } from "react";
 
 const MODIFIER_KEYS = ["mod", "alt", "shift", "ctrl"] as const;
 
+/** @public */
 export const MODIFIER_KEYS_SET = new Set(MODIFIER_KEYS);
 
 export type Platform = "mac" | "windows" | "linux";
@@ -38,6 +39,7 @@ export function detectPlatform(): Platform | undefined {
 	return undefined;
 }
 
+/** @public */
 export function isModifierKey(key: string): key is ModifierKey {
 	return MODIFIER_KEYS_SET.has(key as ModifierKey);
 }

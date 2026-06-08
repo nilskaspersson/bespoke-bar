@@ -3,7 +3,6 @@ import type {
 	BartendingUnits,
 	VolumeUnits,
 } from "@/features/units/constants/volume";
-import { invertMapToSets } from "@/utils";
 import { collator } from "@/utils/collator";
 import { createSearchIndex } from "@/utils/search";
 
@@ -128,10 +127,6 @@ export const ALIAS_TO_DB_VOLUME_UNIT = new Map<string, Unit>([
 	["spritz", "spray"],
 ]);
 
-export const DB_VOLUME_UNIT_TO_ALIASES = invertMapToSets(
-	ALIAS_TO_DB_VOLUME_UNIT,
-);
-
 export const BARTENDING_UNITS = new Set<BartendingUnits>([
 	"dash",
 	"barspoon",
@@ -141,7 +136,7 @@ export const BARTENDING_UNITS = new Set<BartendingUnits>([
 	"spray",
 ]);
 
-export const UNIT_TO_LABEL = new Map<Unit, string>([
+const UNIT_TO_LABEL = new Map<Unit, string>([
 	["cl", "cl"],
 	["cup", "cup"],
 	["dl", "dl"],

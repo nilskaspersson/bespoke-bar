@@ -80,7 +80,7 @@ export function SearchRecipesButton({
 	);
 }
 
-export function SearchRecipesForm({
+function SearchRecipesForm({
 	onNavigate,
 	actions,
 }: {

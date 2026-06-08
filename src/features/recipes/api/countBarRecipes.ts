@@ -4,7 +4,7 @@ import { db } from "@/db";
 import { RecipesTable } from "@/db/schema/recipes";
 import { cacheTags } from "@/utils/cache";
 
-export async function countBarRecipes(orgId: string) {
+async function countBarRecipes(orgId: string) {
 	const [result] = await db
 		.select({ count: count() })
 		.from(RecipesTable)

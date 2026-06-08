@@ -15,6 +15,7 @@ const preparedReadBarMenus = db.query.MenusTable.findMany({
 	],
 }).prepare("readBarMenus");
 
+/** @public */
 export async function readBarMenus(orgId: string): Promise<MenuWithEntries[]> {
 	return preparedReadBarMenus.execute({ orgId });
 }

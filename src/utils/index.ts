@@ -1,3 +1,4 @@
+/** @public */
 export function compose<T>(fn: (a: T) => T, ...fns: Array<(a: T) => T>) {
 	return fns.reduce((prev, next) => (v) => prev(next(v)), fn);
 }
@@ -16,10 +17,12 @@ export function omit<T, K extends keyof T>(o: T, ...keys: K[]): Omit<T, K> {
 	return result;
 }
 
+/** @public */
 export function clamp(n: number, min: number, max: number): number {
 	return Math.min(Math.max(n, min), max);
 }
 
+/** @public */
 export function debounce<Args extends unknown[]>(
 	fn: (...args: Args) => void,
 	wait: number,
@@ -98,6 +101,7 @@ export function escapeRegex(string: string) {
 	return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+/** @public */
 export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 	const inverted = new Map<T, Set<string>>();
 
@@ -129,6 +133,7 @@ const COMBINING_MARKS = /[\u0300-\u036f]/g;
  */
 const NON_ASCII = /\P{ASCII}/u;
 
+/** @public */
 export function asciiFold(s: string): string {
 	// Fast path: skip normalize + regex if pure ASCII
 	if (!NON_ASCII.test(s)) return s;
@@ -187,6 +192,7 @@ export function unique<T>(items: Iterable<T>): T[] {
 	return Array.from(new Set(items));
 }
 
+/** @public */
 export function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
 }

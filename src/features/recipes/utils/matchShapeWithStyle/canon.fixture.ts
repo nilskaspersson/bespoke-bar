@@ -8,7 +8,7 @@ import type { ShapeRecipe } from "./";
  * carry a stored `category`, so it tests the structural ceiling, not name
  * resolution. `family` is a reporting-only tag; `debatable` cases aren't asserted.
  */
-export type CanonSpec = {
+type CanonSpec = {
 	category: SystemCategory;
 	/** Volume in ml. Omit for muddled/dashed/presence-only components. */
 	ml?: number;

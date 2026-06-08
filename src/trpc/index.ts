@@ -54,11 +54,13 @@ const t = initTRPC.context<Context>().create({
 	},
 });
 
+/** @public */
 export type TRPCErrorData = {
 	appError?: AppErrorPayload | null;
 };
 
 export const router = t.router;
+/** @public */
 export const publicProcedure = t.procedure;
 
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {

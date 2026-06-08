@@ -1,7 +1,7 @@
 import type { EditorThemeClasses } from "lexical";
 import styles from "./styles.module.css";
 
-export const EDITOR_THEME: EditorThemeClasses = {
+const EDITOR_THEME: EditorThemeClasses = {
 	paragraph: styles.paragraph,
 };
 

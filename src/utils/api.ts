@@ -6,12 +6,14 @@ import {
 } from "@/utils/appError";
 import type { ActionResult } from "@/utils/serverAction";
 
+/** @public */
 export async function fetcher<T>(
 	...args: Parameters<typeof fetch>
 ): Promise<T> {
 	return fetch(...args).then((res) => res.json());
 }
 
+/** @public */
 export function createFetcher<T>(schema: z.ZodSchema<T>) {
 	return async (...args: Parameters<typeof fetcher>): Promise<T> =>
 		fetcher<T>(...args).then((resp) => {

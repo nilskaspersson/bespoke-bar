@@ -60,4 +60,5 @@ export const recipePreviewSchema = z.object({
 	specs: z.array(previewSpecSchema).optional().default([]),
 });
 
+/** @public */
 export type RecipePreviewData = z.infer<typeof recipePreviewSchema>;

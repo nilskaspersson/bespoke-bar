@@ -34,7 +34,7 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-export const upsertSpecSchema = insertSpecsSchema
+const upsertSpecSchema = insertSpecsSchema
 	.omit({
 		id: true,
 		createdAt: true,
@@ -96,7 +96,7 @@ export const menuWithEntriesFormSchema = z.object({
 
 export type MenuWithEntriesFormData = z.infer<typeof menuWithEntriesFormSchema>;
 
-export const menuWithEntriesSchema = selectMenuSchema.extend({
+const menuWithEntriesSchema = selectMenuSchema.extend({
 	entries: z.array(
 		selectMenuEntrySchema.extend({
 			createdAt: z.string(),

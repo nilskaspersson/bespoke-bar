@@ -15,7 +15,7 @@ const preparedReadRecipe = db.query.RecipesTable.findFirst({
 	},
 }).prepare("readRecipe");
 
-export async function readRecipe(orgId: string, recipeId: Recipe["id"]) {
+async function readRecipe(orgId: string, recipeId: Recipe["id"]) {
 	return await preparedReadRecipe.execute({
 		orgId,
 		recipeId,

@@ -8,6 +8,7 @@ const preparedReadIngredients = db.query.IngredientsTable.findMany({
 	where: eq(IngredientsTable.orgId, sql.placeholder("orgId")),
 }).prepare("readIngredients");
 
+/** @public */
 export async function readIngredients(orgId: string) {
 	return await preparedReadIngredients.execute({ orgId });
 }

@@ -9,7 +9,7 @@ import {
 import { appendMenuEntry as appendMenuEntryService } from "@/features/menus/entries/api/appendMenuEntry.service";
 import { authOrForbidden } from "@/utils/auth";
 
-export async function appendMenuEntry(
+async function appendMenuEntry(
 	userInputMenu: MenuWithEntriesFormData,
 ): Promise<MenuWithEntries> {
 	const auth = await authOrForbidden();

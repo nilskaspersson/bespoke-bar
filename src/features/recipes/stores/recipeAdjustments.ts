@@ -48,5 +48,3 @@ export const recipeAdjustmentsStore = create<RecipeAdjustmentsState>()(
 		},
 	),
 );
-
-export const useRecipeAdjustments = recipeAdjustmentsStore;

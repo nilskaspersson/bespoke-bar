@@ -9,6 +9,7 @@ import { OCR_QUOTA_WINDOW_HOURS } from "@/features/billing/constants";
  * countdown arithmetic wants; the client-facing ISO instant is derived from it
  * downstream in `deriveOCRQuotaState`. `z.coerce` absorbs the driver handing
  * back the `::bigint` epoch as a string (and `count` as int or bigint).
+ * @public
  */
 export const ocrQuotaUsageSchema = z.object({
 	used: z.coerce.number().int(),
