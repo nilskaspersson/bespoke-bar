@@ -13,6 +13,7 @@ function makeFallbackIngredient(spec: Spec): Ingredient {
 	return {
 		id: spec.ingredientId,
 		name: "Unknown ingredient",
+		normalizedName: "unknown ingredient",
 		description: null,
 		category: null,
 		abv: null,

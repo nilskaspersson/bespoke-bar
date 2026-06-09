@@ -6,6 +6,7 @@ function makeIngredients(count: number): Ingredient[] {
 	return Array.from({ length: count }, (_, i) => ({
 		id: `id_${i}`,
 		name: `Ingredient ${i}`,
+		normalizedName: `ingredient ${i}`,
 		category: null,
 		description: null,
 		abv: null,

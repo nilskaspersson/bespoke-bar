@@ -13,6 +13,7 @@ import { rateLimit } from "@/rateLimit";
 import { clearTouchedAiMarks } from "@/utils/aiEnrichedFields";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
+import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
 
 const aiEnrichedFieldsSchema = z
 	.array(ingredientEnrichmentSchema.keyof())
@@ -56,6 +57,10 @@ export async function updateIngredient(
 		.update(IngredientsTable)
 		.set({
 			...validatedInput,
+			/** Keep the identity key in sync whenever the name is edited. */
+			...(validatedInput.name != null && {
+				normalizedName: normalizeIngredientName(validatedInput.name),
+			}),
 			aiEnrichedFields,
 			updatedAt: sql`NOW()`,
 			updatedBy: userId,

@@ -20,9 +20,9 @@ import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes, supportedMeasurements } from "@/db/schema/units";
-import { sqlNormalizedString } from "@/db/utils";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { nullifyEmptyField } from "@/utils/form";
+import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
@@ -31,6 +31,14 @@ export const IngredientsTable = pgTable(
 			.primaryKey()
 			.$defaultFn(() => nanoid(10)),
 		name: varchar("name", { length: 100 }).notNull(),
+		/**
+		 * App-owned canonical form of `name` ({@link normalizeIngredientName}) — the
+		 * identity key the unique index compares directly. The app is the sole writer
+		 * (via the insert schema's transform and the update service); the DB enforces
+		 * uniqueness on it. NOT NULL: added nullable in 0028 to land on a populated
+		 * table, backfilled in 0029, then constrained.
+		 */
+		normalizedName: text("normalized_name").notNull(),
 		description: varchar("description", { length: 5000 }),
 		category: systemCategoryEnum("category"),
 		abv: doublePrecision("abv"),
@@ -50,13 +58,13 @@ export const IngredientsTable = pgTable(
 	},
 	(table) => [
 		/**
-		 * (orgId, normalized_name) ordering enforces case-insensitive uniqueness
-		 * within an org *and* serves org-scoped scans via leftmost-prefix —
-		 * one index, two jobs.
+		 * (orgId, normalized_name) enforces one ingredient per org per canonical name
+		 * and serves org-scoped scans via leftmost-prefix. Compares the stored string
+		 * directly so the index agrees with the app's normalization by construction.
 		 */
 		uniqueIndex("unique_ingredient_name_case_insensitive").on(
 			table.orgId,
-			sqlNormalizedString(table.name),
+			table.normalizedName,
 		),
 		check(
 			"abv_valid_range",
@@ -95,6 +103,7 @@ const INGREDIENT_SYSTEM_FIELDS = {
 	createdAt: true,
 	updatedAt: true,
 	aiEnrichedFields: true,
+	normalizedName: true,
 } as const;
 
 /**
@@ -104,6 +113,7 @@ const INGREDIENT_SYSTEM_FIELDS = {
 const ingredientConstraints = {
 	name: z
 		.string("Name is required")
+		.trim()
 		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
 	category: systemCategories.nullish(),
@@ -123,6 +133,7 @@ const ingredientConstraints = {
 const ingredientFormConstraints = {
 	name: z
 		.string("Name is required")
+		.trim()
 		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
 	category: z
@@ -162,15 +173,26 @@ export const selectIngredientSchema = createSelectSchema(IngredientsTable);
  */
 const insertBase = createInsertSchema(IngredientsTable);
 const draftBase = insertBase.omit(INGREDIENT_SYSTEM_FIELDS);
-/** `aiEnrichedFields` is server-owned (set by Enrichment, recomputed on edit) — never client-submittable. */
+/**
+ * `aiEnrichedFields` is server-owned (set by Enrichment, recomputed on edit) and
+ * `normalizedName` is derived from `name`. Neither is client-submittable.
+ */
 const updateBase = createUpdateSchema(IngredientsTable).omit({
 	aiEnrichedFields: true,
+	normalizedName: true,
 });
 
-/** DB insert schema */
+/**
+ * DB insert schema. Derives the server-owned `normalizedName` from `name` so every
+ * insert path (standalone create + recipe-batch) populates the identity key from
+ * one place.
+ */
 export const insertIngredientSchema = refineIngredient(
-	insertBase.extend(ingredientConstraints),
-);
+	insertBase.omit({ normalizedName: true }).extend(ingredientConstraints),
+).transform((value) => ({
+	...value,
+	normalizedName: normalizeIngredientName(value.name),
+}));
 
 /** API schema */
 export const draftIngredientSchema = refineIngredient(

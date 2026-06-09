@@ -68,7 +68,6 @@ const CATEGORY_TO_ROLE = {
 	syrup: "sweetener",
 	honey: "sweetener",
 	soda: "soda",
-	garnish: "other",
 	other: "other",
 } satisfies Record<SystemCategory, ShapeRole>;
 

@@ -241,6 +241,5 @@ export const CATEGORY_ALIASES = new Map<SystemCategory, string[]>([
 		],
 	],
 	["honey", ["honey", "honey syrup"]],
-	["garnish", []],
 	["other", []],
 ]);

@@ -23,14 +23,14 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 		retryAfter: z.number(),
 	}),
 	z.object({
+		code: z.literal("INGREDIENT_IN_USE"),
+		recipeCount: z.number(),
+	}),
+	z.object({
 		code: z.literal("NO_RECIPE_FOUND"),
 	}),
 	z.object({
 		code: z.literal("NO_RECIPES_PROVIDED"),
-	}),
-	z.object({
-		code: z.literal("INGREDIENT_IN_USE"),
-		recipeCount: z.number(),
 	}),
 ]);
 
@@ -71,7 +71,7 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			const name = payload.recipeName?.trim();
 			return {
 				message: "Too many ingredients",
-				description: `${name ? `"${name}"` : "A Recipe"} can have at most ${payload.limit} ingredients.`,
+				description: `${name ? `"${name}"` : "A Recipe"} can have at most ${payload.limit} Ingredients.`,
 			};
 		}
 		case "RATE_LIMIT_EXCEEDED": {
@@ -86,6 +86,13 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 				description: `You've used all ${payload.limit} of your Photo-to-Recipe uses. The next one unlocks in ${formatRetryAfter(payload.retryAfter)}.`,
 			};
 		}
+		case "INGREDIENT_IN_USE": {
+			const n = payload.recipeCount;
+			return {
+				message: "Ingredient in use",
+				description: `This Ingredient is used in ${n} recipe${n === 1 ? "" : "s"}. Remove it from every Ingredient Line before deleting.`,
+			};
+		}
 		case "NO_RECIPE_FOUND": {
 			return {
 				message: "No recipe found",
@@ -97,12 +104,6 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			return {
 				message: "Nothing to create",
 				description: "Add at least one Recipe.",
-			};
-		}
-		case "INGREDIENT_IN_USE": {
-			return {
-				message: "Ingredient in use",
-				description: `Used in ${payload.recipeCount} ${payload.recipeCount === 1 ? "Recipe" : "Recipes"}. Remove it from all Recipes before deleting.`,
 			};
 		}
 	}

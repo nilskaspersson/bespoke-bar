@@ -9,6 +9,7 @@ const ingredient = (
 ): Ingredient => ({
 	id,
 	name: `Ingredient ${id}`,
+	normalizedName: `ingredient ${id}`,
 	description: null,
 	category: null,
 	abv: null,

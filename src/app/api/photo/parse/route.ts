@@ -86,7 +86,7 @@ export async function POST(req: NextRequest) {
 		 * reads (next page load, the pre-check) reflect the new count, then trim
 		 * the log post-response.
 		 */
-		cacheEvents.ocrQuotaUse.create.emit(orgId);
+		cacheEvents.ocrQuotaUse.changed.emit(orgId);
 		pruneExpiredUses(orgId);
 
 		return Response.json({ ok: true, data: result });
@@ -99,7 +99,7 @@ export async function POST(req: NextRequest) {
 		 * reservation is reverted.
 		 */
 		if (error instanceof AppError && error.payload.code === "NO_RECIPE_FOUND") {
-			cacheEvents.ocrQuotaUse.create.emit(orgId);
+			cacheEvents.ocrQuotaUse.changed.emit(orgId);
 			pruneExpiredUses(orgId);
 
 			return Response.json(
@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
 		}
 
 		await refundOCRUse(useId, orgId);
-		cacheEvents.ocrQuotaUse.create.emit(orgId);
+		cacheEvents.ocrQuotaUse.changed.emit(orgId);
 
 		const message = errorMessageOrFallback(error, "Failed to parse image");
 		return Response.json({ ok: false, error: { message } }, { status: 400 });

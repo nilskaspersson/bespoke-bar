@@ -59,6 +59,7 @@ export async function upsertRecipesWithSpecs(
 			await insertIngredientsInTransaction(
 				tx,
 				Array.from(ingredientsToCreate.values()),
+				orgId,
 			);
 
 		/**

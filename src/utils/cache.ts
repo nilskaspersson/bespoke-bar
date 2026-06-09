@@ -80,14 +80,10 @@ export const cacheEvents = {
 	},
 	favorite: {
 		toggle: {
-			emit: (orgId: string, userId: string) => {
-				updateTag(`${orgId}:toggle-favorite`);
-				updateTag(`${orgId}:toggle-favorite:${userId}`);
-			},
-			tag: (orgId: string, userId?: string) =>
-				userId
-					? `${orgId}:toggle-favorite:${userId}`
-					: `${orgId}:toggle-favorite`,
+			emit: (orgId: string, userId: string) =>
+				updateTag(`${orgId}:toggle-favorite:${userId}`),
+			tag: (orgId: string, userId: string) =>
+				`${orgId}:toggle-favorite:${userId}`,
 		},
 	},
 	tag: {
@@ -125,18 +121,17 @@ export const cacheEvents = {
 		},
 	},
 	ocrQuotaUse: {
-		create: {
+		changed: {
 			/**
-			 * Emitted from the `/api/photo/parse` Route Handler (recordOCRUse /
-			 * refundOCRUse), where `updateTag` is illegal. `revalidateTag` with
-			 * `{ expire: 0 }` expires the tag immediately, so the client's post-Use
-			 * refetch of `billing.ocrQuotaState` reads the fresh count. The `"max"`
-			 * profile would serve stale-while-revalidate and leave the indicator one
-			 * Use behind on that refetch.
+			 * Emitted from a Route Handler, where `updateTag` is illegal.
+			 * `revalidateTag` with `{ expire: 0 }` expires the tag immediately, so
+			 * the client's post-Use refetch of `billing.ocrQuotaState` reads the
+			 * fresh count. The `"max"` profile would serve stale-while-revalidate and
+			 * leave the indicator one Use behind on that refetch.
 			 */
 			emit: (orgId: string) =>
-				revalidateTag(`${orgId}:create-ocr-quota-use`, { expire: 0 }),
-			tag: (orgId: string) => `${orgId}:create-ocr-quota-use`,
+				revalidateTag(`${orgId}:changed-ocr-quota-use`, { expire: 0 }),
+			tag: (orgId: string) => `${orgId}:changed-ocr-quota-use`,
 		},
 	},
 	organisation: {
@@ -245,7 +240,9 @@ export const cacheTags = {
 		cacheEvents.ocrQuotaGrant.create.tag(orgId),
 		cacheEvents.organisation.update.tag(orgId),
 	],
-	ocrQuotaUsage: (orgId: string) => [cacheEvents.ocrQuotaUse.create.tag(orgId)],
+	ocrQuotaUsage: (orgId: string) => [
+		cacheEvents.ocrQuotaUse.changed.tag(orgId),
+	],
 	organisation: (orgId: string) => [cacheEvents.organisation.update.tag(orgId)],
 	/**
 	 * Used by the clerkOrgId → localOrgId lookup, which has to be keyed by

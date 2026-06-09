@@ -4,6 +4,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 	{
 		id: "gqWyGCI0EN",
 		name: "Sipsmith Gin",
+		normalizedName: "sipsmith gin",
 		category: "gin",
 		description: "A classic London dry gin",
 		abv: 0.4,
@@ -20,6 +21,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 	{
 		id: "sP9_RdWlqg",
 		name: "Lime",
+		normalizedName: "lime",
 		category: "citrus",
 		description: "A sour citrus fruit",
 		abv: null,
@@ -36,6 +38,7 @@ export const MOCK_INGREDIENTS: Ingredient[] = [
 	{
 		id: "-3913mq9Wm",
 		name: "Simple syrup",
+		normalizedName: "simple syrup",
 		category: "syrup",
 		description: "A sweet syrup",
 		abv: null,
