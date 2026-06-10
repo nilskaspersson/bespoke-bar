@@ -42,7 +42,7 @@ const previewIngredientSchema = z.object({
 		.optional(),
 });
 
-const previewSpecSchema = z.object({
+const previewLineSchema = z.object({
 	id: optionalString,
 	quantity: nullableNumber,
 	unit: z.preprocess(nullifyEmptyField, supportedUnits.nullable()).optional(),
@@ -57,7 +57,7 @@ const previewRecipeSchema = upsertRecipeSchema
 
 export const recipePreviewSchema = z.object({
 	recipe: previewRecipeSchema.optional(),
-	specs: z.array(previewSpecSchema).optional().default([]),
+	lines: z.array(previewLineSchema).optional().default([]),
 });
 
 /** @public */

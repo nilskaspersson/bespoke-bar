@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { lineIsDraft } from "@/features/ingredientLines/utils";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
-import { specIsDraft } from "@/features/specs/utils";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";
@@ -28,8 +28,8 @@ export function AbvInfo<T extends BaseRecipe>({
 	 * While we estimate the abv on some new ingredients, we cannot assume to
 	 * know until the ingredient is created and assumed to have been populated.
 	 */
-	const draftSpecs = recipe.specs?.filter(specIsDraft);
-	const isInconclusive = draftSpecs && draftSpecs.length > 0;
+	const draftLines = recipe.lines?.filter(lineIsDraft);
+	const isInconclusive = draftLines && draftLines.length > 0;
 
 	return (
 		<details className={className} {...props}>
@@ -77,19 +77,19 @@ export function AbvInfo<T extends BaseRecipe>({
 					</thead>
 
 					<tbody>
-						{recipe.specs?.map((spec) => (
-							<tr key={getKey(spec)}>
+						{recipe.lines?.map((line) => (
+							<tr key={getKey(line)}>
 								<Text as="td">
 									<Link
-										href={`/bar/ingredients/${spec.ingredient.id}`}
+										href={`/bar/ingredients/${line.ingredient.id}`}
 										prefetch={false}
 									>
-										{spec.ingredient.name}
+										{line.ingredient.name}
 									</Link>
 								</Text>
 
 								<Text as="td" align="right">
-									{percentageFormatter.format(spec.ingredient.abv ?? 0)}
+									{percentageFormatter.format(line.ingredient.abv ?? 0)}
 								</Text>
 							</tr>
 						))}
@@ -105,12 +105,12 @@ export function AbvInfo<T extends BaseRecipe>({
 						className={styles.callout}
 					>
 						<ul>
-							{draftSpecs
+							{draftLines
 								.filter((o) => Boolean(o.ingredient.name))
-								.map((spec) => (
-									<li key={getKey(spec)} className={styles.spec}>
-										{spec.ingredient.name} (
-										{percentageFormatter.format(spec.ingredient.abv ?? 0)})
+								.map((line) => (
+									<li key={getKey(line)} className={styles.line}>
+										{line.ingredient.name} (
+										{percentageFormatter.format(line.ingredient.abv ?? 0)})
 									</li>
 								))}
 						</ul>

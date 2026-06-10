@@ -36,15 +36,19 @@ _Avoid_: "AI-suggested", "AI-generated", "Enriched" (as the field-state label) �
 
 **Recipe**:
 A cocktail's full record — its **Ingredient Lines** plus metadata (**Cocktail Style**, glassware, ice, preparation method, dilution target, garnish, description, instructions, tags). Identified by an opaque id, never by name. Because the app is both an archive of finished drinks and a workbench for developing them, a Recipe may be **incomplete** — it's normal for a drink to have lines before it has a name.
-_Avoid_: equating a Recipe with its formula/build alone — that's the Recipe's **lines**; the Recipe is the whole record (cf. why "Recipe" can't stand in for the collective set of lines).
+_Avoid_: equating a Recipe with its formula alone — that's the Recipe's **Spec**; the Recipe is the whole record (Spec + name, Style, serve, prose).
 
 **Name** (of a Recipe):
 A Recipe's display label — optional, non-unique, and never an identifier. A nameless Recipe is a valid, complete state, shown as "Unnamed Recipe". (Contrast **Ingredient**, whose name _is_ its identity: required, unique per org, case-normalized. The two core entities have opposite naming contracts.)
 _Avoid_: treating the name as a key, or assuming names are unique — duplicates are allowed by design.
 
+**Spec**:
+A **Recipe's** formula — the collective set of its **Ingredient Lines**, taken as a whole ("the spec for a Negroni is gin, Campari, sweet vermouth in equal parts"). A Recipe has exactly one Spec and is _more_ than it: the Recipe adds name, **Cocktail Style**, serve, and prose on top of the Spec. The bartender's word for the build, and the name for the collective concept a **Recipe** is not.
+_Avoid_: **Spec** for a _single_ line — that's an **Ingredient Line**; a Spec is the whole set. "Formula"/"Build" as the canonical term (fine as prose glosses; **Spec** is the word).
+
 **Ingredient Line**:
-One **Ingredient's** appearance in a **Recipe** — a reference to an Ingredient, optionally measured (a quantity + unit) and optionally marked optional. A Recipe has many; collectively they are the Recipe's **lines**. The measure may be absent: an unmeasured line ("soda, to top"; "mint, to muddle") is valid and intentional. Shortened to **line** in running text and UI.
-_Avoid_: **Spec** (former name; in bartending "spec" means the _whole formula_, not one line — overloaded). **Pour**, **Measure** (both imply a measured liquid, excluding unmeasured and non-liquid lines).
+One **Ingredient's** appearance in a **Recipe** — a reference to an Ingredient, optionally measured (a quantity + unit) and optionally marked optional. A Recipe's **Spec** has many; collectively they are the Recipe's **lines**. The measure may be absent: an unmeasured line ("soda, to top"; "mint, to muddle") is valid and intentional. Shortened to **line** in running text and UI.
+_Avoid_: **Spec** _for a single line_ — a **Spec** is the whole formula (the set of lines), not one line. **Pour**, **Measure** (both imply a measured liquid, excluding unmeasured and non-liquid lines).
 
 **Unmeasured** (line state):
 An **Ingredient Line** with no explicit quantity. The amount is _implied by context_, not missing — usually a top-up ("soda, to top"), sometimes a gesture ("absinthe rinse") or to-taste. The blank amount is itself the instruction, so the line is complete and deliberate. Unlike an unset **Cocktail Style** — which is genuinely **Unclassified** and a candidate for **Enrichment** — an unmeasured line is never treated as data still to be filled in.

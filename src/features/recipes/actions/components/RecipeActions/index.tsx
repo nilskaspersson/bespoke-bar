@@ -2,12 +2,12 @@
 
 import { ShareAction } from "@/components/ShareAction";
 import type { RecipeWithRelations } from "@/db/schema/recipes";
+import { CopyLinesToClipboard } from "@/features/ingredientLines/components/CopyLinesToClipboard";
 import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
 import { DuplicateRecipeButton } from "@/features/recipes/actions/components/DuplicateRecipeButton";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import { CopySpecsToClipboard } from "@/features/specs/components/CopySpecsToClipboard";
 import { LinkButton } from "@/ui/Button";
 import { useContextMenu } from "@/ui/ContextMenu";
 import { Icon } from "@/ui/Icon";
@@ -84,14 +84,14 @@ export function RecipeActions({
 			</li>
 
 			<li>
-				<CopySpecsToClipboard
+				<CopyLinesToClipboard
 					{...baseActionProps}
 					onClick={close}
-					specs={recipe.specs}
+					lines={recipe.lines}
 					iconSize={1}
 				>
-					Copy specs
-				</CopySpecsToClipboard>
+					Copy spec
+				</CopyLinesToClipboard>
 			</li>
 
 			<li>

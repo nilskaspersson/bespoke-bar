@@ -1,4 +1,9 @@
 import { z } from "zod";
+import {
+	type IngredientLine,
+	type IngredientLineWithIngredient,
+	insertIngredientLinesSchema,
+} from "@/db/schema/ingredientLines";
 import { draftIngredientFormSchema } from "@/db/schema/ingredients";
 import {
 	type MenuEntryWithRecipe,
@@ -7,19 +12,14 @@ import {
 } from "@/db/schema/menuEntries";
 import { type Menu, menuFormSchema, selectMenuSchema } from "@/db/schema/menus";
 import { insertRecipeSchema } from "@/db/schema/recipes";
-import {
-	insertSpecsSchema,
-	type Spec,
-	type SpecWithIngredient,
-} from "@/db/schema/specs";
 
 /**
- * Caps the Recipe spec count well above any known cocktail.
+ * Caps the Recipe line count well above any known cocktail.
  */
-export const MAX_SPECS_PER_RECIPE = 20;
+export const MAX_LINES_PER_RECIPE = 20;
 
 /**
- * Recipes with specs and ingredients
+ * Recipes with lines and ingredients
  */
 export const upsertRecipeSchema = insertRecipeSchema
 	.omit({
@@ -34,7 +34,7 @@ export const upsertRecipeSchema = insertRecipeSchema
 		id: z.string().optional(),
 	});
 
-const upsertSpecSchema = insertSpecsSchema
+const upsertLineSchema = insertIngredientLinesSchema
 	.omit({
 		id: true,
 		createdAt: true,
@@ -73,11 +73,11 @@ const upsertSpecSchema = insertSpecsSchema
 
 export const recipeFormSchema = z.object({
 	recipe: upsertRecipeSchema.optional(),
-	specs: z
-		.array(upsertSpecSchema)
+	lines: z
+		.array(upsertLineSchema)
 		.max(
-			MAX_SPECS_PER_RECIPE,
-			`Recipes can have at most ${MAX_SPECS_PER_RECIPE} ingredients.`,
+			MAX_LINES_PER_RECIPE,
+			`Recipes can have at most ${MAX_LINES_PER_RECIPE} ingredients.`,
 		)
 		.optional(),
 });
@@ -110,6 +110,8 @@ const menuWithEntriesSchema = selectMenuSchema.extend({
 
 export type MenuWithEntries = z.infer<typeof menuWithEntriesSchema>;
 
-export type MenuWithRecipes<S extends Spec = SpecWithIngredient> = Menu & {
+export type MenuWithRecipes<
+	S extends IngredientLine = IngredientLineWithIngredient,
+> = Menu & {
 	entries: MenuEntryWithRecipe<S>[];
 };

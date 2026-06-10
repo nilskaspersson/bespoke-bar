@@ -39,27 +39,27 @@ describe("getAppErrorToast OCR_QUOTA_REACHED", () => {
 	});
 });
 
-describe("getAppErrorToast RECIPE_SPEC_LIMIT_REACHED", () => {
+describe("getAppErrorToast RECIPE_LINE_LIMIT_REACHED", () => {
 	test("names the offending recipe when known", () => {
 		const toast = getAppErrorToast({
-			code: "RECIPE_SPEC_LIMIT_REACHED",
+			code: "RECIPE_LINE_LIMIT_REACHED",
 			limit: 20,
 			recipeName: "Negroni",
 		});
 
-		expect(toast.message).toBe("Too many ingredients");
+		expect(toast.message).toBe("Too many Ingredients");
 		expect(toast.description).toBe(
-			'"Negroni" can have at most 20 ingredients.',
+			'"Negroni" can have at most 20 Ingredients.',
 		);
 	});
 
 	test("falls back to a generic subject without a name", () => {
 		const toast = getAppErrorToast({
-			code: "RECIPE_SPEC_LIMIT_REACHED",
+			code: "RECIPE_LINE_LIMIT_REACHED",
 			limit: 20,
 		});
 
-		expect(toast.description).toBe("A Recipe can have at most 20 ingredients.");
+		expect(toast.description).toBe("A Recipe can have at most 20 Ingredients.");
 	});
 });
 

@@ -20,7 +20,7 @@ export function RecipeInfo<T extends RecipeWithRelations>({
 	recipe: T;
 	isFavorite?: boolean;
 }) {
-	if (!recipe.specs || recipe.specs.length === 0) {
+	if (!recipe.lines || recipe.lines.length === 0) {
 		return null;
 	}
 

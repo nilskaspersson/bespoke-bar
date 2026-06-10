@@ -31,7 +31,7 @@ const DEFAULT_OPTIONS: ExportOptions = {
 	includeDescription: true,
 	includePrice: true,
 	includeIngredients: true,
-	includeSpecs: false,
+	includeMeasures: false,
 	includeGlassware: false,
 	includeMethod: false,
 	includeGarnish: false,
@@ -169,9 +169,9 @@ export function ExportMenuForm({
 
 						<div className={styles.checkboxes}>
 							<Checkbox
-								label="Specs"
-								checked={options.includeSpecs}
-								onChange={() => toggleOption("includeSpecs")}
+								label="Measures"
+								checked={options.includeMeasures}
+								onChange={() => toggleOption("includeMeasures")}
 								disabled={!options.includeIngredients}
 							/>
 

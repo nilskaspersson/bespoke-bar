@@ -1,7 +1,7 @@
 import { use, useCallback } from "react";
 import z from "zod";
 import {
-	MAX_SPECS_PER_RECIPE,
+	MAX_LINES_PER_RECIPE,
 	type RecipeFormData,
 	recipeFormSchema,
 } from "@/db/schema/composite";
@@ -44,20 +44,20 @@ export function useCreateBulkDraftRecipes(
 
 		const promise = (async () => {
 			const overLimit = recipes.find(
-				(recipe) => (recipe.specs?.length ?? 0) > MAX_SPECS_PER_RECIPE,
+				(recipe) => (recipe.lines?.length ?? 0) > MAX_LINES_PER_RECIPE,
 			);
 			if (overLimit) {
 				throw new AppError({
-					code: "RECIPE_SPEC_LIMIT_REACHED",
-					limit: MAX_SPECS_PER_RECIPE,
+					code: "RECIPE_LINE_LIMIT_REACHED",
+					limit: MAX_LINES_PER_RECIPE,
 					recipeName: overLimit.name,
 				});
 			}
 
 			const data = z.array(recipeFormSchema).parse(
-				recipes.map(({ specs, ...recipe }) => ({
+				recipes.map(({ lines, ...recipe }) => ({
 					recipe,
-					specs,
+					lines,
 				})),
 			);
 			return createRecipes(data);

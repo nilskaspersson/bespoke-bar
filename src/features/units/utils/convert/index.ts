@@ -25,7 +25,7 @@ const factorCache = new Map<string, number>();
 
 /**
  * Cached linear conversion factor between two units. Volume/length conversions
- * are constant ratios, so memoizing the factor reduces the hot per-spec
+ * are constant ratios, so memoizing the factor reduces the hot per-line
  * conversion to a multiply, avoiding a `convert-units` Converter allocation on
  * every card render. Only valid for offset-free (linear) measures.
  */

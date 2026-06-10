@@ -1,10 +1,10 @@
 import type { SystemCategory } from "@/db/schema/categories";
 import type { CocktailStyle } from "@/db/schema/cocktailStyles";
+import type { IngredientLine } from "@/db/schema/ingredientLines";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { PreparationMethod } from "@/db/schema/preparationMethods";
-import type { Spec } from "@/db/schema/specs";
 import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
-import { calculateSpecsVolumes } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
+import { calculateLineVolumes } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 
 /** Ingredient categories collapsed to the roles that discriminate families (exhaustive via `satisfies`). */
 type ShapeRole =
@@ -71,26 +71,28 @@ const CATEGORY_TO_ROLE = {
 	other: "other",
 } satisfies Record<SystemCategory, ShapeRole>;
 
-type ShapeSpec = Partial<Pick<Spec, "quantity" | "unit" | "optional">> & {
+type ShapeLine = Partial<
+	Pick<IngredientLine, "quantity" | "unit" | "optional">
+> & {
 	ingredient?: Partial<Pick<Ingredient, "name" | "category" | "abv">> | null;
 };
 
 export type ShapeRecipe = {
 	preparationMethod?: PreparationMethod | null;
-	specs?: ShapeSpec[] | null;
+	lines?: ShapeLine[] | null;
 };
 
 export type RecipeShape = {
 	roleCounts: Partial<Record<ShapeRole, number>>;
-	/** ml per role; specs with no/non-convertible unit contribute 0. */
+	/** ml per role; lines with no/non-convertible unit contribute 0. */
 	volumeByRole: Partial<Record<ShapeRole, number>>;
 	totalVolume: number;
-	/** Any spec carried a usable quantity+unit — gates the ratio rules. */
+	/** Any line carried a usable quantity+unit — gates the ratio rules. */
 	hasVolumeData: boolean;
 	equalParts: boolean;
 	/** Any whiskey/brandy base — the Manhattan/Martini split axis. */
 	hasBrownSpirit: boolean;
-	coreSpecCount: number;
+	coreLineCount: number;
 	spiritCount: number;
 	preparationMethod: PreparationMethod | null;
 };
@@ -124,7 +126,7 @@ const BROWN_SPIRITS = new Set<SystemCategory>([
 ]);
 
 function resolveCategory(
-	ingredient: ShapeSpec["ingredient"],
+	ingredient: ShapeLine["ingredient"],
 ): SystemCategory | null {
 	if (!ingredient) {
 		return null;
@@ -138,13 +140,13 @@ function resolveCategory(
 	return matchNameWithCategory(ingredient.name);
 }
 
-/** ml of a single spec, or 0 when it has no quantity/unit or a non-volume unit. */
-function specVolume(spec: ShapeSpec): number {
-	return calculateSpecsVolumes([
+/** ml of a single line, or 0 when it has no quantity/unit or a non-volume unit. */
+function lineVolume(line: ShapeLine): number {
+	return calculateLineVolumes([
 		{
-			quantity: spec.quantity,
-			unit: spec.unit,
-			ingredient: { abv: spec.ingredient?.abv ?? null },
+			quantity: line.quantity,
+			unit: line.unit,
+			ingredient: { abv: line.ingredient?.abv ?? null },
 		},
 	]).totalLiquidVolume;
 }
@@ -158,21 +160,21 @@ export function getRecipeShape(recipe: ShapeRecipe): RecipeShape {
 	const volumeByRole: Partial<Record<ShapeRole, number>> = {};
 	const componentVolumes: number[] = [];
 	let totalVolume = 0;
-	let coreSpecCount = 0;
+	let coreLineCount = 0;
 	let spiritCount = 0;
 	let hasBrownSpirit = false;
 
-	for (const spec of recipe.specs ?? []) {
-		if (spec?.optional) {
+	for (const line of recipe.lines ?? []) {
+		if (line?.optional) {
 			continue;
 		}
-		const category = resolveCategory(spec?.ingredient);
+		const category = resolveCategory(line?.ingredient);
 		if (!category) {
 			continue;
 		}
 		const role = CATEGORY_TO_ROLE[category];
 		roleCounts[role] = (roleCounts[role] ?? 0) + 1;
-		coreSpecCount += 1;
+		coreLineCount += 1;
 		if (role === "spirit") {
 			spiritCount += 1;
 			if (BROWN_SPIRITS.has(category)) {
@@ -180,7 +182,7 @@ export function getRecipeShape(recipe: ShapeRecipe): RecipeShape {
 			}
 		}
 
-		const volume = specVolume(spec);
+		const volume = lineVolume(line);
 		if (volume > 0) {
 			volumeByRole[role] = (volumeByRole[role] ?? 0) + volume;
 			totalVolume += volume;
@@ -195,7 +197,7 @@ export function getRecipeShape(recipe: ShapeRecipe): RecipeShape {
 		hasVolumeData: totalVolume > 0,
 		equalParts: isEqualParts(componentVolumes),
 		hasBrownSpirit,
-		coreSpecCount,
+		coreLineCount,
 		spiritCount,
 		preparationMethod: recipe.preparationMethod ?? null,
 	};
@@ -229,7 +231,7 @@ function flagsOf(shape: RecipeShape) {
 
 	return {
 		spiritCount: shape.spiritCount,
-		coreSpecCount: shape.coreSpecCount,
+		coreLineCount: shape.coreLineCount,
 		hasVolumeData: shape.hasVolumeData,
 		hasSpirit: shape.spiritCount > 0,
 		/** Real citrus, not a twist: trusted on presence without volumes, else share-gated. */
@@ -253,10 +255,10 @@ function flagsOf(shape: RecipeShape) {
 		hasSparkling: count("sparkling") > 0,
 		hasHerb: count("herb") > 0,
 		/** Soda dominates the pour (highball): a measured majority share, or an
-		 * unmeasured top-up over a measured base; else fall back to spec count. */
+		 * unmeasured top-up over a measured base; else fall back to line count. */
 		sodaDominant: shape.hasVolumeData
 			? sodaTopUp || share("soda") >= MIXER_DOMINANT_SHARE
-			: shape.coreSpecCount <= 3,
+			: shape.coreLineCount <= 3,
 	};
 }
 

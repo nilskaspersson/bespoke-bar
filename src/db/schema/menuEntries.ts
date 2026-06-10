@@ -15,10 +15,13 @@ import {
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
+import type {
+	IngredientLine,
+	IngredientLineWithIngredient,
+} from "@/db/schema/ingredientLines";
 import { MenusTable } from "@/db/schema/menus";
 import { OrganisationsTable } from "@/db/schema/organisations";
-import { RecipesTable, type RecipeWithSpecs } from "@/db/schema/recipes";
-import type { Spec, SpecWithIngredient } from "@/db/schema/specs";
+import { RecipesTable, type RecipeWithLines } from "@/db/schema/recipes";
 
 export const MenuEntriesTable = pgTable(
 	"menu_entries",
@@ -73,10 +76,11 @@ export type UpdateMenuEntry = Pick<
 	"sortOrder" | "price" | "recipeId" | "menuId"
 >;
 
-export type MenuEntryWithRecipe<S extends Spec = SpecWithIngredient> =
-	MenuEntry & {
-		recipe: RecipeWithSpecs<S>;
-	};
+export type MenuEntryWithRecipe<
+	S extends IngredientLine = IngredientLineWithIngredient,
+> = MenuEntry & {
+	recipe: RecipeWithLines<S>;
+};
 
 export const selectMenuEntrySchema = createSelectSchema(MenuEntriesTable);
 

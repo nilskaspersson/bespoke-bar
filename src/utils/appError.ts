@@ -8,7 +8,7 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 		requested: z.number(),
 	}),
 	z.object({
-		code: z.literal("RECIPE_SPEC_LIMIT_REACHED"),
+		code: z.literal("RECIPE_LINE_LIMIT_REACHED"),
 		limit: z.number(),
 		recipeName: z.string().nullish(),
 	}),
@@ -67,10 +67,10 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 				description: `You can only add ${free} more Recipe${free === 1 ? "" : "s"} (${payload.used} / ${payload.limit} used).`,
 			};
 		}
-		case "RECIPE_SPEC_LIMIT_REACHED": {
+		case "RECIPE_LINE_LIMIT_REACHED": {
 			const name = payload.recipeName?.trim();
 			return {
-				message: "Too many ingredients",
+				message: "Too many Ingredients",
 				description: `${name ? `"${name}"` : "A Recipe"} can have at most ${payload.limit} Ingredients.`,
 			};
 		}

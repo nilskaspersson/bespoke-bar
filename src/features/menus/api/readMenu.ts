@@ -16,7 +16,7 @@ const preparedReadMenu = db.query.MenusTable.findFirst({
 			with: {
 				recipe: {
 					with: {
-						specs: true,
+						lines: true,
 					},
 				},
 			},

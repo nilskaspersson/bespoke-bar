@@ -1,6 +1,6 @@
 import { useId, useState } from "react";
 import z from "zod";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@/db/schema/recipes";
 import { CostInfo } from "@/features/recipes/metrics/components/CostInfo";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -10,7 +10,7 @@ import { MenuEntryProfit } from "../MenuEntryProfit";
 
 type Props = {
 	price: unknown;
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithLines;
 	className?: string;
 	priceInputId: string;
 };

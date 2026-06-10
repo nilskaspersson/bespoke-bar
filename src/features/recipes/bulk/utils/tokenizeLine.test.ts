@@ -34,7 +34,7 @@ describe("tokenizeLine", () => {
 		]);
 	});
 
-	test("full spec: quantity + unit + ingredient", () => {
+	test("full line: quantity + unit + ingredient", () => {
 		const result = tokenizeLine("3 cl Sipsmith Gin", index);
 		expect(result.isRecipeName).toBe(false);
 		expect(result.tokens).toEqual([

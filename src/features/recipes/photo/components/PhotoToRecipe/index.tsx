@@ -12,7 +12,7 @@ import {
 import { BottomRailItems } from "@/components/BottomRail";
 import type { Ingredient } from "@/db/schema/ingredients";
 import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicator";
-import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
+import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
 import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
@@ -112,7 +112,7 @@ export function PhotoToRecipe({
 
 	const submitBulkRecipesAction = useCreateBulkDraftRecipes(
 		draftRecipes,
-		createRecipesWithSpecsFromData,
+		createRecipesWithLinesFromData,
 		{ onSuccess: resetFlow },
 	);
 

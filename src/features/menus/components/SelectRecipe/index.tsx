@@ -1,7 +1,7 @@
 import { type ComponentProps, useCallback, useMemo } from "react";
 import type { Recipe } from "@/db/schema/recipes";
-import { getRecipeName, isRecipeWithSpecs } from "@/features/recipes/utils";
-import { useGetSpecsToText } from "@/features/specs/hooks/useGetSpecsToText";
+import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
+import { getRecipeName, isRecipeWithLines } from "@/features/recipes/utils";
 import { Combobox } from "@/ui/Combobox";
 import { Menu } from "@/ui/Menu";
 import { collator } from "@/utils/collator";
@@ -17,19 +17,19 @@ export function SelectRecipe({
 	ComponentProps<typeof Combobox<Recipe>>,
 	"items" | "itemToString" | "getItemValue" | "getItemLabel"
 >) {
-	const specsToText = useGetSpecsToText(1, null, ", ");
+	const linesToText = useLinesToText(1, null, ", ");
 
 	const getItemLabel = useCallback(
 		(item: Recipe) => {
 			return (
 				<Menu.Label
-					description={isRecipeWithSpecs(item) ? specsToText(item.specs) : null}
+					description={isRecipeWithLines(item) ? linesToText(item.lines) : null}
 				>
 					{getRecipeName(item)}
 				</Menu.Label>
 			);
 		},
-		[specsToText],
+		[linesToText],
 	);
 
 	const options = useMemo(

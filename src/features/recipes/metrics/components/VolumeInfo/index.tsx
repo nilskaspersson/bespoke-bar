@@ -32,8 +32,8 @@ export function VolumeInfo<T extends BaseRecipe>({
 
 	const recipeMetrics = calculateRecipeMetrics(recipe, { servings });
 
-	const hasEstimatedVolumes = recipe.specs?.some((spec) =>
-		isBartendingUnit(spec.unit),
+	const hasEstimatedVolumes = recipe.lines?.some((line) =>
+		isBartendingUnit(line.unit),
 	);
 
 	const displayVolume = roundUnit(
@@ -121,24 +121,24 @@ export function VolumeInfo<T extends BaseRecipe>({
 							heading="Volume estimates:"
 						>
 							<Text as="ul" list>
-								{recipe.specs
-									?.filter((spec) => isBartendingUnit(spec.unit))
-									.map((spec) => {
-										if (!spec.quantity || !spec.unit) {
+								{recipe.lines
+									?.filter((line) => isBartendingUnit(line.unit))
+									.map((line) => {
+										if (!line.quantity || !line.unit) {
 											return null;
 										}
 
-										const unitData = convert().describe(spec.unit);
-										const qty = spec.quantity * servings;
+										const unitData = convert().describe(line.unit);
+										const qty = line.quantity * servings;
 										const estimated = roundUnit(
-											convert(spec.quantity).from(spec.unit).to("ml") * qty,
+											convert(line.quantity).from(line.unit).to("ml") * qty,
 											convertUnits,
 										);
 
 										return (
-											<li key={getKey(spec)}>
+											<li key={getKey(line)}>
 												{qty} {qty > 1 ? unitData.plural : unitData.singular}{" "}
-												{spec.ingredient.name} = {estimated}
+												{line.ingredient.name} = {estimated}
 											</li>
 										);
 									})}

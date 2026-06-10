@@ -1,10 +1,10 @@
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@/db/schema/recipes";
 
-export function getRecipesUsingIngredient<T extends RecipeWithSpecs>(
+export function getRecipesUsingIngredient<T extends RecipeWithLines>(
 	ingredientId: string,
 	recipes: T[],
 ): T[] {
 	return recipes.filter((recipe) =>
-		recipe.specs.some((spec) => spec.ingredientId === ingredientId),
+		recipe.lines.some((line) => line.ingredientId === ingredientId),
 	);
 }

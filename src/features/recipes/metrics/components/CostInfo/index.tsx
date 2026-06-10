@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
+import { getLineCost } from "@/features/ingredientLines/utils/getLineCost";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";
-import { useFormatSpecMeasure } from "@/features/specs/hooks/useFormatSpecMeasure";
-import { getSpecCost } from "@/features/specs/utils/getSpecCost";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
@@ -25,7 +25,7 @@ export function CostInfo<T extends BaseRecipe>({
 	const { cost, isIncomplete } = getRecipeCost(recipe);
 
 	const { currencyFormatter, quantityFormatter } = use(FormatterContext);
-	const formatSpecMeasure = useFormatSpecMeasure();
+	const formatLineMeasure = useFormatLineMeasure();
 
 	return (
 		<details {...props}>
@@ -70,23 +70,23 @@ export function CostInfo<T extends BaseRecipe>({
 					</thead>
 
 					<tbody>
-						{recipe.specs?.map((spec) => {
-							const cost = getSpecCost(spec);
+						{recipe.lines?.map((line) => {
+							const cost = getLineCost(line);
 
 							return (
-								<tr key={getKey(spec)}>
+								<tr key={getKey(line)}>
 									<Text as="td">
 										<Link
-											href={`/bar/ingredients/${spec.ingredient.id}`}
+											href={`/bar/ingredients/${line.ingredient.id}`}
 											prefetch={false}
 										>
-											{spec.ingredient.name}
+											{line.ingredient.name}
 										</Link>
 									</Text>
 
 									<Text as="td" align="right">
 										{
-											formatSpecMeasure({ spec, servings, convertUnits })
+											formatLineMeasure({ line, servings, convertUnits })
 												.formatted
 										}
 									</Text>

@@ -3,6 +3,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { PageHeader } from "@/components/PageHeader";
+import {
+	buildIngredientMap,
+	stitchMenuEntries,
+} from "@/features/ingredientLines/utils/stitchIngredients";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { getCachedMenu } from "@/features/menus/api/readMenu";
@@ -10,10 +14,6 @@ import { EmptyMenuEntry } from "@/features/menus/components/EmptyMenuEntry";
 import { MenuFilters } from "@/features/menus/components/MenuFilters";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { getCachedFeaturedMenuId } from "@/features/menus/featured/api/readFeaturedMenu";
-import {
-	buildIngredientMap,
-	stitchMenuEntries,
-} from "@/features/specs/utils/stitchIngredients";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { authOrForbidden } from "@/utils/auth";

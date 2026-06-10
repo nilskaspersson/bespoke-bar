@@ -79,7 +79,7 @@ describe("convertLine", () => {
 		expect(result).toContain("gin");
 	});
 
-	test("converts every line of a multi-spec recipe independently", () => {
+	test("converts every line of a multi-line recipe independently", () => {
 		const lines = ["3 cl gin", "3 cl campari", "3 cl sweet vermouth"];
 		const converted = lines.map((line) => convertLine(line, "imperial"));
 
@@ -92,7 +92,7 @@ describe("convertLine", () => {
 		expect(converted[2]).toContain("sweet vermouth");
 	});
 
-	test("does not mutate recipe name lines mixed with spec lines", () => {
+	test("does not mutate recipe name lines mixed with line lines", () => {
 		const lines = ["Negroni", "3 cl gin", "3 cl campari"];
 		const converted = lines.map((line) => convertLine(line, "imperial"));
 		expect(converted[0]).toBe("Negroni");
@@ -116,7 +116,7 @@ describe("roundLine", () => {
 		expect(roundLine("")).toBe("");
 	});
 
-	test("rounds every line of a multi-spec recipe independently", () => {
+	test("rounds every line of a multi-line recipe independently", () => {
 		const lines = ["2.33 cl gin", "1.1 cl campari", "0.7 cl vermouth"];
 		const rounded = lines.map(roundLine);
 		for (const original of lines) {

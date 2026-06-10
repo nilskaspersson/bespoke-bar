@@ -17,8 +17,8 @@ import {
 import { nanoid } from "nanoid";
 import { z } from "zod";
 import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
+import { IngredientLinesTable } from "@/db/schema/ingredientLines";
 import { OrganisationsTable } from "@/db/schema/organisations";
-import { SpecsTable } from "@/db/schema/specs";
 import { measurementTypes, supportedMeasurements } from "@/db/schema/units";
 import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { nullifyEmptyField } from "@/utils/form";
@@ -82,7 +82,7 @@ export const IngredientsTable = pgTable(
 );
 
 export const ingredientsRelations = relations(IngredientsTable, ({ many }) => ({
-	specs: many(SpecsTable),
+	lines: many(IngredientLinesTable),
 }));
 
 export type Ingredient = typeof IngredientsTable.$inferSelect;

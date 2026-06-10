@@ -1,7 +1,7 @@
 import { and, countDistinct, eq } from "drizzle-orm";
 import { db } from "@/db";
+import { IngredientLinesTable } from "@/db/schema/ingredientLines";
 import { IngredientsTable } from "@/db/schema/ingredients";
-import { SpecsTable } from "@/db/schema/specs";
 import { isForeignKeyViolation } from "@/db/utils";
 import { rateLimit } from "@/rateLimit";
 import { AppError } from "@/utils/appError";
@@ -25,9 +25,9 @@ export async function deleteIngredient(auth: Auth, id: string): Promise<void> {
 		 */
 		if (isForeignKeyViolation(error)) {
 			const [{ recipeCount }] = await db
-				.select({ recipeCount: countDistinct(SpecsTable.recipeId) })
-				.from(SpecsTable)
-				.where(eq(SpecsTable.ingredientId, id));
+				.select({ recipeCount: countDistinct(IngredientLinesTable.recipeId) })
+				.from(IngredientLinesTable)
+				.where(eq(IngredientLinesTable.ingredientId, id));
 
 			throw new AppError({
 				code: "INGREDIENT_IN_USE",

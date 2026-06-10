@@ -1,7 +1,7 @@
 import type { RecipeFormData } from "@/db/schema/composite";
 import type { Recipe } from "@/db/schema/recipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
-import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
+import { upsertRecipesWithLines } from "@/features/recipes/api/upsertRecipesWithLines.service";
 import { rateLimit } from "@/rateLimit";
 import { pick } from "@/utils";
 import type { Auth } from "@/utils/auth";
@@ -34,12 +34,12 @@ export async function duplicateRecipe(
 				"style",
 			),
 		},
-		specs: recipe.specs.map((spec) =>
-			pick(spec, "quantity", "unit", "ingredientId", "optional"),
+		lines: recipe.lines.map((line) =>
+			pick(line, "quantity", "unit", "ingredientId", "optional"),
 		),
 	};
 
-	const [newRecipe] = await upsertRecipesWithSpecs(auth, [duplicateData]);
+	const [newRecipe] = await upsertRecipesWithLines(auth, [duplicateData]);
 
 	return newRecipe;
 }

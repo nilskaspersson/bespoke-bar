@@ -10,9 +10,9 @@ export function DraftRecipesStatusBar({ recipes }: { recipes: BaseRecipe[] }) {
 	const newIngredientCount = useMemo(() => {
 		const names = new Set<string>();
 		for (const recipe of recipes) {
-			for (const spec of recipe.specs ?? []) {
-				if (!spec.ingredientId && spec.ingredient?.name) {
-					names.add(spec.ingredient.name.toLowerCase());
+			for (const line of recipe.lines ?? []) {
+				if (!line.ingredientId && line.ingredient?.name) {
+					names.add(line.ingredient.name.toLowerCase());
 				}
 			}
 		}

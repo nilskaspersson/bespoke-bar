@@ -1,19 +1,19 @@
 import type { BaseRecipe } from "@/db/schema/recipes";
-import { getSpecCost } from "@/features/specs/utils/getSpecCost";
+import { getLineCost } from "@/features/ingredientLines/utils/getLineCost";
 
 export function getRecipeCost<T extends BaseRecipe>(recipe: T) {
 	let isIncomplete = false;
 
-	const total = recipe.specs?.reduce((acc, spec) => {
-		if (typeof spec.ingredient.unitCost !== "number" || !spec.unit) {
+	const total = recipe.lines?.reduce((acc, line) => {
+		if (typeof line.ingredient.unitCost !== "number" || !line.unit) {
 			isIncomplete = true;
 			return acc;
 		}
 
 		try {
-			switch (spec.ingredient.measurementType) {
+			switch (line.ingredient.measurementType) {
 				case "volume": {
-					const cost = getSpecCost(spec);
+					const cost = getLineCost(line);
 
 					if (typeof cost !== "number") {
 						isIncomplete = true;

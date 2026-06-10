@@ -1,12 +1,12 @@
 import { z } from "zod";
+import {
+	buildIngredientMap,
+	stitchMenuEntries,
+} from "@/features/ingredientLines/utils/stitchIngredients";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { clearFeaturedMenu } from "@/features/menus/featured/api/clearFeaturedMenu.service";
 import { getCachedFeaturedMenu } from "@/features/menus/featured/api/readFeaturedMenu";
 import { setFeaturedMenu } from "@/features/menus/featured/api/setFeaturedMenu.service";
-import {
-	buildIngredientMap,
-	stitchMenuEntries,
-} from "@/features/specs/utils/stitchIngredients";
 import { protectedProcedure, router } from "@/trpc";
 
 export const featuredRouter = router({

@@ -1,29 +1,32 @@
+import type {
+	IngredientLine,
+	IngredientLineWithIngredient,
+} from "@/db/schema/ingredientLines";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { RecipeTagWithTag } from "@/db/schema/recipes";
 import type { RecipeTag } from "@/db/schema/recipeTags";
-import type { Spec, SpecWithIngredient } from "@/db/schema/specs";
 import type { Tag } from "@/db/schema/tags";
 import {
 	buildIngredientMap,
-	stitchSpecs,
-} from "@/features/specs/utils/stitchIngredients";
+	stitchLines,
+} from "@/features/ingredientLines/utils/stitchIngredients";
 import {
 	buildTagMap,
 	stitchRecipeTags,
 } from "@/features/tags/utils/stitchRecipeTags";
 
-type RawRecipe = { specs: Spec[]; tags: RecipeTag[] };
+type RawRecipe = { lines: IngredientLine[]; tags: RecipeTag[] };
 
-type WithSpecs<R extends RawRecipe> = Omit<R, "specs"> & {
-	specs: SpecWithIngredient[];
+type WithLines<R extends RawRecipe> = Omit<R, "lines"> & {
+	lines: IngredientLineWithIngredient[];
 };
 
 type WithTags<R extends RawRecipe> = Omit<R, "tags"> & {
 	tags: RecipeTagWithTag[];
 };
 
-type WithBoth<R extends RawRecipe> = Omit<R, "specs" | "tags"> & {
-	specs: SpecWithIngredient[];
+type WithBoth<R extends RawRecipe> = Omit<R, "lines" | "tags"> & {
+	lines: IngredientLineWithIngredient[];
 	tags: RecipeTagWithTag[];
 };
 
@@ -34,7 +37,7 @@ export function stitchRecipes<R extends RawRecipe>(
 export function stitchRecipes<R extends RawRecipe>(
 	recipes: R[],
 	options: { ingredients: Ingredient[]; tags?: never },
-): WithSpecs<R>[];
+): WithLines<R>[];
 export function stitchRecipes<R extends RawRecipe>(
 	recipes: R[],
 	options: { ingredients?: never; tags: Tag[] },
@@ -52,7 +55,7 @@ export function stitchRecipes<R extends RawRecipe>(
 	return recipes.map((recipe) => ({
 		...recipe,
 		...(ingredientMap
-			? { specs: stitchSpecs(recipe.specs, ingredientMap) }
+			? { lines: stitchLines(recipe.lines, ingredientMap) }
 			: {}),
 		...(tagMap ? { tags: stitchRecipeTags(recipe.tags, tagMap) } : {}),
 	}));
@@ -65,7 +68,7 @@ export function stitchRecipe<R extends RawRecipe>(
 export function stitchRecipe<R extends RawRecipe>(
 	recipe: R,
 	options: { ingredients: Ingredient[]; tags?: never },
-): WithSpecs<R>;
+): WithLines<R>;
 export function stitchRecipe<R extends RawRecipe>(
 	recipe: R,
 	options: { ingredients?: never; tags: Tag[] },
@@ -81,7 +84,7 @@ export function stitchRecipe<R extends RawRecipe>(
 	return {
 		...recipe,
 		...(ingredientMap
-			? { specs: stitchSpecs(recipe.specs, ingredientMap) }
+			? { lines: stitchLines(recipe.lines, ingredientMap) }
 			: {}),
 		...(tagMap ? { tags: stitchRecipeTags(recipe.tags, tagMap) } : {}),
 	};
