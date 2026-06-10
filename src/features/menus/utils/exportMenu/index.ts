@@ -1,11 +1,11 @@
 import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 import type { Menu } from "@/db/schema/menus";
+import { formatLine } from "@/features/ingredientLines/utils/formatLine";
 import {
 	GLASSWARE_TO_LABEL,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
 import { getRecipeName } from "@/features/recipes/utils";
-import { formatSpecLine } from "@/features/specs/utils/formatSpecLine";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 
 export type ExportOptions = {
@@ -15,7 +15,7 @@ export type ExportOptions = {
 	includeDescription: boolean;
 	includePrice: boolean;
 	includeIngredients: boolean;
-	includeSpecs: boolean;
+	includeMeasures: boolean;
 	includeGlassware: boolean;
 	includeMethod: boolean;
 	includeGarnish: boolean;
@@ -40,7 +40,7 @@ const defaultExportOptions: ExportOptions = {
 	includeDescription: false,
 	includePrice: false,
 	includeIngredients: false,
-	includeSpecs: false,
+	includeMeasures: false,
 	includeGlassware: false,
 	includeMethod: false,
 	includeGarnish: false,
@@ -56,7 +56,7 @@ export function parseExportOptions(params: URLSearchParams): ExportOptions {
 		includeDescription: params.get("includeDescription") === "true",
 		includePrice: params.get("includePrice") === "true",
 		includeIngredients: params.get("includeIngredients") === "true",
-		includeSpecs: params.get("includeSpecs") === "true",
+		includeMeasures: params.get("includeMeasures") === "true",
 		includeGlassware: params.get("includeGlassware") === "true",
 		includeMethod: params.get("includeMethod") === "true",
 		includeGarnish: params.get("includeGarnish") === "true",
@@ -65,17 +65,17 @@ export function parseExportOptions(params: URLSearchParams): ExportOptions {
 }
 
 function formatIngredient(
-	spec: MenuEntryWithRecipe["recipe"]["specs"][number],
-	includeSpecs: boolean,
+	line: MenuEntryWithRecipe["recipe"]["lines"][number],
+	includeMeasures: boolean,
 ) {
-	if (!includeSpecs) {
-		return spec.ingredient.name;
+	if (!includeMeasures) {
+		return line.ingredient.name;
 	}
 
-	return formatSpecLine({
-		quantity: spec.quantity,
-		unit: spec.unit,
-		name: spec.ingredient.name,
+	return formatLine({
+		quantity: line.quantity,
+		unit: line.unit,
+		name: line.ingredient.name,
 	});
 }
 
@@ -154,15 +154,15 @@ export function exportMenuAsText(
 			recipeLines.push("");
 		}
 
-		if (options.includeIngredients && recipe.specs && recipe.specs.length > 0) {
+		if (options.includeIngredients && recipe.lines && recipe.lines.length > 0) {
 			if (
 				recipeLines.length > 0 &&
 				recipeLines[recipeLines.length - 1] !== ""
 			) {
 				recipeLines.push("");
 			}
-			for (const spec of recipe.specs) {
-				recipeLines.push(formatIngredient(spec, options.includeSpecs));
+			for (const line of recipe.lines) {
+				recipeLines.push(formatIngredient(line, options.includeMeasures));
 			}
 		}
 
@@ -235,15 +235,15 @@ export function exportMenuAsJson(
 					: undefined,
 			price: options.includePrice && price != null ? price : undefined,
 			ingredients:
-				options.includeIngredients && recipe.specs && recipe.specs.length > 0
-					? recipe.specs.map((spec) =>
-							options.includeSpecs
+				options.includeIngredients && recipe.lines && recipe.lines.length > 0
+					? recipe.lines.map((line) =>
+							options.includeMeasures
 								? {
-										quantity: spec.quantity,
-										unit: getFormattedUnit(spec.unit, spec.quantity) || null,
-										name: spec.ingredient.name,
+										quantity: line.quantity,
+										unit: getFormattedUnit(line.unit, line.quantity) || null,
+										name: line.ingredient.name,
 									}
-								: spec.ingredient.name,
+								: line.ingredient.name,
 						)
 					: undefined,
 			glassware:

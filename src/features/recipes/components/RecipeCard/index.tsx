@@ -3,6 +3,7 @@ import Link from "next/link";
 import { memo, type ReactNode, useMemo } from "react";
 import { EnrichmentMark } from "@/components/EnrichmentMark";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { IngredientLineList } from "@/features/ingredientLines/components/IngredientLineList";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
 import {
@@ -14,7 +15,6 @@ import {
 import { AbvChip } from "@/features/recipes/metrics/components/AbvChip";
 import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
-import { SpecsList } from "@/features/specs/components/SpecsList";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
@@ -137,9 +137,9 @@ function RecipeCardImpl<T extends BaseRecipe>({
 				</Flex>
 			</Grid>
 
-			{recipe.specs && recipe.specs.length > 0 ? (
-				<SpecsList
-					specs={recipe.specs}
+			{recipe.lines && recipe.lines.length > 0 ? (
+				<IngredientLineList
+					lines={recipe.lines}
 					servings={servings}
 					convertUnits={convertUnits}
 					withRounding={withRounding}
@@ -149,7 +149,7 @@ function RecipeCardImpl<T extends BaseRecipe>({
 			) : (
 				<Grid gap={4}>
 					<Text as="p" size={2} italic light compact>
-						No specs yet
+						No lines yet
 					</Text>
 				</Grid>
 			)}
@@ -172,7 +172,7 @@ export const RecipeCard = memo(RecipeCardImpl) as typeof RecipeCardImpl;
 
 /**
  * Lightweight stand-in for off-screen cards: the card shell + name only, no
- * specs/chips/metrics. Keeps the name in the DOM so native find-in-page still
+ * lines/chips/metrics. Keeps the name in the DOM so native find-in-page still
  * works, and reserves card-sized space (via `.card`'s min-height) so the swap
  * to the full card stays stable.
  */

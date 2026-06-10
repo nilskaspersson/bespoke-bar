@@ -1,5 +1,5 @@
+import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
 import type { BaseRecipe } from "@/db/schema/recipes";
-import type { DraftSpecWithDraftIngredient } from "@/db/schema/specs";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
 
@@ -14,25 +14,24 @@ export type RecipeMetrics = {
 };
 
 /**
- * Calculate total liquid and alcohol volumes from a list of specs
+ * Calculate total liquid and alcohol volumes from a list of lines
  */
-export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
-	specs: T[] | undefined,
-	servings = 1,
-) {
-	if (!specs || specs.length === 0) {
+export function calculateLineVolumes<
+	T extends DraftIngredientLineWithDraftIngredient,
+>(lines: T[] | undefined, servings = 1) {
+	if (!lines || lines.length === 0) {
 		return { totalLiquidVolume: 0, alcoholVolume: 0 };
 	}
 
 	let totalLiquidVolume = 0;
 	let alcoholVolume = 0;
 
-	for (const spec of specs) {
-		if (!spec.quantity || !spec.unit) {
+	for (const line of lines) {
+		if (!line.quantity || !line.unit) {
 			continue;
 		}
 
-		const libUnit = DB_UNIT_TO_LIB_UNIT.get(spec.unit);
+		const libUnit = DB_UNIT_TO_LIB_UNIT.get(line.unit);
 
 		if (!libUnit) {
 			continue;
@@ -44,11 +43,11 @@ export function calculateSpecsVolumes<T extends DraftSpecWithDraftIngredient>(
 			continue;
 		}
 
-		const volumeInMl = convert(spec.quantity).from(libUnit).to("ml");
+		const volumeInMl = convert(line.quantity).from(libUnit).to("ml");
 		totalLiquidVolume += volumeInMl;
 
-		if (typeof spec.ingredient.abv === "number" && spec.ingredient.abv > 0) {
-			alcoholVolume += volumeInMl * spec.ingredient.abv;
+		if (typeof line.ingredient.abv === "number" && line.ingredient.abv > 0) {
+			alcoholVolume += volumeInMl * line.ingredient.abv;
 		}
 	}
 
@@ -95,7 +94,7 @@ export function calculateRecipeMetrics<T extends BaseRecipe>(
 	recipe: T,
 	{ servings = 1 }: { servings?: number } = {},
 ): RecipeMetrics {
-	const volumes = calculateSpecsVolumes(recipe.specs, servings);
+	const volumes = calculateLineVolumes(recipe.lines, servings);
 
 	if (volumes.totalLiquidVolume === 0) {
 		return {

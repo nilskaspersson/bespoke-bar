@@ -16,7 +16,7 @@ export type SnapOptions = {
 	 * **display** quantity). Aimed at batch-scale work where the last few
 	 * decimals stop being actionable — 173.25 fl oz → 173, 3.8672 qt → 3.87,
 	 * 5.5996 gal → 5.60. Paired with unit-system promotion upstream (see
-	 * `useFormatSpecMeasure`) so the unit itself switches at scale.
+	 * `useFormatLineMeasure`) so the unit itself switches at scale.
 	 */
 	batch?: boolean;
 };

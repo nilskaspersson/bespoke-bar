@@ -62,7 +62,6 @@ export const CATEGORY_TO_LABEL = new Map<SystemCategory, string>([
 	["dairy", "Dairy"],
 	["juice", "Juice"],
 	["honey", "Honey"],
-	["garnish", "Garnish"],
 	["other", "Other"],
 ]);
 

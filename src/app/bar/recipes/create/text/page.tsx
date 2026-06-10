@@ -3,7 +3,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { getCachedRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import { createRecipesWithSpecsFromData } from "@/features/recipes/api/upsertRecipesWithSpecs";
+import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
@@ -45,7 +45,7 @@ async function BulkCreateRecipeWithAuth() {
 		<RecipeSlotUsageProvider value={usage}>
 			<BulkDraftRecipesForm
 				ingredients={ingredients}
-				createRecipes={createRecipesWithSpecsFromData}
+				createRecipes={createRecipesWithLinesFromData}
 			/>
 		</RecipeSlotUsageProvider>
 	);

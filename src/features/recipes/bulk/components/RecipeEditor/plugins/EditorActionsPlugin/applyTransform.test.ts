@@ -90,7 +90,7 @@ describe("applyTransform in-place", () => {
 		expect(lines[3]).toContain("fl oz");
 	});
 
-	test("converts every line of a multi-spec recipe to imperial", async () => {
+	test("converts every line of a multi-line recipe to imperial", async () => {
 		const editor = createTestEditor();
 		await seedLines(editor, [
 			"Negroni",
@@ -113,7 +113,7 @@ describe("applyTransform in-place", () => {
 		expect(lines[3]).toContain("sweet vermouth");
 	});
 
-	test("rounds every line of a multi-spec recipe", async () => {
+	test("rounds every line of a multi-line recipe", async () => {
 		const editor = createTestEditor();
 		await seedLines(editor, [
 			"Daiquiri",

@@ -17,7 +17,7 @@ const getEntryKey = (entry: MenuEntryWithRecipe) => entry.id;
 function getEntrySearchFields(entry: MenuEntryWithRecipe): string[] {
 	return [
 		entry.recipe.name ?? "",
-		...entry.recipe.specs.map((spec) => spec.ingredient.name),
+		...entry.recipe.lines.map((line) => line.ingredient.name),
 	];
 }
 

@@ -4,7 +4,7 @@ import type { PreparationMethod } from "@/db/schema/preparationMethods";
 import type { Unit } from "@/db/schema/units";
 import { getRecipeShape, matchShapeWithStyle, type ShapeRecipe } from "./";
 
-type SpecInit = {
+type LineInit = {
 	name?: string;
 	category?: SystemCategory;
 	optional?: boolean;
@@ -13,12 +13,12 @@ type SpecInit = {
 };
 
 function recipe(
-	specs: SpecInit[],
+	lines: LineInit[],
 	preparationMethod?: PreparationMethod,
 ): ShapeRecipe {
 	return {
 		preparationMethod,
-		specs: specs.map((s) => ({
+		lines: lines.map((s) => ({
 			optional: s.optional,
 			quantity: s.quantity ?? null,
 			unit: s.unit ?? null,
@@ -27,17 +27,17 @@ function recipe(
 	};
 }
 
-/** Spec with a volume in ml, for the ratio-aware tests. */
+/** IngredientLine with a volume in ml, for the ratio-aware tests. */
 function ml(
 	category: SystemCategory,
 	quantity: number,
 	name: string = category,
-): SpecInit {
+): LineInit {
 	return { category, name, quantity, unit: "ml" };
 }
 
-const styleOf = (specs: SpecInit[], prep?: PreparationMethod) =>
-	matchShapeWithStyle(recipe(specs, prep)).style;
+const styleOf = (lines: LineInit[], prep?: PreparationMethod) =>
+	matchShapeWithStyle(recipe(lines, prep)).style;
 
 describe("matchShapeWithStyle — by ingredient name (category not yet enriched)", () => {
 	it("classifies a Daiquiri as a sour", () => {
@@ -248,7 +248,7 @@ describe("matchShapeWithStyle — confidence", () => {
 });
 
 describe("getRecipeShape", () => {
-	it("excludes optional specs (e.g. a garnish) from the shape", () => {
+	it("excludes optional lines (e.g. a garnish) from the shape", () => {
 		const shape = getRecipeShape(
 			recipe([
 				{ category: "gin" },
@@ -257,7 +257,7 @@ describe("getRecipeShape", () => {
 				{ category: "herb", optional: true },
 			]),
 		);
-		expect(shape.coreSpecCount).toBe(3);
+		expect(shape.coreLineCount).toBe(3);
 		expect(shape.roleCounts.herb).toBeUndefined();
 	});
 
@@ -277,10 +277,10 @@ describe("getRecipeShape", () => {
 			recipe([{ name: "Gin" }, { name: "Mystery house ingredient" }]),
 		);
 		expect(shape.roleCounts.spirit).toBe(1);
-		expect(shape.coreSpecCount).toBe(1);
+		expect(shape.coreLineCount).toBe(1);
 	});
 
-	it("computes per-role volumes, counting unitless specs as presence only", () => {
+	it("computes per-role volumes, counting unitless lines as presence only", () => {
 		const shape = getRecipeShape(
 			recipe([
 				ml("gin", 45),
@@ -299,7 +299,7 @@ describe("getRecipeShape", () => {
 
 describe("matchShapeWithStyle — ratio awareness", () => {
 	it("ignores an accent of citrus in a stirred, spirit-forward drink", () => {
-		// Manhattan with a tiny lemon spec: citrus share is below threshold, so it
+		// Manhattan with a tiny lemon line: citrus share is below threshold, so it
 		// stays a Manhattan rather than becoming a sour.
 		const result = matchShapeWithStyle(
 			recipe([

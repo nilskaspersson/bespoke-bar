@@ -4,6 +4,7 @@ import { drizzle as drizzlePostgres } from "drizzle-orm/node-postgres";
 import * as categories from "./schema/categories";
 import * as cocktailStyles from "./schema/cocktailStyles";
 import * as glassware from "./schema/glassware";
+import * as ingredientLines from "./schema/ingredientLines";
 import * as ingredients from "./schema/ingredients";
 import * as menuEntries from "./schema/menuEntries";
 import * as menus from "./schema/menus";
@@ -15,7 +16,6 @@ import * as recipeFavorites from "./schema/recipeFavorites";
 import * as recipeSlotGrants from "./schema/recipeSlotGrants";
 import * as recipes from "./schema/recipes";
 import * as recipeTags from "./schema/recipeTags";
-import * as specs from "./schema/specs";
 import * as tags from "./schema/tags";
 import * as units from "./schema/units";
 
@@ -38,7 +38,7 @@ const schema = {
 	...recipes,
 	...recipeSlotGrants,
 	...recipeTags,
-	...specs,
+	...ingredientLines,
 	...tags,
 	...units,
 };

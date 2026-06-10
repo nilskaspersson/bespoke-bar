@@ -1,16 +1,22 @@
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import type { DatabaseTransaction } from "@/db";
 import type { RecipeFormData } from "@/db/schema/composite";
+import {
+	type IngredientLine,
+	IngredientLinesTable,
+	type InsertIngredientLine,
+} from "@/db/schema/ingredientLines";
 import {
 	type Ingredient,
 	IngredientsTable,
 	type InsertIngredient,
 } from "@/db/schema/ingredients";
 import { type Recipe, RecipesTable } from "@/db/schema/recipes";
-import { type InsertSpec, type Spec, SpecsTable } from "@/db/schema/specs";
 import { clearTouchedAiMarks } from "@/features/recipes/api/utils/aiEnrichedFields";
+import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
 
-export type IngredientIdsByName = Map<Ingredient["name"], Ingredient["id"]>;
+/** Keyed by {@link normalizeIngredientName} — i.e. the stored `normalized_name`. */
+export type IngredientIdsByName = Map<string, Ingredient["id"]>;
 
 export async function upsertRecipeInTransaction(
 	tx: DatabaseTransaction,
@@ -68,9 +74,15 @@ export async function upsertRecipeInTransaction(
 	return [newRecipe, true];
 }
 
+/**
+ * Find-or-reference for the new ingredients a recipe save introduces. Inserts the
+ * genuinely-new ones and lets the case-insensitive unique index absorb any that
+ * already exist.
+ */
 export async function insertIngredientsInTransaction(
 	tx: DatabaseTransaction,
 	ingredients: InsertIngredient[],
+	orgId: string,
 ): Promise<[IngredientIdsByName, Ingredient[]]> {
 	const ingredientIdsByName: IngredientIdsByName = new Map();
 
@@ -78,64 +90,87 @@ export async function insertIngredientsInTransaction(
 		return [ingredientIdsByName, []];
 	}
 
-	const ingredientsToInsert = Array.from(ingredients.values());
-
 	const createdIngredients = await tx
 		.insert(IngredientsTable)
-		.values(ingredientsToInsert)
+		.values(ingredients)
+		.onConflictDoNothing()
 		.returning();
 
-	createdIngredients.forEach((ingredient) => {
-		ingredientIdsByName.set(ingredient.name, ingredient.id);
+	const normalizedNames = ingredients.map((ingredient) =>
+		normalizeIngredientName(ingredient.name),
+	);
+
+	const rows = await tx
+		.select({
+			id: IngredientsTable.id,
+			normalizedName: IngredientsTable.normalizedName,
+		})
+		.from(IngredientsTable)
+		.where(
+			and(
+				eq(IngredientsTable.orgId, orgId),
+				inArray(IngredientsTable.normalizedName, normalizedNames),
+			),
+		);
+
+	rows.forEach((row) => {
+		if (row.normalizedName) {
+			ingredientIdsByName.set(row.normalizedName, row.id);
+		}
 	});
 
 	return [ingredientIdsByName, createdIngredients];
 }
 
 /**
- * Replace all specs for a recipe using the "replace all approach"
- * 1. Delete all existing specs for the recipe
- * 2. Insert all new specs from the form
+ * Replace all lines for a recipe using the "replace all approach"
+ * 1. Delete all existing lines for the recipe
+ * 2. Insert all new lines from the form
  */
-export async function replaceSpecsInTransaction(
+export async function replaceLinesInTransaction(
 	tx: DatabaseTransaction,
 	recipeId: string,
-	specs: RecipeFormData["specs"],
+	lines: RecipeFormData["lines"],
 	ingredientIdsByName: IngredientIdsByName,
-): Promise<Spec[] | null> {
-	if (!specs) {
+): Promise<IngredientLine[] | null> {
+	if (!lines) {
 		return null;
 	}
 
-	await tx.delete(SpecsTable).where(eq(SpecsTable.recipeId, recipeId));
+	await tx
+		.delete(IngredientLinesTable)
+		.where(eq(IngredientLinesTable.recipeId, recipeId));
 
-	if (specs.length === 0) {
+	if (lines.length === 0) {
 		return [];
 	}
 
-	const specsToInsert: InsertSpec[] = specs.map((spec, index) => {
+	const linesToInsert: InsertIngredientLine[] = lines.map((line, index) => {
 		const ingredientId =
-			spec.ingredientId ?? ingredientIdsByName.get(spec.ingredient?.name ?? "");
+			line.ingredientId ??
+			ingredientIdsByName.get(
+				normalizeIngredientName(line.ingredient?.name ?? ""),
+			);
 
 		if (!ingredientId) {
 			throw new Error(
-				`Invalid ingredient reference for spec at index ${index}`,
+				`Invalid ingredient reference for line at index ${index}`,
 			);
 		}
 
 		return {
 			recipeId,
-			quantity: spec.quantity,
-			unit: spec.unit,
-			optional: spec.optional,
+			quantity: line.quantity,
+			unit: line.unit,
+			optional: line.optional,
 			ingredientId,
 		};
 	});
 
-	const insertedSpecs = await tx
-		.insert(SpecsTable)
-		.values(specsToInsert)
+	const insertedLines = await tx
+		.insert(IngredientLinesTable)
+		.values(linesToInsert)
 		.returning();
 
-	return insertedSpecs;
+	return insertedLines;
 }

@@ -7,7 +7,7 @@ import { cacheTags } from "@/utils/cache";
 const preparedReadBarRecipes = db.query.RecipesTable.findMany({
 	where: eq(RecipesTable.orgId, sql.placeholder("orgId")),
 	with: {
-		specs: true,
+		lines: true,
 		tags: true,
 	},
 	orderBy: [desc(RecipesTable.createdAt)],

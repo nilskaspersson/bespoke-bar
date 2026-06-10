@@ -1,14 +1,14 @@
 import { EmptyArea } from "@/components/EmptyArea";
 import { EntityActions } from "@/components/EntityActions";
+import {
+	buildIngredientMap,
+	stitchMenuEntries,
+} from "@/features/ingredientLines/utils/stitchIngredients";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { MenuFilters } from "@/features/menus/components/MenuFilters";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { getCachedFeaturedMenu } from "@/features/menus/featured/api/readFeaturedMenu";
-import {
-	buildIngredientMap,
-	stitchMenuEntries,
-} from "@/features/specs/utils/stitchIngredients";
 import { LinkButton } from "@/ui/Button";
 import { Grid, type GridProps } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";

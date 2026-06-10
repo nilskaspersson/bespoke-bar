@@ -7,7 +7,7 @@ describe("getRecipeCost", () => {
 	describe("successful calculations", () => {
 		it("should calculate cost for single volume ingredient", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,
@@ -28,7 +28,7 @@ describe("getRecipeCost", () => {
 
 		it("should calculate cost for multiple volume ingredients", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 60,
@@ -58,7 +58,7 @@ describe("getRecipeCost", () => {
 
 		it("should handle different volume units", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 2,
@@ -77,8 +77,8 @@ describe("getRecipeCost", () => {
 			expect(result.isIncomplete).toBe(false);
 		});
 
-		it("should return zero cost for empty specs", () => {
-			const recipe: BaseRecipe = { specs: [] };
+		it("should return zero cost for empty lines", () => {
+			const recipe: BaseRecipe = { lines: [] };
 			const result = getRecipeCost(recipe);
 
 			expect(result.cost).toBe(0);
@@ -89,7 +89,7 @@ describe("getRecipeCost", () => {
 	describe("incomplete data handling", () => {
 		it("should mark as incomplete when unitCost is missing", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,
@@ -110,7 +110,7 @@ describe("getRecipeCost", () => {
 
 		it("should mark as incomplete when unit is missing", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,
@@ -129,9 +129,9 @@ describe("getRecipeCost", () => {
 			expect(result.isIncomplete).toBe(true);
 		});
 
-		it("should calculate partial cost when some specs are incomplete", () => {
+		it("should calculate partial cost when some lines are incomplete", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,
@@ -163,7 +163,7 @@ describe("getRecipeCost", () => {
 	describe("measurement type handling", () => {
 		it("should handle null measurementType", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,
@@ -186,7 +186,7 @@ describe("getRecipeCost", () => {
 	describe("edge cases", () => {
 		it("should handle zero quantities", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 0,
@@ -207,7 +207,7 @@ describe("getRecipeCost", () => {
 
 		it("should handle zero unit costs", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,
@@ -226,8 +226,8 @@ describe("getRecipeCost", () => {
 			expect(result.isIncomplete).toBe(false);
 		});
 
-		it("should handle undefined specs", () => {
-			const recipe: BaseRecipe = { specs: undefined };
+		it("should handle undefined lines", () => {
+			const recipe: BaseRecipe = { lines: undefined };
 			const result = getRecipeCost(recipe);
 
 			expect(result.cost).toBe(0);
@@ -236,7 +236,7 @@ describe("getRecipeCost", () => {
 
 		it("should handle conversion errors gracefully", () => {
 			const recipe: BaseRecipe = {
-				specs: [
+				lines: [
 					{
 						id: "1",
 						quantity: 50,

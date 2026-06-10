@@ -5,7 +5,7 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { menuWithEntriesFormSchema } from "@/db/schema/composite";
 import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@/db/schema/recipes";
 import { RemoveMenuEntryButton } from "@/features/menus/actions/components/RemoveMenuEntryButton";
 import { SelectMenu } from "@/features/menus/components/SelectMenu";
 import { appendMenuEntryAction } from "@/features/menus/entries/api/appendMenuEntry";
@@ -34,7 +34,7 @@ import { currencySchema } from "@/utils/currencySchema";
 import styles from "./styles.module.css";
 
 type Props = {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithLines;
 	onSuccess?: () => void;
 	formRef?: React.RefObject<HTMLFormElement | null>;
 };

@@ -11,13 +11,13 @@ import { type ReactNode, use, useRef, useState } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
 import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { type RecipeFormData, recipeFormSchema } from "@/db/schema/composite";
+import type { IngredientLineWithIngredient } from "@/db/schema/ingredientLines";
 import type { Ingredient } from "@/db/schema/ingredients";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
-import type { SpecWithIngredient } from "@/db/schema/specs";
+import type { RecipeWithLines } from "@/db/schema/recipes";
 import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
-import { upsertRecipeWithSpecsAction } from "@/features/recipes/api/upsertRecipesWithSpecs";
-import { EditRecipeSpecs } from "@/features/recipes/components/EditRecipeSpecs";
+import { upsertRecipeWithLinesAction } from "@/features/recipes/api/upsertRecipesWithLines";
+import { EditRecipeLines } from "@/features/recipes/components/EditRecipeLines";
 import { RecipeFormSettings } from "@/features/recipes/components/RecipeFormSettings";
 import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktailStyle";
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
@@ -37,7 +37,7 @@ import { toast } from "@/ui/Toast";
 import styles from "./styles.module.css";
 
 type Props = {
-	recipe?: RecipeWithSpecs;
+	recipe?: RecipeWithLines;
 	ingredients: Ingredient[];
 	children?: ReactNode;
 };
@@ -54,21 +54,21 @@ function enrichableLabel(label: string, enriched: boolean) {
 	);
 }
 
-function initializeSpecFormEntry(spec?: SpecWithIngredient) {
+function initializeLineFormEntry(line?: IngredientLineWithIngredient) {
 	return {
-		quantity: spec?.quantity?.toString() ?? "1",
-		unit: spec?.unit ?? "cl",
-		optional: spec?.optional,
-		ingredientId: spec?.ingredientId,
+		quantity: line?.quantity?.toString() ?? "1",
+		unit: line?.unit ?? "cl",
+		optional: line?.optional,
+		ingredientId: line?.ingredientId,
 		ingredient: {
-			name: spec?.ingredient.name,
-			description: spec?.ingredient.description,
-			abv: spec?.ingredient.abv,
-			brand: spec?.ingredient.brand,
-			category: spec?.ingredient.category,
-			measurementType: spec?.ingredient.measurementType,
-			unitCost: spec?.ingredient.unitCost
-				? String(spec?.ingredient.unitCost)
+			name: line?.ingredient.name,
+			description: line?.ingredient.description,
+			abv: line?.ingredient.abv,
+			brand: line?.ingredient.brand,
+			category: line?.ingredient.category,
+			measurementType: line?.ingredient.measurementType,
+			unitCost: line?.ingredient.unitCost
+				? String(line?.ingredient.unitCost)
 				: "",
 		},
 	};
@@ -97,8 +97,8 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 				...recipe,
 				dilutionTarget: recipe?.dilutionTarget ?? 0,
 			},
-			specs: recipe?.specs.map(initializeSpecFormEntry) ?? [
-				initializeSpecFormEntry(),
+			lines: recipe?.lines.map(initializeLineFormEntry) ?? [
+				initializeLineFormEntry(),
 			],
 		},
 		async onSubmit(event, { formData }) {
@@ -110,7 +110,7 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 			}
 
 			setSubmitting(true);
-			const { result, recipes } = await upsertRecipeWithSpecsAction(formData);
+			const { result, recipes } = await upsertRecipeWithLinesAction(formData);
 			setSubmitting(false);
 			setLastResult(result);
 
@@ -135,8 +135,8 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 
 	const formRef = useRef<HTMLFormElement>(null);
 
-	const initialOptional = recipe?.specs.some((spec) => spec.optional) ?? false;
-	const [withOptionalSpecs, setWithOptionalSpecs] = useState(initialOptional);
+	const initialOptional = recipe?.lines.some((line) => line.optional) ?? false;
+	const [withOptionalLines, setWithOptionalLines] = useState(initialOptional);
 
 	return (
 		<FormProvider context={form.context}>
@@ -148,7 +148,7 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 					id={form.id}
 					onSubmit={form.onSubmit}
 					onReset={() => {
-						setWithOptionalSpecs(initialOptional);
+						setWithOptionalLines(initialOptional);
 					}}
 					noValidate
 					autoComplete="off"
@@ -160,11 +160,11 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 						value={recipeFields.id.value ?? ""}
 					/>
 
-					<EditRecipeSpecs
-						id={fields.specs.id}
-						name="specs"
+					<EditRecipeLines
+						id={fields.lines.id}
+						name="lines"
 						ingredients={ingredients}
-						withOptional={withOptionalSpecs}
+						withOptional={withOptionalLines}
 					/>
 
 					<div className={styles.box}>
@@ -275,8 +275,8 @@ export function RecipeForm({ recipe, ingredients, children }: Props) {
 
 			<BottomRailItems>
 				<RecipeFormSettings
-					optional={withOptionalSpecs}
-					onOptionalChange={setWithOptionalSpecs}
+					optional={withOptionalLines}
+					onOptionalChange={setWithOptionalLines}
 					formId={form.id}
 				/>
 

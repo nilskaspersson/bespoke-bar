@@ -2,7 +2,7 @@
 
 import { clsx } from "clsx";
 import { useOptimistic } from "react";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@/db/schema/recipes";
 import { toggleRecipeFavorite } from "@/features/recipes/api/toggleRecipeFavorite";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";
@@ -23,7 +23,7 @@ export function ToggleFavoriteRecipeButton({
 	onToggleFavorite,
 	...buttonProps
 }: {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithLines;
 	isFavorite: boolean;
 	externalToastId?: string;
 	isQuickAction?: boolean;

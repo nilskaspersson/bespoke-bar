@@ -4,6 +4,7 @@ import {
 	type InsertIngredient,
 	insertIngredientSchema,
 } from "@/db/schema/ingredients";
+import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
 
 /**
  * Extracts new ingredients from user input
@@ -19,28 +20,24 @@ export function extractIngredientsToCreate(
 	>();
 
 	userInputRecipes.forEach((recipe) => {
-		recipe.specs?.forEach((spec) => {
+		recipe.lines?.forEach((line) => {
 			/**
-			 * No spec ingredientId but a defined ingredient object + name = new ingredient
+			 * No line ingredientId but a defined ingredient object + name = new ingredient
 			 */
-			if (!spec.ingredientId && spec.ingredient?.name) {
-				/**
-				 * Avoid creating the same ingredient twice, if used multiple times in the tx
-				 */
-				if (uniqueIngredientsToCreate.has(spec.ingredient.name)) {
+			if (!line.ingredientId && line.ingredient?.name) {
+				const key = normalizeIngredientName(line.ingredient.name);
+
+				if (uniqueIngredientsToCreate.has(key)) {
 					return;
 				}
 
 				const validatedIngredient = insertIngredientSchema.parse({
-					...spec.ingredient,
+					...line.ingredient,
 					createdBy: userId,
 					orgId,
 				});
 
-				uniqueIngredientsToCreate.set(
-					spec.ingredient.name,
-					validatedIngredient,
-				);
+				uniqueIngredientsToCreate.set(key, validatedIngredient);
 			}
 		});
 	});

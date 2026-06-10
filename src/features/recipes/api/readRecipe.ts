@@ -10,7 +10,7 @@ const preparedReadRecipe = db.query.RecipesTable.findFirst({
 		eq(RecipesTable.id, sql.placeholder("recipeId")),
 	),
 	with: {
-		specs: true,
+		lines: true,
 		tags: true,
 	},
 }).prepare("readRecipe");

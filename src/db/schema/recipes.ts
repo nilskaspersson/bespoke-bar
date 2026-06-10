@@ -16,16 +16,16 @@ import { nanoid } from "nanoid";
 import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
 import { glasswareEnum } from "@/db/schema/glassware";
 import { iceEnum } from "@/db/schema/ice";
+import {
+	type DraftIngredientLineWithDraftIngredient,
+	type IngredientLine,
+	IngredientLinesTable,
+	type IngredientLineWithIngredient,
+} from "@/db/schema/ingredientLines";
 import { OrganisationsTable } from "@/db/schema/organisations";
 import { preparationMethodEnum } from "@/db/schema/preparationMethods";
 import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
 import { type RecipeTag, RecipeTagsTable } from "@/db/schema/recipeTags";
-import {
-	type DraftSpecWithDraftIngredient,
-	type Spec,
-	SpecsTable,
-	type SpecWithIngredient,
-} from "@/db/schema/specs";
 import type { Tag } from "@/db/schema/tags";
 import type { Identity } from "@/utils/types";
 import type { Keyed } from "@/utils/withKey";
@@ -65,23 +65,25 @@ export const RecipesTable = pgTable(
 );
 
 export const recipesRelations = relations(RecipesTable, ({ many }) => ({
-	specs: many(SpecsTable),
+	lines: many(IngredientLinesTable),
 	favorites: many(RecipeFavoritesTable),
 	tags: many(RecipeTagsTable),
 }));
 
 export type Recipe = typeof RecipesTable.$inferSelect;
 
-export type RecipeWithSpecs<S extends Spec = SpecWithIngredient> = Recipe & {
-	specs: S[];
+export type RecipeWithLines<
+	S extends IngredientLine = IngredientLineWithIngredient,
+> = Recipe & {
+	lines: S[];
 };
 
 export type RecipeTagWithTag = RecipeTag & { tag: Tag };
 
 export type RecipeWithRelations<
-	S extends Spec = SpecWithIngredient,
+	S extends IngredientLine = IngredientLineWithIngredient,
 	T extends RecipeTag = RecipeTagWithTag,
-> = RecipeWithSpecs<S> & {
+> = RecipeWithLines<S> & {
 	tags: T[];
 };
 
@@ -111,7 +113,7 @@ export type BaseRecipe = Identity<
 			| "style"
 		>
 	> & {
-		specs?: Keyed<DraftSpecWithDraftIngredient>[];
+		lines?: Keyed<DraftIngredientLineWithDraftIngredient>[];
 	}
 >;
 

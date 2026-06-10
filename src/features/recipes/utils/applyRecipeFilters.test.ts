@@ -27,7 +27,7 @@ function makeRecipe(
 		updatedAt: null,
 		updatedBy: null,
 		orgId: "org_test",
-		specs: [],
+		lines: [],
 		tags: [],
 		...overrides,
 	};

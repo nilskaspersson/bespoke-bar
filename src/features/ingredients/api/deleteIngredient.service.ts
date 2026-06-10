@@ -1,8 +1,8 @@
-import { and, eq } from "drizzle-orm";
+import { and, countDistinct, eq } from "drizzle-orm";
 import { db } from "@/db";
+import { IngredientLinesTable } from "@/db/schema/ingredientLines";
 import { IngredientsTable } from "@/db/schema/ingredients";
-import { SpecsTable } from "@/db/schema/specs";
-import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
+import { isForeignKeyViolation } from "@/db/utils";
 import { rateLimit } from "@/rateLimit";
 import { AppError } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
@@ -13,25 +13,29 @@ export async function deleteIngredient(auth: Auth, id: string): Promise<void> {
 
 	await rateLimit(userId);
 
-	// SpecsTable has no orgId; gate the usage probe on org-scoped ownership.
-	if (!(await getCachedIngredient(orgId, id))) {
-		return;
+	try {
+		await db
+			.delete(IngredientsTable)
+			.where(
+				and(eq(IngredientsTable.id, id), eq(IngredientsTable.orgId, orgId)),
+			);
+	} catch (error) {
+		/**
+		 * An in-use Ingredient can't be deleted. Surface a typed error.
+		 */
+		if (isForeignKeyViolation(error)) {
+			const [{ recipeCount }] = await db
+				.select({ recipeCount: countDistinct(IngredientLinesTable.recipeId) })
+				.from(IngredientLinesTable)
+				.where(eq(IngredientLinesTable.ingredientId, id));
+
+			throw new AppError({
+				code: "INGREDIENT_IN_USE",
+				recipeCount: Math.max(1, recipeCount),
+			});
+		}
+		throw error;
 	}
-
-	const usages = await db
-		.select({ recipeId: SpecsTable.recipeId })
-		.from(SpecsTable)
-		.where(eq(SpecsTable.ingredientId, id));
-
-	const recipeCount = new Set(usages.map((usage) => usage.recipeId)).size;
-
-	if (recipeCount > 0) {
-		throw new AppError({ code: "INGREDIENT_IN_USE", recipeCount });
-	}
-
-	await db
-		.delete(IngredientsTable)
-		.where(and(eq(IngredientsTable.id, id), eq(IngredientsTable.orgId, orgId)));
 
 	cacheEvents.ingredient.delete.emit(orgId, id);
 }

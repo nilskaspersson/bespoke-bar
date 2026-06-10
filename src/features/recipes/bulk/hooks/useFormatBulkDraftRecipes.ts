@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import type { Ingredient } from "@/db/schema/ingredients";
 import type { BaseRecipe } from "@/db/schema/recipes";
+import { userInputToBulkRecipe } from "@/features/ingredientLines/utils/userInputToBulkRecipe";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
-import { userInputToBulkRecipe } from "@/features/specs/utils/userInputToBulkRecipe";
 import { type Keyed, withKey } from "@/utils/withKey";
 
 export function useBulkDraftTextToBaseRecipes(

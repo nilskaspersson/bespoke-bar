@@ -1,6 +1,6 @@
 "use client";
 
-import type { Recipe, RecipeWithSpecs } from "@/db/schema/recipes";
+import type { Recipe, RecipeWithLines } from "@/db/schema/recipes";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
 import { duplicateRecipeAction } from "@/features/recipes/api/duplicateRecipe";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
@@ -16,7 +16,7 @@ export function DuplicateRecipeButton({
 	externalToastId,
 	...buttonProps
 }: {
-	recipe: RecipeWithSpecs;
+	recipe: RecipeWithLines;
 	onSuccess?: (newRecipe: Recipe) => void;
 	externalToastId?: string;
 } & ButtonProps) {

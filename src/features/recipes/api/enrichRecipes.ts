@@ -105,7 +105,7 @@ async function loadEnrichableRecipes(orgId: string, recipeIds: string[]) {
 
 	const recipes = await db.query.RecipesTable.findMany({
 		where: and(inArray(RecipesTable.id, ids), eq(RecipesTable.orgId, orgId)),
-		with: { specs: { with: { ingredient: true } } },
+		with: { lines: { with: { ingredient: true } } },
 	});
 
 	return recipes.filter(
@@ -165,14 +165,14 @@ function classifyByShape(recipes: EnrichableRecipe[]) {
 	return { resolvedStyleById, deferred, traces };
 }
 
-/** Core (non-optional) specs as name + amount — the ground-truth build for the LLM. */
-function coreSpecs(recipe: EnrichableRecipe) {
-	return (recipe.specs ?? [])
-		.filter((spec) => !spec.optional)
-		.map((spec) => ({
-			name: spec.ingredient?.name ?? null,
-			quantity: spec.quantity,
-			unit: spec.unit,
+/** Core (non-optional) lines as name + amount — the ground-truth build for the LLM. */
+function coreLines(recipe: EnrichableRecipe) {
+	return (recipe.lines ?? [])
+		.filter((line) => !line.optional)
+		.map((line) => ({
+			name: line.ingredient?.name ?? null,
+			quantity: line.quantity,
+			unit: line.unit,
 		}));
 }
 
@@ -201,7 +201,7 @@ async function resolveDeferredWithLLM(
 		deferred.map(({ recipe, match }) => ({
 			id: recipe.id,
 			name: recipe.name,
-			ingredients: coreSpecs(recipe),
+			ingredients: coreLines(recipe),
 			tentativeStyle: match.style,
 		})),
 	);

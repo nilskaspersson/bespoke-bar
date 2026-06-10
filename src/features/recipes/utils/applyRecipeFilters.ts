@@ -1,4 +1,4 @@
-import type { RecipeWithRelations, RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithLines, RecipeWithRelations } from "@/db/schema/recipes";
 import {
 	type CocktailStyleFilter,
 	DEFAULT_RECIPE_NAME,
@@ -6,16 +6,16 @@ import {
 import { normalizeInput } from "@/utils";
 import { createSearchIndex, type SearchIndex } from "@/utils/search";
 
-const getRecipeId = (recipe: RecipeWithSpecs) => recipe.id;
+const getRecipeId = (recipe: RecipeWithLines) => recipe.id;
 
-function getRecipeSearchFields(recipe: RecipeWithSpecs): string[] {
+function getRecipeSearchFields(recipe: RecipeWithLines): string[] {
 	return [
 		recipe.name || DEFAULT_RECIPE_NAME,
-		...recipe.specs.map((spec) => spec.ingredient.name),
+		...recipe.lines.map((line) => line.ingredient.name),
 	];
 }
 
-export function createRecipeSearchIndex<T extends RecipeWithSpecs>(
+export function createRecipeSearchIndex<T extends RecipeWithLines>(
 	recipes: T[] | undefined,
 ): SearchIndex<T> {
 	if (!recipes) {

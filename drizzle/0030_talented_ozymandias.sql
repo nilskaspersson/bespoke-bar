@@ -1,0 +1,1 @@
+ALTER TABLE "ingredients" ALTER COLUMN "normalized_name" SET NOT NULL;

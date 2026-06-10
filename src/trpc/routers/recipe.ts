@@ -8,7 +8,7 @@ import { duplicateRecipe } from "@/features/recipes/api/duplicateRecipe.service"
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { updateRecipe } from "@/features/recipes/api/updateRecipe.service";
-import { upsertRecipesWithSpecs } from "@/features/recipes/api/upsertRecipesWithSpecs.service";
+import { upsertRecipesWithLines } from "@/features/recipes/api/upsertRecipesWithLines.service";
 import {
 	stitchRecipe,
 	stitchRecipes,
@@ -42,11 +42,11 @@ export const recipeRouter = router({
 		return getCachedCountBarRecipes(ctx.orgId);
 	}),
 
-	upsertWithSpecs: protectedProcedure
+	upsertWithLines: protectedProcedure
 		.input(z.union([recipeFormSchema, z.array(recipeFormSchema)]))
 		.mutation(({ ctx, input }) => {
 			const data = Array.isArray(input) ? input : [input];
-			return upsertRecipesWithSpecs(ctx, data);
+			return upsertRecipesWithLines(ctx, data);
 		}),
 
 	update: protectedProcedure

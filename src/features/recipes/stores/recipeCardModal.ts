@@ -73,10 +73,10 @@ export const recipeCardModalStore = Object.assign(
 					...current,
 					recipe: {
 						...current.recipe,
-						specs: current.recipe.specs.map((spec) =>
-							spec.ingredient?.id === updated.id
-								? { ...spec, ingredient: updated }
-								: spec,
+						lines: current.recipe.lines.map((line) =>
+							line.ingredient?.id === updated.id
+								? { ...line, ingredient: updated }
+								: line,
 						),
 					},
 				},

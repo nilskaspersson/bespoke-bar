@@ -9,8 +9,8 @@ const FRACTION_PATTERN = /^(\d+\s*\/\s*\d+)/;
 
 /**
  * Resolve a numeric token that may use `.` or `,` for grouping and/or the decimal
- * point. We can't know the locale a copied spec was formatted in (a user might
- * paste specs from anywhere) so we infer separator roles from a convention
+ * point. We can't know the locale a copied line was formatted in (a user might
+ * paste lines from anywhere) so we infer separator roles from a convention
  * formatted numbers broadly share rather than from a known locale:
  *
  * - the rightmost separator is the decimal point,

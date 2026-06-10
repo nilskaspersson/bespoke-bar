@@ -48,7 +48,7 @@ export function RecipeFormSettings({
 				</Heading>
 
 				<Checkbox
-					label="Enable optional specs"
+					label="Enable optional lines"
 					checked={optional}
 					onChange={(e) => {
 						onOptionalChange(e.target.checked);

@@ -1,9 +1,9 @@
 import { create } from "zustand";
-import type { RecipeWithSpecs } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@/db/schema/recipes";
 
 type CreateMenuEntryState = {
-	recipe: RecipeWithSpecs | null;
-	open: (recipe: RecipeWithSpecs) => void;
+	recipe: RecipeWithLines | null;
+	open: (recipe: RecipeWithLines) => void;
 	clear: () => void;
 };
 

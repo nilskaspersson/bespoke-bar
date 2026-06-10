@@ -55,7 +55,6 @@ export const systemCategoryEnum = pgEnum("system_category", [
 	"dairy",
 	"juice",
 	"honey",
-	"garnish",
 	"other",
 ]);
 

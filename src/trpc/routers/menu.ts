@@ -1,16 +1,16 @@
 import { z } from "zod";
 import { menuWithEntriesFormSchema } from "@/db/schema/composite";
 import { menuFormSchema } from "@/db/schema/menus";
+import {
+	buildIngredientMap,
+	stitchMenuEntries,
+} from "@/features/ingredientLines/utils/stitchIngredients";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createMenu } from "@/features/menus/api/createMenu.service";
 import { deleteMenu } from "@/features/menus/api/deleteMenu.service";
 import { getCachedMenus } from "@/features/menus/api/readBarMenus";
 import { getCachedMenu } from "@/features/menus/api/readMenu";
 import { upsertMenuWithEntries } from "@/features/menus/api/upsertMenuWithEntries.service";
-import {
-	buildIngredientMap,
-	stitchMenuEntries,
-} from "@/features/specs/utils/stitchIngredients";
 import { protectedProcedure, router } from "@/trpc";
 
 export const menuRouter = router({
