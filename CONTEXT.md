@@ -4,6 +4,23 @@ Cocktail-recipe management for bars. A small team (an **Organisation**) curates 
 
 ## Language
 
+### Organisation
+
+**Organisation**:
+The tenant boundary — the unit `orgId` scopes every row to, and the owner of a private library of **Recipes**, **Ingredients**, and **Menus**. Every query is scoped to exactly one Organisation (resolved by `authOrForbidden()`); nothing is global or cross-org. Usually a shared team, but the term names the _ownership boundary_, not a headcount: a single-member Organisation (one person's private workspace) is valid and intended. A **User** belongs to one or more Organisations and acts within one **Active Organisation** at a time.
+_Avoid_: defining Organisation as "a team" — that's the common case, not the meaning; it is the tenancy/ownership boundary, one member or many. "Account", "Workspace", "Tenant" as the canonical word — the term is **Organisation**.
+
+**Active Organisation**:
+The single **Organisation** a request acts within, resolved server-side from the auth session as `orgId`; every read and write is implicitly scoped to it. A **User** with several Organisations has exactly one Active at a time. "Authenticated" and "has an Active Organisation" are distinct states — a User may be signed in with none selected.
+
+**Bar**:
+The private, back-of-house workspace — the authenticated application surface over an **Organisation's** library, where the team develops and manages **Recipes**, **Ingredients**, and **Menus**. Scoped to the **Active Organisation** (what `barRecipes` / `barMenus` read).
+_Avoid_: treating **Bar** as a synonym for **Organisation** — the Organisation is the tenant/ownership boundary; the Bar is the working surface over it. Both may be a workspace of one.
+
+**Lounge**:
+The public, front-of-house surface over an **Organisation's** library: guest-facing **Menus**, anonymous and unauthenticated. The Lounge is _why_ a **Recipe's** **Description** is menu-facing while its **Instructions** stay internal to the **Bar** — one library, two audiences.
+_Avoid_: surfacing Bar-only (internal) data in the Lounge; the guest surface shows only what is menu-facing.
+
 ### Photo-to-Recipe
 
 **Photo-to-Recipe**:
