@@ -31,7 +31,7 @@ export function CopyToClipboard({
 
 				onClick?.(event);
 			}}
-			endAdornment={<Icon name={iconName} size={iconSize} />}
+			startAdornment={<Icon name={iconName} size={iconSize} />}
 			{...props}
 		>
 			{children}

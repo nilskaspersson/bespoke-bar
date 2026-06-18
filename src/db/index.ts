@@ -11,6 +11,7 @@ import * as menus from "./schema/menus";
 import * as ocrQuotaGrants from "./schema/ocrQuotaGrants";
 import * as ocrQuotaUses from "./schema/ocrQuotaUses";
 import * as organisations from "./schema/organisations";
+import * as orgSubscriptions from "./schema/orgSubscriptions";
 import * as preparationMethods from "./schema/preparationMethods";
 import * as recipeFavorites from "./schema/recipeFavorites";
 import * as recipeSlotGrants from "./schema/recipeSlotGrants";
@@ -33,6 +34,7 @@ const schema = {
 	...ocrQuotaGrants,
 	...ocrQuotaUses,
 	...organisations,
+	...orgSubscriptions,
 	...preparationMethods,
 	...recipeFavorites,
 	...recipes,

@@ -1,0 +1,97 @@
+@layer feature {
+	.plan {
+		--gold-glow: 0.5;
+		--brand-glow: 0.5;
+
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		padding: var(--space-6);
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-3);
+
+		&::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: -1;
+			pointer-events: none;
+			background-image:
+				radial-gradient(
+					ellipse 95% 85% at 0% 5%,
+					hsl(from var(--amber-7) h s l / var(--gold-glow)),
+					transparent 62%
+				),
+				radial-gradient(
+					ellipse 85% 80% at 100% 0%,
+					hsl(from var(--red-7) h s l / 0.24),
+					transparent 60%
+				),
+				radial-gradient(
+					ellipse 115% 95% at 50% 112%,
+					hsl(from var(--iris-7) h s l / var(--brand-glow)),
+					transparent 68%
+				);
+		}
+	}
+
+	.frame {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		border-radius: var(--radius--large);
+		padding: 2px;
+		backdrop-filter: saturate(2.5) brightness(1.1);
+		mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		mask-composite: exclude;
+	}
+
+	.rings {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		background-image: repeating-radial-gradient(
+			circle at calc(100% - var(--space-9)) var(--space-7),
+			hsl(from var(--mauve-12) h s l / 0.06) 0 1.5px,
+			transparent 1px var(--space-8)
+		);
+		mask-image: radial-gradient(
+			circle at calc(100% - var(--space-9)) var(--space-7),
+			#000,
+			transparent 58%
+		);
+	}
+
+	.heading {
+		font-weight: 600;
+	}
+
+	.planBadge {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: var(--space-2);
+		border-radius: var(--radius);
+		color: var(--amber-11);
+		background-color: hsl(from var(--amber-9) h s l / 0.18);
+		box-shadow: inset 0 0 0 1px hsl(from var(--amber-9) h s l / 0.3);
+	}
+
+	.planMeta {
+		color: var(--mauve-12);
+	}
+
+	/* The "text" variant ignores the size prop, so match the adjacent line here. */
+	.cancelLink {
+		font-size: var(--size-1);
+	}
+
+	.status {
+		position: absolute;
+		inset: var(--space-4) var(--space-4) auto auto;
+	}
+}

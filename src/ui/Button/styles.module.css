@@ -71,9 +71,6 @@
 			height: var(--button-height);
 			border-radius: var(--radius--large);
 
-			/**
-			 * Basically immediately after click
-			 */
 			&:focus:not(:focus-visible):not(:active):not([aria-disabled="true"]) {
 				animation: shadowPulse var(--transition-duration--slow) forwards;
 			}
@@ -92,9 +89,6 @@
 		}
 	}
 
-	/**
-	 * Colors
-	 */
 	.regular {
 		--button-color: var(--mauve-11);
 		--button-color-text: var(--mauve-12);
@@ -144,9 +138,6 @@
 		--button-color-text: var(--amber-12);
 	}
 
-	/**
-	 * Sizes
-	 */
 	.tiny {
 		--button-inset: var(--space-2);
 		--button-height: var(--space-5);
@@ -171,13 +162,11 @@
 		--button-font-size: var(--size-4);
 	}
 
-	/**
-	 * Variants
-	 */
 	.text {
 		transition-property: color, opacity;
 		transition-duration: var(--transition-duration);
 		color: var(--button-color);
+		user-select: text;
 
 		&:not([aria-disabled="true"]) {
 			&.link:hover {
@@ -281,9 +270,6 @@
 		}
 	}
 
-	/**
-	 * Modifiers
-	 */
 	.icon {
 		aspect-ratio: 1 / 1;
 		padding: 0;

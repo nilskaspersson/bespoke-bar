@@ -27,6 +27,11 @@ export const OrganisationsTable = pgTable("organisations", {
 	baseOCRQuota: integer("base_ocr_quota")
 		.notNull()
 		.default(DEFAULT_BASE_OCR_QUOTA),
+	/**
+	 * Stripe Customer backing this org's purchases, minted lazily on the org's
+	 * first checkout.
+	 */
+	stripeCustomerId: text("stripe_customer_id").unique(),
 	createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
 	updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 	createdBy: text("created_by").notNull(),

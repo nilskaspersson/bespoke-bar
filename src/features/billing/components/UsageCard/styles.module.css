@@ -1,0 +1,6 @@
+@layer feature {
+	.icon {
+		color: var(--iris-11);
+		flex: none;
+	}
+}

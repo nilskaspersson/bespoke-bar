@@ -1,0 +1,18 @@
+@layer layout {
+	.container {
+		display: grid;
+		gap: var(--gap--large);
+		padding-block: var(--space-5) var(--gap--huge);
+		container-type: inline-size;
+		align-content: start;
+	}
+
+	.body {
+		display: grid;
+		gap: var(--gap--large);
+		width: 100%;
+		max-width: 48rem;
+		margin-inline: auto;
+		container-type: inline-size;
+	}
+}

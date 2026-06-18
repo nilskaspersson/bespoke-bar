@@ -2,7 +2,6 @@
 
 import { useMemo, useState, useTransition } from "react";
 import type { Tag } from "@/db/schema/tags";
-import { OrganisationSettings } from "@/features/organisation/components/OrganisationSettings";
 import { bulkUpdateTags } from "@/features/tags/api/bulkUpdateTags";
 import { EditableTag } from "@/features/tags/components/EditableTag";
 import { TAG_NAME_MAX_LENGTH } from "@/features/tags/constants";
@@ -29,15 +28,15 @@ type DraftMap = Map<string, DraftEntry>;
 export function TagsSettings() {
 	const { data: tags, isLoading } = trpc.tag.list.useQuery();
 
-	return (
-		<OrganisationSettings title="Recipe tags">
-			{tags ? (
-				<TagsSettingsForm tags={tags} />
-			) : isLoading ? (
-				<TagsSettingsSkeleton />
-			) : null}
-		</OrganisationSettings>
-	);
+	if (tags) {
+		return <TagsSettingsForm tags={tags} />;
+	}
+
+	if (isLoading) {
+		return <TagsSettingsSkeleton />;
+	}
+
+	return null;
 }
 
 function TagsSettingsForm({ tags }: { tags: Tag[] }) {
@@ -167,7 +166,7 @@ function TagsSettingsForm({ tags }: { tags: Tag[] }) {
 				</Text>
 			) : (
 				<Grid gap={4}>
-					<Flex as="ul" wrap gap={1} aria-label="Recipe tags">
+					<Flex as="ul" wrap gap={2} aria-label="Recipe tags">
 						{visibleTags.map((tag) => {
 							const entry = draft.get(tag.id);
 							const name = entry?.name ?? tag.name;
@@ -192,13 +191,13 @@ function TagsSettingsForm({ tags }: { tags: Tag[] }) {
 						})}
 					</Flex>
 
-					<Callout size={2} color="heavy" icon="circle-info" variant="inset">
+					<Callout size={1} color="light" icon="circle-info" variant="solid">
 						Click on tags to rename them.
 					</Callout>
 				</Grid>
 			)}
 
-			<div>
+			<Flex justifyContent="flex-end">
 				<Button
 					variant="solid"
 					color="accent"
@@ -210,7 +209,7 @@ function TagsSettingsForm({ tags }: { tags: Tag[] }) {
 				>
 					{isSaving ? "Saving…" : "Apply changes"}
 				</Button>
-			</div>
+			</Flex>
 		</Grid>
 	);
 }

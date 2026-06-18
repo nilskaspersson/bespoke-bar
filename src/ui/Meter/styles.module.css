@@ -1,0 +1,57 @@
+@layer ui {
+	@property --jsxSize {
+		syntax: "*";
+		inherits: false;
+	}
+
+	.meter {
+		all: unset;
+		appearance: none;
+		display: block;
+		inline-size: 100%;
+		block-size: var(--jsxSize, var(--space-2));
+		border: none;
+		border-radius: var(--radius--full);
+		background-image: none;
+		background-color: var(--mauve-4);
+
+		&::-webkit-meter-bar {
+			background-image: none;
+			background-color: var(--mauve-4);
+			border-radius: inherit;
+		}
+
+		&::-webkit-meter-optimum-value {
+			background-color: var(--iris-9);
+			border-radius: inherit;
+			transition: inline-size var(--transition-duration) var(--swift-in);
+		}
+
+		&::-webkit-meter-suboptimum-value {
+			background-color: var(--amber-9);
+			border-radius: inherit;
+			transition: inline-size var(--transition-duration) var(--swift-in);
+		}
+
+		&::-webkit-meter-even-less-good-value {
+			background-color: var(--red-9);
+			border-radius: inherit;
+			transition: inline-size var(--transition-duration) var(--swift-in);
+		}
+
+		&::-moz-meter-bar {
+			background-image: none;
+			background-color: var(--iris-9);
+			border-radius: inherit;
+			transition: inline-size var(--transition-duration) var(--swift-in);
+		}
+
+		&:-moz-meter-sub-optimum::-moz-meter-bar {
+			background-color: var(--amber-9);
+		}
+
+		&:-moz-meter-sub-sub-optimum::-moz-meter-bar {
+			background-color: var(--red-9);
+		}
+	}
+}
