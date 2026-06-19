@@ -67,12 +67,13 @@ describe("cacheTags.countBarRecipes", () => {
 });
 
 describe("cacheTags.ocrQuotaLimit", () => {
-	test("subscribes to grant create and org update only", () => {
+	test("subscribes to grant create, org update, and the subscription mirror", () => {
 		const tags = cacheTags.ocrQuotaLimit("org1");
 
 		expect(tags).toEqual([
 			"org1:create-ocr-quota-grant",
 			"org1:update-organisation",
+			"org1:update-org-subscription",
 		]);
 	});
 
@@ -186,7 +187,7 @@ describe("cacheTags.tagsList", () => {
 });
 
 describe("cacheTags.recipeSlotLimit", () => {
-	test("subscribes to slot-grant create and org update only", () => {
+	test("subscribes to slot-grant create and org update only — Pro slot bonuses are ledgered grants, not live state", () => {
 		expect(cacheTags.recipeSlotLimit("org1")).toEqual([
 			"org1:create-recipe-slot-grant",
 			"org1:update-organisation",
@@ -208,6 +209,14 @@ describe("cacheTags.recipeSlotUsage", () => {
 		expect(cacheTags.recipeSlotUsage("org1")).not.toContain(
 			"org1:update-recipe",
 		);
+	});
+});
+
+describe("cacheTags.orgSubscription", () => {
+	test("subscribes to the subscription mirror update only", () => {
+		expect(cacheTags.orgSubscription("org1")).toEqual([
+			"org1:update-org-subscription",
+		]);
 	});
 });
 

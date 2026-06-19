@@ -2,6 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { getLocalOrgId } from "@/features/organisation/api/getOrCreateLocalOrganisation";
+import { isAdminUser } from "@/utils/admin";
 import { AppError, type AppErrorPayload } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 
@@ -92,4 +93,12 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 		}
 		throw error;
 	}
+});
+
+export const adminProcedure = t.procedure.use(async ({ ctx, next }) => {
+	if (!ctx.userId || !(await isAdminUser(ctx.userId))) {
+		throw new TRPCError({ code: "FORBIDDEN" });
+	}
+
+	return next({ ctx: { ...ctx, userId: ctx.userId } });
 });

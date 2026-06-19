@@ -17,10 +17,6 @@ export const OCRQuotaUsesTable = pgTable(
 			.notNull(),
 	},
 	(t) => [
-		/**
-		 * Serves both the enforcement count and `min(created_at)` over the
-		 * rolling window: `WHERE org_id = $1 AND created_at > $2`.
-		 */
 		index("ocr_quota_uses_org_id_created_at_idx").on(
 			t.orgId,
 			t.createdAt.desc(),

@@ -32,7 +32,8 @@ export const RecipeSlotGrantsTable = pgTable(
 		 * Namespaced idempotency key. Examples:
 		 *   "stripe:cs_test_abc123"   (purchase)
 		 *   "referral:<referralId>"   (bonus_referral)
-		 *   "daily:2026-05-03:<orgId>" (bonus_activity)
+		 *   "pro-signup:<orgId>"      (bonus_activity — Pro signup bonus)
+		 *   "pro-month:2026-06:<orgId>" (bonus_activity — Pro loyalty accrual)
 		 *   "refund:<originalGrantId>" (refund)
 		 * Null is allowed for manual grants, where dedupe is the operator's job.
 		 */

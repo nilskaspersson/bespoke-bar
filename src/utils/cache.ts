@@ -111,6 +111,8 @@ export const cacheEvents = {
 	recipeSlotGrant: {
 		create: {
 			emit: (orgId: string) => updateTag(`${orgId}:create-recipe-slot-grant`),
+			emitFromRouteHandler: (orgId: string) =>
+				revalidateTag(`${orgId}:create-recipe-slot-grant`, { expire: 0 }),
 			tag: (orgId: string) => `${orgId}:create-recipe-slot-grant`,
 		},
 	},
@@ -134,6 +136,13 @@ export const cacheEvents = {
 			tag: (orgId: string) => `${orgId}:changed-ocr-quota-use`,
 		},
 	},
+	orgSubscription: {
+		update: {
+			emit: (orgId: string) =>
+				revalidateTag(`${orgId}:update-org-subscription`, { expire: 0 }),
+			tag: (orgId: string) => `${orgId}:update-org-subscription`,
+		},
+	},
 	organisation: {
 		/**
 		 * `create` and `delete` are keyed by `clerkOrgId` because the
@@ -148,6 +157,8 @@ export const cacheEvents = {
 		},
 		update: {
 			emit: (orgId: string) => updateTag(`${orgId}:update-organisation`),
+			emitFromRouteHandler: (orgId: string) =>
+				revalidateTag(`${orgId}:update-organisation`, { expire: 0 }),
 			tag: (orgId: string) => `${orgId}:update-organisation`,
 		},
 		delete: {
@@ -158,15 +169,7 @@ export const cacheEvents = {
 	},
 };
 
-/**
- * For use as spread args to `cacheTag`, f.e.:
- * cacheTag(...cacheTags.menus(orgId));
- */
 export const cacheTags = {
-	/**
-	 * Ingredients have very few concerns. We do query for Recipe usage, but that's
-	 * separately tagged under barRecipes.
-	 */
 	ingredient: (orgId: string, id: Ingredient["id"]) => [
 		cacheEvents.ingredient.update.tag(orgId, id),
 		cacheEvents.ingredient.delete.tag(orgId, id),
@@ -176,11 +179,6 @@ export const cacheTags = {
 		cacheEvents.ingredient.update.tag(orgId),
 		cacheEvents.ingredient.delete.tag(orgId),
 	],
-	/**
-	 * Recipe payload no longer joins tag entities — junctions stay,
-	 * Tags are stitched in by callers from a separately-cached list. Only
-	 * `tag.delete` matters here because it cascades to the junction row.
-	 */
 	recipe: (orgId: string, id: Recipe["id"]) => [
 		cacheEvents.recipe.update.tag(orgId, id),
 		cacheEvents.recipe.delete.tag(orgId, id),
@@ -192,18 +190,10 @@ export const cacheTags = {
 		cacheEvents.recipe.delete.tag(orgId),
 		cacheEvents.tag.delete.tag(orgId),
 	],
-	/**
-	 * Just the count of recipes — only changes when a recipe is added or removed.
-	 * Ingredient and tag mutations don't affect the number, so don't subscribe.
-	 */
 	countBarRecipes: (orgId: string) => [
 		cacheEvents.recipe.create.tag(orgId),
 		cacheEvents.recipe.delete.tag(orgId),
 	],
-	/**
-	 * The Menus index cares about all menu events, as well as deletion
-	 * of recipes (we show a count of recipe assignments).
-	 */
 	menus: (orgId: string) => [
 		cacheEvents.menu.create.tag(orgId),
 		cacheEvents.menu.update.tag(orgId),
@@ -239,11 +229,15 @@ export const cacheTags = {
 	ocrQuotaLimit: (orgId: string) => [
 		cacheEvents.ocrQuotaGrant.create.tag(orgId),
 		cacheEvents.organisation.update.tag(orgId),
+		cacheEvents.orgSubscription.update.tag(orgId),
 	],
 	ocrQuotaUsage: (orgId: string) => [
 		cacheEvents.ocrQuotaUse.changed.tag(orgId),
 	],
 	organisation: (orgId: string) => [cacheEvents.organisation.update.tag(orgId)],
+	orgSubscription: (orgId: string) => [
+		cacheEvents.orgSubscription.update.tag(orgId),
+	],
 	/**
 	 * Used by the clerkOrgId → localOrgId lookup, which has to be keyed by
 	 * Clerk's id (the local one isn't known yet). Subscribes to create and

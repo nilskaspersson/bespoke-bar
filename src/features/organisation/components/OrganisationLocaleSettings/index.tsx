@@ -1,12 +1,14 @@
+"use client";
+
 import { useForm } from "@conform-to/react";
 import { useCallback } from "react";
 import type { Organisation } from "@/db/schema/organisations";
 import { updateLocalOrganisationAction } from "@/features/organisation/api/updateLocalOrganisation";
-import { OrganisationSettings } from "@/features/organisation/components/OrganisationSettings";
 import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
 import { SelectLocale } from "@/features/organisation/components/SelectLocale";
 import { trpc } from "@/trpc/client";
 import { Callout } from "@/ui/Callout";
+import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Kbd } from "@/ui/Kbd";
 import { SkeletonScreen } from "@/ui/Skeleton";
@@ -17,15 +19,15 @@ import { toast } from "@/ui/Toast";
 export function OrganisationLocaleSettings() {
 	const { data: organisation, isLoading } = trpc.organisation.get.useQuery();
 
-	return (
-		<OrganisationSettings title="Locale & Currency">
-			{organisation ? (
-				<OrganisationLocaleSettingsForm organisation={organisation} />
-			) : isLoading ? (
-				<OrganisationLocaleSettingsSkeleton />
-			) : null}
-		</OrganisationSettings>
-	);
+	if (organisation) {
+		return <OrganisationLocaleSettingsForm organisation={organisation} />;
+	}
+
+	if (isLoading) {
+		return <OrganisationLocaleSettingsSkeleton />;
+	}
+
+	return null;
 }
 
 function OrganisationLocaleSettingsForm({
@@ -95,7 +97,7 @@ function OrganisationLocaleSettingsForm({
 				</Callout>
 			</Grid>
 
-			<div>
+			<Flex justifyContent="flex-end">
 				<SubmitButton
 					form={form.id}
 					variant="solid"
@@ -105,7 +107,7 @@ function OrganisationLocaleSettingsForm({
 				>
 					Apply changes
 				</SubmitButton>
-			</div>
+			</Flex>
 		</Grid>
 	);
 }

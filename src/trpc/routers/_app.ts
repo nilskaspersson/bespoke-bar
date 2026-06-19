@@ -1,4 +1,5 @@
 import { router } from "@/trpc";
+import { adminRouter } from "./admin";
 import { billingRouter } from "./billing";
 import { favoriteRouter } from "./favorite";
 import { featuredRouter } from "./featured";
@@ -10,6 +11,7 @@ import { recipeRouter } from "./recipe";
 import { tagRouter } from "./tag";
 
 export const appRouter = router({
+	admin: adminRouter,
 	billing: billingRouter,
 	ingredient: ingredientRouter,
 	recipe: recipeRouter,

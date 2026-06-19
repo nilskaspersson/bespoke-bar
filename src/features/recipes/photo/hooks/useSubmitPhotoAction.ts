@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { showOCRQuotaReachedToast } from "@/features/billing/components/OCRQuotaReachedToast";
 import { trpc } from "@/trpc/client";
 import { toast } from "@/ui/Toast";
 import { getErrorToast } from "@/utils/api";
@@ -38,10 +39,6 @@ export function useSubmitPhotoAction({
 			onStart?.();
 			setIsPending(true);
 
-			/**
-			 * Optimistically count the Use the instant the request fires. The `finally`
-			 * refetch reconciles this guess.
-			 */
 			await utils.billing.ocrQuotaState.cancel();
 			utils.billing.ocrQuotaState.setData(undefined, (current) =>
 				current && current.remaining > 0
@@ -64,10 +61,6 @@ export function useSubmitPhotoAction({
 				const json = await res.json();
 
 				if (!json.ok) {
-					/**
-					 * Typed AppErrors (e.g. quota reached) carry schema-driven copy;
-					 * anything else falls back to a plain message.
-					 */
 					const appError = appErrorSchema.safeParse(json.error);
 					if (appError.success) {
 						throw new AppError(appError.data);
@@ -78,11 +71,18 @@ export function useSubmitPhotoAction({
 				toast.success("Text extracted", { id: toastId });
 				onSuccess?.(json.data.extractedText);
 			} catch (error) {
-				const { message, description } = getErrorToast(error, {
-					message: "Error processing image",
-					description: "Try again later.",
-				});
-				toast.error(message, { id: toastId, description });
+				if (
+					error instanceof AppError &&
+					error.payload.code === "OCR_QUOTA_REACHED"
+				) {
+					showOCRQuotaReachedToast(error.payload, { id: toastId });
+				} else {
+					const { message, description } = getErrorToast(error, {
+						message: "Error processing image",
+						description: "Try again later.",
+					});
+					toast.error(message, { id: toastId, description });
+				}
 				onError?.(error);
 			} finally {
 				setIsPending(false);

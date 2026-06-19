@@ -14,8 +14,8 @@ A single Photo-to-Recipe call that resulted in a 2xx response from Google Vision
 _Avoid_: "Attempt" (ambiguous about success), "Parse" (overloaded).
 
 **Quota**:
-The maximum number of **Uses** an **Organisation** can consume in any rolling 22-hour window. Default `3`. Raised permanently by **Grants** and temporarily by an active Pro subscription. Rolling, not calendar-day — the next **Use** unlocks when the oldest counting **Use** rolls off. The window is intentionally shorter than a day so a daily user's unlock time doesn't drift later and later.
-_Avoid_: "Limit" (overloaded with the slot-limit feature), "Allowance", "Daily limit" (overspecifies the policy).
+The maximum number of **Uses** an **Organisation** can consume per calendar month. Default `3`. Raised permanently by **Grants** and temporarily by an active Pro subscription (to `50`). Calendar-month, not rolling — the tally resets on the 1st (UTC), so the policy reads exactly as it sells ("3 a month") and a cap shows one fixed reset date, not a drifting unlock countdown. Monthly (not daily) accounting is deliberate: the same number as a daily quota would cost ~30× more in worst-case free usage.
+_Avoid_: "Limit" (overloaded with the slot-limit feature), "Allowance", "Daily limit" (wrong cadence — the quota is monthly).
 
 **Grant**:
 A signed-amount entry that permanently raises an **Organisation's** **Quota** ceiling. Sources: manual comp, referral bonus, activity bonus, refund. Pro-tier bonuses are not Grants — they're computed live from subscription state.
