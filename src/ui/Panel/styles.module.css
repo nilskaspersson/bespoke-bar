@@ -1,0 +1,33 @@
+@layer ui {
+	.panel {
+		--_inset: var(--space-1);
+
+		display: grid;
+		gap: var(--space-4);
+		padding: var(--_inset);
+		border: 1px solid var(--glass--border-color);
+		border-radius: var(--radius--large);
+		background-color: var(--mauve-1);
+	}
+
+	.box {
+		padding: var(--space-4);
+		box-shadow: var(--shadow);
+		border: 1px solid var(--mauve-3);
+		border-radius: calc(var(--radius--large) - var(--_inset));
+		background-color: var(--mauve-2);
+	}
+
+	.header,
+	.footer {
+		padding-inline: var(--space-4);
+	}
+
+	.header {
+		padding-top: var(--space-4);
+	}
+
+	.footer {
+		padding-bottom: var(--space-4);
+	}
+}

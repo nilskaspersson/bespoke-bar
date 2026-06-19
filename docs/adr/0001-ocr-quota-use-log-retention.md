@@ -1,15 +1,15 @@
 # `ocr_quota_uses` is pruned opportunistically per-org, not on a schedule
 
 Each row in `ocr_quota_uses` records a single **Use** for **Quota**
-enforcement. The only consumer of those rows is the rolling-22h enforcement
-query (`OCR_QUOTA_WINDOW_HOURS`); anything older than that is no longer
-load-bearing. Each successful
-**Photo-to-Recipe** call uses Next.js `after()` to delete rows older than 48
-hours for that same org — bounding the working-set size *per active org*
-without setting up a scheduled job. Dormant orgs keep their old rows
-indefinitely; the table self-trims for active ones. There is no audit,
-support, or analytics requirement for **Use** history beyond enforcement, so
-nothing is lost.
+enforcement. The only consumer of those rows is the calendar-month
+enforcement query (Uses since the start of the current month); anything
+recorded before the current month is no longer load-bearing. Each successful
+**Photo-to-Recipe** call uses Next.js `after()` to delete rows older than the
+retention window (`OCR_QUOTA_USE_RETENTION_DAYS`, 35 days) for that same org —
+bounding the working-set size *per active org* without setting up a scheduled
+job. Dormant orgs keep their old rows indefinitely; the table self-trims for
+active ones. There is no audit, support, or analytics requirement for **Use**
+history beyond enforcement, so nothing is lost.
 
 ## Considered options
 
@@ -25,12 +25,13 @@ nothing is lost.
 ## Consequences
 
 - The prune emits **no cache event and needs none**. It only ever deletes rows
-  already outside the rolling enforcement window, so no cached count
+  already outside the enforcement window, so no cached count
   (`cacheTags.ocrQuotaUsage`) can observe the delete. The cached projection is
   correct whether or not the prune ever runs — it is pure housekeeping to keep
-  the table lean, not a load-bearing step. (This holds only while the window
-  stays shorter than the 48h retention; they must not cross.)
-- Refunds are only possible within the 48h window. Acceptable because
+  the table lean, not a load-bearing step. (This holds only while the
+  enforcement window stays shorter than the retention — 35 days comfortably
+  clears the longest month's 31; they must not cross.)
+- Refunds are only possible within the retention window. Acceptable because
   the only refund case is "Vision failed, undo the Use" within the same
   request — bounded by seconds, not days.
 - Dormant orgs keep their old rows until the next OCR call cleans them

@@ -7,6 +7,7 @@ import {
 	recordOCRUse,
 	refundOCRUse,
 } from "@/features/billing/api/recordOCRUse.service";
+import { OCR_QUOTA_USE_RETENTION_DAYS } from "@/features/billing/constants";
 import { parseTextFromImageService } from "@/features/recipes/photo/api/parseTextFromImage.service";
 import { errorMessageOrFallback } from "@/utils/api";
 import { AppError } from "@/utils/appError";
@@ -14,7 +15,7 @@ import { authOrForbidden } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
 
 /**
- * Trim Uses past the 48h retention window (ADR 0001) after the response, so it
+ * Trim Uses past the retention window (ADR 0001) after the response, so it
  * never delays the reply. Called on every path where the Use stands.
  */
 function pruneExpiredUses(orgId: string) {
@@ -24,7 +25,10 @@ function pruneExpiredUses(orgId: string) {
 			.where(
 				and(
 					eq(OCRQuotaUsesTable.orgId, orgId),
-					lt(OCRQuotaUsesTable.createdAt, sql`now() - interval '48 hours'`),
+					lt(
+						OCRQuotaUsesTable.createdAt,
+						sql`now() - make_interval(days => ${OCR_QUOTA_USE_RETENTION_DAYS}::int)`,
+					),
 				),
 			);
 	});
@@ -81,11 +85,6 @@ export async function POST(req: NextRequest) {
 	try {
 		const result = await parseTextFromImageService(formData);
 
-		/**
-		 * Recipe extracted — the Use stands. Invalidate the cached usage so later
-		 * reads (next page load, the pre-check) reflect the new count, then trim
-		 * the log post-response.
-		 */
 		cacheEvents.ocrQuotaUse.changed.emit(orgId);
 		pruneExpiredUses(orgId);
 

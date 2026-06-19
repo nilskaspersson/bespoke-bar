@@ -6,16 +6,13 @@ import {
 	DEFAULT_BASE_OCR_QUOTA,
 	OrganisationsTable,
 } from "@/db/schema/organisations";
-import { getProOCRQuotaBonus } from "@/features/billing/api/getProOCRQuotaBonus";
+import { isProActive } from "@/db/schema/orgSubscriptions";
+import { getOrgSubscription } from "@/features/billing/api/getOrgSubscription";
+import { PRO_OCR_QUOTA_BONUS } from "@/features/billing/constants";
 import { cacheTags } from "@/utils/cache";
 
-/**
- * Effective OCR Quota ceiling: base + ledgered grants + live Pro bonus. The
- * org-row fallback is defensive only — the FK on `ocr_quota_grants.org_id`
- * guarantees the parent row exists for any org that already holds grants.
- */
 export async function getOCRQuotaLimit(orgId: string): Promise<number> {
-	const [[org], [grants], proBonus] = await Promise.all([
+	const [[org], [grants], subscription] = await Promise.all([
 		db
 			.select({ baseOCRQuota: OrganisationsTable.baseOCRQuota })
 			.from(OrganisationsTable)
@@ -26,10 +23,11 @@ export async function getOCRQuotaLimit(orgId: string): Promise<number> {
 			})
 			.from(OCRQuotaGrantsTable)
 			.where(eq(OCRQuotaGrantsTable.orgId, orgId)),
-		getProOCRQuotaBonus(orgId),
+		getOrgSubscription(orgId),
 	]);
 
 	const base = org?.baseOCRQuota ?? DEFAULT_BASE_OCR_QUOTA;
+	const proBonus = isProActive(subscription?.status) ? PRO_OCR_QUOTA_BONUS : 0;
 	return base + (grants?.total ?? 0) + proBonus;
 }
 

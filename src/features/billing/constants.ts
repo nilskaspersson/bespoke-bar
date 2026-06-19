@@ -1,16 +1,7 @@
-/**
- * Length of the rolling Quota window.
- *
- * Deliberately under 24h. With an exact-24h window a daily power-user who maxes
- * out drifts later every day: each day's usage lands a little after the prior
- * unlock, and the next unlock anchors to that later time. A sub-day window
- * frees the oldest Use a couple of hours earlier each day, so the unlock keeps
- * pace with roughly-daily use instead of marching forward.
- *
- * Single source of truth for both the SQL window predicate (`getOCRUsageInWindow`,
- * used by the gate and the cached projection) and the client-facing
- * `nextAvailableAt` (`getOCRQuotaState`),
- * so the gate and the countdown can never disagree.
- */
-export const OCR_QUOTA_WINDOW_HOURS = 22;
-export const OCR_QUOTA_WINDOW_MS = OCR_QUOTA_WINDOW_HOURS * 60 * 60 * 1000;
+/** Must exceed the longest month (31d) so a mid-month count never undercounts. See ADR 0001. */
+export const OCR_QUOTA_USE_RETENTION_DAYS = 35;
+
+/** Base 3 + 47 = 50 OCRs/month while Pro is active. See ADR 0012. */
+export const PRO_OCR_QUOTA_BONUS = 47;
+export const PRO_SIGNUP_SLOT_BONUS = 100;
+export const PRO_MONTHLY_SLOT_BONUS = 5;

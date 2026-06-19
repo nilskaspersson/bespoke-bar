@@ -50,14 +50,14 @@ export function formatRetryAfter(seconds: number): string {
 		const n = Math.round(seconds / 60);
 		return `${n} minute${n === 1 ? "" : "s"}`;
 	}
-	const n = Math.round(seconds / 3600);
-	return `${n} hour${n === 1 ? "" : "s"}`;
+	if (seconds < 86400) {
+		const n = Math.round(seconds / 3600);
+		return `${n} hour${n === 1 ? "" : "s"}`;
+	}
+	const n = Math.round(seconds / 86400);
+	return `${n} day${n === 1 ? "" : "s"}`;
 }
 
-/**
- * Schema-driven toast content for an AppError. The pair `{ message, description }`
- * matches the shape `toast.promise`'s success/error callbacks.
- */
 export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 	switch (payload.code) {
 		case "RECIPE_SLOT_LIMIT_REACHED": {

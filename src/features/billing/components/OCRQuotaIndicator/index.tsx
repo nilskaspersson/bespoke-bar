@@ -28,7 +28,7 @@ export function OCRQuotaIndicator({ locked }: { locked?: boolean }) {
 					: undefined
 			}
 		>
-			Daily use: <AnimatedNumber value={data.used} /> /{" "}
+			This month: <AnimatedNumber value={data.used} /> /{" "}
 			<Text numeric>{data.limit}</Text>
 		</Chip>
 	);
@@ -49,5 +49,8 @@ function formatNextAvailable(
 	if (seconds < 3600) {
 		return relativeTimeFormatter.format(Math.round(seconds / 60), "minute");
 	}
-	return relativeTimeFormatter.format(Math.round(seconds / 3600), "hour");
+	if (seconds < 86400) {
+		return relativeTimeFormatter.format(Math.round(seconds / 3600), "hour");
+	}
+	return relativeTimeFormatter.format(Math.round(seconds / 86400), "day");
 }

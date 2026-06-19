@@ -8,12 +8,6 @@ import {
 import { RecipeSlotGrantsTable } from "@/db/schema/recipeSlotGrants";
 import { cacheTags } from "@/utils/cache";
 
-/**
- * Falls back to the schema default if the org row is missing — defensive only,
- * since the FK on `recipe_slot_grants.org_id` guarantees the parent row exists
- * for any caller that already has slot grants.
- * @public
- */
 export async function getRecipeSlotLimit(orgId: string): Promise<number> {
 	const [[org], [grants]] = await Promise.all([
 		db

@@ -1,44 +1,43 @@
 import { getCachedOCRQuotaLimit } from "@/features/billing/api/getOCRQuotaLimit";
 import { getCachedOCRQuotaUsage } from "@/features/billing/api/getOCRQuotaUsage";
-import { OCR_QUOTA_WINDOW_MS } from "@/features/billing/constants";
+import {
+	startOfCurrentUTCMonthMs,
+	startOfNextUTCMonthMs,
+} from "@/features/billing/quotaMonth";
 
 export type OCRQuotaState = {
 	limit: number;
 	used: number;
 	remaining: number;
-	/** ISO-8601 instant the next Use unlocks; null whenever remaining > 0. */
 	nextAvailableAt: string | null;
 };
 
-/**
- * Pure composition of the two cached halves into the shape the UI and endpoint
- * consume. `nextAvailableAt` is the moment the oldest counting Use exits the
- * window — an absolute instant, so the client can count down to it without
- * refetching.
- */
 export function deriveOCRQuotaState({
 	limit,
 	used,
-	oldestUseAtMs,
+	monthStartMs,
+	nowMs,
 }: {
 	limit: number;
 	used: number;
-	oldestUseAtMs: number | null;
+	monthStartMs: number;
+	nowMs: number;
 }): OCRQuotaState {
-	const remaining = Math.max(0, limit - used);
+	const usedThisMonth =
+		monthStartMs === startOfCurrentUTCMonthMs(nowMs) ? used : 0;
+	const remaining = Math.max(0, limit - usedThisMonth);
 
 	const nextAvailableAt =
-		remaining === 0 && oldestUseAtMs != null
-			? new Date(oldestUseAtMs + OCR_QUOTA_WINDOW_MS).toISOString()
+		remaining === 0 && limit > 0
+			? new Date(startOfNextUTCMonthMs(nowMs)).toISOString()
 			: null;
 
-	return { limit, used, remaining, nextAvailableAt };
+	return { limit, used: usedThisMonth, remaining, nextAvailableAt };
 }
 
 /**
- * Composes the separately-cached limit and usage reads. Not itself cached: each
- * half owns its own `cacheLife("max")` + tag, and the two tags invalidate on
- * very different cadences (rare grants vs every Use).
+ * Not itself cached: each half owns its own `cacheLife("max")` + tag, and the
+ * two tags invalidate on very different cadences (rare grants vs every Use).
  */
 export async function getCachedOCRQuotaState(
 	orgId: string,
@@ -51,6 +50,7 @@ export async function getCachedOCRQuotaState(
 	return deriveOCRQuotaState({
 		limit,
 		used: usage.used,
-		oldestUseAtMs: usage.oldestUseAtMs,
+		monthStartMs: usage.monthStartMs,
+		nowMs: Date.now(),
 	});
 }

@@ -1,0 +1,5 @@
+@layer feature {
+	.usage {
+		grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+	}
+}
