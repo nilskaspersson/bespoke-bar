@@ -1,12 +1,8 @@
-import { DeleteOrgForm } from "@/app/admin/DeleteOrgForm";
-import { GrantOCRQuotaForm } from "@/app/admin/GrantOCRQuotaForm";
-import { GrantSlotsForm } from "@/app/admin/GrantSlotsForm";
 import { PageHeader } from "@/components/PageHeader";
 import { Container } from "@/ui/Container";
-import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
 import { adminOrForbidden } from "@/utils/admin";
+import { AdminConsole } from "./AdminConsole";
 import styles from "./page.module.css";
 
 export default async function AdminPage() {
@@ -22,28 +18,7 @@ export default async function AdminPage() {
 					tagline="Have fun."
 				/>
 
-				<Flex wrap gap={5} alignItems="flex-start">
-					<Grid as="section" gap={3} className={styles.section}>
-						<Heading level="h2" size={4}>
-							Grant recipe slots
-						</Heading>
-						<GrantSlotsForm defaultOrgId={orgId} />
-					</Grid>
-
-					<Grid as="section" gap={3} className={styles.section}>
-						<Heading level="h2" size={4}>
-							Grant OCR quota
-						</Heading>
-						<GrantOCRQuotaForm defaultOrgId={orgId} />
-					</Grid>
-
-					<Grid as="section" gap={3} className={styles.section}>
-						<Heading level="h2" size={4}>
-							Delete bar
-						</Heading>
-						<DeleteOrgForm />
-					</Grid>
-				</Flex>
+				<AdminConsole currentOrgId={orgId} />
 			</Grid>
 		</Container>
 	);

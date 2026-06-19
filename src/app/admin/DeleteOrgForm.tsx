@@ -1,26 +1,26 @@
 "use client";
 
-import { useRef } from "react";
 import { deleteLocalOrganisationAction } from "@/features/organisation/api/deleteLocalOrganisation";
 import { Grid } from "@/ui/Grid";
 import { SubmitButton } from "@/ui/SubmitButton";
-import { TextField } from "@/ui/TextField";
+import { Text } from "@/ui/Text";
 import { toast } from "@/ui/Toast";
 
-export function DeleteOrgForm() {
-	const formRef = useRef<HTMLFormElement>(null);
+type Props = {
+	orgId: string;
+	onSuccess?: () => void;
+};
 
-	async function action(formData: FormData) {
-		const localOrgId = String(formData.get("localOrgId") ?? "");
-
-		const promise = deleteLocalOrganisationAction({ localOrgId });
+export function DeleteOrgForm({ orgId, onSuccess }: Props) {
+	async function action() {
+		const promise = deleteLocalOrganisationAction({ localOrgId: orgId });
 
 		toast.promise(promise, {
 			loading: "Deleting bar…",
 			success: (result) => ({
 				message: result.deletedId
 					? `Deleted bar ${result.deletedId}`
-					: `No bar found for ${localOrgId}`,
+					: "No bar found",
 			}),
 			error: (err) => ({
 				message: "Could not delete bar",
@@ -30,16 +30,19 @@ export function DeleteOrgForm() {
 
 		try {
 			await promise;
-			formRef.current?.reset();
+			onSuccess?.();
 		} catch {
 			// Handled by toast.promise
 		}
 	}
 
 	return (
-		<form ref={formRef} action={action}>
+		<form action={action}>
 			<Grid gap={5}>
-				<TextField label="Bar ID" name="localOrgId" required />
+				<Text size={2} light>
+					This bar is orphaned — its Clerk organisation is gone. Removing it
+					deletes all local data for the org.
+				</Text>
 
 				<div>
 					<SubmitButton variant="solid" color="red">
