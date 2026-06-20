@@ -13,7 +13,9 @@
 				"EDGE_CONFIG",
 				"UPSTASH_*",
 				"CLERK_*",
-				"STRIPE_*"
+				"STRIPE_*",
+				"GCP_*",
+				"NEON_PROJECT_ID"
 			]
 		},
 		"lint": {
