@@ -1,0 +1,27 @@
+packages:
+  - 'apps/*'
+  - 'packages/*'
+
+# Flat, npm-style node_modules. Required because many deps peer-depend on
+# `react`/`typescript` but not the corresponding `@types/*`, and pnpm's isolated
+# layout hides those types from the libs' own .d.ts (collapsing React.ReactNode
+# and tRPC ctx/input to `any`). Also required by Expo/Metro (monorepo plan step 6).
+nodeLinker: hoisted
+
+allowBuilds:
+  '@clerk/shared': false
+  '@google/genai': false
+  '@parcel/watcher': true
+  esbuild: true
+  protobufjs: false
+  sharp: true
+
+catalog:
+  next: 16.2.7
+
+overrides:
+  '@clerk/nextjs>next': 'catalog:'
+  'nuqs>next': 'catalog:'
+  '@clerk/react': '6.7.2'
+  '@clerk/backend': '3.4.14'
+  '@clerk/shared@^4': '4.14.0'

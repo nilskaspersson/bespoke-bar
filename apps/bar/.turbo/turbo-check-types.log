@@ -1,0 +1,26 @@
+$ tsc --noEmit
+src/app/admin/AssignProForm.tsx(42,12): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/app/admin/AssignProForm.tsx(62,12): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/app/admin/DeleteOrgForm.tsx(20,14): error TS7006: Parameter 'result' implicitly has an 'any' type.
+src/app/admin/DeleteOrgForm.tsx(25,12): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/app/admin/GrantQuotaForm.tsx(59,12): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/features/billing/navigateToStripe.ts(17,11): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/features/ingredients/actions/components/DeleteIngredient/index.tsx(33,12): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/features/menus/actions/components/DeleteMenuButton/index.tsx(36,12): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/features/menus/actions/components/RemoveMenuEntryButton/index.tsx(29,14): error TS7006: Parameter 'result' implicitly has an 'any' type.
+src/features/menus/actions/components/UndoEntryChangesButton/index.tsx(31,12): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/features/menus/actions/components/UndoRemoveMenuEntryButton/index.tsx(29,14): error TS7006: Parameter 'result' implicitly has an 'any' type.
+src/features/menus/actions/components/UndoRemoveMenuEntryButton/index.tsx(74,12): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/features/menus/entries/components/AddRecipeForm/index.tsx(66,13): error TS7006: Parameter 'err' implicitly has an 'any' type.
+src/features/menus/entries/components/CreateMenuEntryForm/index.tsx(85,15): error TS7006: Parameter 'result' implicitly has an 'any' type.
+src/features/menus/entries/components/CreateMenuEntryForm/index.tsx(124,13): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/features/menus/entries/components/UpdateEntryForm/index.tsx(54,15): error TS7006: Parameter 'result' implicitly has an 'any' type.
+src/features/recipes/actions/components/DeleteRecipeButton/index.tsx(46,12): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/features/recipes/actions/components/DuplicateRecipeButton/index.tsx(31,14): error TS7006: Parameter 'newRecipe' implicitly has an 'any' type.
+src/features/recipes/actions/components/DuplicateRecipeButton/index.tsx(71,12): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/features/recipes/actions/components/ToggleFavoriteRecipeButton/index.tsx(84,12): error TS7006: Parameter 'e' implicitly has an 'any' type.
+src/features/recipes/bulk/hooks/useCreateBulkDraftRecipes.tsx(77,14): error TS7006: Parameter 'recipes' implicitly has an 'any' type.
+src/features/recipes/bulk/hooks/useCreateBulkDraftRecipes.tsx(87,22): error TS7006: Parameter 'recipe' implicitly has an 'any' type.
+src/features/recipes/bulk/hooks/useCreateBulkDraftRecipes.tsx(132,12): error TS7006: Parameter 'error' implicitly has an 'any' type.
+src/ui/Icon/index.tsx(3,20): error TS2307: Cannot find module '@/libs/icons/sprite.svg' or its corresponding type declarations.
+[ELIFECYCLE] Command failed with exit code 2.

@@ -1,0 +1,283 @@
+[2m$ vitest run[22m
+[?25l
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.7 [39m[90m/Users/mest/Documents/projects/bespoke-bar/apps/bar[39m
+
+[?2026h
+[1m[33m ❯ [39m[22msrc/features/recipes/api/utils/aiEnrichedFields.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m0 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m0 passed[39m[22m[90m (0)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m513ms
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/recipes/bulk/components/RecipeEditor/plugins/ParagraphBreakPlugin.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/features/quantity/utils/parseQuantity/parseQuantity.test.ts [2m([22m[2m81 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/features/recipes/api/utils/aiEnrichedFields.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/utils/search.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/ingredients/utils/sortIngredients.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/ingredients/utils/percentageToRatio/percentageToRatio.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/features/billing/api/stripeWebhook.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/billing/slotPacks.test.ts[2m 1/5[22m
+[1m[33m ❯ [39m[22msrc/features/categories/utils/matchNameWithCategory/matchNameWithCategory.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/percentageToRatio/percentageToRatio.test.ts[2m 19/19[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/sortIngredients.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/quantity/utils/parseQuantity/parseQuantity.test.ts[2m 81/81[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/api/utils/aiEnrichedFields.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/ParagraphBreakPlugin.test.ts[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/tokenizeLine.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/transformRecipeText.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/canon.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/parseUnit.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/utils/search.test.ts[2m 14/14[22m
+
+[2m Test Files [22m[1m[32m6 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m135 passed[39m[22m[90m (139)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m613ms
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/billing/slotPacks.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/features/billing/api/stripeWebhook.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/billing/slotPacks.test.ts[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/features/categories/utils/matchNameWithCategory/matchNameWithCategory.test.ts[2m 0/17[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/percentageToRatio/percentageToRatio.test.ts[2m 19/19[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/sortIngredients.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/quantity/utils/parseQuantity/parseQuantity.test.ts[2m 81/81[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/api/utils/aiEnrichedFields.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/ParagraphBreakPlugin.test.ts[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/tokenizeLine.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/transformRecipeText.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/canon.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/parseUnit.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/utils/search.test.ts[2m 14/14[22m
+
+[2m Test Files [22m[1m[32m7 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m139 passed[39m[22m[90m (156)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m917ms
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/categories/utils/matchNameWithCategory/matchNameWithCategory.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m src/features/recipes/utils/matchShapeWithStyle/canon.test.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/features/recipes/bulk/utils/tokenizeLine.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/features/units/utils/parseUnit.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/features/billing/api/stripeWebhook.test.ts[2m 1/27[22m
+[1m[33m ❯ [39m[22msrc/features/billing/slotPacks.test.ts[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/features/categories/utils/matchNameWithCategory/matchNameWithCategory.test.ts[2m 17/17[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts[2m 35/35[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/percentageToRatio/percentageToRatio.test.ts[2m 19/19[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/sortIngredients.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/quantity/utils/parseQuantity/parseQuantity.test.ts[2m 81/81[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/api/utils/aiEnrichedFields.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/ParagraphBreakPlugin.test.ts[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/tokenizeLine.test.ts[2m 23/23[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/transformRecipeText.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/canon.test.ts[2m 41/41[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts[2m 33/33[22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/parseUnit.test.ts[2m 34/34[22m
+[1m[33m ❯ [39m[22msrc/utils/search.test.ts[2m 14/14[22m
+
+[2m Test Files [22m[1m[32m13 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m323 passed[39m[22m[90m (349)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.02s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[90mstderr[2m | src/features/billing/api/stripeWebhook.test.ts[2m > [22m[2mwebhook route signature handling[2m > [22m[2mrejects a signature minted with the wrong secret
+[22m[39mStripe webhook signature verification failed StripeSignatureVerificationError: No signatures found matching the expected signature for payload. Are you passing the raw request body you received from Stripe? 
+ If a webhook request is being forwarded by a third-party tool, ensure that the exact request body, including JSON formatting and new line style, is preserved.
+
+Learn more about webhook signing and explore webhook integration examples for various frameworks at https://docs.stripe.com/webhooks/signature
+
+    at validateComputedSignature (file:///Users/mest/Documents/projects/bespoke-bar/node_modules/[4mstripe[24m/esm/Webhooks.js:187:19)
+    at Object.verifyHeader (file:///Users/mest/Documents/projects/bespoke-bar/node_modules/[4mstripe[24m/esm/Webhooks.js:80:13)
+    at Object.constructEvent (file:///Users/mest/Documents/projects/bespoke-bar/node_modules/[4mstripe[24m/esm/Webhooks.js:13:32)
+    at Module.POST [90m(/Users/mest/Documents/projects/bespoke-bar/apps/bar/[39msrc/app/api/webhooks/stripe/route.ts:43:32[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:104:5)[39m
+    at [90m/Users/mest/Documents/projects/bespoke-bar/apps/bar/[39msrc/features/billing/api/stripeWebhook.test.ts:303:15
+    at file:///Users/mest/Documents/projects/bespoke-bar/node_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:20 {
+  type: [32m'StripeSignatureVerificationError'[39m,
+  raw: {
+    message: [32m'No signatures found matching the expected signature for payload. Are you passing the raw request body you received from Stripe? \n'[39m +
+      [32m' If a webhook request is being forwarded by a third-party tool, ensure that the exact request body, including JSON formatting and new line style, is preserved.\n'[39m +
+      [32m'\n'[39m +
+      [32m'Learn more about webhook signing and explore webhook integration examples for various frameworks at https://docs.stripe.com/webhooks/signature\n'[39m
+  },
+  rawType: [90mundefined[39m,
+  code: [90mundefined[39m,
+  doc_url: [90mundefined[39m,
+  param: [90mundefined[39m,
+  detail: [90mundefined[39m,
+  headers: [90mundefined[39m,
+  requestId: [90mundefined[39m,
+  statusCode: [90mundefined[39m,
+  userMessage: [90mundefined[39m,
+  charge: [90mundefined[39m,
+  decline_code: [90mundefined[39m,
+  payment_intent: [90mundefined[39m,
+  payment_method: [90mundefined[39m,
+  payment_method_type: [90mundefined[39m,
+  setup_intent: [90mundefined[39m,
+  source: [90mundefined[39m,
+  header: [32m't=1781962856,v1=9125902791881ad79d3fe7898887e0ace9b90a83fe9b677f3dea9ec115436039'[39m,
+  payload: [32m'{"id":"evt_1","type":"invoice.paid"}'[39m
+}
+
+
+[1m[33m ❯ [39m[22msrc/features/billing/api/stripeWebhook.test.ts[2m 1/27[22m
+[1m[33m ❯ [39m[22msrc/features/billing/slotPacks.test.ts[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/features/categories/utils/matchNameWithCategory/matchNameWithCategory.test.ts[2m 17/17[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts[2m 35/35[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/percentageToRatio/percentageToRatio.test.ts[2m 19/19[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/sortIngredients.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/quantity/utils/parseQuantity/parseQuantity.test.ts[2m 81/81[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/api/utils/aiEnrichedFields.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/ParagraphBreakPlugin.test.ts[2m 6/6[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/tokenizeLine.test.ts[2m 23/23[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/transformRecipeText.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/canon.test.ts[2m 41/41[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts[2m 33/33[22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/parseUnit.test.ts[2m 34/34[22m
+[1m[33m ❯ [39m[22msrc/utils/search.test.ts[2m 14/14[22m
+
+[2m Test Files [22m[1m[32m13 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m323 passed[39m[22m[90m (349)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.02s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/billing/api/stripeWebhook.test.ts [2m([22m[2m27 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m src/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m src/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m src/features/recipes/bulk/utils/transformRecipeText.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/features/billing/api/stripeWebhook.test.ts[2m 27/27[22m
+[1m[33m ❯ [39m[22msrc/features/billing/slotPacks.test.ts[2m 5/5[22m
+[1m[33m ❯ [39m[22msrc/features/categories/utils/matchNameWithCategory/matchNameWithCategory.test.ts[2m 17/17[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts[2m 10/10[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts[2m 35/35[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/percentageToRatio/percentageToRatio.test.ts[2m 19/19[22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/sortIngredients.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/quantity/utils/parseQuantity/parseQuantity.test.ts[2m 81/81[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/api/utils/aiEnrichedFields.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/tokenizeLine.test.ts[2m 23/23[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/transformRecipeText.test.ts[2m 22/22[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/canon.test.ts[2m 41/41[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts[2m 33/33[22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/parseUnit.test.ts[2m 34/34[22m
+[1m[33m ❯ [39m[22msrc/utils/cache.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/utils/search.test.ts[2m 14/14[22m
+
+[2m Test Files [22m[1m[32m17 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m385 passed[39m[22m[90m (385)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.12s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/utils/aiEnrichedFields.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/recipes/utils/applyRecipeFilters.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/utils/cache.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m src/utils/currencySchema/currencySchema.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[1m[33m ❯ [39m[22msrc/features/billing/api/stripeWebhook.test.ts[2m 27/27[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToBulkRecipe/userInputToBulkRecipe.test.ts[2m 10/10[22m
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/userInputToLine/userInputToLine.test.ts[2m 35/35[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/components/RecipeEditor/plugins/EditorActionsPlugin/applyTransform.test.ts[2m 4/4[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/tokenizeLine.test.ts[2m 23/23[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/bulk/utils/transformRecipeText.test.ts[2m 22/22[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/metrics/utils/getRecipeCost/getRecipeCost.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/applyRecipeFilters.test.ts[2m 10/10[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/canon.test.ts[2m 41/41[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/matchShapeWithStyle/matchShapeWithStyle.test.ts[2m 33/33[22m
+[1m[33m ❯ [39m[22msrc/features/units/hooks/useRoundedUnit/useRoundedUnit.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/parseUnit.test.ts[2m 34/34[22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/snapQuantity.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/hooks/useLooseRelativeTime/useLooseRelativeTime.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/utils/aiEnrichedFields.test.ts[2m 7/7[22m
+[1m[33m ❯ [39m[22msrc/utils/cache.test.ts[2m 29/29[22m
+[1m[33m ❯ [39m[22msrc/utils/currencySchema/currencySchema.test.ts[2m 3/3[22m
+
+[2m Test Files [22m[1m[32m21 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m434 passed[39m[22m[90m (434)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.42s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/ingredients/utils/parseIngredient/parseIngredient.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/recipes/metrics/utils/getRecipeCost/getRecipeCost.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/units/utils/snapQuantity.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/hooks/useLooseRelativeTime/useLooseRelativeTime.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m src/features/ingredientLines/utils/stitchIngredients.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/utils/appError.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/units/hooks/useRoundedUnit/useRoundedUnit.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m src/features/ingredients/utils/searchIngredients.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/tags/utils/stitchRecipeTags.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/recipes/bulk/utils/getGhostCompletion.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+
+
+[1m[33m ❯ [39m[22msrc/db/utils/normalizeIngredientName.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/billing/api/getOCRQuotaState.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/parseIngredient/parseIngredient.test.ts[2m 12/12[22m
+[1m[33m ❯ [39m[22msrc/features/recipes/utils/applyRecipeFilters.test.ts[2m 10/10[22m
+[1m[33m ❯ [39m[22msrc/features/units/hooks/useQuantityToBestUnit/useQuantityToBestUnit.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/convert/convert.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/utils/cache.test.ts[2m 29/29[22m
+[1m[33m ❯ [39m[22msrc/utils/currencySchema/currencySchema.test.ts[2m 3/3[22m
+
+[2m Test Files [22m[1m[32m31 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m533 passed[39m[22m[90m (533)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.62s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/units/utils/convert/convert.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/utils/llm.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/recipes/utils/planRecipeEnrichment.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+
+[1m[33m ❯ [39m[22msrc/db/utils/normalizeIngredientName.test.ts[2m 0/5[22m
+[1m[33m ❯ [39m[22msrc/features/billing/api/getOCRQuotaState.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/getDefaultIngredientData/getDefaultIngredientData.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/parseIngredient/parseIngredient.test.ts[2m 12/12[22m
+[1m[33m ❯ [39m[22msrc/features/units/hooks/useQuantityToBestUnit/useQuantityToBestUnit.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m34 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m557 passed[39m[22m[90m (562)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.72s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/db/utils/normalizeIngredientName.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/units/hooks/useQuantityToBestUnit/useQuantityToBestUnit.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m src/features/billing/api/getOCRQuotaState.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+
+
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/formatLine.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/ingredients/utils/getDefaultIngredientData/getDefaultIngredientData.test.ts[2m 0/1[22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/getMeasurementFromUnit/getMeasurementFromUnit.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m37 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m577 passed[39m[22m[90m (578)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.82s
+[?2026l[?2026h[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/ingredients/utils/getDefaultIngredientData/getDefaultIngredientData.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 1[2mms[22m[39m
+
+
+[1m[33m ❯ [39m[22msrc/features/ingredientLines/utils/formatLine.test.ts[2m [queued][22m
+[1m[33m ❯ [39m[22msrc/features/units/utils/getMeasurementFromUnit/getMeasurementFromUnit.test.ts[2m [queued][22m
+
+[2m Test Files [22m[1m[32m38 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m[1m[32m578 passed[39m[22m[90m (578)[39m
+[2m   Start at [22m15:40:55
+[2m   Duration [22m1.92s
+[?2026l[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K[1A[K [32m✓[39m src/features/ingredientLines/utils/formatLine.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 1[2mms[22m[39m
+ [32m✓[39m src/features/units/utils/getMeasurementFromUnit/getMeasurementFromUnit.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 1[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m40 passed[39m[22m[90m (40)[39m
+[2m      Tests [22m [1m[32m582 passed[39m[22m[90m (582)[39m
+[2m   Start at [22m 15:40:55
+[2m   Duration [22m 2.06s[2m (transform 1.12s, setup 0ms, import 7.70s, tests 168ms, environment 17.57s)[22m
+
+[?25h

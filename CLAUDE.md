@@ -13,8 +13,8 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 
 ## Commands
 
-- `npm run lint -- --fix path/to/file` — Biome (lint + format). Always run this after touching files.
-- `npm run test -- path/to/test.ts` — single test
+- `pnpm lint --fix path/to/file` — Biome (lint + format). Always run this after touching files.
+- `pnpm test path/to/test.ts` — single test
 
 ## Key Rules
 
