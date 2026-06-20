@@ -2,8 +2,20 @@
 	"$schema": "https://turborepo.dev/schema.json",
 	"ui": "tui",
 	"tasks": {
+		"icons:build": {
+			"inputs": [
+				"src/libs/icons/build.ts",
+				"src/libs/icons/config.ts",
+				"src/libs/icons/svgs/**"
+			],
+			"outputs": [
+				"src/libs/icons/sprite.svg",
+				"src/libs/icons/types.ts",
+				"src/libs/icons/kits.types.ts"
+			]
+		},
 		"build": {
-			"dependsOn": ["^build"],
+			"dependsOn": ["icons:build", "^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
 			"env": [
@@ -22,10 +34,13 @@
 			"dependsOn": ["^lint"]
 		},
 		"check-types": {
-			"dependsOn": ["^check-types"]
+			"dependsOn": ["icons:build", "^check-types"]
 		},
-		"test": {},
+		"test": {
+			"dependsOn": ["icons:build"]
+		},
 		"dev": {
+			"dependsOn": ["icons:build"],
 			"cache": false,
 			"persistent": true
 		}
