@@ -1,5 +1,7 @@
 # CLAUDE.md
 
+See CONTEXT.md for a brief product introduction and ubiquitous language definitions. Read these only when you come across a relevant feature, not if I ask for something purely technical. Similarly, there are various ADRs in docs/adr that explain the thought process behind certain features: Read only when highly relevant.  
+
 ## Stack & priorities
 
 Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Vercel.
@@ -23,8 +25,7 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 ## Nits
 
 - Prefer `function` over `const` for function declarations
-- Tabs for indentation
-- Be VERY sparse with comments in code, and keep them brief. Comment only what's genuinely hard to follow. Don't narrate the decision flow or restate what the code already implicitly states.
+- Do NOT add comments to code, unless it truly is genuinely hard to follow without it. Never  narrate the decision flow or, restate what the code already implicitly states via variable names.
 
 ## Next.js docs
 
