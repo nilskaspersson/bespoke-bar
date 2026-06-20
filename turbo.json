@@ -5,7 +5,16 @@
 		"build": {
 			"dependsOn": ["^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
-			"outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"]
+			"outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
+			"env": [
+				"DATABASE_*",
+				"POSTGRES_*",
+				"PG*",
+				"EDGE_CONFIG",
+				"UPSTASH_*",
+				"CLERK_*",
+				"STRIPE_*"
+			]
 		},
 		"lint": {
 			"dependsOn": ["^lint"]
