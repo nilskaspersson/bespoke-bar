@@ -1,5 +1,13 @@
 "use client";
 
+import { CATEGORY_DEFAULT_ABV } from "@bespoke/domain/categories/constants";
+import { matchNameWithCategory } from "@bespoke/domain/categories/matchNameWithCategory";
+import {
+	buildIngredientIndex,
+	type IngredientIndex,
+} from "@bespoke/domain/ingredients/buildIngredientIndex";
+import { getMeasurementFromUnit } from "@bespoke/domain/units/getMeasurementFromUnit";
+import { isValidUnit } from "@bespoke/domain/units/predicates";
 import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { type FieldName, useField } from "@conform-to/react";
@@ -9,19 +17,11 @@ import {
 	useCombobox,
 } from "downshift";
 import { type ReactNode, use, useMemo } from "react";
-import { CATEGORY_DEFAULT_ABV } from "@/features/categories/constants";
-import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { IngredientPicker } from "@/features/ingredients/components/IngredientPicker";
 import { DraftIngredientOverview } from "@/features/ingredients/draft/components/DraftIngredientOverview";
 import { IngredientDialogForm } from "@/features/ingredients/draft/components/IngredientDialogForm";
-import {
-	buildIngredientIndex,
-	type IngredientIndex,
-} from "@/features/ingredients/utils/buildIngredientIndex";
 import { QuantityControl } from "@/features/quantity/components/QuantityControl";
 import { SelectUnit } from "@/features/units/components/SelectUnit";
-import { isValidUnit } from "@/features/units/utils";
-import { getMeasurementFromUnit } from "@/features/units/utils/getMeasurementFromUnit";
 import { useDialog } from "@/hooks/useDialog";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Button } from "@/ui/Button";

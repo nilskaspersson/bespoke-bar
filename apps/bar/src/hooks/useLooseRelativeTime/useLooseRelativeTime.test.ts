@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest";
 import {
 	createDateTimeFormatter,
 	createRelativeTimeFormatter,
-} from "@/utils/formatting";
+} from "@bespoke/domain/utils/formatting";
+import { describe, expect, it } from "vitest";
 import { formatLooseRelativeTime } from ".";
 
 const dateTimeFormatter = createDateTimeFormatter("en-GB");

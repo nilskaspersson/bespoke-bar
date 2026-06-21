@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { Keyed } from "@bespoke/schema/types";
 import { useRef } from "react";
 import { Grid } from "@/ui/Grid";
@@ -7,7 +8,6 @@ import { RadioGroup, type RadioGroupOption } from "@/ui/RadioGroup";
 import { SubmitButton } from "@/ui/SubmitButton";
 import { TextField } from "@/ui/TextField";
 import { toast } from "@/ui/Toast";
-import { pluralize } from "@/utils/formatting";
 
 type GrantInput = {
 	orgId: string;

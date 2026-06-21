@@ -1,13 +1,13 @@
 "use client";
 
+import { buildIngredientMap } from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { buildIngredientIndex } from "@bespoke/domain/ingredients/buildIngredientIndex";
 import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import type { Keyed } from "@bespoke/schema/types";
 import { useFormMetadata } from "@conform-to/react";
 import { type ComponentProps, useDeferredValue, useId, useMemo } from "react";
-import { buildIngredientMap } from "@/features/ingredientLines/utils/stitchIngredients";
-import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import { normalizeInput } from "@/utils";
 import { recipePreviewSchema } from "./schema";

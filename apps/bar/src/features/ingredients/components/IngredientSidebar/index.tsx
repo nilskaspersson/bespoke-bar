@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import Link from "next/link";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
@@ -28,7 +29,6 @@ import { Kbd } from "@/ui/Kbd";
 import { OptionsSwitch } from "@/ui/OptionsSwitch";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
-import { pluralize } from "@/utils/formatting";
 import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 

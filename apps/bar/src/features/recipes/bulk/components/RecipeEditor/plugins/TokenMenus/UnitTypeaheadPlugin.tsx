@@ -1,5 +1,8 @@
 "use client";
 
+import { quantityTextParser } from "@bespoke/domain/quantity/parseQuantity";
+import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
+import { unitTextParser } from "@bespoke/domain/units/parseUnit";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getSelection, $isRangeSelection, type TextNode } from "lexical";
@@ -10,14 +13,11 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import {
 	getUnitLabel,
 	SORTED_UNITS,
 	UNIT_SEARCH_INDEX,
 } from "@/features/units/constants";
-import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
-import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { searchByIndex } from "@/utils/search";
 import { useHistoricUpdateRef } from "./HistoricUpdateGuard";
 import { UnitOption } from "./UnitOption";

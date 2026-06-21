@@ -1,6 +1,5 @@
 "use client";
 
-import { createContext, useMemo } from "react";
 import {
 	createCurrencyDisplayName,
 	createCurrencyFormatter,
@@ -9,7 +8,8 @@ import {
 	createQuantityFormatter,
 	createRelativeTimeFormatter,
 	createVolumeFormatter,
-} from "@/utils/formatting";
+} from "@bespoke/domain/utils/formatting";
+import { createContext, useMemo } from "react";
 
 const DEFAULT_LOCALE = "en-GB";
 const DEFAULT_CURRENCY = "EUR";

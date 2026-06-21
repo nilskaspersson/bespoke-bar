@@ -1,3 +1,4 @@
+import { OCR_QUOTA_USE_RETENTION_DAYS } from "@bespoke/domain/billing/constants";
 import { OCRQuotaUsesTable } from "@bespoke/schema/schema/ocrQuotaUses";
 import { and, eq, lt, sql } from "drizzle-orm";
 import { after, type NextRequest } from "next/server";
@@ -7,7 +8,6 @@ import {
 	recordOCRUse,
 	refundOCRUse,
 } from "@/features/billing/api/recordOCRUse.service";
-import { OCR_QUOTA_USE_RETENTION_DAYS } from "@/features/billing/constants";
 import { parseTextFromImageService } from "@/features/recipes/photo/api/parseTextFromImage.service";
 import { errorMessageOrFallback } from "@/utils/api";
 import { AppError } from "@/utils/appError";

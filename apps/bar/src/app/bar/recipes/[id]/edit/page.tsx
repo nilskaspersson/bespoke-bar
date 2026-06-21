@@ -1,3 +1,4 @@
+import { stitchRecipe } from "@bespoke/domain/recipes/stitchRecipe";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
@@ -5,7 +6,6 @@ import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { FormDraftPreview } from "@/features/recipes/components/FormDraftPreview";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import { stitchRecipe } from "@/features/recipes/utils/stitchRecipe";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";

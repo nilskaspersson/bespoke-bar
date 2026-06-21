@@ -1,3 +1,4 @@
+import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
@@ -5,7 +6,6 @@ import { PageHeader } from "@/components/PageHeader";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { MENU_FORM_ID, MenuForm } from "@/features/menus/components/MenuForm";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { Container } from "@/ui/Container";
 import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";

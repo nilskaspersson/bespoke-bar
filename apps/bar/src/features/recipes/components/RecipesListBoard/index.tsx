@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
 import { AnimatePresence, m } from "motion/react";
@@ -23,7 +24,6 @@ import { useDialog } from "@/hooks/useDialog";
 import { Button } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
-import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
 
 export { RecipesListBoardSkeleton } from "./Skeleton";

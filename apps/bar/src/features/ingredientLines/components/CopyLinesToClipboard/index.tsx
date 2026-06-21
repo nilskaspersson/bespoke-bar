@@ -1,9 +1,9 @@
 "use client";
 
+import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import type { ComponentProps } from "react";
 import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
-import type { UnitSystems } from "@/features/units/utils/convert";
 import { CopyToClipboard } from "@/ui/CopyToClipboard";
 
 export function CopyLinesToClipboard({

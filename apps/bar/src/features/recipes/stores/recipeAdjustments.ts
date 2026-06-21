@@ -1,6 +1,6 @@
+import type { UnitSystems } from "@bespoke/domain/units/convert";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { UnitSystems } from "@/features/units/utils/convert";
 
 export type AdjustmentValues = {
 	servings: number;

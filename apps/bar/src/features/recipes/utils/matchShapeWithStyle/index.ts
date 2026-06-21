@@ -1,10 +1,10 @@
+import { matchNameWithCategory } from "@bespoke/domain/categories/matchNameWithCategory";
+import { calculateLineVolumes } from "@bespoke/domain/recipes/calculateRecipeMetrics";
 import type { SystemCategory } from "@bespoke/schema/schema/categories";
 import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
 import type { IngredientLine } from "@bespoke/schema/schema/ingredientLines";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
-import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
-import { calculateLineVolumes } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 
 /** Ingredient categories collapsed to the roles that discriminate families (exhaustive via `satisfies`). */
 type ShapeRole =

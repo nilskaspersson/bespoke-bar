@@ -1,5 +1,6 @@
 "use client";
 
+import { pluralize } from "@bespoke/domain/utils/formatting";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -32,7 +33,6 @@ import { LightboxDialog } from "@/ui/LightboxDialog";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { animate, keyframes } from "@/utils/animate";
-import { pluralize } from "@/utils/formatting";
 import styles from "./styles.module.css";
 
 export function SearchRecipesButton({

@@ -1,4 +1,9 @@
 import {
+	capitalizeLine,
+	convertLine,
+	roundLine,
+} from "@bespoke/domain/recipes/transformRecipeText";
+import {
 	$createParagraphNode,
 	$createTextNode,
 	$getRoot,
@@ -7,11 +12,6 @@ import {
 	type LexicalEditor,
 } from "lexical";
 import { describe, expect, test } from "vitest";
-import {
-	capitalizeLine,
-	convertLine,
-	roundLine,
-} from "@/features/recipes/bulk/utils/transformRecipeText";
 
 function createTestEditor(): LexicalEditor {
 	const editor = createEditor({ namespace: "test", onError: console.error });

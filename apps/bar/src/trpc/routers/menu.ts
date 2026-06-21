@@ -1,10 +1,10 @@
-import { menuWithEntriesFormSchema } from "@bespoke/schema/schema/composite";
-import { menuFormSchema } from "@bespoke/schema/schema/menus";
-import { z } from "zod";
 import {
 	buildIngredientMap,
 	stitchMenuEntries,
-} from "@/features/ingredientLines/utils/stitchIngredients";
+} from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { menuWithEntriesFormSchema } from "@bespoke/schema/schema/composite";
+import { menuFormSchema } from "@bespoke/schema/schema/menus";
+import { z } from "zod";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { createMenu } from "@/features/menus/api/createMenu.service";
 import { deleteMenu } from "@/features/menus/api/deleteMenu.service";

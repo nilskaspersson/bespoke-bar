@@ -1,5 +1,10 @@
 "use client";
 
+import {
+	capitalizeLine,
+	convertLine,
+	roundLine,
+} from "@bespoke/domain/recipes/transformRecipeText";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";
 import {
@@ -15,11 +20,6 @@ import {
 } from "lexical";
 import { useCallback, useEffect, useState } from "react";
 import { EntityActions } from "@/components/EntityActions";
-import {
-	capitalizeLine,
-	convertLine,
-	roundLine,
-} from "@/features/recipes/bulk/utils/transformRecipeText";
 import { Button } from "@/ui/Button";
 import { ButtonGroup } from "@/ui/ButtonGroup";
 import { Flex } from "@/ui/Flex";

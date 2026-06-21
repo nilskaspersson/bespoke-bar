@@ -1,3 +1,4 @@
+import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getCachedRecipeSlotLimit } from "@/features/billing/api/getRecipeSlotLimit";
@@ -9,7 +10,6 @@ import {
 	RecipesListBoard,
 	RecipesListBoardSkeleton,
 } from "@/features/recipes/components/RecipesListBoard";
-import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";

@@ -1,3 +1,5 @@
+import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
+import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -16,7 +18,6 @@ import {
 	RecipesList,
 	RecipesListSkeleton,
 } from "@/features/recipes/components/RecipesList";
-import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
@@ -26,7 +27,6 @@ import { Icon } from "@/ui/Icon";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { authOrForbidden } from "@/utils/auth";
-import { pluralize } from "@/utils/formatting";
 import styles from "./page.module.css";
 
 type Props = {

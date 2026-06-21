@@ -1,3 +1,5 @@
+import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
+import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { clsx } from "clsx";
 import Link from "next/link";
@@ -13,9 +15,7 @@ import {
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
 import { AbvChip } from "@/features/recipes/metrics/components/AbvChip";
-import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
-import type { UnitSystems } from "@/features/units/utils/convert";
 import { Chip } from "@/ui/Chip";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";

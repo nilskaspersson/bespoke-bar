@@ -1,3 +1,4 @@
+import { PRO_OCR_QUOTA_BONUS } from "@bespoke/domain/billing/constants";
 import { OCRQuotaGrantsTable } from "@bespoke/schema/schema/ocrQuotaGrants";
 import {
 	DEFAULT_BASE_OCR_QUOTA,
@@ -8,7 +9,6 @@ import { eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
 import { getOrgSubscription } from "@/features/billing/api/getOrgSubscription";
-import { PRO_OCR_QUOTA_BONUS } from "@/features/billing/constants";
 import { cacheTags } from "@/utils/cache";
 
 export async function getOCRQuotaLimit(orgId: string): Promise<number> {

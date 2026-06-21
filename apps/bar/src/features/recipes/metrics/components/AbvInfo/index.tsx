@@ -1,9 +1,9 @@
+import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
 import { lineIsDraft } from "@/features/ingredientLines/utils";
 import { Abv } from "@/features/ingredients/components/Abv";
-import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";

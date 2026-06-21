@@ -1,9 +1,9 @@
-import { EmptyArea } from "@/components/EmptyArea";
-import { EntityActions } from "@/components/EntityActions";
 import {
 	buildIngredientMap,
 	stitchMenuEntries,
-} from "@/features/ingredientLines/utils/stitchIngredients";
+} from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { EmptyArea } from "@/components/EmptyArea";
+import { EntityActions } from "@/components/EntityActions";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { MenuFilters } from "@/features/menus/components/MenuFilters";

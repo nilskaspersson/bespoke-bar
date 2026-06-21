@@ -1,21 +1,21 @@
 "use client";
 
+import { isSystemCategory } from "@bespoke/domain/categories/matchNameWithCategory";
+import {
+	getMeasurementPriceUnit,
+	isMeasurementType,
+} from "@bespoke/domain/units/predicates";
 import type {
 	IngredientFormData,
 	RecipeFormData,
 } from "@bespoke/schema/schema/composite";
 import { type FieldName, useField } from "@conform-to/react";
-import { isSystemCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { Abv } from "@/features/ingredients/components/Abv";
 import {
 	CATEGORY_TO_LABEL,
 	MEASUREMENT_TO_LABEL,
 } from "@/features/ingredients/constants";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
-import {
-	getMeasurementPriceUnit,
-	isMeasurementType,
-} from "@/features/units/utils";
 import { Text } from "@/ui/Text";
 
 export function DraftIngredientOverview({

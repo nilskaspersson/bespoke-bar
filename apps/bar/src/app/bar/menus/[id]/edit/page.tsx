@@ -1,16 +1,16 @@
-import { notFound } from "next/navigation";
-import { Suspense } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import {
 	buildIngredientMap,
 	stitchMenuEntries,
-} from "@/features/ingredientLines/utils/stitchIngredients";
+} from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedMenu } from "@/features/menus/api/readMenu";
 import { MENU_FORM_ID, MenuForm } from "@/features/menus/components/MenuForm";
 import { getMenuUrl } from "@/features/menus/utils";
 import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import { stitchRecipes } from "@/features/recipes/utils/stitchRecipe";
 import { LinkButton } from "@/ui/Button";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";

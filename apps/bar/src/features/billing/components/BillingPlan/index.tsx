@@ -1,11 +1,11 @@
 "use client";
 
+import { formatPrice } from "@bespoke/domain/billing/formatPrice";
 import { clsx } from "clsx";
 import { type ComponentProps, use, useTransition } from "react";
 import { createProCheckout } from "@/features/billing/api/createProCheckout";
 import { BillingPortalButton } from "@/features/billing/components/BillingPortalButton";
 import { BillingStatusBadge } from "@/features/billing/components/BillingStatusBadge";
-import { formatPrice } from "@/features/billing/formatPrice";
 import { navigateToStripe } from "@/features/billing/navigateToStripe";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { trpc } from "@/trpc/client";

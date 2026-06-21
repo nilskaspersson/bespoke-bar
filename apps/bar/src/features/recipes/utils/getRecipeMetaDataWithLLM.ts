@@ -1,3 +1,4 @@
+import { formatLine } from "@bespoke/domain/ingredientLines/formatLine";
 import {
 	type CocktailStyle,
 	cocktailStyles,
@@ -9,7 +10,6 @@ import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { preparationMethods } from "@bespoke/schema/schema/preparationMethods";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { z } from "zod";
-import { formatLine } from "@/features/ingredientLines/utils/formatLine";
 import { genAI } from "@/utils/genai";
 import { isTimeoutError, stripTagDelimiters } from "@/utils/llm";
 

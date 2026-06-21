@@ -1,11 +1,11 @@
 "use client";
 
+import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import { clsx } from "clsx";
 import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
 import { useLineQuantityFormatter } from "@/features/ingredientLines/hooks/useLineQuantityFormatter";
 import { ToggleIngredientCard } from "@/features/ingredients/components/ToggleIngredientCard";
-import type { UnitSystems } from "@/features/units/utils/convert";
 import { AnimatedNumber } from "@/ui/AnimatedNumber";
 import { Chip } from "@/ui/Chip";
 import { Text, type TextProps } from "@/ui/Text";

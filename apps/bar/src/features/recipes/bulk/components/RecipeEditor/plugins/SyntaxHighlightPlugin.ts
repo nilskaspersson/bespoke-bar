@@ -1,5 +1,7 @@
 "use client";
 
+import type { IngredientIndex } from "@bespoke/domain/ingredients/buildIngredientIndex";
+import { type Token, tokenizeLine } from "@bespoke/domain/recipes/tokenizeLine";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
 	$getRoot,
@@ -9,11 +11,6 @@ import {
 	type ParagraphNode,
 } from "lexical";
 import { useEffect } from "react";
-import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
-import {
-	type Token,
-	tokenizeLine,
-} from "@/features/recipes/bulk/utils/tokenizeLine";
 import { useRecipeIngredients } from "../hooks/useRecipeIngredients";
 import { createParagraphDOMRange } from "../utils/paragraphRange";
 

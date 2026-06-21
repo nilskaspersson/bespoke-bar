@@ -1,3 +1,4 @@
+import { currencySchema } from "@bespoke/domain/currency/currencySchema";
 import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { useId, useState } from "react";
 import z from "zod";
@@ -5,7 +6,6 @@ import { CostInfo } from "@/features/recipes/metrics/components/CostInfo";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { TextField } from "@/ui/TextField";
-import { currencySchema } from "@/utils/currencySchema";
 import { MenuEntryProfit } from "../MenuEntryProfit";
 
 type Props = {

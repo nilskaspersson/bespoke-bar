@@ -1,10 +1,10 @@
+import { startOfNextUTCMonthMs } from "@bespoke/domain/billing/quotaMonth";
 import { OCRQuotaUsesTable } from "@bespoke/schema/schema/ocrQuotaUses";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { getOCRQuotaLimit } from "@/features/billing/api/getOCRQuotaLimit";
 import { getOCRUsageInWindow } from "@/features/billing/api/getOCRUsageInWindow";
-import { startOfNextUTCMonthMs } from "@/features/billing/quotaMonth";
 import { AppError } from "@/utils/appError";
 
 /**

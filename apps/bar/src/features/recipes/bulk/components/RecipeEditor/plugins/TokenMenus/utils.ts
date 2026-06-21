@@ -1,10 +1,10 @@
+import { quantityTextParser } from "@bespoke/domain/quantity/parseQuantity";
+import { unitTextParser } from "@bespoke/domain/units/parseUnit";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { Unit } from "@bespoke/schema/schema/units";
 import { MenuOption } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
 import type { RefObject } from "react";
-import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
-import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { normalizeInput } from "@/utils";
 
 export const MAX_TYPEAHEAD_OPTIONS = 10;

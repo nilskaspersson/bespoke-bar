@@ -1,12 +1,12 @@
+import {
+	buildIngredientMap,
+	stitchMenuEntries,
+} from "@bespoke/domain/ingredientLines/stitchIngredients";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { PageHeader } from "@/components/PageHeader";
-import {
-	buildIngredientMap,
-	stitchMenuEntries,
-} from "@/features/ingredientLines/utils/stitchIngredients";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { getCachedMenu } from "@/features/menus/api/readMenu";

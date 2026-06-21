@@ -1,5 +1,6 @@
 "use client";
 
+import { currencySchema } from "@bespoke/domain/currency/currencySchema";
 import { menuWithEntriesFormSchema } from "@bespoke/schema/schema/composite";
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
@@ -30,7 +31,6 @@ import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { TextField } from "@/ui/TextField";
 import { ToastActions, toast } from "@/ui/Toast";
-import { currencySchema } from "@/utils/currencySchema";
 import styles from "./styles.module.css";
 
 type Props = {

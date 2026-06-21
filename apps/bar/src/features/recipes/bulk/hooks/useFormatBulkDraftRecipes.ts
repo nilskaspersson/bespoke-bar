@@ -1,8 +1,8 @@
+import { userInputToBulkRecipe } from "@bespoke/domain/ingredientLines/userInputToBulkRecipe";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import type { Keyed } from "@bespoke/schema/types";
 import { useMemo } from "react";
-import { userInputToBulkRecipe } from "@/features/ingredientLines/utils/userInputToBulkRecipe";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
 import { withKey } from "@/utils/withKey";
 

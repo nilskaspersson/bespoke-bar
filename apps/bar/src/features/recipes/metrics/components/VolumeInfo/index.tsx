@@ -1,11 +1,11 @@
 "use client";
 
+import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
+import { convert, type UnitSystems } from "@bespoke/domain/units/convert";
+import { isBartendingUnit } from "@bespoke/domain/units/predicates";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { type ComponentProps, use } from "react";
-import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { useRoundedUnit } from "@/features/units/hooks/useRoundedUnit";
-import { isBartendingUnit } from "@/features/units/utils";
-import { convert, type UnitSystems } from "@/features/units/utils/convert";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";

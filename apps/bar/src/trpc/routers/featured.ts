@@ -1,8 +1,8 @@
-import { z } from "zod";
 import {
 	buildIngredientMap,
 	stitchMenuEntries,
-} from "@/features/ingredientLines/utils/stitchIngredients";
+} from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { z } from "zod";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { clearFeaturedMenu } from "@/features/menus/featured/api/clearFeaturedMenu.service";
 import { getCachedFeaturedMenu } from "@/features/menus/featured/api/readFeaturedMenu";

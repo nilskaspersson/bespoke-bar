@@ -1,21 +1,6 @@
-/** @public */
-export function compose<T>(fn: (a: T) => T, ...fns: Array<(a: T) => T>) {
-	return fns.reduce((prev, next) => (v) => prev(next(v)), fn);
-}
-
-export function pipe<T>(fn: (a: T) => T, ...fns: Array<(a: T) => T>) {
-	return fns.reduce((prev, next) => (v) => next(prev(v)), fn);
-}
-
-export function omit<T, K extends keyof T>(o: T, ...keys: K[]): Omit<T, K> {
-	const result = { ...o };
-
-	for (const key of keys) {
-		delete result[key];
-	}
-
-	return result;
-}
+export { indexBy } from "@bespoke/domain/utils/collection";
+export { round } from "@bespoke/domain/utils/math";
+export { asciiFold, normalizeInput } from "@bespoke/domain/utils/text";
 
 /** @public */
 export function clamp(n: number, min: number, max: number): number {
@@ -68,11 +53,6 @@ export function debounce<Args extends unknown[]>(
 	return debounced;
 }
 
-export function round(value: number, decimals = 2): number {
-	const factor = 10 ** decimals;
-	return Math.round(value * factor) / factor;
-}
-
 export function pick<T extends Record<PropertyKey, unknown>, K extends keyof T>(
 	o: T,
 	...keys: K[]
@@ -92,15 +72,6 @@ export function isEmpty(o: unknown): boolean {
 	return o == null || o === "";
 }
 
-/**
- * Escapes special characters in a string for use in a regular expression.
- * @param string - The string to escape.
- * @returns The escaped string.
- */
-export function escapeRegex(string: string) {
-	return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
 /** @public */
 export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 	const inverted = new Map<T, Set<string>>();
@@ -118,66 +89,6 @@ export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 
 export function isUndefined(o: unknown): o is undefined {
 	return typeof o === "undefined";
-}
-
-/**
- * Unicode "Combining Diacritical Marks" block (U+0300 to U+036F).
- * Used to strip accents after NFKD normalization decomposes characters
- * like "é" into "e" + combining acute accent.
- */
-const COMBINING_MARKS = /[\u0300-\u036f]/g;
-
-/**
- * Fold a string to its ASCII-comparable form: strip diacritics and map typographic
- * punctuation (curly quotes, en/em dashes) to ASCII equivalents.
- */
-const NON_ASCII = /\P{ASCII}/u;
-
-/** @public */
-export function asciiFold(s: string): string {
-	// Fast path: skip normalize + regex if pure ASCII
-	if (!NON_ASCII.test(s)) return s;
-
-	return s
-		.normalize("NFKD")
-		.replaceAll(COMBINING_MARKS, "")
-		.replaceAll(/[‘’‚‛′ʼ]/g, "'")
-		.replaceAll(/[“”„‟]/g, '"')
-		.replaceAll(/[–—]/g, "-");
-}
-
-export function normalizeInput(s: string): string {
-	return asciiFold(s).toLowerCase().trim();
-}
-
-/**
- * Build a Map from an array, keyed by a value extracted from each item.
- */
-export function indexBy<T>(
-	items: readonly T[],
-	getKey: (item: T) => string,
-): Map<string, T> {
-	const map = new Map<string, T>();
-	for (const item of items) {
-		map.set(getKey(item), item);
-	}
-	return map;
-}
-
-/**
- * Inverts a Map<K, V[]> to Map<V, K> for one-to-one lookups
- * Assumes each value appears only once.
- */
-export function invertMapToLookup<K, V>(map: Map<K, V[]>): Map<V, K> {
-	const result = new Map<V, K>();
-
-	for (const [key, values] of map.entries()) {
-		for (const value of values) {
-			result.set(value, key);
-		}
-	}
-
-	return result;
 }
 
 export function pickRandom<T>(items: readonly [T, ...T[]]): T {

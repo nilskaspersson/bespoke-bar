@@ -1,3 +1,7 @@
+import {
+	stitchRecipe,
+	stitchRecipes,
+} from "@bespoke/domain/recipes/stitchRecipe";
 import { recipeFormSchema } from "@bespoke/schema/schema/composite";
 import { updateRecipeSchema } from "@bespoke/schema/schema/recipes";
 import { z } from "zod";
@@ -9,10 +13,6 @@ import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { updateRecipe } from "@/features/recipes/api/updateRecipe.service";
 import { upsertRecipesWithLines } from "@/features/recipes/api/upsertRecipesWithLines.service";
-import {
-	stitchRecipe,
-	stitchRecipes,
-} from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { protectedProcedure, router } from "@/trpc";
 

@@ -1,5 +1,9 @@
 "use client";
 
+import type { IngredientIndex } from "@bespoke/domain/ingredients/buildIngredientIndex";
+import { quantityTextParser } from "@bespoke/domain/quantity/parseQuantity";
+import { type Token, tokenizeLine } from "@bespoke/domain/recipes/tokenizeLine";
+import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import {
 	$createRangeSelection,
@@ -24,14 +28,7 @@ import {
 	useState,
 } from "react";
 import { getIngredientId } from "@/features/ingredients/utils";
-import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
-import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
-import {
-	type Token,
-	tokenizeLine,
-} from "@/features/recipes/bulk/utils/tokenizeLine";
 import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
-import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 import { usePopover } from "@/hooks/usePopover";
 import { Input } from "@/ui/Input";
 import { PopoverAnchor } from "@/ui/Popover";

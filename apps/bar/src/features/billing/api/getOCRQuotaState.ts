@@ -1,39 +1,11 @@
+import {
+	deriveOCRQuotaState,
+	type OCRQuotaState,
+} from "@bespoke/domain/billing/getOCRQuotaState";
 import { getCachedOCRQuotaLimit } from "@/features/billing/api/getOCRQuotaLimit";
 import { getCachedOCRQuotaUsage } from "@/features/billing/api/getOCRQuotaUsage";
-import {
-	startOfCurrentUTCMonthMs,
-	startOfNextUTCMonthMs,
-} from "@/features/billing/quotaMonth";
 
-export type OCRQuotaState = {
-	limit: number;
-	used: number;
-	remaining: number;
-	nextAvailableAt: string | null;
-};
-
-export function deriveOCRQuotaState({
-	limit,
-	used,
-	monthStartMs,
-	nowMs,
-}: {
-	limit: number;
-	used: number;
-	monthStartMs: number;
-	nowMs: number;
-}): OCRQuotaState {
-	const usedThisMonth =
-		monthStartMs === startOfCurrentUTCMonthMs(nowMs) ? used : 0;
-	const remaining = Math.max(0, limit - usedThisMonth);
-
-	const nextAvailableAt =
-		remaining === 0 && limit > 0
-			? new Date(startOfNextUTCMonthMs(nowMs)).toISOString()
-			: null;
-
-	return { limit, used: usedThisMonth, remaining, nextAvailableAt };
-}
+export type { OCRQuotaState };
 
 /**
  * Not itself cached: each half owns its own `cacheLife("max")` + tag, and the

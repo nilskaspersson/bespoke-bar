@@ -1,14 +1,14 @@
 import {
+	PRO_MONTHLY_SLOT_BONUS,
+	PRO_SIGNUP_SLOT_BONUS,
+} from "@bespoke/domain/billing/constants";
+import {
 	type InsertOrgSubscription,
 	isProActive,
 	subscriptionStatusSchema,
 } from "@bespoke/schema/schema/orgSubscriptions";
 import type Stripe from "stripe";
 import { z } from "zod";
-import {
-	PRO_MONTHLY_SLOT_BONUS,
-	PRO_SIGNUP_SLOT_BONUS,
-} from "@/features/billing/constants";
 
 const slotPackMetadataSchema = z.object({
 	orgId: z.string().min(1),

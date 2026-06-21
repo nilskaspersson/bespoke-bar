@@ -1,12 +1,6 @@
+import type { PriceDisplay } from "@bespoke/domain/billing/formatPrice";
 import { cacheLife } from "next/cache";
 import { getStripe } from "@/features/billing/stripe";
-
-export type PriceDisplay = {
-	/** Minor units (cents); null for prices without a fixed amount. */
-	amount: number | null;
-	currency: string;
-	interval: string | null;
-};
 
 /**
  * No cache tag on purpose: a Stripe Price's amount/currency/recurrence are

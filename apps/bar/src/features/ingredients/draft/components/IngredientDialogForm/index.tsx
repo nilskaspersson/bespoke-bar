@@ -1,5 +1,6 @@
 "use client";
 
+import { getMeasurementPriceUnit } from "@bespoke/domain/units/predicates";
 import type {
 	IngredientFormData,
 	RecipeFormData,
@@ -10,7 +11,6 @@ import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";
 import { SelectUnitCost } from "@/features/ingredients/components/SelectUnitCost";
-import { getMeasurementPriceUnit } from "@/features/units/utils";
 import { Alert } from "@/ui/Alert";
 import { Button } from "@/ui/Button";
 import type { Dialog } from "@/ui/Dialog";

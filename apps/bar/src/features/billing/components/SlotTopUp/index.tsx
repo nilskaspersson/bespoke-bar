@@ -1,8 +1,8 @@
 "use client";
 
+import { formatPrice } from "@bespoke/domain/billing/formatPrice";
 import { use, useTransition } from "react";
 import { createSlotPackCheckout } from "@/features/billing/api/createSlotPackCheckout";
-import { formatPrice } from "@/features/billing/formatPrice";
 import { navigateToStripe } from "@/features/billing/navigateToStripe";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { trpc } from "@/trpc/client";

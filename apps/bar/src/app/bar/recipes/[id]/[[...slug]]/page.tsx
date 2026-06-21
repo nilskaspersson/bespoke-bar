@@ -1,3 +1,4 @@
+import { stitchRecipe } from "@bespoke/domain/recipes/stitchRecipe";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -9,7 +10,6 @@ import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { getRecipeName } from "@/features/recipes/utils";
-import { stitchRecipe } from "@/features/recipes/utils/stitchRecipe";
 import { getCachedTags } from "@/features/tags/api/listTags";
 import { Container } from "@/ui/Container";
 import { authOrForbidden } from "@/utils/auth";

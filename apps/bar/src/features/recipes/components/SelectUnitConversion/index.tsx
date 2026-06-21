@@ -1,10 +1,10 @@
 "use client";
 
-import { type ChangeEvent, useCallback } from "react";
 import {
 	isValidUnitSystem,
 	type UnitSystems,
-} from "@/features/units/utils/convert";
+} from "@bespoke/domain/units/convert";
+import { type ChangeEvent, useCallback } from "react";
 import { WeightedToggle } from "@/ui/WeightedToggle";
 import { withKey } from "@/utils/withKey";
 

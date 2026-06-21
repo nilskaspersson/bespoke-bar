@@ -1,9 +1,9 @@
 "use client";
 
+import { getGhostCompletion } from "@bespoke/domain/recipes/getGhostCompletion";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { $getSelection, $isRangeSelection } from "lexical";
 import { useLayoutEffect, useRef } from "react";
-import { getGhostCompletion } from "@/features/recipes/bulk/utils/getGhostCompletion";
 
 /**
  * Writes the completion suffix of the currently highlighted option as a
