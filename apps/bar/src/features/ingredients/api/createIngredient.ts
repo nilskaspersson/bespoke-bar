@@ -1,11 +1,11 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { createIngredient as createIngredientService } from "@bespoke/api/ingredients/createIngredient.service";
 import type {
 	DraftIngredient,
 	Ingredient,
 } from "@bespoke/schema/schema/ingredients";
-import { createIngredient as createIngredientService } from "@/features/ingredients/api/createIngredient.service";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function createIngredient(
 	userIngredient: DraftIngredient,

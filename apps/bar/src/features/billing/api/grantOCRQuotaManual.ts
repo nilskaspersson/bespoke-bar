@@ -1,8 +1,8 @@
 "use server";
 
+import { adminOrForbidden } from "@bespoke/api/admin";
+import { issueOCRQuotaGrant } from "@bespoke/api/billing/issueOCRQuotaGrant.service";
 import { z } from "zod";
-import { issueOCRQuotaGrant } from "@/features/billing/api/issueOCRQuotaGrant.service";
-import { adminOrForbidden } from "@/utils/admin";
 
 const inputSchema = z.object({
 	orgId: z.string().min(1),

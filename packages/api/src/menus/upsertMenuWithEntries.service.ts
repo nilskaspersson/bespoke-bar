@@ -1,0 +1,45 @@
+import { db } from "@bespoke/db";
+import type { MenuWithEntriesFormData } from "@bespoke/schema/schema/composite";
+import type { Menu } from "@bespoke/schema/schema/menus";
+import type { Auth } from "../auth";
+import { cacheEvents } from "../cache";
+import { rateLimit } from "../rateLimit";
+import {
+	replaceMenuEntriesInTransaction,
+	upsertMenuInTransaction,
+} from "./utils/transactionHelpers";
+
+export async function upsertMenuWithEntries(
+	auth: Auth,
+	userInputMenu: MenuWithEntriesFormData,
+): Promise<Menu> {
+	const { userId, orgId } = auth;
+
+	await rateLimit(userId);
+
+	const [result, isNew] = await db.transaction(async (tx) => {
+		const [menu, isNew] = await upsertMenuInTransaction(
+			tx,
+			userInputMenu.menu,
+			userId,
+			orgId,
+		);
+
+		await replaceMenuEntriesInTransaction(
+			tx,
+			menu.id,
+			userInputMenu.entries,
+			orgId,
+		);
+
+		return [menu, isNew];
+	});
+
+	if (isNew) {
+		cacheEvents.menu.create.emit(orgId);
+	} else {
+		cacheEvents.menu.update.emit(orgId, result.id);
+	}
+
+	return result;
+}

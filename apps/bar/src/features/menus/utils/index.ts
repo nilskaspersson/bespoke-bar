@@ -9,10 +9,6 @@ import { isRecipe } from "@/features/recipes/utils";
 import { isObject } from "@/utils";
 import { namedEntityToUrlSlug } from "@/utils/url";
 
-export function generateDefaultMenuName() {
-	return `Menu ${new Date().toLocaleString()}`;
-}
-
 export function getMenuUrl(menu: Menu) {
 	return `/bar/menus/${menu.id}/${namedEntityToUrlSlug(menu)}`;
 }

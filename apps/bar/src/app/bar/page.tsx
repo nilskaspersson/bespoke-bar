@@ -1,3 +1,4 @@
+import { authOrForbidden } from "@bespoke/api/auth";
 import { cacheLife } from "next/cache";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
@@ -7,7 +8,6 @@ import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
-import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 export default function BarPage() {

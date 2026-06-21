@@ -1,0 +1,30 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"root": true,
+	"files": {
+		"includes": ["src/**"]
+	},
+	"formatter": {
+		"enabled": true,
+		"useEditorconfig": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": ["react-dom", "react-dom/**", "@lexical/**"],
+								"message": "packages/api is the SERVER package (Next-coupled): tRPC router/context, services, reads, cache-event model, auth, rate-limiting, LLM/Vision. It may import next/*, react (server cache only), @clerk, @upstash, @google*, stripe, the DB driver — but never client DOM (react-dom) or the editor (@lexical). Those belong in apps/bar."
+							}
+						]
+					}
+				}
+			}
+		}
+	}
+}

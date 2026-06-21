@@ -1,6 +1,6 @@
+import { getOrCreateLocalOrganisation } from "@bespoke/api/organisation/getOrCreateLocalOrganisation";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import { FormatterContextProvider } from "@/hooks/useFormatter";
 
 export async function OrgProvider({ children }: { children: React.ReactNode }) {

@@ -27,6 +27,9 @@ importers:
 
   apps/bar:
     dependencies:
+      '@bespoke/api':
+        specifier: workspace:*
+        version: link:../../packages/api
       '@bespoke/db':
         specifier: workspace:*
         version: link:../../packages/db
@@ -160,6 +163,73 @@ importers:
       typescript-plugin-css-modules:
         specifier: 5.2.0
         version: 5.2.0(typescript@6.0.3)
+      vitest:
+        specifier: 4.1.7
+        version: 4.1.7(@types/node@25.9.1)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.1)(less@4.6.6)(sass@1.101.0)(stylus@0.62.0)(tsx@4.22.4))
+
+  packages/api:
+    dependencies:
+      '@bespoke/db':
+        specifier: workspace:*
+        version: link:../db
+      '@bespoke/domain':
+        specifier: workspace:*
+        version: link:../domain
+      '@bespoke/schema':
+        specifier: workspace:*
+        version: link:../schema
+      '@clerk/nextjs':
+        specifier: 7.4.2
+        version: 7.4.2(next@16.2.9(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.101.0))(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@google-cloud/vision':
+        specifier: 5.3.6
+        version: 5.3.6
+      '@google/genai':
+        specifier: 2.6.0
+        version: 2.6.0
+      '@trpc/server':
+        specifier: 11.17.0
+        version: 11.17.0(typescript@6.0.3)
+      '@upstash/ratelimit':
+        specifier: 2.0.8
+        version: 2.0.8(@upstash/redis@1.38.0)
+      '@upstash/redis':
+        specifier: 1.38.0
+        version: 1.38.0
+      '@vercel/edge-config':
+        specifier: 1.4.3
+        version: 1.4.3(next@16.2.9(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.101.0))
+      drizzle-orm:
+        specifier: 0.45.2
+        version: 0.45.2(@neondatabase/serverless@1.1.0)(@types/pg@8.20.0)(@upstash/redis@1.38.0)(pg@8.20.0)
+      next:
+        specifier: 'catalog:'
+        version: 16.2.9(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.101.0)
+      react:
+        specifier: 19.2.7
+        version: 19.2.7
+      stripe:
+        specifier: 22.2.0
+        version: 22.2.0(@types/node@25.9.1)
+      zod:
+        specifier: 4.4.3
+        version: 4.4.3
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 2.4.16
+        version: 2.4.16
+      '@types/node':
+        specifier: 25.9.1
+        version: 25.9.1
+      '@types/react':
+        specifier: 19.2.15
+        version: 19.2.15
+      dotenv:
+        specifier: 17.4.2
+        version: 17.4.2
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
       vitest:
         specifier: 4.1.7
         version: 4.1.7(@types/node@25.9.1)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.1)(less@4.6.6)(sass@1.101.0)(stylus@0.62.0)(tsx@4.22.4))

@@ -1,8 +1,8 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { removeRecipeFromMenu as removeRecipeFromMenuService } from "@bespoke/api/menus/entries/removeRecipeFromMenu.service";
 import type { MenuEntry } from "@bespoke/schema/schema/menuEntries";
-import { removeRecipeFromMenu as removeRecipeFromMenuService } from "@/features/menus/entries/api/removeRecipeFromMenu.service";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function removeRecipeFromMenu(
 	entryId: string,

@@ -1,12 +1,12 @@
 "use client";
 
 import { isValidUnit } from "@bespoke/domain/units/predicates";
+import { collator } from "@bespoke/domain/utils/collator";
 import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
 import type { Keyed } from "@bespoke/schema/types";
 import type { ComponentProps } from "react";
 import { getUnitLabel } from "@/features/units/constants";
 import { Select } from "@/ui/Select";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

@@ -1,15 +1,15 @@
 "use server";
 
+import { adminOrForbidden } from "@bespoke/api/admin";
+import {
+	type DeleteLocalOrganisationResult,
+	deleteLocalOrganisation,
+} from "@bespoke/api/organisation/deleteLocalOrganisation.service";
 import { db } from "@bespoke/db";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { clerkClient } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import {
-	type DeleteLocalOrganisationResult,
-	deleteLocalOrganisation,
-} from "@/features/organisation/api/deleteLocalOrganisation.service";
-import { adminOrForbidden } from "@/utils/admin";
 
 const inputSchema = z.object({
 	localOrgId: z.string().min(1),

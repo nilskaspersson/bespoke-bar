@@ -1,10 +1,10 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { updateLocalOrganisation as updateLocalOrganisationService } from "@bespoke/api/organisation/updateLocalOrganisation.service";
 import type { UpdateOrganisationFormData } from "@bespoke/schema/schema/organisations";
 import { updateOrganisationFormSchema } from "@bespoke/schema/schema/organisations";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { updateLocalOrganisation as updateLocalOrganisationService } from "@/features/organisation/api/updateLocalOrganisation.service";
-import { authOrForbidden } from "@/utils/auth";
 
 async function updateLocalOrganisation(userInput: UpdateOrganisationFormData) {
 	const auth = await authOrForbidden();

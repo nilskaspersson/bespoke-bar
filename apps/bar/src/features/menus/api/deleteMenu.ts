@@ -1,9 +1,9 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { deleteMenu as deleteMenuService } from "@bespoke/api/menus/deleteMenu.service";
 import type { Menu } from "@bespoke/schema/schema/menus";
 import { redirect } from "next/navigation";
-import { deleteMenu as deleteMenuService } from "@/features/menus/api/deleteMenu.service";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function deleteMenu({
 	id,

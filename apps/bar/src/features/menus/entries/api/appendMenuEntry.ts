@@ -1,13 +1,13 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { appendMenuEntry as appendMenuEntryService } from "@bespoke/api/menus/entries/appendMenuEntry.service";
 import {
 	type MenuWithEntries,
 	type MenuWithEntriesFormData,
 	menuWithEntriesFormSchema,
 } from "@bespoke/schema/schema/composite";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { appendMenuEntry as appendMenuEntryService } from "@/features/menus/entries/api/appendMenuEntry.service";
-import { authOrForbidden } from "@/utils/auth";
 
 async function appendMenuEntry(
 	userInputMenu: MenuWithEntriesFormData,

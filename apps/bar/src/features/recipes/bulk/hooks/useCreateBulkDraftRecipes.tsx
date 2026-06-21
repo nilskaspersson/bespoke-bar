@@ -1,3 +1,4 @@
+import { AppError } from "@bespoke/schema/appError";
 import {
 	MAX_LINES_PER_RECIPE,
 	type RecipeFormData,
@@ -16,7 +17,6 @@ import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
 import { getErrorToast } from "@/utils/api";
-import { AppError } from "@/utils/appError";
 import { getKey } from "@/utils/withKey";
 
 export function useCreateBulkDraftRecipes(

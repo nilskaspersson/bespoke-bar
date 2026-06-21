@@ -1,9 +1,9 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { rateLimit } from "@bespoke/api/rateLimit";
 import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { OCR_CONSENT_VERSION } from "@/features/consent/constants";
-import { rateLimit } from "@/rateLimit";
-import { authOrForbidden } from "@/utils/auth";
 import { catchKnownErrors } from "@/utils/serverAction";
 
 const OCR_CONSENT_KEY = "ocrConsentVersion";

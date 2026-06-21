@@ -1,8 +1,8 @@
 "use client";
 
+import { TAG_NAME_MAX_LENGTH } from "@bespoke/domain/tags/constants";
 import { clsx } from "clsx";
 import { useId } from "react";
-import { TAG_NAME_MAX_LENGTH } from "@/features/tags/constants";
 import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";

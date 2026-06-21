@@ -1,5 +1,7 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { upsertMenuWithEntries as upsertMenuWithEntriesService } from "@bespoke/api/menus/upsertMenuWithEntries.service";
 import {
 	type MenuWithEntriesFormData,
 	menuWithEntriesFormSchema,
@@ -7,9 +9,7 @@ import {
 import type { Menu } from "@bespoke/schema/schema/menus";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { redirect } from "next/navigation";
-import { upsertMenuWithEntries as upsertMenuWithEntriesService } from "@/features/menus/api/upsertMenuWithEntries.service";
 import { getMenuUrl } from "@/features/menus/utils";
-import { authOrForbidden } from "@/utils/auth";
 
 /** @public */
 export async function upsertMenuWithEntries(

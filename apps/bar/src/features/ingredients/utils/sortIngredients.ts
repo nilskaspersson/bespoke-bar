@@ -1,6 +1,6 @@
+import { collator } from "@bespoke/domain/utils/collator";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { z } from "zod";
-import { collator } from "@/utils/collator";
 
 export const ingredientSortFieldSchema = z.enum(["created", "updated", "name"]);
 export const ingredientSortDirectionSchema = z.enum(["asc", "desc"]);

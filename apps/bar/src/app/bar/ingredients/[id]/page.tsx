@@ -1,3 +1,9 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredient } from "@bespoke/api/ingredients/readIngredient";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { getCachedBarRecipes } from "@bespoke/api/recipes/readBarRecipes";
+import { getCachedUserFavoriteRecipeIds } from "@bespoke/api/recipes/readUserFavoriteRecipeIds";
+import { getCachedTags } from "@bespoke/api/tags/listTags";
 import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { Metadata } from "next";
@@ -6,19 +12,14 @@ import { Suspense } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
 import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
-import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { EditIngredientButton } from "@/features/ingredients/components/EditIngredientButton";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
-import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import {
 	RecipesList,
 	RecipesListSkeleton,
 } from "@/features/recipes/components/RecipesList";
-import { getCachedTags } from "@/features/tags/api/listTags";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
@@ -26,7 +27,6 @@ import { HGroup } from "@/ui/HGroup";
 import { Icon } from "@/ui/Icon";
 import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
-import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 type Props = {

@@ -1,4 +1,9 @@
-export { indexBy } from "@bespoke/domain/utils/collection";
+export {
+	indexBy,
+	isEmpty,
+	pick,
+	unique,
+} from "@bespoke/domain/utils/collection";
 export { round } from "@bespoke/domain/utils/math";
 export { asciiFold, normalizeInput } from "@bespoke/domain/utils/text";
 
@@ -53,25 +58,6 @@ export function debounce<Args extends unknown[]>(
 	return debounced;
 }
 
-export function pick<T extends Record<PropertyKey, unknown>, K extends keyof T>(
-	o: T,
-	...keys: K[]
-): Pick<T, K> {
-	const result = {} as Pick<T, K>;
-
-	for (const key of keys) {
-		if (key in o) {
-			result[key] = o[key];
-		}
-	}
-
-	return result;
-}
-
-export function isEmpty(o: unknown): boolean {
-	return o == null || o === "";
-}
-
 /** @public */
 export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 	const inverted = new Map<T, Set<string>>();
@@ -97,10 +83,6 @@ export function pickRandom<T>(items: readonly [T, ...T[]]): T {
 
 export function times(n: number): number[] {
 	return Array.from({ length: n }, (_, i) => i);
-}
-
-export function unique<T>(items: Iterable<T>): T[] {
-	return Array.from(new Set(items));
 }
 
 /** @public */

@@ -1,10 +1,9 @@
 "use server";
 
-import { getAppErrorMessage } from "@bespoke/schema/appError";
+import { authOrForbidden } from "@bespoke/api/auth";
+import { duplicateRecipe } from "@bespoke/api/recipes/duplicateRecipe.service";
+import { AppError, getAppErrorMessage } from "@bespoke/schema/appError";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
-import { duplicateRecipe } from "@/features/recipes/api/duplicateRecipe.service";
-import { AppError } from "@/utils/appError";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function duplicateRecipeAction(recipeId: string): Promise<Recipe> {
 	const auth = await authOrForbidden();

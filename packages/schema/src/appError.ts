@@ -112,3 +112,10 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 export function getAppErrorMessage(payload: AppErrorPayload): string {
 	return getAppErrorToast(payload).description;
 }
+
+export class AppError extends Error {
+	constructor(public payload: AppErrorPayload) {
+		super(getAppErrorMessage(payload));
+		this.name = "AppError";
+	}
+}

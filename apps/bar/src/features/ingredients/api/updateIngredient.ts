@@ -1,5 +1,7 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { updateIngredient as updateIngredientService } from "@bespoke/api/ingredients/updateIngredient.service";
 import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import type {
 	DraftIngredient,
@@ -7,8 +9,6 @@ import type {
 } from "@bespoke/schema/schema/ingredients";
 import { updateIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { updateIngredient as updateIngredientService } from "@/features/ingredients/api/updateIngredient.service";
-import { authOrForbidden } from "@/utils/auth";
 
 /** @public */
 export async function updateIngredient(

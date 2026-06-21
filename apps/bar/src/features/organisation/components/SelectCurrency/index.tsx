@@ -1,9 +1,9 @@
+import { collator } from "@bespoke/domain/utils/collator";
 import type { Keyed } from "@bespoke/schema/types";
 import { type ComponentProps, use, useCallback, useMemo } from "react";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Combobox } from "@/ui/Combobox";
 import { Menu } from "@/ui/Menu";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 

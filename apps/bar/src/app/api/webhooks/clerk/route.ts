@@ -1,9 +1,9 @@
+import { deleteLocalOrganisation } from "@bespoke/api/organisation/deleteLocalOrganisation.service";
 import { db } from "@bespoke/db";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { eq } from "drizzle-orm";
 import type { NextRequest } from "next/server";
-import { deleteLocalOrganisation } from "@/features/organisation/api/deleteLocalOrganisation.service";
 
 const CLERK_ORG_ID_PATTERN = /^org_[A-Za-z0-9]{8,}$/;
 

@@ -1,5 +1,5 @@
+import { collator } from "@bespoke/domain/utils/collator";
 import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
-import { collator } from "@/utils/collator";
 import { createSearchIndex } from "@/utils/search";
 
 const UNIT_TO_LABEL = new Map<Unit, string>([

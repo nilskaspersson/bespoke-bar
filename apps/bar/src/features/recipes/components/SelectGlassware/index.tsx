@@ -1,10 +1,10 @@
 "use client";
 
+import { collator } from "@bespoke/domain/utils/collator";
 import { type Glassware, glasswares } from "@bespoke/schema/schema/glassware";
 import type { ComponentProps } from "react";
 import { GLASSWARE_TO_LABEL } from "@/features/recipes/constants";
 import { Combobox } from "@/ui/Combobox";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

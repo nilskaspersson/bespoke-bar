@@ -1,21 +1,21 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedRecipeSlotLimit } from "@bespoke/api/billing/getRecipeSlotLimit";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { getCachedBarRecipes } from "@bespoke/api/recipes/readBarRecipes";
+import { getCachedUserFavoriteRecipeIds } from "@bespoke/api/recipes/readUserFavoriteRecipeIds";
+import { getCachedTags } from "@bespoke/api/tags/listTags";
 import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { getCachedRecipeSlotLimit } from "@/features/billing/api/getRecipeSlotLimit";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import { getCachedBarRecipes } from "@/features/recipes/api/readBarRecipes";
-import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import {
 	RecipesListBoard,
 	RecipesListBoardSkeleton,
 } from "@/features/recipes/components/RecipesListBoard";
-import { getCachedTags } from "@/features/tags/api/listTags";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Text } from "@/ui/Text";
-import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 export default function RecipesPage() {

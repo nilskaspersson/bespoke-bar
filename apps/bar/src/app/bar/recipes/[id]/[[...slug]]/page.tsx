@@ -1,18 +1,18 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { getUserById } from "@bespoke/api/organisation/getUserById";
+import { getCachedRecipe } from "@bespoke/api/recipes/readRecipe";
+import { getCachedUserFavoriteRecipeIds } from "@bespoke/api/recipes/readUserFavoriteRecipeIds";
+import { getCachedTags } from "@bespoke/api/tags/listTags";
 import { stitchRecipe } from "@bespoke/domain/recipes/stitchRecipe";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
-import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
-import { getCachedUserFavoriteRecipeIds } from "@/features/recipes/api/readUserFavoriteRecipeIds";
 import { RecipeArticle } from "@/features/recipes/components/RecipeArticle";
 import { getRecipeName } from "@/features/recipes/utils";
-import { getCachedTags } from "@/features/tags/api/listTags";
 import { Container } from "@/ui/Container";
-import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 

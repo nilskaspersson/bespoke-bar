@@ -1,7 +1,7 @@
 "use client";
 
+import type { AdminSubscriptionSummary } from "@bespoke/api/admin/getAdminOrgDetails";
 import { use } from "react";
-import type { AdminSubscriptionSummary } from "@/features/admin/api/getAdminOrgDetails";
 import { grantProManual } from "@/features/admin/api/grantProManual";
 import { revokeProManual } from "@/features/admin/api/revokeProManual";
 import { FormatterContext } from "@/hooks/useFormatter";

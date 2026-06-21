@@ -1,8 +1,8 @@
 "use server";
 
+import { adminOrForbidden } from "@bespoke/api/admin";
+import { revokeOrgProManual } from "@bespoke/api/admin/setOrgProManual.service";
 import { z } from "zod";
-import { revokeOrgProManual } from "@/features/admin/api/setOrgProManual.service";
-import { adminOrForbidden } from "@/utils/admin";
 
 const inputSchema = z.object({
 	orgId: z.string().min(1),

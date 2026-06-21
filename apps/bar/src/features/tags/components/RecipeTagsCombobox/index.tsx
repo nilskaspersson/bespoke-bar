@@ -1,13 +1,14 @@
 "use client";
 
+import {
+	MAX_TAGS_PER_RECIPE,
+	TAG_NAME_MAX_LENGTH,
+} from "@bespoke/domain/tags/constants";
+import { collator } from "@bespoke/domain/utils/collator";
 import type { Tag } from "@bespoke/schema/schema/tags";
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
-import {
-	MAX_TAGS_PER_RECIPE,
-	TAG_NAME_MAX_LENGTH,
-} from "@/features/tags/constants";
 import { useRecipeTagsCombobox } from "@/features/tags/hooks/useRecipeTagsCombobox";
 import { usePlatform } from "@/stores/platform";
 import { Button } from "@/ui/Button";
@@ -20,7 +21,6 @@ import { Lightbox } from "@/ui/Lightbox";
 import { Popover } from "@/ui/Popover";
 import { Spinner } from "@/ui/Spinner";
 import { Text } from "@/ui/Text";
-import { collator } from "@/utils/collator";
 import { handleKey, matchesShortcut } from "@/utils/keyboard";
 import {
 	createSearchIndex,

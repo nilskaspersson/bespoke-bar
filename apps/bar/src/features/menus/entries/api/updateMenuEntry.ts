@@ -1,13 +1,13 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { updateMenuEntry as updateMenuEntryService } from "@bespoke/api/menus/entries/updateMenuEntry.service";
 import {
 	type MenuEntry,
 	menuEntryFormSchema,
 	type UpdateMenuEntry,
 } from "@bespoke/schema/schema/menuEntries";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { updateMenuEntry as updateMenuEntryService } from "@/features/menus/entries/api/updateMenuEntry.service";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function updateMenuEntry(
 	id: MenuEntry["id"],

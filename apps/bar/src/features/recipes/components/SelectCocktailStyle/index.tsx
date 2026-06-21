@@ -1,5 +1,6 @@
 "use client";
 
+import { collator } from "@bespoke/domain/utils/collator";
 import {
 	type CocktailStyle,
 	cocktailStyles,
@@ -7,7 +8,6 @@ import {
 import type { ComponentProps } from "react";
 import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
 import { Combobox } from "@/ui/Combobox";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

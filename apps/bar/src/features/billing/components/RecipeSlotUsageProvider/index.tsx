@@ -1,7 +1,7 @@
 "use client";
 
+import type { RecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { createContext, type ReactNode } from "react";
-import type { RecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
 
 export const RecipeSlotUsageContext = createContext<
 	RecipeSlotUsage | undefined

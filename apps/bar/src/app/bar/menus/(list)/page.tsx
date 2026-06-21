@@ -1,8 +1,10 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { cacheTags } from "@bespoke/api/cache";
+import { getCachedMenus } from "@bespoke/api/menus/readBarMenus";
 import type { Metadata } from "next";
 import { cacheLife, cacheTag } from "next/cache";
 import { type ReactNode, Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
-import { getCachedMenus } from "@/features/menus/api/readBarMenus";
 import { MenuTable } from "@/features/menus/components/MenuTable";
 import { LinkButton } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
@@ -11,8 +13,6 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
-import { authOrForbidden } from "@/utils/auth";
-import { cacheTags } from "@/utils/cache";
 import styles from "./page.module.css";
 
 export default function MenusPage() {

@@ -1,6 +1,6 @@
+import { isAdminUser } from "@bespoke/api/admin";
+import { getIngredientMetaDataBatchWithLLM } from "@bespoke/api/ingredients/getIngredientMetaDataWithLLM";
 import { auth } from "@clerk/nextjs/server";
-import { getIngredientMetaDataBatchWithLLM } from "@/features/ingredients/utils/getIngredientMetaDataWithLLM";
-import { isAdminUser } from "@/utils/admin";
 
 export async function GET(request: Request) {
 	const { userId } = await auth();

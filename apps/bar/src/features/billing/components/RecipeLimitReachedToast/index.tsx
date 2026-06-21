@@ -1,6 +1,6 @@
 "use client";
 
-import type { RecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
+import type { RecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { toast } from "@/ui/Toast";

@@ -15,6 +15,7 @@
 		"icons:check": "node --no-warnings src/libs/icons/build.ts && git diff --exit-code src/libs/icons/sprite.svg src/libs/icons/types.ts"
 	},
 	"dependencies": {
+		"@bespoke/api": "workspace:*",
 		"@bespoke/db": "workspace:*",
 		"@bespoke/domain": "workspace:*",
 		"@bespoke/schema": "workspace:*",

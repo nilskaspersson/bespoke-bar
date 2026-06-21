@@ -1,8 +1,9 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { getCachedRecipe } from "@bespoke/api/recipes/readRecipe";
 import { stitchRecipe } from "@bespoke/domain/recipes/stitchRecipe";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
-import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { FormDraftPreview } from "@/features/recipes/components/FormDraftPreview";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import { getRecipeUrl } from "@/features/recipes/utils";
@@ -12,7 +13,6 @@ import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";
 import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
-import { authOrForbidden } from "@/utils/auth";
 import styles from "./page.module.css";
 
 type Props = {

@@ -1,0 +1,68 @@
+import { AppError } from "@bespoke/schema/appError";
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
+import { get } from "@vercel/edge-config";
+import { cache } from "react";
+
+const url = process.env.UPSTASH_KV_REST_API_URL;
+const token = process.env.UPSTASH_KV_REST_API_TOKEN;
+
+/**
+ * Guard construction so missing config is a fast no-op, not a per-request stall.
+ */
+const redis = url && token ? new Redis({ url, token }) : null;
+
+/**
+ * In-process short-circuit for repeat calls from blocked users — spares
+ * Upstash quota during write spam (stuck buttons, abuse).
+ */
+const ephemeralCache = new Map<string, number>();
+
+const rateLimiter = redis
+	? new Ratelimit({
+			redis,
+			limiter: Ratelimit.slidingWindow(30, "60s"),
+			prefix: "rl:ops",
+			analytics: false,
+			ephemeralCache,
+		})
+	: null;
+
+/** The shared kill switch: whether Upstash-based limiting is currently on. */
+export async function isLimitingEnabled(): Promise<boolean> {
+	return (await get<boolean>("rate-limit-enabled")) ?? false;
+}
+
+async function getEnabledRateLimiter() {
+	if (!rateLimiter) {
+		return null;
+	}
+
+	return (await isLimitingEnabled()) ? rateLimiter : null;
+}
+
+/**
+ * Request-scoped `cache` so a hypothetical multiple write-service calls
+ * within the same request only consume one quota hit.
+ */
+export const rateLimit = cache(async (userId: string): Promise<void> => {
+	const limiter = await getEnabledRateLimiter();
+	if (!limiter) return;
+
+	try {
+		const result = await limiter.limit(userId);
+
+		if (!result.success) {
+			throw new AppError({
+				code: "RATE_LIMIT_EXCEEDED",
+				retryAfter: Math.max(1, Math.round((result.reset - Date.now()) / 1000)),
+			});
+		}
+	} catch (error) {
+		if (error instanceof AppError) {
+			throw error;
+		}
+
+		console.warn("Rate limiting failed, allowing request:", error);
+	}
+});

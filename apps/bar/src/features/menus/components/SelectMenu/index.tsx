@@ -1,3 +1,4 @@
+import { collator } from "@bespoke/domain/utils/collator";
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
@@ -6,7 +7,6 @@ import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBad
 import { Combobox } from "@/ui/Combobox";
 import { Icon } from "@/ui/Icon";
 import { Menu } from "@/ui/Menu";
-import { collator } from "@/utils/collator";
 import styles from "./styles.module.css";
 
 const itemToString = (item: MenuWithEntries | null) =>

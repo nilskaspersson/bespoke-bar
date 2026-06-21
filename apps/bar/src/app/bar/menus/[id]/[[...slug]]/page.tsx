@@ -1,3 +1,7 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { getCachedFeaturedMenuId } from "@bespoke/api/menus/featured/readFeaturedMenu";
+import { getCachedMenu } from "@bespoke/api/menus/readMenu";
 import {
 	buildIngredientMap,
 	stitchMenuEntries,
@@ -7,16 +11,12 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { PageHeader } from "@/components/PageHeader";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
-import { getCachedMenu } from "@/features/menus/api/readMenu";
 import { EmptyMenuEntry } from "@/features/menus/components/EmptyMenuEntry";
 import { MenuFilters } from "@/features/menus/components/MenuFilters";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
-import { getCachedFeaturedMenuId } from "@/features/menus/featured/api/readFeaturedMenu";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
-import { authOrForbidden } from "@/utils/auth";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 

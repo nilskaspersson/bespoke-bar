@@ -1,9 +1,9 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { deleteIngredient as deleteIngredientService } from "@bespoke/api/ingredients/deleteIngredient.service";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { redirect } from "next/navigation";
-import { deleteIngredient as deleteIngredientService } from "@/features/ingredients/api/deleteIngredient.service";
-import { authOrForbidden } from "@/utils/auth";
 import { type ActionResult, catchKnownErrors } from "@/utils/serverAction";
 
 export async function deleteIngredient({

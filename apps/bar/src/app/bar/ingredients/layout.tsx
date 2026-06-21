@@ -1,6 +1,7 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
 import { Suspense } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
-import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { CreateIngredientButton } from "@/features/ingredients/components/CreateIngredientButton";
 import {
 	IngredientSidebar,
@@ -9,7 +10,6 @@ import {
 import { LinkButton } from "@/ui/Button";
 import { Grid } from "@/ui/Grid";
 import { Icon } from "@/ui/Icon";
-import { authOrForbidden } from "@/utils/auth";
 import { IngredientsShell } from "./IngredientsShell";
 import styles from "./layout.module.css";
 

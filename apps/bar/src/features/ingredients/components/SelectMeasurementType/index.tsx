@@ -1,5 +1,6 @@
 "use client";
 
+import { collator } from "@bespoke/domain/utils/collator";
 import { supportedMeasurements } from "@bespoke/schema/schema/units";
 import type { ComponentProps } from "react";
 import {
@@ -8,7 +9,6 @@ import {
 } from "@/features/ingredients/constants";
 import { Menu } from "@/ui/Menu";
 import { Select } from "@/ui/Select";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 type Option = (typeof OPTIONS)[number];

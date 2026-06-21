@@ -1,5 +1,5 @@
+import { getUserById } from "@bespoke/api/organisation/getUserById";
 import type { ComponentProps } from "react";
-import { getUserById } from "@/features/organisation/api/getUserById";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
 import { Skeleton } from "@/ui/Skeleton";

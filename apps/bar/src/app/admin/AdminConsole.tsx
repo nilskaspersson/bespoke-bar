@@ -1,8 +1,8 @@
 "use client";
 
+import type { AdminOrgSummary } from "@bespoke/api/admin/listOrganisationsForAdmin";
+import type { OrgMemberSummary } from "@bespoke/api/admin/listOrgMembers";
 import { parseAsString, useQueryState } from "nuqs";
-import type { AdminOrgSummary } from "@/features/admin/api/listOrganisationsForAdmin";
-import type { OrgMemberSummary } from "@/features/admin/api/listOrgMembers";
 import { grantOCRQuotaManual } from "@/features/billing/api/grantOCRQuotaManual";
 import { grantSlotsManual } from "@/features/billing/api/grantSlotsManual";
 import { UsageCard } from "@/features/billing/components/UsageCard";

@@ -1,10 +1,10 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
 import {
 	type BulkUpdateTagsInput,
 	bulkUpdateTags as bulkUpdateTagsService,
-} from "@/features/tags/api/bulkUpdateTags.service";
-import { authOrForbidden } from "@/utils/auth";
+} from "@bespoke/api/tags/bulkUpdateTags.service";
 
 export async function bulkUpdateTags(input: BulkUpdateTagsInput) {
 	const auth = await authOrForbidden();

@@ -1,10 +1,10 @@
 "use client";
 
+import { collator } from "@bespoke/domain/utils/collator";
 import { systemCategories } from "@bespoke/schema/schema/categories";
 import type { ComponentProps } from "react";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { Combobox } from "@/ui/Combobox";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 const OPTIONS = systemCategories.options

@@ -1,5 +1,6 @@
 "use client";
 
+import { collator } from "@bespoke/domain/utils/collator";
 import {
 	type PreparationMethod,
 	preparationMethods,
@@ -12,7 +13,6 @@ import {
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Menu } from "@/ui/Menu";
 import { Select } from "@/ui/Select";
-import { collator } from "@/utils/collator";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

@@ -1,6 +1,9 @@
-import { type AppErrorToast, getAppErrorToast } from "@bespoke/schema/appError";
+import {
+	AppError,
+	type AppErrorToast,
+	getAppErrorToast,
+} from "@bespoke/schema/appError";
 import type { z } from "zod";
-import { AppError } from "@/utils/appError";
 import type { ActionResult } from "@/utils/serverAction";
 
 /** @public */

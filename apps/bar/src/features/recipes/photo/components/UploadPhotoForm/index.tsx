@@ -1,8 +1,8 @@
+import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
 import { useCallback, useRef } from "react";
-import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 import {
 	checkOCRConsent,
 	storeOCRConsent,

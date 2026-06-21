@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	MAX_TAGS_PER_RECIPE,
+	TAG_NAME_MAX_LENGTH,
+} from "@bespoke/domain/tags/constants";
 import type { Tag } from "@bespoke/schema/schema/tags";
 import {
 	type ComponentProps,
@@ -8,10 +12,6 @@ import {
 	useDeferredValue,
 	useState,
 } from "react";
-import {
-	MAX_TAGS_PER_RECIPE,
-	TAG_NAME_MAX_LENGTH,
-} from "@/features/tags/constants";
 import { usePlatform } from "@/stores/platform";
 import type { Popover } from "@/ui/Popover";
 import { handleKey, matchesShortcut } from "@/utils/keyboard";

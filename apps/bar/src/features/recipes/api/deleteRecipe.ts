@@ -1,9 +1,9 @@
 "use server";
 
+import { authOrForbidden } from "@bespoke/api/auth";
+import { deleteRecipe as deleteRecipeService } from "@bespoke/api/recipes/deleteRecipe.service";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { redirect } from "next/navigation";
-import { deleteRecipe as deleteRecipeService } from "@/features/recipes/api/deleteRecipe.service";
-import { authOrForbidden } from "@/utils/auth";
 
 export async function deleteRecipe({
 	id,

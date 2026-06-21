@@ -1,7 +1,7 @@
+import { adminOrForbidden } from "@bespoke/api/admin";
 import { PageHeader } from "@/components/PageHeader";
 import { Container } from "@/ui/Container";
 import { Grid } from "@/ui/Grid";
-import { adminOrForbidden } from "@/utils/admin";
 import { AdminConsole } from "./AdminConsole";
 import styles from "./page.module.css";
 

@@ -1,5 +1,5 @@
+import type { AppRouter } from "@bespoke/api/trpc/routers/_app";
 import { createTRPCReact, httpBatchLink } from "@trpc/react-query";
-import type { AppRouter } from "@/trpc/routers/_app";
 
 export const trpc = createTRPCReact<AppRouter>();
 
