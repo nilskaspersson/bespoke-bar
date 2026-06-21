@@ -1,6 +1,6 @@
+import { type Recipe, RecipesTable } from "@bespoke/schema/schema/recipes";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { type Recipe, RecipesTable } from "@/db/schema/recipes";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";

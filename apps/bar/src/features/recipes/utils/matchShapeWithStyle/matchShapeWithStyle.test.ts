@@ -1,7 +1,7 @@
+import type { SystemCategory } from "@bespoke/schema/schema/categories";
+import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { describe, expect, it } from "vitest";
-import type { SystemCategory } from "@/db/schema/categories";
-import type { PreparationMethod } from "@/db/schema/preparationMethods";
-import type { Unit } from "@/db/schema/units";
 import { getRecipeShape, matchShapeWithStyle, type ShapeRecipe } from "./";
 
 type LineInit = {

@@ -1,6 +1,6 @@
+import type { RecipeTag } from "@bespoke/schema/schema/recipeTags";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { describe, expect, test } from "vitest";
-import type { RecipeTag } from "@/db/schema/recipeTags";
-import type { Tag } from "@/db/schema/tags";
 import { buildTagMap, stitchRecipeTags } from "./stitchRecipeTags";
 
 const tag = (id: string, overrides: Partial<Tag> = {}): Tag => ({

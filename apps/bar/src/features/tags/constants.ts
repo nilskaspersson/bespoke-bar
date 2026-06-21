@@ -1,4 +1,4 @@
-import { insertTagSchema } from "@/db/schema/tags";
+import { insertTagSchema } from "@bespoke/schema/schema/tags";
 
 export const MAX_TAGS_PER_ORG = 100;
 export const MAX_TAGS_PER_RECIPE = 20;

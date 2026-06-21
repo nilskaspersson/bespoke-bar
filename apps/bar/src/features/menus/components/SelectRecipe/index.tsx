@@ -1,5 +1,5 @@
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { type ComponentProps, useCallback, useMemo } from "react";
-import type { Recipe } from "@/db/schema/recipes";
 import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
 import { getRecipeName, isRecipeWithLines } from "@/features/recipes/utils";
 import { Combobox } from "@/ui/Combobox";

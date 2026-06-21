@@ -1,7 +1,10 @@
+import {
+	type Ingredient,
+	IngredientsTable,
+} from "@bespoke/schema/schema/ingredients";
 import { and, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadIngredient = db.query.IngredientsTable.findFirst({

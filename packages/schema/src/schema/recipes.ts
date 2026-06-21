@@ -13,22 +13,21 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { cocktailStylesEnum } from "@/db/schema/cocktailStyles";
-import { glasswareEnum } from "@/db/schema/glassware";
-import { iceEnum } from "@/db/schema/ice";
+import type { Identity, Keyed } from "../types";
+import { cocktailStylesEnum } from "./cocktailStyles";
+import { glasswareEnum } from "./glassware";
+import { iceEnum } from "./ice";
 import {
 	type DraftIngredientLineWithDraftIngredient,
 	type IngredientLine,
 	IngredientLinesTable,
 	type IngredientLineWithIngredient,
-} from "@/db/schema/ingredientLines";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { preparationMethodEnum } from "@/db/schema/preparationMethods";
-import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
-import { type RecipeTag, RecipeTagsTable } from "@/db/schema/recipeTags";
-import type { Tag } from "@/db/schema/tags";
-import type { Identity } from "@/utils/types";
-import type { Keyed } from "@/utils/withKey";
+} from "./ingredientLines";
+import { OrganisationsTable } from "./organisations";
+import { preparationMethodEnum } from "./preparationMethods";
+import { RecipeFavoritesTable } from "./recipeFavorites";
+import { type RecipeTag, RecipeTagsTable } from "./recipeTags";
+import type { Tag } from "./tags";
 
 export const RecipesTable = pgTable(
 	"recipes",

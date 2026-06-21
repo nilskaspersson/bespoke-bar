@@ -1,11 +1,11 @@
 "use server";
 
-import { parseWithZod } from "@conform-to/zod/v4";
 import {
 	type MenuWithEntries,
 	type MenuWithEntriesFormData,
 	menuWithEntriesFormSchema,
-} from "@/db/schema/composite";
+} from "@bespoke/schema/schema/composite";
+import { parseWithZod } from "@conform-to/zod/v4";
 import { appendMenuEntry as appendMenuEntryService } from "@/features/menus/entries/api/appendMenuEntry.service";
 import { authOrForbidden } from "@/utils/auth";
 

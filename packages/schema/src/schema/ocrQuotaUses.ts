@@ -1,6 +1,6 @@
 import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
-import { OrganisationsTable } from "@/db/schema/organisations";
+import { OrganisationsTable } from "./organisations";
 
 export const OCRQuotaUsesTable = pgTable(
 	"ocr_quota_uses",

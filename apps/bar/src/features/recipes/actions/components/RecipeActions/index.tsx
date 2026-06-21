@@ -1,7 +1,7 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import { ShareAction } from "@/components/ShareAction";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { CopyLinesToClipboard } from "@/features/ingredientLines/components/CopyLinesToClipboard";
 import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";

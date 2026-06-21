@@ -1,4 +1,4 @@
-import type { BaseRecipe } from "@/db/schema/recipes";
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { getLineCost } from "@/features/ingredientLines/utils/getLineCost";
 
 export function getRecipeCost<T extends BaseRecipe>(recipe: T) {

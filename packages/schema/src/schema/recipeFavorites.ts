@@ -6,8 +6,8 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { RecipesTable } from "@/db/schema/recipes";
+import { OrganisationsTable } from "./organisations";
+import { RecipesTable } from "./recipes";
 
 export const RecipeFavoritesTable = pgTable(
 	"recipe_favorites",

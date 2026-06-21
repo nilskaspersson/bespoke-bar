@@ -1,5 +1,5 @@
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import { clsx } from "clsx";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 import { MenuEntryActions } from "@/features/menus/actions/components/MenuEntryActions";
 import { MenuEntryNameAdornment } from "@/features/menus/entries/components/MenuEntryNameAdornment";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";

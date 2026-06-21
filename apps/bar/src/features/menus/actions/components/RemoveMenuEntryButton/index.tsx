@@ -1,6 +1,9 @@
 "use client";
 
-import type { MenuEntry, MenuEntryFormData } from "@/db/schema/menuEntries";
+import type {
+	MenuEntry,
+	MenuEntryFormData,
+} from "@bespoke/schema/schema/menuEntries";
 import { UndoRemoveMenuEntryButton } from "@/features/menus/actions/components/UndoRemoveMenuEntryButton";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";

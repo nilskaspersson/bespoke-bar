@@ -1,8 +1,8 @@
 "use client";
 
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { clsx } from "clsx";
 import { type ComponentProps, useState } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { AbvInfo } from "@/features/recipes/metrics/components/AbvInfo";
 import { CostInfo } from "@/features/recipes/metrics/components/CostInfo";
 import { VolumeInfo } from "@/features/recipes/metrics/components/VolumeInfo";

@@ -1,4 +1,4 @@
-import type { RecipeWithRelations } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import {
 	type CocktailStyleFilter,
 	getCocktailStyleColor,

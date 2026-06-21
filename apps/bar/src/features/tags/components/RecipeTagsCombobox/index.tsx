@@ -1,8 +1,8 @@
 "use client";
 
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
-import type { Tag } from "@/db/schema/tags";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import {
 	MAX_TAGS_PER_RECIPE,

@@ -1,5 +1,5 @@
-import type { DraftIngredient } from "@/db/schema/ingredients";
-import type { Unit } from "@/db/schema/units";
+import type { DraftIngredient } from "@bespoke/schema/schema/ingredients";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { CATEGORY_DEFAULT_ABV } from "@/features/categories/constants";
 import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { getMeasurementFromUnit } from "@/features/units/utils/getMeasurementFromUnit";

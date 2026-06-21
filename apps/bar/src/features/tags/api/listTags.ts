@@ -1,7 +1,7 @@
+import { TagsTable } from "@bespoke/schema/schema/tags";
 import { asc, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { TagsTable } from "@/db/schema/tags";
 import { cacheTags } from "@/utils/cache";
 
 const preparedListTags = db.query.TagsTable.findMany({

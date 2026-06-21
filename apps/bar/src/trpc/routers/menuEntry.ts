@@ -1,6 +1,6 @@
+import { menuWithEntriesFormSchema } from "@bespoke/schema/schema/composite";
+import { menuEntryFormSchema } from "@bespoke/schema/schema/menuEntries";
 import { z } from "zod";
-import { menuWithEntriesFormSchema } from "@/db/schema/composite";
-import { menuEntryFormSchema } from "@/db/schema/menuEntries";
 import { addRecipeToMenu } from "@/features/menus/entries/api/addRecipeToMenu.service";
 import { appendMenuEntry } from "@/features/menus/entries/api/appendMenuEntry.service";
 import { removeRecipeFromMenu } from "@/features/menus/entries/api/removeRecipeFromMenu.service";

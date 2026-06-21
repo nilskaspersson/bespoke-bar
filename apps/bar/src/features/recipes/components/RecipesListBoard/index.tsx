@@ -1,11 +1,10 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { AnimatePresence, m } from "motion/react";
 import { useDeferredValue, useMemo, useState } from "react";
-
 import { BottomRailItems } from "@/components/BottomRail";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
 import { ClearFiltersPill } from "@/features/recipes/components/ClearFiltersPill";
 import { useHydrateRecipeAdjustments } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeAdjustmentsDock } from "@/features/recipes/components/RecipeAdjustmentsDock";

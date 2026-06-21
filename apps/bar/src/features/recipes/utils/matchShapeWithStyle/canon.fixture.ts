@@ -1,6 +1,6 @@
-import type { SystemCategory } from "@/db/schema/categories";
-import type { CocktailStyle } from "@/db/schema/cocktailStyles";
-import type { PreparationMethod } from "@/db/schema/preparationMethods";
+import type { SystemCategory } from "@bespoke/schema/schema/categories";
+import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
+import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
 import type { ShapeRecipe } from "./";
 
 /**

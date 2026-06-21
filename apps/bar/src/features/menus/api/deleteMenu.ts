@@ -1,7 +1,7 @@
 "use server";
 
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { redirect } from "next/navigation";
-import type { Menu } from "@/db/schema/menus";
 import { deleteMenu as deleteMenuService } from "@/features/menus/api/deleteMenu.service";
 import { authOrForbidden } from "@/utils/auth";
 

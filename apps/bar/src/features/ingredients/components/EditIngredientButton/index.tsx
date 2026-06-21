@@ -1,6 +1,6 @@
 "use client";
 
-import type { Ingredient } from "@/db/schema/ingredients";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";

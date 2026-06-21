@@ -1,4 +1,4 @@
-import type { SubscriptionAttention } from "@/db/schema/orgSubscriptions";
+import type { SubscriptionAttention } from "@bespoke/schema/schema/orgSubscriptions";
 import { Chip, type ChipProps } from "@/ui/Chip";
 import { Icon } from "@/ui/Icon";
 import type { SystemColor } from "@/utils/types";

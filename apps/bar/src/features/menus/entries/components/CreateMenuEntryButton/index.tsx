@@ -1,6 +1,6 @@
 "use client";
 
-import type { RecipeWithLines } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { useCreateMenuEntry } from "@/features/menus/entries/stores/createMenuEntry";
 import { Button, type ButtonProps } from "@/ui/Button";
 

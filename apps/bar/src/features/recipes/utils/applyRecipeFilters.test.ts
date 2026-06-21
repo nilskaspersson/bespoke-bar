@@ -1,5 +1,5 @@
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import { describe, expect, test } from "vitest";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
 import {
 	applyRecipeFilters,
 	createRecipeSearchIndex,

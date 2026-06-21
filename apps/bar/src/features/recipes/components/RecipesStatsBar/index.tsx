@@ -1,12 +1,12 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import {
 	type ComponentProps,
 	type ReactNode,
 	useCallback,
 	useMemo,
 } from "react";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
 import {
 	CocktailStyleDistribution,
 	type CocktailStyleFilter,

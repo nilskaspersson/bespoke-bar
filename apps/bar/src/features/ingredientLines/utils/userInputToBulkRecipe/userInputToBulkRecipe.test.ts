@@ -1,5 +1,5 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { describe, expect, test } from "vitest";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
 import { withoutKey } from "@/utils/withKey";
 import { userInputToBulkRecipe } from ".";

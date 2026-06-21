@@ -1,8 +1,11 @@
 "use server";
 
+import type {
+	DraftIngredient,
+	Ingredient,
+} from "@bespoke/schema/schema/ingredients";
+import { updateIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
 import { parseWithZod } from "@conform-to/zod/v4";
-import type { DraftIngredient, Ingredient } from "@/db/schema/ingredients";
-import { updateIngredientFormSchema } from "@/db/schema/ingredients";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { updateIngredient as updateIngredientService } from "@/features/ingredients/api/updateIngredient.service";
 import { authOrForbidden } from "@/utils/auth";

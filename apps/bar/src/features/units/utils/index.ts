@@ -1,5 +1,8 @@
-import type { Measurement, Unit } from "@/db/schema/units";
-import { supportedMeasurements, supportedUnits } from "@/db/schema/units";
+import type { Measurement, Unit } from "@bespoke/schema/schema/units";
+import {
+	supportedMeasurements,
+	supportedUnits,
+} from "@bespoke/schema/schema/units";
 import { BARTENDING_UNITS } from "@/features/units/constants";
 import type { BartendingUnits } from "@/features/units/constants/volume";
 

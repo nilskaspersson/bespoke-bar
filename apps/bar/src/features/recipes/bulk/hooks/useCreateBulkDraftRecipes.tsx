@@ -1,11 +1,12 @@
-import { use, useCallback } from "react";
-import z from "zod";
 import {
 	MAX_LINES_PER_RECIPE,
 	type RecipeFormData,
 	recipeFormSchema,
-} from "@/db/schema/composite";
-import type { BaseRecipe, Recipe } from "@/db/schema/recipes";
+} from "@bespoke/schema/schema/composite";
+import type { BaseRecipe, Recipe } from "@bespoke/schema/schema/recipes";
+import type { Keyed } from "@bespoke/schema/types";
+import { use, useCallback } from "react";
+import z from "zod";
 import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
@@ -16,7 +17,7 @@ import { Text } from "@/ui/Text";
 import { ToastActions, toast } from "@/ui/Toast";
 import { getErrorToast } from "@/utils/api";
 import { AppError } from "@/utils/appError";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 
 export function useCreateBulkDraftRecipes(
 	recipes: Keyed<BaseRecipe>[],

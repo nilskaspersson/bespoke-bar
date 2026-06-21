@@ -19,6 +19,7 @@ const cspHeader = `
 `;
 
 const nextConfig: NextConfig = {
+	transpilePackages: ["@bespoke/schema"],
 	async headers() {
 		const securityHeaders = [
 			{

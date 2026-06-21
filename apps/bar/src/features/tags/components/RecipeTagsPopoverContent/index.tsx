@@ -1,5 +1,5 @@
+import type { Tag } from "@bespoke/schema/schema/tags";
 import type { ReactNode } from "react";
-import type { Tag } from "@/db/schema/tags";
 import { RecipeTagCloud } from "@/features/tags/components/RecipeTagCloud";
 import { Button } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";

@@ -1,11 +1,11 @@
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
 import {
 	type InsertTag,
 	insertTagSchema,
 	type Tag,
 	TagsTable,
-} from "@/db/schema/tags";
+} from "@bespoke/schema/schema/tags";
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { MAX_TAGS_PER_ORG } from "@/features/tags/constants";
 import { rateLimit } from "@/rateLimit";

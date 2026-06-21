@@ -1,4 +1,4 @@
-import type { Unit } from "@/db/schema/units";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { ALIAS_TO_DB_VOLUME_UNIT } from "@/features/units/constants";
 import { escapeRegex } from "@/utils";
 

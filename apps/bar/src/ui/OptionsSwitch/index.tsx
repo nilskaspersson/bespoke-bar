@@ -1,11 +1,11 @@
 "use client";
 
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import type { IconName } from "@/libs/icons/types";
 import { Icon } from "@/ui/Icon";
 import { Text } from "@/ui/Text";
-import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function OptionsSwitch<T extends string>({

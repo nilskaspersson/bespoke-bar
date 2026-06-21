@@ -1,4 +1,4 @@
-import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
+import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
 

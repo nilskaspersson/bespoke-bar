@@ -1,8 +1,8 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { RecipeActionsToggle } from "@/features/recipes/actions/components/RecipeActionsToggle";

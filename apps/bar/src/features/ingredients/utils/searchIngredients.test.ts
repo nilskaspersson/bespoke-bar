@@ -1,5 +1,5 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { describe, expect, it } from "vitest";
-import type { Ingredient } from "@/db/schema/ingredients";
 import {
 	createIngredientSearchIndex,
 	filterIngredientsByQuery,

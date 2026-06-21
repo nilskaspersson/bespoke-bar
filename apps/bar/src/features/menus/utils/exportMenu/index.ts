@@ -1,5 +1,5 @@
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
-import type { Menu } from "@/db/schema/menus";
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { formatLine } from "@/features/ingredientLines/utils/formatLine";
 import {
 	GLASSWARE_TO_LABEL,

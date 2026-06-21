@@ -76,3 +76,38 @@ The web apps consume `ui` + `api` (value) + `domain`; the Expo app consumes `sch
   its keep.
 - Per ADR-0009, the shared `AppRouter` type makes "does mobile call this procedure?" the gate
   on every non-additive change to the one router.
+
+## Amendment — Step 1 (`packages/schema` extracted, 2026-06-20)
+
+Two consequences above assumed pnpm's strict resolution would turn a server→mobile import into
+an install-time error. **It does not, in this repo.** Step 0 had to set `node-linker: hoisted`
+(a flat, npm-style `node_modules`) because pnpm's isolated layout hid peer `@types/*` from
+libraries that peer-depend on `react`/`typescript` without their types — collapsing
+tRPC/sonner/conform generics to `any` — and hoisting is also what Expo/Metro need (step 6). A
+hoisted layout lets any package resolve any hoisted dependency regardless of its own
+`package.json`, so the boundary is **no longer enforced by resolution**.
+
+The boundary guardrail is therefore a **per-package Biome `noRestrictedImports` rule**
+(`packages/schema/biome.json`, `root: true`) that fails `biome check` — and so the existing
+`turbo run lint` in CI, with zero workflow changes — on any import of `react`, `react-dom`,
+`next`, `@clerk/*`, `@upstash/*`, `pg`, `@neondatabase/*`, `@google*`, or `@lexical/*` from the
+pure leaf. This is a **lexical** guard (it bans specifier strings, not transitive leaks through
+another workspace package), so it is backstopped by the package's deliberately minimal
+dependency list (`drizzle-orm`, `drizzle-zod`, `zod`, `nanoid`) and, ultimately, by the Metro
+bundle in step 6.
+
+A full **dependency-cruiser** boundary graph was considered and **deferred**: for a
+single-developer repo with one pure package, the Biome rule is near-zero-cost and catches the
+same first-order leaks; the residual transitive-leak gap is an accepted risk, to be caught at
+the Metro boundary. Revisit dependency-cruiser once more pure packages (`domain`) exist and the
+per-package duplication or the transitive blind spot starts to bite.
+
+The package is consumed as **raw `.ts` source** (no build step): a wildcard `exports`
+(`"./*": "./src/*.ts"`) maps `@bespoke/schema/<module>`, `apps/bar` lists it in
+`transpilePackages`, and `drizzle.config.ts` points at `packages/schema/src/schema`. Tables live
+under `src/schema/` (a tables-only dir, so drizzle-kit's scan is unchanged); the pure helpers
+(`appError` envelope, `types` incl. `Identity`/`Keyed`, `form`, `normalizeIngredientName`,
+`percentageToRatio`, `sqlNormalizedString`) live flat in `src/`. The throwable `AppError`
+**class** stays in `apps/bar` (only the pure envelope + formatters are shared); billing
+constants were **deliberately not moved** — they have no table or mobile consumer yet, so they
+belong in `domain` (step 2), not the schema leaf.

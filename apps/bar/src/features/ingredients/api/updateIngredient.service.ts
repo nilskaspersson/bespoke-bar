@@ -1,19 +1,22 @@
-import { and, eq, sql } from "drizzle-orm";
-import { z } from "zod";
-import { db } from "@/db";
-import type { DraftIngredient, Ingredient } from "@/db/schema/ingredients";
+import { normalizeIngredientName } from "@bespoke/schema/normalizeIngredientName";
+import { percentageToRatioSchema } from "@bespoke/schema/percentageToRatio";
+import type {
+	DraftIngredient,
+	Ingredient,
+} from "@bespoke/schema/schema/ingredients";
 import {
 	IngredientsTable,
 	updateIngredientSchema,
-} from "@/db/schema/ingredients";
+} from "@bespoke/schema/schema/ingredients";
+import { and, eq, sql } from "drizzle-orm";
+import { z } from "zod";
+import { db } from "@/db";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { ingredientEnrichmentSchema } from "@/features/ingredients/utils/getIngredientMetaDataWithLLM";
-import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
 import { rateLimit } from "@/rateLimit";
 import { clearTouchedAiMarks } from "@/utils/aiEnrichedFields";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";
-import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
 
 const aiEnrichedFieldsSchema = z
 	.array(ingredientEnrichmentSchema.keyof())

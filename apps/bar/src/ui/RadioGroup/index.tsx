@@ -1,11 +1,12 @@
 "use client";
 
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { Checkbox } from "@/ui/Checkbox";
 import { Grid } from "@/ui/Grid";
 import { Text } from "@/ui/Text";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export type RadioGroupOption = {

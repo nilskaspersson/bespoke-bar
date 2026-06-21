@@ -1,5 +1,6 @@
 "use client";
 
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import { type UseSelectProps, useSelect } from "downshift";
 import { type ComponentProps, useId } from "react";
@@ -9,7 +10,7 @@ import { ControlLabel } from "@/ui/ControlLabel";
 import formControlStyles from "@/ui/FormControl/styles.module.css";
 import { Menu } from "@/ui/Menu";
 import { Text } from "@/ui/Text";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Props<T> = {

@@ -1,11 +1,11 @@
-import { create } from "zustand";
-import type { Ingredient } from "@/db/schema/ingredients";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type {
 	Recipe,
 	RecipeTagWithTag,
 	RecipeWithRelations,
-} from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
+} from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
+import { create } from "zustand";
 import { ingredientEditorStore } from "@/features/ingredients/stores/ingredientEditor";
 import { recipeTagsEditorStore } from "@/features/tags/stores/recipeTagsEditor";
 

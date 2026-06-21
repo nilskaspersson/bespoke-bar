@@ -1,10 +1,10 @@
-import type { RecipeFormData } from "@/db/schema/composite";
+import { normalizeIngredientName } from "@bespoke/schema/normalizeIngredientName";
+import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import {
 	type Ingredient,
 	type InsertIngredient,
 	insertIngredientSchema,
-} from "@/db/schema/ingredients";
-import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
+} from "@bespoke/schema/schema/ingredients";
 
 /**
  * Extracts new ingredients from user input

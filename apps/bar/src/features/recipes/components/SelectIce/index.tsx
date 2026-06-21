@@ -1,7 +1,7 @@
 "use client";
 
+import { type Ice, ice } from "@bespoke/schema/schema/ice";
 import type { ComponentProps } from "react";
-import { type Ice, ice } from "@/db/schema/ice";
 import { ICE_TO_LABEL } from "@/features/recipes/constants";
 import { Select } from "@/ui/Select";
 import { withKey } from "@/utils/withKey";

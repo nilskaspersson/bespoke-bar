@@ -1,8 +1,8 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import clsx from "clsx";
 import type { ComponentProps } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { IngredientCard } from "@/features/ingredients/components/IngredientCard";
 import { usePopover } from "@/hooks/usePopover";
 import { Button } from "@/ui/Button";

@@ -1,13 +1,13 @@
 "use client";
 
-import { FormProvider, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useRef } from "react";
 import {
 	type MenuWithRecipes,
 	menuWithEntriesFormSchema,
-} from "@/db/schema/composite";
-import type { Recipe } from "@/db/schema/recipes";
+} from "@bespoke/schema/schema/composite";
+import type { Recipe } from "@bespoke/schema/schema/recipes";
+import { FormProvider, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod/v4";
+import { useCallback, useRef } from "react";
 import { upsertMenuWithEntriesAction } from "@/features/menus/api/upsertMenuWithEntries";
 import { SelectRecipe } from "@/features/menus/components/SelectRecipe";
 import { trpc } from "@/trpc/client";

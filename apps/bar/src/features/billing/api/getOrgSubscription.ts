@@ -1,10 +1,10 @@
-import { eq } from "drizzle-orm";
-import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import {
 	type OrgSubscription,
 	OrgSubscriptionsTable,
-} from "@/db/schema/orgSubscriptions";
+} from "@bespoke/schema/schema/orgSubscriptions";
+import { eq } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
+import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 /**

@@ -1,4 +1,4 @@
-import type { Unit } from "@/db/schema/units";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { getUnitSystemFromUnit } from "@/features/units/utils/getUnitSystemFromUnit";
 import { round } from "@/utils";
 

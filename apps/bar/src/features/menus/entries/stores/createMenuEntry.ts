@@ -1,5 +1,5 @@
+import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { create } from "zustand";
-import type { RecipeWithLines } from "@/db/schema/recipes";
 
 type CreateMenuEntryState = {
 	recipe: RecipeWithLines | null;

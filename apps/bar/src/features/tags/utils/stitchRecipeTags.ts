@@ -1,6 +1,6 @@
-import type { RecipeTagWithTag } from "@/db/schema/recipes";
-import type { RecipeTag } from "@/db/schema/recipeTags";
-import type { Tag } from "@/db/schema/tags";
+import type { RecipeTagWithTag } from "@bespoke/schema/schema/recipes";
+import type { RecipeTag } from "@bespoke/schema/schema/recipeTags";
+import type { Tag } from "@bespoke/schema/schema/tags";
 
 export type TagMap = Map<Tag["id"], Tag>;
 

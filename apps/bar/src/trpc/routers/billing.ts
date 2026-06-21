@@ -1,7 +1,7 @@
 import {
 	isProActive,
 	subscriptionAttention,
-} from "@/db/schema/orgSubscriptions";
+} from "@bespoke/schema/schema/orgSubscriptions";
 import { getCachedOCRQuotaState } from "@/features/billing/api/getOCRQuotaState";
 import { getCachedOrgSubscription } from "@/features/billing/api/getOrgSubscription";
 import { getPriceDisplayOrNull } from "@/features/billing/api/getPriceDisplay";

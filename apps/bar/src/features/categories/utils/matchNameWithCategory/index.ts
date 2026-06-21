@@ -1,4 +1,7 @@
-import { type SystemCategory, systemCategories } from "@/db/schema/categories";
+import {
+	type SystemCategory,
+	systemCategories,
+} from "@bespoke/schema/schema/categories";
 import { CATEGORY_ALIASES } from "@/features/categories/constants";
 import { invertMapToLookup, normalizeInput } from "@/utils";
 

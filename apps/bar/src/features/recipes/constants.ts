@@ -1,8 +1,8 @@
-import type { CocktailStyle } from "@/db/schema/cocktailStyles";
-import type { Glassware } from "@/db/schema/glassware";
-import type { Ice } from "@/db/schema/ice";
-import type { PreparationMethod } from "@/db/schema/preparationMethods";
-import type { BaseRecipe } from "@/db/schema/recipes";
+import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
+import type { Glassware } from "@bespoke/schema/schema/glassware";
+import type { Ice } from "@bespoke/schema/schema/ice";
+import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 
 export const DEFAULT_RECIPE_NAME = "Unnamed Recipe";
 export const EMPTY_RECIPE: BaseRecipe = {};

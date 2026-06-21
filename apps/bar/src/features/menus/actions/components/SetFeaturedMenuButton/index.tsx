@@ -1,6 +1,6 @@
 "use client";
 
-import type { Menu } from "@/db/schema/menus";
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { ClearFeaturedMenuButton } from "@/features/menus/actions/components/ClearFeaturedMenuButton";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";

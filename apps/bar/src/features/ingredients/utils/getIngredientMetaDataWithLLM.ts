@@ -1,6 +1,6 @@
+import { systemCategories } from "@bespoke/schema/schema/categories";
+import { supportedMeasurements } from "@bespoke/schema/schema/units";
 import { z } from "zod";
-import { systemCategories } from "@/db/schema/categories";
-import { supportedMeasurements } from "@/db/schema/units";
 import { genAI } from "@/utils/genai";
 import { isTimeoutError, stripTagDelimiters } from "@/utils/llm";
 

@@ -1,7 +1,7 @@
 "use client";
 
+import { supportedMeasurements } from "@bespoke/schema/schema/units";
 import type { ComponentProps } from "react";
-import { supportedMeasurements } from "@/db/schema/units";
 import {
 	MEASUREMENT_TO_DESCRIPTION,
 	MEASUREMENT_TO_LABEL,

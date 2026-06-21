@@ -1,8 +1,8 @@
 "use server";
 
+import type { UpdateOrganisationFormData } from "@bespoke/schema/schema/organisations";
+import { updateOrganisationFormSchema } from "@bespoke/schema/schema/organisations";
 import { parseWithZod } from "@conform-to/zod/v4";
-import type { UpdateOrganisationFormData } from "@/db/schema/organisations";
-import { updateOrganisationFormSchema } from "@/db/schema/organisations";
 import { updateLocalOrganisation as updateLocalOrganisationService } from "@/features/organisation/api/updateLocalOrganisation.service";
 import { authOrForbidden } from "@/utils/auth";
 

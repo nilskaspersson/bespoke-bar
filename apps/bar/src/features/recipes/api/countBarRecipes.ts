@@ -1,7 +1,7 @@
+import { RecipesTable } from "@bespoke/schema/schema/recipes";
 import { count, eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { RecipesTable } from "@/db/schema/recipes";
 import { cacheTags } from "@/utils/cache";
 
 async function countBarRecipes(orgId: string) {

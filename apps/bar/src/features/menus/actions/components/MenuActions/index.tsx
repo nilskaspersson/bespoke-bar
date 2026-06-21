@@ -1,7 +1,7 @@
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { cacheLife } from "next/cache";
 import type { ActionProps } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
-import type { MenuWithEntries } from "@/db/schema/composite";
 import { ClearFeaturedMenuButton } from "@/features/menus/actions/components/ClearFeaturedMenuButton";
 import { DeleteMenuButton } from "@/features/menus/actions/components/DeleteMenuButton";
 import { ExportMenuButton } from "@/features/menus/actions/components/ExportMenuButton";

@@ -1,8 +1,8 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { MenuOption } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import { $getRoot, $getSelection, $isRangeSelection } from "lexical";
 import type { RefObject } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { Unit } from "@/db/schema/units";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { unitTextParser } from "@/features/units/utils/parseUnit";
 import { normalizeInput } from "@/utils";

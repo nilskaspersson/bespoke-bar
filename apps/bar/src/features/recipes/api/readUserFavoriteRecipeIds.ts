@@ -1,7 +1,7 @@
+import { RecipeFavoritesTable } from "@bespoke/schema/schema/recipeFavorites";
 import { and, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { RecipeFavoritesTable } from "@/db/schema/recipeFavorites";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadUserFavoriteRecipeIds = db

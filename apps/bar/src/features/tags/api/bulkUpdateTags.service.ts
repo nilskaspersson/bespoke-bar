@@ -1,6 +1,10 @@
+import {
+	insertTagSchema,
+	type Tag,
+	TagsTable,
+} from "@bespoke/schema/schema/tags";
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { insertTagSchema, type Tag, TagsTable } from "@/db/schema/tags";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { rateLimit } from "@/rateLimit";
 import { normalizeInput, unique } from "@/utils";

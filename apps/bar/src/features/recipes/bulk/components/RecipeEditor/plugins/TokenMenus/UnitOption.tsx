@@ -1,7 +1,7 @@
 "use client";
 
+import type { Unit } from "@bespoke/schema/schema/units";
 import type { ComponentProps } from "react";
-import type { Unit } from "@/db/schema/units";
 import { getUnitLabel } from "@/features/units/constants";
 import { Menu } from "@/ui/Menu";
 

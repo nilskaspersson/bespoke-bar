@@ -1,7 +1,7 @@
 "use client";
 
+import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import { clsx } from "clsx";
-import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
 import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
 import { useLineQuantityFormatter } from "@/features/ingredientLines/hooks/useLineQuantityFormatter";
 import { ToggleIngredientCard } from "@/features/ingredients/components/ToggleIngredientCard";

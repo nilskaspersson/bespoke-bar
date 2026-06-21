@@ -1,11 +1,11 @@
-import { eq, sql } from "drizzle-orm";
-import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import {
 	DEFAULT_BASE_RECIPE_SLOTS,
 	OrganisationsTable,
-} from "@/db/schema/organisations";
-import { RecipeSlotGrantsTable } from "@/db/schema/recipeSlotGrants";
+} from "@bespoke/schema/schema/organisations";
+import { RecipeSlotGrantsTable } from "@bespoke/schema/schema/recipeSlotGrants";
+import { eq, sql } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
+import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 export async function getRecipeSlotLimit(orgId: string): Promise<number> {

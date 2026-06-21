@@ -1,8 +1,8 @@
 "use client";
 
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { clsx } from "clsx";
 import { type ReactNode, useMemo } from "react";
-import type { Tag } from "@/db/schema/tags";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";

@@ -1,5 +1,5 @@
+import type { Unit } from "@bespoke/schema/schema/units";
 import { use, useCallback } from "react";
-import type { Unit } from "@/db/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import {
 	formatMeasure,

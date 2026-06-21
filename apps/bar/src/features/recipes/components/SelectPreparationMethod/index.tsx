@@ -1,10 +1,10 @@
 "use client";
 
-import { type ComponentProps, use, useMemo } from "react";
 import {
 	type PreparationMethod,
 	preparationMethods,
-} from "@/db/schema/preparationMethods";
+} from "@bespoke/schema/schema/preparationMethods";
+import { type ComponentProps, use, useMemo } from "react";
 import {
 	METHOD_TO_DEFAULT_DILUTION,
 	METHOD_TO_LABEL,

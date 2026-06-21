@@ -11,9 +11,9 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import z from "zod";
-import { MenuEntriesTable } from "@/db/schema/menuEntries";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { sqlNormalizedString } from "@/db/utils";
+import { sqlNormalizedString } from "../sqlNormalizedString";
+import { MenuEntriesTable } from "./menuEntries";
+import { OrganisationsTable } from "./organisations";
 
 export const MenusTable = pgTable(
 	"menus",

@@ -1,7 +1,7 @@
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
-import type { Menu } from "@/db/schema/menus";
 import { AddRecipeDialog } from "@/features/menus/entries/components/AddRecipeDialog";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";

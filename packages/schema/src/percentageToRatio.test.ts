@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { percentageToRatioSchema } from "./.";
+import { percentageToRatioSchema } from "./percentageToRatio";
 
 describe("percentageToRatioSchema", () => {
 	describe("valid percentage inputs", () => {

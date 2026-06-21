@@ -1,4 +1,4 @@
-import type { DraftIngredientLine } from "@/db/schema/ingredientLines";
+import type { DraftIngredientLine } from "@bespoke/schema/schema/ingredientLines";
 
 export function lineIsDraft<T extends DraftIngredientLine>(line: T) {
 	return line.ingredientId == null;

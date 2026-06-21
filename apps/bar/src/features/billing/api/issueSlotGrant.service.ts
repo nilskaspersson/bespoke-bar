@@ -1,9 +1,9 @@
-import { eq } from "drizzle-orm";
-import { db } from "@/db";
 import {
 	type RecipeSlotGrant,
 	RecipeSlotGrantsTable,
-} from "@/db/schema/recipeSlotGrants";
+} from "@bespoke/schema/schema/recipeSlotGrants";
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { cacheEvents } from "@/utils/cache";
 

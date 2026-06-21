@@ -1,5 +1,5 @@
-import type { SystemCategory } from "@/db/schema/categories";
-import type { Measurement } from "@/db/schema/units";
+import type { SystemCategory } from "@bespoke/schema/schema/categories";
+import type { Measurement } from "@bespoke/schema/schema/units";
 
 export const MEASUREMENT_TO_LABEL = new Map<Measurement, string>([
 	["mass", "Mass"],

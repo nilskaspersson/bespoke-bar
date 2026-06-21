@@ -1,7 +1,7 @@
+import { IngredientsTable } from "@bespoke/schema/schema/ingredients";
 import { eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { IngredientsTable } from "@/db/schema/ingredients";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadIngredients = db.query.IngredientsTable.findMany({

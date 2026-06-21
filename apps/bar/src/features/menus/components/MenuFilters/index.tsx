@@ -1,9 +1,9 @@
 "use client";
 
+import type { MenuWithRecipes } from "@bespoke/schema/schema/composite";
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import { useDeferredValue, useMemo, useState } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
-import type { MenuWithRecipes } from "@/db/schema/composite";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 import { MenuEntryList } from "@/features/menus/entries/components/MenuEntryList";
 import { Button, LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";

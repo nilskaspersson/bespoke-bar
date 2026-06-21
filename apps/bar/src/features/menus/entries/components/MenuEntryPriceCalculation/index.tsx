@@ -1,6 +1,6 @@
+import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { useId, useState } from "react";
 import z from "zod";
-import type { RecipeWithLines } from "@/db/schema/recipes";
 import { CostInfo } from "@/features/recipes/metrics/components/CostInfo";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";

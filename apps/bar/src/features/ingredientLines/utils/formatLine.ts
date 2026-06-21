@@ -1,4 +1,4 @@
-import type { IngredientLine } from "@/db/schema/ingredientLines";
+import type { IngredientLine } from "@bespoke/schema/schema/ingredientLines";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";
 
 /** "2 cl Aperol" — quantity, formatted unit, and name joined by spaces; empty parts dropped. */

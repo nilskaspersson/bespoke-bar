@@ -1,9 +1,9 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import clsx from "clsx";
 import { type ComponentProps, memo, useMemo, useRef } from "react";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { CreateRecipeSlot } from "@/features/recipes/components/CreateRecipeSlot";
 import { RecipeListCard } from "@/features/recipes/components/RecipeListCard";

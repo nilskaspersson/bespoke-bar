@@ -1,11 +1,11 @@
 import type {
 	IngredientLine,
 	IngredientLineWithIngredient,
-} from "@/db/schema/ingredientLines";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { RecipeTagWithTag } from "@/db/schema/recipes";
-import type { RecipeTag } from "@/db/schema/recipeTags";
-import type { Tag } from "@/db/schema/tags";
+} from "@bespoke/schema/schema/ingredientLines";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { RecipeTagWithTag } from "@bespoke/schema/schema/recipes";
+import type { RecipeTag } from "@bespoke/schema/schema/recipeTags";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import {
 	buildIngredientMap,
 	stitchLines,

@@ -1,5 +1,5 @@
+import type { Measurement } from "@bespoke/schema/schema/units";
 import { use, useCallback } from "react";
-import type { Measurement } from "@/db/schema/units";
 import { MEASUREMENT_TO_DB_INGREDIENT_UNIT } from "@/features/ingredients/constants";
 import { FormatterContext } from "@/hooks/useFormatter";
 

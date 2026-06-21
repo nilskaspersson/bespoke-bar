@@ -1,7 +1,7 @@
 "use client";
 
+import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import type { ComponentProps } from "react";
-import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
 import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { CopyToClipboard } from "@/ui/CopyToClipboard";

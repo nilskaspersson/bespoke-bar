@@ -1,9 +1,9 @@
-import { sql } from "drizzle-orm";
-import { db } from "@/db";
 import {
 	type InsertOrgSubscription,
 	OrgSubscriptionsTable,
-} from "@/db/schema/orgSubscriptions";
+} from "@bespoke/schema/schema/orgSubscriptions";
+import { sql } from "drizzle-orm";
+import { db } from "@/db";
 import { cacheEvents } from "@/utils/cache";
 
 /**

@@ -1,12 +1,11 @@
 "use client";
 
-import { useOptimistic, useTransition } from "react";
-
 import type {
 	RecipeTagWithTag,
 	RecipeWithRelations,
-} from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
+} from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
+import { useOptimistic, useTransition } from "react";
 import { createTag } from "@/features/tags/api/createTag";
 import { setRecipeTags } from "@/features/tags/api/setRecipeTags";
 import { RecipeTagsCombobox } from "@/features/tags/components/RecipeTagsCombobox";

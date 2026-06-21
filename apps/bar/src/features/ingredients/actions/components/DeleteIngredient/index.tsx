@@ -1,7 +1,7 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { PropsWithChildren } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
 import type { ButtonProps } from "@/ui/Button";
 import { ConfirmAction } from "@/ui/ConfirmAction";

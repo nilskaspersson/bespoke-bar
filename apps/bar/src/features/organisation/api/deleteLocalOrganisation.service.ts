@@ -1,6 +1,6 @@
+import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
 import { cacheEvents } from "@/utils/cache";
 
 class InvalidLocalOrgIdError extends Error {

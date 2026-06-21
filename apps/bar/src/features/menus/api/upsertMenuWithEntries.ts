@@ -1,12 +1,12 @@
 "use server";
 
-import { parseWithZod } from "@conform-to/zod/v4";
-import { redirect } from "next/navigation";
 import {
 	type MenuWithEntriesFormData,
 	menuWithEntriesFormSchema,
-} from "@/db/schema/composite";
-import type { Menu } from "@/db/schema/menus";
+} from "@bespoke/schema/schema/composite";
+import type { Menu } from "@bespoke/schema/schema/menus";
+import { parseWithZod } from "@conform-to/zod/v4";
+import { redirect } from "next/navigation";
 import { upsertMenuWithEntries as upsertMenuWithEntriesService } from "@/features/menus/api/upsertMenuWithEntries.service";
 import { getMenuUrl } from "@/features/menus/utils";
 import { authOrForbidden } from "@/utils/auth";

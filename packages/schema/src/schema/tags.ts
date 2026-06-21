@@ -12,8 +12,8 @@ import {
 	createUpdateSchema,
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { RecipeTagsTable } from "@/db/schema/recipeTags";
+import { OrganisationsTable } from "./organisations";
+import { RecipeTagsTable } from "./recipeTags";
 
 export const TagsTable = pgTable(
 	"tags",

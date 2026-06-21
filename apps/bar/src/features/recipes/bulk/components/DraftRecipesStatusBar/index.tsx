@@ -1,7 +1,7 @@
 "use client";
 
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { useMemo } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { Text } from "@/ui/Text";
 
 export function DraftRecipesStatusBar({ recipes }: { recipes: BaseRecipe[] }) {

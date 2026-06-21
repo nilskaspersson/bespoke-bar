@@ -18,10 +18,10 @@ import { z } from "zod";
 import type {
 	IngredientLine,
 	IngredientLineWithIngredient,
-} from "@/db/schema/ingredientLines";
-import { MenusTable } from "@/db/schema/menus";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { RecipesTable, type RecipeWithLines } from "@/db/schema/recipes";
+} from "./ingredientLines";
+import { MenusTable } from "./menus";
+import { OrganisationsTable } from "./organisations";
+import { RecipesTable, type RecipeWithLines } from "./recipes";
 
 export const MenuEntriesTable = pgTable(
 	"menu_entries",

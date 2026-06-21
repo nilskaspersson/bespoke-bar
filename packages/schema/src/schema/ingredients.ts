@@ -16,13 +16,13 @@ import {
 } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { systemCategories, systemCategoryEnum } from "@/db/schema/categories";
-import { IngredientLinesTable } from "@/db/schema/ingredientLines";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { measurementTypes, supportedMeasurements } from "@/db/schema/units";
-import { percentageToRatioSchema } from "@/features/ingredients/utils/percentageToRatio";
-import { nullifyEmptyField } from "@/utils/form";
-import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
+import { nullifyEmptyField } from "../form";
+import { normalizeIngredientName } from "../normalizeIngredientName";
+import { percentageToRatioSchema } from "../percentageToRatio";
+import { systemCategories, systemCategoryEnum } from "./categories";
+import { IngredientLinesTable } from "./ingredientLines";
+import { OrganisationsTable } from "./organisations";
+import { measurementTypes, supportedMeasurements } from "./units";
 
 export const IngredientsTable = pgTable(
 	"ingredients",

@@ -1,7 +1,7 @@
 "use server";
 
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { redirect } from "next/navigation";
-import type { Recipe } from "@/db/schema/recipes";
 import { deleteRecipe as deleteRecipeService } from "@/features/recipes/api/deleteRecipe.service";
 import { authOrForbidden } from "@/utils/auth";
 

@@ -1,5 +1,5 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { create } from "zustand";
-import type { Ingredient } from "@/db/schema/ingredients";
 
 type OnUpdateCallback = (updated: Ingredient) => void;
 

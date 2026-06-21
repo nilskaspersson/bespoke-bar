@@ -1,8 +1,8 @@
-import { db } from "@/db";
 import {
 	type OCRQuotaGrant,
 	OCRQuotaGrantsTable,
-} from "@/db/schema/ocrQuotaGrants";
+} from "@bespoke/schema/schema/ocrQuotaGrants";
+import { db } from "@/db";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { cacheEvents } from "@/utils/cache";
 

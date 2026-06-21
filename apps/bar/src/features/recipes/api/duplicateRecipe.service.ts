@@ -1,5 +1,5 @@
-import type { RecipeFormData } from "@/db/schema/composite";
-import type { Recipe } from "@/db/schema/recipes";
+import type { RecipeFormData } from "@bespoke/schema/schema/composite";
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { upsertRecipesWithLines } from "@/features/recipes/api/upsertRecipesWithLines.service";
 import { rateLimit } from "@/rateLimit";

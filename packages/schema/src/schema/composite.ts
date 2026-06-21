@@ -3,15 +3,15 @@ import {
 	type IngredientLine,
 	type IngredientLineWithIngredient,
 	insertIngredientLinesSchema,
-} from "@/db/schema/ingredientLines";
-import { draftIngredientFormSchema } from "@/db/schema/ingredients";
+} from "./ingredientLines";
+import { draftIngredientFormSchema } from "./ingredients";
 import {
 	type MenuEntryWithRecipe,
 	menuEntryFormSchema,
 	selectMenuEntrySchema,
-} from "@/db/schema/menuEntries";
-import { type Menu, menuFormSchema, selectMenuSchema } from "@/db/schema/menus";
-import { insertRecipeSchema } from "@/db/schema/recipes";
+} from "./menuEntries";
+import { type Menu, menuFormSchema, selectMenuSchema } from "./menus";
+import { insertRecipeSchema } from "./recipes";
 
 /**
  * Caps the Recipe line count well above any known cocktail.

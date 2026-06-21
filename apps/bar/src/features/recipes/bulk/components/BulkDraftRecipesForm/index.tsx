@@ -1,5 +1,8 @@
 "use client";
 
+import type { RecipeFormData } from "@bespoke/schema/schema/composite";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { clsx } from "clsx";
 import { CLEAR_EDITOR_COMMAND, type LexicalEditor } from "lexical";
 import { useRouter } from "next/navigation";
@@ -12,9 +15,6 @@ import {
 	useState,
 } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
-import type { RecipeFormData } from "@/db/schema/composite";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { Recipe } from "@/db/schema/recipes";
 import { DraftRecipesStatusBar } from "@/features/recipes/bulk/components/DraftRecipesStatusBar";
 import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";

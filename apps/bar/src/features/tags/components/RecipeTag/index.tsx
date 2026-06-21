@@ -1,5 +1,5 @@
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { clsx } from "clsx";
-import type { Tag } from "@/db/schema/tags";
 import { Chip } from "@/ui/Chip";
 import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";

@@ -1,7 +1,7 @@
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { Suspense } from "react";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
 import { RecipeAuthorByline } from "@/features/recipes/components/RecipeAuthorByline";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";

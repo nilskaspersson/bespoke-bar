@@ -1,6 +1,6 @@
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { describe, expect, it } from "vitest";
-import type { BaseRecipe } from "@/db/schema/recipes";
-import type { Unit } from "@/db/schema/units";
 import { getRecipeCost } from ".";
 
 describe("getRecipeCost", () => {

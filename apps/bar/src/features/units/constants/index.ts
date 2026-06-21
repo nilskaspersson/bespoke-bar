@@ -1,4 +1,4 @@
-import { supportedUnits, type Unit } from "@/db/schema/units";
+import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
 import type {
 	BartendingUnits,
 	VolumeUnits,

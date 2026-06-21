@@ -1,8 +1,8 @@
 "use client";
 
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
 import { getLineCost } from "@/features/ingredientLines/utils/getLineCost";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";

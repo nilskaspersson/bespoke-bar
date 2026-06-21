@@ -1,5 +1,6 @@
 "use client";
 
+import { draftIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
 import {
 	FormProvider,
 	type SubmissionResult,
@@ -8,7 +9,6 @@ import {
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useRouter } from "next/navigation";
 import { type ComponentProps, useRef, useState } from "react";
-import { draftIngredientFormSchema } from "@/db/schema/ingredients";
 import { createIngredient } from "@/features/ingredients/api/createIngredient";
 import { IngredientFormFields } from "@/features/ingredients/components/IngredientFormFields";
 import {

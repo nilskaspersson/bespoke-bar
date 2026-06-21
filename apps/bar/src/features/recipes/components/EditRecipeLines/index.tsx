@@ -1,10 +1,10 @@
 "use client";
 
+import type { RecipeFormData } from "@bespoke/schema/schema/composite";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { type FieldName, useField } from "@conform-to/react";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import type { RecipeFormData } from "@/db/schema/composite";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { Button } from "@/ui/Button";
 import { Callout } from "@/ui/Callout";
 import { Grid } from "@/ui/Grid";

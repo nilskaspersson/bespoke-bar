@@ -1,7 +1,7 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { EditIngredientButton } from "@/features/ingredients/components/EditIngredientButton";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import { LinkButton } from "@/ui/Button";

@@ -1,12 +1,13 @@
 "use client";
 
+import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
+import type { Keyed } from "@bespoke/schema/types";
 import type { ComponentProps } from "react";
-import { supportedUnits, type Unit } from "@/db/schema/units";
 import { getUnitLabel } from "@/features/units/constants";
 import { isValidUnit } from "@/features/units/utils";
 import { Select } from "@/ui/Select";
 import { collator } from "@/utils/collator";
-import { type Keyed, withKey } from "@/utils/withKey";
+import { withKey } from "@/utils/withKey";
 
 type Option = {
 	value: Unit | "";

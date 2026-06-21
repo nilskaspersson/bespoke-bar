@@ -1,7 +1,7 @@
 "use client";
 
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { type ComponentProps, use } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { MenuEntryProfitLabel } from "@/features/menus/entries/components/MenuEntryProfitLabel";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";
 import { FormatterContext } from "@/hooks/useFormatter";

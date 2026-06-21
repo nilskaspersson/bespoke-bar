@@ -1,7 +1,7 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { type ComponentProps, use } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { TextField } from "@/ui/TextField";
 

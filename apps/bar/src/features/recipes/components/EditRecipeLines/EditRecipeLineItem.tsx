@@ -1,5 +1,7 @@
 "use client";
 
+import type { RecipeFormData } from "@bespoke/schema/schema/composite";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { type FieldName, useField } from "@conform-to/react";
 import {
 	type UseComboboxState,
@@ -7,8 +9,6 @@ import {
 	useCombobox,
 } from "downshift";
 import { type ReactNode, use, useMemo } from "react";
-import type { RecipeFormData } from "@/db/schema/composite";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_DEFAULT_ABV } from "@/features/categories/constants";
 import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { IngredientPicker } from "@/features/ingredients/components/IngredientPicker";

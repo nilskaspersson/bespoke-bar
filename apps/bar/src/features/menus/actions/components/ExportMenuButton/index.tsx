@@ -1,8 +1,8 @@
 "use client";
 
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import type { MenuWithEntries } from "@/db/schema/composite";
 import { ExportMenuFormSkeleton } from "@/features/menus/components/ExportMenuForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";

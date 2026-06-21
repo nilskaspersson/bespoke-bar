@@ -1,4 +1,7 @@
-import type { RecipeWithLines, RecipeWithRelations } from "@/db/schema/recipes";
+import type {
+	RecipeWithLines,
+	RecipeWithRelations,
+} from "@bespoke/schema/schema/recipes";
 import {
 	type CocktailStyleFilter,
 	DEFAULT_RECIPE_NAME,

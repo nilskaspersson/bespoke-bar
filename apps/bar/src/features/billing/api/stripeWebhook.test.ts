@@ -1,5 +1,5 @@
 import Stripe from "stripe";
-import { afterEach, describe, expect, test, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { POST } from "@/app/api/webhooks/stripe/route";
 import {
 	clawBackSlotGrant,
@@ -277,7 +277,14 @@ function signedRequest(payload: string, secret = WEBHOOK_SECRET): Request {
 }
 
 describe("webhook route signature handling", () => {
+	let warnSpy: ReturnType<typeof vi.spyOn>;
+
+	beforeEach(() => {
+		warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+	});
+
 	afterEach(() => {
+		warnSpy.mockRestore();
 		vi.unstubAllEnvs();
 	});
 
@@ -305,6 +312,7 @@ describe("webhook route signature handling", () => {
 		);
 
 		expect(res.status).toBe(401);
+		expect(warnSpy).toHaveBeenCalledOnce();
 	});
 
 	test("acknowledges verified events it doesn't handle", async () => {

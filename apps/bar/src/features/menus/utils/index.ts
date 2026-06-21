@@ -1,6 +1,9 @@
-import type { MenuWithEntries } from "@/db/schema/composite";
-import type { MenuEntry, MenuEntryWithRecipe } from "@/db/schema/menuEntries";
-import type { Menu } from "@/db/schema/menus";
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import type {
+	MenuEntry,
+	MenuEntryWithRecipe,
+} from "@bespoke/schema/schema/menuEntries";
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { DEFAULT_MENU_NAME } from "@/features/menus/constants";
 import { isRecipe } from "@/features/recipes/utils";
 import { isObject } from "@/utils";

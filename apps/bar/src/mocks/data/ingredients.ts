@@ -1,4 +1,4 @@
-import type { Ingredient } from "@/db/schema/ingredients";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 
 export const MOCK_INGREDIENTS: Ingredient[] = [
 	{

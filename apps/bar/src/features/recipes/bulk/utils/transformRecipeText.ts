@@ -1,4 +1,4 @@
-import type { Unit } from "@/db/schema/units";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { quantityTextParser } from "@/features/quantity/utils/parseQuantity";
 import { quantityToBestUnit } from "@/features/units/hooks/useQuantityToBestUnit";
 import type { UnitSystems } from "@/features/units/utils/convert";

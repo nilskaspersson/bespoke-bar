@@ -1,4 +1,5 @@
-import { AppError, type AppErrorPayload } from "@/utils/appError";
+import type { AppErrorPayload } from "@bespoke/schema/appError";
+import { AppError } from "@/utils/appError";
 
 export type ActionResult<T> =
 	| { ok: true; data: T }

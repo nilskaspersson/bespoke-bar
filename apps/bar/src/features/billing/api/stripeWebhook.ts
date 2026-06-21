@@ -1,10 +1,10 @@
-import type Stripe from "stripe";
-import { z } from "zod";
 import {
 	type InsertOrgSubscription,
 	isProActive,
 	subscriptionStatusSchema,
-} from "@/db/schema/orgSubscriptions";
+} from "@bespoke/schema/schema/orgSubscriptions";
+import type Stripe from "stripe";
+import { z } from "zod";
 import {
 	PRO_MONTHLY_SLOT_BONUS,
 	PRO_SIGNUP_SLOT_BONUS,

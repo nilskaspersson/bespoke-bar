@@ -1,6 +1,6 @@
+import { MenusTable } from "@bespoke/schema/schema/menus";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { MenusTable } from "@/db/schema/menus";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";

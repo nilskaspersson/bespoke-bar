@@ -1,12 +1,11 @@
+import {
+	type Identity,
+	KEY_NAME,
+	type Keyed,
+	type WithId,
+	type WithKey,
+} from "@bespoke/schema/types";
 import { omit } from "@/utils";
-import type { Identity } from "@/utils/types";
-
-const KEY_NAME = "_key";
-
-type WithKey<T> = Identity<T & { [KEY_NAME]: string }>;
-type WithId<T> = Identity<T & { id: string }>;
-
-export type Keyed<T> = WithKey<T> | WithId<T>;
 
 function hasKey<T extends Record<PropertyKey, unknown>>(o: T): o is WithKey<T> {
 	return Object.hasOwn(o, KEY_NAME);

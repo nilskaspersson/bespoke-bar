@@ -1,8 +1,8 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { type ReactNode, use } from "react";
 import { EnrichmentMark } from "@/components/EnrichmentMark";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
 import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";

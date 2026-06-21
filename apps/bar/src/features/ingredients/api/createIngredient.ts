@@ -1,6 +1,9 @@
 "use server";
 
-import type { DraftIngredient, Ingredient } from "@/db/schema/ingredients";
+import type {
+	DraftIngredient,
+	Ingredient,
+} from "@bespoke/schema/schema/ingredients";
 import { createIngredient as createIngredientService } from "@/features/ingredients/api/createIngredient.service";
 import { authOrForbidden } from "@/utils/auth";
 

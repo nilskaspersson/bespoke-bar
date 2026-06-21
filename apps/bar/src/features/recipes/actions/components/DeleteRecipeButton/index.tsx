@@ -1,7 +1,7 @@
 "use client";
 
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 import type { ReactNode } from "react";
-import type { Recipe } from "@/db/schema/recipes";
 import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { getRecipeName } from "@/features/recipes/utils";

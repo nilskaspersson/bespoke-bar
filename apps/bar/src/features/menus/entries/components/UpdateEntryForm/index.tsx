@@ -1,12 +1,12 @@
 "use client";
 
-import { FormProvider, useForm } from "@conform-to/react";
-import { parseWithZod } from "@conform-to/zod/v4";
-import { useCallback, useId, useRef } from "react";
 import {
 	type MenuEntryWithRecipe,
 	menuEntryFormSchema,
-} from "@/db/schema/menuEntries";
+} from "@bespoke/schema/schema/menuEntries";
+import { FormProvider, useForm } from "@conform-to/react";
+import { parseWithZod } from "@conform-to/zod/v4";
+import { useCallback, useId, useRef } from "react";
 import { UndoEntryChangesButton } from "@/features/menus/actions/components/UndoEntryChangesButton";
 import { updateMenuEntryAction } from "@/features/menus/entries/api/updateMenuEntry";
 import { MenuEntryDiff } from "@/features/menus/entries/components/MenuEntryDiff";

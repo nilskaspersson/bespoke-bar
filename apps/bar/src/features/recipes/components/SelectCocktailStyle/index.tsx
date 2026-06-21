@@ -1,7 +1,10 @@
 "use client";
 
+import {
+	type CocktailStyle,
+	cocktailStyles,
+} from "@bespoke/schema/schema/cocktailStyles";
 import type { ComponentProps } from "react";
-import { type CocktailStyle, cocktailStyles } from "@/db/schema/cocktailStyles";
 import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
 import { Combobox } from "@/ui/Combobox";
 import { collator } from "@/utils/collator";

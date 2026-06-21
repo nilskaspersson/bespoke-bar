@@ -1,7 +1,7 @@
 "use client";
 
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { useMemo, useState, useTransition } from "react";
-import type { Tag } from "@/db/schema/tags";
 import { bulkUpdateTags } from "@/features/tags/api/bulkUpdateTags";
 import { EditableTag } from "@/features/tags/components/EditableTag";
 import { TAG_NAME_MAX_LENGTH } from "@/features/tags/constants";

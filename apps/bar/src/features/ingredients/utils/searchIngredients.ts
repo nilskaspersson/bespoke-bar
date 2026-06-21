@@ -1,4 +1,4 @@
-import type { Ingredient } from "@/db/schema/ingredients";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { normalizeInput } from "@/utils";
 import { createSearchIndex, type SearchIndex } from "@/utils/search";

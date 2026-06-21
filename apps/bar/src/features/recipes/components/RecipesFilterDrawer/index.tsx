@@ -1,7 +1,7 @@
 "use client";
 
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { useMemo } from "react";
-import type { Tag } from "@/db/schema/tags";
 import { CocktailStyleCloud } from "@/features/recipes/components/CocktailStyleCloud";
 import {
 	COCKTAIL_STYLE_TO_LABEL,

@@ -1,4 +1,4 @@
-import type { Unit } from "@/db/schema/units";
+import type { Unit } from "@bespoke/schema/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
 

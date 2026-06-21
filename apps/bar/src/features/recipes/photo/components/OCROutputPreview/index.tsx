@@ -1,9 +1,10 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import { Activity, type ComponentProps, useState } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { DraftRecipesStatusBar } from "@/features/recipes/bulk/components/DraftRecipesStatusBar";
 import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
@@ -14,7 +15,6 @@ import {
 import { Flex } from "@/ui/Flex";
 import { Grid } from "@/ui/Grid";
 import { Heading } from "@/ui/Heading";
-import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function OCROutputPreview({

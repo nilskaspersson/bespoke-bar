@@ -1,12 +1,12 @@
-import { eq, sql } from "drizzle-orm";
-import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
-import { OCRQuotaGrantsTable } from "@/db/schema/ocrQuotaGrants";
+import { OCRQuotaGrantsTable } from "@bespoke/schema/schema/ocrQuotaGrants";
 import {
 	DEFAULT_BASE_OCR_QUOTA,
 	OrganisationsTable,
-} from "@/db/schema/organisations";
-import { isProActive } from "@/db/schema/orgSubscriptions";
+} from "@bespoke/schema/schema/organisations";
+import { isProActive } from "@bespoke/schema/schema/orgSubscriptions";
+import { eq, sql } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
+import { db } from "@/db";
 import { getOrgSubscription } from "@/features/billing/api/getOrgSubscription";
 import { PRO_OCR_QUOTA_BONUS } from "@/features/billing/constants";
 import { cacheTags } from "@/utils/cache";

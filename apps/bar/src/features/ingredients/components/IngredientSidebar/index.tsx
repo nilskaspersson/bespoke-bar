@@ -1,10 +1,10 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import Link from "next/link";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { parseAsStringLiteral, useQueryStates } from "nuqs";
 import { useDeferredValue, useMemo, useRef, useState } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getIngredientUrl } from "@/features/ingredients/utils";
 import {

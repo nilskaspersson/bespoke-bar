@@ -1,7 +1,7 @@
 "use client";
 
+import type { MenuEntry } from "@bespoke/schema/schema/menuEntries";
 import type { MouseEventHandler } from "react";
-import type { MenuEntry } from "@/db/schema/menuEntries";
 import { updateMenuEntry } from "@/features/menus/entries/api/updateMenuEntry";
 import { Button, type ButtonProps } from "@/ui/Button";
 import { toast } from "@/ui/Toast";

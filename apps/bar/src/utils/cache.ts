@@ -1,8 +1,8 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { Menu } from "@bespoke/schema/schema/menus";
+import type { Recipe } from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { revalidateTag, updateTag } from "next/cache";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { Menu } from "@/db/schema/menus";
-import type { Recipe } from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
 
 /**
  * We use cacheTag and updateTag as an event system; Every mutating action

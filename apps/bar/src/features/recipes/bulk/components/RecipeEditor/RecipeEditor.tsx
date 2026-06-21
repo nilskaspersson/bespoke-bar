@@ -1,5 +1,6 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -14,7 +15,6 @@ import {
 	type LexicalEditor,
 } from "lexical";
 import { type ReactNode, type RefObject, useState } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { Flex } from "@/ui/Flex";

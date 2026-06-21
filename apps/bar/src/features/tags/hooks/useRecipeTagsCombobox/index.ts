@@ -1,5 +1,6 @@
 "use client";
 
+import type { Tag } from "@bespoke/schema/schema/tags";
 import {
 	type ComponentProps,
 	type KeyboardEventHandler,
@@ -7,7 +8,6 @@ import {
 	useDeferredValue,
 	useState,
 } from "react";
-import type { Tag } from "@/db/schema/tags";
 import {
 	MAX_TAGS_PER_RECIPE,
 	TAG_NAME_MAX_LENGTH,

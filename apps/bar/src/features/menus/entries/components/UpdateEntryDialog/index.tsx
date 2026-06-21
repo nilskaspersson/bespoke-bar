@@ -1,7 +1,7 @@
 "use client";
 
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import dynamic from "next/dynamic";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 import { UpdateEntryFormSkeleton } from "@/features/menus/entries/components/UpdateEntryForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";

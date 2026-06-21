@@ -1,9 +1,10 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import type { Keyed } from "@bespoke/schema/types";
 import { useMemo } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { userInputToBulkRecipe } from "@/features/ingredientLines/utils/userInputToBulkRecipe";
 import { isEmptyDraftRecipe } from "@/features/recipes/utils";
-import { type Keyed, withKey } from "@/utils/withKey";
+import { withKey } from "@/utils/withKey";
 
 export function useBulkDraftTextToBaseRecipes(
 	inputValue: string,

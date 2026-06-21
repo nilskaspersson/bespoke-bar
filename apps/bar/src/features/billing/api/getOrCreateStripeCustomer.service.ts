@@ -1,7 +1,7 @@
+import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { eq, sql } from "drizzle-orm";
 import Stripe from "stripe";
 import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
 import { getStripe } from "@/features/billing/stripe";
 import { cacheEvents } from "@/utils/cache";
 

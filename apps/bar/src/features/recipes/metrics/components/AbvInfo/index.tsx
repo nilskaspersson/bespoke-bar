@@ -1,6 +1,6 @@
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { lineIsDraft } from "@/features/ingredientLines/utils";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";

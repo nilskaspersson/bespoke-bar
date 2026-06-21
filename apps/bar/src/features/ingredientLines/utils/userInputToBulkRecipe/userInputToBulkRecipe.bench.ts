@@ -1,5 +1,5 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { bench, describe } from "vitest";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { userInputToBulkRecipe } from ".";
 
 function makeIngredients(count: number): Ingredient[] {

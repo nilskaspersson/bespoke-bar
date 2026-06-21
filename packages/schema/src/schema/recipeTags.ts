@@ -6,9 +6,9 @@ import {
 	text,
 	timestamp,
 } from "drizzle-orm/pg-core";
-import { OrganisationsTable } from "@/db/schema/organisations";
-import { RecipesTable } from "@/db/schema/recipes";
-import { TagsTable } from "@/db/schema/tags";
+import { OrganisationsTable } from "./organisations";
+import { RecipesTable } from "./recipes";
+import { TagsTable } from "./tags";
 
 export const RecipeTagsTable = pgTable(
 	"recipe_tags",

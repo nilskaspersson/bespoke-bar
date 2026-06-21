@@ -1,6 +1,6 @@
+import type { IngredientLine } from "@bespoke/schema/schema/ingredientLines";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { describe, expect, test } from "vitest";
-import type { IngredientLine } from "@/db/schema/ingredientLines";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { buildIngredientMap, stitchLines } from "./stitchIngredients";
 
 const ingredient = (

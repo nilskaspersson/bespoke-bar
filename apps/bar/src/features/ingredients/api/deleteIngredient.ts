@@ -1,7 +1,7 @@
 "use server";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { redirect } from "next/navigation";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { deleteIngredient as deleteIngredientService } from "@/features/ingredients/api/deleteIngredient.service";
 import { authOrForbidden } from "@/utils/auth";
 import { type ActionResult, catchKnownErrors } from "@/utils/serverAction";

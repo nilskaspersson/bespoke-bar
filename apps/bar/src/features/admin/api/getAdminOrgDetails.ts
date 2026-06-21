@@ -1,13 +1,13 @@
-import { eq } from "drizzle-orm";
-import { z } from "zod";
-import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
+import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import {
 	isProActive,
 	type SubscriptionAttention,
 	type SubscriptionStatus,
 	subscriptionAttention,
-} from "@/db/schema/orgSubscriptions";
+} from "@bespoke/schema/schema/orgSubscriptions";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
+import { db } from "@/db";
 import {
 	listOrgMembers,
 	type OrgMemberSummary,

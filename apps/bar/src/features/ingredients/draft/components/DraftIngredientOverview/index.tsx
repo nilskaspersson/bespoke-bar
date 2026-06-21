@@ -1,8 +1,10 @@
 "use client";
 
+import type {
+	IngredientFormData,
+	RecipeFormData,
+} from "@bespoke/schema/schema/composite";
 import { type FieldName, useField } from "@conform-to/react";
-
-import type { IngredientFormData, RecipeFormData } from "@/db/schema/composite";
 import { isSystemCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { Abv } from "@/features/ingredients/components/Abv";
 import {

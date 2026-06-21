@@ -1,6 +1,9 @@
+import {
+	type Ingredient,
+	IngredientsTable,
+} from "@bespoke/schema/schema/ingredients";
 import { and, eq, inArray, type SQL, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
 import { CATEGORY_DEFAULT_ABV } from "@/features/categories/constants";
 import {
 	getIngredientMetaDataBatchWithLLM,

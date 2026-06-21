@@ -7,10 +7,10 @@ import {
 	uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
-import { OrganisationsTable } from "@/db/schema/organisations";
+import { OrganisationsTable } from "./organisations";
 
-export const OCRQuotaGrantsTable = pgTable(
-	"ocr_quota_grants",
+export const RecipeSlotGrantsTable = pgTable(
+	"recipe_slot_grants",
 	{
 		id: text("id")
 			.primaryKey()
@@ -30,10 +30,11 @@ export const OCRQuotaGrantsTable = pgTable(
 		}).notNull(),
 		/**
 		 * Namespaced idempotency key. Examples:
-		 *   "stripe:cs_test_abc123"    (purchase)
-		 *   "referral:<referralId>"    (bonus_referral)
-		 *   "daily:2026-05-03:<orgId>" (bonus_activity)
-		 *   "refund:<originalUseId>"   (refund)
+		 *   "stripe:cs_test_abc123"   (purchase)
+		 *   "referral:<referralId>"   (bonus_referral)
+		 *   "pro-signup:<orgId>"      (bonus_activity — Pro signup bonus)
+		 *   "pro-month:2026-06:<orgId>" (bonus_activity — Pro loyalty accrual)
+		 *   "refund:<originalGrantId>" (refund)
 		 * Null is allowed for manual grants, where dedupe is the operator's job.
 		 */
 		externalId: text("external_id"),
@@ -44,10 +45,10 @@ export const OCRQuotaGrantsTable = pgTable(
 			.notNull(),
 	},
 	(t) => [
-		index("ocr_quota_grants_org_id_idx").on(t.orgId),
-		uniqueIndex("ocr_quota_grants_external_id_uq").on(t.externalId),
+		index("recipe_slot_grants_org_id_idx").on(t.orgId),
+		uniqueIndex("recipe_slot_grants_external_id_uq").on(t.externalId),
 	],
 );
 
-export type OCRQuotaGrant = typeof OCRQuotaGrantsTable.$inferSelect;
-export type InsertOCRQuotaGrant = typeof OCRQuotaGrantsTable.$inferInsert;
+export type RecipeSlotGrant = typeof RecipeSlotGrantsTable.$inferSelect;
+export type InsertRecipeSlotGrant = typeof RecipeSlotGrantsTable.$inferInsert;

@@ -1,12 +1,12 @@
-import { sql } from "drizzle-orm";
-import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import {
 	DEFAULT_BASE_RECIPE_SLOTS,
 	OrganisationsTable,
-} from "@/db/schema/organisations";
-import { RecipeSlotGrantsTable } from "@/db/schema/recipeSlotGrants";
-import { RecipesTable } from "@/db/schema/recipes";
+} from "@bespoke/schema/schema/organisations";
+import { RecipeSlotGrantsTable } from "@bespoke/schema/schema/recipeSlotGrants";
+import { RecipesTable } from "@bespoke/schema/schema/recipes";
+import { sql } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
+import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 export type RecipeSlotUsage = {

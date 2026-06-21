@@ -1,10 +1,10 @@
-import type { MenuWithRecipes } from "@/db/schema/composite";
+import type { MenuWithRecipes } from "@bespoke/schema/schema/composite";
 import type {
 	IngredientLine,
 	IngredientLineWithIngredient,
-} from "@/db/schema/ingredientLines";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
+} from "@bespoke/schema/schema/ingredientLines";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 
 export type IngredientMap = Map<Ingredient["id"], Ingredient>;
 

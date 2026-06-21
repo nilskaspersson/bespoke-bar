@@ -1,9 +1,10 @@
+import type { AppErrorPayload } from "@bespoke/schema/appError";
 import { auth } from "@clerk/nextjs/server";
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
 import { getLocalOrgId } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import { isAdminUser } from "@/utils/admin";
-import { AppError, type AppErrorPayload } from "@/utils/appError";
+import { AppError } from "@/utils/appError";
 import type { Auth } from "@/utils/auth";
 
 type TRPCErrorCode = ConstructorParameters<typeof TRPCError>[0]["code"];

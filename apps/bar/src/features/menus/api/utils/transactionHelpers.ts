@@ -1,13 +1,13 @@
-import { and, eq, sql } from "drizzle-orm";
-import type { DatabaseTransaction } from "@/db";
-import type { MenuWithEntriesFormData } from "@/db/schema/composite";
+import type { MenuWithEntriesFormData } from "@bespoke/schema/schema/composite";
 import {
 	type InsertMenuEntry,
 	insertMenuEntrySchema,
 	MenuEntriesTable,
 	type MenuEntry,
-} from "@/db/schema/menuEntries";
-import { type Menu, MenusTable } from "@/db/schema/menus";
+} from "@bespoke/schema/schema/menuEntries";
+import { type Menu, MenusTable } from "@bespoke/schema/schema/menus";
+import { and, eq, sql } from "drizzle-orm";
+import type { DatabaseTransaction } from "@/db";
 import { generateDefaultMenuName } from "@/features/menus/utils";
 
 export async function upsertMenuInTransaction(

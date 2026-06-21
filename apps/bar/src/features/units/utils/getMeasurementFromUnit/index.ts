@@ -2,7 +2,7 @@ import {
 	type Measurement,
 	supportedMeasurements,
 	type Unit,
-} from "@/db/schema/units";
+} from "@bespoke/schema/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "@/features/units/constants";
 import { convert } from "@/features/units/utils/convert";
 

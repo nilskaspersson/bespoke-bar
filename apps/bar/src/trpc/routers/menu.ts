@@ -1,6 +1,6 @@
+import { menuWithEntriesFormSchema } from "@bespoke/schema/schema/composite";
+import { menuFormSchema } from "@bespoke/schema/schema/menus";
 import { z } from "zod";
-import { menuWithEntriesFormSchema } from "@/db/schema/composite";
-import { menuFormSchema } from "@/db/schema/menus";
 import {
 	buildIngredientMap,
 	stitchMenuEntries,

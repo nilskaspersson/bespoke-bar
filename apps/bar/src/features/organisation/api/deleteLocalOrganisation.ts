@@ -1,10 +1,10 @@
 "use server";
 
+import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { clerkClient } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
 import {
 	type DeleteLocalOrganisationResult,
 	deleteLocalOrganisation,

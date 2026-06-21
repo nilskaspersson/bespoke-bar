@@ -1,4 +1,4 @@
-import type { Recipe, RecipeTagWithTag } from "@/db/schema/recipes";
+import type { Recipe, RecipeTagWithTag } from "@bespoke/schema/schema/recipes";
 
 type Update = { recipeId: Recipe["id"]; tags: RecipeTagWithTag[] };
 type OnUpdateCallback = (update: Update) => void;

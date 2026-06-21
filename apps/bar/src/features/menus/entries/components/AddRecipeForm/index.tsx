@@ -1,14 +1,14 @@
 "use client";
 
+import {
+	type MenuEntryWithRecipe,
+	menuEntryFormSchema,
+} from "@bespoke/schema/schema/menuEntries";
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useMemo, useRef } from "react";
 import z from "zod";
-import {
-	type MenuEntryWithRecipe,
-	menuEntryFormSchema,
-} from "@/db/schema/menuEntries";
-import type { Menu } from "@/db/schema/menus";
 import { SelectRecipe } from "@/features/menus/components/SelectRecipe";
 import { addRecipeToMenuAction } from "@/features/menus/entries/api/addRecipeToMenu";
 import { MenuEntryNameAdornment } from "@/features/menus/entries/components/MenuEntryNameAdornment";

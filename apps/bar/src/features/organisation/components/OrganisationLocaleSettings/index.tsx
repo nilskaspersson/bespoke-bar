@@ -1,8 +1,8 @@
 "use client";
 
+import type { Organisation } from "@bespoke/schema/schema/organisations";
 import { useForm } from "@conform-to/react";
 import { useCallback } from "react";
-import type { Organisation } from "@/db/schema/organisations";
 import { updateLocalOrganisationAction } from "@/features/organisation/api/updateLocalOrganisation";
 import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
 import { SelectLocale } from "@/features/organisation/components/SelectLocale";

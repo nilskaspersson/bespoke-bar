@@ -1,11 +1,11 @@
-import { after } from "next/server";
-import { db } from "@/db";
 import {
 	type DraftIngredient,
 	type Ingredient,
 	IngredientsTable,
 	insertIngredientSchema,
-} from "@/db/schema/ingredients";
+} from "@bespoke/schema/schema/ingredients";
+import { after } from "next/server";
+import { db } from "@/db";
 import { isUniqueConstraintViolation } from "@/db/utils";
 import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
 import { rateLimit } from "@/rateLimit";

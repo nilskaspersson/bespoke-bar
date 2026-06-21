@@ -1,8 +1,11 @@
 "use client";
 
+import type {
+	DraftIngredient,
+	Ingredient,
+} from "@bespoke/schema/schema/ingredients";
 import type { FieldMetadata } from "@conform-to/react";
 import type { RefObject } from "react";
-import type { DraftIngredient, Ingredient } from "@/db/schema/ingredients";
 import { SelectAbv } from "@/features/ingredients/components/SelectAbv";
 import { SelectCategory } from "@/features/ingredients/components/SelectCategory";
 import { SelectMeasurementType } from "@/features/ingredients/components/SelectMeasurementType";

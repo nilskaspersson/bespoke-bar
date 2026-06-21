@@ -1,8 +1,8 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import clsx from "clsx";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
 import { useAdjustments } from "@/features/recipes/components/RecipeAdjustments";
 import {
 	RecipeCard,

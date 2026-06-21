@@ -1,6 +1,6 @@
+import { recipeFormSchema } from "@bespoke/schema/schema/composite";
+import { updateRecipeSchema } from "@bespoke/schema/schema/recipes";
 import { z } from "zod";
-import { recipeFormSchema } from "@/db/schema/composite";
-import { updateRecipeSchema } from "@/db/schema/recipes";
 import { getCachedIngredients } from "@/features/ingredients/api/readIngredients";
 import { getCachedCountBarRecipes } from "@/features/recipes/api/countBarRecipes";
 import { deleteRecipe } from "@/features/recipes/api/deleteRecipe.service";

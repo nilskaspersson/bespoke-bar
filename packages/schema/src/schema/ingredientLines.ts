@@ -11,10 +11,10 @@ import {
 import { createInsertSchema } from "drizzle-zod";
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { type Ingredient, IngredientsTable } from "@/db/schema/ingredients";
-import { RecipesTable } from "@/db/schema/recipes";
-import { unitEnum } from "@/db/schema/units";
-import type { Identity } from "@/utils/types";
+import type { Identity } from "../types";
+import { type Ingredient, IngredientsTable } from "./ingredients";
+import { RecipesTable } from "./recipes";
+import { unitEnum } from "./units";
 
 export const IngredientLinesTable = pgTable(
 	"ingredient_lines",

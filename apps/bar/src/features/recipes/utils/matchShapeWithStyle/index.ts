@@ -1,8 +1,8 @@
-import type { SystemCategory } from "@/db/schema/categories";
-import type { CocktailStyle } from "@/db/schema/cocktailStyles";
-import type { IngredientLine } from "@/db/schema/ingredientLines";
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { PreparationMethod } from "@/db/schema/preparationMethods";
+import type { SystemCategory } from "@bespoke/schema/schema/categories";
+import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
+import type { IngredientLine } from "@bespoke/schema/schema/ingredientLines";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
 import { matchNameWithCategory } from "@/features/categories/utils/matchNameWithCategory";
 import { calculateLineVolumes } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 

@@ -1,8 +1,9 @@
 "use client";
 
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import type { ChangeEvent, ComponentProps, ReactNode } from "react";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Group = {

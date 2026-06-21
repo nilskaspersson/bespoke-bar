@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { insertIngredientSchema } from "@/db/schema/ingredients";
-import { normalizeIngredientName } from "@/utils/normalizeIngredientName";
+import { normalizeIngredientName } from "./normalizeIngredientName";
+import { insertIngredientSchema } from "./schema/ingredients";
 
 /**
  * `normalizeIngredientName` is the single source of truth for ingredient identity:

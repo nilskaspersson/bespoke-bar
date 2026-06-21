@@ -1,5 +1,5 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { z } from "zod";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { collator } from "@/utils/collator";
 
 export const ingredientSortFieldSchema = z.enum(["created", "updated", "name"]);

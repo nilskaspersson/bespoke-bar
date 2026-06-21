@@ -1,7 +1,7 @@
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import type { MenuWithEntries } from "@/db/schema/composite";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
 import { Heading } from "@/ui/Heading";
 import { Icon } from "@/ui/Icon";

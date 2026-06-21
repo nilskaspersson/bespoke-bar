@@ -1,5 +1,5 @@
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { EntityActions } from "@/components/EntityActions";
-import type { MenuWithEntries } from "@/db/schema/composite";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { getMenuUrl } from "@/features/menus/utils";

@@ -1,6 +1,6 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { supportedUnits } from "@bespoke/schema/schema/units";
 import { describe, expect, test } from "vitest";
-import type { Ingredient } from "@/db/schema/ingredients";
-import { supportedUnits } from "@/db/schema/units";
 import { MOCK_INGREDIENTS } from "@/mocks/data/ingredients";
 import { userInputToLine } from ".";
 

@@ -1,7 +1,8 @@
 "use client";
 
+import type { Menu } from "@bespoke/schema/schema/menus";
+import type { Keyed } from "@bespoke/schema/types";
 import { type FormEvent, use, useCallback, useMemo, useState } from "react";
-import type { Menu } from "@/db/schema/menus";
 import {
 	type ExportOptions,
 	exportMenuAsJson,
@@ -19,7 +20,6 @@ import { Skeleton } from "@/ui/Skeleton";
 import { Text } from "@/ui/Text";
 import { downloadBlob } from "@/utils/downloadBlob";
 import { handleKey } from "@/utils/keyboard";
-import type { Keyed } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type ExportFormat = "txt" | "json";

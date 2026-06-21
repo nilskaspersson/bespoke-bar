@@ -1,4 +1,4 @@
-import type { RecipeWithLines } from "@/db/schema/recipes";
+import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 
 export function getRecipesUsingIngredient<T extends RecipeWithLines>(
 	ingredientId: string,

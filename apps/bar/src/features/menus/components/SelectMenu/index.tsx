@@ -1,6 +1,6 @@
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
-import type { MenuWithEntries } from "@/db/schema/composite";
 import { getMenuName } from "@/features/menus/utils";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
 import { Combobox } from "@/ui/Combobox";

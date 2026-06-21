@@ -1,4 +1,4 @@
-import { updateOrganisationFormSchema } from "@/db/schema/organisations";
+import { updateOrganisationFormSchema } from "@bespoke/schema/schema/organisations";
 import { getOrCreateLocalOrganisation } from "@/features/organisation/api/getOrCreateLocalOrganisation";
 import { updateLocalOrganisation } from "@/features/organisation/api/updateLocalOrganisation.service";
 import { protectedProcedure, router } from "@/trpc";

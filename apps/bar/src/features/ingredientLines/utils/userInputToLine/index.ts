@@ -1,5 +1,5 @@
-import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
-import type { Ingredient } from "@/db/schema/ingredients";
+import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { IngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { getDefaultIngredientData } from "@/features/ingredients/utils/getDefaultIngredientData";
 import { ingredientTextParser } from "@/features/ingredients/utils/parseIngredient";

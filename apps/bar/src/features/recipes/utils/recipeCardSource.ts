@@ -1,4 +1,4 @@
-import type { Recipe } from "@/db/schema/recipes";
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 
 const ATTR = "data-recipe-id";
 

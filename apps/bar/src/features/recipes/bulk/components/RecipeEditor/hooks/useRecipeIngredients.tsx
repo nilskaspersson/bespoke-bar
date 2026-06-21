@@ -1,7 +1,7 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { createContext, type ReactNode, useContext, useMemo } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getIngredientId } from "@/features/ingredients/utils";
 import {

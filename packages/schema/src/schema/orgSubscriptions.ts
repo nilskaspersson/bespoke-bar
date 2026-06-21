@@ -1,7 +1,7 @@
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { nanoid } from "nanoid";
 import { z } from "zod";
-import { OrganisationsTable } from "@/db/schema/organisations";
+import { OrganisationsTable } from "./organisations";
 
 /**
  * Mirrors Stripe's subscription statuses. Kept a `text` column because Stripe

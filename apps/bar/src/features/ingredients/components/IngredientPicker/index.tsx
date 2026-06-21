@@ -1,7 +1,7 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { type ComponentProps, use, useCallback, useMemo } from "react";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { FormatterContext } from "@/hooks/useFormatter";
 import { Combobox } from "@/ui/Combobox";

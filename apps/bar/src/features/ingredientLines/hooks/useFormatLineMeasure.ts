@@ -1,7 +1,7 @@
 "use client";
 
+import type { DraftIngredientLine } from "@bespoke/schema/schema/ingredientLines";
 import { use, useCallback } from "react";
-import type { DraftIngredientLine } from "@/db/schema/ingredientLines";
 import { useQuantityToBestUnit } from "@/features/units/hooks/useQuantityToBestUnit";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { getFormattedUnit } from "@/features/units/utils/getFormattedUnit";

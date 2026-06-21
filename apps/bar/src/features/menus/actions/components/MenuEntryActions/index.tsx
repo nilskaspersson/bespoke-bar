@@ -1,7 +1,7 @@
 "use client";
 
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import { EntityActions } from "@/components/EntityActions";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 
 import { RemoveMenuEntryButton } from "@/features/menus/actions/components/RemoveMenuEntryButton";
 import { addRecipeToMenu } from "@/features/menus/entries/api/addRecipeToMenu";

@@ -1,8 +1,8 @@
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import clsx from "clsx";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
 import { EnrichmentMark } from "@/components/EnrichmentMark";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { Abv } from "@/features/ingredients/components/Abv";
 import { IngredientActions } from "@/features/ingredients/components/IngredientActions";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";

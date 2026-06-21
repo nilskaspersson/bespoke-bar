@@ -1,9 +1,10 @@
+import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
+import type { Keyed } from "@bespoke/schema/types";
 import type { ComponentProps } from "react";
-import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
 import { IngredientLineEntry } from "@/features/ingredientLines/components/IngredientLineEntry";
 import type { UnitSystems } from "@/features/units/utils/convert";
 import { Grid } from "@/ui/Grid";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function IngredientLineList<

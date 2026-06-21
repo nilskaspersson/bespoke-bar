@@ -1,8 +1,8 @@
 "use client";
 
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import { clsx } from "clsx";
 import { type ComponentProps, use } from "react";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
 import { MenuEntryProfitLabel } from "@/features/menus/entries/components/MenuEntryProfitLabel";
 import { UpdateEntryDialog } from "@/features/menus/entries/components/UpdateEntryDialog";
 import { getRecipeCost } from "@/features/recipes/metrics/utils/getRecipeCost";

@@ -1,7 +1,7 @@
 "use client";
 
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import type { PropsWithChildren } from "react";
-import type { MenuWithEntries } from "@/db/schema/composite";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { trpc } from "@/trpc/client";
 import type { ButtonProps } from "@/ui/Button";

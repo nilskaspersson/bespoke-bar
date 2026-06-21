@@ -1,8 +1,8 @@
+import { MenuEntriesTable } from "@bespoke/schema/schema/menuEntries";
+import { type Menu, MenusTable } from "@bespoke/schema/schema/menus";
 import { and, asc, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/db";
-import { MenuEntriesTable } from "@/db/schema/menuEntries";
-import { type Menu, MenusTable } from "@/db/schema/menus";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadMenu = db.query.MenusTable.findFirst({

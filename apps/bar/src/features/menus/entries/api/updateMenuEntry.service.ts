@@ -1,11 +1,11 @@
-import { and, eq, sql } from "drizzle-orm";
-import { db } from "@/db";
 import {
 	MenuEntriesTable,
 	type MenuEntry,
 	menuEntryFormSchema,
 	type UpdateMenuEntry,
-} from "@/db/schema/menuEntries";
+} from "@bespoke/schema/schema/menuEntries";
+import { and, eq, sql } from "drizzle-orm";
+import { db } from "@/db";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";

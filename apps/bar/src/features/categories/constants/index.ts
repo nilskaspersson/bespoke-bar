@@ -1,4 +1,4 @@
-import type { SystemCategory } from "@/db/schema/categories";
+import type { SystemCategory } from "@bespoke/schema/schema/categories";
 
 export const CATEGORY_DEFAULT_ABV = new Map<SystemCategory, number>([
 	["absinthe", 0.65],

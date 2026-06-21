@@ -1,7 +1,7 @@
+import { IngredientLinesTable } from "@bespoke/schema/schema/ingredientLines";
+import { IngredientsTable } from "@bespoke/schema/schema/ingredients";
 import { and, countDistinct, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { IngredientLinesTable } from "@/db/schema/ingredientLines";
-import { IngredientsTable } from "@/db/schema/ingredients";
 import { isForeignKeyViolation } from "@/db/utils";
 import { rateLimit } from "@/rateLimit";
 import { AppError } from "@/utils/appError";

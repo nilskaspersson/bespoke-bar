@@ -1,7 +1,7 @@
 "use client";
 
+import { systemCategories } from "@bespoke/schema/schema/categories";
 import type { ComponentProps } from "react";
-import { systemCategories } from "@/db/schema/categories";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { Combobox } from "@/ui/Combobox";
 import { collator } from "@/utils/collator";

@@ -1,8 +1,8 @@
-import { db } from "@/db";
 import type {
 	MenuWithEntries,
 	MenuWithEntriesFormData,
-} from "@/db/schema/composite";
+} from "@bespoke/schema/schema/composite";
+import { db } from "@/db";
 import {
 	appendMenuEntriesInTransaction,
 	upsertMenuInTransaction,

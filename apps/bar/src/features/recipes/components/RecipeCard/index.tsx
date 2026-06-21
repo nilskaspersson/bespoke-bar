@@ -1,8 +1,8 @@
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { memo, type ReactNode, useMemo } from "react";
 import { EnrichmentMark } from "@/components/EnrichmentMark";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { IngredientLineList } from "@/features/ingredientLines/components/IngredientLineList";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";

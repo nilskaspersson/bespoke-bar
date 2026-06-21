@@ -1,7 +1,7 @@
+import { OCRQuotaUsesTable } from "@bespoke/schema/schema/ocrQuotaUses";
 import { and, eq, lt, sql } from "drizzle-orm";
 import { after, type NextRequest } from "next/server";
 import { db } from "@/db";
-import { OCRQuotaUsesTable } from "@/db/schema/ocrQuotaUses";
 import { getCachedOCRQuotaState } from "@/features/billing/api/getOCRQuotaState";
 import {
 	recordOCRUse,

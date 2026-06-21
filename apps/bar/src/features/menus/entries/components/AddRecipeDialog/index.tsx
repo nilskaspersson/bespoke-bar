@@ -1,8 +1,8 @@
 "use client";
 
+import type { Menu } from "@bespoke/schema/schema/menus";
 import dynamic from "next/dynamic";
 import { useId } from "react";
-import type { Menu } from "@/db/schema/menus";
 import { AddRecipeFormSkeleton } from "@/features/menus/entries/components/AddRecipeForm";
 import { useDialog } from "@/hooks/useDialog";
 import { Button, type ButtonProps } from "@/ui/Button";

@@ -1,9 +1,12 @@
 "use client";
 
+import {
+	type AppErrorPayload,
+	getAppErrorToast,
+} from "@bespoke/schema/appError";
 import { LinkButton } from "@/ui/Button";
 import { Flex } from "@/ui/Flex";
 import { toast } from "@/ui/Toast";
-import { type AppErrorPayload, getAppErrorToast } from "@/utils/appError";
 
 type OCRQuotaReachedPayload = Extract<
 	AppErrorPayload,

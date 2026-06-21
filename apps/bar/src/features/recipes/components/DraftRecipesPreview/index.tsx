@@ -1,9 +1,10 @@
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { EMPTY_RECIPE } from "@/features/recipes/constants";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function DraftRecipesPreview({

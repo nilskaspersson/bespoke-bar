@@ -1,8 +1,8 @@
-import { z } from "zod";
 import {
 	draftIngredientSchema,
 	updateIngredientSchema,
-} from "@/db/schema/ingredients";
+} from "@bespoke/schema/schema/ingredients";
+import { z } from "zod";
 import { createIngredient } from "@/features/ingredients/api/createIngredient.service";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient.service";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";

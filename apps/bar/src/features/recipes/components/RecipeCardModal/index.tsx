@@ -1,5 +1,7 @@
 "use client";
 
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import type { Tag } from "@bespoke/schema/schema/tags";
 import { clsx } from "clsx";
 import { m } from "motion/react";
 import {
@@ -10,8 +12,6 @@ import {
 	useRef,
 } from "react";
 import { WakeLock } from "@/components/WakeLock";
-import type { RecipeWithRelations } from "@/db/schema/recipes";
-import type { Tag } from "@/db/schema/tags";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,

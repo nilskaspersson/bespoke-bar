@@ -1,8 +1,8 @@
 "use client";
 
+import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { clsx } from "clsx";
 import { useOptimistic } from "react";
-import type { RecipeWithLines } from "@/db/schema/recipes";
 import { toggleRecipeFavorite } from "@/features/recipes/api/toggleRecipeFavorite";
 import { type ButtonProps, LinkButton } from "@/ui/Button";
 import { Icon } from "@/ui/Icon";

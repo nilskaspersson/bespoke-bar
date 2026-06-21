@@ -1,8 +1,8 @@
+import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { and, eq, isNull, sql } from "drizzle-orm";
 import type { NextRequest } from "next/server";
 import type Stripe from "stripe";
 import { db } from "@/db";
-import { OrganisationsTable } from "@/db/schema/organisations";
 import {
 	clawBackSlotGrant,
 	issueSlotGrant,

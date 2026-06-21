@@ -1,5 +1,6 @@
 "use client";
 
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { clsx } from "clsx";
 import {
 	type ChangeEventHandler,
@@ -10,7 +11,6 @@ import {
 	useState,
 } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
-import type { Ingredient } from "@/db/schema/ingredients";
 import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicator";
 import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";

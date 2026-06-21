@@ -1,7 +1,7 @@
 "use client";
 
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { type ComponentProps, use } from "react";
-import type { BaseRecipe } from "@/db/schema/recipes";
 import { calculateRecipeMetrics } from "@/features/recipes/metrics/utils/calculateRecipeMetrics";
 import { useRoundedUnit } from "@/features/units/hooks/useRoundedUnit";
 import { isBartendingUnit } from "@/features/units/utils";

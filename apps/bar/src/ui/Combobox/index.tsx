@@ -1,6 +1,7 @@
 "use client";
 "use no memo";
 
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import { type UseComboboxProps, useCombobox } from "downshift";
 import {
@@ -18,7 +19,7 @@ import { Icon } from "@/ui/Icon";
 import { Input } from "@/ui/Input";
 import { Menu } from "@/ui/Menu";
 import { Text } from "@/ui/Text";
-import { getKey, type Keyed } from "@/utils/withKey";
+import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Props<T> = {

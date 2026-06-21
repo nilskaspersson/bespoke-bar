@@ -1,7 +1,7 @@
+import { OCRQuotaUsesTable } from "@bespoke/schema/schema/ocrQuotaUses";
+import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/db";
-import { OCRQuotaUsesTable } from "@/db/schema/ocrQuotaUses";
-import { OrganisationsTable } from "@/db/schema/organisations";
 import { getOCRQuotaLimit } from "@/features/billing/api/getOCRQuotaLimit";
 import { getOCRUsageInWindow } from "@/features/billing/api/getOCRUsageInWindow";
 import { startOfNextUTCMonthMs } from "@/features/billing/quotaMonth";

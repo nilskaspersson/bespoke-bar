@@ -1,5 +1,5 @@
-import type { CocktailStyle } from "@/db/schema/cocktailStyles";
-import type { Recipe } from "@/db/schema/recipes";
+import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
+import type { Recipe } from "@bespoke/schema/schema/recipes";
 import type { RecipeEnrichableField } from "@/features/recipes/api/utils/aiEnrichedFields";
 import { STYLE_TO_SERVE } from "@/features/recipes/constants";
 import type { RecipeMeta } from "@/features/recipes/utils/getRecipeMetaDataWithLLM";

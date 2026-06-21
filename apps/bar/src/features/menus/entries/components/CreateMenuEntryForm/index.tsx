@@ -1,11 +1,11 @@
 "use client";
 
+import { menuWithEntriesFormSchema } from "@bespoke/schema/schema/composite";
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { menuWithEntriesFormSchema } from "@/db/schema/composite";
-import type { MenuEntryWithRecipe } from "@/db/schema/menuEntries";
-import type { RecipeWithLines } from "@/db/schema/recipes";
 import { RemoveMenuEntryButton } from "@/features/menus/actions/components/RemoveMenuEntryButton";
 import { SelectMenu } from "@/features/menus/components/SelectMenu";
 import { appendMenuEntryAction } from "@/features/menus/entries/api/appendMenuEntry";

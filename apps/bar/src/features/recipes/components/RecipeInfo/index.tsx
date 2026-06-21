@@ -1,6 +1,6 @@
 "use client";
 
-import type { RecipeWithRelations } from "@/db/schema/recipes";
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,

@@ -1,5 +1,5 @@
-import type { Ingredient } from "@/db/schema/ingredients";
-import type { BaseRecipe } from "@/db/schema/recipes";
+import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { userInputToLine } from "@/features/ingredientLines/utils/userInputToLine";
 import { buildIngredientIndex } from "@/features/ingredients/utils/buildIngredientIndex";
 import { withKey } from "@/utils/withKey";

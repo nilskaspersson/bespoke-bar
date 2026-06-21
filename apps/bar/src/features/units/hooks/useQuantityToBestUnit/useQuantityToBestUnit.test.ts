@@ -1,5 +1,5 @@
+import type { Unit } from "@bespoke/schema/schema/units";
 import { describe, expect, it } from "vitest";
-import type { Unit } from "@/db/schema/units";
 import { quantityToBestUnit } from ".";
 
 describe("quantityToBestUnit", () => {

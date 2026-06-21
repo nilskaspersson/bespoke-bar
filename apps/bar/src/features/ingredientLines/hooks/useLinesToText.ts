@@ -1,4 +1,4 @@
-import type { DraftIngredientLineWithDraftIngredient } from "@/db/schema/ingredientLines";
+import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
 import type { UnitSystems } from "@/features/units/utils/convert";
 
