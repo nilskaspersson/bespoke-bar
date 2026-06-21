@@ -1,3 +1,5 @@
+import { db } from "@bespoke/db";
+import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import {
 	type InsertTag,
 	insertTagSchema,
@@ -5,8 +7,6 @@ import {
 	TagsTable,
 } from "@bespoke/schema/schema/tags";
 import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { isUniqueConstraintViolation } from "@/db/utils";
 import { MAX_TAGS_PER_ORG } from "@/features/tags/constants";
 import { rateLimit } from "@/rateLimit";
 import { normalizeInput } from "@/utils";

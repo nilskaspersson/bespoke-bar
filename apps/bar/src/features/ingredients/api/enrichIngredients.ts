@@ -1,10 +1,10 @@
+import { db } from "@bespoke/db";
 import { CATEGORY_DEFAULT_ABV } from "@bespoke/domain/categories/constants";
 import {
 	type Ingredient,
 	IngredientsTable,
 } from "@bespoke/schema/schema/ingredients";
 import { and, eq, inArray, type SQL, sql } from "drizzle-orm";
-import { db } from "@/db";
 import {
 	getIngredientMetaDataBatchWithLLM,
 	ingredientEnrichmentSchema,

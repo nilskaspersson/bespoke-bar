@@ -1,7 +1,7 @@
+import { db } from "@bespoke/db";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 export async function hasStripeCustomer(orgId: string): Promise<boolean> {

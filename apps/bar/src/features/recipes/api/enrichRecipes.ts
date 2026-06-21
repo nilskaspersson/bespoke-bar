@@ -1,7 +1,7 @@
+import { db } from "@bespoke/db";
 import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
 import { RecipesTable } from "@bespoke/schema/schema/recipes";
 import { type AnyColumn, and, eq, inArray, type SQL, sql } from "drizzle-orm";
-import { db } from "@/db";
 import type { RecipeEnrichableField } from "@/features/recipes/api/utils/aiEnrichedFields";
 import {
 	getRecipeMetaDataBatchWithLLM,

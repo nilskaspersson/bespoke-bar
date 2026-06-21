@@ -1,12 +1,12 @@
 "use server";
 
+import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import type {
 	DraftIngredient,
 	Ingredient,
 } from "@bespoke/schema/schema/ingredients";
 import { updateIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { isUniqueConstraintViolation } from "@/db/utils";
 import { updateIngredient as updateIngredientService } from "@/features/ingredients/api/updateIngredient.service";
 import { authOrForbidden } from "@/utils/auth";
 

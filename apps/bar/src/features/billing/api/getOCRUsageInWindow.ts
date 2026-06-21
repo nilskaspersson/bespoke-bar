@@ -1,7 +1,7 @@
+import type { DatabaseExecutor } from "@bespoke/db";
 import { OCRQuotaUsesTable } from "@bespoke/schema/schema/ocrQuotaUses";
 import { and, eq, gte, sql } from "drizzle-orm";
 import { z } from "zod";
-import type { DatabaseExecutor } from "@/db";
 
 /**
  * `z.coerce` absorbs the driver handing back the `::bigint` epoch as a string

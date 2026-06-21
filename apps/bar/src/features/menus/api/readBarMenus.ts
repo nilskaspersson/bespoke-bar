@@ -1,8 +1,8 @@
+import { db } from "@bespoke/db";
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { MenusTable } from "@bespoke/schema/schema/menus";
 import { and, desc, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadBarMenus = db.query.MenusTable.findMany({

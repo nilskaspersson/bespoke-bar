@@ -1,8 +1,8 @@
+import { db } from "@bespoke/db";
 import { OCR_QUOTA_USE_RETENTION_DAYS } from "@bespoke/domain/billing/constants";
 import { OCRQuotaUsesTable } from "@bespoke/schema/schema/ocrQuotaUses";
 import { and, eq, lt, sql } from "drizzle-orm";
 import { after, type NextRequest } from "next/server";
-import { db } from "@/db";
 import { getCachedOCRQuotaState } from "@/features/billing/api/getOCRQuotaState";
 import {
 	recordOCRUse,

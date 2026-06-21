@@ -1,8 +1,8 @@
+import { db } from "@bespoke/db";
 import { type Recipe, RecipesTable } from "@bespoke/schema/schema/recipes";
 import { RecipeTagsTable } from "@bespoke/schema/schema/recipeTags";
 import { TagsTable } from "@bespoke/schema/schema/tags";
 import { and, eq, inArray } from "drizzle-orm";
-import { db } from "@/db";
 import { MAX_TAGS_PER_RECIPE } from "@/features/tags/constants";
 import { rateLimit } from "@/rateLimit";
 import { unique } from "@/utils";

@@ -1,0 +1,41 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"root": true,
+	"files": {
+		"includes": ["src/**", "drizzle.config.ts"]
+	},
+	"formatter": {
+		"enabled": true,
+		"useEditorconfig": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": [
+									"react",
+									"react-dom",
+									"next",
+									"next/**",
+									"@clerk/**",
+									"@google-cloud/**",
+									"googleapis",
+									"@google/genai",
+									"@upstash/**",
+									"@lexical/**"
+								],
+								"message": "packages/db is SERVER-ONLY and Next-free: the DB connection, migrations, and constraint helpers ONLY. It may import the driver (pg / @neondatabase / drizzle-orm), but no Next, no React, no auth/vision/cache SDK — those belong in packages/api."
+							}
+						]
+					}
+				}
+			}
+		}
+	}
+}

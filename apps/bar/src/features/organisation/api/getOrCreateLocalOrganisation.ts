@@ -1,3 +1,4 @@
+import { db } from "@bespoke/db";
 import {
 	type Organisation,
 	OrganisationsTable,
@@ -5,7 +6,6 @@ import {
 import { eq } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
 import { after } from "next/server";
-import { db } from "@/db";
 import { cacheEvents, cacheTags } from "@/utils/cache";
 
 /**

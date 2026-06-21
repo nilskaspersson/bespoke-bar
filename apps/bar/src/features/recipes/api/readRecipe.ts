@@ -1,7 +1,7 @@
+import { db } from "@bespoke/db";
 import { type Recipe, RecipesTable } from "@bespoke/schema/schema/recipes";
 import { and, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadRecipe = db.query.RecipesTable.findFirst({

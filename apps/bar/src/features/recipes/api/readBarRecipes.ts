@@ -1,7 +1,7 @@
+import { db } from "@bespoke/db";
 import { RecipesTable } from "@bespoke/schema/schema/recipes";
 import { desc, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 const preparedReadBarRecipes = db.query.RecipesTable.findMany({

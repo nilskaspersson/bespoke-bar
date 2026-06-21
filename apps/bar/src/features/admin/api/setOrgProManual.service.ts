@@ -1,6 +1,6 @@
+import { db } from "@bespoke/db";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { eq } from "drizzle-orm";
-import { db } from "@/db";
 import { getOrgSubscription } from "@/features/billing/api/getOrgSubscription";
 import { upsertOrgSubscription } from "@/features/billing/api/upsertOrgSubscription.service";
 

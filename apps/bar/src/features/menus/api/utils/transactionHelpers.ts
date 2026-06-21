@@ -1,3 +1,4 @@
+import type { DatabaseTransaction } from "@bespoke/db";
 import type { MenuWithEntriesFormData } from "@bespoke/schema/schema/composite";
 import {
 	type InsertMenuEntry,
@@ -7,7 +8,6 @@ import {
 } from "@bespoke/schema/schema/menuEntries";
 import { type Menu, MenusTable } from "@bespoke/schema/schema/menus";
 import { and, eq, sql } from "drizzle-orm";
-import type { DatabaseTransaction } from "@/db";
 import { generateDefaultMenuName } from "@/features/menus/utils";
 
 export async function upsertMenuInTransaction(

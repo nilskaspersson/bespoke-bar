@@ -1,6 +1,6 @@
+import { db } from "@bespoke/db";
 import { RecipeFavoritesTable } from "@bespoke/schema/schema/recipeFavorites";
 import { and, eq } from "drizzle-orm";
-import { db } from "@/db";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";

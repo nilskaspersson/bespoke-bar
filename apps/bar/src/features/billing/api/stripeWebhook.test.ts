@@ -32,7 +32,7 @@ const dbMock = vi.hoisted(() => {
 	return { update, set, where, returning };
 });
 
-vi.mock("@/db", () => ({ db: { update: dbMock.update } }));
+vi.mock("@bespoke/db", () => ({ db: { update: dbMock.update } }));
 
 vi.mock("@/utils/cache", () => ({
 	cacheEvents: {

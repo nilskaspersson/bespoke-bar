@@ -1,10 +1,10 @@
+import { db } from "@bespoke/db";
+import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import {
 	type RecipeSlotGrant,
 	RecipeSlotGrantsTable,
 } from "@bespoke/schema/schema/recipeSlotGrants";
 import { eq } from "drizzle-orm";
-import { db } from "@/db";
-import { isUniqueConstraintViolation } from "@/db/utils";
 import { cacheEvents } from "@/utils/cache";
 
 type IssueSlotGrantInput = {

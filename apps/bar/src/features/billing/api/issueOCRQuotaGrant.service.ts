@@ -1,9 +1,9 @@
+import { db } from "@bespoke/db";
+import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import {
 	type OCRQuotaGrant,
 	OCRQuotaGrantsTable,
 } from "@bespoke/schema/schema/ocrQuotaGrants";
-import { db } from "@/db";
-import { isUniqueConstraintViolation } from "@/db/utils";
 import { cacheEvents } from "@/utils/cache";
 
 type IssueOCRQuotaGrantInput = {

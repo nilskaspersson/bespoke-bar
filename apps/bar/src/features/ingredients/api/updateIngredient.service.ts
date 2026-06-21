@@ -1,3 +1,4 @@
+import { db } from "@bespoke/db";
 import { normalizeIngredientName } from "@bespoke/schema/normalizeIngredientName";
 import { percentageToRatioSchema } from "@bespoke/schema/percentageToRatio";
 import type {
@@ -10,7 +11,6 @@ import {
 } from "@bespoke/schema/schema/ingredients";
 import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "@/db";
 import { getCachedIngredient } from "@/features/ingredients/api/readIngredient";
 import { ingredientEnrichmentSchema } from "@/features/ingredients/utils/getIngredientMetaDataWithLLM";
 import { rateLimit } from "@/rateLimit";

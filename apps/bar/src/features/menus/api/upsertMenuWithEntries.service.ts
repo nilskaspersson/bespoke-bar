@@ -1,6 +1,6 @@
+import { db } from "@bespoke/db";
 import type { MenuWithEntriesFormData } from "@bespoke/schema/schema/composite";
 import type { Menu } from "@bespoke/schema/schema/menus";
-import { db } from "@/db";
 import {
 	replaceMenuEntriesInTransaction,
 	upsertMenuInTransaction,

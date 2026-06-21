@@ -1,7 +1,7 @@
+import { db } from "@bespoke/db";
 import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { after } from "next/server";
-import { db } from "@/db";
 import { getRecipeSlotUsage } from "@/features/billing/api/getRecipeSlotUsage";
 import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
 import { enrichRecipes } from "@/features/recipes/api/enrichRecipes";

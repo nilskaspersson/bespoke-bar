@@ -1,6 +1,6 @@
+import { db } from "@bespoke/db";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import { clerkClient } from "@clerk/nextjs/server";
-import { db } from "@/db";
 import { collator } from "@/utils/collator";
 
 export type AdminOrgSummary = {

@@ -1,10 +1,10 @@
+import { db } from "@bespoke/db";
 import {
 	insertMenuSchema,
 	type Menu,
 	type MenuFormData,
 	MenusTable,
 } from "@bespoke/schema/schema/menus";
-import { db } from "@/db";
 import { generateDefaultMenuName } from "@/features/menus/utils";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";

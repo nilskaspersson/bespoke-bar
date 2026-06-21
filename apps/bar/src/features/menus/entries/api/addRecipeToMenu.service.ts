@@ -1,3 +1,4 @@
+import { db } from "@bespoke/db";
 import {
 	type InsertMenuEntry,
 	insertMenuEntrySchema,
@@ -7,7 +8,6 @@ import {
 } from "@bespoke/schema/schema/menuEntries";
 import { MenusTable } from "@bespoke/schema/schema/menus";
 import { and, eq, max, sql } from "drizzle-orm";
-import { db } from "@/db";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";

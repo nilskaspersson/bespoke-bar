@@ -1,3 +1,4 @@
+import type { DatabaseTransaction } from "@bespoke/db";
 import { normalizeIngredientName } from "@bespoke/schema/normalizeIngredientName";
 import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import {
@@ -12,7 +13,6 @@ import {
 } from "@bespoke/schema/schema/ingredients";
 import { type Recipe, RecipesTable } from "@bespoke/schema/schema/recipes";
 import { and, eq, inArray, sql } from "drizzle-orm";
-import type { DatabaseTransaction } from "@/db";
 import { clearTouchedAiMarks } from "@/features/recipes/api/utils/aiEnrichedFields";
 
 /** Keyed by {@link normalizeIngredientName} — i.e. the stored `normalized_name`. */

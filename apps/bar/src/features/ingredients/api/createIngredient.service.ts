@@ -1,3 +1,5 @@
+import { db } from "@bespoke/db";
+import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import {
 	type DraftIngredient,
 	type Ingredient,
@@ -5,8 +7,6 @@ import {
 	insertIngredientSchema,
 } from "@bespoke/schema/schema/ingredients";
 import { after } from "next/server";
-import { db } from "@/db";
-import { isUniqueConstraintViolation } from "@/db/utils";
 import { enrichIngredients } from "@/features/ingredients/api/enrichIngredients";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";

@@ -1,5 +1,5 @@
+import { db } from "@bespoke/db";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import {
 	getOCRUsageInWindow,
 	type OCRQuotaUsage,

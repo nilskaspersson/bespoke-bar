@@ -1,10 +1,10 @@
+import { db } from "@bespoke/db";
 import {
 	OrganisationsTable,
 	type UpdateOrganisationFormData,
 	updateOrganisationSchema,
 } from "@bespoke/schema/schema/organisations";
 import { eq, sql } from "drizzle-orm";
-import { db } from "@/db";
 import { rateLimit } from "@/rateLimit";
 import type { Auth } from "@/utils/auth";
 import { cacheEvents } from "@/utils/cache";

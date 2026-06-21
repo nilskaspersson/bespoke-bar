@@ -1,3 +1,4 @@
+import { db } from "@bespoke/db";
 import {
 	type InsertRecipe,
 	type Recipe,
@@ -5,7 +6,6 @@ import {
 	updateRecipeSchema,
 } from "@bespoke/schema/schema/recipes";
 import { and, eq, sql } from "drizzle-orm";
-import { db } from "@/db";
 import { getCachedRecipe } from "@/features/recipes/api/readRecipe";
 import { clearTouchedAiMarks } from "@/features/recipes/api/utils/aiEnrichedFields";
 import { rateLimit } from "@/rateLimit";

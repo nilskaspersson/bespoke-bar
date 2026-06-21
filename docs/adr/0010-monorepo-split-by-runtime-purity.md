@@ -19,7 +19,7 @@ server SDK:
   `convert`, currency, and the dependency-free text→lines parser (`userInputToLine`,
   `tokenizeLine`, `transformRecipeText`) lifted out of `recipes/bulk/`. This is what gives
   mobile authoring-semantics parity *without* a line of Lexical.
-- `packages/db` — **thin and Next-free**: the connection (`src/db/index.ts`),
+- `packages/db` — **thin and Next-free**: the connection (`packages/db/src/index.ts`),
   `drizzle.config.ts`, migrations, and constraint-error helpers. Nothing else — services are
   *not* split into it.
 - `packages/api` — **all server-side code, files intact**: the tRPC router + context, every

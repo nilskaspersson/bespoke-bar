@@ -1,3 +1,4 @@
+import { db } from "@bespoke/db";
 import {
 	DEFAULT_BASE_RECIPE_SLOTS,
 	OrganisationsTable,
@@ -6,7 +7,6 @@ import { RecipeSlotGrantsTable } from "@bespoke/schema/schema/recipeSlotGrants";
 import { RecipesTable } from "@bespoke/schema/schema/recipes";
 import { sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import { cacheTags } from "@/utils/cache";
 
 export type RecipeSlotUsage = {

@@ -1,3 +1,4 @@
+import { db } from "@bespoke/db";
 import { OrganisationsTable } from "@bespoke/schema/schema/organisations";
 import {
 	isProActive,
@@ -7,7 +8,6 @@ import {
 } from "@bespoke/schema/schema/orgSubscriptions";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "@/db";
 import {
 	listOrgMembers,
 	type OrgMemberSummary,

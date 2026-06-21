@@ -1,11 +1,11 @@
+import { db } from "@bespoke/db";
+import { isUniqueConstraintViolation } from "@bespoke/db/utils";
 import {
 	insertTagSchema,
 	type Tag,
 	TagsTable,
 } from "@bespoke/schema/schema/tags";
 import { and, asc, eq, inArray, sql } from "drizzle-orm";
-import { db } from "@/db";
-import { isUniqueConstraintViolation } from "@/db/utils";
 import { rateLimit } from "@/rateLimit";
 import { normalizeInput, unique } from "@/utils";
 import type { Auth } from "@/utils/auth";

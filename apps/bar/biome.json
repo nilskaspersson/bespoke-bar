@@ -7,12 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"includes": [
-			"src/**",
-			"next.config.ts",
-			"drizzle.config.ts",
-			"vitest.config.ts"
-		]
+		"includes": ["src/**", "next.config.ts", "vitest.config.ts"]
 	},
 	"formatter": {
 		"enabled": true,

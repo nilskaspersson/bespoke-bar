@@ -1,7 +1,7 @@
+import { db } from "@bespoke/db";
 import { MenusTable } from "@bespoke/schema/schema/menus";
 import { and, eq, sql } from "drizzle-orm";
 import { cacheLife, cacheTag } from "next/cache";
-import { db } from "@/db";
 import { cacheEvents, cacheTags } from "@/utils/cache";
 
 const readFeaturedMenuPrepared = db.query.MenusTable.findFirst({
