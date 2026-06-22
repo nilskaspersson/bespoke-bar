@@ -1,7 +1,7 @@
 import type { Measurement } from "@bespoke/schema/schema/units";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { use, useCallback } from "react";
 import { MEASUREMENT_TO_DB_INGREDIENT_UNIT } from "@/features/ingredients/constants";
-import { FormatterContext } from "@/hooks/useFormatter";
 
 export function useFormatIngredientUnitCost() {
 	const { currencyFormatter } = use(FormatterContext);

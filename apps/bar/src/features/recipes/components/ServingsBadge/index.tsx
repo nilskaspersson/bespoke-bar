@@ -1,11 +1,11 @@
 "use client";
 
+import { AnimatedNumber } from "@bespoke/ui/AnimatedNumber";
+import { Chip, type ChipProps } from "@bespoke/ui/Chip";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Icon } from "@bespoke/ui/Icon";
 import { clsx } from "clsx";
 import { use, useCallback } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { AnimatedNumber } from "@/ui/AnimatedNumber";
-import { Chip, type ChipProps } from "@/ui/Chip";
-import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 export function ServingsBadge({

@@ -1,10 +1,10 @@
 "use client";
 
+import { Grid } from "@bespoke/ui/Grid";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
+import { Text } from "@bespoke/ui/Text";
+import { toast } from "@bespoke/ui/Toast";
 import { deleteLocalOrganisationAction } from "@/features/organisation/api/deleteLocalOrganisation";
-import { Grid } from "@/ui/Grid";
-import { SubmitButton } from "@/ui/SubmitButton";
-import { Text } from "@/ui/Text";
-import { toast } from "@/ui/Toast";
 
 type Props = {
 	orgId: string;

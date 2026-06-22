@@ -1,13 +1,13 @@
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import { Heading } from "@bespoke/ui/Heading";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
+import { Time } from "@bespoke/ui/Time";
+import type { HeadingLevel } from "@bespoke/ui/utils/types";
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
-import { Time } from "@/ui/Time";
-import type { HeadingLevel } from "@/utils/types";
 import styles from "./styles.module.css";
 
 function OptionalLink({

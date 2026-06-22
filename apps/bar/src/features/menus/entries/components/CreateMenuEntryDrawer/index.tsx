@@ -1,5 +1,10 @@
 "use client";
 
+import { Drawer } from "@bespoke/ui/Drawer";
+import { Heading } from "@bespoke/ui/Heading";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
+import { Kbd } from "@bespoke/ui/Kbd";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import dynamic from "next/dynamic";
 import { useEffect, useRef } from "react";
 import { useShallow } from "zustand/react/shallow";
@@ -8,11 +13,6 @@ import {
 	createMenuEntryStore,
 	useCreateMenuEntry,
 } from "@/features/menus/entries/stores/createMenuEntry";
-import { useDialog } from "@/hooks/useDialog";
-import { Drawer } from "@/ui/Drawer";
-import { Heading } from "@/ui/Heading";
-import { Kbd } from "@/ui/Kbd";
-import { SubmitButton } from "@/ui/SubmitButton";
 
 const CreateMenuEntryForm = dynamic(
 	() =>

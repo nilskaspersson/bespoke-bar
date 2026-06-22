@@ -3,6 +3,9 @@
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import type { Keyed } from "@bespoke/schema/types";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
 import { clsx } from "clsx";
 import { Activity, type ComponentProps, useState } from "react";
 import { DraftRecipesStatusBar } from "@/features/recipes/bulk/components/DraftRecipesStatusBar";
@@ -12,9 +15,6 @@ import {
 	type DisplayMode,
 	DisplayModeSwitch,
 } from "@/features/recipes/photo/components/DisplayModeSwitch";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
 import styles from "./styles.module.css";
 
 export function OCROutputPreview({

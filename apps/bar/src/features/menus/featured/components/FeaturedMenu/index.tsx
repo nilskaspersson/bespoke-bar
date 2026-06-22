@@ -4,15 +4,15 @@ import {
 	buildIngredientMap,
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Grid, type GridProps } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Text } from "@bespoke/ui/Text";
 import { EmptyArea } from "@/components/EmptyArea";
 import { EntityActions } from "@/components/EntityActions";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { MenuFilters } from "@/features/menus/components/MenuFilters";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
-import { LinkButton } from "@/ui/Button";
-import { Grid, type GridProps } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type FeaturedMenuProps = Omit<GridProps, "children"> & {

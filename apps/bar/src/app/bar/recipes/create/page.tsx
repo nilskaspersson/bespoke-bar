@@ -1,8 +1,8 @@
+import { LinkButton } from "@bespoke/ui/Button";
+import { Icon } from "@bespoke/ui/Icon";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
-import { LinkButton } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
 import styles from "./page.module.css";
 
 export default function CreateRecipePage() {

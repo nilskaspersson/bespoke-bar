@@ -2,9 +2,9 @@
 
 import { collator } from "@bespoke/domain/utils/collator";
 import { systemCategories } from "@bespoke/schema/schema/categories";
+import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { Combobox } from "@/ui/Combobox";
 import { withKey } from "@/utils/withKey";
 
 const OPTIONS = systemCategories.options

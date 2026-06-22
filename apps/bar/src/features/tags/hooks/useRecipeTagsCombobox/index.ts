@@ -5,6 +5,9 @@ import {
 	TAG_NAME_MAX_LENGTH,
 } from "@bespoke/domain/tags/constants";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import type { Popover } from "@bespoke/ui/Popover";
+import { usePlatform } from "@bespoke/ui/stores/platform";
+import { handleKey, matchesShortcut } from "@bespoke/ui/utils/keyboard";
 import {
 	type ComponentProps,
 	type KeyboardEventHandler,
@@ -12,9 +15,6 @@ import {
 	useDeferredValue,
 	useState,
 } from "react";
-import { usePlatform } from "@/stores/platform";
-import type { Popover } from "@/ui/Popover";
-import { handleKey, matchesShortcut } from "@/utils/keyboard";
 
 type Args = {
 	popoverContentProps: ComponentProps<typeof Popover>;

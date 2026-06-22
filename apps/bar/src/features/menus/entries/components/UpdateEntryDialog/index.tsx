@@ -1,15 +1,15 @@
 "use client";
 
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import { Button, type ButtonProps } from "@bespoke/ui/Button";
+import { Drawer } from "@bespoke/ui/Drawer";
+import { Heading } from "@bespoke/ui/Heading";
+import { HGroup } from "@bespoke/ui/HGroup";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
+import { Kbd } from "@bespoke/ui/Kbd";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import dynamic from "next/dynamic";
 import { UpdateEntryFormSkeleton } from "@/features/menus/entries/components/UpdateEntryForm";
-import { useDialog } from "@/hooks/useDialog";
-import { Button, type ButtonProps } from "@/ui/Button";
-import { Drawer } from "@/ui/Drawer";
-import { Heading } from "@/ui/Heading";
-import { HGroup } from "@/ui/HGroup";
-import { Kbd } from "@/ui/Kbd";
-import { SubmitButton } from "@/ui/SubmitButton";
 
 const UpdateEntryForm = dynamic(
 	() =>

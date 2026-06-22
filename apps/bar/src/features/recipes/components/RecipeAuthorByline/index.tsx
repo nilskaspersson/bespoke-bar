@@ -1,10 +1,10 @@
 import { getUserById } from "@bespoke/api/organisation/getUserById";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { Text, type TextProps } from "@bespoke/ui/Text";
+import { Time } from "@bespoke/ui/Time";
 import type { ComponentProps } from "react";
 import { FALLBACK_USER_NAME } from "@/features/organisation/constants";
 import { getFullName } from "@/features/organisation/utils";
-import { Skeleton } from "@/ui/Skeleton";
-import { Text, type TextProps } from "@/ui/Text";
-import { Time } from "@/ui/Time";
 export async function RecipeAuthorByline({
 	createdBy,
 	createdAt,

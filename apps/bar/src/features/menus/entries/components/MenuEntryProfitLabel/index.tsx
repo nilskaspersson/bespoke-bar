@@ -1,7 +1,7 @@
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Text, type TextProps } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import { type ElementType, use } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function MenuEntryProfitLabel<E extends ElementType = "span">({

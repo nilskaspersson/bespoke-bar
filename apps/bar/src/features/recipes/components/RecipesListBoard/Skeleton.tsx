@@ -1,10 +1,10 @@
 "use client";
 
+import { Grid } from "@bespoke/ui/Grid";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
+import { toCSSVars } from "@bespoke/ui/utils/styles";
 import { RecipesListSkeleton } from "@/features/recipes/components/RecipesList";
 import { RecipesListHeader } from "@/features/recipes/components/RecipesListHeader";
-import { Grid } from "@/ui/Grid";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
-import { toCSSVars } from "@/utils/styles";
 import skeletonStyles from "./Skeleton.module.css";
 import styles from "./styles.module.css";
 

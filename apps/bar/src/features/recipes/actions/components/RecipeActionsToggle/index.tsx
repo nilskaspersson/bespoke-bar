@@ -1,7 +1,7 @@
+import { ContextMenu } from "@bespoke/ui/ContextMenu";
+import { Heading } from "@bespoke/ui/Heading";
+import { HGroup } from "@bespoke/ui/HGroup";
 import type { ReactNode } from "react";
-import { ContextMenu } from "@/ui/ContextMenu";
-import { Heading } from "@/ui/Heading";
-import { HGroup } from "@/ui/HGroup";
 
 type Props = {
 	children: ReactNode;

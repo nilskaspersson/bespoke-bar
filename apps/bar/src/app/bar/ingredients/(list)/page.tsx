@@ -1,9 +1,9 @@
+import { LinkButton } from "@bespoke/ui/Button";
+import { Callout } from "@bespoke/ui/Callout";
+import { Flex } from "@bespoke/ui/Flex";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { CreateIngredientButton } from "@/features/ingredients/components/CreateIngredientButton";
-import { LinkButton } from "@/ui/Button";
-import { Callout } from "@/ui/Callout";
-import { Flex } from "@/ui/Flex";
 
 export default function IngredientsPage() {
 	return (

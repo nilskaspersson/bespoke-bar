@@ -1,10 +1,10 @@
 "use client";
 
 import { AppError, appErrorSchema } from "@bespoke/schema/appError";
+import { toast } from "@bespoke/ui/Toast";
 import { useCallback, useRef, useState } from "react";
 import { showOCRQuotaReachedToast } from "@/features/billing/components/OCRQuotaReachedToast";
 import { trpc } from "@/trpc/client";
-import { toast } from "@/ui/Toast";
 import { getErrorToast } from "@/utils/api";
 
 export function useSubmitPhotoAction({

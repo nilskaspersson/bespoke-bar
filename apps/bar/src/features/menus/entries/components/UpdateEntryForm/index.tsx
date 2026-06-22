@@ -4,6 +4,10 @@ import {
 	type MenuEntryWithRecipe,
 	menuEntryFormSchema,
 } from "@bespoke/schema/schema/menuEntries";
+import { CurrencyInput } from "@bespoke/ui/CurrencyInput";
+import { Grid } from "@bespoke/ui/Grid";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { ToastActions, toast } from "@bespoke/ui/Toast";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useId, useRef } from "react";
@@ -12,11 +16,7 @@ import { updateMenuEntryAction } from "@/features/menus/entries/api/updateMenuEn
 import { MenuEntryDiff } from "@/features/menus/entries/components/MenuEntryDiff";
 import { MenuEntryPriceCalculation } from "@/features/menus/entries/components/MenuEntryPriceCalculation";
 import { isMenuEntry } from "@/features/menus/utils";
-import { CurrencyInput } from "@/ui/CurrencyInput";
 import { FormErrors } from "@/ui/FormErrors";
-import { Grid } from "@/ui/Grid";
-import { Skeleton } from "@/ui/Skeleton";
-import { ToastActions, toast } from "@/ui/Toast";
 
 type Props = {
 	entry: MenuEntryWithRecipe;

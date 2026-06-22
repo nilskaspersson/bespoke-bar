@@ -1,12 +1,12 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import formControlStyles from "@bespoke/ui/FormControl/styles.module.css";
+import { Icon } from "@bespoke/ui/Icon";
+import { handleKey } from "@bespoke/ui/utils/keyboard";
 import { clsx } from "clsx";
 import { type ComponentProps, useCallback, useState } from "react";
 import z from "zod";
-import { Button } from "@/ui/Button";
-import formControlStyles from "@/ui/FormControl/styles.module.css";
-import { Icon } from "@/ui/Icon";
-import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 export function QuantityControl({

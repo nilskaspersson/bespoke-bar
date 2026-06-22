@@ -1,13 +1,13 @@
 "use client";
 
 import type { Menu } from "@bespoke/schema/schema/menus";
+import { type ButtonProps, LinkButton } from "@bespoke/ui/Button";
+import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { Icon } from "@bespoke/ui/Icon";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
+import { Text } from "@bespoke/ui/Text";
+import { ToastActions, toast } from "@bespoke/ui/Toast";
 import { SetFeaturedMenuButton } from "@/features/menus/actions/components/SetFeaturedMenuButton";
-import { type ButtonProps, LinkButton } from "@/ui/Button";
-import { ConfirmAction } from "@/ui/ConfirmAction";
-import { Icon } from "@/ui/Icon";
-import { SubmitButton } from "@/ui/SubmitButton";
-import { Text } from "@/ui/Text";
-import { ToastActions, toast } from "@/ui/Toast";
 
 export function ClearFeaturedMenuButton({
 	menu,

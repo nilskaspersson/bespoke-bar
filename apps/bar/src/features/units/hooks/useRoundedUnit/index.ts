@@ -1,8 +1,8 @@
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
 import { type MeasureParts, roundUnit } from "@bespoke/domain/units/roundUnit";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { use, useCallback } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
 
 export function formatMeasure(
 	parts: MeasureParts,

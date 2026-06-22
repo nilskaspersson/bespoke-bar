@@ -1,4 +1,13 @@
 import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
+import { Callout } from "@bespoke/ui/Callout";
+import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { FileInput } from "@bespoke/ui/FileInput";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { useConfirm } from "@bespoke/ui/hooks/useConfirm";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
@@ -8,17 +17,8 @@ import {
 	storeOCRConsent,
 } from "@/features/consent/ocrConsent";
 import { useSubmitPhotoAction } from "@/features/recipes/photo/hooks/useSubmitPhotoAction";
-import { useConfirm } from "@/hooks/useConfirm";
-import { useDialog } from "@/hooks/useDialog";
 import { useFileDrop } from "@/hooks/useFileDrop";
 import { usePasteFile } from "@/hooks/usePasteFile";
-import { Callout } from "@/ui/Callout";
-import { ConfirmAction } from "@/ui/ConfirmAction";
-import { FileInput } from "@/ui/FileInput";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import { unwrapAction } from "@/utils/api";
 import styles from "./styles.module.css";
 

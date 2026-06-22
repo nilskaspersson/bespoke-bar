@@ -1,7 +1,7 @@
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { Chip } from "@bespoke/ui/Chip";
+import { Icon } from "@bespoke/ui/Icon";
 import { clsx } from "clsx";
-import { Chip } from "@/ui/Chip";
-import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 type Props = {

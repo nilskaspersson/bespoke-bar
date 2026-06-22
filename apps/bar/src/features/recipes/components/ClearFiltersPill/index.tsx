@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
 import clsx from "clsx";
 import type { ComponentProps } from "react";
-import { Button } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {

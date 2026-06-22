@@ -1,3 +1,6 @@
+import { Flex } from "@bespoke/ui/Flex";
+import { Icon } from "@bespoke/ui/Icon";
+import { LoadingScreen } from "@bespoke/ui/LoadingScreen";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AppNavToggle } from "@/components/AppNavToggle";
@@ -8,9 +11,6 @@ import { IngredientEditorDrawer } from "@/features/ingredients/components/Ingred
 import { CreateMenuEntryDrawer } from "@/features/menus/entries/components/CreateMenuEntryDrawer";
 import { RecipeCardModal } from "@/features/recipes/components/RecipeCardModal/loader";
 import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesForm";
-import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
-import { LoadingScreen } from "@/ui/LoadingScreen";
 import styles from "./layout.module.css";
 
 export default function Layout({ children }: { children: React.ReactNode }) {

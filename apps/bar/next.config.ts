@@ -24,6 +24,7 @@ const nextConfig: NextConfig = {
 		"@bespoke/domain",
 		"@bespoke/db",
 		"@bespoke/api",
+		"@bespoke/ui",
 	],
 	async headers() {
 		const securityHeaders = [

@@ -1,13 +1,13 @@
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import { Heading } from "@bespoke/ui/Heading";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { Suspense } from "react";
 import { RecipeAuthorByline } from "@/features/recipes/components/RecipeAuthorByline";
 import { RecipeInfo } from "@/features/recipes/components/RecipeInfo";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { Heading } from "@/ui/Heading";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function RecipeArticle({

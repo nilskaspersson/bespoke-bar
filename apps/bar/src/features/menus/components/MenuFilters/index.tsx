@@ -2,14 +2,14 @@
 
 import type { MenuWithRecipes } from "@bespoke/schema/schema/composite";
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import { Button, LinkButton } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid, type GridProps } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Input } from "@bespoke/ui/Input";
 import { useDeferredValue, useMemo, useState } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { MenuEntryList } from "@/features/menus/entries/components/MenuEntryList";
-import { Button, LinkButton } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { Grid, type GridProps } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Input } from "@/ui/Input";
 import { createSearchIndex, searchByIndex } from "@/utils/search";
 
 const getEntryKey = (entry: MenuEntryWithRecipe) => entry.id;

@@ -2,11 +2,11 @@
 
 import { getRecipeCost } from "@bespoke/domain/recipes/getRecipeCost";
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { clsx } from "clsx";
 import { type ComponentProps, use } from "react";
 import { MenuEntryProfitLabel } from "@/features/menus/entries/components/MenuEntryProfitLabel";
 import { UpdateEntryDialog } from "@/features/menus/entries/components/UpdateEntryDialog";
-import { FormatterContext } from "@/hooks/useFormatter";
 
 import styles from "./styles.module.css";
 

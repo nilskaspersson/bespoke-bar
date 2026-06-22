@@ -5,9 +5,9 @@ import {
 	type CocktailStyle,
 	cocktailStyles,
 } from "@bespoke/schema/schema/cocktailStyles";
+import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
 import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
-import { Combobox } from "@/ui/Combobox";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

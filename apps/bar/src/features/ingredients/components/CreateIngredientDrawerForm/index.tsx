@@ -1,6 +1,7 @@
 "use client";
 
 import { draftIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
+import { toast } from "@bespoke/ui/Toast";
 import {
 	FormProvider,
 	type SubmissionResult,
@@ -22,7 +23,6 @@ import {
 	saveIngredientDraft,
 } from "@/features/ingredients/utils/ingredientDraftStorage";
 import { useInvalidateClientCache } from "@/hooks/useInvalidateClientCache";
-import { toast } from "@/ui/Toast";
 
 type Props = {
 	formId: string;

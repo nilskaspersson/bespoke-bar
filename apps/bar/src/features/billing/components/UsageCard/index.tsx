@@ -1,13 +1,13 @@
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Icon } from "@bespoke/ui/Icon";
+import type { IconName } from "@bespoke/ui/icons/types";
+import { Meter } from "@bespoke/ui/Meter";
+import { Panel } from "@bespoke/ui/Panel";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { StatsLine } from "@bespoke/ui/StatsLine";
+import { Text } from "@bespoke/ui/Text";
 import { type ReactNode, useId } from "react";
-import type { IconName } from "@/libs/icons/types";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { Meter } from "@/ui/Meter";
-import { Panel } from "@/ui/Panel";
-import { Skeleton } from "@/ui/Skeleton";
-import { StatsLine } from "@/ui/StatsLine";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {

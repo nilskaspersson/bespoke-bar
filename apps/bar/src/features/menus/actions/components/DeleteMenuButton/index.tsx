@@ -1,14 +1,14 @@
 "use client";
 
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import type { ButtonProps } from "@bespoke/ui/Button";
+import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { Grid } from "@bespoke/ui/Grid";
+import { Text } from "@bespoke/ui/Text";
+import { toast } from "@bespoke/ui/Toast";
 import type { PropsWithChildren } from "react";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { trpc } from "@/trpc/client";
-import type { ButtonProps } from "@/ui/Button";
-import { ConfirmAction } from "@/ui/ConfirmAction";
-import { Grid } from "@/ui/Grid";
-import { Text } from "@/ui/Text";
-import { toast } from "@/ui/Toast";
 import styles from "./styles.module.css";
 
 export function DeleteMenuButton({

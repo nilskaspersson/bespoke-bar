@@ -1,13 +1,13 @@
 import { authOrForbidden } from "@bespoke/api/auth";
+import { Container } from "@bespoke/ui/Container";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import { cacheLife } from "next/cache";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { FeaturedMenu } from "@/features/menus/featured/components/FeaturedMenu";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
-import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import styles from "./page.module.css";
 
 export default function BarPage() {

@@ -1,12 +1,12 @@
+import { Container } from "@bespoke/ui/Container";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { HGroup } from "@bespoke/ui/HGroup";
+import { Text } from "@bespoke/ui/Text";
+import { Time } from "@bespoke/ui/Time";
 import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { PRIVACY_POLICY_VERSION } from "@/features/consent/constants";
-import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { HGroup } from "@/ui/HGroup";
-import { Text } from "@/ui/Text";
-import { Time } from "@/ui/Time";
 import styles from "./page.module.css";
 
 /**

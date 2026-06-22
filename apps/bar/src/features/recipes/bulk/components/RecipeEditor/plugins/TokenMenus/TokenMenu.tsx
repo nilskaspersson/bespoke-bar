@@ -1,9 +1,9 @@
 "use client";
 
+import { Kbd } from "@bespoke/ui/Kbd";
+import { Menu } from "@bespoke/ui/Menu";
+import { Text } from "@bespoke/ui/Text";
 import type { ComponentProps, ReactNode } from "react";
-import { Kbd } from "@/ui/Kbd";
-import { Menu } from "@/ui/Menu";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = Omit<ComponentProps<typeof Menu>, "footer" | "children"> & {

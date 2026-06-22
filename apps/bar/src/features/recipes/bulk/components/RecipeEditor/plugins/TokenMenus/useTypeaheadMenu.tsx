@@ -1,5 +1,10 @@
 "use client";
 
+import {
+	type UsePopoverReturn,
+	usePopover,
+} from "@bespoke/ui/hooks/usePopover";
+import { PopoverAnchor } from "@bespoke/ui/Popover";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import type {
 	MenuOption,
@@ -20,8 +25,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { type UsePopoverReturn, usePopover } from "@/hooks/usePopover";
-import { PopoverAnchor } from "@/ui/Popover";
 import { GhostTextController } from "./GhostTextController";
 import { TokenMenu } from "./TokenMenu";
 

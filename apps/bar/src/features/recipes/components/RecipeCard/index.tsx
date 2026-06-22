@@ -1,6 +1,11 @@
 import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import { Chip } from "@bespoke/ui/Chip";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import Link from "next/link";
 import { memo, type ReactNode, useMemo } from "react";
@@ -16,11 +21,6 @@ import {
 } from "@/features/recipes/constants";
 import { AbvChip } from "@/features/recipes/metrics/components/AbvChip";
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
-import { Chip } from "@/ui/Chip";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props<T> = {

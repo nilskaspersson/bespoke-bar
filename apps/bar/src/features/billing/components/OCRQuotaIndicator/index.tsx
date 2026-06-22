@@ -1,11 +1,11 @@
 "use client";
 
+import { AnimatedNumber } from "@bespoke/ui/AnimatedNumber";
+import { Chip } from "@bespoke/ui/Chip";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Text } from "@bespoke/ui/Text";
 import { use } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
 import { trpc } from "@/trpc/client";
-import { AnimatedNumber } from "@/ui/AnimatedNumber";
-import { Chip } from "@/ui/Chip";
-import { Text } from "@/ui/Text";
 
 export function OCRQuotaIndicator({ locked }: { locked?: boolean }) {
 	const { relativeTimeFormatter } = use(FormatterContext);

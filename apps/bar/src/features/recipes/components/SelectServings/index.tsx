@@ -1,13 +1,13 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import { ControlLabel } from "@bespoke/ui/ControlLabel";
+import formControlStyles from "@bespoke/ui/FormControl/styles.module.css";
+import { Icon } from "@bespoke/ui/Icon";
+import { handleKey } from "@bespoke/ui/utils/keyboard";
 import clsx from "clsx";
 import { type ChangeEvent, type KeyboardEvent, useId, useState } from "react";
 import z from "zod";
-import { Button } from "@/ui/Button";
-import { ControlLabel } from "@/ui/ControlLabel";
-import formControlStyles from "@/ui/FormControl/styles.module.css";
-import { Icon } from "@/ui/Icon";
-import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 const MAX = 1_000_000_000;

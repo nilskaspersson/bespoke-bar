@@ -1,7 +1,7 @@
 import type { SubscriptionAttention } from "@bespoke/schema/schema/orgSubscriptions";
-import { Chip, type ChipProps } from "@/ui/Chip";
-import { Icon } from "@/ui/Icon";
-import type { SystemColor } from "@/utils/types";
+import { Chip, type ChipProps } from "@bespoke/ui/Chip";
+import { Icon } from "@bespoke/ui/Icon";
+import type { SystemColor } from "@bespoke/ui/utils/types";
 
 const ATTENTION_LABEL = {
 	payment_failed: "Payment failed",

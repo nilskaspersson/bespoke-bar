@@ -1,7 +1,7 @@
 import { getOrCreateLocalOrganisation } from "@bespoke/api/organisation/getOrCreateLocalOrganisation";
+import { FormatterContextProvider } from "@bespoke/ui/hooks/useFormatter";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { FormatterContextProvider } from "@/hooks/useFormatter";
 
 export async function OrgProvider({ children }: { children: React.ReactNode }) {
 	const { userId, orgId: clerkOrgId } = await auth.protect();

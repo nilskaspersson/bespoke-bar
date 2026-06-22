@@ -1,9 +1,9 @@
 import type { Menu } from "@bespoke/schema/schema/menus";
+import { Icon } from "@bespoke/ui/Icon";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { AddRecipeDialog } from "@/features/menus/entries/components/AddRecipeDialog";
-import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 export function EmptyMenuEntry({

@@ -1,6 +1,7 @@
 "use client";
 
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import { Icon } from "@bespoke/ui/Icon";
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
@@ -9,7 +10,6 @@ import { RecipeActionsToggle } from "@/features/recipes/actions/components/Recip
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { getRecipeName } from "@/features/recipes/utils";
-import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 type Props = {

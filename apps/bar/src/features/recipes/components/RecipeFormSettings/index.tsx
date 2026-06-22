@@ -1,11 +1,11 @@
 "use client";
 
-import { usePopover } from "@/hooks/usePopover";
-import { Button } from "@/ui/Button";
-import { Checkbox } from "@/ui/Checkbox";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Popover } from "@/ui/Popover";
+import { Button } from "@bespoke/ui/Button";
+import { Checkbox } from "@bespoke/ui/Checkbox";
+import { Heading } from "@bespoke/ui/Heading";
+import { usePopover } from "@bespoke/ui/hooks/usePopover";
+import { Icon } from "@bespoke/ui/Icon";
+import { Popover } from "@bespoke/ui/Popover";
 import styles from "./styles.module.css";
 
 type Props = {

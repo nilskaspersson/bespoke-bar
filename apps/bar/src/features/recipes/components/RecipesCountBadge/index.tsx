@@ -1,6 +1,6 @@
+import { Text, type TextProps } from "@bespoke/ui/Text";
+import type { SystemColor } from "@bespoke/ui/utils/types";
 import { clsx } from "clsx";
-import { Text, type TextProps } from "@/ui/Text";
-import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
 export function RecipesCountBadge({

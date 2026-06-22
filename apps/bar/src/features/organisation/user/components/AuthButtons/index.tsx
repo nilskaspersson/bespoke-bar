@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import { Chip } from "@bespoke/ui/Chip";
+import { Flex } from "@bespoke/ui/Flex";
+import { Skeleton } from "@bespoke/ui/Skeleton";
 import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Suspense } from "react";
-import { Button } from "@/ui/Button";
-import { Chip } from "@/ui/Chip";
-import { Flex } from "@/ui/Flex";
-import { Skeleton } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
 
 export function AuthButtons() {

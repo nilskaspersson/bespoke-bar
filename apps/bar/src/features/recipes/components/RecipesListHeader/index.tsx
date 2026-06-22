@@ -1,11 +1,11 @@
 "use client";
 
+import { Button, LinkButton } from "@bespoke/ui/Button";
+import { Grid, type GridProps } from "@bespoke/ui/Grid";
+import { Icon } from "@bespoke/ui/Icon";
 import { clsx } from "clsx";
 import type { ChangeEvent } from "react";
 import { RecipesSearchInput } from "@/features/recipes/components/RecipesSearchInput";
-import { Button, LinkButton } from "@/ui/Button";
-import { Grid, type GridProps } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
 import styles from "./styles.module.css";
 
 type Props = {

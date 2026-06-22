@@ -1,5 +1,5 @@
-import { Icon } from "@/ui/Icon";
-import { Tooltip } from "@/ui/Tooltip";
+import { Icon } from "@bespoke/ui/Icon";
+import { Tooltip } from "@bespoke/ui/Tooltip";
 import styles from "./styles.module.css";
 
 const label = "Auto-filled.";

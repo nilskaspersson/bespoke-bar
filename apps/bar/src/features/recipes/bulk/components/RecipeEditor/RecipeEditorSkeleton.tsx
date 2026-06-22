@@ -1,8 +1,8 @@
+import { Flex } from "@bespoke/ui/Flex";
+import { Icon } from "@bespoke/ui/Icon";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { Text } from "@bespoke/ui/Text";
 import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
-import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
-import { Skeleton } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function RecipeEditorSkeleton() {

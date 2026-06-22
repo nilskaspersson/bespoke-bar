@@ -1,11 +1,11 @@
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Icon } from "@bespoke/ui/Icon";
 import type { ComponentProps } from "react";
 import { EntityActions } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
 import { EditIngredientButton } from "@/features/ingredients/components/EditIngredientButton";
 import { getIngredientUrl } from "@/features/ingredients/utils";
-import { LinkButton } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
 
 export function IngredientActions({
 	ingredient,

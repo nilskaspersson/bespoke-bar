@@ -4,9 +4,9 @@ import {
 	type AppErrorPayload,
 	getAppErrorToast,
 } from "@bespoke/schema/appError";
-import { LinkButton } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { toast } from "@/ui/Toast";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
+import { toast } from "@bespoke/ui/Toast";
 
 type OCRQuotaReachedPayload = Extract<
 	AppErrorPayload,

@@ -2,6 +2,7 @@
 
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { handleKey } from "@bespoke/ui/utils/keyboard";
 import clsx from "clsx";
 import { useAdjustments } from "@/features/recipes/components/RecipeAdjustments";
 import {
@@ -10,7 +11,6 @@ import {
 } from "@/features/recipes/components/RecipeCard";
 import { useRecipeCardModal } from "@/features/recipes/stores/recipeCardModal";
 import { recipeCardSourceProps } from "@/features/recipes/utils/recipeCardSource";
-import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 type Props = {

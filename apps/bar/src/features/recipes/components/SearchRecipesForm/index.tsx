@@ -1,6 +1,20 @@
 "use client";
 
 import { pluralize } from "@bespoke/domain/utils/formatting";
+import { Button, type ButtonProps, LinkButton } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
+import { useOnNavigation } from "@bespoke/ui/hooks/useOnNavigation";
+import { useShortcut } from "@bespoke/ui/hooks/useShortcut";
+import { Icon } from "@bespoke/ui/Icon";
+import { Input } from "@bespoke/ui/Input";
+import { Kbd } from "@bespoke/ui/Kbd";
+import { LightboxDialog } from "@bespoke/ui/LightboxDialog";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { Text } from "@bespoke/ui/Text";
+import { animate, keyframes } from "@bespoke/ui/utils/animate";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "next/navigation";
 import {
@@ -18,21 +32,7 @@ import {
 	applyRecipeFilters,
 	createRecipeSearchIndex,
 } from "@/features/recipes/utils/applyRecipeFilters";
-import { useDialog } from "@/hooks/useDialog";
-import { useOnNavigation } from "@/hooks/useOnNavigation";
-import { useShortcut } from "@/hooks/useShortcut";
 import { trpc } from "@/trpc/client";
-import { Button, type ButtonProps, LinkButton } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
-import { Kbd } from "@/ui/Kbd";
-import { LightboxDialog } from "@/ui/LightboxDialog";
-import { Skeleton } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
-import { animate, keyframes } from "@/utils/animate";
 import styles from "./styles.module.css";
 
 export function SearchRecipesButton({

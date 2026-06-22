@@ -1,11 +1,11 @@
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { Button } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
+import { Heading } from "@bespoke/ui/Heading";
+import { Icon } from "@bespoke/ui/Icon";
+import { Lightbox } from "@bespoke/ui/Lightbox";
 import type { ReactNode } from "react";
 import { RecipeTagCloud } from "@/features/tags/components/RecipeTagCloud";
-import { Button } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Lightbox } from "@/ui/Lightbox";
 import styles from "./styles.module.css";
 
 type Props = {

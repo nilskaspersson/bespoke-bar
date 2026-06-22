@@ -1,12 +1,12 @@
 "use client";
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import type { ButtonProps } from "@bespoke/ui/Button";
+import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { Text } from "@bespoke/ui/Text";
+import { toast } from "@bespoke/ui/Toast";
 import type { PropsWithChildren } from "react";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
-import type { ButtonProps } from "@/ui/Button";
-import { ConfirmAction } from "@/ui/ConfirmAction";
-import { Text } from "@/ui/Text";
-import { toast } from "@/ui/Toast";
 import { getErrorToast, unwrapAction } from "@/utils/api";
 
 export function DeleteIngredient({

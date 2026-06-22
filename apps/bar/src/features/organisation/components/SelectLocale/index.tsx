@@ -1,8 +1,8 @@
 import { collator } from "@bespoke/domain/utils/collator";
 import type { Keyed } from "@bespoke/schema/types";
+import { Combobox } from "@bespoke/ui/Combobox";
+import { Menu } from "@bespoke/ui/Menu";
 import { type ComponentProps, useMemo } from "react";
-import { Combobox } from "@/ui/Combobox";
-import { Menu } from "@/ui/Menu";
 import { SUPPORTED_LOCALES } from "@/utils/locales";
 import { withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";

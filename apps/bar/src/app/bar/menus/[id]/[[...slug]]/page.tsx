@@ -6,6 +6,8 @@ import {
 	buildIngredientMap,
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { Container } from "@bespoke/ui/Container";
+import { Grid } from "@bespoke/ui/Grid";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -15,8 +17,6 @@ import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { EmptyMenuEntry } from "@/features/menus/components/EmptyMenuEntry";
 import { MenuFilters } from "@/features/menus/components/MenuFilters";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
-import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 

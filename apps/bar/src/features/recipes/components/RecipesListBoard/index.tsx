@@ -3,6 +3,10 @@
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { Button } from "@bespoke/ui/Button";
+import { Grid } from "@bespoke/ui/Grid";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
+import { Text } from "@bespoke/ui/Text";
 import { AnimatePresence, m } from "motion/react";
 import { useDeferredValue, useMemo, useState } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
@@ -20,10 +24,6 @@ import {
 	createRecipeSearchIndex,
 } from "@/features/recipes/utils/applyRecipeFilters";
 import { useTagSelection } from "@/features/tags/hooks/useTagSelection";
-import { useDialog } from "@/hooks/useDialog";
-import { Button } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export { RecipesListBoardSkeleton } from "./Skeleton";

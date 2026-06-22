@@ -1,9 +1,9 @@
 "use client";
 
 import type { RecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
-import { LinkButton } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { toast } from "@/ui/Toast";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
+import { toast } from "@bespoke/ui/Toast";
 
 function RecipeLimitReachedDescription({ usage }: { usage: RecipeSlotUsage }) {
 	return (

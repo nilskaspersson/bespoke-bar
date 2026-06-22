@@ -2,6 +2,7 @@
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { updateIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
+import { toast } from "@bespoke/ui/Toast";
 import {
 	FormProvider,
 	type SubmissionResult,
@@ -16,7 +17,6 @@ import {
 	useIngredientEditor,
 } from "@/features/ingredients/stores/ingredientEditor";
 import { useInvalidateClientCache } from "@/hooks/useInvalidateClientCache";
-import { toast } from "@/ui/Toast";
 
 type Props = {
 	formId: string;

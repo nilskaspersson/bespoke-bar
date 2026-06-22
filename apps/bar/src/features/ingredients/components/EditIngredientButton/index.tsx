@@ -1,9 +1,9 @@
 "use client";
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { Button, type ButtonProps } from "@bespoke/ui/Button";
+import { Icon } from "@bespoke/ui/Icon";
 import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";
-import { Button, type ButtonProps } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
 
 type Props = {
 	ingredient: Partial<Ingredient>;

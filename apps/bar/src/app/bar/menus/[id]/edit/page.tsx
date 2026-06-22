@@ -7,18 +7,18 @@ import {
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
 import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Container } from "@bespoke/ui/Container";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Icon } from "@bespoke/ui/Icon";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
 import { MENU_FORM_ID, MenuForm } from "@/features/menus/components/MenuForm";
 import { getMenuUrl } from "@/features/menus/utils";
-import { LinkButton } from "@/ui/Button";
-import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
-import { SubmitButton } from "@/ui/SubmitButton";
 import styles from "./page.module.css";
 
 type Props = {

@@ -1,4 +1,11 @@
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { Chip } from "@bespoke/ui/Chip";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { HGroup } from "@bespoke/ui/HGroup";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Text } from "@bespoke/ui/Text";
 import clsx from "clsx";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
@@ -8,13 +15,6 @@ import { IngredientActions } from "@/features/ingredients/components/IngredientA
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
 import { getIngredientUrl } from "@/features/ingredients/utils";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Chip } from "@/ui/Chip";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { HGroup } from "@/ui/HGroup";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function IngredientCard({

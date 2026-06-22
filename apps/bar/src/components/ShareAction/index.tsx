@@ -1,10 +1,10 @@
 "use client";
 
+import { Button, type ButtonProps } from "@bespoke/ui/Button";
+import { CopyToClipboard } from "@bespoke/ui/CopyToClipboard";
+import { Icon } from "@bespoke/ui/Icon";
 import { clsx } from "clsx";
 import { useIsMounted } from "@/hooks/useIsMounted";
-import { Button, type ButtonProps } from "@/ui/Button";
-import { CopyToClipboard } from "@/ui/CopyToClipboard";
-import { Icon } from "@/ui/Icon";
 import { isShareSupported, shareText } from "@/utils/share";
 import styles from "./styles.module.css";
 

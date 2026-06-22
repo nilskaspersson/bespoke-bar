@@ -2,6 +2,16 @@
 
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { Button } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Icon } from "@bespoke/ui/Icon";
+import { Input } from "@bespoke/ui/Input";
+import { Kbd } from "@bespoke/ui/Kbd";
+import { OptionsSwitch } from "@bespoke/ui/OptionsSwitch";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { Text } from "@bespoke/ui/Text";
+import { handleKey } from "@bespoke/ui/utils/keyboard";
 import Link from "next/link";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { parseAsStringLiteral, useQueryStates } from "nuqs";
@@ -20,16 +30,6 @@ import {
 	ingredientSortFieldSchema,
 	sortIngredients,
 } from "@/features/ingredients/utils/sortIngredients";
-import { Button } from "@/ui/Button";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
-import { Kbd } from "@/ui/Kbd";
-import { OptionsSwitch } from "@/ui/OptionsSwitch";
-import { Skeleton } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
-import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 const SORT_OPTIONS: {

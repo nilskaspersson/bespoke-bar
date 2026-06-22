@@ -1,5 +1,5 @@
+import { TRANSITION_DURATION_SLOW_MS } from "@bespoke/ui/utils/animate";
 import { type RefObject, useEffect, useRef } from "react";
-import { TRANSITION_DURATION_SLOW_MS } from "@/utils/animate";
 import {
 	computeCardVelocity,
 	createLoopState,

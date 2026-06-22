@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import { Flex, type FlexProps } from "@bespoke/ui/Flex";
+import { StatsLine } from "@bespoke/ui/StatsLine";
+import { Text } from "@bespoke/ui/Text";
 import clsx from "clsx";
-import { Button } from "@/ui/Button";
-import { Flex, type FlexProps } from "@/ui/Flex";
-import { StatsLine } from "@/ui/StatsLine";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {

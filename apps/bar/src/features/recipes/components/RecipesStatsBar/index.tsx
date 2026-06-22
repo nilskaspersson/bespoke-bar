@@ -1,6 +1,8 @@
 "use client";
 
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
 import {
 	type ComponentProps,
 	type ReactNode,
@@ -13,8 +15,6 @@ import {
 } from "@/features/recipes/components/CocktailStyleDistribution";
 import { CocktailStyleLegend } from "@/features/recipes/components/CocktailStyleLegend";
 import { getCocktailStyleEntries } from "@/features/recipes/utils/cocktailStyleEntries";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
 
 type Props = {
 	recipes: RecipeWithRelations[];

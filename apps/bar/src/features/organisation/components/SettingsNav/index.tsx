@@ -1,15 +1,15 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import { Grid } from "@bespoke/ui/Grid";
+import { Icon } from "@bespoke/ui/Icon";
+import type { IconName } from "@bespoke/ui/icons/types";
+import { Text } from "@bespoke/ui/Text";
 import { useClerk } from "@clerk/nextjs";
 import { Suspense, use, useEffect, useState } from "react";
 import { BillingPortalButton } from "@/features/billing/components/BillingPortalButton";
 import { OrganisationLocaleSettings } from "@/features/organisation/components/OrganisationLocaleSettings";
 import { TagsSettings } from "@/features/tags/components/TagsSettings";
-import type { IconName } from "@/libs/icons/types";
-import { Button } from "@/ui/Button";
-import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Section = {

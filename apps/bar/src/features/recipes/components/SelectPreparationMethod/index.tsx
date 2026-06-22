@@ -5,14 +5,14 @@ import {
 	type PreparationMethod,
 	preparationMethods,
 } from "@bespoke/schema/schema/preparationMethods";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Menu } from "@bespoke/ui/Menu";
+import { Select } from "@bespoke/ui/Select";
 import { type ComponentProps, use, useMemo } from "react";
 import {
 	METHOD_TO_DEFAULT_DILUTION,
 	METHOD_TO_LABEL,
 } from "@/features/recipes/constants";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Menu } from "@/ui/Menu";
-import { Select } from "@/ui/Select";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

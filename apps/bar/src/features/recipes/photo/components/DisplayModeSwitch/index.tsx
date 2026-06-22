@@ -1,7 +1,7 @@
 "use client";
 
+import { OptionsSwitch } from "@bespoke/ui/OptionsSwitch";
 import type { ComponentProps } from "react";
-import { OptionsSwitch } from "@/ui/OptionsSwitch";
 
 export type DisplayMode = "PREVIEW" | "EDIT";
 

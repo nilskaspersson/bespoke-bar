@@ -1,9 +1,9 @@
 "use client";
 
+import { Button, type ButtonProps } from "@bespoke/ui/Button";
 import { useTransition } from "react";
 import { createBillingPortalSession } from "@/features/billing/api/createBillingPortalSession";
 import { navigateToStripe } from "@/features/billing/navigateToStripe";
-import { Button, type ButtonProps } from "@/ui/Button";
 
 function useOpenPortal() {
 	const [isPending, startTransition] = useTransition();

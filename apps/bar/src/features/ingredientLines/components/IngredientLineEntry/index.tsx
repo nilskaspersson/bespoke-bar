@@ -2,13 +2,13 @@
 
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
+import { AnimatedNumber } from "@bespoke/ui/AnimatedNumber";
+import { Chip } from "@bespoke/ui/Chip";
+import { Text, type TextProps } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
 import { useLineQuantityFormatter } from "@/features/ingredientLines/hooks/useLineQuantityFormatter";
 import { ToggleIngredientCard } from "@/features/ingredients/components/ToggleIngredientCard";
-import { AnimatedNumber } from "@/ui/AnimatedNumber";
-import { Chip } from "@/ui/Chip";
-import { Text, type TextProps } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function IngredientLineEntry<

@@ -1,9 +1,9 @@
 "use client";
 
+import { Icon } from "@bespoke/ui/Icon";
+import { animate, keyframes } from "@bespoke/ui/utils/animate";
 import { useEffect, useRef } from "react";
 import { ServingsBadge } from "@/features/recipes/components/ServingsBadge";
-import { Icon } from "@/ui/Icon";
-import { animate, keyframes } from "@/utils/animate";
 
 type Props = {
 	servings?: number;

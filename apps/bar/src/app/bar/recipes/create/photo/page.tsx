@@ -1,13 +1,13 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedRecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PageHeader } from "@/components/PageHeader";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import { PhotoToRecipe } from "@/features/recipes/photo/components/PhotoToRecipe";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 
 export default function PhotoToRecipePage() {
 	return (

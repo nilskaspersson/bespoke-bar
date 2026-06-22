@@ -1,13 +1,13 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedOrgSubscription } from "@bespoke/api/billing/getOrgSubscription";
 import { hasStripeCustomer } from "@bespoke/api/billing/hasStripeCustomer";
+import { Container } from "@bespoke/ui/Container";
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
 import { BillingPlan } from "@/features/billing/components/BillingPlan";
 import { BillingUsage } from "@/features/billing/components/BillingUsage";
 import { CheckoutResultToast } from "@/features/billing/components/CheckoutResultToast";
 import { SettingsNav } from "@/features/organisation/components/SettingsNav";
-import { Container } from "@/ui/Container";
 import styles from "./page.module.css";
 
 async function resolveHasBilling(): Promise<boolean> {

@@ -1,9 +1,9 @@
+import { Flex } from "@bespoke/ui/Flex";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ComponentProps } from "react";
-import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function CreateRecipeSlot({

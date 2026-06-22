@@ -1,7 +1,7 @@
 "use client";
 
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { use, useCallback, useRef } from "react";
-import { FormatterContext } from "@/hooks/useFormatter";
 
 export function useLineQuantityFormatter() {
 	const { quantityFormatter, options } = use(FormatterContext);

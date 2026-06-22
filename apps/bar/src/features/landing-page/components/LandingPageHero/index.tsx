@@ -1,8 +1,8 @@
+import { Container } from "@bespoke/ui/Container";
+import { Heading } from "@bespoke/ui/Heading";
 import { clsx } from "clsx";
 import type { ComponentProps } from "react";
 import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { Container } from "@/ui/Container";
-import { Heading } from "@/ui/Heading";
 import styles from "./styles.module.css";
 
 export function LandingPageHero({

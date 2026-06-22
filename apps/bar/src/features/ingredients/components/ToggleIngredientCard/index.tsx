@@ -1,14 +1,14 @@
 "use client";
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { Button } from "@bespoke/ui/Button";
+import { usePopover } from "@bespoke/ui/hooks/usePopover";
+import { Icon } from "@bespoke/ui/Icon";
+import { Popover } from "@bespoke/ui/Popover";
+import { stopPropagation } from "@bespoke/ui/utils/events";
 import clsx from "clsx";
 import type { ComponentProps } from "react";
 import { IngredientCard } from "@/features/ingredients/components/IngredientCard";
-import { usePopover } from "@/hooks/usePopover";
-import { Button } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
-import { Popover } from "@/ui/Popover";
-import { stopPropagation } from "@/utils/events";
 import styles from "./styles.module.css";
 
 export function ToggleIngredientCard({

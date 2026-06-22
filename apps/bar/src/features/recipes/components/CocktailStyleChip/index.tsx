@@ -1,3 +1,4 @@
+import { Button } from "@bespoke/ui/Button";
 import { clsx } from "clsx";
 import type { CSSProperties } from "react";
 import {
@@ -5,7 +6,6 @@ import {
 	getCocktailStyleColor,
 	getCocktailStyleLabel,
 } from "@/features/recipes/constants";
-import { Button } from "@/ui/Button";
 import styles from "./styles.module.css";
 
 type Props = {

@@ -1,6 +1,6 @@
+import { Grid, type GridProps } from "@bespoke/ui/Grid";
+import type { SystemColor } from "@bespoke/ui/utils/types";
 import { clsx } from "clsx";
-import { Grid, type GridProps } from "@/ui/Grid";
-import type { SystemColor } from "@/utils/types";
 import styles from "./styles.module.css";
 
 export function EmptyArea({

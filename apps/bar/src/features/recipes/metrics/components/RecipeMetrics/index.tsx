@@ -2,13 +2,13 @@
 
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import { Checkbox } from "@bespoke/ui/Checkbox";
+import { Grid } from "@bespoke/ui/Grid";
 import { clsx } from "clsx";
 import { type ComponentProps, useState } from "react";
 import { AbvInfo } from "@/features/recipes/metrics/components/AbvInfo";
 import { CostInfo } from "@/features/recipes/metrics/components/CostInfo";
 import { VolumeInfo } from "@/features/recipes/metrics/components/VolumeInfo";
-import { Checkbox } from "@/ui/Checkbox";
-import { Grid } from "@/ui/Grid";
 import styles from "./styles.module.css";
 
 export function RecipeMetrics<T extends BaseRecipe>({

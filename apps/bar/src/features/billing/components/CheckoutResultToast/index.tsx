@@ -1,8 +1,8 @@
 "use client";
 
+import { toast } from "@bespoke/ui/Toast";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
-import { toast } from "@/ui/Toast";
 
 function CheckoutResultToastInner() {
 	const searchParams = useSearchParams();

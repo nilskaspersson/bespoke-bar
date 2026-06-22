@@ -1,4 +1,4 @@
-import { Container } from "@/ui/Container";
+import { Container } from "@bespoke/ui/Container";
 import styles from "./layout.module.css";
 
 export default async function Layout({

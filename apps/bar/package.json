@@ -10,15 +10,14 @@
 		"test": "vitest run",
 		"check-types": "next typegen && tsc --noEmit",
 		"bench": "vitest bench",
-		"ncu": "pnpm dlx npm-check-updates --interactive",
-		"icons:build": "node --no-warnings src/libs/icons/build.ts",
-		"icons:check": "node --no-warnings src/libs/icons/build.ts && git diff --exit-code src/libs/icons/sprite.svg src/libs/icons/types.ts"
+		"ncu": "pnpm dlx npm-check-updates --interactive"
 	},
 	"dependencies": {
 		"@bespoke/api": "workspace:*",
 		"@bespoke/db": "workspace:*",
 		"@bespoke/domain": "workspace:*",
 		"@bespoke/schema": "workspace:*",
+		"@bespoke/ui": "workspace:*",
 		"@clerk/nextjs": "7.4.2",
 		"@clerk/themes": "2.4.57",
 		"@conform-to/react": "1.19.2",
@@ -53,8 +52,6 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.4.16",
-		"@iconify-json/lucide": "1.2.108",
-		"@iconify/utils": "3.1.3",
 		"@types/node": "25.9.1",
 		"@types/react": "19.2.15",
 		"@types/react-dom": "19.2.3",

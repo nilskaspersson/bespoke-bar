@@ -4,8 +4,8 @@ import {
 	isValidUnitSystem,
 	type UnitSystems,
 } from "@bespoke/domain/units/convert";
+import { WeightedToggle } from "@bespoke/ui/WeightedToggle";
 import { type ChangeEvent, useCallback } from "react";
-import { WeightedToggle } from "@/ui/WeightedToggle";
 import { withKey } from "@/utils/withKey";
 
 const OPTIONS = [

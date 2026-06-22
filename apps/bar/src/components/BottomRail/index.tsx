@@ -1,10 +1,10 @@
 "use client";
 
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { useIsMounted } from "@/hooks/useIsMounted";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
 import styles from "./styles.module.css";
 
 const SlotContext = createContext<HTMLDivElement | null>(null);

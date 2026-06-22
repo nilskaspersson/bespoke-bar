@@ -1,12 +1,12 @@
 "use client";
 
-import { usePopover } from "@/hooks/usePopover";
-import { Button } from "@/ui/Button";
-import { Callout } from "@/ui/Callout";
-import { Icon } from "@/ui/Icon";
-import { Popover } from "@/ui/Popover";
-import { Text } from "@/ui/Text";
-import { stopPropagation } from "@/utils/events";
+import { Button } from "@bespoke/ui/Button";
+import { Callout } from "@bespoke/ui/Callout";
+import { usePopover } from "@bespoke/ui/hooks/usePopover";
+import { Icon } from "@bespoke/ui/Icon";
+import { Popover } from "@bespoke/ui/Popover";
+import { Text } from "@bespoke/ui/Text";
+import { stopPropagation } from "@bespoke/ui/utils/events";
 import styles from "./styles.module.css";
 
 export function BulkDraftInfo() {

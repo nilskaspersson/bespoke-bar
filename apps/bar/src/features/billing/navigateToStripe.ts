@@ -1,4 +1,4 @@
-import { toast } from "@/ui/Toast";
+import { toast } from "@bespoke/ui/Toast";
 import { getErrorToast, unwrapAction } from "@/utils/api";
 import type { ActionResult } from "@/utils/serverAction";
 

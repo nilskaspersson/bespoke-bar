@@ -1,6 +1,6 @@
+import { LinkButton } from "@bespoke/ui/Button";
+import { Text } from "@bespoke/ui/Text";
 import { SystemError } from "@/components/SystemError";
-import { LinkButton } from "@/ui/Button";
-import { Text } from "@/ui/Text";
 
 export default function ForbiddenPage() {
 	return (

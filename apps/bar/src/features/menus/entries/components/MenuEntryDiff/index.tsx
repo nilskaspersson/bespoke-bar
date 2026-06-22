@@ -1,8 +1,8 @@
 import type { MenuEntry } from "@bespoke/schema/schema/menuEntries";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
 import { getDifferentKeys, pick } from "@/utils";
 
 type Props = {

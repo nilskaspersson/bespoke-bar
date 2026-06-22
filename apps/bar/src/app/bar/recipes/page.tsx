@@ -5,6 +5,10 @@ import { getCachedBarRecipes } from "@bespoke/api/recipes/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@bespoke/api/recipes/readUserFavoriteRecipeIds";
 import { getCachedTags } from "@bespoke/api/tags/listTags";
 import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
+import { Container } from "@bespoke/ui/Container";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Text } from "@bespoke/ui/Text";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
@@ -12,10 +16,6 @@ import {
 	RecipesListBoard,
 	RecipesListBoardSkeleton,
 } from "@/features/recipes/components/RecipesListBoard";
-import { Container } from "@/ui/Container";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
 import styles from "./page.module.css";
 
 export default function RecipesPage() {

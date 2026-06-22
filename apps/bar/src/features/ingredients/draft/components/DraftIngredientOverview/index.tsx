@@ -9,6 +9,7 @@ import type {
 	IngredientFormData,
 	RecipeFormData,
 } from "@bespoke/schema/schema/composite";
+import { Text } from "@bespoke/ui/Text";
 import { type FieldName, useField } from "@conform-to/react";
 import { Abv } from "@/features/ingredients/components/Abv";
 import {
@@ -16,7 +17,6 @@ import {
 	MEASUREMENT_TO_LABEL,
 } from "@/features/ingredients/constants";
 import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
-import { Text } from "@/ui/Text";
 
 export function DraftIngredientOverview({
 	name,

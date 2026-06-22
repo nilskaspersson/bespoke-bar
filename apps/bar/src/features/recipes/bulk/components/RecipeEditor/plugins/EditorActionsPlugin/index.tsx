@@ -5,6 +5,11 @@ import {
 	convertLine,
 	roundLine,
 } from "@bespoke/domain/recipes/transformRecipeText";
+import { Button } from "@bespoke/ui/Button";
+import { ButtonGroup } from "@bespoke/ui/ButtonGroup";
+import { Flex } from "@bespoke/ui/Flex";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";
 import {
@@ -20,11 +25,6 @@ import {
 } from "lexical";
 import { useCallback, useEffect, useState } from "react";
 import { EntityActions } from "@/components/EntityActions";
-import { Button } from "@/ui/Button";
-import { ButtonGroup } from "@/ui/ButtonGroup";
-import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export function EditorActionsPlugin() {

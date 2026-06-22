@@ -1,6 +1,8 @@
 "use client";
 
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
@@ -9,8 +11,6 @@ import {
 } from "@/features/recipes/components/RecipeAdjustments";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
 import styles from "./styles.module.css";
 
 export function RecipeInfo<T extends RecipeWithRelations>({

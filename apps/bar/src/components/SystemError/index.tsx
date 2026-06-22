@@ -1,6 +1,6 @@
-import { Container } from "@/ui/Container";
-import { Heading } from "@/ui/Heading";
-import { Text } from "@/ui/Text";
+import { Container } from "@bespoke/ui/Container";
+import { Heading } from "@bespoke/ui/Heading";
+import { Text } from "@bespoke/ui/Text";
 import styles from "./styles.module.css";
 
 export function SystemError(props: {

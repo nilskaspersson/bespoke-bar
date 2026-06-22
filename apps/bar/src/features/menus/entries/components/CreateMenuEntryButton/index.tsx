@@ -1,8 +1,8 @@
 "use client";
 
 import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
+import { Button, type ButtonProps } from "@bespoke/ui/Button";
 import { useCreateMenuEntry } from "@/features/menus/entries/stores/createMenuEntry";
-import { Button, type ButtonProps } from "@/ui/Button";
 
 type Props = ButtonProps & {
 	recipe: RecipeWithLines;

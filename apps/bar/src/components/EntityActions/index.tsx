@@ -1,6 +1,6 @@
+import type { ButtonProps } from "@bespoke/ui/Button";
+import { Flex, type FlexProps } from "@bespoke/ui/Flex";
 import type { ReactNode } from "react";
-import type { ButtonProps } from "@/ui/Button";
-import { Flex, type FlexProps } from "@/ui/Flex";
 
 export type ActionProps = {
 	variant?: ButtonProps["variant"];

@@ -6,6 +6,13 @@ import { getCachedUserFavoriteRecipeIds } from "@bespoke/api/recipes/readUserFav
 import { getCachedTags } from "@bespoke/api/tags/listTags";
 import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
 import { pluralize } from "@bespoke/domain/utils/formatting";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { HGroup } from "@bespoke/ui/HGroup";
+import { Icon } from "@bespoke/ui/Icon";
+import { Skeleton } from "@bespoke/ui/Skeleton";
+import { Text } from "@bespoke/ui/Text";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
@@ -20,13 +27,6 @@ import {
 	RecipesList,
 	RecipesListSkeleton,
 } from "@/features/recipes/components/RecipesList";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { HGroup } from "@/ui/HGroup";
-import { Icon } from "@/ui/Icon";
-import { Skeleton } from "@/ui/Skeleton";
-import { Text } from "@/ui/Text";
 import styles from "./page.module.css";
 
 type Props = {

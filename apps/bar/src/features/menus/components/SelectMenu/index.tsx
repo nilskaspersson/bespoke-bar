@@ -1,12 +1,12 @@
 import { collator } from "@bespoke/domain/utils/collator";
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import { Combobox } from "@bespoke/ui/Combobox";
+import { Icon } from "@bespoke/ui/Icon";
+import { Menu } from "@bespoke/ui/Menu";
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
 import { getMenuName } from "@/features/menus/utils";
 import { RecipesCountBadge } from "@/features/recipes/components/RecipesCountBadge";
-import { Combobox } from "@/ui/Combobox";
-import { Icon } from "@/ui/Icon";
-import { Menu } from "@/ui/Menu";
 import styles from "./styles.module.css";
 
 const itemToString = (item: MenuWithEntries | null) =>

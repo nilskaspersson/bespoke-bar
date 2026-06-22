@@ -1,9 +1,9 @@
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import type { Keyed } from "@bespoke/schema/types";
+import { Grid } from "@bespoke/ui/Grid";
 import type { ComponentProps } from "react";
 import { IngredientLineEntry } from "@/features/ingredientLines/components/IngredientLineEntry";
-import { Grid } from "@/ui/Grid";
 import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 

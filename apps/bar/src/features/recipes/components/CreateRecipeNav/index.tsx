@@ -1,12 +1,12 @@
+import { Chip } from "@bespoke/ui/Chip";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid, type GridProps } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Icon } from "@bespoke/ui/Icon";
+import type { IconName } from "@bespoke/ui/icons/types";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import Link from "next/link";
-import type { IconName } from "@/libs/icons/types";
-import { Chip } from "@/ui/Chip";
-import { Flex } from "@/ui/Flex";
-import { Grid, type GridProps } from "@/ui/Grid";
-import { Heading } from "@/ui/Heading";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 export type CreateRecipeMethod = "text" | "photo" | "structured";

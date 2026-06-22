@@ -2,9 +2,9 @@
 
 import { collator } from "@bespoke/domain/utils/collator";
 import { type Glassware, glasswares } from "@bespoke/schema/schema/glassware";
+import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
 import { GLASSWARE_TO_LABEL } from "@/features/recipes/constants";
-import { Combobox } from "@/ui/Combobox";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

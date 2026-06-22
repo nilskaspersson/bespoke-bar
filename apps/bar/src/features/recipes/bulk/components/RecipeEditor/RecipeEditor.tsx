@@ -1,6 +1,9 @@
 "use client";
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { Flex } from "@bespoke/ui/Flex";
+import { Icon } from "@bespoke/ui/Icon";
+import { Text } from "@bespoke/ui/Text";
 import { ClearEditorPlugin } from "@lexical/react/LexicalClearEditorPlugin";
 import { LexicalComposer } from "@lexical/react/LexicalComposer";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
@@ -17,9 +20,6 @@ import {
 import { type ReactNode, type RefObject, useState } from "react";
 import { BulkDraftInfo } from "@/features/recipes/bulk/components/BulkDraftInfo";
 import { useIsMounted } from "@/hooks/useIsMounted";
-import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import { pickRandom } from "@/utils";
 import { EDITOR_CONFIG, EXAMPLE_RECIPES } from "./constants";
 import { RecipeIngredientsProvider } from "./hooks/useRecipeIngredients";

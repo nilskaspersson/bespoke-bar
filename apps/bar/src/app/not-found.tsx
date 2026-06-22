@@ -1,5 +1,5 @@
+import { LinkButton } from "@bespoke/ui/Button";
 import { SystemError } from "@/components/SystemError";
-import { LinkButton } from "@/ui/Button";
 
 export default function NotFound() {
 	return (

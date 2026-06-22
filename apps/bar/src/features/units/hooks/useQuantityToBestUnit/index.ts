@@ -3,9 +3,9 @@ import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
 import { quantityToBestUnit } from "@bespoke/domain/units/quantityToBestUnit";
 import { snapQuantity } from "@bespoke/domain/units/snapQuantity";
 import type { Unit } from "@bespoke/schema/schema/units";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { use, useCallback } from "react";
 import { formatMeasure } from "@/features/units/hooks/useRoundedUnit";
-import { FormatterContext } from "@/hooks/useFormatter";
 
 export function useQuantityToBestUnit() {
 	const { volumeFormatter } = use(FormatterContext);

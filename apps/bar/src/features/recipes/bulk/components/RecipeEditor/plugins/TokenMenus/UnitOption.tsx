@@ -1,9 +1,9 @@
 "use client";
 
 import type { Unit } from "@bespoke/schema/schema/units";
+import { Menu } from "@bespoke/ui/Menu";
 import type { ComponentProps } from "react";
 import { getUnitLabel } from "@/features/units/constants";
-import { Menu } from "@/ui/Menu";
 
 export function UnitOption({
 	unit,

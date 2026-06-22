@@ -50,7 +50,7 @@ secrets/
 next-env.d.ts
 
 # generated
-**/src/libs/icons/kits.types.ts
+**/src/icons/kits.types.ts
 
 # debug
 /debug

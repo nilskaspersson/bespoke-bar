@@ -1,4 +1,6 @@
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Icon } from "@bespoke/ui/Icon";
 import { cacheLife } from "next/cache";
 import type { ActionProps } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
@@ -10,8 +12,6 @@ import { deleteMenu } from "@/features/menus/api/deleteMenu";
 import { clearFeaturedMenu } from "@/features/menus/featured/api/clearFeaturedMenu";
 import { setFeaturedMenu } from "@/features/menus/featured/api/setFeaturedMenu";
 import { getMenuUrl } from "@/features/menus/utils";
-import { LinkButton } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
 
 export async function MenuActions({
 	menu,

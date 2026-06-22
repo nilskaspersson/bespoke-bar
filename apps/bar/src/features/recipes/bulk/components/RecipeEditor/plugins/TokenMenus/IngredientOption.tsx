@@ -1,10 +1,10 @@
 "use client";
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Menu } from "@bespoke/ui/Menu";
 import { type ComponentProps, use } from "react";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Menu } from "@/ui/Menu";
 
 export function IngredientOption({
 	ingredient,

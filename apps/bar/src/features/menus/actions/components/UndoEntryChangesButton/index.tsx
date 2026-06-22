@@ -1,10 +1,10 @@
 "use client";
 
 import type { MenuEntry } from "@bespoke/schema/schema/menuEntries";
+import { Button, type ButtonProps } from "@bespoke/ui/Button";
+import { toast } from "@bespoke/ui/Toast";
 import type { MouseEventHandler } from "react";
 import { updateMenuEntry } from "@/features/menus/entries/api/updateMenuEntry";
-import { Button, type ButtonProps } from "@/ui/Button";
-import { toast } from "@/ui/Toast";
 import { errorMessageOrFallback } from "@/utils/api";
 
 export function UndoEntryChangesButton({

@@ -1,8 +1,8 @@
 "use client";
 
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import { Text } from "@bespoke/ui/Text";
 import { useMemo } from "react";
-import { Text } from "@/ui/Text";
 
 export function DraftRecipesStatusBar({ recipes }: { recipes: BaseRecipe[] }) {
 	const recipeCount = recipes.length;

@@ -1,14 +1,14 @@
 "use client";
 
+import { Button, LinkButton } from "@bespoke/ui/Button";
+import { Icon } from "@bespoke/ui/Icon";
+import type { IconName } from "@bespoke/ui/icons/types";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import { m } from "motion/react";
 import type { Route } from "next";
 import { ThemePicker } from "@/components/ThemePicker";
 import { WakeLock } from "@/components/WakeLock";
-import type { IconName } from "@/libs/icons/types";
-import { Button, LinkButton } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Item = {

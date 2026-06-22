@@ -1,16 +1,16 @@
 "use client";
 
 import { TAG_NAME_MAX_LENGTH } from "@bespoke/domain/tags/constants";
+import { Button } from "@bespoke/ui/Button";
+import { usePopover } from "@bespoke/ui/hooks/usePopover";
+import { Icon } from "@bespoke/ui/Icon";
+import { Input } from "@bespoke/ui/Input";
+import { Lightbox } from "@bespoke/ui/Lightbox";
+import { Popover } from "@bespoke/ui/Popover";
+import { Text } from "@bespoke/ui/Text";
+import { handleKey } from "@bespoke/ui/utils/keyboard";
 import { clsx } from "clsx";
 import { useId } from "react";
-import { usePopover } from "@/hooks/usePopover";
-import { Button } from "@/ui/Button";
-import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
-import { Lightbox } from "@/ui/Lightbox";
-import { Popover } from "@/ui/Popover";
-import { Text } from "@/ui/Text";
-import { handleKey } from "@/utils/keyboard";
 import styles from "./styles.module.css";
 
 type Props = {

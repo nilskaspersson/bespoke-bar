@@ -2,9 +2,9 @@
 
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
+import { CopyToClipboard } from "@bespoke/ui/CopyToClipboard";
 import type { ComponentProps } from "react";
 import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
-import { CopyToClipboard } from "@/ui/CopyToClipboard";
 
 export function CopyLinesToClipboard({
 	lines,

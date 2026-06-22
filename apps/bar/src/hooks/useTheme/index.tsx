@@ -1,17 +1,17 @@
 "use client";
 
 import {
+	type ResolvedTheme,
+	THEME_STORAGE_KEY,
+	type Theme,
+} from "@bespoke/ui/theme/constants";
+import {
 	createContext,
 	type PropsWithChildren,
 	use,
 	useEffect,
 	useSyncExternalStore,
 } from "react";
-import {
-	type ResolvedTheme,
-	THEME_STORAGE_KEY,
-	type Theme,
-} from "@/app/_theme/constants";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 
 interface ThemeContextValue {
@@ -22,7 +22,7 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-import { DARK_MODE_MQ } from "@/app/_theme/constants";
+import { DARK_MODE_MQ } from "@bespoke/ui/theme/constants";
 
 function subscribeToDarkMode(onChange: () => void) {
 	const controller = new AbortController();

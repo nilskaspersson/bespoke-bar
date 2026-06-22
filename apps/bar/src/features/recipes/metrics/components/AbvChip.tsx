@@ -1,9 +1,9 @@
 "use client";
 
+import { Chip } from "@bespoke/ui/Chip";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { use } from "react";
 import { Abv } from "@/features/ingredients/components/Abv";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Chip } from "@/ui/Chip";
 
 export function AbvChip({ abv }: { abv: number }) {
 	const { percentageFormatter } = use(FormatterContext);

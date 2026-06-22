@@ -1,0 +1,66 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"root": true,
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"includes": ["src/**", "vitest.config.ts"]
+	},
+	"formatter": {
+		"enabled": true,
+		"useEditorconfig": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"suspicious": {
+				"noDuplicateCustomProperties": "off"
+			},
+			"style": {
+				"useComponentExportOnlyModules": "off",
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": [
+									"@bespoke/api",
+									"@bespoke/api/**",
+									"@bespoke/db",
+									"@bespoke/db/**",
+									"@clerk/**",
+									"@google-cloud/**",
+									"googleapis",
+									"@google/genai",
+									"@upstash/**",
+									"pg",
+									"@neondatabase/**",
+									"drizzle-orm",
+									"drizzle-orm/**",
+									"stripe",
+									"@lexical/**",
+									"lexical",
+									"@conform-to/**"
+								],
+								"message": "packages/ui is shared web-DOM UI: no server/db/auth/LLM SDKs, no Drizzle, no Lexical, and no Conform (form-coupled code stays in apps/bar). It may use react, react-dom, next, and @bespoke/{schema,domain}."
+							}
+						]
+					}
+				}
+			}
+		},
+		"domains": {
+			"react": "all"
+		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": true
+		}
+	}
+}

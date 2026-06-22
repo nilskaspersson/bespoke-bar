@@ -1,9 +1,8 @@
 "use client";
 
+import { Button } from "@bespoke/ui/Button";
+import { Text } from "@bespoke/ui/Text";
 import { SystemError } from "@/components/SystemError";
-
-import { Button } from "@/ui/Button";
-import { Text } from "@/ui/Text";
 
 export default function ErrorPage({
 	error,

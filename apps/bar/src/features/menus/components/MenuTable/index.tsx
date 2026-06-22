@@ -1,10 +1,10 @@
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import { Grid, type GridProps } from "@bespoke/ui/Grid";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import { EntityActions } from "@/components/EntityActions";
 import { MenuActions } from "@/features/menus/actions/components/MenuActions";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { getMenuUrl } from "@/features/menus/utils";
-import { Grid, type GridProps } from "@/ui/Grid";
-import { Skeleton, SkeletonScreen } from "@/ui/Skeleton";
 import styles from "./styles.module.css";
 
 type Props = {

@@ -1,9 +1,9 @@
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import { Grid } from "@bespoke/ui/Grid";
 import { clsx } from "clsx";
 import { MenuEntryActions } from "@/features/menus/actions/components/MenuEntryActions";
 import { MenuEntryNameAdornment } from "@/features/menus/entries/components/MenuEntryNameAdornment";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
-import { Grid } from "@/ui/Grid";
 import styles from "./styles.module.css";
 
 export function MenuEntryList({

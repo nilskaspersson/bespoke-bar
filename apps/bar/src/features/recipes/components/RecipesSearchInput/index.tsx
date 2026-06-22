@@ -1,10 +1,10 @@
 "use client";
 
+import { Icon } from "@bespoke/ui/Icon";
+import { Input } from "@bespoke/ui/Input";
+import { Kbd } from "@bespoke/ui/Kbd";
 import { clsx } from "clsx";
 import { type ComponentPropsWithoutRef, useRef } from "react";
-import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
-import { Kbd } from "@/ui/Kbd";
 import styles from "./styles.module.css";
 
 export function RecipesSearchInput({

@@ -1,18 +1,20 @@
-import "./_theme";
+import "@bespoke/ui/theme";
+import { Footer } from "@bespoke/ui/Footer";
+import { Header } from "@bespoke/ui/Header";
+import { ThemeScript } from "@bespoke/ui/theme/ThemeScript";
+import { NavigationObserver } from "@bespoke/ui/utils/navigation";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { type PropsWithChildren, Suspense } from "react";
-import { AppFooter } from "@/components/AppFooter";
-import { AppHeader } from "@/components/AppHeader";
 import { AuthProvider } from "@/components/AuthProvider";
 import { ScrollFix } from "@/components/ScrollFix";
+import { ThemePicker } from "@/components/ThemePicker";
+import { Toaster } from "@/components/Toaster";
+import { WakeLock } from "@/components/WakeLock";
 import { AuthButtonsSkeleton } from "@/features/organisation/user/components/AuthButtons";
 import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 import { ThemeProvider } from "@/hooks/useTheme";
-import { Toaster } from "@/ui/Toast/Toaster";
-import { NavigationObserver } from "@/utils/navigation";
-import { ThemeScript } from "./_theme/ThemeScript";
 import styles from "./layout.module.css";
 
 const sans = Figtree({
@@ -37,11 +39,11 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 					<div className={styles.layout} id="root">
 						<AuthProvider>
-							<AppHeader className={styles.header}>
+							<Header className={styles.header}>
 								<Suspense fallback={<AuthButtonsSkeleton />}>
 									<AuthButtonsLoader />
 								</Suspense>
-							</AppHeader>
+							</Header>
 
 							<Suspense fallback={<main className={styles.main} />}>
 								<main className={styles.main}>{children}</main>
@@ -49,7 +51,10 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 						</AuthProvider>
 
 						<Suspense>
-							<AppFooter className={styles.footer} />
+							<Footer className={styles.footer} barUrl="/bar" loungeUrl="">
+								<ThemePicker />
+								<WakeLock size="small" />
+							</Footer>
 						</Suspense>
 					</div>
 

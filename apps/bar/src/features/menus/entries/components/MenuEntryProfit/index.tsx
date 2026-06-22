@@ -2,12 +2,12 @@
 
 import { getRecipeCost } from "@bespoke/domain/recipes/getRecipeCost";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import { Callout } from "@bespoke/ui/Callout";
+import { Grid } from "@bespoke/ui/Grid";
+import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { Text } from "@bespoke/ui/Text";
 import { type ComponentProps, use } from "react";
 import { MenuEntryProfitLabel } from "@/features/menus/entries/components/MenuEntryProfitLabel";
-import { FormatterContext } from "@/hooks/useFormatter";
-import { Callout } from "@/ui/Callout";
-import { Grid } from "@/ui/Grid";
-import { Text } from "@/ui/Text";
 
 export function MenuEntryProfit<T extends BaseRecipe>({
 	recipe,

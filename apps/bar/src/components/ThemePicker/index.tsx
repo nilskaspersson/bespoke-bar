@@ -1,10 +1,10 @@
 "use client";
 
+import type { IconName } from "@bespoke/ui/icons/types";
+import { OptionsSwitch } from "@bespoke/ui/OptionsSwitch";
+import { ThemeSchema } from "@bespoke/ui/theme/constants";
 import { type ChangeEventHandler, useId } from "react";
-import { ThemeSchema } from "@/app/_theme/constants";
 import { useTheme } from "@/hooks/useTheme";
-import type { IconName } from "@/libs/icons/types";
-import { OptionsSwitch } from "@/ui/OptionsSwitch";
 import { withKey } from "@/utils/withKey";
 
 const ICONS: Record<(typeof ThemeSchema)["options"][number], IconName> = {

@@ -6,22 +6,22 @@ import {
 } from "@bespoke/domain/tags/constants";
 import { collator } from "@bespoke/domain/utils/collator";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { Button } from "@bespoke/ui/Button";
+import { Chip } from "@bespoke/ui/Chip";
+import { Flex } from "@bespoke/ui/Flex";
+import { Icon } from "@bespoke/ui/Icon";
+import { Input } from "@bespoke/ui/Input";
+import { Kbd } from "@bespoke/ui/Kbd";
+import { Lightbox } from "@bespoke/ui/Lightbox";
+import { Popover } from "@bespoke/ui/Popover";
+import { Spinner } from "@bespoke/ui/Spinner";
+import { usePlatform } from "@bespoke/ui/stores/platform";
+import { Text } from "@bespoke/ui/Text";
+import { handleKey, matchesShortcut } from "@bespoke/ui/utils/keyboard";
 import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import { useRecipeTagsCombobox } from "@/features/tags/hooks/useRecipeTagsCombobox";
-import { usePlatform } from "@/stores/platform";
-import { Button } from "@/ui/Button";
-import { Chip } from "@/ui/Chip";
-import { Flex } from "@/ui/Flex";
-import { Icon } from "@/ui/Icon";
-import { Input } from "@/ui/Input";
-import { Kbd } from "@/ui/Kbd";
-import { Lightbox } from "@/ui/Lightbox";
-import { Popover } from "@/ui/Popover";
-import { Spinner } from "@/ui/Spinner";
-import { Text } from "@/ui/Text";
-import { handleKey, matchesShortcut } from "@/utils/keyboard";
 import {
 	createSearchIndex,
 	findExactByIndex,

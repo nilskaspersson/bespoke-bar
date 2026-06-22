@@ -2,12 +2,12 @@
 
 import { collator } from "@bespoke/domain/utils/collator";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { Flex } from "@bespoke/ui/Flex";
+import { Grid } from "@bespoke/ui/Grid";
+import { Text } from "@bespoke/ui/Text";
 import { clsx } from "clsx";
 import { type ReactNode, useMemo } from "react";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
-import { Flex } from "@/ui/Flex";
-import { Grid } from "@/ui/Grid";
-import { Text } from "@/ui/Text";
 import styles from "./styles.module.css";
 
 type Props = {

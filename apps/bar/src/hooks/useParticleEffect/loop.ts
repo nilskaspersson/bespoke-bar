@@ -1,4 +1,4 @@
-import { SPRING_DAMPING, SPRING_STIFFNESS } from "@/utils/animate";
+import { SPRING_DAMPING, SPRING_STIFFNESS } from "@bespoke/ui/utils/animate";
 import {
 	type CardRect,
 	type Particle,

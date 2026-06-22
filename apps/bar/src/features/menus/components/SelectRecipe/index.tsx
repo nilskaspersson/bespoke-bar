@@ -1,10 +1,10 @@
 import { collator } from "@bespoke/domain/utils/collator";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
+import { Combobox } from "@bespoke/ui/Combobox";
+import { Menu } from "@bespoke/ui/Menu";
 import { type ComponentProps, useCallback, useMemo } from "react";
 import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
 import { getRecipeName, isRecipeWithLines } from "@/features/recipes/utils";
-import { Combobox } from "@/ui/Combobox";
-import { Menu } from "@/ui/Menu";
 
 const itemToString = (item: Recipe | null) =>
 	!item ? "" : getRecipeName(item);

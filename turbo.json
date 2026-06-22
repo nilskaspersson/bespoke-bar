@@ -4,18 +4,18 @@
 	"tasks": {
 		"icons:build": {
 			"inputs": [
-				"src/libs/icons/build.ts",
-				"src/libs/icons/config.ts",
-				"src/libs/icons/svgs/**"
+				"src/icons/build.ts",
+				"src/icons/config.ts",
+				"src/icons/svgs/**"
 			],
 			"outputs": [
-				"src/libs/icons/sprite.svg",
-				"src/libs/icons/types.ts",
-				"src/libs/icons/kits.types.ts"
+				"src/icons/sprite.svg",
+				"src/icons/types.ts",
+				"src/icons/kits.types.ts"
 			]
 		},
 		"build": {
-			"dependsOn": ["icons:build", "^build"],
+			"dependsOn": ["icons:build", "^icons:build", "^build"],
 			"inputs": ["$TURBO_DEFAULT$", ".env*"],
 			"outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
 			"env": [
@@ -34,13 +34,13 @@
 			"dependsOn": ["^lint"]
 		},
 		"check-types": {
-			"dependsOn": ["icons:build", "^check-types"]
+			"dependsOn": ["icons:build", "^icons:build", "^check-types"]
 		},
 		"test": {
-			"dependsOn": ["icons:build"]
+			"dependsOn": ["icons:build", "^icons:build"]
 		},
 		"dev": {
-			"dependsOn": ["icons:build"],
+			"dependsOn": ["icons:build", "^icons:build"],
 			"cache": false,
 			"persistent": true
 		}
