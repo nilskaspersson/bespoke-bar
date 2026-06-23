@@ -2,6 +2,7 @@
 	"$schema": "https://turborepo.dev/schema.json",
 	"ui": "tui",
 	"globalDependencies": [".editorconfig"],
+	"globalPassThroughEnv": ["VERCEL", "VERCEL_GIT_COMMIT_SHA"],
 	"tasks": {
 		"icons:build": {
 			"inputs": [
@@ -28,7 +29,9 @@
 				"CLERK_*",
 				"STRIPE_*",
 				"GCP_*",
-				"NEON_PROJECT_ID"
+				"NEON_PROJECT_ID",
+				"VERCEL_ENV",
+				"VERCEL_BRANCH_URL"
 			]
 		},
 		"lint": {},

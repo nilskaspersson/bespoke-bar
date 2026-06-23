@@ -22,4 +22,4 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter @bespoke/ui run icons:check
-      - run: pnpm turbo run lint test check-types ${{ github.event_name == 'pull_request' && '--affected' || '' }}
+      - run: pnpm turbo run lint test check-types ${{ github.event_name == 'pull_request' && '--affected' || '' }} --continue=dependencies-successful
