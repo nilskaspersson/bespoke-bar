@@ -12,6 +12,10 @@
 		"./next": {
 			"types": "./next.d.ts",
 			"default": "./next.mjs"
+		},
+		"./vitest": {
+			"types": "./vitest.d.ts",
+			"default": "./vitest.mjs"
 		}
 	},
 	"scripts": {
@@ -19,6 +23,8 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "catalog:",
-		"next": "catalog:"
+		"@vitejs/plugin-react": "catalog:",
+		"next": "catalog:",
+		"vitest": "catalog:"
 	}
 }

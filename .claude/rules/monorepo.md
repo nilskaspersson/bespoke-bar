@@ -1,6 +1,6 @@
 # Monorepo (Turborepo + pnpm)
 
-> **Status: live (extraction in progress).** Step 0 (Turborepo container) and Step 1 (`packages/schema`, the pure leaf) have landed, so the `schema` rules below are enforced now (Biome purity guard + CI). Steps 2–6 (`domain`, `db`, `api`, `lounge`, `mobile`) are the documented target, not yet built — `plans/monorepo-extraction.md` tracks the sequence. Rationale: ADR-0009/0010/0011.
+> **Status: web extraction complete; only mobile pending.** `packages/{schema,domain,db,api,ui,config}` + `apps/{bar,lounge}` have all landed and are gate-green, with the Biome boundary guards enforced across `schema`/`domain`/`db`/`api`/`ui`. The one remaining step is **`apps/mobile`** (step 6, Expo) — deferred, greenfield (the pure leaves + `import type { AppRouter }` foundation are ready). Production cutover (bar → `bar.bespoke-bar.app`, lounge → apex) is documented in `plans/step5-lounge-ops-cutover.md`. Rationale: ADR-0009/0010/0011; original sequence in `plans/monorepo-extraction.md`.
 
 Layout: `apps/{bar,lounge,mobile}` (deployables) + `packages/{schema,domain,db,api,ui}` runtime packages + `packages/config` (shared build/lint tooling) — all private `workspace:*`, imported as `@bespoke/*`, **never published**. `bar` = authed app (`bar.bespoke-bar.app`); `lounge` = public landing + guest menus (apex); `mobile` = one Expo codebase → iOS + Android.
 

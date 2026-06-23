@@ -25,7 +25,7 @@ export function buildCsp(extra = {}) {
 	];
 
 	const csp = directives
-		.map(([name, values]) => `${name} ${values.join(" ")}`)
+		.map(([name, values]) => `${name} ${values.filter(Boolean).join(" ")}`)
 		.join("; ");
 
 	return isDevelopment ? csp : `${csp}; upgrade-insecure-requests`;

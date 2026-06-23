@@ -3,7 +3,7 @@
 	"extends": ["@bespoke/config/biome.base.json"],
 	"root": true,
 	"files": {
-		"includes": ["src/**"]
+		"includes": ["src/**", "vitest.config.ts"]
 	},
 	"linter": {
 		"rules": {
