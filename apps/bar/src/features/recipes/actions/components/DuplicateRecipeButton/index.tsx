@@ -7,7 +7,7 @@ import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { ToastActions, toast } from "@bespoke/ui/Toast";
 import { DeleteRecipeButton } from "@/features/recipes/actions/components/DeleteRecipeButton";
 import { duplicateRecipeAction } from "@/features/recipes/api/duplicateRecipe";
-import { errorMessageOrFallback } from "@/utils/api";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export function DuplicateRecipeButton({
 	recipe,
@@ -25,8 +25,8 @@ export function DuplicateRecipeButton({
 
 		const promise = duplicateRecipeAction(recipe.id);
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: "Duplicating…",
 			success: (newRecipe) => {
 				if (!newRecipe) {
@@ -68,13 +68,11 @@ export function DuplicateRecipeButton({
 					),
 				};
 			},
-			error: (e) => ({
+			error: {
 				message: "Could not duplicate recipe",
-				description: errorMessageOrFallback(e, "Try again later."),
-			}),
+				description: "Try again later.",
+			},
 		});
-
-		await promise;
 	};
 
 	return (

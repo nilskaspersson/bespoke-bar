@@ -3,8 +3,8 @@
 import { Grid } from "@bespoke/ui/Grid";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { Text } from "@bespoke/ui/Text";
-import { toast } from "@bespoke/ui/Toast";
 import { deleteLocalOrganisationAction } from "@/features/organisation/api/deleteLocalOrganisation";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 type Props = {
 	orgId: string;
@@ -15,25 +15,19 @@ export function DeleteOrgForm({ orgId, onSuccess }: Props) {
 	async function action() {
 		const promise = deleteLocalOrganisationAction({ localOrgId: orgId });
 
-		toast.promise(promise, {
+		await createPromiseToast(promise, {
 			loading: "Deleting bar…",
 			success: (result) => ({
 				message: result.deletedId
 					? `Deleted bar ${result.deletedId}`
 					: "No bar found",
 			}),
-			error: (err) => ({
+			error: {
 				message: "Could not delete bar",
-				description: err instanceof Error ? err.message : "Try again later.",
-			}),
+				description: "Try again later.",
+			},
+			onSuccess,
 		});
-
-		try {
-			await promise;
-			onSuccess?.();
-		} catch {
-			// Handled by toast.promise
-		}
 	}
 
 	return (

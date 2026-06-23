@@ -23,6 +23,7 @@ import {
 	saveIngredientDraft,
 } from "@/features/ingredients/utils/ingredientDraftStorage";
 import { useInvalidateClientCache } from "@/hooks/useInvalidateClientCache";
+import { getErrorToast } from "@/utils/api";
 
 type Props = {
 	formId: string;
@@ -87,11 +88,11 @@ export function CreateIngredientDrawerForm({
 
 				router.push(getIngredientUrl(ingredient));
 			} catch (error) {
-				toast.error(
-					error instanceof Error
-						? error.message
-						: "Could not create ingredient.",
-				);
+				const { message, description } = getErrorToast(error, {
+					message: "Could not create ingredient.",
+					description: "Try again later.",
+				});
+				toast.error(message, { description });
 			} finally {
 				setSubmitting(false);
 				setPending(false);

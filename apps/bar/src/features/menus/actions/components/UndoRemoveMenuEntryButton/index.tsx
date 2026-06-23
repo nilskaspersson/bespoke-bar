@@ -9,6 +9,7 @@ import { Icon } from "@bespoke/ui/Icon";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { ToastActions, toast } from "@bespoke/ui/Toast";
 import { RemoveMenuEntryButton } from "@/features/menus/actions/components/RemoveMenuEntryButton";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export function UndoRemoveMenuEntryButton({
 	actionAdd,
@@ -26,8 +27,8 @@ export function UndoRemoveMenuEntryButton({
 
 		const promise = actionAdd(entry);
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: "Restoring…",
 			success: (result) => ({
 				message: "Recipe restored to menu",
@@ -74,15 +75,11 @@ export function UndoRemoveMenuEntryButton({
 					</ToastActions>
 				) : null,
 			}),
-			error: (error) => ({
-				message:
-					error instanceof Error
-						? error.message
-						: "Recipe could not be added to menu.",
-			}),
+			error: {
+				message: "Recipe could not be added to menu.",
+				description: "Try again later.",
+			},
 		});
-
-		await promise;
 	};
 
 	return (

@@ -2,10 +2,9 @@
 
 import type { MenuEntry } from "@bespoke/schema/schema/menuEntries";
 import { Button, type ButtonProps } from "@bespoke/ui/Button";
-import { toast } from "@bespoke/ui/Toast";
 import type { MouseEventHandler } from "react";
 import { updateMenuEntry } from "@/features/menus/entries/api/updateMenuEntry";
-import { errorMessageOrFallback } from "@/utils/api";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export function UndoEntryChangesButton({
 	entry,
@@ -25,13 +24,13 @@ export function UndoEntryChangesButton({
 			recipeId: entry.recipeId,
 		});
 
-		toast.promise(promise, {
+		await createPromiseToast(promise, {
 			loading: "Undoing…",
 			success: "Reverted price change",
-			error: (e) => ({
+			error: {
 				message: "Could not revert price change",
-				description: errorMessageOrFallback(e, "Try again later."),
-			}),
+				description: "Try again later.",
+			},
 		});
 	};
 

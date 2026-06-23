@@ -4,10 +4,10 @@ import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { ButtonProps } from "@bespoke/ui/Button";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { Text } from "@bespoke/ui/Text";
-import { toast } from "@bespoke/ui/Toast";
 import type { PropsWithChildren } from "react";
 import { deleteIngredient } from "@/features/ingredients/api/deleteIngredient";
-import { getErrorToast, unwrapAction } from "@/utils/api";
+import { unwrapAction } from "@/utils/api";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export function DeleteIngredient({
 	children,
@@ -27,21 +27,14 @@ export function DeleteIngredient({
 			deleteIngredient({ id: ingredient.id, redirectTo }),
 		);
 
-		toast.promise(promise, {
+		await createPromiseToast(promise, {
 			loading: "Deleting…",
 			success: () => ({ message: `Deleted ${ingredient.name}` }),
-			error: (error) =>
-				getErrorToast(error, {
-					message: "Could not delete ingredient",
-					description: "Try again later.",
-				}),
+			error: {
+				message: "Could not delete ingredient",
+				description: "Try again later.",
+			},
 		});
-
-		try {
-			await promise;
-		} catch {
-			// Surfaced via the toast above; swallow so it doesn't reach error.tsx.
-		}
 	}
 
 	return (

@@ -5,10 +5,10 @@ import type { ButtonProps } from "@bespoke/ui/Button";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { Grid } from "@bespoke/ui/Grid";
 import { Text } from "@bespoke/ui/Text";
-import { toast } from "@bespoke/ui/Toast";
 import type { PropsWithChildren } from "react";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
 import { trpc } from "@/trpc/client";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 import styles from "./styles.module.css";
 
 export function DeleteMenuButton({
@@ -29,18 +29,16 @@ export function DeleteMenuButton({
 
 		const promise = action();
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: "Deleting menu…",
 			success: () => "Menu deleted",
-			error: (error) => ({
-				message:
-					error instanceof Error ? error.message : "Menu could not be deleted",
-			}),
+			error: {
+				message: "Menu could not be deleted",
+				description: "Try again later.",
+			},
+			onSuccess: () => utils.menu.list.invalidate(),
 		});
-
-		await promise;
-		utils.menu.list.invalidate();
 	};
 
 	return (

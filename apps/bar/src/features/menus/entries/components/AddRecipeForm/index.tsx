@@ -10,7 +10,6 @@ import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
 import { useIndexedItems } from "@bespoke/ui/hooks/useIndexedItems";
 import { Skeleton } from "@bespoke/ui/Skeleton";
-import { toast } from "@bespoke/ui/Toast";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useMemo, useRef } from "react";
@@ -22,6 +21,7 @@ import { createDraftMenuEntry } from "@/features/menus/utils";
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { trpc } from "@/trpc/client";
 import { FormErrors } from "@/ui/FormErrors";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -58,23 +58,17 @@ export function AddRecipeForm({ formId, menu, onSuccess }: Props) {
 			const formData = new FormData(event.currentTarget);
 			const promise = addRecipeToMenuAction(formData);
 
-			toast.promise(promise, {
+			await createPromiseToast(promise, {
 				loading: "Adding recipe…",
 				success: () => ({
 					message: "Recipe added to menu",
 				}),
-				error: (err) => ({
+				error: {
 					message: "Could not add recipe to menu",
-					description: err instanceof Error ? err.message : "Try again later.",
-				}),
+					description: "Try again later.",
+				},
+				onSuccess: () => onSuccess?.(),
 			});
-
-			try {
-				await promise;
-				onSuccess?.();
-			} catch {
-				// Handled by toast.promise
-			}
 		},
 		[onSuccess],
 	);

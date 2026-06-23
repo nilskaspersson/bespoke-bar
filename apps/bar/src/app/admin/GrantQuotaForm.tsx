@@ -6,8 +6,8 @@ import { Grid } from "@bespoke/ui/Grid";
 import { RadioGroup, type RadioGroupOption } from "@bespoke/ui/RadioGroup";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { TextField } from "@bespoke/ui/TextField";
-import { toast } from "@bespoke/ui/Toast";
 import { useRef } from "react";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 type GrantInput = {
 	orgId: string;
@@ -48,7 +48,7 @@ export function GrantQuotaForm({
 
 		const promise = action({ orgId, amount, source, note });
 
-		toast.promise(promise, {
+		await createPromiseToast(promise, {
 			loading: "Granting…",
 			success: () => ({
 				message:
@@ -56,19 +56,15 @@ export function GrantQuotaForm({
 						? `Granted ${pluralize(amount, unit)}`
 						: `Removed ${pluralize(Math.abs(amount), unit)}`,
 			}),
-			error: (err) => ({
+			error: {
 				message: "Could not grant",
-				description: err instanceof Error ? err.message : "Try again later.",
-			}),
+				description: "Try again later.",
+			},
+			onSuccess: () => {
+				formRef.current?.reset();
+				onSuccess?.();
+			},
 		});
-
-		try {
-			await promise;
-			formRef.current?.reset();
-			onSuccess?.();
-		} catch {
-			// Handled by toast.promise
-		}
 	}
 
 	return (

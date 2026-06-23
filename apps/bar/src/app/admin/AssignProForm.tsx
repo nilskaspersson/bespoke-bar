@@ -9,10 +9,10 @@ import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { Text } from "@bespoke/ui/Text";
 import { TextField } from "@bespoke/ui/TextField";
-import { toast } from "@bespoke/ui/Toast";
 import { use } from "react";
 import { grantProManual } from "@/features/admin/api/grantProManual";
 import { revokeProManual } from "@/features/admin/api/revokeProManual";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 type Props = {
 	orgId: string;
@@ -36,41 +36,29 @@ export function AssignProForm({ orgId, subscription, onSuccess }: Props) {
 
 		const promise = grantProManual({ orgId, expiresAt });
 
-		toast.promise(promise, {
+		await createPromiseToast(promise, {
 			loading: "Assigning Pro…",
 			success: () => ({ message: "Pro assigned" }),
-			error: (err) => ({
+			error: {
 				message: "Could not assign Pro",
-				description: err instanceof Error ? err.message : "Try again later.",
-			}),
+				description: "Try again later.",
+			},
+			onSuccess: () => onSuccess?.(),
 		});
-
-		try {
-			await promise;
-			onSuccess?.();
-		} catch {
-			// Handled by toast.promise
-		}
 	}
 
 	async function revoke() {
 		const promise = revokeProManual({ orgId });
 
-		toast.promise(promise, {
+		await createPromiseToast(promise, {
 			loading: "Revoking Pro…",
 			success: () => ({ message: "Pro revoked" }),
-			error: (err) => ({
+			error: {
 				message: "Could not revoke Pro",
-				description: err instanceof Error ? err.message : "Try again later.",
-			}),
+				description: "Try again later.",
+			},
+			onSuccess: () => onSuccess?.(),
 		});
-
-		try {
-			await promise;
-			onSuccess?.();
-		} catch {
-			// Handled by toast.promise
-		}
 	}
 
 	return (

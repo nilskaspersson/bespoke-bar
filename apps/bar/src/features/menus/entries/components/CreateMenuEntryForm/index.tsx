@@ -31,6 +31,7 @@ import {
 import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { trpc } from "@/trpc/client";
 import { FormErrors } from "@/ui/FormErrors";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -79,8 +80,8 @@ export function CreateMenuEntryForm({ recipe, onSuccess, formRef }: Props) {
 
 			const promise = appendMenuEntryAction(formData);
 
-			toast.promise(promise, {
-				id: toastId,
+			await createPromiseToast(promise, {
+				toastId,
 				loading: withNewMenu ? "Creating menu…" : "Adding to menu…",
 				success: (result) => ({
 					message: !isMenu(result) ? (
@@ -121,16 +122,12 @@ export function CreateMenuEntryForm({ recipe, onSuccess, formRef }: Props) {
 						</ToastActions>
 					) : null,
 				}),
-				error: (error) => ({
-					message:
-						error instanceof Error
-							? error.message
-							: "Recipe could not be added to Menu.",
-				}),
+				error: {
+					message: "Recipe could not be added to Menu.",
+					description: "Try again later.",
+				},
+				onSuccess: () => onSuccess?.(),
 			});
-
-			await promise;
-			onSuccess?.();
 		},
 		[withNewMenu, onSuccess],
 	);

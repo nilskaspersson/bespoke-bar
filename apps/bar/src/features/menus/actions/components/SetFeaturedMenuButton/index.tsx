@@ -8,6 +8,7 @@ import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { Text } from "@bespoke/ui/Text";
 import { ToastActions, toast } from "@bespoke/ui/Toast";
 import { ClearFeaturedMenuButton } from "@/features/menus/actions/components/ClearFeaturedMenuButton";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export function SetFeaturedMenuButton({
 	menu,
@@ -29,8 +30,8 @@ export function SetFeaturedMenuButton({
 
 		const toastId = Date.now().toString();
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: "Submitting…",
 			success: () => ({
 				message: "Menu set as Featured Menu",
@@ -64,13 +65,11 @@ export function SetFeaturedMenuButton({
 					</ToastActions>
 				),
 			}),
-			error: () => ({
+			error: {
 				message: "Could not set menu as Featured Menu.",
 				description: "Try again later.",
-			}),
+			},
 		});
-
-		await promise;
 	};
 
 	if (!requireConfirmation) {

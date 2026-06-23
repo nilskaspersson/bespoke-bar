@@ -9,7 +9,6 @@ import { Button } from "@bespoke/ui/Button";
 import { CurrencyInput } from "@bespoke/ui/CurrencyInput";
 import { Grid } from "@bespoke/ui/Grid";
 import { TextField } from "@bespoke/ui/TextField";
-import { toast } from "@bespoke/ui/Toast";
 import { FormProvider, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useCallback, useRef } from "react";
@@ -17,6 +16,7 @@ import { upsertMenuWithEntriesAction } from "@/features/menus/api/upsertMenuWith
 import { SelectRecipe } from "@/features/menus/components/SelectRecipe";
 import { trpc } from "@/trpc/client";
 import { FormErrors } from "@/ui/FormErrors";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export const MENU_FORM_ID = "menu-form";
 
@@ -54,19 +54,17 @@ export function MenuForm({ recipes, menu }: Props) {
 		async (formData: FormData) => {
 			const promise = upsertMenuWithEntriesAction(formData);
 
-			toast.promise(promise, {
+			await createPromiseToast(promise, {
 				loading: "Creating menu…",
 				success: () => ({
 					message: "Menu created",
 				}),
-				error: () => ({
+				error: {
 					message: "Could not create menu",
 					description: "Try again later.",
-				}),
+				},
+				onSuccess: () => utils.menu.list.invalidate(),
 			});
-
-			await promise;
-			utils.menu.list.invalidate();
 		},
 		[utils],
 	);

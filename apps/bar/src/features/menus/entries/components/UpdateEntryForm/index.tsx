@@ -17,6 +17,7 @@ import { MenuEntryDiff } from "@/features/menus/entries/components/MenuEntryDiff
 import { MenuEntryPriceCalculation } from "@/features/menus/entries/components/MenuEntryPriceCalculation";
 import { isMenuEntry } from "@/features/menus/utils";
 import { FormErrors } from "@/ui/FormErrors";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 type Props = {
 	entry: MenuEntryWithRecipe;
@@ -48,8 +49,8 @@ export function UpdateEntryForm({ entry, onSuccess }: Props) {
 
 			const promise = updateMenuEntryAction(entry.id, formData);
 
-			toast.promise(promise, {
-				id: toastId,
+			await createPromiseToast(promise, {
+				toastId,
 				loading: "Saving…",
 				success: (result) => ({
 					message: (
@@ -71,14 +72,12 @@ export function UpdateEntryForm({ entry, onSuccess }: Props) {
 						</ToastActions>
 					),
 				}),
-				error: () => ({
+				error: {
 					message: "Menu entry could not be updated.",
 					description: "Try again later.",
-				}),
+				},
+				onSuccess: () => onSuccess(),
 			});
-
-			await promise;
-			onSuccess();
 		},
 		[entry, onSuccess],
 	);

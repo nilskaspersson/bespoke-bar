@@ -5,12 +5,11 @@ import type { ButtonProps } from "@bespoke/ui/Button";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { Text } from "@bespoke/ui/Text";
-import { toast } from "@bespoke/ui/Toast";
 import type { ReactNode } from "react";
 import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { getRecipeName } from "@/features/recipes/utils";
-import { errorMessageOrFallback } from "@/utils/api";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 type Props = {
 	recipe: Recipe;
@@ -37,20 +36,18 @@ export function DeleteRecipeButton({
 		const toastId = externalToastId ?? Date.now().toString();
 		const promise = deleteRecipe({ id: recipe.id, redirectTo });
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: "Deleting…",
 			success: () => ({
 				message: `Deleted "${getRecipeName(recipe)}"`,
 			}),
-			error: (e) => ({
+			error: {
 				message: "Could not delete recipe",
-				description: errorMessageOrFallback(e, "Try again later."),
-			}),
+				description: "Try again later.",
+			},
+			onSuccess: () => onDelete?.(),
 		});
-
-		await promise;
-		onDelete?.();
 	};
 
 	if (confirm) {

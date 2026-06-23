@@ -16,7 +16,7 @@ import { showRecipeLimitReachedToast } from "@/features/billing/components/Recip
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import { getErrorToast } from "@/utils/api";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 import { getKey } from "@/utils/withKey";
 
 export function useCreateBulkDraftRecipes(
@@ -34,7 +34,7 @@ export function useCreateBulkDraftRecipes(
 ) {
 	const usage = use(RecipeSlotUsageContext);
 
-	return useCallback(() => {
+	return useCallback(async () => {
 		const toastId = Date.now().toString();
 
 		if (usage && usage.remaining < recipes.length) {
@@ -72,8 +72,8 @@ export function useCreateBulkDraftRecipes(
 				throw error;
 			});
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: "Creating recipes…",
 			success: (recipes) => ({
 				message:
@@ -130,11 +130,10 @@ export function useCreateBulkDraftRecipes(
 					</ToastActions>
 				),
 			}),
-			error: (error) =>
-				getErrorToast(error, {
-					message: "Recipe could not be created",
-					description: "Try again later.",
-				}),
+			error: {
+				message: "Recipe could not be created",
+				description: "Try again later.",
+			},
 		});
 	}, [recipes, createRecipes, onSuccess, onError, createMoreHref, usage]);
 }

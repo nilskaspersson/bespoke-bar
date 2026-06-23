@@ -8,8 +8,8 @@ import { ToastActions, toast } from "@bespoke/ui/Toast";
 import { clsx } from "clsx";
 import { useOptimistic } from "react";
 import { toggleRecipeFavorite } from "@/features/recipes/api/toggleRecipeFavorite";
-import { noop } from "@/utils";
-import { getErrorToast, unwrapAction } from "@/utils/api";
+import { unwrapAction } from "@/utils/api";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 import styles from "./styles.module.css";
 
 export function ToggleFavoriteRecipeButton({
@@ -43,8 +43,8 @@ export function ToggleFavoriteRecipeButton({
 
 		const promise = unwrapAction(toggleRecipeFavorite(recipe.id));
 
-		toast.promise(promise, {
-			id: toastId,
+		await createPromiseToast(promise, {
+			toastId,
 			loading: newFavoriteState ? "Adding…" : "Removing…",
 			success: () => ({
 				message: newFavoriteState
@@ -81,14 +81,11 @@ export function ToggleFavoriteRecipeButton({
 					</ToastActions>
 				),
 			}),
-			error: (e) =>
-				getErrorToast(e, {
-					message: "Could not toggle favorite Recipe",
-					description: "Try again later.",
-				}),
+			error: {
+				message: "Could not toggle favorite Recipe",
+				description: "Try again later.",
+			},
 		});
-
-		await promise.catch(noop);
 	};
 
 	return (

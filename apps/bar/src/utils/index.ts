@@ -1,11 +1,6 @@
-export {
-	indexBy,
-	isEmpty,
-	pick,
-	unique,
-} from "@bespoke/domain/utils/collection";
+export { pick } from "@bespoke/domain/utils/collection";
 export { round } from "@bespoke/domain/utils/math";
-export { asciiFold, normalizeInput } from "@bespoke/domain/utils/text";
+export { normalizeInput } from "@bespoke/domain/utils/text";
 
 /** @public */
 export function clamp(n: number, min: number, max: number): number {
@@ -71,10 +66,6 @@ export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 	}
 
 	return inverted;
-}
-
-export function isUndefined(o: unknown): o is undefined {
-	return typeof o === "undefined";
 }
 
 export function pickRandom<T>(items: readonly [T, ...T[]]): T {

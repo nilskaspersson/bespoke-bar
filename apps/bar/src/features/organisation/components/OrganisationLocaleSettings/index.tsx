@@ -8,13 +8,13 @@ import { Kbd } from "@bespoke/ui/Kbd";
 import { SkeletonScreen } from "@bespoke/ui/Skeleton";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { TextFieldSkeleton } from "@bespoke/ui/TextField";
-import { toast } from "@bespoke/ui/Toast";
 import { useForm } from "@conform-to/react";
 import { useCallback } from "react";
 import { updateLocalOrganisationAction } from "@/features/organisation/api/updateLocalOrganisation";
 import { SelectCurrency } from "@/features/organisation/components/SelectCurrency";
 import { SelectLocale } from "@/features/organisation/components/SelectLocale";
 import { trpc } from "@/trpc/client";
+import { createPromiseToast } from "@/utils/createPromiseToast";
 
 export function OrganisationLocaleSettings() {
 	const { data: organisation, isLoading } = trpc.organisation.get.useQuery();
@@ -51,20 +51,18 @@ function OrganisationLocaleSettingsForm({
 
 			const promise = updateLocalOrganisationAction(formData);
 
-			toast.promise(promise, {
-				id: toastId,
+			await createPromiseToast(promise, {
+				toastId,
 				loading: "Updating organisation settings…",
 				success: () => ({
 					message: "Organisation settings updated",
 				}),
-				error: () => ({
+				error: {
 					message: "Could not update organisation settings",
 					description: "Try again later.",
-				}),
+				},
+				onSuccess: () => utils.organisation.get.invalidate(),
 			});
-
-			await promise;
-			utils.organisation.get.invalidate();
 		},
 		[utils],
 	);
