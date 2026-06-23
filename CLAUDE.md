@@ -22,6 +22,12 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 - All DB queries should attempt to read from cache, and all mutations should clear related caches (see cache event model at `src/utils/cache.ts`)
 - If unsure about a domain term (e.g. Quota, Use, Grant), check `CONTEXT.md`.
 
+## Monorepo (Turborepo: `apps/*` + `packages/*`)
+
+**Purity is load-bearing — Expo/RN consumes the pure packages.** Before adding an import or a call inside `schema` or `domain`, confirm it keeps them pure & RN-safe: no `next/*`, no DB/server SDKs, no DOM, **and no side effects** — a network/LLM/Vision call is server-side (→ `api`) even if it imports nothing forbidden (the Biome guard is lexical; it can't catch this, only you can). `db` + `api` are server-only; `mobile` imports `schema`/`domain` for values and `import type { AppRouter }` from `api` only.
+
+When deciding where code belongs — a new file, a move, or a helper/schema/function you're adding that could live in a shared package — read `docs/monorepo.md`.
+
 ## Nits
 
 - Prefer `function` over `const` for function declarations
