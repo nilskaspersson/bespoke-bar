@@ -1,7 +1,8 @@
 import "@bespoke/ui/theme";
+import { AppShell } from "@bespoke/ui/AppShell";
+import shell from "@bespoke/ui/AppShell/styles.module.css";
 import { Footer } from "@bespoke/ui/Footer";
 import { Header } from "@bespoke/ui/Header";
-import { ThemeScript } from "@bespoke/ui/theme/ThemeScript";
 import { NavigationObserver } from "@bespoke/ui/utils/navigation";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
@@ -15,7 +16,6 @@ import { WakeLock } from "@/components/WakeLock";
 import { AuthButtonsSkeleton } from "@/features/organisation/user/components/AuthButtons";
 import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 import { ThemeProvider } from "@/hooks/useTheme";
-import styles from "./layout.module.css";
 
 const sans = Figtree({
 	subsets: ["latin"],
@@ -33,46 +33,38 @@ const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
-		<html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-			<body className={clsx(sans.variable, serif.variable, styles.body)}>
-				<ThemeScript />
-
-				<ThemeProvider>
-					{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
-					<div className={styles.layout} id="root">
-						<AuthProvider>
-							<Header className={styles.header}>
-								<Suspense fallback={<AuthButtonsSkeleton />}>
-									<AuthButtonsLoader />
-								</Suspense>
-							</Header>
-
-							<Suspense fallback={<main className={styles.main} />}>
-								<main className={styles.main}>{children}</main>
+		<AppShell className={clsx(sans.variable, serif.variable)}>
+			<ThemeProvider>
+				{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
+				<div className={shell.layout} id="root">
+					<AuthProvider>
+						<Header className={shell.header}>
+							<Suspense fallback={<AuthButtonsSkeleton />}>
+								<AuthButtonsLoader />
 							</Suspense>
-						</AuthProvider>
+						</Header>
 
-						<Suspense>
-							<Footer
-								className={styles.footer}
-								barUrl=""
-								loungeUrl={LOUNGE_URL}
-							>
-								<ThemePicker />
-								<WakeLock size="small" />
-							</Footer>
+						<Suspense fallback={<main className={shell.main} />}>
+							<main className={shell.main}>{children}</main>
 						</Suspense>
-					</div>
+					</AuthProvider>
 
-					<Toaster />
-				</ThemeProvider>
+					<Suspense>
+						<Footer className={shell.footer} barUrl="" loungeUrl={LOUNGE_URL}>
+							<ThemePicker />
+							<WakeLock size="small" />
+						</Footer>
+					</Suspense>
+				</div>
 
-				<Suspense>
-					<ScrollFix />
-					<NavigationObserver />
-				</Suspense>
-			</body>
-		</html>
+				<Toaster />
+			</ThemeProvider>
+
+			<Suspense>
+				<ScrollFix />
+				<NavigationObserver />
+			</Suspense>
+		</AppShell>
 	);
 }
 

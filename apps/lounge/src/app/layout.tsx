@@ -1,13 +1,13 @@
 import "@bespoke/ui/theme";
+import { AppShell } from "@bespoke/ui/AppShell";
+import shell from "@bespoke/ui/AppShell/styles.module.css";
 import { LinkButton } from "@bespoke/ui/Button";
 import { Footer } from "@bespoke/ui/Footer";
 import { Header } from "@bespoke/ui/Header";
-import { ThemeScript } from "@bespoke/ui/theme/ThemeScript";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import type { PropsWithChildren } from "react";
-import styles from "./layout.module.css";
 
 const sans = Figtree({
 	subsets: ["latin"],
@@ -26,32 +26,28 @@ const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
-		<html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
-			<body className={clsx(sans.variable, serif.variable, styles.body)}>
-				<ThemeScript />
+		<AppShell className={clsx(sans.variable, serif.variable)}>
+			<div className={shell.layout}>
+				<Header className={shell.header}>
+					<LinkButton
+						href={`${BAR_URL}/recipes`}
+						variant="solid"
+						size="tiny"
+						color="heavy"
+					>
+						To the bar
+					</LinkButton>
+				</Header>
 
-				<div className={styles.layout}>
-					<Header className={styles.header}>
-						<LinkButton
-							href={`${BAR_URL}/recipes`}
-							variant="solid"
-							size="tiny"
-							color="heavy"
-						>
-							To the bar
-						</LinkButton>
-					</Header>
+				<main className={shell.main}>{children}</main>
 
-					<main className={styles.main}>{children}</main>
-
-					<Footer
-						className={styles.footer}
-						barUrl={BAR_URL}
-						loungeUrl={LOUNGE_URL}
-					/>
-				</div>
-			</body>
-		</html>
+				<Footer
+					className={shell.footer}
+					barUrl={BAR_URL}
+					loungeUrl={LOUNGE_URL}
+				/>
+			</div>
+		</AppShell>
 	);
 }
 
