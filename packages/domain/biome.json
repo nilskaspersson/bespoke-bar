@@ -1,38 +1,11 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
-	"extends": ["@bespoke/config/biome.base.json"],
+	"extends": [
+		"@bespoke/config/biome.base.json",
+		"@bespoke/config/biome.pure-leaf.json"
+	],
 	"root": true,
 	"files": {
 		"includes": ["src/**", "vitest.config.ts"]
-	},
-	"linter": {
-		"rules": {
-			"style": {
-				"noRestrictedImports": {
-					"level": "error",
-					"options": {
-						"patterns": [
-							{
-								"group": [
-									"react",
-									"react-dom",
-									"next",
-									"next/**",
-									"@clerk/**",
-									"@google-cloud/**",
-									"googleapis",
-									"@google/genai",
-									"@upstash/**",
-									"pg",
-									"@neondatabase/**",
-									"@lexical/**"
-								],
-								"message": "packages/domain is PURE and React-Native-safe: pure logic only — no React, no Next, no DB driver, no server SDK. Server/UI code belongs in packages/db, packages/api, or packages/ui."
-							}
-						]
-					}
-				}
-			}
-		}
 	}
 }

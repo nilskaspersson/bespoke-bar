@@ -1,0 +1,33 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"linter": {
+		"rules": {
+			"style": {
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": [
+									"react",
+									"react-dom",
+									"next",
+									"next/**",
+									"@clerk/**",
+									"@google-cloud/**",
+									"googleapis",
+									"@google/genai",
+									"@upstash/**",
+									"pg",
+									"@neondatabase/**",
+									"@lexical/**"
+								],
+								"message": "This package is a PURE, React-Native-safe leaf: no React, no Next, no DB driver, no server SDK. Server/UI code belongs in @bespoke/db, @bespoke/api, or @bespoke/ui."
+							}
+						]
+					}
+				}
+			}
+		}
+	}
+}

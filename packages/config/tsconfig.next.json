@@ -3,7 +3,6 @@
 	"extends": "./tsconfig.dom.json",
 	"compilerOptions": {
 		"allowJs": true,
-		"incremental": true,
 		"plugins": [{ "name": "next" }, { "name": "typescript-plugin-css-modules" }]
 	}
 }

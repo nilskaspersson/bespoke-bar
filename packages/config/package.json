@@ -9,6 +9,7 @@
 		"./tsconfig.next.json": "./tsconfig.next.json",
 		"./biome.base.json": "./biome.base.json",
 		"./biome.web.json": "./biome.web.json",
+		"./biome.pure-leaf.json": "./biome.pure-leaf.json",
 		"./next": {
 			"types": "./next.d.ts",
 			"default": "./next.mjs"

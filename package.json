@@ -3,7 +3,11 @@
 	"version": "0.1.0",
 	"private": true,
 	"packageManager": "pnpm@11.8.0",
+	"engines": {
+		"node": "24.x"
+	},
 	"scripts": {
+		"preinstall": "node scripts/only-pnpm.mjs",
 		"dev": "turbo run dev",
 		"build": "turbo run build",
 		"lint": "turbo run lint",

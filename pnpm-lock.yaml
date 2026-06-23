@@ -12,6 +12,12 @@ catalogs:
     '@clerk/nextjs':
       specifier: 7.4.2
       version: 7.4.2
+    '@trpc/react-query':
+      specifier: 11.17.0
+      version: 11.17.0
+    '@trpc/server':
+      specifier: 11.17.0
+      version: 11.17.0
     '@types/node':
       specifier: 25.9.1
       version: 25.9.1
@@ -21,6 +27,9 @@ catalogs:
     '@types/react-dom':
       specifier: 19.2.3
       version: 19.2.3
+    '@upstash/redis':
+      specifier: 1.38.0
+      version: 1.38.0
     '@vitejs/plugin-react':
       specifier: 6.0.2
       version: 6.0.2
@@ -33,12 +42,18 @@ catalogs:
     dotenv:
       specifier: 17.4.2
       version: 17.4.2
+    downshift:
+      specifier: 9.3.2
+      version: 9.3.2
     drizzle-orm:
       specifier: 0.45.2
       version: 0.45.2
     jsdom:
       specifier: 29.1.1
       version: 29.1.1
+    motion:
+      specifier: 12.38.0
+      version: 12.38.0
     next:
       specifier: 16.2.9
       version: 16.2.9
@@ -48,6 +63,9 @@ catalogs:
     react-dom:
       specifier: 19.2.7
       version: 19.2.7
+    sonner:
+      specifier: 2.0.7
+      version: 2.0.7
     stripe:
       specifier: 22.2.0
       version: 22.2.0
@@ -63,6 +81,9 @@ catalogs:
     zod:
       specifier: 4.4.3
       version: 4.4.3
+    zustand:
+      specifier: 5.0.13
+      version: 5.0.13
 
 overrides:
   '@clerk/nextjs>next': 16.2.9
@@ -121,10 +142,13 @@ importers:
         specifier: 5.100.10
         version: 5.100.10(react@19.2.7)
       '@trpc/react-query':
-        specifier: 11.17.0
+        specifier: 'catalog:'
         version: 11.17.0(@tanstack/react-query@5.100.10(react@19.2.7))(@trpc/client@11.17.0(@trpc/server@11.17.0(typescript@6.0.3))(typescript@6.0.3))(@trpc/server@11.17.0(typescript@6.0.3))(react@19.2.7)(typescript@6.0.3)
+      '@trpc/server':
+        specifier: 'catalog:'
+        version: 11.17.0(typescript@6.0.3)
       '@upstash/redis':
-        specifier: 1.38.0
+        specifier: 'catalog:'
         version: 1.38.0
       babel-plugin-react-compiler:
         specifier: 'catalog:'
@@ -133,7 +157,7 @@ importers:
         specifier: 'catalog:'
         version: 2.1.1
       downshift:
-        specifier: 9.3.2
+        specifier: 'catalog:'
         version: 9.3.2(react@19.2.7)
       drizzle-orm:
         specifier: 'catalog:'
@@ -142,7 +166,7 @@ importers:
         specifier: 0.45.0
         version: 0.45.0
       motion:
-        specifier: 12.38.0
+        specifier: 'catalog:'
         version: 12.38.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       next:
         specifier: 'catalog:'
@@ -157,7 +181,7 @@ importers:
         specifier: 'catalog:'
         version: 19.2.7(react@19.2.7)
       sonner:
-        specifier: 2.0.7
+        specifier: 'catalog:'
         version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       stripe:
         specifier: 'catalog:'
@@ -166,7 +190,7 @@ importers:
         specifier: 'catalog:'
         version: 4.4.3
       zustand:
-        specifier: 5.0.13
+        specifier: 'catalog:'
         version: 5.0.13(@types/react@19.2.15)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     devDependencies:
       '@bespoke/config':
@@ -270,13 +294,13 @@ importers:
         specifier: 2.6.0
         version: 2.6.0
       '@trpc/server':
-        specifier: 11.17.0
+        specifier: 'catalog:'
         version: 11.17.0(typescript@6.0.3)
       '@upstash/ratelimit':
         specifier: 2.0.8
         version: 2.0.8(@upstash/redis@1.38.0)
       '@upstash/redis':
-        specifier: 1.38.0
+        specifier: 'catalog:'
         version: 1.38.0
       '@vercel/edge-config':
         specifier: 1.4.3
@@ -439,10 +463,10 @@ importers:
         specifier: 'catalog:'
         version: 2.1.1
       downshift:
-        specifier: 9.3.2
+        specifier: 'catalog:'
         version: 9.3.2(react@19.2.7)
       motion:
-        specifier: 12.38.0
+        specifier: 'catalog:'
         version: 12.38.0(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       next:
         specifier: 'catalog:'
@@ -454,13 +478,13 @@ importers:
         specifier: 'catalog:'
         version: 19.2.7(react@19.2.7)
       sonner:
-        specifier: 2.0.7
+        specifier: 'catalog:'
         version: 2.0.7(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       zod:
         specifier: 'catalog:'
         version: 4.4.3
       zustand:
-        specifier: 5.0.13
+        specifier: 'catalog:'
         version: 5.0.13(@types/react@19.2.15)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     devDependencies:
       '@bespoke/config':
