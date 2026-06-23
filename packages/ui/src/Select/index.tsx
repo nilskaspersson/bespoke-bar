@@ -128,24 +128,17 @@ export function Select<T>({
 				footer={footer}
 			>
 				{items.map((item, index) => (
-					<Menu.Item
+					<Menu.Option
 						key={getKey(item)}
-						{...getItemProps({ item, index })}
-						isHighlighted={highlightedIndex === index}
-						isSelected={
-							selectedItem
-								? getItemValue(selectedItem) === getItemValue(item)
-								: false
-						}
-					>
-						{getItemLabel ? (
-							getItemLabel(item)
-						) : (
-							<Text size={3} heavy>
-								{itemToString(item)}
-							</Text>
-						)}
-					</Menu.Item>
+						item={item}
+						index={index}
+						getItemProps={getItemProps}
+						getItemValue={getItemValue}
+						itemToString={itemToString}
+						getItemLabel={getItemLabel}
+						selectedItem={selectedItem}
+						highlightedIndex={highlightedIndex}
+					/>
 				))}
 			</Menu>
 

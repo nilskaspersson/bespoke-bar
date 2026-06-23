@@ -80,16 +80,17 @@ export const metadata: Metadata = {
 	 * It's me!
 	 */
 	authors: {
-		name: "Nils Kaspersson",
+		name: "Nils Kaspersson Viert",
 		url: "https://github.com/nilskaspersson",
 	},
-	creator: "Nils Kaspersson",
-	publisher: "Nils Kaspersson",
+	creator: "Nils Kaspersson Viert",
+	publisher: "Nils Kaspersson Viert",
 	/**
 	 * Opt out of indexing of all pages by default. Pages down the line can opt in.
 	 */
 	robots: {
 		index: false,
+		follow: false,
 	},
 };
 

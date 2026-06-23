@@ -1,5 +1,6 @@
 "use client";
 
+import type { Keyed } from "@bespoke/schema/types";
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
 import { Icon } from "../Icon";
@@ -72,6 +73,49 @@ function Item({
 	);
 }
 
+type OptionProps<T> = {
+	item: Keyed<T>;
+	index: number;
+	getItemProps: (options: {
+		item: Keyed<T>;
+		index: number;
+	}) => ComponentProps<"li">;
+	getItemValue: (item: Keyed<T>) => string;
+	itemToString: (item: Keyed<T> | null) => string;
+	getItemLabel?: (item: Keyed<T>) => ReactNode;
+	selectedItem: Keyed<T> | null | undefined;
+	highlightedIndex: number;
+};
+
+function Option<T>({
+	item,
+	index,
+	getItemProps,
+	getItemValue,
+	itemToString,
+	getItemLabel,
+	selectedItem,
+	highlightedIndex,
+}: OptionProps<T>) {
+	return (
+		<Item
+			{...getItemProps({ item, index })}
+			isHighlighted={highlightedIndex === index}
+			isSelected={
+				selectedItem ? getItemValue(selectedItem) === getItemValue(item) : false
+			}
+		>
+			{getItemLabel ? (
+				getItemLabel(item)
+			) : (
+				<Text size={3} heavy>
+					{itemToString(item)}
+				</Text>
+			)}
+		</Item>
+	);
+}
+
 function Label({
 	children,
 	className,
@@ -102,4 +146,4 @@ function Label({
 	);
 }
 
-export const Menu = Object.assign(MenuRoot, { Item, Label });
+export const Menu = Object.assign(MenuRoot, { Item, Label, Option });
