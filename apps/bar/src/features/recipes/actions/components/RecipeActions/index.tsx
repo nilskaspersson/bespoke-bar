@@ -64,7 +64,7 @@ export function RecipeActions({
 				<LinkButton
 					{...baseActionProps}
 					onClick={close}
-					href={`/bar/recipes/${recipe.id}/edit`}
+					href={`/recipes/${recipe.id}/edit`}
 					prefetch={false}
 					color="accent"
 				>

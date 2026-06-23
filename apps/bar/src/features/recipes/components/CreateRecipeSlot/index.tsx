@@ -12,7 +12,7 @@ export function CreateRecipeSlot({
 }: Partial<ComponentProps<typeof Link>>) {
 	return (
 		<Link
-			href="/bar/recipes/create"
+			href="/recipes/create"
 			className={clsx(className, styles.slot)}
 			{...props}
 		>

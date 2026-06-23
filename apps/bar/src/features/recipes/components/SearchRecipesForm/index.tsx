@@ -215,7 +215,7 @@ function SearchRecipesForm({
 							</Button>
 
 							<LinkButton
-								href="/bar/recipes/create"
+								href="/recipes/create"
 								variant="outline"
 								color="accent"
 								size="small"

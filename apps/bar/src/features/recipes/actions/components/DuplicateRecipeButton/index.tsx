@@ -56,7 +56,7 @@ export function DuplicateRecipeButton({
 
 							<LinkButton
 								size="tiny"
-								href={`/bar/recipes/${newRecipe.id}`}
+								href={`/recipes/${newRecipe.id}`}
 								variant="ghost"
 								color="heavy"
 								prefetch

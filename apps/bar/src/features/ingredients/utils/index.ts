@@ -8,5 +8,5 @@ export function getIngredientUrl(ingredient: Partial<Ingredient>): string {
 		throw new Error("Ingredient ID is required");
 	}
 
-	return `/bar/ingredients/${ingredient.id}`;
+	return `/ingredients/${ingredient.id}`;
 }

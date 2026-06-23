@@ -77,7 +77,7 @@ export function CostInfo<T extends BaseRecipe>({
 								<tr key={getKey(line)}>
 									<Text as="td">
 										<Link
-											href={`/bar/ingredients/${line.ingredient.id}`}
+											href={`/ingredients/${line.ingredient.id}`}
 											prefetch={false}
 										>
 											{line.ingredient.name}

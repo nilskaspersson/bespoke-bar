@@ -20,27 +20,27 @@ type Item = {
 
 const ITEMS: readonly Item[] = [
 	{
-		href: "/bar/settings",
+		href: "/settings",
 		label: "Settings",
-		match: "/bar/settings",
+		match: "/settings",
 		icon: "gear",
 	},
 	{
-		href: "/bar/ingredients",
+		href: "/ingredients",
 		label: "Ingredients",
-		match: "/bar/ingredients",
+		match: "/ingredients",
 		icon: "duotone-wine-bottle",
 	},
 	{
-		href: "/bar/menus",
+		href: "/menus",
 		label: "Menus",
-		match: "/bar/menus",
+		match: "/menus",
 		icon: "duotone-memo-pad",
 	},
 	{
-		href: "/bar/recipes",
+		href: "/recipes",
 		label: "Recipes",
-		match: "/bar/recipes",
+		match: "/recipes",
 		icon: "duotone-martini-glass",
 	},
 ] as const;
@@ -88,7 +88,7 @@ export function AppNav({ onClose }: Props) {
 
 			<m.div className={styles.block} {...cascade(CASCADE_CREATE)}>
 				<LinkButton
-					href="/bar/recipes/create"
+					href="/recipes/create"
 					variant="solid"
 					color="accent"
 					fullWidth

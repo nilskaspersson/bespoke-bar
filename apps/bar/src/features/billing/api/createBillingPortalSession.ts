@@ -27,7 +27,7 @@ export async function createBillingPortalSession(): Promise<
 
 		const session = await getStripe().billingPortal.sessions.create({
 			customer,
-			return_url: `${origin}/bar/settings`,
+			return_url: `${origin}/settings`,
 		});
 
 		return { url: session.url };

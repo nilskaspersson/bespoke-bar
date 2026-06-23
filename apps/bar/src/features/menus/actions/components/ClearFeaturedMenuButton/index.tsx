@@ -48,7 +48,7 @@ export function ClearFeaturedMenuButton({
 
 						<LinkButton
 							size="tiny"
-							href="/bar/menus"
+							href="/menus"
 							variant="ghost"
 							color="heavy"
 							prefetch={false}

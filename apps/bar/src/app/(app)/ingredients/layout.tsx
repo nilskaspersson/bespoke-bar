@@ -1,0 +1,68 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Grid } from "@bespoke/ui/Grid";
+import { Icon } from "@bespoke/ui/Icon";
+import { Suspense } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
+import { CreateIngredientButton } from "@/features/ingredients/components/CreateIngredientButton";
+import {
+	IngredientSidebar,
+	IngredientSidebarSkeleton,
+} from "@/features/ingredients/components/IngredientSidebar";
+import { IngredientsShell } from "./IngredientsShell";
+import styles from "./layout.module.css";
+
+export default function IngredientsLayout({
+	children,
+}: {
+	children: React.ReactNode;
+}) {
+	return (
+		<>
+			<div className={styles.root}>
+				<IngredientsShell>
+					<aside className={styles.sidebar}>
+						<Suspense fallback={<IngredientSidebarSkeleton />}>
+							<SidebarWithData />
+						</Suspense>
+					</aside>
+
+					<Grid as="section" gap={6} className={styles.content}>
+						<nav className={styles.listNav}>
+							<LinkButton
+								href="/ingredients"
+								variant="solid"
+								color="accent"
+								size="small"
+								startAdornment={<Icon name="arrow-left" size={2} />}
+							>
+								All Ingredients
+							</LinkButton>
+						</nav>
+
+						{children}
+					</Grid>
+				</IngredientsShell>
+			</div>
+
+			<BottomRailItems>
+				<CreateIngredientButton
+					variant="clear"
+					color="accent"
+					rounded
+					endAdornment={<Icon name="plus" />}
+				>
+					Create
+				</CreateIngredientButton>
+			</BottomRailItems>
+		</>
+	);
+}
+
+async function SidebarWithData() {
+	const { orgId } = await authOrForbidden();
+	const ingredients = await getCachedIngredients(orgId);
+
+	return <IngredientSidebar ingredients={ingredients} />;
+}

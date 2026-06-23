@@ -52,7 +52,7 @@ export function SetFeaturedMenuButton({
 
 						<LinkButton
 							size="tiny"
-							href="/bar"
+							href="/"
 							variant="ghost"
 							color="heavy"
 							prefetch={false}

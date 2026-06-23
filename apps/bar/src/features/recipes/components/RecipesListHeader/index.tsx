@@ -53,7 +53,7 @@ export function RecipesListHeader({
 					size="large"
 					variant="clear"
 					color="light"
-					href="/bar/recipes/create"
+					href="/recipes/create"
 					className={styles.create}
 				>
 					<Icon size={4} name="plus" />

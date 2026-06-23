@@ -62,7 +62,7 @@ export function BulkDraftRecipesForm({
 	const router = useRouter();
 	const onSuccess = useCallback(() => {
 		editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-		router.push("/bar/recipes");
+		router.push("/recipes");
 	}, [router]);
 
 	const onError = useCallback(() => {
@@ -80,7 +80,7 @@ export function BulkDraftRecipesForm({
 		{
 			onSuccess,
 			onError,
-			createMoreHref: "/bar/recipes/create/text",
+			createMoreHref: "/recipes/create/text",
 		},
 	);
 

@@ -105,7 +105,7 @@ export function useCreateBulkDraftRecipes(
 					<ToastActions>
 						<LinkButton
 							size="tiny"
-							href={createMoreHref ?? "/bar/recipes"}
+							href={createMoreHref ?? "/recipes"}
 							variant="ghost"
 							color="heavy"
 							prefetch={false}

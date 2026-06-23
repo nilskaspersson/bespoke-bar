@@ -29,6 +29,8 @@ const serif = Newsreader({
 	display: "swap",
 });
 
+const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
+
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<html lang="en" data-scroll-behavior="smooth" suppressHydrationWarning>
@@ -51,7 +53,11 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 						</AuthProvider>
 
 						<Suspense>
-							<Footer className={styles.footer} barUrl="/bar" loungeUrl="">
+							<Footer
+								className={styles.footer}
+								barUrl=""
+								loungeUrl={LOUNGE_URL}
+							>
 								<ThemePicker />
 								<WakeLock size="small" />
 							</Footer>

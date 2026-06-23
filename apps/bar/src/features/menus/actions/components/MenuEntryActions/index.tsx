@@ -23,7 +23,7 @@ export function MenuEntryActions({ entry }: { entry: MenuEntryWithRecipe }) {
 					<li>
 						<LinkButton
 							{...actionProps}
-							href={`/bar/recipes/${entry.recipe.id}/edit`}
+							href={`/recipes/${entry.recipe.id}/edit`}
 						>
 							Edit recipe
 						</LinkButton>

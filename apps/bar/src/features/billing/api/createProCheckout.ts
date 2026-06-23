@@ -43,8 +43,8 @@ export async function createProCheckout(): Promise<
 			 */
 			subscription_data: { metadata: { orgId, createdBy: userId } },
 			metadata: { orgId, createdBy: userId },
-			success_url: `${origin}/bar/settings?checkout=success`,
-			cancel_url: `${origin}/bar/settings?checkout=cancelled`,
+			success_url: `${origin}/settings?checkout=success`,
+			cancel_url: `${origin}/settings?checkout=cancelled`,
 			...taxParams(),
 		});
 

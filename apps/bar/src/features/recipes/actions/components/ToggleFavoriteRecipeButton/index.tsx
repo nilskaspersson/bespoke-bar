@@ -69,7 +69,7 @@ export function ToggleFavoriteRecipeButton({
 						{newFavoriteState ? (
 							<LinkButton
 								size="tiny"
-								href="/bar/recipes/favorites"
+								href="/recipes/favorites"
 								variant="ghost"
 								color="heavy"
 								prefetch={false}

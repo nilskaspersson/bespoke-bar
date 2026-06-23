@@ -27,7 +27,9 @@
 				"CLERK_*",
 				"STRIPE_*",
 				"GCP_*",
-				"NEON_PROJECT_ID"
+				"NEON_PROJECT_ID",
+				"NEXT_PUBLIC_BAR_URL",
+				"NEXT_PUBLIC_LOUNGE_URL"
 			]
 		},
 		"lint": {

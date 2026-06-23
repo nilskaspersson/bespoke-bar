@@ -50,8 +50,8 @@ export async function createSlotPackCheckout(
 				createdBy: userId,
 				slotAmount: String(pack.slotAmount),
 			},
-			success_url: `${origin}/bar/settings?checkout=success`,
-			cancel_url: `${origin}/bar/settings?checkout=cancelled`,
+			success_url: `${origin}/settings?checkout=success`,
+			cancel_url: `${origin}/settings?checkout=cancelled`,
 			...taxParams(),
 		});
 

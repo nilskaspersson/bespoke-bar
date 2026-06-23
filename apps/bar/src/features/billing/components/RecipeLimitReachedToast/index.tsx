@@ -12,7 +12,7 @@ function RecipeLimitReachedDescription({ usage }: { usage: RecipeSlotUsage }) {
 				{usage.used} / {usage.limit} used.
 			</span>
 
-			<LinkButton href="/bar/settings#billing" size="tiny" variant="outline">
+			<LinkButton href="/settings#billing" size="tiny" variant="outline">
 				Get more slots
 			</LinkButton>
 		</Flex>

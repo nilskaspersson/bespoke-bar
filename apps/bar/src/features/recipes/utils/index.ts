@@ -9,7 +9,7 @@ import { isObject } from "@/utils";
 import { namedEntityToUrlSlug } from "@/utils/url";
 
 export function getRecipeUrl(recipe: Recipe) {
-	return `/bar/recipes/${recipe.id}/${namedEntityToUrlSlug(recipe)}`;
+	return `/recipes/${recipe.id}/${namedEntityToUrlSlug(recipe)}`;
 }
 
 export function isEmptyDraftRecipe(recipe: BaseRecipe) {

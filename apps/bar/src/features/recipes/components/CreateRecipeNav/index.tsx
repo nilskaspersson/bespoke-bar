@@ -31,7 +31,7 @@ function getCards(onBoarding?: boolean): CardSpec[] {
 			title: "Text Editor",
 			hook: "Paste from your notes",
 			description: "Text to Recipes and Ingredients.",
-			href: "/bar/recipes/create/text",
+			href: "/recipes/create/text",
 			caption: onBoarding ? "Good starting point" : undefined,
 			featured: onBoarding,
 		},
@@ -41,7 +41,7 @@ function getCards(onBoarding?: boolean): CardSpec[] {
 			title: "Photo",
 			hook: "Snap a napkin",
 			description: "Create Recipes from a photo.",
-			href: "/bar/recipes/create/photo",
+			href: "/recipes/create/photo",
 			meta: "3 free per day",
 		},
 		{
@@ -50,7 +50,7 @@ function getCards(onBoarding?: boolean): CardSpec[] {
 			title: "Structured",
 			hook: "Full control",
 			description: "Create a Recipe with a structured form.",
-			href: "/bar/recipes/create/structured",
+			href: "/recipes/create/structured",
 		},
 	];
 }

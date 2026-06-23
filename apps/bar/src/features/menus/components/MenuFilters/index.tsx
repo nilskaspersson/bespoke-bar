@@ -67,7 +67,7 @@ export function MenuFilters({
 					<Flex as="menu" gap={2} wrap justifyContent="center">
 						<li>
 							<LinkButton
-								href={`/bar/menus/${menu.id}/edit`}
+								href={`/menus/${menu.id}/edit`}
 								variant="outline"
 								color="light"
 								size="small"

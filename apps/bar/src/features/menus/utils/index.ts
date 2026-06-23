@@ -10,7 +10,7 @@ import { isObject } from "@/utils";
 import { namedEntityToUrlSlug } from "@/utils/url";
 
 export function getMenuUrl(menu: Menu) {
-	return `/bar/menus/${menu.id}/${namedEntityToUrlSlug(menu)}`;
+	return `/menus/${menu.id}/${namedEntityToUrlSlug(menu)}`;
 }
 
 export function isMenuEntry(o: unknown): o is MenuEntry {

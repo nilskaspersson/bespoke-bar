@@ -25,7 +25,7 @@ export function showOCRQuotaReachedToast(
 			<Flex direction="column" gap={2} alignItems="flex-start">
 				<span>{description}</span>
 
-				<LinkButton href="/bar/settings#billing" size="tiny" variant="outline">
+				<LinkButton href="/settings#billing" size="tiny" variant="outline">
 					Upgrade for more
 				</LinkButton>
 			</Flex>

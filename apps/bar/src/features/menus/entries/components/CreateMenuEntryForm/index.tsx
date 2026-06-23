@@ -109,7 +109,7 @@ export function CreateMenuEntryForm({ recipe, onSuccess, formRef }: Props) {
 
 							<LinkButton
 								size="tiny"
-								href={`/bar/menus/${result.id}`}
+								href={`/menus/${result.id}`}
 								variant="ghost"
 								color="heavy"
 								prefetch={false}

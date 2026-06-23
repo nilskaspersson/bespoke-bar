@@ -6,6 +6,8 @@ import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
 import { useIsMounted } from "@/hooks/useIsMounted";
 import { useTheme } from "@/hooks/useTheme";
 
+const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
+
 const localization: ComponentProps<typeof ClerkProvider>["localization"] = {
 	organizationProfile: {
 		profilePage: {
@@ -28,8 +30,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
 			() => ({
 				theme: isMounted && resolvedTheme === "dark" ? dark : undefined,
 				options: {
-					termsPageUrl: "/terms",
-					privacyPageUrl: "/privacy",
+					termsPageUrl: `${LOUNGE_URL}/terms`,
+					privacyPageUrl: `${LOUNGE_URL}/privacy`,
 				},
 			}),
 			[isMounted, resolvedTheme],
@@ -39,8 +41,8 @@ export function AuthProvider({ children }: PropsWithChildren) {
 		<ClerkProvider
 			appearance={appearance}
 			localization={localization}
-			signInFallbackRedirectUrl="/bar/recipes"
-			signUpFallbackRedirectUrl="/bar/recipes"
+			signInFallbackRedirectUrl="/recipes"
+			signUpFallbackRedirectUrl="/recipes"
 		>
 			{children}
 		</ClerkProvider>

@@ -63,7 +63,7 @@ export async function FeaturedMenu({ orgId, ...props }: FeaturedMenuProps) {
 					</Text>
 
 					<LinkButton
-						href="/bar/menus"
+						href="/menus"
 						variant="outline"
 						color="amber"
 						size="small"

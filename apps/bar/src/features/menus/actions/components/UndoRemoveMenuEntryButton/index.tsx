@@ -50,7 +50,7 @@ export function UndoRemoveMenuEntryButton({
 
 						<LinkButton
 							size="tiny"
-							href={`/bar/menus/${result.menuId}`}
+							href={`/menus/${result.menuId}`}
 							variant="ghost"
 							color="accent"
 							prefetch={false}
@@ -62,7 +62,7 @@ export function UndoRemoveMenuEntryButton({
 
 						<LinkButton
 							size="tiny"
-							href={`/bar/recipes/${result.recipeId}`}
+							href={`/recipes/${result.recipeId}`}
 							variant="ghost"
 							color="accent"
 							prefetch={false}

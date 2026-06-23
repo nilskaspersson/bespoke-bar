@@ -43,7 +43,7 @@ export async function MenuActions({
 			<li>
 				<LinkButton
 					{...actionProps}
-					href={`/bar/menus/${menu.id}/edit`}
+					href={`/menus/${menu.id}/edit`}
 					color="accent"
 				>
 					<Icon name="pen-to-square" size={1} />

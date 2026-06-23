@@ -16,5 +16,5 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter bar run icons:check
+      - run: pnpm --filter @bespoke/ui run icons:check
       - run: pnpm turbo run lint test check-types

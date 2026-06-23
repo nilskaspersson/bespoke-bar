@@ -1,14 +1,14 @@
+import { AnimatedBackground } from "@bespoke/ui/AnimatedBackground";
 import { CreateOrganization } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
 import styles from "./page.module.css";
 
 export default async function CreateOrgPage() {
 	const { orgId } = await auth.protect();
 
 	if (orgId) {
-		redirect("/bar/recipes");
+		redirect("/recipes");
 	}
 
 	return (
@@ -17,7 +17,7 @@ export default async function CreateOrgPage() {
 
 			<CreateOrganization
 				skipInvitationScreen
-				afterCreateOrganizationUrl="/bar/recipes"
+				afterCreateOrganizationUrl="/recipes"
 			/>
 		</section>
 	);
