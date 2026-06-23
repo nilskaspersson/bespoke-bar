@@ -13,7 +13,7 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 
 ## Commands
 
-- `pnpm lint --fix path/to/file` — Biome (lint + format). A PostToolUse hook applies this to each edited file automatically; run manually only for bulk passes.
+- `pnpm lint` — Biome check across the repo (Turbo; read-only, the package script is `biome check`). A PostToolUse hook auto-fixes edited files (`biome check --write`); for a manual fix use `pnpm --filter <pkg> exec biome check --write <file>`.
 - `pnpm test path/to/test.ts` — single test
 
 ## Key Rules

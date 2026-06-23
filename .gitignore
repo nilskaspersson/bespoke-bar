@@ -57,3 +57,6 @@ next-env.d.ts
 
 # local plans
 /plans
+
+# agent skills (auto-fetched content; commit skills-lock.json, not the fetched skills)
+/.agents/
