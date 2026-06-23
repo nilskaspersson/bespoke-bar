@@ -1,0 +1,24 @@
+{
+	"name": "@bespoke/config",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"exports": {
+		"./tsconfig.base.json": "./tsconfig.base.json",
+		"./tsconfig.dom.json": "./tsconfig.dom.json",
+		"./tsconfig.next.json": "./tsconfig.next.json",
+		"./biome.base.json": "./biome.base.json",
+		"./biome.web.json": "./biome.web.json",
+		"./next": {
+			"types": "./next.d.ts",
+			"default": "./next.mjs"
+		}
+	},
+	"scripts": {
+		"lint": "biome check"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.16",
+		"next": "catalog:"
+	}
+}

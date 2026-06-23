@@ -1,36 +1,10 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.0-beta.5/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"extends": [
+		"@bespoke/config/biome.base.json",
+		"@bespoke/config/biome.web.json"
+	],
 	"files": {
-		"ignoreUnknown": false,
 		"includes": ["src/**", "next.config.ts"]
-	},
-	"formatter": {
-		"enabled": true,
-		"useEditorconfig": true
-	},
-	"linter": {
-		"enabled": true,
-		"rules": {
-			"recommended": true,
-			"suspicious": {
-				"noDuplicateCustomProperties": "off"
-			},
-			"style": {
-				"useComponentExportOnlyModules": "off"
-			}
-		},
-		"domains": {
-			"react": "all"
-		}
-	},
-	"css": {
-		"parser": {
-			"cssModules": true
-		}
 	}
 }

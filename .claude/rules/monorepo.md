@@ -2,7 +2,7 @@
 
 > **Status: live (extraction in progress).** Step 0 (Turborepo container) and Step 1 (`packages/schema`, the pure leaf) have landed, so the `schema` rules below are enforced now (Biome purity guard + CI). Steps 2–6 (`domain`, `db`, `api`, `lounge`, `mobile`) are the documented target, not yet built — `plans/monorepo-extraction.md` tracks the sequence. Rationale: ADR-0009/0010/0011.
 
-Layout: `apps/{bar,lounge,mobile}` (deployables) + `packages/{schema,domain,db,api,ui}` (private `workspace:*`, imported as `@bespoke/*`, **never published**). `bar` = authed app (`bar.bespoke-bar.app`); `lounge` = public landing + guest menus (apex); `mobile` = one Expo codebase → iOS + Android.
+Layout: `apps/{bar,lounge,mobile}` (deployables) + `packages/{schema,domain,db,api,ui}` runtime packages + `packages/config` (shared build/lint tooling) — all private `workspace:*`, imported as `@bespoke/*`, **never published**. `bar` = authed app (`bar.bespoke-bar.app`); `lounge` = public landing + guest menus (apex); `mobile` = one Expo codebase → iOS + Android.
 
 ## The one load-bearing boundary: pure vs server
 
@@ -20,6 +20,7 @@ The split exists so the React Native bundle never pulls in server code. Honour t
 * **`db`** — thin & Next-free: the connection, `drizzle.config.ts`, migrations, constraint-error helpers. *Nothing else.*
 * **`api`** — all other server code, **files intact**: tRPC router + context, services, `use cache` wrappers, the cache-event model, auth, rate-limiting, LLM/Vision. Next-coupled. **Do not split service files** along a db/api line — both halves run only on the BE, so the seam buys nothing.
 * **`ui`** — web DOM only, shared by `bar` + `lounge` (never `mobile`): the `src/ui` primitives, the theme (it *owns* the `@layer` declaration; each app imports it once, before any module CSS), the icon system, generic hooks. Promote shared feature-display components (recipe cards, metrics, read-only menu lists) here **from `bar`** only when `lounge` actually consumes them — on second use, not speculatively.
+* **`config`** — shared build/lint tooling, **outside** the pure/server boundary (build-time only, never imported for runtime values). Each consumer `extends` it: `tsconfig.{base,dom,next}.json` (chained), `biome.{base,web}.json` (base = formatter+recommended; web = CSS/React rule-offs + `react` domain + cssModules, for `bar`/`lounge`/`ui`), and `next` (`createNextConfig`/`buildCsp`, authored as `.mjs`+`.d.ts` so Next's config loader can `require` it). Each package keeps its own path-relative `paths`/`include`/`exclude` and its own Biome **purity guard** (`noRestrictedImports`) — those do NOT move to the base.
 
 ## Deciding where code goes (shape → reasoning → server)
 

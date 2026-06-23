@@ -1,24 +1,6 @@
-import type { NextConfig } from "next";
+import { createNextConfig } from "@bespoke/config/next";
 
-const isDevelopment = process.env.NODE_ENV === "development";
-
-const cspHeader = `
-  default-src 'self';
-  script-src 'self' 'unsafe-inline' ${isDevelopment ? "'unsafe-eval'" : ""} https://tidy-mole-83.clerk.accounts.dev https://challenges.cloudflare.com;
-  connect-src 'self' https://tidy-mole-83.clerk.accounts.dev;
-  img-src 'self' blob: data: https://img.clerk.com;
-  font-src 'self';
-  worker-src 'self' blob:;
-  style-src 'self' 'unsafe-inline';
-  frame-src 'self' https://challenges.cloudflare.com;
-  object-src 'none';
-  base-uri 'self';
-  form-action 'self';
-  frame-ancestors 'none';
-  ${isDevelopment ? "" : "upgrade-insecure-requests;"}
-`;
-
-const nextConfig: NextConfig = {
+export default createNextConfig({
 	transpilePackages: [
 		"@bespoke/schema",
 		"@bespoke/domain",
@@ -26,49 +8,17 @@ const nextConfig: NextConfig = {
 		"@bespoke/api",
 		"@bespoke/ui",
 	],
-	async headers() {
-		const securityHeaders = [
-			{
-				key: "Content-Security-Policy",
-				value: cspHeader.replace(/\n/g, ""),
-			},
-		];
-
-		// The `.app` TLD is itself on the browser HSTS preload list, so HTTPS
-		// (incl. first visit) is already enforced for every *.app host — this
-		// header is defense-in-depth. HSTS is ignored over plain HTTP, so only
-		// emit it in prod where every response is TLS. No `preload` directive /
-		// hstspreload.org submission needed: the TLD already covers us.
-		if (!isDevelopment) {
-			securityHeaders.push({
-				key: "Strict-Transport-Security",
-				value: "max-age=63072000; includeSubDomains",
-			});
-		}
-
-		return [
-			{
-				source: "/(.*)",
-				headers: securityHeaders,
-			},
-		];
-	},
-	images: {
-		remotePatterns: [
-			{
-				protocol: "https",
-				hostname: "img.clerk.com",
-			},
+	csp: {
+		scriptSrc: [
+			"https://tidy-mole-83.clerk.accounts.dev",
+			"https://challenges.cloudflare.com",
 		],
+		connectSrc: ["https://tidy-mole-83.clerk.accounts.dev"],
+		imgSrc: ["https://img.clerk.com"],
+		frameSrc: ["https://challenges.cloudflare.com"],
 	},
-	devIndicators: { position: "bottom-right" },
-	poweredByHeader: false,
-	reactCompiler: !isDevelopment,
-	cacheComponents: true,
-	experimental: {
-		authInterrupts: true,
-		useLightningcss: true,
+	experimental: { authInterrupts: true },
+	images: {
+		remotePatterns: [{ protocol: "https", hostname: "img.clerk.com" }],
 	},
-};
-
-export default nextConfig;
+});

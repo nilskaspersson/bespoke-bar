@@ -136,6 +136,9 @@ importers:
         specifier: 5.0.13
         version: 5.0.13(@types/react@19.2.15)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
@@ -191,6 +194,9 @@ importers:
         specifier: 19.2.7
         version: 19.2.7(react@19.2.7)
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../../packages/config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
@@ -258,6 +264,9 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
@@ -277,6 +286,15 @@ importers:
         specifier: 4.1.7
         version: 4.1.7(@types/node@25.9.1)(jsdom@29.1.1)(vite@8.0.16(@types/node@25.9.1)(esbuild@0.28.1)(less@4.6.6)(sass@1.101.0)(stylus@0.62.0)(tsx@4.22.4))
 
+  packages/config:
+    devDependencies:
+      '@biomejs/biome':
+        specifier: 2.4.16
+        version: 2.4.16
+      next:
+        specifier: 'catalog:'
+        version: 16.2.9(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)(sass@1.101.0)
+
   packages/db:
     dependencies:
       '@bespoke/schema':
@@ -295,6 +313,9 @@ importers:
         specifier: 8.20.0
         version: 8.20.0
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
@@ -323,6 +344,9 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
@@ -351,6 +375,9 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
@@ -394,6 +421,9 @@ importers:
         specifier: 5.0.13
         version: 5.0.13(@types/react@19.2.15)(react@19.2.7)(use-sync-external-store@1.6.0(react@19.2.7))
     devDependencies:
+      '@bespoke/config':
+        specifier: workspace:*
+        version: link:../config
       '@biomejs/biome':
         specifier: 2.4.16
         version: 2.4.16
