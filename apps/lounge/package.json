@@ -13,19 +13,19 @@
 		"@bespoke/domain": "workspace:*",
 		"@bespoke/schema": "workspace:*",
 		"@bespoke/ui": "workspace:*",
-		"babel-plugin-react-compiler": "1.0.0",
-		"clsx": "2.1.1",
+		"babel-plugin-react-compiler": "catalog:",
+		"clsx": "catalog:",
 		"next": "catalog:",
-		"react": "19.2.7",
-		"react-dom": "19.2.7"
+		"react": "catalog:",
+		"react-dom": "catalog:"
 	},
 	"devDependencies": {
 		"@bespoke/config": "workspace:*",
-		"@biomejs/biome": "2.4.16",
-		"@types/node": "25.9.1",
-		"@types/react": "19.2.15",
-		"@types/react-dom": "19.2.3",
-		"typescript": "6.0.3",
-		"typescript-plugin-css-modules": "5.2.0"
+		"@biomejs/biome": "catalog:",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
+		"typescript": "catalog:",
+		"typescript-plugin-css-modules": "catalog:"
 	}
 }
