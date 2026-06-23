@@ -6,12 +6,11 @@ import {
 	index,
 	pgTable,
 	text,
-	timestamp,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
-import { nanoid } from "nanoid";
 import { z } from "zod";
 import type { Identity } from "../types";
+import { createdAtCol, nanoidPk } from "./columns";
 import { type Ingredient, IngredientsTable } from "./ingredients";
 import { RecipesTable } from "./recipes";
 import { unitEnum } from "./units";
@@ -19,9 +18,7 @@ import { unitEnum } from "./units";
 export const IngredientLinesTable = pgTable(
 	"ingredient_lines",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
+		id: nanoidPk(),
 		recipeId: text("recipe_id")
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
@@ -30,9 +27,7 @@ export const IngredientLinesTable = pgTable(
 		ingredientId: text("ingredient_id")
 			.notNull()
 			.references(() => IngredientsTable.id, { onDelete: "restrict" }),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		createdAt: createdAtCol(),
 		optional: boolean("optional").default(false),
 	},
 	(table) => [

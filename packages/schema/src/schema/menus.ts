@@ -9,32 +9,25 @@ import {
 	varchar,
 } from "drizzle-orm/pg-core";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { nanoid } from "nanoid";
 import z from "zod";
 import { sqlNormalizedString } from "../sqlNormalizedString";
+import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import { MenuEntriesTable } from "./menuEntries";
-import { OrganisationsTable } from "./organisations";
 
 export const MenusTable = pgTable(
 	"menus",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
+		id: nanoidPk(),
 		name: varchar("name", { length: 100 }).notNull(),
 		description: varchar("description", { length: 1000 }),
 		isPublic: boolean("is_public").default(false).notNull(),
 		isFeatured: boolean("is_featured").default(false).notNull(),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		createdAt: createdAtCol(),
 		createdBy: text("created_by").notNull(),
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),
 		featuredAt: timestamp("featured_at", { mode: "string" }),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
+		orgId: orgIdCascade(),
 	},
 	(table) => [
 		uniqueIndex("unique_menu_name_case_insensitive").on(

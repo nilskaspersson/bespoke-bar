@@ -1,12 +1,6 @@
 import { relations } from "drizzle-orm";
-import {
-	index,
-	pgTable,
-	primaryKey,
-	text,
-	timestamp,
-} from "drizzle-orm/pg-core";
-import { OrganisationsTable } from "./organisations";
+import { index, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { createdAtCol, orgIdCascade } from "./columns";
 import { RecipesTable } from "./recipes";
 import { TagsTable } from "./tags";
 
@@ -19,12 +13,8 @@ export const RecipeTagsTable = pgTable(
 		tagId: text("tag_id")
 			.notNull()
 			.references(() => TagsTable.id, { onDelete: "cascade" }),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		orgId: orgIdCascade(),
+		createdAt: createdAtCol(),
 	},
 	(table) => [
 		/**

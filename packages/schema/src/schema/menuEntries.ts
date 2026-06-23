@@ -13,25 +13,20 @@ import {
 	createSelectSchema,
 	createUpdateSchema,
 } from "drizzle-zod";
-import { nanoid } from "nanoid";
 import { z } from "zod";
+import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import type {
 	IngredientLine,
 	IngredientLineWithIngredient,
 } from "./ingredientLines";
 import { MenusTable } from "./menus";
-import { OrganisationsTable } from "./organisations";
 import { RecipesTable, type RecipeWithLines } from "./recipes";
 
 export const MenuEntriesTable = pgTable(
 	"menu_entries",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
+		id: nanoidPk(),
+		orgId: orgIdCascade(),
 		menuId: text("menu_id")
 			.notNull()
 			.references(() => MenusTable.id, { onDelete: "cascade" }),
@@ -40,9 +35,7 @@ export const MenuEntriesTable = pgTable(
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		sortOrder: integer("sort_order"),
 		price: numeric("price", { precision: 12, scale: 4, mode: "number" }),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		createdAt: createdAtCol(),
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 	},
 	(table) => [

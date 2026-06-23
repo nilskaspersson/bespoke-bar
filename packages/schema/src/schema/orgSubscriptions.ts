@@ -1,6 +1,6 @@
 import { boolean, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
 import { z } from "zod";
+import { createdAtCol, nanoidPk } from "./columns";
 import { OrganisationsTable } from "./organisations";
 
 /**
@@ -48,9 +48,7 @@ export function subscriptionAttention(
 }
 
 export const OrgSubscriptionsTable = pgTable("org_subscriptions", {
-	id: text("id")
-		.primaryKey()
-		.$defaultFn(() => nanoid(10)),
+	id: nanoidPk(),
 	orgId: text("org_id")
 		.notNull()
 		.unique()
@@ -64,7 +62,7 @@ export const OrgSubscriptionsTable = pgTable("org_subscriptions", {
 	}).notNull(),
 	cancelAtPeriodEnd: boolean("cancel_at_period_end").notNull().default(false),
 	createdBy: text("created_by"),
-	createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+	createdAt: createdAtCol(),
 	updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 });
 

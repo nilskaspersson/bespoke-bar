@@ -1,20 +1,13 @@
-import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
-import { nanoid } from "nanoid";
-import { OrganisationsTable } from "./organisations";
+import { index, pgTable, text } from "drizzle-orm/pg-core";
+import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 
 export const OCRQuotaUsesTable = pgTable(
 	"ocr_quota_uses",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
+		id: nanoidPk(),
+		orgId: orgIdCascade(),
 		userId: text("user_id").notNull(),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		createdAt: createdAtCol(),
 	},
 	(t) => [
 		index("ocr_quota_uses_org_id_created_at_idx").on(

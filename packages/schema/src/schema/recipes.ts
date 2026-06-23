@@ -12,9 +12,9 @@ import {
 	createSelectSchema,
 	createUpdateSchema,
 } from "drizzle-zod";
-import { nanoid } from "nanoid";
 import type { Identity, Keyed } from "../types";
 import { cocktailStylesEnum } from "./cocktailStyles";
+import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import { glasswareEnum } from "./glassware";
 import { iceEnum } from "./ice";
 import {
@@ -23,7 +23,6 @@ import {
 	IngredientLinesTable,
 	type IngredientLineWithIngredient,
 } from "./ingredientLines";
-import { OrganisationsTable } from "./organisations";
 import { preparationMethodEnum } from "./preparationMethods";
 import { RecipeFavoritesTable } from "./recipeFavorites";
 import { type RecipeTag, RecipeTagsTable } from "./recipeTags";
@@ -32,9 +31,7 @@ import type { Tag } from "./tags";
 export const RecipesTable = pgTable(
 	"recipes",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
+		id: nanoidPk(),
 		name: varchar("name", { length: 100 }),
 		description: varchar("description", { length: 5000 }),
 		instructions: varchar("instructions", { length: 5000 }),
@@ -45,15 +42,11 @@ export const RecipesTable = pgTable(
 		garnish: varchar("garnish", { length: 100 }),
 		style: cocktailStylesEnum("style"),
 		aiEnrichedFields: text("ai_enriched_fields").array(),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		createdAt: createdAtCol(),
 		createdBy: text("created_by").notNull(),
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
+		orgId: orgIdCascade(),
 	},
 	(table) => [
 		index("idx_recipes_org_created").on(

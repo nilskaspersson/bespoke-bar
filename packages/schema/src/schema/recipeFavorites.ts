@@ -1,12 +1,6 @@
 import { relations } from "drizzle-orm";
-import {
-	index,
-	pgTable,
-	primaryKey,
-	text,
-	timestamp,
-} from "drizzle-orm/pg-core";
-import { OrganisationsTable } from "./organisations";
+import { index, pgTable, primaryKey, text } from "drizzle-orm/pg-core";
+import { createdAtCol, orgIdCascade } from "./columns";
 import { RecipesTable } from "./recipes";
 
 export const RecipeFavoritesTable = pgTable(
@@ -16,10 +10,8 @@ export const RecipeFavoritesTable = pgTable(
 			.notNull()
 			.references(() => RecipesTable.id, { onDelete: "cascade" }),
 		userId: text("user_id").notNull(),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
-		addedAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
+		orgId: orgIdCascade(),
+		addedAt: createdAtCol(),
 	},
 	(table) => [
 		primaryKey({ columns: [table.orgId, table.userId, table.recipeId] }),

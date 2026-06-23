@@ -11,23 +11,16 @@ import {
 	createSelectSchema,
 	createUpdateSchema,
 } from "drizzle-zod";
-import { nanoid } from "nanoid";
-import { OrganisationsTable } from "./organisations";
+import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import { RecipeTagsTable } from "./recipeTags";
 
 export const TagsTable = pgTable(
 	"tags",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
+		id: nanoidPk(),
+		orgId: orgIdCascade(),
 		name: varchar("name", { length: 30 }).notNull(),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		createdAt: createdAtCol(),
 		createdBy: text("created_by").notNull(),
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 		updatedBy: text("updated_by"),

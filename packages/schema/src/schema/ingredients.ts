@@ -14,22 +14,19 @@ import {
 	createSelectSchema,
 	createUpdateSchema,
 } from "drizzle-zod";
-import { nanoid } from "nanoid";
 import { z } from "zod";
 import { nullifyEmptyField } from "../form";
 import { normalizeIngredientName } from "../normalizeIngredientName";
 import { percentageToRatioSchema } from "../percentageToRatio";
 import { systemCategories, systemCategoryEnum } from "./categories";
+import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import { IngredientLinesTable } from "./ingredientLines";
-import { OrganisationsTable } from "./organisations";
 import { measurementTypes, supportedMeasurements } from "./units";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
 	{
-		id: text("id")
-			.primaryKey()
-			.$defaultFn(() => nanoid(10)),
+		id: nanoidPk(),
 		name: varchar("name", { length: 100 }).notNull(),
 		/**
 		 * App-owned canonical form of `name` ({@link normalizeIngredientName}) — the
@@ -45,12 +42,8 @@ export const IngredientsTable = pgTable(
 		brand: varchar("brand", { length: 100 }),
 		unitCost: numeric("unitCost", { precision: 12, scale: 4, mode: "number" }),
 		measurementType: measurementTypes("measurementType"),
-		orgId: text("org_id")
-			.notNull()
-			.references(() => OrganisationsTable.id, { onDelete: "cascade" }),
-		createdAt: timestamp("created_at", { mode: "string" })
-			.defaultNow()
-			.notNull(),
+		orgId: orgIdCascade(),
+		createdAt: createdAtCol(),
 		updatedAt: timestamp("updated_at", { mode: "string" }),
 		createdBy: text("created_by").notNull(),
 		updatedBy: text("updated_by"),
