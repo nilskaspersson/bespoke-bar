@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -11,14 +11,17 @@
 !.yarn/versions
 
 # testing
-/coverage
+coverage/
+
+# turborepo
+.turbo/
 
 # next.js
-/.next/
-/out/
+.next/
+out/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store
@@ -37,7 +40,7 @@ yarn-error.log*
 .env
 .env.local
 .npmrc
-/secrets/
+secrets/
 
 # vercel
 .vercel
@@ -47,10 +50,13 @@ yarn-error.log*
 next-env.d.ts
 
 # generated
-/src/libs/icons/kits.types.ts
+**/src/icons/kits.types.ts
 
 # debug
 /debug
 
 # local plans
 /plans
+
+# agent skills (auto-fetched content; commit skills-lock.json, not the fetched skills)
+/.agents/

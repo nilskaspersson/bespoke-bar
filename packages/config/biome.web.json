@@ -1,0 +1,21 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"linter": {
+		"rules": {
+			"suspicious": {
+				"noDuplicateCustomProperties": "off"
+			},
+			"style": {
+				"useComponentExportOnlyModules": "off"
+			}
+		},
+		"domains": {
+			"react": "all"
+		}
+	},
+	"css": {
+		"parser": {
+			"cssModules": true
+		}
+	}
+}

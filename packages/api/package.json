@@ -1,0 +1,44 @@
+{
+	"name": "@bespoke/api",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"main": "./src/trpc/routers/_app.ts",
+	"types": "./src/trpc/routers/_app.ts",
+	"exports": {
+		".": "./src/trpc/routers/_app.ts",
+		"./trpc": "./src/trpc/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"lint": "biome check",
+		"test": "vitest run",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"@bespoke/db": "workspace:*",
+		"@bespoke/domain": "workspace:*",
+		"@bespoke/schema": "workspace:*",
+		"@clerk/nextjs": "catalog:",
+		"@google-cloud/vision": "5.3.6",
+		"@google/genai": "2.6.0",
+		"@trpc/server": "catalog:",
+		"@upstash/ratelimit": "2.0.8",
+		"@upstash/redis": "catalog:",
+		"@vercel/edge-config": "1.4.3",
+		"drizzle-orm": "catalog:",
+		"next": "catalog:",
+		"react": "catalog:",
+		"stripe": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@bespoke/config": "workspace:*",
+		"@biomejs/biome": "catalog:",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"dotenv": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	}
+}

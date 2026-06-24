@@ -1,0 +1,25 @@
+import { db } from "@bespoke/db";
+import { RecipesTable } from "@bespoke/schema/schema/recipes";
+import { desc, eq, sql } from "drizzle-orm";
+import { cacheLife, cacheTag } from "next/cache";
+import { cacheTags } from "../cache";
+
+const preparedReadBarRecipes = db.query.RecipesTable.findMany({
+	where: eq(RecipesTable.orgId, sql.placeholder("orgId")),
+	with: {
+		lines: true,
+		tags: true,
+	},
+	orderBy: [desc(RecipesTable.createdAt)],
+}).prepare("readBarRecipes");
+
+async function readBarRecipes(orgId: string) {
+	return await preparedReadBarRecipes.execute({ orgId });
+}
+
+export async function getCachedBarRecipes(orgId: string) {
+	"use cache";
+	cacheLife("max");
+	cacheTag(...cacheTags.barRecipes(orgId));
+	return await readBarRecipes(orgId);
+}

@@ -1,0 +1,86 @@
+"use client";
+
+import type { Recipe } from "@bespoke/schema/schema/recipes";
+import type { ButtonProps } from "@bespoke/ui/Button";
+import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
+import { Text } from "@bespoke/ui/Text";
+import type { ReactNode } from "react";
+import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
+import { RecipeName } from "@/features/recipes/components/RecipeName";
+import { getRecipeName } from "@/features/recipes/utils";
+import { createPromiseToast } from "@/utils/createPromiseToast";
+
+type Props = {
+	recipe: Recipe;
+	buttonProps?: ButtonProps;
+	redirectTo?: string;
+	onDelete?: () => void;
+	confirm?: boolean;
+	externalToastId?: string;
+	className?: string;
+	children?: ReactNode;
+};
+
+export function DeleteRecipeButton({
+	recipe,
+	buttonProps,
+	redirectTo,
+	onDelete,
+	confirm,
+	externalToastId,
+	className,
+	children,
+}: Props) {
+	const handleDelete = async () => {
+		const toastId = externalToastId ?? Date.now().toString();
+		const promise = deleteRecipe({ id: recipe.id, redirectTo });
+
+		await createPromiseToast(promise, {
+			toastId,
+			loading: "Deleting…",
+			success: () => ({
+				message: `Deleted "${getRecipeName(recipe)}"`,
+			}),
+			error: {
+				message: "Could not delete recipe",
+				description: "Try again later.",
+			},
+			onSuccess: () => onDelete?.(),
+		});
+	};
+
+	if (confirm) {
+		return (
+			<ConfirmAction
+				action={handleDelete}
+				className={className}
+				iconName="trash"
+				buttonProps={{ ...buttonProps, color: "red" }}
+				actionLabel="Delete Recipe"
+				notice={
+					<>
+						This action is <strong>permanent</strong>. It cannot be undone.
+					</>
+				}
+				description={
+					<Text as="p" heavy>
+						You are about to delete{" "}
+						<Text serif italic>
+							<RecipeName recipe={recipe} />
+						</Text>
+						. Do you want to continue?
+					</Text>
+				}
+			>
+				{children}
+			</ConfirmAction>
+		);
+	}
+
+	return (
+		<form action={handleDelete} className={className}>
+			<SubmitButton {...buttonProps}>{children}</SubmitButton>
+		</form>
+	);
+}

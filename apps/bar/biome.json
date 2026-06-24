@@ -1,0 +1,10 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.4.16/schema.json",
+	"extends": [
+		"@bespoke/config/biome.base.json",
+		"@bespoke/config/biome.web.json"
+	],
+	"files": {
+		"includes": ["src/**", "next.config.ts", "vitest.config.ts"]
+	}
+}

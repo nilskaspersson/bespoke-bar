@@ -1,0 +1,8 @@
+{
+	"extends": "@bespoke/config/tsconfig.dom.json",
+	"compilerOptions": {
+		"plugins": [{ "name": "typescript-plugin-css-modules" }]
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+	"exclude": ["node_modules"]
+}

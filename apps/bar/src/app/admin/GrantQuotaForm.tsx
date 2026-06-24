@@ -1,0 +1,97 @@
+"use client";
+
+import { pluralize } from "@bespoke/domain/utils/formatting";
+import type { Keyed } from "@bespoke/schema/types";
+import { Grid } from "@bespoke/ui/Grid";
+import { RadioGroup, type RadioGroupOption } from "@bespoke/ui/RadioGroup";
+import { SubmitButton } from "@bespoke/ui/SubmitButton";
+import { TextField } from "@bespoke/ui/TextField";
+import { useRef } from "react";
+import { createPromiseToast } from "@/utils/createPromiseToast";
+
+type GrantInput = {
+	orgId: string;
+	amount: number;
+	source: string;
+	note?: string;
+};
+
+type Props = {
+	orgId: string;
+	action: (input: GrantInput) => Promise<void>;
+	/** Singular noun for the granted resource, e.g. "slot" or "use". */
+	unit: string;
+	min: number;
+	max: number;
+	onSuccess?: () => void;
+};
+
+const SOURCE_OPTIONS: Keyed<RadioGroupOption>[] = [
+	{ id: "manual", label: "Manual grant", value: "manual" },
+	{ id: "refund", label: "Refund", value: "refund" },
+];
+
+export function GrantQuotaForm({
+	orgId,
+	action,
+	unit,
+	min,
+	max,
+	onSuccess,
+}: Props) {
+	const formRef = useRef<HTMLFormElement>(null);
+
+	async function submit(formData: FormData) {
+		const amount = Number(formData.get("amount") ?? Number.NaN);
+		const source = String(formData.get("source") ?? "manual");
+		const note = (formData.get("note") as string) || undefined;
+
+		const promise = action({ orgId, amount, source, note });
+
+		await createPromiseToast(promise, {
+			loading: "Granting…",
+			success: () => ({
+				message:
+					amount >= 0
+						? `Granted ${pluralize(amount, unit)}`
+						: `Removed ${pluralize(Math.abs(amount), unit)}`,
+			}),
+			error: {
+				message: "Could not grant",
+				description: "Try again later.",
+			},
+			onSuccess: () => {
+				formRef.current?.reset();
+				onSuccess?.();
+			},
+		});
+	}
+
+	return (
+		<form ref={formRef} action={submit}>
+			<Grid gap={5}>
+				<TextField
+					label="Amount"
+					name="amount"
+					type="number"
+					required
+					min={min}
+					max={max}
+				/>
+				<RadioGroup
+					legend="Source"
+					name="source"
+					options={SOURCE_OPTIONS}
+					defaultValue="manual"
+				/>
+				<TextField label="Note" name="note" maxLength={1000} />
+
+				<div>
+					<SubmitButton variant="solid" color="accent">
+						Grant
+					</SubmitButton>
+				</div>
+			</Grid>
+		</form>
+	);
+}

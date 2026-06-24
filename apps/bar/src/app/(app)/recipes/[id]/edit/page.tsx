@@ -1,0 +1,84 @@
+import { authOrForbidden } from "@bespoke/api/auth";
+import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { getCachedRecipe } from "@bespoke/api/recipes/readRecipe";
+import { stitchRecipe } from "@bespoke/domain/recipes/stitchRecipe";
+import { LinkButton } from "@bespoke/ui/Button";
+import { Container } from "@bespoke/ui/Container";
+import { Grid } from "@bespoke/ui/Grid";
+import { Heading } from "@bespoke/ui/Heading";
+import { Icon } from "@bespoke/ui/Icon";
+import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
+import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import { FormDraftPreview } from "@/features/recipes/components/FormDraftPreview";
+import { RecipeForm } from "@/features/recipes/components/RecipeForm";
+import { getRecipeUrl } from "@/features/recipes/utils";
+import styles from "./page.module.css";
+
+type Props = {
+	params: Promise<{ id?: string }>;
+};
+
+export default function EditRecipePage({ params }: Props) {
+	return (
+		<Container as="article" className={styles.container}>
+			<Grid gap={4}>
+				<Heading level="h1">Edit recipe</Heading>
+
+				<Suspense
+					fallback={
+						<SkeletonScreen>
+							<Skeleton width="100%" height="40lvh" />
+						</SkeletonScreen>
+					}
+				>
+					<RecipeEditWithAuth params={params} />
+				</Suspense>
+			</Grid>
+		</Container>
+	);
+}
+
+async function RecipeEditWithAuth({ params }: Props) {
+	const { id } = await params;
+	const { orgId } = await authOrForbidden();
+
+	if (!id) {
+		notFound();
+	}
+
+	const [rawRecipe, ingredients] = await Promise.all([
+		getCachedRecipe(orgId, id),
+		getCachedIngredients(orgId),
+	]);
+
+	if (!rawRecipe) {
+		notFound();
+	}
+
+	const recipe = stitchRecipe(rawRecipe, { ingredients });
+
+	return (
+		<>
+			<nav>
+				<LinkButton
+					href={getRecipeUrl(recipe)}
+					variant="text"
+					color="accent"
+					size="small"
+				>
+					<Icon name="angle-left" />
+					Back to recipe
+				</LinkButton>
+			</nav>
+
+			<RecipeForm recipe={recipe} ingredients={ingredients}>
+				<FormDraftPreview
+					ingredients={ingredients}
+					aiEnrichedFields={recipe.aiEnrichedFields}
+					className={styles.preview}
+				/>
+			</RecipeForm>
+		</>
+	);
+}

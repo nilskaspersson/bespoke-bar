@@ -1,0 +1,145 @@
+"use client";
+
+import {
+	MAX_TAGS_PER_RECIPE,
+	TAG_NAME_MAX_LENGTH,
+} from "@bespoke/domain/tags/constants";
+import type { Tag } from "@bespoke/schema/schema/tags";
+import type { Popover } from "@bespoke/ui/Popover";
+import { usePlatform } from "@bespoke/ui/stores/platform";
+import { handleKey, matchesShortcut } from "@bespoke/ui/utils/keyboard";
+import {
+	type ComponentProps,
+	type KeyboardEventHandler,
+	type ToggleEventHandler,
+	useDeferredValue,
+	useState,
+} from "react";
+
+type Args = {
+	popoverContentProps: ComponentProps<typeof Popover>;
+	onClosePopover: () => void;
+	assignedTagIds: string[];
+	onCreateTag?: (name: string) => Promise<Tag>;
+	onCommit: (nextAssignedIds: string[]) => void;
+};
+
+export function useRecipeTagsCombobox({
+	popoverContentProps,
+	onClosePopover,
+	assignedTagIds,
+	onCreateTag,
+	onCommit,
+}: Args) {
+	const platform = usePlatform((s) => s.platform);
+	const [draft, setDraft] = useState<string[] | null>(null);
+	const [search, setSearch] = useState("");
+	const deferredSearch = useDeferredValue(search).trim();
+
+	const draftedIds = draft ?? assignedTagIds;
+	const overLimit = draftedIds.length > MAX_TAGS_PER_RECIPE;
+	const isOverMax = deferredSearch.length > TAG_NAME_MAX_LENGTH;
+
+	const [isCreating, setIsCreating] = useState(false);
+
+	const toggleInDraft = (tagId: string, prev: string[] | null) => {
+		const current = prev ?? assignedTagIds;
+		return current.includes(tagId)
+			? current.filter((id) => id !== tagId)
+			: [...current, tagId];
+	};
+
+	const handleSuggestionClick = (tagId: string) => {
+		setDraft((prev) => toggleInDraft(tagId, prev));
+	};
+
+	const handleCreate = async () => {
+		if (isCreating || !deferredSearch || isOverMax || !onCreateTag) return;
+		setIsCreating(true);
+		try {
+			const tag = await onCreateTag(deferredSearch);
+			setDraft((prev) => [...(prev ?? assignedTagIds), tag.id]);
+			setSearch("");
+		} catch {
+			// onCreateTag toasts on its own
+		} finally {
+			setIsCreating(false);
+		}
+	};
+
+	const handleClearAll = () => {
+		setDraft([]);
+	};
+
+	const handleCancel = () => {
+		setDraft(null);
+		setSearch("");
+		onClosePopover();
+	};
+
+	const handleApply = () => {
+		if (overLimit) {
+			return;
+		}
+
+		if (draft !== null) {
+			onCommit(draft);
+		}
+
+		handleCancel();
+	};
+
+	/**
+	 * Light-dismiss / Esc / chip-toggle close paths route through here.
+	 * Treated as Cancel — changes only land via the explicit Apply button.
+	 */
+	const handleToggle: ToggleEventHandler<HTMLDivElement> = (e) => {
+		popoverContentProps.onToggle?.(e);
+
+		if (e.target !== e.currentTarget) {
+			return;
+		}
+
+		if (e.newState === "open") {
+			setDraft(assignedTagIds);
+		} else if (e.newState === "closed") {
+			setDraft(null);
+			setSearch("");
+		}
+	};
+
+	const handleApplyShortcut = handleKey<HTMLDivElement>([
+		[
+			"Enter",
+			handleApply,
+			(event) => matchesShortcut(event, "mod+enter", platform),
+		],
+	]);
+
+	/**
+	 * usePopover's contentProps.onKeyDown calls stopPropagation,
+	 * which kills the native bubble. Run our handler first so
+	 * Cmd+Enter still works regardless of which descendant has focus.
+	 */
+	const handlePopoverKeyDown: KeyboardEventHandler<HTMLDivElement> = (e) => {
+		handleApplyShortcut(e);
+		popoverContentProps.onKeyDown?.(e);
+	};
+
+	return {
+		search,
+		setSearch,
+		deferredSearch,
+		draftedIds,
+		overLimit,
+		isOverMax,
+		isCreating,
+		handleSuggestionClick,
+		handleCreate,
+		handleClearAll,
+		handleCancel,
+		handleApply,
+		handleToggle,
+		handlePopoverKeyDown,
+	};
+}

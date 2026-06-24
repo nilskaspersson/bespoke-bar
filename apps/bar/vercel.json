@@ -1,0 +1,4 @@
+{
+	"$schema": "https://openapi.vercel.sh/vercel.json",
+	"buildCommand": "pnpm --filter @bespoke/db run drizzle:migrate && turbo run build --filter=bar"
+}

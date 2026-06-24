@@ -1,0 +1,44 @@
+"use server";
+
+import { authOrForbidden } from "@bespoke/api/auth";
+import { upsertMenuWithEntries as upsertMenuWithEntriesService } from "@bespoke/api/menus/upsertMenuWithEntries.service";
+import {
+	type MenuWithEntriesFormData,
+	menuWithEntriesFormSchema,
+} from "@bespoke/schema/schema/composite";
+import type { Menu } from "@bespoke/schema/schema/menus";
+import { parseWithZod } from "@conform-to/zod/v4";
+import { redirect } from "next/navigation";
+import { getMenuUrl } from "@/features/menus/utils";
+
+/** @public */
+export async function upsertMenuWithEntries(
+	userInputMenu: MenuWithEntriesFormData,
+): Promise<Menu> {
+	const auth = await authOrForbidden();
+	return upsertMenuWithEntriesService(auth, userInputMenu);
+}
+
+export async function upsertMenuWithEntriesAction(formData: FormData) {
+	const submission = parseWithZod(formData, {
+		schema: menuWithEntriesFormSchema,
+	});
+
+	if (submission.status !== "success") {
+		return submission.reply();
+	}
+
+	let result: Menu;
+
+	try {
+		result = await upsertMenuWithEntries(submission.value);
+	} catch (_error) {
+		console.error(_error);
+
+		return submission.reply({
+			formErrors: ["Failed to save menu"],
+		});
+	}
+
+	redirect(getMenuUrl(result));
+}

@@ -1,0 +1,51 @@
+{
+	"$schema": "https://turborepo.dev/schema.json",
+	"ui": "tui",
+	"globalDependencies": [".editorconfig"],
+	"globalPassThroughEnv": ["VERCEL", "VERCEL_GIT_COMMIT_SHA"],
+	"tasks": {
+		"icons:build": {
+			"inputs": [
+				"src/icons/build.ts",
+				"src/icons/config.ts",
+				"src/icons/svgs/**"
+			],
+			"outputs": [
+				"src/icons/sprite.svg",
+				"src/icons/types.ts",
+				"src/icons/kits.types.ts"
+			]
+		},
+		"build": {
+			"dependsOn": ["icons:build", "^icons:build", "^build"],
+			"inputs": ["$TURBO_DEFAULT$", ".env*"],
+			"outputs": [".next/**", "!.next/cache/**", "!.next/dev/**"],
+			"env": [
+				"DATABASE_*",
+				"POSTGRES_*",
+				"PG*",
+				"EDGE_CONFIG",
+				"UPSTASH_*",
+				"CLERK_*",
+				"STRIPE_*",
+				"GCP_*",
+				"NEON_PROJECT_ID",
+				"VERCEL_ENV",
+				"VERCEL_BRANCH_URL"
+			]
+		},
+		"lint": {},
+		"check-types": {
+			"dependsOn": ["icons:build", "^icons:build", "^check-types"],
+			"outputs": ["tsconfig.tsbuildinfo"]
+		},
+		"test": {
+			"dependsOn": ["icons:build", "^icons:build"]
+		},
+		"dev": {
+			"dependsOn": ["icons:build", "^icons:build"],
+			"cache": false,
+			"persistent": true
+		}
+	}
+}

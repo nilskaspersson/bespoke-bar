@@ -1,0 +1,29 @@
+{
+	"name": "@bespoke/schema",
+	"version": "0.1.0",
+	"private": true,
+	"type": "module",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": "./src/index.ts",
+		"./*": "./src/*.ts"
+	},
+	"scripts": {
+		"lint": "biome check",
+		"test": "vitest run",
+		"check-types": "tsc --noEmit"
+	},
+	"dependencies": {
+		"drizzle-orm": "catalog:",
+		"drizzle-zod": "0.8.3",
+		"nanoid": "5.1.11",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@bespoke/config": "workspace:*",
+		"@biomejs/biome": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:"
+	}
+}

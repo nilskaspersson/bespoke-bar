@@ -3,7 +3,39 @@
     "defaultMode": "acceptEdits",
     "allow": [
       "Bash(npm run *)",
-      "Bash(rg *)"
+      "Bash(rg *)",
+      "Bash(echo *)",
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git log)",
+      "Bash(git log *)",
+      "Bash(git diff)",
+      "Bash(git diff *)",
+      "Bash(git show *)",
+      "Bash(git blame *)",
+      "Bash(npm ls *)",
+      "Bash(npm why *)",
+      "Bash(npm view *)",
+      "Bash(npm config *)",
+      "Bash(pnpm why *)",
+      "Bash(pnpm ls *)",
+      "Bash(pnpm view *)",
+      "Bash(pnpm config *)",
+      "Bash(npx tsc *)",
+      "Bash(npx vitest *)",
+      "Bash(npx biome *)",
+      "Bash(npx knip)",
+      "Bash(npx knip *)",
+      "Bash(turbo run *)",
+      "Bash(pnpm exec *)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm approve-builds *)",
+      "Bash(pnpm prune *)",
+      "Bash(git mv *)",
+      "Bash(git ls-files)",
+      "Bash(git ls-files *)",
+      "Bash(git check-ignore *)",
+      "Bash(gh api *)"
     ],
     "deny": [
       "Bash(git add *)",
@@ -23,6 +55,21 @@
       "Bash(git cherry-pick *)",
       "Bash(git revert *)",
       "Bash(git tag *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=$(jq -r '.tool_input.file_path // empty'); case \"$f\" in *.ts|*.tsx|*.js|*.jsx|*.mjs|*.cjs|*.json|*.jsonc|*.css) d=$(dirname \"$f\"); while [ \"$d\" != \"/\" ]; do [ -f \"$d/biome.json\" ] && break; d=$(dirname \"$d\"); done; [ -f \"$d/biome.json\" ] && ( cd \"$d\" && pnpm exec biome check --write \"$f\" ) 2>/dev/null || true;; esac",
+            "timeout": 30,
+            "statusMessage": "Linting edited file…"
+          }
+        ]
+      }
     ]
   }
 }
