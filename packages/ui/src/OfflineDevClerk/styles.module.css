@@ -1,0 +1,16 @@
+@layer ui {
+	.avatar {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+
+		background-color: var(--mauve-5);
+		border-radius: var(--radius--full);
+
+		color: var(--mauve-11);
+		font-weight: 600;
+		user-select: none;
+	}
+}

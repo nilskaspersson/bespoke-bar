@@ -26,6 +26,7 @@
 		"@biomejs/biome": "catalog:",
 		"@vitejs/plugin-react": "catalog:",
 		"next": "catalog:",
+		"typescript-plugin-css-modules": "catalog:",
 		"vitest": "catalog:"
 	}
 }

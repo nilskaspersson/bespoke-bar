@@ -16,6 +16,10 @@ function clerkFrontendApi(): string {
 
 const clerk = clerkFrontendApi();
 
+const withOfflineDevAuth =
+	Boolean(process.env.NEXT_PUBLIC_OFFLINE_DEV_AUTH) &&
+	process.env.VERCEL !== "1";
+
 export default createNextConfig({
 	transpilePackages: [
 		"@bespoke/schema",
@@ -34,4 +38,14 @@ export default createNextConfig({
 	images: {
 		remotePatterns: [{ protocol: "https", hostname: "img.clerk.com" }],
 	},
+	...(withOfflineDevAuth
+		? {
+				turbopack: {
+					resolveAlias: {
+						"@clerk/nextjs": "@bespoke/ui/OfflineDevClerk",
+						"@clerk/nextjs/server": "@bespoke/api/offlineDevClerk",
+					},
+				},
+			}
+		: {}),
 });
