@@ -112,3 +112,9 @@ A family of **Units**: `metric`, `imperial`, or `bartending`. The **bartending**
 **Measurement Type**:
 The dimension an **Ingredient** is measured and priced in — `volume`, `mass` (solids), or `pieces` (countable items: cherries, umbrellas). A property of the **Ingredient**, not the Line; an **Ingredient Line's** **Unit** must share its ingredient's Measurement Type (no cross-dimension measuring — you can't measure a per-kg ingredient by the tablespoon). Today only **volume** participates in cost and volume/ABV math; **mass** and **pieces** are selectable and roadmapped ("solids soon") but not yet wired — a knowingly-accepted gap.
 _Avoid_: bare "measurement"/"measure" — overloaded (the conversion library's _measure_ is volume/length; this enum is volume/mass/pieces). Don't conflate with **Unit** — Unit is the Line's amount marker, Measurement Type is the Ingredient's dimension.
+
+### Development
+
+**Offline Dev Auth**:
+A development-only escape hatch that runs the **Bar** app with no network, by aliasing Clerk to local stubs when `NEXT_PUBLIC_OFFLINE_DEV_AUTH` is set (see `docs/offline.md`). It fakes a fixed signed-in **User** and **Active Organisation** so the app can be developed offline (e.g. on a plane), and is hard-disabled in production. A dev convenience, not an authentication capability.
+_Avoid_: calling it "**Offline Auth**" — that name is reserved for a future, genuine offline-authentication capability (an offline-capable mobile app holding a real session without connectivity), which is a product feature, not a dev bypass. The disambiguator is **Dev**: _Offline **Dev** Auth_.

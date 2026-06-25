@@ -16,10 +16,27 @@ import { cacheEvents, cacheTags } from "../cache";
  * from the bootstrap path.
  */
 
+const offlineDevOrgId =
+	process.env.VERCEL !== "1" &&
+	process.env.NEXT_PUBLIC_OFFLINE_DEV_AUTH &&
+	process.env.NEXT_PUBLIC_OFFLINE_DEV_AUTH !== "1"
+		? process.env.NEXT_PUBLIC_OFFLINE_DEV_AUTH
+		: null;
+
 export async function getOrCreateLocalOrganisation(
 	clerkOrgId: string,
 	userId: string,
 ): Promise<Organisation> {
+	if (offlineDevOrgId) {
+		const org = await getCachedOrganisation(offlineDevOrgId);
+		if (!org) {
+			throw new Error(
+				`Offline org "${offlineDevOrgId}" (NEXT_PUBLIC_OFFLINE_DEV_AUTH) not found in organisations`,
+			);
+		}
+		return org;
+	}
+
 	const localOrgId = await getCachedLocalOrgId(clerkOrgId);
 
 	if (localOrgId) {
@@ -36,6 +53,10 @@ export async function getLocalOrgId(
 	clerkOrgId: string,
 	userId: string,
 ): Promise<string> {
+	if (offlineDevOrgId) {
+		return offlineDevOrgId;
+	}
+
 	const cached = await getCachedLocalOrgId(clerkOrgId);
 	if (cached) {
 		return cached;

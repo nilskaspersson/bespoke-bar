@@ -10,8 +10,6 @@
 		"check-types": "next typegen && tsc --noEmit"
 	},
 	"dependencies": {
-		"@bespoke/domain": "workspace:*",
-		"@bespoke/schema": "workspace:*",
 		"@bespoke/ui": "workspace:*",
 		"babel-plugin-react-compiler": "catalog:",
 		"clsx": "catalog:",
@@ -25,7 +23,6 @@
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
-		"typescript": "catalog:",
-		"typescript-plugin-css-modules": "catalog:"
+		"typescript": "catalog:"
 	}
 }
