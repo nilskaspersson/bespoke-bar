@@ -101,6 +101,24 @@ _Avoid_: treating an Ingredient as recipe-local (it's shared); using **Brand** a
 The _kind_ of substance an **Ingredient** is, from a curated set (gin, rum, citrus, syrup, vermouth, bitters…) — closed to end-users today, maintainer-curated (values change by migration, as with **Cocktail Style**); user-defined categories remain a possible, non-near-term future. Shortened to **category** where the ingredient context is clear (the `ingredient.category` field). Matched from the name heuristically and used to seed a default ABV. **Cocktail Style's structural twin**: `null` = **Unclassified** (unknown — an **Enrichment** target), the explicit value **other** = "deliberately none of these." Encodes _kind only_, never _function_: a garnish is categorized by what it _is_ (its kind, or **other**), with its garnish-ness expressed on the **Ingredient Line** / Recipe — not the Category. (Legacy `garnish` value being removed: `plans/remove-garnish-category.md`.)
 _Avoid_: bare "Category" as the standalone term — too generic; qualify as Ingredient Category. "Ingredient Type" — collides with **Measurement Type**. A category for a **Brand** (separate field) or for a role/function ("garnish" is a line/recipe concern, not a kind).
 
+### Menus
+
+**Menu**:
+A curated, ordered selection of an **Organisation's** **Recipes**, assembled for presentation — the **Bar's** working list today and (in future) a guest-facing page. Has a name, an optional description, and a sequence of **Menu Entries**. A Recipe may appear on many Menus or none; a Menu may be empty (a valid, in-progress state). A Menu _references_ its Recipes, never copies them — it reflects each Recipe's current state, with no snapshot.
+_Avoid_: treating a Menu as a copy/snapshot of its Recipes (the reference is live).
+
+**Menu Entry**:
+One **Recipe's** placement on a **Menu** — a reference to a Recipe plus an optional **price** and a sort position. The unit a Menu's pricing and profit are figured on. A Recipe appears at most once per Menu. The **Menu-level structural twin of an Ingredient Line**: a reference to a library entity, with an optional amount, inside a parent.
+_Avoid_: equating the Entry with the Recipe — the Entry is the Recipe's priced placement, not the Recipe itself.
+
+**Featured Menu**:
+The single **Menu** an **Organisation** highlights as its headline. At most one per Organisation — featuring a Menu un-features the previous one. Today it surfaces on the **Bar** home page; it is also the Menu destined for the **Lounge** front page once that surface exists. Independent of **Public**: featuring a Menu does not publish it.
+_Avoid_: assuming more than one Featured Menu per Organisation, or that Featured implies publicly visible.
+
+**Public** (planned, dormant):
+A future **Lounge** capability to publish a **Menu** as a guest-facing page on the open internet. Not built — no Menu is publicly visible today, and nothing yet distinguishes a "public" Menu from a private one. Distinct from **Featured**, which headlines a Menu within the **Bar** now.
+_Avoid_: treating Public as a live state, or conflating it with **Featured**.
+
 ### Units & Measurement
 
 **Unit**:

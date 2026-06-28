@@ -1,0 +1,83 @@
+@layer layout {
+	.root {
+		container-type: inline-size;
+		container-name: menus-shell;
+		min-height: 0;
+		padding-block: 0 calc(var(--space-7) + var(--gap) * 2);
+	}
+
+	.shell {
+		display: grid;
+		gap: var(--gap--huge);
+
+		@container menus-shell (width >= 800px) {
+			gap: var(--gap--large);
+			grid-template-columns: 21rem minmax(0, 1fr);
+			align-items: start;
+		}
+	}
+
+	.content {
+		@container menus-shell (width < 800px) {
+			grid-row: -1;
+		}
+	}
+
+	.sidebar {
+		align-self: start;
+		display: flex;
+		min-height: 0;
+		padding: var(--space-2);
+		--r: calc(var(--radius--huge) * 1.25);
+		border-radius: var(--r) var(--r) var(--radius--large) var(--radius--large);
+		color: var(--glass--text);
+		background-color: var(--glass--bg);
+		backdrop-filter: var(--glass--blur);
+		border: 1px solid var(--glass--border-color);
+		box-shadow: var(--shadow--high);
+
+		@supports not (backdrop-filter: blur(var(--size-1))) {
+			background-color: var(--mauve-1);
+		}
+
+		:root:has(dialog[open]) & {
+			backdrop-filter: none;
+		}
+
+		@container menus-shell (width < 800px) {
+			.detailOpen & {
+				display: none;
+			}
+		}
+
+		@container menus-shell (width >= 800px) {
+			position: sticky;
+			top: var(--app-inset);
+
+			/*
+			 * End a gap above the bottom rail instead of running off-screen. Subtracts
+			 * the box's top offset (header + the root's top padding) and the rail's
+			 * clearance (the rail's tallest control is a large button ≈ --space-7).
+			 */
+			max-height: calc(
+				100svh -
+				var(--app-header--height) -
+				var(--space-7) -
+				var(--gap) *
+				2
+			);
+		}
+	}
+
+	.listNav {
+		@container menus-shell (width >= 800px) {
+			display: none;
+		}
+
+		@container menus-shell (width < 800px) {
+			.shell:not(.detailOpen) & {
+				display: none;
+			}
+		}
+	}
+}

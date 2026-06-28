@@ -1,54 +1,30 @@
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
-import { LinkButton } from "@bespoke/ui/Button";
 import { Icon } from "@bespoke/ui/Icon";
-import { cacheLife } from "next/cache";
 import type { ActionProps } from "@/components/EntityActions";
 import { ShareAction } from "@/components/ShareAction";
 import { ClearFeaturedMenuButton } from "@/features/menus/actions/components/ClearFeaturedMenuButton";
-import { DeleteMenuButton } from "@/features/menus/actions/components/DeleteMenuButton";
-import { ExportMenuButton } from "@/features/menus/actions/components/ExportMenuButton";
 import { SetFeaturedMenuButton } from "@/features/menus/actions/components/SetFeaturedMenuButton";
-import { deleteMenu } from "@/features/menus/api/deleteMenu";
+import { EditMenuButton } from "@/features/menus/components/EditMenuButton";
 import { clearFeaturedMenu } from "@/features/menus/featured/api/clearFeaturedMenu";
 import { setFeaturedMenu } from "@/features/menus/featured/api/setFeaturedMenu";
 import { getMenuUrl } from "@/features/menus/utils";
 
-export async function MenuActions({
+export function MenuDetailActions({
 	menu,
 	hasFeaturedMenu,
-	deleteRedirectTo,
-	withLink,
 	actionProps,
 }: {
-	actionProps: ActionProps;
 	menu: MenuWithEntries;
 	hasFeaturedMenu?: boolean;
-	deleteRedirectTo?: string;
-	withLink?: boolean;
+	actionProps: ActionProps;
 }) {
-	"use cache";
-	cacheLife("max");
-
 	return (
 		<>
-			{withLink ? (
-				<li>
-					<LinkButton {...actionProps} href={getMenuUrl(menu)} color="accent">
-						<Icon name="arrow-right" size={1} />
-						View
-					</LinkButton>
-				</li>
-			) : null}
-
 			<li>
-				<LinkButton
-					{...actionProps}
-					href={`/menus/${menu.id}/edit`}
-					color="accent"
-				>
+				<EditMenuButton menu={menu} {...actionProps}>
 					<Icon name="pen-to-square" size={1} />
 					Edit
-				</LinkButton>
+				</EditMenuButton>
 			</li>
 
 			<li>
@@ -67,8 +43,8 @@ export async function MenuActions({
 						requireConfirmation
 						color="amber"
 					>
-						<Icon name="circle-xmark" />
-						Remove Featured
+						<Icon name="star-off" size={1} />
+						Unfeature
 					</ClearFeaturedMenuButton>
 				) : (
 					<SetFeaturedMenuButton
@@ -80,32 +56,10 @@ export async function MenuActions({
 						requireConfirmation={hasFeaturedMenu}
 						color="amber"
 					>
-						<Icon name="star" />
+						<Icon name="star" size={1} />
 						Set Featured
 					</SetFeaturedMenuButton>
 				)}
-			</li>
-
-			<li>
-				<DeleteMenuButton
-					{...actionProps}
-					color="red"
-					menu={menu}
-					action={deleteMenu.bind(null, {
-						id: menu.id,
-						redirectTo: deleteRedirectTo,
-					})}
-				>
-					<Icon name="trash" />
-					Delete
-				</DeleteMenuButton>
-			</li>
-
-			<li>
-				<ExportMenuButton {...actionProps} menu={menu}>
-					<Icon name="arrow-down-from-line" />
-					Export menu
-				</ExportMenuButton>
 			</li>
 		</>
 	);

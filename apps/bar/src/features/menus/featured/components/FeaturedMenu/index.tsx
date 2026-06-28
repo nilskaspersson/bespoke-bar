@@ -5,14 +5,15 @@ import {
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
 import { LinkButton } from "@bespoke/ui/Button";
+import { Flex } from "@bespoke/ui/Flex";
 import { Grid, type GridProps } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
+import { Icon } from "@bespoke/ui/Icon";
 import { Text } from "@bespoke/ui/Text";
 import { EmptyArea } from "@/components/EmptyArea";
-import { EntityActions } from "@/components/EntityActions";
-import { MenuActions } from "@/features/menus/actions/components/MenuActions";
-import { MenuFilters } from "@/features/menus/components/MenuFilters";
 import { MenuFrame } from "@/features/menus/components/MenuFrame";
+import { MenuEntryList } from "@/features/menus/entries/components/MenuEntryList";
+import { getMenuUrl } from "@/features/menus/utils";
 import styles from "./styles.module.css";
 
 type FeaturedMenuProps = Omit<GridProps, "children"> & {
@@ -38,19 +39,20 @@ export async function FeaturedMenu({ orgId, ...props }: FeaturedMenuProps) {
 			{featuredMenu ? (
 				<div>
 					<MenuFrame menu={featuredMenu} className={styles.menu}>
-						<MenuFilters menu={featuredMenu} />
+						<MenuEntryList entries={featuredMenu.entries} />
 					</MenuFrame>
 
-					<EntityActions className={styles.actions}>
-						{(actionProps) => (
-							<MenuActions
-								actionProps={actionProps}
-								menu={featuredMenu}
-								hasFeaturedMenu
-								withLink
-							/>
-						)}
-					</EntityActions>
+					<Flex className={styles.actions} justifyContent="center">
+						<LinkButton
+							href={getMenuUrl(featuredMenu)}
+							variant="solid"
+							color="accent"
+							size="small"
+						>
+							View menu
+							<Icon name="arrow-right" size={1} />
+						</LinkButton>
+					</Flex>
 				</div>
 			) : (
 				<EmptyArea color="amber">

@@ -1,0 +1,119 @@
+@layer feature {
+	.masthead {
+		--badge-length: var(--space-7);
+
+		position: relative;
+		display: grid;
+		padding: var(--gap--large) var(--gap--large) var(--gap);
+		grid-template-rows: 1fr auto;
+		align-content: space-between;
+
+		background-color: var(--mauve-2);
+		border-radius: var(--radius--large);
+		color: var(--glass--text);
+		border: 1px solid var(--glass--border-color);
+		box-shadow: var(--shadow--high);
+
+		max-width: 80ch;
+		width: 100%;
+		margin-inline: auto;
+
+		&.isFeatured {
+			border-color: var(--amber-6);
+		}
+	}
+
+	.badge {
+		position: absolute;
+		inset: calc(var(--badge-length) * -0.5) 0 auto;
+		display: flex;
+		margin-inline: auto;
+		width: var(--badge-length);
+		height: var(--badge-length);
+		padding: var(--space-1);
+		border-radius: 50%;
+		background-color: var(--mauve-2);
+	}
+
+	.icon {
+		flex: 1 1 auto;
+		display: flex;
+		place-items: center;
+		place-content: center;
+		border-radius: inherit;
+		background-color: var(--mauve-2);
+		border: 1px solid var(--mauve-5);
+		color: var(--mauve-8);
+
+		.isFeatured & {
+			color: var(--amber-9);
+			border-color: var(--amber-6);
+		}
+	}
+
+	.bevel {
+		display: grid;
+		align-content: space-between;
+		gap: var(--gap--large);
+		padding: var(--gap--huge) var(--gap--large) var(--gap--large);
+		border: 1px solid var(--mauve-5);
+	}
+
+	.head {
+		display: grid;
+		justify-items: center;
+		gap: var(--space-2);
+		text-align: center;
+		padding-bottom: var(--gap--large);
+		border-bottom: 1px dashed var(--mauve-6);
+	}
+
+	.overline {
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--amber-9);
+	}
+
+	.description {
+		max-width: 56ch;
+		color: var(--mauve-11);
+	}
+
+	.chips {
+		margin-block-start: var(--space-1);
+	}
+
+	.strip {
+		display: grid;
+		gap: var(--gap--tiny);
+		width: min(100%, 32rem);
+		margin-inline: auto;
+	}
+
+	.styleBar {
+		width: 100%;
+	}
+
+	.footer {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-2) var(--gap);
+		padding-top: var(--gap--small);
+	}
+
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		font-style: italic;
+	}
+
+	.stat {
+		&:has(+ .stat)::after {
+			content: "•";
+			margin-inline: var(--space-1);
+		}
+	}
+}

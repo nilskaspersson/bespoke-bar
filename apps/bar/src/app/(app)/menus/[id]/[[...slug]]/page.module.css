@@ -1,21 +1,11 @@
 @layer layout {
-	.container {
+	.detail {
+		padding-block-start: calc(var(--space-7) * 0.5);
+	}
+
+	.skeleton {
 		display: grid;
-		gap: var(--gap);
-		padding-block: var(--space-5) var(--gap--huge);
-		align-content: start;
-		container-type: inline-size;
-	}
-
-	.frame {
-		margin-top: var(--gap--large);
-
-		@container (width < 450px) {
-			margin-inline: calc(var(--app-inset) * -1);
-		}
-	}
-
-	.actions {
-		justify-content: center;
+		justify-items: center;
+		gap: var(--gap--large);
 	}
 }

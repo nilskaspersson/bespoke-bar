@@ -1,0 +1,110 @@
+@layer feature {
+	.sidebar {
+		flex: 1;
+		min-height: 0;
+		display: grid;
+		grid-template-rows: auto minmax(0, 1fr);
+	}
+
+	.header {
+		padding-bottom: var(--gap--tiny);
+		border-bottom: 1px solid var(--glass--border-color);
+	}
+
+	.status {
+		padding-inline: var(--space-1);
+	}
+
+	.scroll {
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		scrollbar-gutter: stable;
+		padding-block-start: var(--gap--tiny);
+	}
+
+	.skeletonItem {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-0);
+		padding: var(--space-2) var(--space-3);
+		height: 3.2125rem; /* it is what it is */
+	}
+
+	.link {
+		--bgc: transparent;
+		--c: var(--mauve-12);
+
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-0);
+		padding: var(--space-2) var(--space-3);
+		border-radius: var(--radius--large);
+		color: var(--c);
+		background-color: var(--bgc);
+		transition-property: background-color, color;
+		transition-duration: var(--transition-duration);
+
+		&:hover {
+			--bgc: var(--mauve-4);
+		}
+
+		&[aria-current="page"] {
+			--bgc: var(--mauve-12);
+			--c: var(--mauve-1);
+		}
+	}
+
+	.link.featured:not([aria-current="page"]) {
+		--bgc: var(--amber-3);
+		--c: var(--amber-12);
+
+		&:hover {
+			--bgc: var(--amber-4);
+		}
+	}
+
+	.nameRow {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		min-width: 0;
+	}
+
+	.star {
+		flex: none;
+		color: var(--amber-9);
+	}
+
+	.name {
+		min-width: 0;
+	}
+
+	.meta {
+		display: flex;
+		align-items: baseline;
+		justify-content: space-between;
+		gap: var(--space-2);
+		opacity: 0.75;
+	}
+
+	.time {
+		flex: none;
+		white-space: nowrap;
+	}
+
+	.empty {
+		padding: var(--gap--large);
+	}
+
+	@container menus-shell (width < 800px) {
+		.sidebar {
+			grid-template-rows: auto auto;
+		}
+
+		.scroll {
+			overflow: visible;
+			overscroll-behavior: auto;
+		}
+	}
+}

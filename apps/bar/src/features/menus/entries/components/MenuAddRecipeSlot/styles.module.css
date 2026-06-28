@@ -1,0 +1,18 @@
+@layer feature {
+	.slot {
+		contain: strict;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: var(--recipe-card-width);
+		max-width: 100%;
+		aspect-ratio: var(--recipe-card-ratio);
+		border: 1px dashed var(--mauve-6);
+		border-radius: var(--radius--large);
+		transition: border-color var(--transition-duration);
+
+		&:is(:hover, :focus-visible) {
+			border-color: var(--iris-8);
+		}
+	}
+}

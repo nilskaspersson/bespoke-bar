@@ -38,7 +38,7 @@ export function Chip<E extends ElementType = "span">({
 		>
 			{label ? <span className={styles.label}>{label}</span> : null}
 
-			<Flex gap={1}>
+			<Flex gap={1} alignItems="center">
 				{icon ? <span className={styles.icon}>{icon}</span> : null}
 				{children}
 			</Flex>

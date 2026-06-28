@@ -4,6 +4,7 @@ import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
 import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import { cacheLife } from "next/cache";
+import { redirect } from "next/navigation";
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 import { FeaturedMenu } from "@/features/menus/featured/components/FeaturedMenu";
@@ -11,6 +12,8 @@ import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
 import styles from "./page.module.css";
 
 export default function BarPage() {
+	redirect("/recipes");
+
 	return (
 		<BarPageShell>
 			<Suspense
