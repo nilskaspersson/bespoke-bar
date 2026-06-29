@@ -20,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			<div className={styles.container}>
 				<BottomRailHost
 					left={
-						<Flex gap={2} alignItems="center">
+						<Flex gap={2} alignItems="center" className={styles.nav}>
 							<AppNavToggle />
 
 							<SearchRecipesButton

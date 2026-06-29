@@ -5,6 +5,8 @@ import { Flex, type FlexProps } from "@bespoke/ui/Flex";
 import { StatsLine } from "@bespoke/ui/StatsLine";
 import { Text } from "@bespoke/ui/Text";
 import clsx from "clsx";
+import Link from "next/link";
+import { RECIPE_SLOTS_BOX_ID } from "@/features/billing/constants";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -45,7 +47,14 @@ export function RecipesOverviewStats({
 					})}
 				>
 					{" / "}
-					{recipeSlotLimit}
+
+					<Link
+						href={`/settings#${RECIPE_SLOTS_BOX_ID}`}
+						prefetch={false}
+						className={styles.topUp}
+					>
+						{recipeSlotLimit}
+					</Link>
 				</Text>
 			</StatsLine>
 		</Flex>

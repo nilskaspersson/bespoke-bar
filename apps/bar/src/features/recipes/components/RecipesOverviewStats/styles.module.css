@@ -16,4 +16,12 @@
 	.overCap {
 		color: var(--red-11);
 	}
+
+	.topUp {
+		text-decoration: none;
+
+		&:not(:hover, :focus-visible) {
+			color: inherit;
+		}
+	}
 }

@@ -16,7 +16,7 @@ function formatRange(
 	}
 
 	const [min, max] = range;
-	return min === max ? format(min) : `${min}–${format(max)}`;
+	return min === max ? format(min) : `${format(min)}–${format(max)}`;
 }
 
 export function MenuRangeChips({

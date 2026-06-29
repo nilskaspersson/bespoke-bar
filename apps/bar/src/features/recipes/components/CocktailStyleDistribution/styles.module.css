@@ -1,5 +1,5 @@
 @layer feature {
-	.bar {
+	.list {
 		--bar-height: 10px;
 
 		display: flex;
@@ -9,24 +9,28 @@
 		contain: layout;
 	}
 
-	.segment {
+	.item {
 		flex: var(--jsxCount) 0 var(--space-1);
+	}
+
+	.segment {
 		background-color: var(--jsxEntryColor);
 		height: var(--bar-height);
+		width: 100%;
 		transition-property: height, opacity;
 		transition-duration: var(--transition-duration);
 
-		&:first-child {
+		.item:first-child & {
 			border-top-left-radius: var(--radius--full);
 			border-bottom-left-radius: var(--radius--full);
 		}
 
-		&:last-child {
+		.item:last-child & {
 			border-top-right-radius: var(--radius--full);
 			border-bottom-right-radius: var(--radius--full);
 		}
 
-		&:is(:hover, :focus-visible) {
+		&:is(:hover, :focus-visible):not(.isStatic) {
 			opacity: 0.85;
 			will-change: height;
 		}
@@ -36,7 +40,11 @@
 		}
 
 		&.isInactive {
-			opacity: 0.333;
+			opacity: 0.3;
+		}
+
+		&.isStatic {
+			cursor: default;
 		}
 	}
 }
