@@ -1,7 +1,7 @@
 "use client";
 
 import { pluralize } from "@bespoke/domain/utils/formatting";
-import type { Menu } from "@bespoke/schema/schema/menus";
+import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { Button } from "@bespoke/ui/Button";
 import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
@@ -16,22 +16,15 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { useDeferredValue, useMemo, useRef, useState } from "react";
+import { getMenuUrl } from "@/features/menus/utils";
 import { createSearchIndex, searchByIndex } from "@/utils/search";
 import styles from "./styles.module.css";
 
-export type MenuSidebarItem = Pick<
-	Menu,
-	"id" | "name" | "description" | "isFeatured" | "createdAt" | "updatedAt"
-> & {
-	recipeCount: number;
-	href: string;
-};
-
 const SKELETON_ROWS = Array.from({ length: 16 }, (_, index) => `row-${index}`);
 
-const getMenuKey = (menu: MenuSidebarItem) => menu.id;
+const getMenuKey = (menu: MenuWithEntries) => menu.id;
 
-const getMenuSearchFields = (menu: MenuSidebarItem) => [
+const getMenuSearchFields = (menu: MenuWithEntries) => [
 	menu.name,
 	menu.description ?? "",
 ];
@@ -41,7 +34,7 @@ const getMenuSearchFields = (menu: MenuSidebarItem) => [
  * Array.prototype.sort is stable, so the incoming order is preserved within
  * each group.
  */
-function pinFeatured(menus: MenuSidebarItem[]): MenuSidebarItem[] {
+function pinFeatured(menus: MenuWithEntries[]): MenuWithEntries[] {
 	return [...menus].sort((a, b) => Number(b.isFeatured) - Number(a.isFeatured));
 }
 
@@ -76,7 +69,7 @@ function scrollActiveIntoView(element: HTMLAnchorElement | null) {
 	});
 }
 
-export function MenuSidebar({ menus }: { menus: MenuSidebarItem[] }) {
+export function MenuSidebar({ menus }: { menus: MenuWithEntries[] }) {
 	const router = useRouter();
 	const activeId = useSelectedLayoutSegment();
 	const filterRef = useRef<HTMLInputElement>(null);
@@ -108,7 +101,7 @@ export function MenuSidebar({ menus }: { menus: MenuSidebarItem[] }) {
 					onKeyDown={handleKey([
 						[
 							"Enter",
-							() => router.push(visible[0].href),
+							() => router.push(getMenuUrl(visible[0])),
 							() => visible.length > 0,
 						],
 					])}
@@ -178,7 +171,7 @@ export function MenuSidebar({ menus }: { menus: MenuSidebarItem[] }) {
 							<li key={menu.id}>
 								<Link
 									ref={menu.id === activeId ? scrollActiveIntoView : undefined}
-									href={menu.href}
+									href={getMenuUrl(menu)}
 									prefetch={false}
 									aria-current={menu.id === activeId ? "page" : undefined}
 									className={clsx(styles.link, {
@@ -204,7 +197,8 @@ export function MenuSidebar({ menus }: { menus: MenuSidebarItem[] }) {
 
 									<div className={styles.meta}>
 										<Text as="span" size={1} truncate compact>
-											{menu.recipeCount} {pluralize(menu.recipeCount, "recipe")}
+											{menu.entries.length}{" "}
+											{pluralize(menu.entries.length, "recipe")}
 										</Text>
 
 										<Time

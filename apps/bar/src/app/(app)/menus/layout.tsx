@@ -8,10 +8,8 @@ import { BottomRailItems } from "@/components/BottomRail";
 import { CreateMenuButton } from "@/features/menus/components/CreateMenuButton";
 import {
 	MenuSidebar,
-	type MenuSidebarItem,
 	MenuSidebarSkeleton,
 } from "@/features/menus/components/MenuSidebar";
-import { getMenuUrl } from "@/features/menus/utils";
 import styles from "./layout.module.css";
 import { MenusShell } from "./MenusShell";
 
@@ -66,16 +64,5 @@ async function SidebarWithData() {
 	const { orgId } = await authOrForbidden();
 	const menus = await getCachedMenus(orgId);
 
-	const items: MenuSidebarItem[] = menus.map((menu) => ({
-		id: menu.id,
-		name: menu.name,
-		description: menu.description,
-		isFeatured: menu.isFeatured,
-		createdAt: menu.createdAt,
-		updatedAt: menu.updatedAt,
-		recipeCount: menu.entries.length,
-		href: getMenuUrl(menu),
-	}));
-
-	return <MenuSidebar menus={items} />;
+	return <MenuSidebar menus={menus} />;
 }

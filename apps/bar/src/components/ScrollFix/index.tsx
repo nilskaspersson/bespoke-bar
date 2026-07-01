@@ -28,6 +28,7 @@ export function ScrollFix() {
 		return () => controller.abort();
 	}, []);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: We explicitly want to subscribe to pathname changes
 	useEffect(() => {
 		if (!isStatePopped.current) {
 			if (!window.location.hash) {

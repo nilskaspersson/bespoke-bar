@@ -6,7 +6,6 @@ import {
 	buildIngredientMap,
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
-import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import { Skeleton } from "@bespoke/ui/Skeleton";
 import type { Metadata } from "next";
@@ -43,16 +42,7 @@ export default function MenuPage({ params }: Props) {
 
 function MenuPageSkeleton() {
 	return (
-		<div className={styles.skeleton}>
-			<Skeleton variant="text" width="min(60%, 18rem)" height="2.5rem" />
-			<Skeleton variant="text" width="min(80%, 28rem)" height="1rem" />
-
-			<Flex gap={2} wrap justifyContent="center">
-				<Skeleton variant="text" width="5rem" height="1.75rem" />
-				<Skeleton variant="text" width="5rem" height="1.75rem" />
-				<Skeleton variant="text" width="6rem" height="1.75rem" />
-			</Flex>
-		</div>
+		<Skeleton variant="block" height="408px" className={styles.skeleton} />
 	);
 }
 
