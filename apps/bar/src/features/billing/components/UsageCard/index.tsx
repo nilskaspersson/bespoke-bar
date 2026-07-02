@@ -3,11 +3,11 @@ import { Grid } from "@bespoke/ui/Grid";
 import { Icon } from "@bespoke/ui/Icon";
 import type { IconName } from "@bespoke/ui/icons/types";
 import { Meter } from "@bespoke/ui/Meter";
-import { Panel } from "@bespoke/ui/Panel";
+import { Panel, type PanelProps } from "@bespoke/ui/Panel";
 import { Skeleton } from "@bespoke/ui/Skeleton";
 import { StatsLine } from "@bespoke/ui/StatsLine";
 import { Text } from "@bespoke/ui/Text";
-import { type ReactNode, useId } from "react";
+import { useId } from "react";
 import styles from "./styles.module.css";
 
 type Props = {
@@ -16,7 +16,6 @@ type Props = {
 	overline: string;
 	used: number | undefined;
 	limit: number | undefined;
-	footer?: ReactNode;
 };
 
 export function UsageCard({
@@ -25,8 +24,8 @@ export function UsageCard({
 	overline,
 	used,
 	limit,
-	footer,
-}: Props) {
+	...props
+}: Props & PanelProps) {
 	const id = useId();
 	const labelId = `${id}-label`;
 	const valueId = `${id}-value`;
@@ -36,6 +35,7 @@ export function UsageCard({
 
 	return (
 		<Panel
+			{...props}
 			header={
 				<Flex alignItems="center" gap={2}>
 					<Icon name={icon} size={3} className={styles.icon} />
@@ -45,7 +45,6 @@ export function UsageCard({
 					</Text>
 				</Flex>
 			}
-			footer={footer}
 		>
 			<Grid gap={2}>
 				<StatsLine id={valueId} overline={overline}>

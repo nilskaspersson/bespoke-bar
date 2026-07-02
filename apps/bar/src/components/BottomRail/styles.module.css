@@ -1,5 +1,10 @@
 @layer composition {
 	.rail {
+		display: grid;
+		gap: var(--gap--small);
+		align-items: end;
+		justify-content: space-between;
+
 		position: sticky;
 		bottom: max(env(safe-area-inset-bottom), var(--gap));
 		z-index: var(--z-navigation);
@@ -11,7 +16,7 @@
 		@media (max-width: 35rem) {
 			grid-template-columns: auto auto;
 
-			.node:last-child {
+			.right {
 				display: none;
 			}
 		}
@@ -19,5 +24,13 @@
 
 	.node > * {
 		pointer-events: auto;
+	}
+
+	.middle {
+		display: flex;
+		gap: var(--gap--tiny);
+		align-items: center;
+		flex-wrap: wrap-reverse;
+		justify-content: flex-end;
 	}
 }

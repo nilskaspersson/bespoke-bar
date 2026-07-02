@@ -1,7 +1,17 @@
 @layer feature {
 	.recipes {
-		display: grid;
-		gap: var(--space-8);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: start;
+		justify-content: flex-start;
+		gap: var(--gap--huge) var(--gap--large);
+		list-style: none;
+		margin: 0;
+		padding: 0;
 		color: var(--mauve-11);
+	}
+
+	.item {
+		grid-template-columns: minmax(0, 1fr);
 	}
 }

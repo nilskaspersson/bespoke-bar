@@ -6,17 +6,19 @@ import {
 	buildIngredientMap,
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
-import { Container } from "@bespoke/ui/Container";
 import { Grid } from "@bespoke/ui/Grid";
+import { Skeleton } from "@bespoke/ui/Skeleton";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { BottomRailItems } from "@/components/BottomRail";
 import { EntityActions } from "@/components/EntityActions";
-import { PageHeader } from "@/components/PageHeader";
-import { MenuActions } from "@/features/menus/actions/components/MenuActions";
+import { MenuDetailActions } from "@/features/menus/actions/components/MenuDetailActions";
+import { MenuRailActions } from "@/features/menus/actions/components/MenuRailActions";
 import { EmptyMenuEntry } from "@/features/menus/components/EmptyMenuEntry";
-import { MenuFilters } from "@/features/menus/components/MenuFilters";
-import { MenuFrame } from "@/features/menus/components/MenuFrame";
+import { MenuMasthead } from "@/features/menus/components/MenuMasthead";
+import { MenuAddRecipeSlot } from "@/features/menus/entries/components/MenuAddRecipeSlot";
+import { MenuEntryList } from "@/features/menus/entries/components/MenuEntryList";
 import { isValidPageUrl } from "@/utils/url";
 import styles from "./page.module.css";
 
@@ -30,13 +32,17 @@ type Props = {
  */
 export default function MenuPage({ params }: Props) {
 	return (
-		<Container as="article" className={styles.container}>
-			<PageHeader heading="Recipe Menu" />
-
-			<Suspense fallback={<div>Loading...</div>}>
+		<article className={styles.detail}>
+			<Suspense fallback={<MenuPageSkeleton />}>
 				<MenuContent params={params} />
 			</Suspense>
-		</Container>
+		</article>
+	);
+}
+
+function MenuPageSkeleton() {
+	return (
+		<Skeleton variant="block" height="408px" className={styles.skeleton} />
 	);
 }
 
@@ -63,23 +69,37 @@ async function MenuContent({ params }: Props) {
 
 	return (
 		<>
-			<MenuFrame level="h2" menu={menu} className={styles.frame}>
-				<Grid gap={8}>
-					<MenuFilters menu={menu} editable withActions />
-					<EmptyMenuEntry menu={menu} />
-				</Grid>
-			</MenuFrame>
+			<Grid gap={9}>
+				<MenuMasthead
+					menu={menu}
+					actions={
+						<EntityActions actionProps={{ size: "small" }}>
+							{(actionProps) => (
+								<MenuDetailActions
+									menu={menu}
+									hasFeaturedMenu={featuredMenuId !== null}
+									actionProps={actionProps}
+								/>
+							)}
+						</EntityActions>
+					}
+				/>
 
-			<EntityActions className={styles.actions}>
-				{(actionProps) => (
-					<MenuActions
-						actionProps={actionProps}
-						menu={menu}
-						hasFeaturedMenu={featuredMenuId !== null}
-						deleteRedirectTo={"/menus"}
+				{menu.entries.length > 0 ? (
+					<MenuEntryList
+						entries={menu.entries}
+						editable
+						withActions
+						trailingSlot={<MenuAddRecipeSlot menu={menu} />}
 					/>
+				) : (
+					<EmptyMenuEntry menu={menu} />
 				)}
-			</EntityActions>
+			</Grid>
+
+			<BottomRailItems>
+				<MenuRailActions menu={menu} />
+			</BottomRailItems>
 		</>
 	);
 }

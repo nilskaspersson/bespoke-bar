@@ -3,11 +3,12 @@ import { createElement, type ElementType, type ReactNode } from "react";
 import type { PolymorphicProps } from "../utils/types";
 import styles from "./styles.module.css";
 
-type Props<E extends ElementType> = {
-	as?: E;
-	header?: ReactNode;
-	footer?: ReactNode;
-};
+export type PanelProps<E extends ElementType = "section"> =
+	PolymorphicProps<E> & {
+		as?: E;
+		header?: ReactNode;
+		footer?: ReactNode;
+	};
 
 export function Panel<E extends ElementType = "section">({
 	as = "section",
@@ -16,7 +17,7 @@ export function Panel<E extends ElementType = "section">({
 	children,
 	className,
 	...props
-}: PolymorphicProps<E> & Props<E>) {
+}: PanelProps<E>) {
 	return createElement(
 		as,
 		{ ...props, className: clsx(className, styles.panel) },

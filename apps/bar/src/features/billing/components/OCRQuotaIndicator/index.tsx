@@ -29,7 +29,9 @@ export function OCRQuotaIndicator({ locked }: { locked?: boolean }) {
 			}
 		>
 			This month: <AnimatedNumber value={data.used} /> /{" "}
-			<Text numeric>{data.limit}</Text>
+			<Text numeric weight={600}>
+				{data.limit}
+			</Text>
 		</Chip>
 	);
 }

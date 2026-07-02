@@ -60,6 +60,7 @@ export type IconName =
 	| "sort-up"
 	| "sparkles"
 	| "star"
+	| "star-off"
 	| "sun-bright"
 	| "table-list"
 	| "tag"

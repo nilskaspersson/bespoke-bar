@@ -8,6 +8,7 @@ import { BottomRailHost } from "@/components/BottomRail";
 import { OrgProvider } from "@/components/OrgProvider";
 import { Providers } from "@/components/Providers";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";
+import { MenuEditorDrawer } from "@/features/menus/components/MenuEditorDrawer";
 import { CreateMenuEntryDrawer } from "@/features/menus/entries/components/CreateMenuEntryDrawer";
 import { RecipeCardModal } from "@/features/recipes/components/RecipeCardModal/loader";
 import { SearchRecipesButton } from "@/features/recipes/components/SearchRecipesForm";
@@ -19,7 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 			<div className={styles.container}>
 				<BottomRailHost
 					left={
-						<Flex gap={2} alignItems="center">
+						<Flex gap={2} alignItems="center" className={styles.nav}>
 							<AppNavToggle />
 
 							<SearchRecipesButton
@@ -46,6 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 							{children}
 
 							<IngredientEditorDrawer />
+							<MenuEditorDrawer />
 							<CreateMenuEntryDrawer />
 							<RecipeCardModal />
 						</OrgProvider>

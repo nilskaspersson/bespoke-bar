@@ -7,6 +7,7 @@ import { clsx } from "clsx";
 import { type ComponentProps, use } from "react";
 import { SlotTopUp } from "@/features/billing/components/SlotTopUp";
 import { UsageCard } from "@/features/billing/components/UsageCard";
+import { RECIPE_SLOTS_BOX_ID } from "@/features/billing/constants";
 import { trpc } from "@/trpc/client";
 import styles from "./styles.module.css";
 
@@ -43,6 +44,7 @@ export function BillingUsage({
 			/>
 
 			<UsageCard
+				id={RECIPE_SLOTS_BOX_ID}
 				icon="duotone-martini-glass"
 				label="Recipe slots"
 				overline="Used slots"

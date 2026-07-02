@@ -7,4 +7,11 @@
 		padding-inline: var(--app-inset);
 		padding-block: var(--app-header--height) var(--gap);
 	}
+
+	/**
+	 * Optically aligns the center point of this block with dynamic middle
+	 */
+	.nav {
+		margin-bottom: calc(-1 * var(--space-2) / 2);
+	}
 }

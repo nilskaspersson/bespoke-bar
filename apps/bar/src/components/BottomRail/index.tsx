@@ -1,7 +1,6 @@
 "use client";
 
-import { Flex } from "@bespoke/ui/Flex";
-import { Grid } from "@bespoke/ui/Grid";
+import { clsx } from "clsx";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { createPortal } from "react-dom";
 import { useIsMounted } from "@/hooks/useIsMounted";
@@ -19,25 +18,11 @@ export function BottomRailHost({ children, left }: HostProps) {
 
 	return (
 		<SlotContext.Provider value={slot}>
-			<Grid
-				gap={2}
-				alignItems="end"
-				justifyContent="space-between"
-				className={styles.rail}
-			>
+			<div className={styles.rail}>
 				<div className={styles.node}>{left}</div>
-
-				<Flex
-					className={styles.node}
-					gap={2}
-					wrap
-					alignItems="center"
-					justifyContent="center"
-					ref={setSlot}
-				/>
-
-				<div className={styles.node} />
-			</Grid>
+				<div className={clsx(styles.node, styles.middle)} ref={setSlot} />
+				<div className={clsx(styles.node, styles.right)} />
+			</div>
 
 			{children}
 		</SlotContext.Provider>

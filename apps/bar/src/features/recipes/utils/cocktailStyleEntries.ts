@@ -13,7 +13,7 @@ export type CocktailStyleEntry = {
 };
 
 export function getCocktailStyleEntries(
-	recipes: RecipeWithRelations[],
+	recipes: Pick<RecipeWithRelations, "style">[],
 ): CocktailStyleEntry[] {
 	const byStyle = new Map<CocktailStyleFilter, CocktailStyleEntry>();
 

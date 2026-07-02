@@ -146,13 +146,7 @@ function RecipeCardImpl<T extends BaseRecipe>({
 					withBestUnit={withBestUnit}
 					animateNumbers={animateNumbers}
 				/>
-			) : (
-				<Grid gap={4}>
-					<Text as="p" size={2} italic light compact>
-						No lines yet
-					</Text>
-				</Grid>
-			)}
+			) : null}
 
 			{recipe.garnish ? (
 				<Text as="p" size={3} serif>

@@ -4,7 +4,7 @@
 		"@bespoke/config/biome.base.json",
 		"@bespoke/config/biome.pure-leaf.json"
 	],
-	"root": true,
+	"root": false,
 	"files": {
 		"includes": ["src/**", "vitest.config.ts"]
 	}
