@@ -76,3 +76,15 @@ own product) and evolve it under three rules:
   by an old build is read by the new build after update, so persisted shapes follow the
   wire's rules and need a cache-buster when they can't. (Relevant only if offline storage
   lands; not yet decided.)
+
+## Amendment — offline persistence decided (2026-07-05)
+
+Offline storage (**Offline Reads**, CONTEXT.md) is landing, and the last consequence
+resolves the *strict* way: the persisted query cache is keyed to the app binary version
+(the persister's cache-buster), so **a new build never reads an old build's cache** and the
+append-only discipline for persisted shapes is moot. Within one binary's lifetime the two
+remaining directions are safe by construction: the server only evolves additively (a binary
+cannot know fields newer than itself), and a per-procedure successor changes the query key,
+which strands the old entry harmlessly. Accepted edge: the first launch after an app update
+starts with an empty cache, so that launch is briefly library-less if it happens offline —
+judged phantom, since updates arrive over the network moments earlier.
