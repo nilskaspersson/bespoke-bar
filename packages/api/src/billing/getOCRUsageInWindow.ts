@@ -16,10 +16,13 @@ export const ocrQuotaUsageSchema = z.object({
 export type OCRQuotaUsage = z.infer<typeof ocrQuotaUsageSchema>;
 
 /**
- * `now() AT TIME ZONE 'UTC'` pins the boundary to UTC regardless of the DB
- * session timezone, matching the `timestamp without time zone` column and the
- * app-side `startOfCurrentUTCMonthMs` sentinel. The contract is self-enforcing,
- * not inherited from a Neon/Vercel session default.
+ * The double `AT TIME ZONE 'UTC'` pins the month boundary to UTC regardless
+ * of the DB session timezone: the inner one turns `now()` into UTC wall time
+ * for `date_trunc`, the outer one re-stamps the truncated value as
+ * `timestamptz` so the comparison against the `timestamptz` column never
+ * falls back to a session-timezone coercion. Matches the app-side
+ * `startOfCurrentUTCMonthMs` sentinel; self-enforcing, not inherited from a
+ * Neon/Vercel session default.
  */
 export async function getOCRUsageInWindow(
 	executor: DatabaseExecutor,
@@ -36,7 +39,7 @@ export async function getOCRUsageInWindow(
 				eq(OCRQuotaUsesTable.orgId, orgId),
 				gte(
 					OCRQuotaUsesTable.createdAt,
-					sql`date_trunc('month', now() AT TIME ZONE 'UTC')`,
+					sql`date_trunc('month', now() AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'`,
 				),
 			),
 		);

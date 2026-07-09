@@ -59,11 +59,14 @@ export const OrgSubscriptionsTable = pgTable("org_subscriptions", {
 	priceId: text("price_id").notNull(),
 	currentPeriodEnd: timestamp("current_period_end", {
 		mode: "string",
+		withTimezone: true,
 	}).notNull(),
 	cancelAtPeriodEnd: boolean("cancel_at_period_end").notNull().default(false),
 	createdBy: text("created_by"),
 	createdAt: createdAtCol(),
-	updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
+	updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true })
+		.defaultNow()
+		.notNull(),
 });
 
 export type OrgSubscription = typeof OrgSubscriptionsTable.$inferSelect;

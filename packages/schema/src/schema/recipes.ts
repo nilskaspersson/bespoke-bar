@@ -44,7 +44,7 @@ export const RecipesTable = pgTable(
 		aiEnrichedFields: text("ai_enriched_fields").array(),
 		createdAt: createdAtCol(),
 		createdBy: text("created_by").notNull(),
-		updatedAt: timestamp("updated_at", { mode: "string" }),
+		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true }),
 		updatedBy: text("updated_by"),
 		orgId: orgIdCascade(),
 	},
