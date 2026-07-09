@@ -34,8 +34,8 @@ catalog:
   jsdom: 29.1.1
   motion: 12.38.0
   next: 16.2.9
-  react: 19.2.7
-  react-dom: 19.2.7
+  react: 19.2.3
+  react-dom: 19.2.3
   sonner: 2.0.7
   stripe: 22.2.0
   typescript: 6.0.3
@@ -45,6 +45,8 @@ catalog:
   zustand: 5.0.13
 
 overrides:
+  react: 'catalog:'
+  react-dom: 'catalog:'
   '@clerk/nextjs>next': 'catalog:'
   'nuqs>next': 'catalog:'
   '@clerk/react': '6.7.2'
