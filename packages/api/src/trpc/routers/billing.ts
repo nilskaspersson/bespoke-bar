@@ -58,16 +58,7 @@ export const billingRouter = router({
 			status: sub.status,
 			isPro: isProActive(sub.status),
 			attention: subscriptionAttention(sub.status),
-			/**
-			 * The mirror column is `timestamp` without tz; the driver returns it
-			 * as a naive `"YYYY-MM-DD HH:MM:SS"` string (no `Z`). It was written
-			 * from a UTC instant, so re-stamp it as UTC before it reaches the
-			 * client — otherwise `new Date(...)` there reads it as browser-local
-			 * and the renewal date can slip a day.
-			 */
-			currentPeriodEnd: new Date(
-				`${sub.currentPeriodEnd.replace(" ", "T")}Z`,
-			).toISOString(),
+			currentPeriodEnd: sub.currentPeriodEnd,
 			cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
 		};
 	}),

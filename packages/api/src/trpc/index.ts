@@ -6,6 +6,7 @@ import { z } from "zod";
 import { isAdminUser } from "../admin";
 import type { Auth } from "../auth";
 import { getLocalOrgId } from "../organisation/getOrCreateLocalOrganisation";
+import { serializeWireTimestamps } from "./serializeTimestamp";
 
 type TRPCErrorCode = ConstructorParameters<typeof TRPCError>[0]["code"];
 
@@ -20,6 +21,7 @@ const APP_ERROR_TO_TRPC_CODE: Record<AppErrorPayload["code"], TRPCErrorCode> = {
 	OCR_QUOTA_REACHED: "TOO_MANY_REQUESTS",
 	NO_RECIPE_FOUND: "UNPROCESSABLE_CONTENT",
 	NO_RECIPES_PROVIDED: "BAD_REQUEST",
+	UPDATE_REQUIRED: "PRECONDITION_FAILED",
 };
 
 export async function createContext() {
@@ -61,11 +63,24 @@ export type TRPCErrorData = {
 	appError?: AppErrorPayload | null;
 };
 
+/**
+ * Every procedure's output passes through wire-timestamp canonicalization
+ * here, by construction — not per procedure. New procedure variants must
+ * derive from `baseProcedure` (or the exports below), never from
+ * `t.procedure` directly, or their timestamps ship raw.
+ */
+const baseProcedure = t.procedure.use(async ({ next }) => {
+	const result = await next();
+	return result.ok
+		? { ...result, data: serializeWireTimestamps(result.data) }
+		: result;
+});
+
 export const router = t.router;
 /** @public */
-export const publicProcedure = t.procedure;
+export const publicProcedure = baseProcedure;
 
-export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
 	if (!ctx.userId || !ctx.orgId || !ctx.clerkOrgId) {
 		throw new TRPCError({ code: "UNAUTHORIZED" });
 	}
@@ -96,7 +111,7 @@ export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
 	}
 });
 
-export const adminProcedure = t.procedure.use(async ({ ctx, next }) => {
+export const adminProcedure = baseProcedure.use(async ({ ctx, next }) => {
 	if (!ctx.userId || !(await isAdminUser(ctx.userId))) {
 		throw new TRPCError({ code: "FORBIDDEN" });
 	}

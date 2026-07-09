@@ -32,6 +32,10 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 	z.object({
 		code: z.literal("NO_RECIPES_PROVIDED"),
 	}),
+	z.object({
+		code: z.literal("UPDATE_REQUIRED"),
+		minVersion: z.string(),
+	}),
 ]);
 
 export type AppErrorPayload = z.infer<typeof appErrorSchema>;
@@ -104,6 +108,13 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 			return {
 				message: "Nothing to create",
 				description: "Add at least one Recipe.",
+			};
+		}
+		case "UPDATE_REQUIRED": {
+			return {
+				message: "Update required",
+				description:
+					"This version of the app is no longer supported. Update Bespoke Bar from the App Store to continue.",
 			};
 		}
 	}

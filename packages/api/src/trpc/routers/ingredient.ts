@@ -17,8 +17,8 @@ export const ingredientRouter = router({
 
 	byId: protectedProcedure
 		.input(z.object({ id: z.string() }))
-		.query(({ ctx, input }) => {
-			return getCachedIngredient(ctx.orgId, input.id);
+		.query(async ({ ctx, input }) => {
+			return (await getCachedIngredient(ctx.orgId, input.id)) ?? null;
 		}),
 
 	create: protectedProcedure

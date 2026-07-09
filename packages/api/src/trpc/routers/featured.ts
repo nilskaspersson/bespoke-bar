@@ -15,7 +15,7 @@ export const featuredRouter = router({
 			getCachedFeaturedMenu(ctx.orgId),
 			getCachedIngredients(ctx.orgId),
 		]);
-		if (!rawMenu) return rawMenu;
+		if (!rawMenu) return null;
 		return stitchMenuEntries(rawMenu, buildIngredientMap(ingredients));
 	}),
 
