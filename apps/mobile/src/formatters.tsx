@@ -2,11 +2,12 @@ import {
 	createCurrencyFormatter,
 	createDateTimeFormatter,
 	createPercentageFormatter,
+	createQuantityFormatter,
 	createVolumeFormatter,
 } from "@bespoke/domain/utils/formatting";
 import { useQuery } from "@tanstack/react-query";
 import { createContext, type ReactNode, use, useMemo } from "react";
-import { useTRPC } from "./trpc/client";
+import { useTRPC } from "@/trpc/client";
 
 const DEFAULT_LOCALE = "en-GB";
 const DEFAULT_CURRENCY = "EUR";
@@ -16,6 +17,7 @@ function createFormatters(locale: string, currency: string) {
 		currency: createCurrencyFormatter(locale, currency),
 		dateTime: createDateTimeFormatter(locale),
 		percentage: createPercentageFormatter(locale),
+		quantity: createQuantityFormatter(locale),
 		volume: createVolumeFormatter(locale),
 	};
 }

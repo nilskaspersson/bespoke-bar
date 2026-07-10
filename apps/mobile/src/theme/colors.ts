@@ -93,6 +93,7 @@ function palette(mode: Mode) {
 	const scale = mauve[mode];
 
 	return {
+		mauve: scale,
 		text: scale[11],
 		textLight: scale[10],
 		textHeavy: scale[12],

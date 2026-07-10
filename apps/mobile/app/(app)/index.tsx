@@ -16,11 +16,11 @@ import {
 	type TextInputFocusEventData,
 	View,
 } from "react-native";
-import { RecipeCard } from "../../src/features/recipes/RecipeCard";
-import { useTheme } from "../../src/theme";
-import { fontSize, space } from "../../src/theme/tokens";
-import { getAppErrorPayload } from "../../src/trpc/appError";
-import { useTRPC } from "../../src/trpc/client";
+import { RecipeCard } from "@/features/recipes/RecipeCard";
+import { useTheme } from "@/theme";
+import { fontSize, space } from "@/theme/tokens";
+import { getAppErrorPayload } from "@/trpc/appError";
+import { useTRPC } from "@/trpc/client";
 
 function keyExtractor(recipe: RecipeWithRelations): string {
 	return recipe.id;
@@ -86,34 +86,63 @@ export default function RecipesScreen() {
 		<>
 			<Stack.Screen options={screenOptions} />
 
-			{recipes.isPending ? (
-				<Centered>
-					<ActivityIndicator />
-				</Centered>
-			) : recipes.error ? (
-				<Centered>
-					<Text style={[styles.message, { color: theme.colors.error }]}>
-						{errorMessage(recipes.error)}
-					</Text>
-				</Centered>
-			) : (
-				<FlatList
-					data={filteredRecipes}
-					keyExtractor={keyExtractor}
-					renderItem={renderItem}
-					contentInsetAdjustmentBehavior="automatic"
-					contentContainerStyle={styles.list}
-					keyboardDismissMode="on-drag"
-					ListEmptyComponent={
-						<Centered>
-							<Text style={[styles.message, { color: theme.colors.textLight }]}>
-								No recipes match
-							</Text>
-						</Centered>
-					}
-				/>
-			)}
+			<FlatList
+				data={filteredRecipes}
+				keyExtractor={keyExtractor}
+				renderItem={renderItem}
+				contentInsetAdjustmentBehavior="automatic"
+				contentContainerStyle={styles.list}
+				keyboardDismissMode="on-drag"
+				ListEmptyComponent={
+					<ListPlaceholder
+						isPending={recipes.isPending}
+						error={recipes.error}
+					/>
+				}
+			/>
 		</>
+	);
+}
+
+/**
+ * iOS resolves the nav bar's tracked scroll view by walking the first-subview
+ * chain, and only applies the large title's content inset to a scroll view that
+ * exists at first layout — so the list must mount unconditionally, and the
+ * loading, error and empty states must live inside it.
+ */
+function ListPlaceholder({
+	isPending,
+	error,
+}: {
+	isPending: boolean;
+	error: { message: string } | null;
+}) {
+	const theme = useTheme();
+
+	if (isPending) {
+		return (
+			<Centered>
+				<ActivityIndicator />
+			</Centered>
+		);
+	}
+
+	if (error) {
+		return (
+			<Centered>
+				<Text style={[styles.message, { color: theme.colors.error }]}>
+					{errorMessage(error)}
+				</Text>
+			</Centered>
+		);
+	}
+
+	return (
+		<Centered>
+			<Text style={[styles.message, { color: theme.colors.textLight }]}>
+				No recipes match
+			</Text>
+		</Centered>
 	);
 }
 

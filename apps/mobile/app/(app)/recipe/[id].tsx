@@ -1,4 +1,3 @@
-import { formatLine } from "@bespoke/domain/ingredientLines/formatLine";
 import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
 import { getRecipeCost } from "@bespoke/domain/recipes/getRecipeCost";
 import {
@@ -19,11 +18,12 @@ import {
 	Text,
 	View,
 } from "react-native";
-import { Chip } from "../../../src/features/recipes/Chip";
-import { useFormatters } from "../../../src/formatters";
-import { type Theme, useTheme } from "../../../src/theme";
-import { fontSize, radius, space } from "../../../src/theme/tokens";
-import { useTRPC } from "../../../src/trpc/client";
+import { IngredientLineList } from "@/features/ingredientLines/IngredientLineList";
+import { Chip } from "@/features/recipes/Chip";
+import { useFormatters } from "@/formatters";
+import { type Theme, useTheme } from "@/theme";
+import { fontSize, radius, space } from "@/theme/tokens";
+import { useTRPC } from "@/trpc/client";
 
 const SCREEN_OPTIONS = { title: "" };
 
@@ -103,20 +103,7 @@ export default function RecipeDetailScreen() {
 				{recipe.lines.length > 0 ? (
 					<Section title="Ingredients" theme={theme}>
 						<Surface theme={theme}>
-							{recipe.lines.map((line) => (
-								<Text
-									key={line.id}
-									style={[
-										styles.line,
-										{
-											color: theme.colors.textHeavy,
-											fontFamily: theme.fonts.serif,
-										},
-									]}
-								>
-									{formatLine({ ...line, name: line.ingredient.name })}
-								</Text>
-							))}
+							<IngredientLineList lines={recipe.lines} />
 						</Surface>
 					</Section>
 				) : null}
@@ -208,12 +195,7 @@ export default function RecipeDetailScreen() {
 					<Section title="Tags" theme={theme}>
 						<View style={styles.chips}>
 							{recipe.tags.map(({ tag }) => (
-								<Chip
-									key={tag.id}
-									label={tag.name}
-									color={theme.colors.textLight}
-									borderColor={theme.colors.border}
-								/>
+								<Chip key={tag.id}>{tag.name}</Chip>
 							))}
 						</View>
 					</Section>

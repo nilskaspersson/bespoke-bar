@@ -3,7 +3,15 @@
 	"extends": ["@bespoke/config/biome.base.json"],
 	"root": false,
 	"files": {
-		"includes": ["app/**", "src/**", "*.ts", "*.js", "*.json", "!expo-env.d.ts"]
+		"includes": [
+			"app/**",
+			"src/**",
+			"plugins/**",
+			"*.ts",
+			"*.js",
+			"*.json",
+			"!expo-env.d.ts"
+		]
 	},
 	"linter": {
 		"rules": {
@@ -20,6 +28,10 @@
 									"@bespoke/db/**"
 								],
 								"message": "Mobile consumes only the pure packages: @bespoke/schema and @bespoke/domain for values, plus `import type { AppRouter }` from @bespoke/api (stage 1). @bespoke/ui is web/DOM and @bespoke/db is server-only — neither runs on React Native."
+							},
+							{
+								"group": ["../**"],
+								"message": "Reach across directories through an alias: `@/*` for src, `@assets/*` for assets. Relative paths are for siblings that move together."
 							}
 						]
 					}

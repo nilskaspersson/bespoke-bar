@@ -4,7 +4,6 @@
  */
 export const fonts = {
 	serif: "Newsreader-Regular",
-	serifMedium: "Newsreader-Medium",
 	serifSemiBold: "Newsreader-SemiBold",
-	serifItalic: "Newsreader-Italic",
+	serifSemiBoldItalic: "Newsreader-SemiBoldItalic",
 } as const;

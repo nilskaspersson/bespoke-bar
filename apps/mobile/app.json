@@ -22,6 +22,7 @@
 			"predictiveBackGestureEnabled": false
 		},
 		"plugins": [
+			"./plugins/withQuietPods",
 			"expo-router",
 			[
 				"expo-splash-screen",
@@ -38,9 +39,8 @@
 				{
 					"fonts": [
 						"./assets/fonts/Newsreader-Regular.ttf",
-						"./assets/fonts/Newsreader-Medium.ttf",
 						"./assets/fonts/Newsreader-SemiBold.ttf",
-						"./assets/fonts/Newsreader-Italic.ttf"
+						"./assets/fonts/Newsreader-SemiBoldItalic.ttf"
 					]
 				}
 			]

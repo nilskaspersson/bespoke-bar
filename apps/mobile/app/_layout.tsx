@@ -7,8 +7,8 @@ import {
 	initialWindowMetrics,
 	SafeAreaProvider,
 } from "react-native-safe-area-context";
-import { TRPCProvider, trpcClient } from "../src/trpc/client";
-import { queryClient } from "../src/trpc/queryClient";
+import { TRPCProvider, trpcClient } from "@/trpc/client";
+import { queryClient } from "@/trpc/queryClient";
 
 AppState.addEventListener("change", (status) =>
 	focusManager.setFocused(status === "active"),

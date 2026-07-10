@@ -1,9 +1,9 @@
 import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
-import { AuthSplash } from "../../src/auth/AuthSplash";
-import { OrgGate } from "../../src/auth/OrgGate";
-import { FormattersProvider } from "../../src/formatters";
-import { useTheme } from "../../src/theme";
+import { AuthSplash } from "@/auth/AuthSplash";
+import { OrgGate } from "@/auth/OrgGate";
+import { FormattersProvider } from "@/formatters";
+import { useTheme } from "@/theme";
 
 /**
  * The gate. Ordering is load-bearing: splash before the redirect (no flash of

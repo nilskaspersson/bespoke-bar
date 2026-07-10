@@ -1,7 +1,7 @@
 import { useClerk } from "@clerk/expo";
 import * as WebBrowser from "expo-web-browser";
 import { View } from "react-native";
-import { apiOrigin } from "../trpc/client";
+import { apiOrigin } from "@/trpc/client";
 import {
 	AuthScreen,
 	BodyText,

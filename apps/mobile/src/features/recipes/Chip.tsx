@@ -1,34 +1,54 @@
-import { StyleSheet, Text } from "react-native";
-import { fontSize, radius, space } from "../../theme/tokens";
+import type { ReactNode } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { useTheme } from "@/theme";
+import { fontSize, radius, space } from "@/theme/tokens";
+
+const INSET = fontSize.xs / 2;
 
 export function Chip({
-	label,
-	color,
-	borderColor,
+	children,
+	icon,
 }: {
-	label: string;
-	color: string;
-	borderColor?: string;
+	children: string;
+	icon?: ReactNode;
 }) {
+	const theme = useTheme();
+
 	return (
-		<Text
-			numberOfLines={1}
-			style={[styles.chip, { color, borderColor: borderColor ?? color }]}
+		<View
+			style={[
+				styles.chip,
+				{
+					backgroundColor: theme.colors.background,
+					borderColor: theme.colors.background,
+				},
+			]}
 		>
-			{label}
-		</Text>
+			{icon}
+
+			<Text
+				numberOfLines={1}
+				style={[styles.label, { color: theme.colors.textLight }]}
+			>
+				{children}
+			</Text>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	chip: {
-		paddingVertical: space[1],
-		paddingHorizontal: space[3],
-		borderRadius: radius.full,
+		flexDirection: "row",
+		alignItems: "center",
+		gap: space[1],
+		paddingVertical: INSET / 2,
+		paddingHorizontal: INSET,
+		borderRadius: radius.lg,
 		borderWidth: 1,
+	},
+	label: {
 		fontSize: fontSize.xs,
 		fontWeight: "600",
-		lineHeight: fontSize.md,
-		overflow: "hidden",
+		lineHeight: fontSize.xs * 1.15,
 	},
 });

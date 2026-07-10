@@ -1,17 +1,44 @@
+import dotGrid from "@assets/textures/dot-grid.png";
+import dotLeader from "@assets/textures/dot-leader.png";
 import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
-import { getRecipeCost } from "@bespoke/domain/recipes/getRecipeCost";
 import {
+	COCKTAIL_STYLE_TO_LABEL,
 	DEFAULT_RECIPE_NAME,
-	getCocktailStyleLabel,
+	GLASSWARE_TO_LABEL,
+	ICE_TO_LABEL,
+	METHOD_TO_LABEL,
 } from "@bespoke/domain/recipes/labels";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import { router } from "expo-router";
 import { SymbolView } from "expo-symbols";
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import { useFormatters } from "../../formatters";
-import { useTheme } from "../../theme";
-import { fontSize, radius, space } from "../../theme/tokens";
-import { Chip } from "./Chip";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import { IngredientLineList } from "@/features/ingredientLines/IngredientLineList";
+import { Chip } from "@/features/recipes/Chip";
+import { EnrichmentMark } from "@/features/recipes/EnrichmentMark";
+import { useFormatters } from "@/formatters";
+import { useTheme } from "@/theme";
+import { fontSize, radius, space } from "@/theme/tokens";
+
+const CARD_WIDTH = 400;
+const CARD_RATIO = 16 / 9;
+
+const SHADOW = [
+	{ offsetX: 0, offsetY: 0.5, blurRadius: 0.5, color: "rgba(26, 25, 26, 0.2)" },
+	{
+		offsetX: 0,
+		offsetY: 1,
+		blurRadius: 1,
+		spreadDistance: -1,
+		color: "rgba(26, 25, 26, 0.15)",
+	},
+	{
+		offsetX: 0,
+		offsetY: 2,
+		blurRadius: 2,
+		spreadDistance: -3,
+		color: "rgba(26, 25, 26, 0.1)",
+	},
+];
 
 export function RecipeCard({
 	recipe,
@@ -21,10 +48,10 @@ export function RecipeCard({
 	isFavorite: boolean;
 }) {
 	const theme = useTheme();
-	const { currency, percentage, volume } = useFormatters();
+	const { percentage } = useFormatters();
 
 	const metrics = calculateRecipeMetrics(recipe);
-	const { cost, isIncomplete } = getRecipeCost(recipe);
+	const enriched = new Set(recipe.aiEnrichedFields ?? []);
 
 	return (
 		<Pressable
@@ -35,113 +62,170 @@ export function RecipeCard({
 			style={({ pressed }) => [
 				styles.card,
 				{
-					backgroundColor: theme.colors.surface,
-					borderColor: theme.colors.borderLight,
+					backgroundColor: theme.colors.mauve[1],
+					borderColor: theme.colors.mauve[pressed ? 5 : 4],
 				},
-				pressed && styles.pressed,
 			]}
 		>
-			<View style={styles.titleRow}>
-				<Text
-					numberOfLines={2}
-					style={[
-						styles.name,
-						{
-							color: theme.colors.textHeavy,
-							fontFamily: theme.fonts.serifSemiBold,
-						},
-					]}
-				>
-					{recipe.name || DEFAULT_RECIPE_NAME}
-				</Text>
+			<Image
+				source={dotGrid}
+				resizeMode="repeat"
+				style={[styles.texture, { tintColor: theme.colors.mauve[5] }]}
+			/>
 
-				{isFavorite ? (
-					<SymbolView
-						name="heart.fill"
-						size={16}
-						tintColor={theme.colors.accent}
-						accessibilityLabel="Favorite"
+			<View style={styles.header}>
+				<View style={styles.titleLine}>
+					<RecipeName recipe={recipe} />
+
+					<Image
+						source={dotLeader}
+						resizeMode="repeat"
+						style={[styles.leader, { tintColor: theme.colors.mauve[6] }]}
 					/>
-				) : null}
-			</View>
 
-			{recipe.style || recipe.tags.length > 0 ? (
-				<View style={styles.chips}>
-					{recipe.style ? (
-						<Chip
-							label={getCocktailStyleLabel(recipe.style)}
-							color={theme.colors.styleHue[recipe.style]}
+					{isFavorite ? (
+						<SymbolView
+							name="heart.fill"
+							size={fontSize.md}
+							tintColor={theme.colors.accent}
+							accessibilityLabel="Favorite"
 						/>
 					) : null}
 
-					{recipe.tags.map(({ tag }) => (
-						<Chip
-							key={tag.id}
-							label={tag.name}
-							color={theme.colors.textLight}
-							borderColor={theme.colors.border}
-						/>
-					))}
+					<SymbolView
+						name="wineglass"
+						size={fontSize.md}
+						tintColor={theme.colors.text}
+					/>
 				</View>
+
+				<View style={styles.chips}>
+					{recipe.style ? (
+						<Chip icon={enriched.has("style") ? <EnrichmentMark /> : undefined}>
+							{COCKTAIL_STYLE_TO_LABEL.get(recipe.style) ?? recipe.style}
+						</Chip>
+					) : null}
+
+					{recipe.preparationMethod ? (
+						<Chip
+							icon={
+								enriched.has("preparationMethod") ? (
+									<EnrichmentMark />
+								) : undefined
+							}
+						>
+							{METHOD_TO_LABEL.get(recipe.preparationMethod) ??
+								recipe.preparationMethod}
+						</Chip>
+					) : null}
+
+					<Chip>{`${percentage.format(metrics.abv)} ABV`}</Chip>
+
+					{recipe.glassware ? (
+						<Chip
+							icon={enriched.has("glassware") ? <EnrichmentMark /> : undefined}
+						>
+							{GLASSWARE_TO_LABEL.get(recipe.glassware) ?? recipe.glassware}
+						</Chip>
+					) : null}
+
+					{recipe.ice && recipe.ice !== "none" ? (
+						<Chip icon={enriched.has("ice") ? <EnrichmentMark /> : undefined}>
+							{ICE_TO_LABEL.get(recipe.ice) ?? recipe.ice}
+						</Chip>
+					) : null}
+				</View>
+			</View>
+
+			{recipe.lines.length > 0 ? (
+				<IngredientLineList lines={recipe.lines} />
 			) : null}
 
-			{metrics.finalVolume > 0 ? (
-				<View style={styles.metrics}>
-					<Metric value={percentage.format(metrics.abv)} label="ABV" />
-					<Metric value={`${volume.format(metrics.finalVolume)} ml`} />
-					{isIncomplete ? null : <Metric value={currency.format(cost)} />}
-				</View>
+			{recipe.garnish ? (
+				<Text style={[styles.garnish, { color: theme.colors.text }]}>
+					<Text style={{ color: theme.colors.textHeavy }}>Garnish:</Text>{" "}
+					<Text style={{ fontFamily: theme.fonts.serif }}>
+						{recipe.garnish}
+					</Text>
+				</Text>
 			) : null}
 		</Pressable>
 	);
 }
 
-function Metric({ value, label }: { value: string; label?: string }) {
+function RecipeName({ recipe }: { recipe: RecipeWithRelations }) {
 	const theme = useTheme();
 
-	return (
-		<Text style={[styles.metric, { color: theme.colors.textLight }]}>
-			<Text style={{ color: theme.colors.text, fontWeight: "600" }}>
-				{value}
+	if (!recipe.name) {
+		return (
+			<Text
+				style={[
+					styles.name,
+					{
+						color: theme.colors.textLight,
+						fontFamily: theme.fonts.serifSemiBoldItalic,
+					},
+				]}
+			>
+				{DEFAULT_RECIPE_NAME}
 			</Text>
-			{label ? ` ${label}` : null}
+		);
+	}
+
+	return (
+		<Text
+			style={[
+				styles.name,
+				{
+					color: theme.colors.textHeavy,
+					fontFamily: theme.fonts.serifSemiBold,
+				},
+			]}
+		>
+			{recipe.name}
 		</Text>
 	);
 }
 
 const styles = StyleSheet.create({
 	card: {
-		padding: space[4],
-		borderRadius: radius.lg,
-		borderWidth: StyleSheet.hairlineWidth,
-		gap: space[2],
-	},
-	pressed: {
-		opacity: 0.7,
-	},
-	titleRow: {
-		flexDirection: "row",
-		alignItems: "center",
+		minHeight: CARD_WIDTH / CARD_RATIO,
 		justifyContent: "space-between",
-		gap: space[3],
+		gap: space[4],
+		padding: space[4],
+		borderWidth: 1,
+		borderRadius: radius.lg,
+		boxShadow: SHADOW,
+	},
+	texture: {
+		...StyleSheet.absoluteFill,
+		borderRadius: radius.lg - 1,
+	},
+	header: {
+		gap: space[1],
+	},
+	titleLine: {
+		flexDirection: "row",
+		alignItems: "baseline",
+		gap: space[2],
 	},
 	name: {
 		flexShrink: 1,
 		fontSize: fontSize.xl,
-		lineHeight: fontSize.h2 + 2,
+		lineHeight: fontSize.xl * 1.15,
+	},
+	leader: {
+		flex: 1,
+		minWidth: space[5],
+		height: 2,
 	},
 	chips: {
 		flexDirection: "row",
 		flexWrap: "wrap",
 		gap: space[1],
 	},
-	metrics: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		columnGap: space[4],
-		rowGap: space[1],
-	},
-	metric: {
-		fontSize: fontSize.sm,
+	garnish: {
+		fontSize: fontSize.md,
+		lineHeight: fontSize.md * 1.5,
 	},
 });
