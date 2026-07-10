@@ -32,7 +32,18 @@
 				}
 			],
 			"expo-secure-store",
-			"@clerk/expo"
+			"@clerk/expo",
+			[
+				"expo-font",
+				{
+					"fonts": [
+						"./assets/fonts/Newsreader-Regular.ttf",
+						"./assets/fonts/Newsreader-Medium.ttf",
+						"./assets/fonts/Newsreader-SemiBold.ttf",
+						"./assets/fonts/Newsreader-Italic.ttf"
+					]
+				}
+			]
 		],
 		"experiments": {
 			"typedRoutes": true,

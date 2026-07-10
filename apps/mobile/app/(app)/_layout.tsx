@@ -2,6 +2,8 @@ import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
 import { AuthSplash } from "../../src/auth/AuthSplash";
 import { OrgGate } from "../../src/auth/OrgGate";
+import { FormattersProvider } from "../../src/formatters";
+import { useTheme } from "../../src/theme";
 
 /**
  * The gate. Ordering is load-bearing: splash before the redirect (no flash of
@@ -10,6 +12,7 @@ import { OrgGate } from "../../src/auth/OrgGate";
  */
 export default function AppLayout() {
 	const { isLoaded, isSignedIn, orgId } = useAuth();
+	const theme = useTheme();
 
 	if (!isLoaded) {
 		return <AuthSplash />;
@@ -24,8 +27,12 @@ export default function AppLayout() {
 	}
 
 	return (
-		<Stack>
-			<Stack.Screen name="index" options={{ title: "Recipes" }} />
-		</Stack>
+		<FormattersProvider>
+			<Stack
+				screenOptions={{
+					contentStyle: { backgroundColor: theme.colors.background },
+				}}
+			/>
+		</FormattersProvider>
 	);
 }
