@@ -7,5 +7,22 @@
 	],
 	"files": {
 		"includes": ["src/**", "next.config.ts", "vitest.config.ts"]
+	},
+	"linter": {
+		"rules": {
+			"style": {
+				"noRestrictedImports": {
+					"level": "error",
+					"options": {
+						"patterns": [
+							{
+								"group": ["../**"],
+								"message": "Reach across directories through the `@/*` alias. Relative paths are for siblings that move together."
+							}
+						]
+					}
+				}
+			}
+		}
 	}
 }

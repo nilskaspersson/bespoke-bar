@@ -32,12 +32,12 @@ import {
 	useState,
 } from "react";
 import { getIngredientId } from "@/features/ingredients/utils";
-import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
-import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
+import { useRecipeIngredients } from "@/features/recipes/bulk/components/RecipeEditor/hooks/useRecipeIngredients";
 import {
 	createParagraphDOMRange,
 	locateTextNodeAtOffset,
-} from "../../utils/paragraphRange";
+} from "@/features/recipes/bulk/components/RecipeEditor/utils/paragraphRange";
+import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
 import { IngredientOption } from "./IngredientOption";
 import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";

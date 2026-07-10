@@ -6,7 +6,7 @@ import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuP
 import type { TextNode } from "lexical";
 import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { getIngredientId } from "@/features/ingredients/utils";
-import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
+import { useRecipeIngredients } from "@/features/recipes/bulk/components/RecipeEditor/hooks/useRecipeIngredients";
 import { useHistoricUpdateRef } from "./HistoricUpdateGuard";
 import { IngredientOption } from "./IngredientOption";
 import { useTypeaheadMenu } from "./useTypeaheadMenu";
