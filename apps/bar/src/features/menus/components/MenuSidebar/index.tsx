@@ -1,6 +1,7 @@
 "use client";
 
 import { pluralize } from "@bespoke/domain/utils/formatting";
+import { createSearchIndex, searchByIndex } from "@bespoke/domain/utils/search";
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import { Button } from "@bespoke/ui/Button";
 import { Flex } from "@bespoke/ui/Flex";
@@ -17,7 +18,6 @@ import Link from "next/link";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { useDeferredValue, useMemo, useRef, useState } from "react";
 import { getMenuUrl } from "@/features/menus/utils";
-import { createSearchIndex, searchByIndex } from "@/utils/search";
 import styles from "./styles.module.css";
 
 const SKELETON_ROWS = Array.from({ length: 16 }, (_, index) => `row-${index}`);

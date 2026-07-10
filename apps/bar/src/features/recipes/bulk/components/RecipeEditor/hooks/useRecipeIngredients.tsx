@@ -5,12 +5,15 @@ import {
 	type IngredientIndex,
 } from "@bespoke/domain/ingredients/buildIngredientIndex";
 import { collator } from "@bespoke/domain/utils/collator";
+import {
+	createSearchIndex,
+	type SearchIndex,
+} from "@bespoke/domain/utils/search";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { createContext, type ReactNode, useContext, useMemo } from "react";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getIngredientId } from "@/features/ingredients/utils";
 import { normalizeInput } from "@/utils";
-import { createSearchIndex, type SearchIndex } from "@/utils/search";
 
 type RecipeIngredientsValue = {
 	sortedIngredients: Ingredient[];

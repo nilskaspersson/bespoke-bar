@@ -5,6 +5,11 @@ import {
 	TAG_NAME_MAX_LENGTH,
 } from "@bespoke/domain/tags/constants";
 import { collator } from "@bespoke/domain/utils/collator";
+import {
+	createSearchIndex,
+	findExactByIndex,
+	searchByIndex,
+} from "@bespoke/domain/utils/search";
 import type { Tag } from "@bespoke/schema/schema/tags";
 import { Button } from "@bespoke/ui/Button";
 import { Chip } from "@bespoke/ui/Chip";
@@ -22,11 +27,6 @@ import { clsx } from "clsx";
 import { type ComponentProps, useMemo } from "react";
 import { RecipeTag } from "@/features/tags/components/RecipeTag";
 import { useRecipeTagsCombobox } from "@/features/tags/hooks/useRecipeTagsCombobox";
-import {
-	createSearchIndex,
-	findExactByIndex,
-	searchByIndex,
-} from "@/utils/search";
 import styles from "./styles.module.css";
 
 const getTagKey = (tag: Tag) => tag.id;

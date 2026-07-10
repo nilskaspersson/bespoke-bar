@@ -1,11 +1,11 @@
 import { formatLine } from "@bespoke/domain/ingredientLines/formatLine";
-import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
-import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
-import type { Menu } from "@bespoke/schema/schema/menus";
 import {
 	GLASSWARE_TO_LABEL,
 	METHOD_TO_LABEL,
-} from "@/features/recipes/constants";
+} from "@bespoke/domain/recipes/labels";
+import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
+import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
+import type { Menu } from "@bespoke/schema/schema/menus";
 import { getRecipeName } from "@/features/recipes/utils";
 
 export type ExportOptions = {

@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	applyRecipeFilters,
+	createRecipeSearchIndex,
+} from "@bespoke/domain/recipes/applyRecipeFilters";
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import { Button, type ButtonProps, LinkButton } from "@bespoke/ui/Button";
 import { Flex } from "@bespoke/ui/Flex";
@@ -28,10 +32,6 @@ import {
 import { EmptyArea } from "@/components/EmptyArea";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { getRecipeUrl } from "@/features/recipes/utils";
-import {
-	applyRecipeFilters,
-	createRecipeSearchIndex,
-} from "@/features/recipes/utils/applyRecipeFilters";
 import { trpc } from "@/trpc/client";
 import styles from "./styles.module.css";
 

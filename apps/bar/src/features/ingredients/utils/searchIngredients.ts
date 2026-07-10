@@ -1,7 +1,10 @@
+import {
+	createSearchIndex,
+	type SearchIndex,
+} from "@bespoke/domain/utils/search";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { normalizeInput } from "@/utils";
-import { createSearchIndex, type SearchIndex } from "@/utils/search";
 
 const getIngredientId = (ingredient: Ingredient) => ingredient.id;
 

@@ -1,11 +1,11 @@
+import {
+	type CocktailStyleFilter,
+	getCocktailStyleLabel,
+} from "@bespoke/domain/recipes/labels";
 import { Button } from "@bespoke/ui/Button";
 import { clsx } from "clsx";
 import type { CSSProperties } from "react";
-import {
-	type CocktailStyleFilter,
-	getCocktailStyleColor,
-	getCocktailStyleLabel,
-} from "@/features/recipes/constants";
+import { getCocktailStyleColor } from "@/features/recipes/constants";
 import styles from "./styles.module.css";
 
 type Props = {

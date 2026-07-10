@@ -1,9 +1,9 @@
-import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import {
 	type CocktailStyleFilter,
-	getCocktailStyleColor,
 	getCocktailStyleLabel,
-} from "@/features/recipes/constants";
+} from "@bespoke/domain/recipes/labels";
+import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import { getCocktailStyleColor } from "@/features/recipes/constants";
 
 export type CocktailStyleEntry = {
 	style: CocktailStyleFilter;

@@ -1,10 +1,10 @@
+import { DEFAULT_RECIPE_NAME } from "@bespoke/domain/recipes/labels";
 import type {
 	BaseRecipe,
 	Recipe,
 	RecipeWithLines,
 } from "@bespoke/schema/schema/recipes";
 import { hasNoLines } from "@/features/ingredientLines/utils";
-import { DEFAULT_RECIPE_NAME } from "@/features/recipes/constants";
 import { isObject } from "@/utils";
 import { namedEntityToUrlSlug } from "@/utils/url";
 
