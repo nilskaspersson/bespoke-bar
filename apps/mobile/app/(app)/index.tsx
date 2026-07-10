@@ -1,8 +1,8 @@
 import { getAppErrorMessage } from "@bespoke/schema/appError";
 import { useQuery } from "@tanstack/react-query";
 import { FlatList, Text } from "react-native";
-import { getAppErrorPayload } from "../src/trpc/appError";
-import { useTRPC } from "../src/trpc/client";
+import { getAppErrorPayload } from "../../src/trpc/appError";
+import { useTRPC } from "../../src/trpc/client";
 
 export default function RecipeList() {
 	const trpc = useTRPC();

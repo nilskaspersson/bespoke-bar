@@ -12,13 +12,17 @@ allowBuilds:
   '@clerk/shared': false
   '@google/genai': false
   '@parcel/watcher': true
+  browser-tabs-lock: false
+  bufferutil: false
+  core-js: false
   esbuild: true
   protobufjs: false
   sharp: true
+  utf-8-validate: false
 
 catalog:
   "@biomejs/biome": 2.4.16
-  "@clerk/nextjs": 7.4.2
+  "@clerk/nextjs": 7.5.15
   "@tanstack/react-query": 5.100.10
   "@trpc/client": 11.17.0
   "@trpc/react-query": 11.17.0
@@ -52,6 +56,14 @@ overrides:
   react-dom: 'catalog:'
   '@clerk/nextjs>next': 'catalog:'
   'nuqs>next': 'catalog:'
-  '@clerk/react': '6.7.2'
-  '@clerk/backend': '3.4.14'
-  '@clerk/shared@^4': '4.14.0'
+  '@clerk/react': '6.12.1'
+  '@clerk/backend': '3.11.2'
+  '@clerk/shared@^4': '4.25.1'
+
+minimumReleaseAgeExclude:
+  - '@clerk/backend@3.11.2'
+  - '@clerk/clerk-js@6.25.1'
+  - '@clerk/expo@3.7.2'
+  - '@clerk/react@6.12.1'
+  - '@clerk/shared@4.25.1'
+  - '@clerk/nextjs@7.5.15'

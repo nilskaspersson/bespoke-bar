@@ -25,3 +25,13 @@ render in Newsreader via `expo-font`).
 - Styling stays at the `StyleSheet` + typed-theme-module level; a styling library (e.g.
   unistyles) is adopted only when interactive custom UI grows enough to want variants and
   re-render-free theming — not as a foundation.
+
+## Addendum (2026-07-09): current design language, named
+
+"System materials" means the *current* iOS design language, explicitly including Liquid
+Glass (iOS 26). When navigation grows beyond a single stack, the bottom navigation is the
+system one — expo-router's `NativeTabs` (icon-only, bottom-centered, morphs/minimizes with
+context on iOS 26) — never a custom JS tab bar. Glass surfaces come from the system
+primitives (`expo-glass-effect`'s GlassView / SwiftUI-backed `@expo/ui` components at the
+SDK-pinned versions), not hand-rolled blur imitations. These were in the SDK 57 template
+for a reason; reinstall via `npx expo install` when a stage needs them.
