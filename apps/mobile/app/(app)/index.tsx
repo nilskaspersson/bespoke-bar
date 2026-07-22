@@ -4,6 +4,7 @@ import {
 } from "@bespoke/domain/recipes/applyRecipeFilters";
 import { getAppErrorMessage } from "@bespoke/schema/appError";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import type { FetchStatus, QueryStatus } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -11,12 +12,16 @@ import {
 	ActivityIndicator,
 	FlatList,
 	type NativeSyntheticEvent,
+	RefreshControl,
 	StyleSheet,
 	Text,
 	type TextInputFocusEventData,
 	View,
 } from "react-native";
+import { SignOutButton } from "@/auth/SignOutButton";
 import { RecipeCard } from "@/features/recipes/RecipeCard";
+import { usePlaceholderPhase } from "@/offline/usePlaceholderPhase";
+import { useSyncedAgoLabel } from "@/offline/useSyncedAgoLabel";
 import { useTheme } from "@/theme";
 import { fontSize, space } from "@/theme/tokens";
 import { getAppErrorPayload } from "@/trpc/appError";
@@ -34,6 +39,17 @@ export default function RecipesScreen() {
 	const recipes = useQuery(trpc.recipe.list.queryOptions());
 	const favorites = useQuery(trpc.favorite.list.queryOptions());
 
+	const [isRefreshing, setIsRefreshing] = useState(false);
+	const syncedAgoLabel = useSyncedAgoLabel(recipes.dataUpdatedAt);
+
+	async function onRefresh() {
+		setIsRefreshing(true);
+		await Promise.all([recipes.refetch(), favorites.refetch()]).catch(
+			() => undefined,
+		);
+		setIsRefreshing(false);
+	}
+
 	const onChangeText = useCallback(
 		(event: NativeSyntheticEvent<TextInputFocusEventData>) =>
 			setQuery(event.nativeEvent.text),
@@ -45,6 +61,7 @@ export default function RecipesScreen() {
 			title: "Recipes",
 			headerLargeTitleEnabled: true,
 			headerLargeStyle: { backgroundColor: theme.colors.background },
+			headerRight: () => <SignOutButton />,
 			headerSearchBarOptions: {
 				placeholder: "Recipe or ingredient",
 				autoCapitalize: "none" as const,
@@ -93,9 +110,19 @@ export default function RecipesScreen() {
 				contentInsetAdjustmentBehavior="automatic"
 				contentContainerStyle={styles.list}
 				keyboardDismissMode="on-drag"
+				refreshControl={
+					<RefreshControl
+						refreshing={isRefreshing}
+						onRefresh={onRefresh}
+						title={syncedAgoLabel}
+						tintColor={theme.colors.textLight}
+						titleColor={theme.colors.textLight}
+					/>
+				}
 				ListEmptyComponent={
 					<ListPlaceholder
-						isPending={recipes.isPending}
+						status={recipes.status}
+						fetchStatus={recipes.fetchStatus}
 						error={recipes.error}
 					/>
 				}
@@ -111,15 +138,22 @@ export default function RecipesScreen() {
  * loading, error and empty states must live inside it.
  */
 function ListPlaceholder({
-	isPending,
+	status,
+	fetchStatus,
 	error,
 }: {
-	isPending: boolean;
+	status: QueryStatus;
+	fetchStatus: FetchStatus;
 	error: { message: string } | null;
 }) {
 	const theme = useTheme();
+	const phase = usePlaceholderPhase(status, fetchStatus);
 
-	if (isPending) {
+	if (phase === "blank") {
+		return null;
+	}
+
+	if (phase === "loading") {
 		return (
 			<Centered>
 				<ActivityIndicator />
@@ -127,11 +161,22 @@ function ListPlaceholder({
 		);
 	}
 
-	if (error) {
+	const appError = error && getAppErrorPayload(error);
+	if (phase === "offline" || (error && !appError)) {
+		return (
+			<Centered>
+				<Text style={[styles.message, { color: theme.colors.textLight }]}>
+					Can't reach the server right now.
+				</Text>
+			</Centered>
+		);
+	}
+
+	if (appError) {
 		return (
 			<Centered>
 				<Text style={[styles.message, { color: theme.colors.error }]}>
-					{errorMessage(error)}
+					{getAppErrorMessage(appError)}
 				</Text>
 			</Centered>
 		);
@@ -148,11 +193,6 @@ function ListPlaceholder({
 
 function Centered({ children }: { children: React.ReactNode }) {
 	return <View style={styles.centered}>{children}</View>;
-}
-
-function errorMessage(error: { message: string }): string {
-	const payload = getAppErrorPayload(error);
-	return payload ? getAppErrorMessage(payload) : error.message;
 }
 
 const styles = StyleSheet.create({

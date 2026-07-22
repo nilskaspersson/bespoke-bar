@@ -3,6 +3,7 @@ import {
 	createDateTimeFormatter,
 	createPercentageFormatter,
 	createQuantityFormatter,
+	createRelativeTimeFormatter,
 	createVolumeFormatter,
 } from "@bespoke/domain/utils/formatting";
 import { useQuery } from "@tanstack/react-query";
@@ -18,6 +19,7 @@ function createFormatters(locale: string, currency: string) {
 		dateTime: createDateTimeFormatter(locale),
 		percentage: createPercentageFormatter(locale),
 		quantity: createQuantityFormatter(locale),
+		relativeTime: createRelativeTimeFormatter(locale),
 		volume: createVolumeFormatter(locale),
 	};
 }

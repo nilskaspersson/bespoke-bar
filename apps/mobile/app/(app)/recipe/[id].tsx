@@ -7,6 +7,7 @@ import {
 	METHOD_TO_LABEL,
 } from "@bespoke/domain/recipes/labels";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import type { FetchStatus, QueryStatus } from "@tanstack/react-query";
 import { useQuery } from "@tanstack/react-query";
 import { Stack, useLocalSearchParams } from "expo-router";
 import { type SFSymbol, SymbolView } from "expo-symbols";
@@ -21,6 +22,7 @@ import {
 import { IngredientLineList } from "@/features/ingredientLines/IngredientLineList";
 import { Chip } from "@/features/recipes/Chip";
 import { useFormatters } from "@/formatters";
+import { usePlaceholderPhase } from "@/offline/usePlaceholderPhase";
 import { type Theme, useTheme } from "@/theme";
 import { fontSize, radius, space } from "@/theme/tokens";
 import { useTRPC } from "@/trpc/client";
@@ -33,7 +35,11 @@ export default function RecipeDetailScreen() {
 	const theme = useTheme();
 	const { currency, dateTime, percentage, volume } = useFormatters();
 
-	const { data: recipe, isPending } = useQuery(
+	const {
+		data: recipe,
+		status,
+		fetchStatus,
+	} = useQuery(
 		trpc.recipe.list.queryOptions(undefined, {
 			select: (recipes) => recipes.find((r) => r.id === id),
 		}),
@@ -44,13 +50,11 @@ export default function RecipeDetailScreen() {
 			<>
 				<Stack.Screen options={SCREEN_OPTIONS} />
 				<View style={styles.centered}>
-					{isPending ? (
-						<ActivityIndicator />
-					) : (
-						<Text style={[styles.value, { color: theme.colors.textLight }]}>
-							Recipe not found
-						</Text>
-					)}
+					<DetailPlaceholder
+						status={status}
+						fetchStatus={fetchStatus}
+						theme={theme}
+					/>
 				</View>
 			</>
 		);
@@ -234,6 +238,34 @@ function serveRows(
 	}
 
 	return rows;
+}
+
+function DetailPlaceholder({
+	status,
+	fetchStatus,
+	theme,
+}: {
+	status: QueryStatus;
+	fetchStatus: FetchStatus;
+	theme: Theme;
+}) {
+	const phase = usePlaceholderPhase(status, fetchStatus);
+
+	if (phase === "blank") {
+		return null;
+	}
+
+	if (phase === "loading") {
+		return <ActivityIndicator />;
+	}
+
+	const unreachable = phase === "offline" || status === "error";
+
+	return (
+		<Text style={[styles.value, { color: theme.colors.textLight }]}>
+			{unreachable ? "Can't reach the server right now." : "Recipe not found"}
+		</Text>
+	);
 }
 
 function Section({
