@@ -1,7 +1,9 @@
 import { useClerk } from "@clerk/expo";
 import * as WebBrowser from "expo-web-browser";
 import { View } from "react-native";
+import { purgeOfflineCache } from "@/offline/purge";
 import { apiOrigin } from "@/trpc/client";
+import { queryClient } from "@/trpc/queryClient";
 import {
 	AuthScreen,
 	BodyText,
@@ -19,6 +21,11 @@ import {
 export function SetupWall() {
 	const { signOut } = useClerk();
 
+	async function handleSignOut() {
+		await signOut().catch(() => undefined);
+		purgeOfflineCache(queryClient);
+	}
+
 	return (
 		<AuthScreen>
 			<Heading>Finish setup on the web</Heading>
@@ -31,7 +38,7 @@ export function SetupWall() {
 					label="Open setup in browser"
 					onPress={() => WebBrowser.openBrowserAsync(`${apiOrigin}/setup`)}
 				/>
-				<TextButton label="Sign out" onPress={() => signOut()} />
+				<TextButton label="Sign out" onPress={handleSignOut} />
 			</View>
 		</AuthScreen>
 	);

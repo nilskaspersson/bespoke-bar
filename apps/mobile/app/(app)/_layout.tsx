@@ -1,18 +1,27 @@
 import { useAuth } from "@clerk/expo";
 import { Redirect, Stack } from "expo-router";
+import { useEffect } from "react";
 import { AuthSplash } from "@/auth/AuthSplash";
 import { OrgGate } from "@/auth/OrgGate";
 import { FormattersProvider } from "@/formatters";
+import { reconcileCachedSession } from "@/offline/cachedSession";
 import { useTheme } from "@/theme";
+import { queryClient } from "@/trpc/queryClient";
 
 /**
- * The gate. Ordering is load-bearing: splash before the redirect (no flash of
- * the gate), and gating on `orgId` — not merely `isSignedIn` — keeps protected
- * queries from firing in the sign-in→setActive window where every call 401s.
+ * Offline Auth is Clerk's job: its persisted resource cache resolves the last
+ * verified session while disconnected, so the gate never has to reason about
+ * connectivity. It only reconciles whose cache is on disk before the library
+ * renders (the persisted query keys carry neither user nor org).
  */
 export default function AppLayout() {
-	const { isLoaded, isSignedIn, orgId } = useAuth();
-	const theme = useTheme();
+	const { isLoaded, isSignedIn, orgId, userId } = useAuth();
+
+	useEffect(() => {
+		if (orgId && userId) {
+			reconcileCachedSession(userId, orgId, queryClient);
+		}
+	}, [orgId, userId]);
 
 	if (!isLoaded) {
 		return <AuthSplash />;
@@ -25,6 +34,12 @@ export default function AppLayout() {
 	if (!orgId) {
 		return <OrgGate />;
 	}
+
+	return <AppStack />;
+}
+
+function AppStack() {
+	const theme = useTheme();
 
 	return (
 		<FormattersProvider>

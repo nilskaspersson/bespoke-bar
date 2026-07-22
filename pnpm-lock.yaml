@@ -289,9 +289,15 @@ importers:
       '@formatjs/intl-relativetimeformat':
         specifier: ^12.3.10
         version: 12.3.10
+      '@tanstack/query-sync-storage-persister':
+        specifier: 5.100.10
+        version: 5.100.10
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.100.10(react@19.2.3)
+      '@tanstack/react-query-persist-client':
+        specifier: 5.100.10
+        version: 5.100.10(@tanstack/react-query@5.100.10(react@19.2.3))(react@19.2.3)
       '@trpc/client':
         specifier: 'catalog:'
         version: 11.17.0(@trpc/server@11.17.0(typescript@6.0.3))(typescript@6.0.3)
@@ -322,6 +328,9 @@ importers:
       expo-linking:
         specifier: ~57.0.2
         version: 57.0.2(expo@57.0.4)(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3)
+      expo-network:
+        specifier: ~57.0.0
+        version: 57.0.0(expo@57.0.4)(react@19.2.3)
       expo-router:
         specifier: ~57.0.4
         version: 57.0.4(dd30dae74b10550485649eda4c7dde09)
@@ -355,6 +364,12 @@ importers:
       react-native-get-random-values:
         specifier: ~1.11.0
         version: 1.11.0(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))
+      react-native-mmkv:
+        specifier: 4.3.2
+        version: 4.3.2(react-native-nitro-modules@0.35.9(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3)
+      react-native-nitro-modules:
+        specifier: 0.35.9
+        version: 0.35.9(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3)
       react-native-reanimated:
         specifier: 4.5.0
         version: 4.5.0(react-native-worklets@0.10.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3)
@@ -3402,6 +3417,18 @@ packages:
   '@tanstack/query-core@5.101.0':
     resolution: {integrity: sha512-cQetA74EB+seWySv1TTKr828TnP0u39m6LykwDXIo84SNortpDkp30TMEjkqtYCNP9c40uT/iwl6MLiufEt0Ow==}
 
+  '@tanstack/query-persist-client-core@5.100.10':
+    resolution: {integrity: sha512-O9Pey40DhTTDBABS0bHr+KNL5/VMf6PrqjexS8WoDDtnkaoWM+y0MSe0V9E5W+BwvkjM33mB3aYcCxa175gZTQ==}
+
+  '@tanstack/query-sync-storage-persister@5.100.10':
+    resolution: {integrity: sha512-DKEQkz7S7gtJ7KFvfAhZOd8p8SKSIgg/jGWzKzEgE8L2ienGx5/qMuTr8S/Al21TC6M9/uOmFOeFJl4J71RZnA==}
+
+  '@tanstack/react-query-persist-client@5.100.10':
+    resolution: {integrity: sha512-EImacngLXYEtzlrIPf8IAqKN3foS7cmSj4GWqsHJvc7K+8fy2c3s7mdV8oTJeii/TvrzO4X9fcnXi6tUHMIOHA==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.100.10
+      react: 19.2.3
+
   '@tanstack/react-query@5.100.10':
     resolution: {integrity: sha512-FLaZf2RCrA/Zgp4aiu5tG3TyasTRO7aZ99skxQpr3Hg/zXOhu6yq5FZCYQ/tRaJtM9ylnoK8tFK7PolXQadv6Q==}
     peerDependencies:
@@ -4533,6 +4560,12 @@ packages:
     resolution: {integrity: sha512-dECN3pOFv+KrQcGrOhJKEBc1/ob7SBjTTYGRB1bc84zmQ65La0FSrAPxpvnEQf8g9giLB5y9RLqwGxHspjXigQ==}
     peerDependencies:
       react-native: '*'
+
+  expo-network@57.0.0:
+    resolution: {integrity: sha512-xd3TxX8qIFs8yLs22CnI0KcnuvJSDyIQNJSD8/7cAGoe/pDUJYrme1jlkbAbgqgjVp2zOg8CGyus9O+GbzIyBQ==}
+    peerDependencies:
+      expo: '*'
+      react: 19.2.3
 
   expo-router@57.0.4:
     resolution: {integrity: sha512-JVUAxamOQV7oG/uo/itLuR8gLiN3+C00bg/JPU+p/g/8Mx3PceZ4Mga/34cLmMc+RETpi5EjC/+AN0mJJzOW3w==}
@@ -5866,6 +5899,19 @@ packages:
 
   react-native-is-edge-to-edge@1.3.1:
     resolution: {integrity: sha512-NIXU/iT5+ORyCc7p0z2nnlkouYKX425vuU1OEm6bMMtWWR9yvb+Xg5AZmImTKoF9abxCPqrKC3rOZsKzUYgYZA==}
+    peerDependencies:
+      react: 19.2.3
+      react-native: '*'
+
+  react-native-mmkv@4.3.2:
+    resolution: {integrity: sha512-49OAyfkg0/TMWiWELZN6VuVQPZPhizwL4DTmp8b7B1md3dB/s3LH3mGfC3T+lp9W0y/rqxZMEnotLFTIbOAenQ==}
+    peerDependencies:
+      react: 19.2.3
+      react-native: '*'
+      react-native-nitro-modules: '*'
+
+  react-native-nitro-modules@0.35.9:
+    resolution: {integrity: sha512-yCO6eJ85SPPUo4a4an7H5oj6wPCSIT72fbjr5WZ/20n6zswaJ2gNNpnWtg2We0AZwkAOjSqkOJ0Vjc05p6kGiA==}
     peerDependencies:
       react: 19.2.3
       react-native: '*'
@@ -9903,6 +9949,21 @@ snapshots:
 
   '@tanstack/query-core@5.101.0': {}
 
+  '@tanstack/query-persist-client-core@5.100.10':
+    dependencies:
+      '@tanstack/query-core': 5.100.10
+
+  '@tanstack/query-sync-storage-persister@5.100.10':
+    dependencies:
+      '@tanstack/query-core': 5.100.10
+      '@tanstack/query-persist-client-core': 5.100.10
+
+  '@tanstack/react-query-persist-client@5.100.10(@tanstack/react-query@5.100.10(react@19.2.3))(react@19.2.3)':
+    dependencies:
+      '@tanstack/query-persist-client-core': 5.100.10
+      '@tanstack/react-query': 5.100.10(react@19.2.3)
+      react: 19.2.3
+
   '@tanstack/react-query@5.100.10(react@19.2.3)':
     dependencies:
       '@tanstack/query-core': 5.100.10
@@ -11006,6 +11067,11 @@ snapshots:
   expo-modules-jsi@57.0.1(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6)):
     dependencies:
       react-native: 0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6)
+
+  expo-network@57.0.0(expo@57.0.4)(react@19.2.3):
+    dependencies:
+      expo: 57.0.4(@babel/core@7.29.7)(@expo/dom-webview@57.0.0)(@expo/metro-runtime@57.0.3)(bufferutil@4.1.0)(expo-router@57.0.4)(react-dom@19.2.3(react@19.2.3))(react-native-web@0.21.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-native-worklets@0.10.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3)(typescript@6.0.3)(utf-8-validate@6.0.6)
+      react: 19.2.3
 
   expo-router@57.0.4(dd30dae74b10550485649eda4c7dde09):
     dependencies:
@@ -12471,6 +12537,17 @@ snapshots:
       react-native: 0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6)
 
   react-native-is-edge-to-edge@1.3.1(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
+      react-native: 0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6)
+
+  react-native-mmkv@4.3.2(react-native-nitro-modules@0.35.9(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3))(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3):
+    dependencies:
+      react: 19.2.3
+      react-native: 0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6)
+      react-native-nitro-modules: 0.35.9(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3)
+
+  react-native-nitro-modules@0.35.9(react-native@0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6))(react@19.2.3):
     dependencies:
       react: 19.2.3
       react-native: 0.86.0(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7)(bufferutil@4.1.0)(utf-8-validate@6.0.6))(@types/react@19.2.15)(bufferutil@4.1.0)(react@19.2.3)(utf-8-validate@6.0.6)

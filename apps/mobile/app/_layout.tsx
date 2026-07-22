@@ -1,18 +1,16 @@
 import { ClerkProvider } from "@clerk/expo";
+import { resourceCache } from "@clerk/expo/resource-cache";
 import { tokenCache } from "@clerk/expo/token-cache";
-import { focusManager, QueryClientProvider } from "@tanstack/react-query";
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Slot } from "expo-router";
-import { AppState } from "react-native";
 import {
 	initialWindowMetrics,
 	SafeAreaProvider,
 } from "react-native-safe-area-context";
+import "@/offline/online";
+import { persistOptions } from "@/offline/persister";
 import { TRPCProvider, trpcClient } from "@/trpc/client";
 import { queryClient } from "@/trpc/queryClient";
-
-AppState.addEventListener("change", (status) =>
-	focusManager.setFocused(status === "active"),
-);
 
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY;
 
@@ -24,13 +22,20 @@ export default function RootLayout() {
 	}
 
 	return (
-		<ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+		<ClerkProvider
+			publishableKey={publishableKey}
+			tokenCache={tokenCache}
+			__experimental_resourceCache={resourceCache}
+		>
 			<SafeAreaProvider initialMetrics={initialWindowMetrics}>
-				<QueryClientProvider client={queryClient}>
+				<PersistQueryClientProvider
+					client={queryClient}
+					persistOptions={persistOptions}
+				>
 					<TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
 						<Slot />
 					</TRPCProvider>
-				</QueryClientProvider>
+				</PersistQueryClientProvider>
 			</SafeAreaProvider>
 		</ClerkProvider>
 	);
