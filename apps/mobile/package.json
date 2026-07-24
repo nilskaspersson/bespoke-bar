@@ -6,6 +6,9 @@
 	"scripts": {
 		"start": "expo start --dev-client",
 		"ios": "bash scripts/dev-ios.sh",
+		"build:ios:preview": "eas build --platform ios --profile preview",
+		"build:ios": "eas build --platform ios --profile production",
+		"submit:ios": "eas submit --platform ios --latest",
 		"lint": "biome check",
 		"check-types": "tsc --noEmit"
 	},

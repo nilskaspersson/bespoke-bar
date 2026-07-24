@@ -10,7 +10,10 @@
 		"ios": {
 			"icon": "./assets/expo.icon",
 			"bundleIdentifier": "app.bespoke-bar.bar",
-			"supportsTablet": false
+			"supportsTablet": false,
+			"infoPlist": {
+				"ITSAppUsesNonExemptEncryption": false
+			}
 		},
 		"android": {
 			"adaptiveIcon": {

@@ -7,8 +7,20 @@ import { Platform } from "react-native";
 
 export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>();
 
-export const apiOrigin =
-	process.env.EXPO_PUBLIC_API_URL ?? "http://localhost:3000";
+function resolveApiOrigin(): string {
+	const configured = process.env.EXPO_PUBLIC_API_URL;
+	if (__DEV__) {
+		return configured ?? "http://localhost:3000";
+	}
+	if (!configured || /localhost|127\.0\.0\.1/.test(configured)) {
+		throw new Error(
+			"EXPO_PUBLIC_API_URL is missing or points at localhost in a release build — set it in the EAS build profile's env.",
+		);
+	}
+	return configured;
+}
+
+export const apiOrigin = resolveApiOrigin();
 
 const TOKEN_TIMEOUT_MS = 5000;
 
