@@ -26,6 +26,7 @@ import { useTheme } from "@/theme";
 import { fontSize, space } from "@/theme/tokens";
 import { getAppErrorPayload } from "@/trpc/appError";
 import { useTRPC } from "@/trpc/client";
+import { updateRequiredStore } from "@/trpc/updateRequired";
 
 function keyExtractor(recipe: RecipeWithRelations): string {
 	return recipe.id;
@@ -47,6 +48,7 @@ export default function RecipesScreen() {
 		await Promise.all([recipes.refetch(), favorites.refetch()]).catch(
 			() => undefined,
 		);
+		updateRequiredStore.getState().resurface();
 		setIsRefreshing(false);
 	}
 

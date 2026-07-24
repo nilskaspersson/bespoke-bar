@@ -3,10 +3,19 @@ import { MutationCache, QueryCache, QueryClient } from "@tanstack/react-query";
 import { TRPCClientError } from "@trpc/client";
 import { PERSIST_MAX_AGE } from "@/offline/persister";
 import { purgeOfflineCache } from "@/offline/purge";
+import { getAppErrorPayload, isUpdateRequired } from "@/trpc/appError";
+import { updateRequiredStore } from "@/trpc/updateRequired";
 
 function isUnauthorized(error: unknown): boolean {
 	return (
 		error instanceof TRPCClientError && error.data?.code === "UNAUTHORIZED"
+	);
+}
+
+function isPreconditionFailed(error: unknown): boolean {
+	return (
+		error instanceof TRPCClientError &&
+		error.data?.code === "PRECONDITION_FAILED"
 	);
 }
 
@@ -26,9 +35,39 @@ async function signOutOnUnauthorized(error: unknown): Promise<void> {
 	}
 }
 
+/**
+ * `UPDATE_REQUIRED` is global (ADR-0009): the binary is below the server's
+ * floor, so every request fails the same way. This is NOT a hard wall (that
+ * stays reserved for security/retirement) — the cached library keeps rendering
+ * and only the refresh is refused. Flip the sticky store that shows the
+ * non-blocking "update to sync" notice; leave the stale cache in place.
+ */
+function handleCacheError(error: unknown): void {
+	if (isUpdateRequired(getAppErrorPayload(error))) {
+		updateRequiredStore.getState().markRequired();
+		return;
+	}
+	void signOutOnUnauthorized(error);
+}
+
+/**
+ * Any successful response proves this binary is back above the floor (it was
+ * lowered, or the request was retried after an update), so retire the notice.
+ * Cheap no-op when it isn't showing.
+ */
+function handleCacheSuccess(): void {
+	updateRequiredStore.getState().clear();
+}
+
 export const queryClient = new QueryClient({
-	queryCache: new QueryCache({ onError: signOutOnUnauthorized }),
-	mutationCache: new MutationCache({ onError: signOutOnUnauthorized }),
+	queryCache: new QueryCache({
+		onError: handleCacheError,
+		onSuccess: handleCacheSuccess,
+	}),
+	mutationCache: new MutationCache({
+		onError: handleCacheError,
+		onSuccess: handleCacheSuccess,
+	}),
 	defaultOptions: {
 		queries: {
 			staleTime: 5 * 60 * 1000,
@@ -39,8 +78,15 @@ export const queryClient = new QueryClient({
 			 * the default gcTime is five minutes.
 			 */
 			gcTime: PERSIST_MAX_AGE,
+			/**
+			 * Never retry a `PRECONDITION_FAILED` (update-required): the floor is
+			 * deterministic, so a retry storm would only hammer the server without
+			 * ever succeeding.
+			 */
 			retry: (failureCount, error) =>
-				!isUnauthorized(error) && failureCount < 2,
+				!isUnauthorized(error) &&
+				!isPreconditionFailed(error) &&
+				failureCount < 2,
 		},
 	},
 });

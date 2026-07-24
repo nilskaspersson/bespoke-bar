@@ -77,6 +77,12 @@ own product) and evolve it under three rules:
   wire's rules and need a cache-buster when they can't. (Relevant only if offline storage
   lands; not yet decided.)
 
+## Amendment — the routine floor response is a soft gate, not a wall (2026-07-23)
+
+Consequence 1 already scoped the hard "update required" wall to *security fixes and retiring a passed contract — not a routine UX*, but the first stage-5 build applied a full-screen wall to **every** `UPDATE_REQUIRED`, conflating a routine floor raise with a hard kill. Corrected: the default client response to `UPDATE_REQUIRED` is a **soft, non-blocking gate**. The below-floor binary keeps rendering its cached library (the persister already retains errored-with-data queries, Offline Reads) and only the *refresh* is refused; a persistent, dismissible-free banner tells the user to update to sync, and — when mutations land — their controls disable themselves off the same signal with matching copy. It auto-clears the moment any request succeeds (the floor was lowered, or the app was updated). This is coherent for a **read-only** client whose real enforcement point is the server rejecting the request: viewing a stale cocktail library is not a security risk, so blocking cached reads buys nothing.
+
+The **hard wall remains the reserved escape hatch** for the genuine security/retirement case, but it is *unbuilt* until first needed (YAGNI) — it would arrive as a distinct, harder signal (e.g. a second Edge Config tier or a dedicated error code), not by hardening the routine floor. The empty-cache below-floor case needs no wall either: the library's own empty state renders the `UPDATE_REQUIRED` message (there is nothing cached to preserve). Server behaviour is unchanged by this amendment — the floor middleware still rejects below-floor requests on every procedure; only the client's interpretation softened.
+
 ## Amendment — offline persistence decided (2026-07-05)
 
 Offline storage (**Offline Reads**, CONTEXT.md) is landing, and the last consequence

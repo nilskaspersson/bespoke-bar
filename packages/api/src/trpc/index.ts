@@ -7,6 +7,11 @@ import { isAdminUser } from "../admin";
 import type { Auth } from "../auth";
 import { getLocalOrgId } from "../organisation/getOrCreateLocalOrganisation";
 import { serializeWireTimestamps } from "./serializeTimestamp";
+import {
+	getMinAppVersion,
+	isBelowFloor,
+	readClientHeaders,
+} from "./versionFloor";
 
 type TRPCErrorCode = ConstructorParameters<typeof TRPCError>[0]["code"];
 
@@ -24,13 +29,32 @@ const APP_ERROR_TO_TRPC_CODE: Record<AppErrorPayload["code"], TRPCErrorCode> = {
 	UPDATE_REQUIRED: "PRECONDITION_FAILED",
 };
 
-export async function createContext() {
+/**
+ * Translate an `AppError` into a `TRPCError` with the matching HTTP code. The
+ * mapping is schema-driven, so status is consistent across every variant;
+ * `errorFormatter` still pulls the original payload onto `data.appError` via
+ * `error.cause`.
+ */
+function toTRPCError(error: AppError): TRPCError {
+	return new TRPCError({
+		code: APP_ERROR_TO_TRPC_CODE[error.payload.code],
+		message: error.message,
+		cause: error,
+	});
+}
+
+export async function createContext(opts?: { headers?: Headers }) {
 	const { userId, orgId: clerkOrgId } = await auth();
 
 	const orgId =
 		userId && clerkOrgId ? await getLocalOrgId(clerkOrgId, userId) : null;
 
-	return { userId, orgId, clerkOrgId };
+	return {
+		userId,
+		orgId,
+		clerkOrgId,
+		client: readClientHeaders(opts?.headers),
+	};
 }
 
 type Context = Awaited<ReturnType<typeof createContext>>;
@@ -64,12 +88,37 @@ export type TRPCErrorData = {
 };
 
 /**
+ * Per-platform min-version floor (ADR-0009), gated on the shared base so it
+ * runs on public, protected, and admin alike — and *before* auth, so an
+ * outdated binary sees the update wall, not an `UNAUTHORIZED` masking it. Web
+ * traffic sends no cohort headers and returns immediately before any Edge
+ * Config read.
+ */
+const versionFloor = t.middleware(async ({ ctx, next }) => {
+	const { platform, version } = ctx.client;
+	if (!platform || !version) {
+		return next();
+	}
+
+	console.log(JSON.stringify({ evt: "app-cohort", platform, version }));
+
+	const floor = await getMinAppVersion(platform);
+	if (floor && isBelowFloor(version, floor)) {
+		throw toTRPCError(
+			new AppError({ code: "UPDATE_REQUIRED", minVersion: floor }),
+		);
+	}
+
+	return next();
+});
+
+/**
  * Every procedure's output passes through wire-timestamp canonicalization
  * here, by construction — not per procedure. New procedure variants must
  * derive from `baseProcedure` (or the exports below), never from
  * `t.procedure` directly, or their timestamps ship raw.
  */
-const baseProcedure = t.procedure.use(async ({ next }) => {
+const baseProcedure = t.procedure.use(versionFloor).use(async ({ next }) => {
 	const result = await next();
 	return result.ok
 		? { ...result, data: serializeWireTimestamps(result.data) }
@@ -85,12 +134,6 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
 		throw new TRPCError({ code: "UNAUTHORIZED" });
 	}
 
-	/**
-	 * Translate any `AppError` into a `TRPCError` with the matching HTTP code.
-	 * The mapping lives at the top of the file and is schema-driven, so the
-	 * status is consistent across every variant. `errorFormatter` still pulls
-	 * the original payload onto `data.appError` via `error.cause`.
-	 */
 	try {
 		return await next({
 			ctx: {
@@ -101,11 +144,7 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
 		});
 	} catch (error) {
 		if (error instanceof AppError) {
-			throw new TRPCError({
-				code: APP_ERROR_TO_TRPC_CODE[error.payload.code],
-				message: error.message,
-				cause: error,
-			});
+			throw toTRPCError(error);
 		}
 		throw error;
 	}

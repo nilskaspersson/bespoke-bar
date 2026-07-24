@@ -3,11 +3,13 @@ import { resourceCache } from "@clerk/expo/resource-cache";
 import { tokenCache } from "@clerk/expo/token-cache";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
 import { Slot } from "expo-router";
+import { View } from "react-native";
 import {
 	initialWindowMetrics,
 	SafeAreaProvider,
 } from "react-native-safe-area-context";
 import "@/offline/online";
+import { UpdateBanner } from "@/components/UpdateBanner";
 import { persistOptions } from "@/offline/persister";
 import { TRPCProvider, trpcClient } from "@/trpc/client";
 import { queryClient } from "@/trpc/queryClient";
@@ -33,7 +35,12 @@ export default function RootLayout() {
 					persistOptions={persistOptions}
 				>
 					<TRPCProvider trpcClient={trpcClient} queryClient={queryClient}>
-						<Slot />
+						<View style={{ flex: 1 }}>
+							<UpdateBanner />
+							<View style={{ flex: 1 }}>
+								<Slot />
+							</View>
+						</View>
 					</TRPCProvider>
 				</PersistQueryClientProvider>
 			</SafeAreaProvider>

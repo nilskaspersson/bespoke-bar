@@ -1,0 +1,1771 @@
+{
+	"appErrorCodes": [
+		"INGREDIENT_IN_USE",
+		"NO_RECIPES_PROVIDED",
+		"NO_RECIPE_FOUND",
+		"OCR_QUOTA_REACHED",
+		"RATE_LIMIT_EXCEEDED",
+		"RECIPE_LINE_LIMIT_REACHED",
+		"RECIPE_SLOT_LIMIT_REACHED",
+		"UPDATE_REQUIRED"
+	],
+	"procedures": {
+		"billing.config": {
+			"input": null,
+			"type": "query"
+		},
+		"billing.ocrQuotaState": {
+			"input": null,
+			"type": "query"
+		},
+		"billing.subscription": {
+			"input": null,
+			"type": "query"
+		},
+		"billing.usage": {
+			"input": null,
+			"type": "query"
+		},
+		"favorite.list": {
+			"input": null,
+			"type": "query"
+		},
+		"favorite.toggle": {
+			"input": {
+				"properties": {
+					"recipeId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"recipeId"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"featured.clear": {
+			"input": null,
+			"type": "mutation"
+		},
+		"featured.get": {
+			"input": null,
+			"type": "query"
+		},
+		"featured.set": {
+			"input": {
+				"properties": {
+					"menuId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"menuId"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"ingredient.byId": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "query"
+		},
+		"ingredient.create": {
+			"input": {
+				"properties": {
+					"abv": {
+						"anyOf": [
+							{
+								"maximum": 1,
+								"minimum": 0,
+								"type": "number"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"brand": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"category": {
+						"anyOf": [
+							{
+								"enum": [
+									"absinthe",
+									"aquavit",
+									"armagnac",
+									"baijiu",
+									"bourbon",
+									"brandy",
+									"cachaca",
+									"calvados",
+									"cognac",
+									"gin",
+									"genever",
+									"grappa",
+									"mezcal",
+									"pisco",
+									"rum",
+									"rye",
+									"shochu",
+									"tequila",
+									"vodka",
+									"whiskey",
+									"vermouth",
+									"sherry",
+									"port",
+									"aperitif",
+									"sake",
+									"amaro",
+									"bitters",
+									"liqueur",
+									"herbal_liqueur",
+									"wine",
+									"champagne",
+									"beer",
+									"citrus",
+									"fruit",
+									"herb",
+									"cocktail_bitters",
+									"egg",
+									"syrup",
+									"soda",
+									"dairy",
+									"juice",
+									"honey",
+									"other"
+								],
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"description": {
+						"anyOf": [
+							{
+								"maxLength": 5000,
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"measurementType": {
+						"anyOf": [
+							{
+								"enum": [
+									"volume",
+									"mass",
+									"pieces"
+								],
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"name": {
+						"maxLength": 100,
+						"minLength": 1,
+						"type": "string"
+					},
+					"unitCost": {
+						"anyOf": [
+							{
+								"exclusiveMinimum": 0,
+								"type": "number"
+							},
+							{
+								"type": "null"
+							}
+						]
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"ingredient.delete": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"ingredient.list": {
+			"input": null,
+			"type": "query"
+		},
+		"ingredient.update": {
+			"input": {
+				"properties": {
+					"data": {
+						"properties": {
+							"abv": {
+								"anyOf": [
+									{
+										"maximum": 1,
+										"minimum": 0,
+										"type": "number"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"brand": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"category": {
+								"anyOf": [
+									{
+										"enum": [
+											"absinthe",
+											"aquavit",
+											"armagnac",
+											"baijiu",
+											"bourbon",
+											"brandy",
+											"cachaca",
+											"calvados",
+											"cognac",
+											"gin",
+											"genever",
+											"grappa",
+											"mezcal",
+											"pisco",
+											"rum",
+											"rye",
+											"shochu",
+											"tequila",
+											"vodka",
+											"whiskey",
+											"vermouth",
+											"sherry",
+											"port",
+											"aperitif",
+											"sake",
+											"amaro",
+											"bitters",
+											"liqueur",
+											"herbal_liqueur",
+											"wine",
+											"champagne",
+											"beer",
+											"citrus",
+											"fruit",
+											"herb",
+											"cocktail_bitters",
+											"egg",
+											"syrup",
+											"soda",
+											"dairy",
+											"juice",
+											"honey",
+											"other"
+										],
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"createdAt": {
+								"type": "string"
+							},
+							"createdBy": {
+								"type": "string"
+							},
+							"description": {
+								"anyOf": [
+									{
+										"maxLength": 5000,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"id": {
+								"type": "string"
+							},
+							"measurementType": {
+								"anyOf": [
+									{
+										"enum": [
+											"volume",
+											"mass",
+											"pieces"
+										],
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"name": {
+								"maxLength": 100,
+								"minLength": 1,
+								"type": "string"
+							},
+							"orgId": {
+								"type": "string"
+							},
+							"unitCost": {
+								"anyOf": [
+									{
+										"exclusiveMinimum": 0,
+										"type": "number"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"updatedAt": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"updatedBy": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							}
+						},
+						"required": [
+							"name"
+						],
+						"type": "object"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"data"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menu.byId": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "query"
+		},
+		"menu.create": {
+			"input": {
+				"properties": {
+					"description": {
+						"anyOf": [
+							{
+								"maxLength": 1000,
+								"type": "string"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"id": {
+						"type": "string"
+					},
+					"isPublic": {
+						"type": "boolean"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menu.delete": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menu.list": {
+			"input": null,
+			"type": "query"
+		},
+		"menu.upsertWithEntries": {
+			"input": {
+				"properties": {
+					"entries": {
+						"items": {
+							"properties": {
+								"price": {
+									"anyOf": [
+										{
+											"maximum": 9007199254740991,
+											"minimum": -9007199254740991,
+											"type": "number"
+										},
+										{
+											"type": "null"
+										}
+									]
+								},
+								"recipeId": {
+									"type": "string"
+								},
+								"sortOrder": {
+									"anyOf": [
+										{
+											"maximum": 2147483647,
+											"minimum": -2147483648,
+											"type": "integer"
+										},
+										{
+											"type": "null"
+										}
+									]
+								}
+							},
+							"required": [
+								"recipeId"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"menu": {
+						"properties": {
+							"description": {
+								"anyOf": [
+									{
+										"maxLength": 1000,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"id": {
+								"type": "string"
+							},
+							"isPublic": {
+								"type": "boolean"
+							},
+							"name": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"menu",
+					"entries"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menuEntry.add": {
+			"input": {
+				"properties": {
+					"menuId": {
+						"type": "string"
+					},
+					"price": {
+						"anyOf": [
+							{
+								"maximum": 9007199254740991,
+								"minimum": -9007199254740991,
+								"type": "number"
+							},
+							{
+								"type": "null"
+							}
+						]
+					},
+					"recipeId": {
+						"type": "string"
+					},
+					"sortOrder": {
+						"anyOf": [
+							{
+								"maximum": 2147483647,
+								"minimum": -2147483648,
+								"type": "integer"
+							},
+							{
+								"type": "null"
+							}
+						]
+					}
+				},
+				"required": [
+					"menuId",
+					"recipeId"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menuEntry.append": {
+			"input": {
+				"properties": {
+					"entries": {
+						"items": {
+							"properties": {
+								"price": {
+									"anyOf": [
+										{
+											"maximum": 9007199254740991,
+											"minimum": -9007199254740991,
+											"type": "number"
+										},
+										{
+											"type": "null"
+										}
+									]
+								},
+								"recipeId": {
+									"type": "string"
+								},
+								"sortOrder": {
+									"anyOf": [
+										{
+											"maximum": 2147483647,
+											"minimum": -2147483648,
+											"type": "integer"
+										},
+										{
+											"type": "null"
+										}
+									]
+								}
+							},
+							"required": [
+								"recipeId"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
+					"menu": {
+						"properties": {
+							"description": {
+								"anyOf": [
+									{
+										"maxLength": 1000,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"id": {
+								"type": "string"
+							},
+							"isPublic": {
+								"type": "boolean"
+							},
+							"name": {
+								"type": "string"
+							}
+						},
+						"type": "object"
+					}
+				},
+				"required": [
+					"menu",
+					"entries"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menuEntry.remove": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"menuEntry.update": {
+			"input": {
+				"properties": {
+					"data": {
+						"properties": {
+							"menuId": {
+								"type": "string"
+							},
+							"price": {
+								"anyOf": [
+									{
+										"maximum": 9007199254740991,
+										"minimum": -9007199254740991,
+										"type": "number"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"recipeId": {
+								"type": "string"
+							},
+							"sortOrder": {
+								"anyOf": [
+									{
+										"maximum": 2147483647,
+										"minimum": -2147483648,
+										"type": "integer"
+									},
+									{
+										"type": "null"
+									}
+								]
+							}
+						},
+						"required": [
+							"menuId",
+							"recipeId"
+						],
+						"type": "object"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"data"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"organisation.get": {
+			"input": null,
+			"type": "query"
+		},
+		"organisation.update": {
+			"input": {
+				"properties": {
+					"currency": {
+						"maxLength": 3,
+						"type": "string"
+					},
+					"defaultLocale": {
+						"maxLength": 10,
+						"type": "string"
+					}
+				},
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"recipe.byId": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "query"
+		},
+		"recipe.count": {
+			"input": null,
+			"type": "query"
+		},
+		"recipe.delete": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"recipe.duplicate": {
+			"input": {
+				"properties": {
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"recipe.list": {
+			"input": null,
+			"type": "query"
+		},
+		"recipe.update": {
+			"input": {
+				"properties": {
+					"data": {
+						"properties": {
+							"createdAt": {
+								"type": "string"
+							},
+							"createdBy": {
+								"type": "string"
+							},
+							"description": {
+								"anyOf": [
+									{
+										"maxLength": 5000,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"dilutionTarget": {
+								"anyOf": [
+									{
+										"maximum": 140737488355327,
+										"minimum": -140737488355328,
+										"type": "number"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"garnish": {
+								"anyOf": [
+									{
+										"maxLength": 100,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"glassware": {
+								"anyOf": [
+									{
+										"enum": [
+											"coupe",
+											"fizz",
+											"flute",
+											"highball",
+											"hurricane",
+											"julep",
+											"martini",
+											"nick_nora",
+											"pilsner",
+											"port",
+											"rocks_double",
+											"rocks",
+											"shot",
+											"snifter",
+											"tiki_mug",
+											"wine"
+										],
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"ice": {
+								"anyOf": [
+									{
+										"enum": [
+											"none",
+											"cubed",
+											"crushed"
+										],
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"id": {
+								"type": "string"
+							},
+							"instructions": {
+								"anyOf": [
+									{
+										"maxLength": 5000,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"name": {
+								"anyOf": [
+									{
+										"maxLength": 100,
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"orgId": {
+								"type": "string"
+							},
+							"preparationMethod": {
+								"anyOf": [
+									{
+										"enum": [
+											"blended",
+											"built",
+											"layered",
+											"shaken",
+											"stirred"
+										],
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"style": {
+								"anyOf": [
+									{
+										"enum": [
+											"aperitif",
+											"cooler",
+											"digestif",
+											"fizz",
+											"flip",
+											"highball",
+											"julep",
+											"manhattan",
+											"martini",
+											"negroni",
+											"oldFashioned",
+											"other",
+											"punch",
+											"smash",
+											"sour",
+											"spritz",
+											"tiki"
+										],
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"updatedAt": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							},
+							"updatedBy": {
+								"anyOf": [
+									{
+										"type": "string"
+									},
+									{
+										"type": "null"
+									}
+								]
+							}
+						},
+						"type": "object"
+					},
+					"id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"data"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"recipe.upsertWithLines": {
+			"input": {
+				"anyOf": [
+					{
+						"properties": {
+							"lines": {
+								"items": {
+									"properties": {
+										"id": {
+											"type": "string"
+										},
+										"ingredient": {
+											"properties": {
+												"abv": {
+													"anyOf": [
+														{
+															"type": "string"
+														},
+														{
+															"type": "number"
+														},
+														{
+															"type": "null"
+														},
+														{}
+													]
+												},
+												"brand": {
+													"anyOf": [
+														{
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"category": {
+													"anyOf": [
+														{
+															"enum": [
+																"absinthe",
+																"aquavit",
+																"armagnac",
+																"baijiu",
+																"bourbon",
+																"brandy",
+																"cachaca",
+																"calvados",
+																"cognac",
+																"gin",
+																"genever",
+																"grappa",
+																"mezcal",
+																"pisco",
+																"rum",
+																"rye",
+																"shochu",
+																"tequila",
+																"vodka",
+																"whiskey",
+																"vermouth",
+																"sherry",
+																"port",
+																"aperitif",
+																"sake",
+																"amaro",
+																"bitters",
+																"liqueur",
+																"herbal_liqueur",
+																"wine",
+																"champagne",
+																"beer",
+																"citrus",
+																"fruit",
+																"herb",
+																"cocktail_bitters",
+																"egg",
+																"syrup",
+																"soda",
+																"dairy",
+																"juice",
+																"honey",
+																"other"
+															],
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"description": {
+													"anyOf": [
+														{
+															"maxLength": 5000,
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"measurementType": {
+													"anyOf": [
+														{
+															"enum": [
+																"volume",
+																"mass",
+																"pieces"
+															],
+															"type": "string"
+														},
+														{
+															"type": "null"
+														}
+													]
+												},
+												"name": {
+													"maxLength": 100,
+													"minLength": 1,
+													"type": "string"
+												},
+												"unitCost": {
+													"anyOf": [
+														{
+															"exclusiveMinimum": 0,
+															"type": "number"
+														},
+														{
+															"type": "null"
+														}
+													]
+												}
+											},
+											"required": [
+												"name"
+											],
+											"type": "object"
+										},
+										"ingredientId": {
+											"type": "string"
+										},
+										"optional": {
+											"anyOf": [
+												{
+													"type": "boolean"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"quantity": {
+											"anyOf": [
+												{
+													"exclusiveMinimum": 0,
+													"type": "number"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"unit": {
+											"anyOf": [
+												{
+													"enum": [
+														"cl",
+														"dl",
+														"cup",
+														"fl_oz",
+														"l",
+														"ml",
+														"tbsp",
+														"tsp",
+														"gal",
+														"qt",
+														"barspoon",
+														"dash",
+														"rinse",
+														"float",
+														"drop",
+														"spray"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									},
+									"required": [
+										"quantity"
+									],
+									"type": "object"
+								},
+								"maxItems": 20,
+								"type": "array"
+							},
+							"recipe": {
+								"properties": {
+									"description": {
+										"anyOf": [
+											{
+												"maxLength": 5000,
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"dilutionTarget": {
+										"anyOf": [
+											{
+												"maximum": 140737488355327,
+												"minimum": -140737488355328,
+												"type": "number"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"garnish": {
+										"anyOf": [
+											{
+												"maxLength": 100,
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"glassware": {
+										"anyOf": [
+											{
+												"enum": [
+													"coupe",
+													"fizz",
+													"flute",
+													"highball",
+													"hurricane",
+													"julep",
+													"martini",
+													"nick_nora",
+													"pilsner",
+													"port",
+													"rocks_double",
+													"rocks",
+													"shot",
+													"snifter",
+													"tiki_mug",
+													"wine"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"ice": {
+										"anyOf": [
+											{
+												"enum": [
+													"none",
+													"cubed",
+													"crushed"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"id": {
+										"type": "string"
+									},
+									"instructions": {
+										"anyOf": [
+											{
+												"maxLength": 5000,
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"name": {
+										"anyOf": [
+											{
+												"maxLength": 100,
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"preparationMethod": {
+										"anyOf": [
+											{
+												"enum": [
+													"blended",
+													"built",
+													"layered",
+													"shaken",
+													"stirred"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"style": {
+										"anyOf": [
+											{
+												"enum": [
+													"aperitif",
+													"cooler",
+													"digestif",
+													"fizz",
+													"flip",
+													"highball",
+													"julep",
+													"manhattan",
+													"martini",
+													"negroni",
+													"oldFashioned",
+													"other",
+													"punch",
+													"smash",
+													"sour",
+													"spritz",
+													"tiki"
+												],
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									},
+									"updatedBy": {
+										"anyOf": [
+											{
+												"type": "string"
+											},
+											{
+												"type": "null"
+											}
+										]
+									}
+								},
+								"type": "object"
+							}
+						},
+						"type": "object"
+					},
+					{
+						"items": {
+							"properties": {
+								"lines": {
+									"items": {
+										"properties": {
+											"id": {
+												"type": "string"
+											},
+											"ingredient": {
+												"properties": {
+													"abv": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "number"
+															},
+															{
+																"type": "null"
+															},
+															{}
+														]
+													},
+													"brand": {
+														"anyOf": [
+															{
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"category": {
+														"anyOf": [
+															{
+																"enum": [
+																	"absinthe",
+																	"aquavit",
+																	"armagnac",
+																	"baijiu",
+																	"bourbon",
+																	"brandy",
+																	"cachaca",
+																	"calvados",
+																	"cognac",
+																	"gin",
+																	"genever",
+																	"grappa",
+																	"mezcal",
+																	"pisco",
+																	"rum",
+																	"rye",
+																	"shochu",
+																	"tequila",
+																	"vodka",
+																	"whiskey",
+																	"vermouth",
+																	"sherry",
+																	"port",
+																	"aperitif",
+																	"sake",
+																	"amaro",
+																	"bitters",
+																	"liqueur",
+																	"herbal_liqueur",
+																	"wine",
+																	"champagne",
+																	"beer",
+																	"citrus",
+																	"fruit",
+																	"herb",
+																	"cocktail_bitters",
+																	"egg",
+																	"syrup",
+																	"soda",
+																	"dairy",
+																	"juice",
+																	"honey",
+																	"other"
+																],
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"description": {
+														"anyOf": [
+															{
+																"maxLength": 5000,
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"measurementType": {
+														"anyOf": [
+															{
+																"enum": [
+																	"volume",
+																	"mass",
+																	"pieces"
+																],
+																"type": "string"
+															},
+															{
+																"type": "null"
+															}
+														]
+													},
+													"name": {
+														"maxLength": 100,
+														"minLength": 1,
+														"type": "string"
+													},
+													"unitCost": {
+														"anyOf": [
+															{
+																"exclusiveMinimum": 0,
+																"type": "number"
+															},
+															{
+																"type": "null"
+															}
+														]
+													}
+												},
+												"required": [
+													"name"
+												],
+												"type": "object"
+											},
+											"ingredientId": {
+												"type": "string"
+											},
+											"optional": {
+												"anyOf": [
+													{
+														"type": "boolean"
+													},
+													{
+														"type": "null"
+													}
+												]
+											},
+											"quantity": {
+												"anyOf": [
+													{
+														"exclusiveMinimum": 0,
+														"type": "number"
+													},
+													{
+														"type": "null"
+													}
+												]
+											},
+											"unit": {
+												"anyOf": [
+													{
+														"enum": [
+															"cl",
+															"dl",
+															"cup",
+															"fl_oz",
+															"l",
+															"ml",
+															"tbsp",
+															"tsp",
+															"gal",
+															"qt",
+															"barspoon",
+															"dash",
+															"rinse",
+															"float",
+															"drop",
+															"spray"
+														],
+														"type": "string"
+													},
+													{
+														"type": "null"
+													}
+												]
+											}
+										},
+										"required": [
+											"quantity"
+										],
+										"type": "object"
+									},
+									"maxItems": 20,
+									"type": "array"
+								},
+								"recipe": {
+									"properties": {
+										"description": {
+											"anyOf": [
+												{
+													"maxLength": 5000,
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"dilutionTarget": {
+											"anyOf": [
+												{
+													"maximum": 140737488355327,
+													"minimum": -140737488355328,
+													"type": "number"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"garnish": {
+											"anyOf": [
+												{
+													"maxLength": 100,
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"glassware": {
+											"anyOf": [
+												{
+													"enum": [
+														"coupe",
+														"fizz",
+														"flute",
+														"highball",
+														"hurricane",
+														"julep",
+														"martini",
+														"nick_nora",
+														"pilsner",
+														"port",
+														"rocks_double",
+														"rocks",
+														"shot",
+														"snifter",
+														"tiki_mug",
+														"wine"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"ice": {
+											"anyOf": [
+												{
+													"enum": [
+														"none",
+														"cubed",
+														"crushed"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"id": {
+											"type": "string"
+										},
+										"instructions": {
+											"anyOf": [
+												{
+													"maxLength": 5000,
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"name": {
+											"anyOf": [
+												{
+													"maxLength": 100,
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"preparationMethod": {
+											"anyOf": [
+												{
+													"enum": [
+														"blended",
+														"built",
+														"layered",
+														"shaken",
+														"stirred"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"style": {
+											"anyOf": [
+												{
+													"enum": [
+														"aperitif",
+														"cooler",
+														"digestif",
+														"fizz",
+														"flip",
+														"highball",
+														"julep",
+														"manhattan",
+														"martini",
+														"negroni",
+														"oldFashioned",
+														"other",
+														"punch",
+														"smash",
+														"sour",
+														"spritz",
+														"tiki"
+													],
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										},
+										"updatedBy": {
+											"anyOf": [
+												{
+													"type": "string"
+												},
+												{
+													"type": "null"
+												}
+											]
+										}
+									},
+									"type": "object"
+								}
+							},
+							"type": "object"
+						},
+						"type": "array"
+					}
+				]
+			},
+			"type": "mutation"
+		},
+		"tag.create": {
+			"input": {
+				"properties": {
+					"name": {
+						"maxLength": 30,
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		},
+		"tag.list": {
+			"input": null,
+			"type": "query"
+		},
+		"tag.setRecipeTags": {
+			"input": {
+				"properties": {
+					"recipeId": {
+						"type": "string"
+					},
+					"tagIds": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"recipeId",
+					"tagIds"
+				],
+				"type": "object"
+			},
+			"type": "mutation"
+		}
+	}
+}
