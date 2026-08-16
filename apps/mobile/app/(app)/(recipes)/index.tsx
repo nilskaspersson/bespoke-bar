@@ -18,7 +18,6 @@ import {
 	type TextInputFocusEventData,
 	View,
 } from "react-native";
-import { SignOutButton } from "@/auth/SignOutButton";
 import { RecipeCard } from "@/features/recipes/RecipeCard";
 import { usePlaceholderPhase } from "@/offline/usePlaceholderPhase";
 import { useSyncedAgoLabel } from "@/offline/useSyncedAgoLabel";
@@ -58,19 +57,23 @@ export default function RecipesScreen() {
 		[],
 	);
 
+	/**
+	 * No headerLargeStyle here: an opaque background on the scroll-edge
+	 * appearance makes the large title invisible at rest on iOS 26 (the same
+	 * bug expo-router guards its standard header background against, but
+	 * headerLargeStyle passes through unguarded).
+	 */
 	const screenOptions = useMemo(
 		() => ({
 			title: "Recipes",
 			headerLargeTitleEnabled: true,
-			headerLargeStyle: { backgroundColor: theme.colors.background },
-			headerRight: () => <SignOutButton />,
 			headerSearchBarOptions: {
 				placeholder: "Recipe or ingredient",
 				autoCapitalize: "none" as const,
 				onChangeText,
 			},
 		}),
-		[onChangeText, theme.colors.background],
+		[onChangeText],
 	);
 
 	const searchIndex = useMemo(
@@ -158,7 +161,7 @@ function ListPlaceholder({
 	if (phase === "loading") {
 		return (
 			<Centered>
-				<ActivityIndicator />
+				<ActivityIndicator color={theme.colors.textLight} />
 			</Centered>
 		);
 	}

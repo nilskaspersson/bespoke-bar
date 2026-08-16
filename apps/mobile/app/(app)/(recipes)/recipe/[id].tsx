@@ -256,7 +256,7 @@ function DetailPlaceholder({
 	}
 
 	if (phase === "loading") {
-		return <ActivityIndicator />;
+		return <ActivityIndicator color={theme.colors.textLight} />;
 	}
 
 	const unreachable = phase === "offline" || status === "error";

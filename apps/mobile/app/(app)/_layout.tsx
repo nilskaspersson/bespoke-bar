@@ -1,5 +1,6 @@
 import { useAuth } from "@clerk/expo";
-import { Redirect, Stack } from "expo-router";
+import { Redirect } from "expo-router";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { useEffect } from "react";
 import { AuthSplash } from "@/auth/AuthSplash";
 import { OrgGate } from "@/auth/OrgGate";
@@ -35,19 +36,32 @@ export default function AppLayout() {
 		return <OrgGate />;
 	}
 
-	return <AppStack />;
+	return <AppTabs />;
 }
 
-function AppStack() {
+function AppTabs() {
 	const theme = useTheme();
 
 	return (
 		<FormattersProvider>
-			<Stack
-				screenOptions={{
-					contentStyle: { backgroundColor: theme.colors.background },
-				}}
-			/>
+			<NativeTabs
+				minimizeBehavior="onScrollDown"
+				tintColor={theme.colors.accent}
+			>
+				<NativeTabs.Trigger name="(recipes)">
+					<NativeTabs.Trigger.Icon
+						sf={{ default: "wineglass", selected: "wineglass.fill" }}
+					/>
+					<NativeTabs.Trigger.Label>Recipes</NativeTabs.Trigger.Label>
+				</NativeTabs.Trigger>
+
+				<NativeTabs.Trigger name="settings">
+					<NativeTabs.Trigger.Icon
+						sf={{ default: "gearshape", selected: "gearshape.fill" }}
+					/>
+					<NativeTabs.Trigger.Label>Settings</NativeTabs.Trigger.Label>
+				</NativeTabs.Trigger>
+			</NativeTabs>
 		</FormattersProvider>
 	);
 }
