@@ -5,13 +5,12 @@ import {
 	createQuantityFormatter,
 	createRelativeTimeFormatter,
 	createVolumeFormatter,
+	DEFAULT_CURRENCY,
+	DEFAULT_LOCALE,
 } from "@bespoke/domain/utils/formatting";
 import { useQuery } from "@tanstack/react-query";
 import { createContext, type ReactNode, use, useMemo } from "react";
 import { useTRPC } from "@/trpc/client";
-
-const DEFAULT_LOCALE = "en-GB";
-const DEFAULT_CURRENCY = "EUR";
 
 function createFormatters(locale: string, currency: string) {
 	return {

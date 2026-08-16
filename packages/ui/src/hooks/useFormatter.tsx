@@ -8,11 +8,10 @@ import {
 	createQuantityFormatter,
 	createRelativeTimeFormatter,
 	createVolumeFormatter,
+	DEFAULT_CURRENCY,
+	DEFAULT_LOCALE,
 } from "@bespoke/domain/utils/formatting";
 import { createContext, useMemo } from "react";
-
-const DEFAULT_LOCALE = "en-GB";
-const DEFAULT_CURRENCY = "EUR";
 
 export const FormatterContext = createContext({
 	currencyFormatter: createCurrencyFormatter(DEFAULT_LOCALE, DEFAULT_CURRENCY),

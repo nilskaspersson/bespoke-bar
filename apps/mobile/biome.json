@@ -30,6 +30,16 @@
 								"message": "Mobile consumes only the pure packages: @bespoke/schema and @bespoke/domain for values, plus `import type { AppRouter }` from @bespoke/api (stage 1). @bespoke/ui is web/DOM and @bespoke/db is server-only — neither runs on React Native."
 							},
 							{
+								"group": ["@bespoke/api/**"],
+								"message": "The only allowed @bespoke/api import is `import type { AppRouter }` from the package root (type-only, erased at build). Subpaths are server-only value surfaces that would fail at Metro bundle time."
+							},
+							{
+								"group": ["@bespoke/api"],
+								"importNamePattern": "AppRouter",
+								"invertImportNamePattern": true,
+								"message": "Only `import type { AppRouter }` may come from @bespoke/api — every other export is server-only."
+							},
+							{
 								"group": ["../**"],
 								"message": "Reach across directories through an alias: `@/*` for src, `@assets/*` for assets. Relative paths are for siblings that move together."
 							}
