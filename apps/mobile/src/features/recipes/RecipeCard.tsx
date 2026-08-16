@@ -16,29 +16,37 @@ import { IngredientLineList } from "@/features/ingredientLines/IngredientLineLis
 import { Chip } from "@/features/recipes/Chip";
 import { EnrichmentMark } from "@/features/recipes/EnrichmentMark";
 import { useFormatters } from "@/formatters";
-import { useTheme } from "@/theme";
+import { type ResolvedTheme, useResolvedTheme, useTheme } from "@/theme";
 import { fontSize, radius, space } from "@/theme/tokens";
 
 const CARD_WIDTH = 400;
 const CARD_RATIO = 16 / 9;
 
-const SHADOW = [
-	{ offsetX: 0, offsetY: 0.5, blurRadius: 0.5, color: "rgba(26, 25, 26, 0.2)" },
-	{
-		offsetX: 0,
-		offsetY: 1,
-		blurRadius: 1,
-		spreadDistance: -1,
-		color: "rgba(26, 25, 26, 0.15)",
-	},
-	{
-		offsetX: 0,
-		offsetY: 2,
-		blurRadius: 2,
-		spreadDistance: -3,
-		color: "rgba(26, 25, 26, 0.1)",
-	},
-];
+function shadow(color: string) {
+	return [
+		{ offsetX: 0, offsetY: 0.5, blurRadius: 0.5, color: `rgba(${color}, 0.2)` },
+		{
+			offsetX: 0,
+			offsetY: 1,
+			blurRadius: 1,
+			spreadDistance: -1,
+			color: `rgba(${color}, 0.15)`,
+		},
+		{
+			offsetX: 0,
+			offsetY: 2,
+			blurRadius: 2,
+			spreadDistance: -3,
+			color: `rgba(${color}, 0.1)`,
+		},
+	];
+}
+
+/** The web's --shadow--low + --shadow-color pair, per resolved theme. */
+const SHADOW: Record<ResolvedTheme, ReturnType<typeof shadow>> = {
+	light: shadow("26, 25, 26"),
+	dark: shadow("18, 17, 19"),
+};
 
 export function RecipeCard({
 	recipe,
@@ -48,6 +56,7 @@ export function RecipeCard({
 	isFavorite: boolean;
 }) {
 	const theme = useTheme();
+	const resolvedTheme = useResolvedTheme();
 	const { percentage } = useFormatters();
 
 	const metrics = calculateRecipeMetrics(recipe);
@@ -64,6 +73,7 @@ export function RecipeCard({
 				{
 					backgroundColor: theme.colors.mauve[1],
 					borderColor: theme.colors.mauve[pressed ? 5 : 4],
+					boxShadow: SHADOW[resolvedTheme],
 				},
 			]}
 		>
@@ -195,7 +205,6 @@ const styles = StyleSheet.create({
 		padding: space[4],
 		borderWidth: 1,
 		borderRadius: radius.lg,
-		boxShadow: SHADOW,
 	},
 	texture: {
 		...StyleSheet.absoluteFill,

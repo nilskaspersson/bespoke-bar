@@ -5,11 +5,10 @@ import {
 	Pressable,
 	StyleSheet,
 	Text,
-	useColorScheme,
 	View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useTheme } from "@/theme";
+import { useResolvedTheme, useTheme } from "@/theme";
 import { dark, light } from "@/theme/colors";
 import { fontSize, space } from "@/theme/tokens";
 import { useUpdateRequired } from "@/trpc/updateRequired";
@@ -34,14 +33,14 @@ export function UpdateBanner() {
 	const show = useUpdateRequired((s) => s.updateRequired && !s.dismissed);
 	const dismiss = useUpdateRequired((s) => s.dismiss);
 	const theme = useTheme();
-	const scheme = useColorScheme();
+	const resolvedTheme = useResolvedTheme();
 	const insets = useSafeAreaInsets();
 
 	if (!show) {
 		return null;
 	}
 
-	const inverted = scheme === "dark" ? light : dark;
+	const inverted = resolvedTheme === "dark" ? light : dark;
 
 	async function onUpdate() {
 		try {

@@ -2,6 +2,7 @@ import { useClerk } from "@clerk/expo";
 import * as WebBrowser from "expo-web-browser";
 import { View } from "react-native";
 import { purgeOfflineCache } from "@/offline/purge";
+import { space } from "@/theme/tokens";
 import { apiOrigin } from "@/trpc/client";
 import { queryClient } from "@/trpc/queryClient";
 import {
@@ -33,7 +34,7 @@ export function SetupWall() {
 				Your account isn't part of a bar yet. Create one on the web, then come
 				back — you'll be signed in and ready.
 			</BodyText>
-			<View style={{ gap: 12 }}>
+			<View style={{ gap: space[3] }}>
 				<PrimaryButton
 					label="Open setup in browser"
 					onPress={() => WebBrowser.openBrowserAsync(`${apiOrigin}/setup`)}

@@ -2,6 +2,7 @@ import { useAuth } from "@clerk/expo";
 import { AuthView } from "@clerk/expo/native";
 import { Redirect } from "expo-router";
 import { View } from "react-native";
+import { useTheme } from "@/theme";
 
 /**
  * Clerk's native prebuilt auth UI (SwiftUI on iOS). It owns the whole sign-in /
@@ -11,13 +12,14 @@ import { View } from "react-native";
  */
 export default function SignInScreen() {
 	const { isSignedIn } = useAuth();
+	const theme = useTheme();
 
 	if (isSignedIn) {
 		return <Redirect href="/" />;
 	}
 
 	return (
-		<View style={{ flex: 1 }}>
+		<View style={{ flex: 1, backgroundColor: theme.colors.background }}>
 			<AuthView mode="signInOrUp" />
 		</View>
 	);

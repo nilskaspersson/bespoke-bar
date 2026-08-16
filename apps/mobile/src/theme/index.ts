@@ -11,11 +11,22 @@ export type Theme = {
 	fonts: typeof fonts;
 };
 
+export type ResolvedTheme = "light" | "dark";
+
 const themes = {
 	light: { colors: light, space, radius, fontSize, fonts },
 	dark: { colors: dark, space, radius, fontSize, fonts },
-} satisfies Record<"light" | "dark", Theme>;
+} satisfies Record<ResolvedTheme, Theme>;
+
+/**
+ * `useColorScheme()` already reflects the persisted preference, because the
+ * preference is applied through `Appearance.setColorScheme` (see
+ * theme/preference.ts) — keep this the only file that reads it.
+ */
+export function useResolvedTheme(): ResolvedTheme {
+	return useColorScheme() === "dark" ? "dark" : "light";
+}
 
 export function useTheme(): Theme {
-	return themes[useColorScheme() === "dark" ? "dark" : "light"];
+	return themes[useResolvedTheme()];
 }

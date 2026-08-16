@@ -7,17 +7,35 @@ import {
 	Text,
 	View,
 } from "react-native";
+import { useTheme } from "@/theme";
+import { fontSize, radius, space } from "@/theme/tokens";
 
 export function AuthScreen({ children }: { children: ReactNode }) {
-	return <View style={styles.screen}>{children}</View>;
+	const theme = useTheme();
+
+	return (
+		<View style={[styles.screen, { backgroundColor: theme.colors.background }]}>
+			{children}
+		</View>
+	);
 }
 
 export function Heading({ children }: { children: ReactNode }) {
-	return <Text style={styles.heading}>{children}</Text>;
+	const theme = useTheme();
+
+	return (
+		<Text style={[styles.heading, { color: theme.colors.textHeavy }]}>
+			{children}
+		</Text>
+	);
 }
 
 export function BodyText({ children }: { children: ReactNode }) {
-	return <Text style={styles.body}>{children}</Text>;
+	const theme = useTheme();
+
+	return (
+		<Text style={[styles.body, { color: theme.colors.text }]}>{children}</Text>
+	);
 }
 
 type ButtonProps = Omit<PressableProps, "children"> & {
@@ -31,31 +49,40 @@ export function PrimaryButton({
 	disabled,
 	...props
 }: ButtonProps) {
+	const theme = useTheme();
 	const inactive = disabled || loading;
+
 	return (
 		<Pressable
 			accessibilityRole="button"
 			disabled={inactive}
 			style={({ pressed }) => [
 				styles.primary,
+				{ backgroundColor: theme.colors.accent },
 				inactive && styles.disabled,
 				pressed && styles.pressed,
 			]}
 			{...props}
 		>
 			{loading ? (
-				<ActivityIndicator color="#FFFFFF" />
+				<ActivityIndicator color={theme.colors.surface} />
 			) : (
-				<Text style={styles.primaryLabel}>{label}</Text>
+				<Text style={[styles.primaryLabel, { color: theme.colors.surface }]}>
+					{label}
+				</Text>
 			)}
 		</Pressable>
 	);
 }
 
 export function TextButton({ label, ...props }: Omit<ButtonProps, "loading">) {
+	const theme = useTheme();
+
 	return (
 		<Pressable accessibilityRole="button" hitSlop={8} {...props}>
-			<Text style={styles.textButtonLabel}>{label}</Text>
+			<Text style={[styles.textButtonLabel, { color: theme.colors.accent }]}>
+				{label}
+			</Text>
 		</Pressable>
 	);
 }
@@ -63,36 +90,30 @@ export function TextButton({ label, ...props }: Omit<ButtonProps, "loading">) {
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
-		backgroundColor: "#FFFFFF",
-		paddingHorizontal: 24,
+		paddingHorizontal: space[5],
 		justifyContent: "center",
-		gap: 16,
+		gap: space[4],
 	},
 	heading: {
-		fontSize: 28,
+		fontSize: fontSize.h2,
 		fontWeight: "700",
-		color: "#111827",
 	},
 	body: {
-		fontSize: 15,
-		lineHeight: 22,
-		color: "#4B5563",
+		fontSize: fontSize.md,
+		lineHeight: fontSize.md * 1.5,
 	},
 	primary: {
 		height: 48,
-		borderRadius: 10,
-		backgroundColor: "#007AFF",
+		borderRadius: radius.lg,
 		alignItems: "center",
 		justifyContent: "center",
 	},
 	primaryLabel: {
-		fontSize: 16,
+		fontSize: fontSize.md,
 		fontWeight: "600",
-		color: "#FFFFFF",
 	},
 	textButtonLabel: {
-		fontSize: 15,
-		color: "#007AFF",
+		fontSize: fontSize.md,
 		textAlign: "center",
 	},
 	disabled: {
