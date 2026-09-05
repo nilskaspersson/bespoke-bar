@@ -65,6 +65,9 @@ export function RecipeCard({
 	return (
 		<Pressable
 			accessibilityRole="button"
+			accessibilityLabel={`${recipe.name || DEFAULT_RECIPE_NAME}${
+				isFavorite ? ", favorite" : ""
+			}`}
 			onPress={() =>
 				router.push({ pathname: "/recipe/[id]", params: { id: recipe.id } })
 			}

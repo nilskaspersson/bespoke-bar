@@ -10,7 +10,8 @@
 		"build:ios": "eas build --platform ios --profile production",
 		"submit:ios": "eas submit --platform ios --latest",
 		"lint": "biome check",
-		"check-types": "tsc --noEmit"
+		"check-types": "tsc --noEmit",
+		"bundle": "expo export --platform ios"
 	},
 	"dependencies": {
 		"@bespoke/domain": "workspace:*",

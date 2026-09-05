@@ -35,6 +35,10 @@
 			]
 		},
 		"lint": {},
+		"bundle": {
+			"dependsOn": ["^check-types"],
+			"outputs": []
+		},
 		"check-types": {
 			"dependsOn": ["icons:build", "^icons:build", "^check-types"],
 			"outputs": ["tsconfig.tsbuildinfo"]

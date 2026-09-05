@@ -74,6 +74,7 @@ export default function RecipeDetailScreen() {
 			>
 				<View style={styles.header}>
 					<Text
+						accessibilityRole="header"
 						style={[
 							styles.name,
 							{
@@ -279,7 +280,10 @@ function Section({
 }) {
 	return (
 		<View style={styles.section}>
-			<Text style={[styles.sectionTitle, { color: theme.colors.textLight }]}>
+			<Text
+				accessibilityRole="header"
+				style={[styles.sectionTitle, { color: theme.colors.textLight }]}
+			>
 				{title.toUpperCase()}
 			</Text>
 			{children}

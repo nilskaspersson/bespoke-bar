@@ -103,7 +103,9 @@ const styles = StyleSheet.create({
 		lineHeight: fontSize.md * 1.5,
 	},
 	primary: {
-		height: 48,
+		minHeight: 48,
+		paddingVertical: space[3],
+		paddingHorizontal: space[4],
 		borderRadius: radius.lg,
 		alignItems: "center",
 		justifyContent: "center",
