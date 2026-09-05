@@ -1,5 +1,6 @@
 "use client";
 
+import { METHOD_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { collator } from "@bespoke/domain/utils/collator";
 import {
 	type PreparationMethod,
@@ -9,10 +10,7 @@ import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { Menu } from "@bespoke/ui/Menu";
 import { Select } from "@bespoke/ui/Select";
 import { type ComponentProps, use, useMemo } from "react";
-import {
-	METHOD_TO_DEFAULT_DILUTION,
-	METHOD_TO_LABEL,
-} from "@/features/recipes/constants";
+import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

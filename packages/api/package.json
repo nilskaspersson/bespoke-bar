@@ -13,6 +13,7 @@
 	"scripts": {
 		"lint": "biome check",
 		"test": "vitest run",
+		"contract:update": "CONTRACT_UPDATE=1 vitest run src/contract",
 		"check-types": "tsc --noEmit"
 	},
 	"dependencies": {

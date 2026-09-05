@@ -36,7 +36,7 @@ export const MenuEntriesTable = pgTable(
 		sortOrder: integer("sort_order"),
 		price: numeric("price", { precision: 12, scale: 4, mode: "number" }),
 		createdAt: createdAtCol(),
-		updatedAt: timestamp("updated_at", { mode: "string" }),
+		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true }),
 	},
 	(table) => [
 		index("idx_menu_entries_org").on(table.orgId),

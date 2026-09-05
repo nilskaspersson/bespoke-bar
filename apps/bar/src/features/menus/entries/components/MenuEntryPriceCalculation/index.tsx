@@ -5,8 +5,8 @@ import { Heading } from "@bespoke/ui/Heading";
 import { TextField } from "@bespoke/ui/TextField";
 import { useId, useState } from "react";
 import z from "zod";
+import { MenuEntryProfit } from "@/features/menus/entries/components/MenuEntryProfit";
 import { CostInfo } from "@/features/recipes/metrics/components/CostInfo";
-import { MenuEntryProfit } from "../MenuEntryProfit";
 
 type Props = {
 	price: unknown;

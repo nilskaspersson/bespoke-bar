@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	COCKTAIL_STYLE_TO_LABEL,
+	type CocktailStyleFilter,
+} from "@bespoke/domain/recipes/labels";
 import type { Tag } from "@bespoke/schema/schema/tags";
 import { Button } from "@bespoke/ui/Button";
 import { Drawer } from "@bespoke/ui/Drawer";
@@ -10,10 +14,6 @@ import type { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { Text } from "@bespoke/ui/Text";
 import { useMemo } from "react";
 import { CocktailStyleCloud } from "@/features/recipes/components/CocktailStyleCloud";
-import {
-	COCKTAIL_STYLE_TO_LABEL,
-	type CocktailStyleFilter,
-} from "@/features/recipes/constants";
 import type { useCocktailStyleSelection } from "@/features/recipes/hooks/useCocktailStyleSelection";
 import { RecipeTagCloud } from "@/features/tags/components/RecipeTagCloud";
 import type { useTagSelection } from "@/features/tags/hooks/useTagSelection";

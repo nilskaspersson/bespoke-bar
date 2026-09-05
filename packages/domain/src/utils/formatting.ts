@@ -1,3 +1,6 @@
+export const DEFAULT_LOCALE = "en-GB";
+export const DEFAULT_CURRENCY = "EUR";
+
 export function createPercentageFormatter(language: string) {
 	return new Intl.NumberFormat(language, {
 		style: "percent",

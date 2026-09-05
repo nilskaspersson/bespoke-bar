@@ -1,5 +1,5 @@
+import { DEFAULT_RECIPE_NAME } from "@bespoke/domain/recipes/labels";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
-import { DEFAULT_RECIPE_NAME } from "@/features/recipes/constants";
 import styles from "./styles.module.css";
 
 type Props = {

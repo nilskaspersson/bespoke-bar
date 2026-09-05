@@ -3,7 +3,11 @@
 	"extends": ["@bespoke/config/biome.base.json"],
 	"root": false,
 	"files": {
-		"includes": ["src/**", "vitest.config.ts"]
+		"includes": [
+			"src/**",
+			"vitest.config.ts",
+			"!src/contract/mobile-contract.json"
+		]
 	},
 	"linter": {
 		"rules": {

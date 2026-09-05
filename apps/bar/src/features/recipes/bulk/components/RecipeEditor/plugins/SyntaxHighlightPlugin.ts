@@ -11,8 +11,8 @@ import {
 	type ParagraphNode,
 } from "lexical";
 import { useEffect } from "react";
-import { useRecipeIngredients } from "../hooks/useRecipeIngredients";
-import { createParagraphDOMRange } from "../utils/paragraphRange";
+import { useRecipeIngredients } from "@/features/recipes/bulk/components/RecipeEditor/hooks/useRecipeIngredients";
+import { createParagraphDOMRange } from "@/features/recipes/bulk/components/RecipeEditor/utils/paragraphRange";
 
 const HIGHLIGHT_NAMES = [
 	"recipe-quantity",

@@ -131,8 +131,18 @@ A family of **Units**: `metric`, `imperial`, or `bartending`. The **bartending**
 The dimension an **Ingredient** is measured and priced in — `volume`, `mass` (solids), or `pieces` (countable items: cherries, umbrellas). A property of the **Ingredient**, not the Line; an **Ingredient Line's** **Unit** must share its ingredient's Measurement Type (no cross-dimension measuring — you can't measure a per-kg ingredient by the tablespoon). Today only **volume** participates in cost and volume/ABV math; **mass** and **pieces** are selectable and roadmapped ("solids soon") but not yet wired — a knowingly-accepted gap.
 _Avoid_: bare "measurement"/"measure" — overloaded (the conversion library's _measure_ is volume/length; this enum is volume/mass/pieces). Don't conflate with **Unit** — Unit is the Line's amount marker, Measurement Type is the Ingredient's dimension.
 
+### Mobile
+
+**Offline Reads**:
+The mobile-app capability that keeps an **Organisation's** library readable without connectivity: previously fetched **Recipes**, **Ingredients**, and **Menus** remain viewable from a local cache, reflecting the library as of the last connected session (possibly stale, never wrong-org). Reads only, deliberately: an edit is never queued, stored, or accepted offline — every write requires a live connection, so there is no sync and no conflict to resolve.
+_Avoid_: "offline-first", "offline sync", "queued edits" (all imply offline *writes* and conflict resolution — explicitly out of scope); conflating with **Offline Dev Auth** (a dev bypass, not a product capability).
+
+**Offline Auth**:
+Holding a previously-verified session while disconnected, so **Offline Reads** can show the library without a live authentication check. The principle: auth gates the network, not the pixels — offline, the app trusts the last verified session for *display*; every network call still authenticates for real, and nothing is ever verified without connectivity (it is a retained session, not a fresh proof). The product capability the name was reserved for; distinct from **Offline Dev Auth**.
+_Avoid_: reading it as "authentication performed offline" (nothing is); using it for the dev bypass (that is **Offline *Dev* Auth** — the Dev is load-bearing).
+
 ### Development
 
 **Offline Dev Auth**:
 A development-only escape hatch that runs the **Bar** app with no network, by aliasing Clerk to local stubs when `NEXT_PUBLIC_OFFLINE_DEV_AUTH` is set (see `docs/offline.md`). It fakes a fixed signed-in **User** and **Active Organisation** so the app can be developed offline (e.g. on a plane), and is hard-disabled in production. A dev convenience, not an authentication capability.
-_Avoid_: calling it "**Offline Auth**" — that name is reserved for a future, genuine offline-authentication capability (an offline-capable mobile app holding a real session without connectivity), which is a product feature, not a dev bypass. The disambiguator is **Dev**: _Offline **Dev** Auth_.
+_Avoid_: calling it "**Offline Auth**" — that names the genuine product capability (see **Offline Auth**, under Mobile), not this dev bypass. The disambiguator is **Dev**: _Offline **Dev** Auth_.

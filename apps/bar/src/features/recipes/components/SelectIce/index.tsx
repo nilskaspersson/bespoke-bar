@@ -1,9 +1,9 @@
 "use client";
 
+import { ICE_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { type Ice, ice } from "@bespoke/schema/schema/ice";
 import { Select } from "@bespoke/ui/Select";
 import type { ComponentProps } from "react";
-import { ICE_TO_LABEL } from "@/features/recipes/constants";
 import { withKey } from "@/utils/withKey";
 
 type Option = {

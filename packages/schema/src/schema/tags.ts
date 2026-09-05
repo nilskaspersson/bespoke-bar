@@ -22,7 +22,7 @@ export const TagsTable = pgTable(
 		name: varchar("name", { length: 30 }).notNull(),
 		createdAt: createdAtCol(),
 		createdBy: text("created_by").notNull(),
-		updatedAt: timestamp("updated_at", { mode: "string" }),
+		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true }),
 		updatedBy: text("updated_by"),
 	},
 	(table) => [

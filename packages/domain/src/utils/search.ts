@@ -1,4 +1,4 @@
-import { normalizeInput } from "@/utils";
+import { normalizeInput } from "./text";
 
 declare const searchIndexBrand: unique symbol;
 

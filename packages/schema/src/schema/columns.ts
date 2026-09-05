@@ -15,7 +15,9 @@ export function orgIdCascade() {
 }
 
 export function createdAtCol() {
-	return timestamp("created_at", { mode: "string" }).defaultNow().notNull();
+	return timestamp("created_at", { mode: "string", withTimezone: true })
+		.defaultNow()
+		.notNull();
 }
 
 export const GRANT_SOURCES = [

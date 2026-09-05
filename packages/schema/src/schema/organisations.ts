@@ -32,8 +32,12 @@ export const OrganisationsTable = pgTable("organisations", {
 	 * first checkout.
 	 */
 	stripeCustomerId: text("stripe_customer_id").unique(),
-	createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
-	updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
+	createdAt: timestamp("created_at", { mode: "string", withTimezone: true })
+		.defaultNow()
+		.notNull(),
+	updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true })
+		.defaultNow()
+		.notNull(),
 	createdBy: text("created_by").notNull(),
 });
 

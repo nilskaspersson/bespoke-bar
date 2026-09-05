@@ -1,5 +1,9 @@
 "use client";
 
+import {
+	applyRecipeFilters,
+	createRecipeSearchIndex,
+} from "@bespoke/domain/recipes/applyRecipeFilters";
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
@@ -19,10 +23,6 @@ import { RecipesListHeader } from "@/features/recipes/components/RecipesListHead
 import { RecipesOverviewStats } from "@/features/recipes/components/RecipesOverviewStats";
 import { RecipesStatsBar } from "@/features/recipes/components/RecipesStatsBar";
 import { useCocktailStyleSelection } from "@/features/recipes/hooks/useCocktailStyleSelection";
-import {
-	applyRecipeFilters,
-	createRecipeSearchIndex,
-} from "@/features/recipes/utils/applyRecipeFilters";
 import { useTagSelection } from "@/features/tags/hooks/useTagSelection";
 import styles from "./styles.module.css";
 

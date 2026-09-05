@@ -1,12 +1,12 @@
 "use client";
 
+import type { CocktailStyleFilter } from "@bespoke/domain/recipes/labels";
 import { Button } from "@bespoke/ui/Button";
 import { Grid, type GridProps } from "@bespoke/ui/Grid";
 import { Tooltip } from "@bespoke/ui/Tooltip";
 import { toCSSVars } from "@bespoke/ui/utils/styles";
 import { clsx } from "clsx";
 import { useMemo } from "react";
-import type { CocktailStyleFilter } from "@/features/recipes/constants";
 import type { CocktailStyleEntry } from "@/features/recipes/utils/cocktailStyleEntries";
 import styles from "./styles.module.css";
 

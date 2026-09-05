@@ -1,12 +1,12 @@
 "use client";
 
+import { searchByIndex } from "@bespoke/domain/utils/search";
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { LexicalTypeaheadMenuPlugin } from "@lexical/react/LexicalTypeaheadMenuPlugin";
 import type { TextNode } from "lexical";
 import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import { getIngredientId } from "@/features/ingredients/utils";
-import { searchByIndex } from "@/utils/search";
-import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
+import { useRecipeIngredients } from "@/features/recipes/bulk/components/RecipeEditor/hooks/useRecipeIngredients";
 import { useHistoricUpdateRef } from "./HistoricUpdateGuard";
 import { IngredientOption } from "./IngredientOption";
 import { useTypeaheadMenu } from "./useTypeaheadMenu";

@@ -4,6 +4,7 @@ import type { IngredientIndex } from "@bespoke/domain/ingredients/buildIngredien
 import { quantityTextParser } from "@bespoke/domain/quantity/parseQuantity";
 import { type Token, tokenizeLine } from "@bespoke/domain/recipes/tokenizeLine";
 import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
+import { searchByIndex } from "@bespoke/domain/utils/search";
 import { usePopover } from "@bespoke/ui/hooks/usePopover";
 import { Input } from "@bespoke/ui/Input";
 import { PopoverAnchor } from "@bespoke/ui/Popover";
@@ -31,13 +32,12 @@ import {
 	useState,
 } from "react";
 import { getIngredientId } from "@/features/ingredients/utils";
-import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
-import { searchByIndex } from "@/utils/search";
-import { useRecipeIngredients } from "../../hooks/useRecipeIngredients";
+import { useRecipeIngredients } from "@/features/recipes/bulk/components/RecipeEditor/hooks/useRecipeIngredients";
 import {
 	createParagraphDOMRange,
 	locateTextNodeAtOffset,
-} from "../../utils/paragraphRange";
+} from "@/features/recipes/bulk/components/RecipeEditor/utils/paragraphRange";
+import { SORTED_UNITS, UNIT_SEARCH_INDEX } from "@/features/units/constants";
 import { IngredientOption } from "./IngredientOption";
 import { TokenMenu } from "./TokenMenu";
 import { UnitOption } from "./UnitOption";

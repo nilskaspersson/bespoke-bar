@@ -24,9 +24,12 @@ export const MenusTable = pgTable(
 		isFeatured: boolean("is_featured").default(false).notNull(),
 		createdAt: createdAtCol(),
 		createdBy: text("created_by").notNull(),
-		updatedAt: timestamp("updated_at", { mode: "string" }),
+		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true }),
 		updatedBy: text("updated_by"),
-		featuredAt: timestamp("featured_at", { mode: "string" }),
+		featuredAt: timestamp("featured_at", {
+			mode: "string",
+			withTimezone: true,
+		}),
 		orgId: orgIdCascade(),
 	},
 	(table) => [

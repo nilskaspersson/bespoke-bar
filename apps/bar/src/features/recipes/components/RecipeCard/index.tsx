@@ -1,4 +1,10 @@
 import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
+import {
+	COCKTAIL_STYLE_TO_LABEL,
+	GLASSWARE_TO_LABEL,
+	ICE_TO_LABEL,
+	METHOD_TO_LABEL,
+} from "@bespoke/domain/recipes/labels";
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { Chip } from "@bespoke/ui/Chip";
@@ -13,12 +19,6 @@ import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { IngredientLineList } from "@/features/ingredientLines/components/IngredientLineList";
 import { RecipeName } from "@/features/recipes/components/RecipeName";
 import { RecipeNameAdornment } from "@/features/recipes/components/RecipeNameAdornment";
-import {
-	COCKTAIL_STYLE_TO_LABEL,
-	GLASSWARE_TO_LABEL,
-	ICE_TO_LABEL,
-	METHOD_TO_LABEL,
-} from "@/features/recipes/constants";
 import { AbvChip } from "@/features/recipes/metrics/components/AbvChip";
 import { getRecipeUrl, isRecipe } from "@/features/recipes/utils";
 import styles from "./styles.module.css";

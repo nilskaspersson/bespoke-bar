@@ -2,12 +2,9 @@ import type {
 	RecipeWithLines,
 	RecipeWithRelations,
 } from "@bespoke/schema/schema/recipes";
-import {
-	type CocktailStyleFilter,
-	DEFAULT_RECIPE_NAME,
-} from "@/features/recipes/constants";
-import { normalizeInput } from "@/utils";
-import { createSearchIndex, type SearchIndex } from "@/utils/search";
+import { createSearchIndex, type SearchIndex } from "../utils/search";
+import { normalizeInput } from "../utils/text";
+import { type CocktailStyleFilter, DEFAULT_RECIPE_NAME } from "./labels";
 
 const getRecipeId = (recipe: RecipeWithLines) => recipe.id;
 

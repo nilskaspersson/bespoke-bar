@@ -61,9 +61,7 @@ export async function getAdminOrgDetails(
 					status: sub.status,
 					isPro: isProActive(sub.status),
 					attention: subscriptionAttention(sub.status),
-					currentPeriodEnd: new Date(
-						`${sub.currentPeriodEnd.replace(" ", "T")}Z`,
-					).toISOString(),
+					currentPeriodEnd: sub.currentPeriodEnd,
 					cancelAtPeriodEnd: sub.cancelAtPeriodEnd,
 				}
 			: null,

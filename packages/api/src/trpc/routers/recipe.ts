@@ -34,7 +34,7 @@ export const recipeRouter = router({
 				getCachedIngredients(ctx.orgId),
 				getCachedTags(ctx.orgId),
 			]);
-			if (!rawRecipe) return rawRecipe;
+			if (!rawRecipe) return null;
 			return stitchRecipe(rawRecipe, { ingredients, tags });
 		}),
 

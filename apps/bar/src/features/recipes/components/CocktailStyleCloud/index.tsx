@@ -1,9 +1,9 @@
 "use client";
 
+import type { CocktailStyleFilter } from "@bespoke/domain/recipes/labels";
 import { Flex } from "@bespoke/ui/Flex";
 import { Text } from "@bespoke/ui/Text";
 import { CocktailStyleChip } from "@/features/recipes/components/CocktailStyleChip";
-import type { CocktailStyleFilter } from "@/features/recipes/constants";
 
 type Props = {
 	styles: CocktailStyleFilter[];

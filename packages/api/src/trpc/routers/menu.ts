@@ -25,7 +25,7 @@ export const menuRouter = router({
 				getCachedMenu(ctx.orgId, input.id),
 				getCachedIngredients(ctx.orgId),
 			]);
-			if (!rawMenu) return rawMenu;
+			if (!rawMenu) return null;
 			return stitchMenuEntries(rawMenu, buildIngredientMap(ingredients));
 		}),
 

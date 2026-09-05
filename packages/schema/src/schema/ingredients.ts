@@ -44,7 +44,7 @@ export const IngredientsTable = pgTable(
 		measurementType: measurementTypes("measurementType"),
 		orgId: orgIdCascade(),
 		createdAt: createdAtCol(),
-		updatedAt: timestamp("updated_at", { mode: "string" }),
+		updatedAt: timestamp("updated_at", { mode: "string", withTimezone: true }),
 		createdBy: text("created_by").notNull(),
 		updatedBy: text("updated_by"),
 		aiEnrichedFields: text("ai_enriched_fields").array(),

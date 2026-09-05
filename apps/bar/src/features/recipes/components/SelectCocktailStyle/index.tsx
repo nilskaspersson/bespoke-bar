@@ -1,5 +1,6 @@
 "use client";
 
+import { COCKTAIL_STYLE_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { collator } from "@bespoke/domain/utils/collator";
 import {
 	type CocktailStyle,
@@ -7,7 +8,6 @@ import {
 } from "@bespoke/schema/schema/cocktailStyles";
 import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
-import { COCKTAIL_STYLE_TO_LABEL } from "@/features/recipes/constants";
 import { withKey } from "@/utils/withKey";
 
 type Option = {
