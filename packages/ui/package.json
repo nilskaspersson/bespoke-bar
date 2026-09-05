@@ -39,8 +39,8 @@
 	"devDependencies": {
 		"@bespoke/config": "workspace:*",
 		"@biomejs/biome": "catalog:",
-		"@iconify-json/lucide": "1.2.108",
-		"@iconify/utils": "3.1.3",
+		"@iconify-json/lucide": "1.2.129",
+		"@iconify/utils": "3.1.5",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",

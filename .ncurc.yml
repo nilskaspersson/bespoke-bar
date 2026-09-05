@@ -1,0 +1,12 @@
+packageManager: pnpm
+
+# Expo owns these — their versions come from the SDK's bundledNativeModules,
+# not from npm latest. Bump them with `pnpm deps:expo`, never with ncu.
+reject:
+  - expo
+  - expo-*
+  - '@expo/*'
+  - react-native
+  - react-native-get-random-values
+  - react-native-safe-area-context
+  - react-native-screens

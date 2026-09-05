@@ -32,23 +32,24 @@ describe("userInputToLine", () => {
 	});
 
 	describe("parses unit (uppercase)", () => {
-		test.each(
-			supportedUnits.options.map((unit) => unit.toUpperCase()),
-		)('"%s"', (unit) => {
-			expect(userInputToLine(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
-				quantity: 1,
-				unit: unit.toLowerCase(),
+		test.each(supportedUnits.options.map((unit) => unit.toUpperCase()))(
+			'"%s"',
+			(unit) => {
+				expect(userInputToLine(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
+					quantity: 1,
+					unit: unit.toLowerCase(),
 
-				ingredient: {
-					...EMPTY_INGREDIENT,
-					name: "gin",
-					abv: 0.4,
-					category: "gin",
-					measurementType: "volume",
-				},
-				ingredientId: undefined,
-			});
-		});
+					ingredient: {
+						...EMPTY_INGREDIENT,
+						name: "gin",
+						abv: 0.4,
+						category: "gin",
+						measurementType: "volume",
+					},
+					ingredientId: undefined,
+				});
+			},
+		);
 	});
 
 	describe("parses common unit deviations", () => {

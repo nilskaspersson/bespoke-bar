@@ -85,8 +85,8 @@ const RecipeListItem = memo(function RecipeListItem({
 				inView={inView}
 			/>
 
-			{withActions &&
-				(inView ? (
+			{withActions ? (
+				inView ? (
 					<RecipeListActions
 						recipe={recipe}
 						isFavorite={isFavorite}
@@ -94,7 +94,8 @@ const RecipeListItem = memo(function RecipeListItem({
 					/>
 				) : (
 					<div aria-hidden className={styles.actions} />
-				))}
+				)
+			) : null}
 		</Grid>
 	);
 });

@@ -128,8 +128,22 @@ function acceptsNull(schema: JSONSchema): boolean {
 	return unionMembers(schema)?.some(isNullSchema) ?? false;
 }
 
-/** Peel the `T | null` wrapper so `T` itself is diffed structurally. */
+/**
+ * Peel the `T | null` wrapper so `T` itself is diffed structurally. Both
+ * spellings must be handled: zod <=4.4 emitted `anyOf: [T, { type: "null" }]`,
+ * 4.5 emits `type: [T, "null"]`, and a baseline written by either has to diff
+ * clean against the other.
+ */
 function stripNullable(schema: JSONSchema): JSONSchema {
+	if (Array.isArray(schema.type)) {
+		const nonNull = (schema.type as string[]).filter(
+			(member) => member !== "null",
+		);
+		if (nonNull.length === 1) {
+			return { ...schema, type: nonNull[0] };
+		}
+	}
+
 	const members = unionMembers(schema);
 	if (members && members.length === 2) {
 		const nonNull = members.filter((member) => !isNullSchema(member));

@@ -22,6 +22,8 @@ const object = (
 ): ContractInput => ({ type: "object", properties, required });
 
 const nullable = (inner: unknown) => ({ anyOf: [inner, { type: "null" }] });
+/** zod >=4.5 spells `T | null` as a type array rather than an `anyOf`. */
+const nullableTypeArray = (type: string) => ({ type: [type, "null"] });
 const str = { type: "string" };
 const enumOf = (...values: string[]) => ({ type: "string", enum: values });
 
@@ -105,6 +107,17 @@ describe("diffContract — breaking changes fail", () => {
 		expect(violations[0]).toContain("union dropped member");
 	});
 
+	it("flags a type change hidden inside the type-array spelling", () => {
+		expect(
+			diffContract(
+				contract(object({ note: nullableTypeArray("string") })),
+				contract(object({ note: nullableTypeArray("number") })),
+			),
+		).toEqual([
+			'procedures.x.y.input.note: type changed from "string" to "number"',
+		]);
+	});
+
 	it("flags a field that no longer accepts null", () => {
 		const violations = diffContract(
 			contract(object({ note: nullable(str) })),
@@ -148,6 +161,24 @@ describe("diffContract — additive drift passes", () => {
 			diffContract(
 				contract(object({ note: str })),
 				contract(object({ note: nullable(str) })),
+			),
+		).toEqual([]);
+	});
+
+	it("passes a nullable field respelled from anyOf to a type array", () => {
+		expect(
+			diffContract(
+				contract(object({ note: nullable(str) })),
+				contract(object({ note: nullableTypeArray("string") })),
+			),
+		).toEqual([]);
+	});
+
+	it("passes a field becoming nullable in the type-array spelling", () => {
+		expect(
+			diffContract(
+				contract(object({ note: str })),
+				contract(object({ note: nullableTypeArray("string") })),
 			),
 		).toEqual([]);
 	});

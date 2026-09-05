@@ -9,8 +9,7 @@
 		"lint": "biome check",
 		"test": "vitest run",
 		"check-types": "next typegen && tsc --noEmit",
-		"bench": "vitest bench",
-		"ncu": "pnpm dlx npm-check-updates --interactive"
+		"bench": "vitest bench"
 	},
 	"dependencies": {
 		"@bespoke/api": "workspace:*",
@@ -19,9 +18,9 @@
 		"@bespoke/schema": "workspace:*",
 		"@bespoke/ui": "workspace:*",
 		"@clerk/nextjs": "catalog:",
-		"@clerk/themes": "2.4.57",
-		"@conform-to/react": "1.19.2",
-		"@conform-to/zod": "1.19.2",
+		"@clerk/themes": "2.4.63",
+		"@conform-to/react": "1.21.1",
+		"@conform-to/zod": "1.21.1",
 		"@lexical/react": "0.45.0",
 		"@lexical/selection": "0.45.0",
 		"@lexical/utils": "0.45.0",
@@ -36,7 +35,7 @@
 		"lexical": "0.45.0",
 		"motion": "catalog:",
 		"next": "catalog:",
-		"nuqs": "2.8.9",
+		"nuqs": "2.10.1",
 		"react": "catalog:",
 		"react-dom": "catalog:",
 		"sonner": "catalog:",
