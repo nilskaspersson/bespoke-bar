@@ -52,6 +52,9 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 }
 
 export const metadata: Metadata = {
+	metadataBase: new URL(LOUNGE_URL || "http://localhost:3001"),
+	description:
+		"Bespoke Bar has tools for cocktail recipes. Create, calculate, and collaborate on recipes and lists with your team.",
 	/**
 	 * The { title: "Name" } set by a page or layout will be interpolated into template
 	 */

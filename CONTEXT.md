@@ -18,8 +18,12 @@ The private, back-of-house workspace — the authenticated application surface o
 _Avoid_: treating **Bar** as a synonym for **Organisation** — the Organisation is the tenant/ownership boundary; the Bar is the working surface over it. Both may be a workspace of one.
 
 **Lounge**:
-The public, front-of-house surface over an **Organisation's** library: guest-facing **Menus**, anonymous and unauthenticated. The Lounge is _why_ a **Recipe's** **Description** is menu-facing while its **Instructions** stay internal to the **Bar** — one library, two audiences.
-_Avoid_: surfacing Bar-only (internal) data in the Lounge; the guest surface shows only what is menu-facing.
+Bespoke Bar's public, front-of-house surface — everything anonymous and unauthenticated, whether or not it reads an **Organisation's** library. It hosts org-less surfaces today (marketing, legal, and **Public Tools**) and will host guest-facing **Menus** once **Public** ships. That guest-**Menu** half is _why_ a **Recipe's** **Description** is menu-facing while its **Instructions** stay internal to the **Bar** — one library, two audiences.
+_Avoid_: defining the Lounge as "the surface over an Organisation's library" — that describes only its guest-**Menu** half; the term names the public surface, org-scoped or not. Surfacing Bar-only (internal) data on a guest **Menu**.
+
+**Public Tool**:
+A **Lounge** surface that works on data the visitor supplies, belongs to no **Organisation**, stores nothing, and needs no account — useful on its own terms, and an invitation into the **Bar**. The **Recipe Calculator** is the first.
+_Avoid_: treating a Public Tool as a demo, trial, or teaser of the Bar — it is a complete tool, with no account, no **Quota**, and no expiry. Conflating it with the guest-**Menu** half of the Lounge, which _is_ org-scoped.
 
 ### Photo-to-Recipe
 
@@ -54,6 +58,10 @@ _Avoid_: "AI-suggested", "AI-generated", "Enriched" (as the field-state label) �
 **Recipe**:
 A cocktail's full record — its **Ingredient Lines** plus metadata (**Cocktail Style**, glassware, ice, preparation method, dilution target, garnish, description, instructions, tags). Identified by an opaque id, never by name. Because the app is both an archive of finished drinks and a workbench for developing them, a Recipe may be **incomplete** — it's normal for a drink to have lines before it has a name.
 _Avoid_: equating a Recipe with its formula alone — that's the Recipe's **Spec**; the Recipe is the whole record (Spec + name, Style, serve, prose).
+
+**Draft Recipe**:
+A recipe-shaped value that belongs to no **Organisation** and sits in no library: **Ingredient Lines** plus optional metadata, but no identity. What **Photo-to-Recipe**, the bulk text editor, and the **Recipe Calculator** all produce; it becomes a **Recipe** on save, which is where it gains its id. Its lines carry **Draft Ingredients** — the same shape without identity — so a draft line _names_ an ingredient instead of referencing one, and is why such a line reads as "new".
+_Avoid_: "incomplete Recipe" — a **Recipe** may be incomplete and still be a Recipe; a Draft Recipe is not one at all, for want of identity. ("Unsaved recipe" is fine as prose.)
 
 **Name** (of a Recipe):
 A Recipe's display label — optional, non-unique, and never an identifier. A nameless Recipe is a valid, complete state, shown as "Unnamed Recipe". (Contrast **Ingredient**, whose name _is_ its identity: required, unique per org, case-normalized. The two core entities have opposite naming contracts.)
@@ -98,8 +106,8 @@ A reusable, org-scoped library entry for a substance a drink is built from (a sp
 _Avoid_: treating an Ingredient as recipe-local (it's shared); using **Brand** as identity (identity is the name, not the brand).
 
 **Ingredient Category**:
-The _kind_ of substance an **Ingredient** is, from a curated set (gin, rum, citrus, syrup, vermouth, bitters…) — closed to end-users today, maintainer-curated (values change by migration, as with **Cocktail Style**); user-defined categories remain a possible, non-near-term future. Shortened to **category** where the ingredient context is clear (the `ingredient.category` field). Matched from the name heuristically and used to seed a default ABV. **Cocktail Style's structural twin**: `null` = **Unclassified** (unknown — an **Enrichment** target), the explicit value **other** = "deliberately none of these." Encodes _kind only_, never _function_: a garnish is categorized by what it _is_ (its kind, or **other**), with its garnish-ness expressed on the **Ingredient Line** / Recipe — not the Category. (Legacy `garnish` value being removed: `plans/remove-garnish-category.md`.)
-_Avoid_: bare "Category" as the standalone term — too generic; qualify as Ingredient Category. "Ingredient Type" — collides with **Measurement Type**. A category for a **Brand** (separate field) or for a role/function ("garnish" is a line/recipe concern, not a kind).
+The _kind_ of substance an **Ingredient** is, from a curated set (gin, rum, citrus, syrup, vermouth, bitters…) — closed to end-users today, maintainer-curated (values change by migration, as with **Cocktail Style**); user-defined categories remain a possible, non-near-term future. Shortened to **category** where the ingredient context is clear (the `ingredient.category` field). Matched from the name heuristically and used to seed a default ABV — a property of the *category*, never a claim about any particular product in it. **Cocktail Style's structural twin**: `null` = **Unclassified** (unknown — an **Enrichment** target), the explicit value **other** = "deliberately none of these." Encodes _kind only_, never _function_: a garnish is categorized by what it _is_ (its kind, or **other**), with its garnish-ness expressed on the **Ingredient Line** / Recipe — not the Category. (Legacy `garnish` value being removed: `plans/remove-garnish-category.md`.)
+_Avoid_: bare "Category" as the standalone term — too generic; qualify as Ingredient Category. "Ingredient Type" — collides with **Measurement Type**. A category for a **Brand** (separate field) or for a role/function ("garnish" is a line/recipe concern, not a kind). Re-categorizing an **Ingredient** because its seeded ABV is wrong for that product — Aperol is an `aperitif` at 11% however far that sits from the category default; a divergent product is corrected at the product level, never by moving it to a Category it does not belong to.
 
 ### Menus
 

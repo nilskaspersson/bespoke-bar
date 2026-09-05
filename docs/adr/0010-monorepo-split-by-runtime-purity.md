@@ -111,3 +111,46 @@ under `src/schema/` (a tables-only dir, so drizzle-kit's scan is unchanged); the
 **class** stays in `apps/bar` (only the pure envelope + formatters are shared); billing
 constants were **deliberately not moved** — they have no table or mobile consumer yet, so they
 belong in `domain` (step 2), not the schema leaf.
+
+## Amendment — the Lexical editor moves to `packages/ui` (2026-09-05)
+
+Two rules above said the editor stays put: the decision's closing line (*"The Lexical editor and
+all DOM UI stay in `apps/bar`"*) and, mechanically, `@lexical/**` + `lexical` in the
+`noRestrictedImports` group in `packages/ui/biome.json`. **The editor is now shared**, and both
+are amended.
+
+The trigger is the **Recipe Calculator**, a **Public Tool** on the Lounge (see `CONTEXT.md`): a
+public, org-less page that renders `RecipeEditor` + `DraftRecipesPreview` +
+`RecipeAdjustmentsControls` over `ingredients: []`. That makes the Lounge the second consumer, so
+the second-tier promotion this ADR already sanctions ("recipe cards, the metrics family,
+read-only menu lists … on second use, not speculatively") applies to the card side by the
+original rule, and only the editor needed a decision.
+
+The ban's own rationale is why it gives way. Its lint message reads *"no Lexical, and no Conform
+(**form-coupled code stays in apps/bar**)"* — and `RecipeEditor` is not the form. It is a
+controlled text input: `onTextChange(text: string)` out, `initialText`/`ingredients`/`statusBar`
+in, one `next/dynamic` import in a 22-file tree and no auth, tRPC, server action, DB or
+`next/cache` anywhere below it. The form-coupled component is `BulkDraftRecipesForm`, which owns
+the server action, the slot quota and the router push — and it **stays in `apps/bar`**, exactly
+as the rule intends. The ban was aimed at the form; the editor was swept up with it.
+
+So `packages/ui/biome.json` keeps `@conform-to/**` and drops `@lexical/**` + `lexical`, with the
+message rewritten to say that form- and route-coupled Lexical *consumers* stay in the app. A
+separate `packages/recipe-ui` was considered and rejected: it would hold exactly one component
+tree — the Consequences above already rule out Lexical crossing to React Native, so nothing else
+is coming — at the cost of a fourth package config to defend a boundary this ADR crossed by
+design when it put feature-display components in `ui`.
+
+Accepted consequences:
+
+- **`drizzle-orm/pg-core` enters the Lounge client bundle.** The unit typeahead reads
+  `supportedUnits` from `@bespoke/schema/schema/units`, a `createSelectSchema(pgEnum(...))` — a
+  runtime value, not a type. `packages/ui/biome.json` still bans `drizzle-orm` directly, but the
+  guard is lexical and does not see through `@bespoke/schema`. `apps/bar` already pays this; the
+  Lounge now does too, on one route, behind a `dynamic(..., { ssr: false })` boundary that Lexical
+  dominates anyway.
+- **`apps/lounge` acquires its first client boundary** and must declare `@bespoke/domain` and
+  `@bespoke/schema` explicitly. It already transpiles both (`next.config.ts`) and resolves them
+  only by `node-linker: hoisted` — the accident this ADR's Step-1 amendment describes.
+- **Mobile is unchanged.** The Consequences bullet stands: Lexical still does not cross to React
+  Native, and `packages/ui` is still never consumed by `apps/mobile`.

@@ -3,14 +3,14 @@
 import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
 import { convert, type UnitSystems } from "@bespoke/domain/units/convert";
 import { isBartendingUnit } from "@bespoke/domain/units/predicates";
+import { getKey } from "@bespoke/domain/utils/withKey";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { Callout } from "@bespoke/ui/Callout";
 import { Grid } from "@bespoke/ui/Grid";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { useRoundedUnit } from "@bespoke/ui/hooks/useRoundedUnit";
 import { Text } from "@bespoke/ui/Text";
 import { type ComponentProps, use } from "react";
-import { useRoundedUnit } from "@/features/units/hooks/useRoundedUnit";
-import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function VolumeInfo<T extends BaseRecipe>({

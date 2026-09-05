@@ -3,13 +3,13 @@
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
-import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import {
 	RecipeAdjustmentsControls,
 	useAdjustments,
 	useHydrateRecipeAdjustments,
-} from "@/features/recipes/components/RecipeAdjustments";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
+} from "@bespoke/ui/RecipeAdjustments";
+import { RecipeCard } from "@bespoke/ui/RecipeCard";
+import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import styles from "./styles.module.css";
 

@@ -1,4 +1,3 @@
-import type { SystemCategory } from "@bespoke/schema/schema/categories";
 import type { Measurement } from "@bespoke/schema/schema/units";
 
 export const MEASUREMENT_TO_LABEL = new Map<Measurement, string>([
@@ -17,56 +16,4 @@ export const MEASUREMENT_TO_DESCRIPTION = new Map<Measurement, string>([
 		"For ingredients measured by quantity, such as cherries, umbrellas, or straws.",
 	],
 	["volume", "For liquid ingredients, such as alcohol, water, juice, etc."],
-]);
-
-export const CATEGORY_TO_LABEL = new Map<SystemCategory, string>([
-	["absinthe", "Absinthe"],
-	["aquavit", "Aquavit"],
-	["armagnac", "Armagnac"],
-	["baijiu", "Baijiu"],
-	["bourbon", "Bourbon"],
-	["brandy", "Brandy"],
-	["cachaca", "Cachaça"],
-	["calvados", "Calvados"],
-	["cognac", "Cognac"],
-	["gin", "Gin"],
-	["genever", "Genever"],
-	["grappa", "Grappa"],
-	["mezcal", "Mezcal"],
-	["pisco", "Pisco"],
-	["rum", "Rum"],
-	["rye", "Rye"],
-	["shochu", "Shochu"],
-	["tequila", "Tequila"],
-	["vodka", "Vodka"],
-	["whiskey", "Whiskey"],
-	["vermouth", "Vermouth"],
-	["sherry", "Sherry"],
-	["port", "Port"],
-	["aperitif", "Aperitif"],
-	["sake", "Sake"],
-	["amaro", "Amaro"],
-	["bitters", "Bitters"],
-	["liqueur", "Liqueur"],
-	["herbal_liqueur", "Herbal Liqueur"],
-	["wine", "Wine"],
-	["champagne", "Champagne"],
-	["beer", "Beer"],
-	["citrus", "Citrus"],
-	["fruit", "Fruit"],
-	["herb", "Herb"],
-	["cocktail_bitters", "Cocktail Bitters"],
-	["egg", "Egg"],
-	["syrup", "Syrup"],
-	["soda", "Soda"],
-	["dairy", "Dairy"],
-	["juice", "Juice"],
-	["honey", "Honey"],
-	["other", "Other"],
-]);
-
-export const MEASUREMENT_TO_DB_INGREDIENT_UNIT = new Map<Measurement, string>([
-	["volume", "l"],
-	["mass", "kg"],
-	["pieces", "pc"],
 ]);

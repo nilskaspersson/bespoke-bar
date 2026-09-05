@@ -1,6 +1,7 @@
 "use client";
 
 import { collator } from "@bespoke/domain/utils/collator";
+import { withKey } from "@bespoke/domain/utils/withKey";
 import { supportedMeasurements } from "@bespoke/schema/schema/units";
 import { Menu } from "@bespoke/ui/Menu";
 import { Select } from "@bespoke/ui/Select";
@@ -9,7 +10,6 @@ import {
 	MEASUREMENT_TO_DESCRIPTION,
 	MEASUREMENT_TO_LABEL,
 } from "@/features/ingredients/constants";
-import { withKey } from "@/utils/withKey";
 
 type Option = (typeof OPTIONS)[number];
 

@@ -1,0 +1,14 @@
+@layer layout {
+	.page {
+		display: grid;
+		gap: var(--gap--large);
+		padding-block: var(--gap--large);
+		container-type: inline-size;
+	}
+
+	.header {
+		max-width: 60ch;
+		justify-self: center;
+		text-align: center;
+	}
+}

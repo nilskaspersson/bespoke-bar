@@ -1,12 +1,12 @@
 "use client";
 
+import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
 import { collator } from "@bespoke/domain/utils/collator";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { Combobox } from "@bespoke/ui/Combobox";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { Menu } from "@bespoke/ui/Menu";
 import { type ComponentProps, use, useCallback, useMemo } from "react";
-import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 
 const itemToString = (item: Ingredient | null) => (!item ? "" : item.name);
 const getItemValue = (item: Ingredient) => item.id;

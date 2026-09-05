@@ -1,7 +1,7 @@
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
+import type { ActionProps } from "@bespoke/ui/EntityActions";
 import { Icon } from "@bespoke/ui/Icon";
-import type { ActionProps } from "@/components/EntityActions";
-import { ShareAction } from "@/components/ShareAction";
+import { ShareAction } from "@bespoke/ui/ShareAction";
 import { ClearFeaturedMenuButton } from "@/features/menus/actions/components/ClearFeaturedMenuButton";
 import { SetFeaturedMenuButton } from "@/features/menus/actions/components/SetFeaturedMenuButton";
 import { EditMenuButton } from "@/features/menus/components/EditMenuButton";

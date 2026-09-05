@@ -1,5 +1,6 @@
 "use client";
 
+import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
 import { isSystemCategory } from "@bespoke/domain/categories/matchNameWithCategory";
 import {
 	getMeasurementPriceUnit,
@@ -9,14 +10,11 @@ import type {
 	IngredientFormData,
 	RecipeFormData,
 } from "@bespoke/schema/schema/composite";
+import { Abv } from "@bespoke/ui/Abv";
+import { useFormatIngredientUnitCost } from "@bespoke/ui/hooks/useFormatIngredientUnitCost";
 import { Text } from "@bespoke/ui/Text";
 import { type FieldName, useField } from "@conform-to/react";
-import { Abv } from "@/features/ingredients/components/Abv";
-import {
-	CATEGORY_TO_LABEL,
-	MEASUREMENT_TO_LABEL,
-} from "@/features/ingredients/constants";
-import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
+import { MEASUREMENT_TO_LABEL } from "@/features/ingredients/constants";
 
 export function DraftIngredientOverview({
 	name,

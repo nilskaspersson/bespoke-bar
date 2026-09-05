@@ -1,10 +1,10 @@
 import { collator } from "@bespoke/domain/utils/collator";
+import { withKey } from "@bespoke/domain/utils/withKey";
 import type { Keyed } from "@bespoke/schema/types";
 import { Combobox } from "@bespoke/ui/Combobox";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { Menu } from "@bespoke/ui/Menu";
 import { type ComponentProps, use, useCallback, useMemo } from "react";
-import { withKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 type Currency = {
