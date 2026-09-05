@@ -8,8 +8,7 @@
 		"start": "next start",
 		"lint": "biome check",
 		"test": "vitest run",
-		"check-types": "next typegen && tsc --noEmit",
-		"bench": "vitest bench"
+		"check-types": "next typegen && tsc --noEmit"
 	},
 	"dependencies": {
 		"@bespoke/api": "workspace:*",

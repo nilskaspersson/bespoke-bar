@@ -12,6 +12,7 @@
 	"scripts": {
 		"lint": "biome check",
 		"test": "vitest run",
+		"bench": "vitest bench --reporter=verbose",
 		"check-types": "tsc --noEmit"
 	},
 	"dependencies": {

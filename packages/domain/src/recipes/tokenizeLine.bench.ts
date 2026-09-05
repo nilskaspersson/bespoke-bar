@@ -1,5 +1,5 @@
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
-import { bench, describe } from "vitest";
+import { test } from "vitest";
 import {
 	buildIngredientIndex,
 	type IngredientIndex,
@@ -62,17 +62,20 @@ for (const size of SIZES) {
 	const ingredients = makeIngredients(size);
 	const index = buildIngredientIndex(ingredients);
 
-	describe(`tokenizeLine × ${RECIPE_TEXT.length} lines — ${size} ingredients`, () => {
-		bench("Map lookup (current)", () => {
-			for (const line of RECIPE_TEXT) {
-				tokenizeLine(line, index);
-			}
-		});
-
-		bench("Array.find() per call (old)", () => {
-			for (const line of RECIPE_TEXT) {
-				tokenizeLineWithFind(line, ingredients);
-			}
-		});
+	test(`tokenizeLine × ${RECIPE_TEXT.length} lines — ${size} ingredients`, async ({
+		bench,
+	}) => {
+		await bench.compare(
+			bench("Map lookup (current)", () => {
+				for (const line of RECIPE_TEXT) {
+					tokenizeLine(line, index);
+				}
+			}),
+			bench("Array.find() per call (old)", () => {
+				for (const line of RECIPE_TEXT) {
+					tokenizeLineWithFind(line, ingredients);
+				}
+			}),
+		);
 	});
 }

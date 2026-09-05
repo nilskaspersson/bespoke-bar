@@ -1,5 +1,5 @@
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
-import { bench, describe } from "vitest";
+import { test } from "vitest";
 import { userInputToBulkRecipe } from "./userInputToBulkRecipe";
 
 function makeIngredients(count: number): Ingredient[] {
@@ -41,13 +41,14 @@ for (const size of SIZES) {
 	const input5 = makeInput(5);
 	const input20 = makeInput(20);
 
-	describe(`userInputToBulkRecipe — ${size} ingredients`, () => {
-		bench("5 recipes (20 lines)", () => {
-			userInputToBulkRecipe(input5, ingredients);
-		});
-
-		bench("20 recipes (80 lines)", () => {
-			userInputToBulkRecipe(input20, ingredients);
-		});
+	test(`userInputToBulkRecipe — ${size} ingredients`, async ({ bench }) => {
+		await bench.compare(
+			bench("5 recipes (20 lines)", () => {
+				userInputToBulkRecipe(input5, ingredients);
+			}),
+			bench("20 recipes (80 lines)", () => {
+				userInputToBulkRecipe(input20, ingredients);
+			}),
+		);
 	});
 }
