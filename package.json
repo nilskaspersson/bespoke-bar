@@ -2,7 +2,7 @@
 	"name": "bespoke-bar",
 	"version": "0.1.0",
 	"private": true,
-	"packageManager": "pnpm@11.8.0",
+	"packageManager": "pnpm@11.25.0",
 	"engines": {
 		"node": "24.x"
 	},
@@ -13,10 +13,14 @@
 		"lint": "turbo run lint",
 		"test": "turbo run test",
 		"check-types": "turbo run check-types",
-		"deps:check": "pnpm outdated -r",
-		"deps:up": "pnpm up -i -L -r"
+		"deps": "pnpm dlx npm-check-updates --root --workspaces; CI=1 pnpm -C apps/mobile exec expo install --check || true",
+		"deps:patch": "pnpm dlx npm-check-updates --root --workspaces --target patch -u --install never",
+		"deps:minor": "pnpm dlx npm-check-updates --root --workspaces --target minor -i --install never",
+		"deps:major": "pnpm dlx npm-check-updates --root --workspaces --target latest -i --install never",
+		"deps:expo": "pnpm -C apps/mobile exec expo install --fix",
+		"deps:verify": "pnpm install && turbo run lint check-types test bundle"
 	},
 	"devDependencies": {
-		"turbo": "2.10.0"
+		"turbo": "2.10.12"
 	}
 }

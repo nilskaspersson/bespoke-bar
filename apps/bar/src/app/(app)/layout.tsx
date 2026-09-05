@@ -1,6 +1,7 @@
 import { Flex } from "@bespoke/ui/Flex";
 import { Icon } from "@bespoke/ui/Icon";
 import { LoadingScreen } from "@bespoke/ui/LoadingScreen";
+import { RedirectToSignIn, Show } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AppNavToggle } from "@/components/AppNavToggle";
@@ -43,14 +44,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 					 * the rail and page frame above prerender into the static shell.
 					 */}
 					<Suspense fallback={<LoadingScreen />}>
-						<OrgProvider>
-							{children}
+						<Show when="signed-out">
+							<RedirectToSignIn />
+						</Show>
 
-							<IngredientEditorDrawer />
-							<MenuEditorDrawer />
-							<CreateMenuEntryDrawer />
-							<RecipeCardModal />
-						</OrgProvider>
+						<Show when="signed-in">
+							<OrgProvider>
+								{children}
+
+								<IngredientEditorDrawer />
+								<MenuEditorDrawer />
+								<CreateMenuEntryDrawer />
+								<RecipeCardModal />
+							</OrgProvider>
+						</Show>
 					</Suspense>
 				</BottomRailHost>
 			</div>

@@ -60,7 +60,3 @@ export async function clerkClient() {
 export function clerkMiddleware() {
 	return () => NextResponse.next();
 }
-
-export function createRouteMatcher() {
-	return () => false;
-}

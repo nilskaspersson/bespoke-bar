@@ -48,6 +48,10 @@
 			gap: 0.5em;
 		}
 
+		.label {
+			transition: opacity var(--transition-duration);
+		}
+
 		&:where(:not(.base)) {
 			font-weight: 600;
 
@@ -74,10 +78,6 @@
 			&:focus:not(:focus-visible):not(:active):not([aria-disabled="true"]) {
 				animation: shadowPulse var(--transition-duration--slow) forwards;
 			}
-		}
-
-		.label {
-			transition: opacity var(--transition-duration);
 		}
 
 		[data-theme="dark"] & {

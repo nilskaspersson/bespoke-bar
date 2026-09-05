@@ -88,10 +88,6 @@
 		height: auto;
 	}
 
-	svg {
-		fill: currentColor;
-	}
-
 	table {
 		text-indent: 0;
 		border-color: inherit;

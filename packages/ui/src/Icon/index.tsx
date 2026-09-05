@@ -32,7 +32,7 @@ export function Icon({
 				}),
 			)}
 		>
-			{name ? <use href={`${sprite.src}#${name}`} /> : children}
+			{name ? <use href={`${sprite.src}#${name}`} /> : (children ?? null)}
 		</svg>
 	);
 }

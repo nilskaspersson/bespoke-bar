@@ -16,6 +16,22 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 - `pnpm lint` — Biome check across the repo (Turbo; read-only, the package script is `biome check`). A PostToolUse hook auto-fixes edited files (`biome check --write`); for a manual fix use `pnpm --filter <pkg> exec biome check --write <file>`.
 - `pnpm test path/to/test.ts` — single test
 
+### Dependency upgrades
+
+Climb the ladder, `pnpm deps:verify` and commit between each rung. Each rung includes the ones
+below it, so `deps:minor` alone is the routine default — reach for `deps:patch` only to split a
+large catch-up into a boring commit and a risky one.
+
+- `pnpm deps` — report only; what's outstanding across every package, the catalog, and Expo
+- `pnpm deps:patch` — applies all patches, no prompts
+- `pnpm deps:minor` — minors, interactive
+- `pnpm deps:major` — majors, interactive; one coupled set per commit
+- `pnpm deps:expo` — the Expo SDK-owned deps (`.ncurc.yml` keeps ncu's hands off them)
+- `pnpm deps:verify` — install + lint + types + test + the mobile bundle
+
+Shared deps live in the `catalog:` in `pnpm-workspace.yaml`, not in app package.json files, so
+an upgrade is staged by risk tier, never by app — 11 catalog entries feed mobile as well as web.
+
 ## Key Rules
 
 - **Multi-tenant**: All DB queries must be scoped by `orgId` from `authOrForbidden()` (`src/utils/auth.ts`)

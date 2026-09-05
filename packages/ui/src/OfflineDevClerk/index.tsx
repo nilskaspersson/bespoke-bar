@@ -19,6 +19,10 @@ export function Show({
 	return when === "signed-in" ? children : null;
 }
 
+export function RedirectToSignIn() {
+	return null;
+}
+
 export function SignInButton({ children }: PropsWithChildren) {
 	return children;
 }
