@@ -1,10 +1,11 @@
+import { getRecipeName } from "@bespoke/domain/recipes/labels";
+import { isRecipeWithLines } from "@bespoke/domain/recipes/predicates";
 import { collator } from "@bespoke/domain/utils/collator";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { Combobox } from "@bespoke/ui/Combobox";
 import { Menu } from "@bespoke/ui/Menu";
 import { type ComponentProps, useCallback, useMemo } from "react";
 import { useLinesToText } from "@/features/ingredientLines/hooks/useLinesToText";
-import { getRecipeName, isRecipeWithLines } from "@/features/recipes/utils";
 
 const itemToString = (item: Recipe | null) =>
 	!item ? "" : getRecipeName(item);

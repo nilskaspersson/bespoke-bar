@@ -1,12 +1,12 @@
 import { formatLine } from "@bespoke/domain/ingredientLines/formatLine";
 import {
 	GLASSWARE_TO_LABEL,
+	getRecipeName,
 	METHOD_TO_LABEL,
 } from "@bespoke/domain/recipes/labels";
 import { getFormattedUnit } from "@bespoke/domain/units/getFormattedUnit";
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import type { Menu } from "@bespoke/schema/schema/menus";
-import { getRecipeName } from "@/features/recipes/utils";
 
 export type ExportOptions = {
 	includeMenuName: boolean;

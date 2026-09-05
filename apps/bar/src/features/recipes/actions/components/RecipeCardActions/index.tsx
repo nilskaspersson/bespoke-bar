@@ -1,15 +1,15 @@
 "use client";
 
+import { getRecipeName } from "@bespoke/domain/recipes/labels";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
+import { EntityActions } from "@bespoke/ui/EntityActions";
 import { Icon } from "@bespoke/ui/Icon";
+import { RecipeName } from "@bespoke/ui/RecipeName";
 import type { ComponentProps } from "react";
-import { EntityActions } from "@/components/EntityActions";
 import { CreateMenuEntryButton } from "@/features/menus/entries/components/CreateMenuEntryButton";
 import { RecipeActions } from "@/features/recipes/actions/components/RecipeActions";
 import { RecipeActionsToggle } from "@/features/recipes/actions/components/RecipeActionsToggle";
 import { ToggleFavoriteRecipeButton } from "@/features/recipes/actions/components/ToggleFavoriteRecipeButton";
-import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { getRecipeName } from "@/features/recipes/utils";
 import styles from "./styles.module.css";
 
 type Props = {

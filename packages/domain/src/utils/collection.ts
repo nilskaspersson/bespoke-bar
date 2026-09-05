@@ -57,6 +57,14 @@ export function isEmpty(o: unknown): boolean {
 	return o == null || o === "";
 }
 
+export function isObject(o: unknown): o is Record<PropertyKey, unknown> {
+	return typeof o === "object" && o !== null && !Array.isArray(o);
+}
+
+export function pickRandom<T>(items: readonly [T, ...T[]]): T {
+	return items[Math.floor(Math.random() * items.length)];
+}
+
 export function unique<T>(items: Iterable<T>): T[] {
 	return Array.from(new Set(items));
 }

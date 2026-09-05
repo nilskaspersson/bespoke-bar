@@ -1,6 +1,6 @@
 import type { UnitSystems } from "@bespoke/domain/units/convert";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
-import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
+import { useFormatLineMeasure } from "@bespoke/ui/hooks/useFormatLineMeasure";
 
 export function useLinesToText<
 	T extends DraftIngredientLineWithDraftIngredient,

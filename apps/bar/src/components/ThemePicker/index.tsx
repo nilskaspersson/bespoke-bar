@@ -1,11 +1,11 @@
 "use client";
 
+import { withKey } from "@bespoke/domain/utils/withKey";
 import type { IconName } from "@bespoke/ui/icons/types";
 import { OptionsSwitch } from "@bespoke/ui/OptionsSwitch";
 import { ThemeSchema } from "@bespoke/ui/theme/constants";
 import { type ChangeEventHandler, useId } from "react";
 import { useTheme } from "@/hooks/useTheme";
-import { withKey } from "@/utils/withKey";
 
 const ICONS: Record<(typeof ThemeSchema)["options"][number], IconName> = {
 	light: "sun-bright",

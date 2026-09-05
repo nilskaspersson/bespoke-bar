@@ -5,8 +5,8 @@ import type {
 	RecipeWithRelations,
 } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { ingredientEditorStore } from "@bespoke/ui/stores/ingredientEditor";
 import { create } from "zustand";
-import { ingredientEditorStore } from "@/features/ingredients/stores/ingredientEditor";
 import { recipeTagsEditorStore } from "@/features/tags/stores/recipeTagsEditor";
 
 type ModalCurrent = {

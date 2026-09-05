@@ -6,13 +6,13 @@ import { usePopover } from "@bespoke/ui/hooks/usePopover";
 import { Icon } from "@bespoke/ui/Icon";
 import { Kbd } from "@bespoke/ui/Kbd";
 import { Popover } from "@bespoke/ui/Popover";
-import { Text } from "@bespoke/ui/Text";
-import { clsx } from "clsx";
-import { type ToggleEventHandler, useMemo } from "react";
 import {
 	RecipeAdjustmentsControls,
 	useRawAdjustments,
-} from "@/features/recipes/components/RecipeAdjustments";
+} from "@bespoke/ui/RecipeAdjustments";
+import { Text } from "@bespoke/ui/Text";
+import { clsx } from "clsx";
+import { type ToggleEventHandler, useMemo } from "react";
 import styles from "./styles.module.css";
 
 type Props = {

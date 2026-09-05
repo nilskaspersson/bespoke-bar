@@ -1,10 +1,10 @@
 "use client";
 
 import { ICE_TO_LABEL } from "@bespoke/domain/recipes/labels";
+import { withKey } from "@bespoke/domain/utils/withKey";
 import { type Ice, ice } from "@bespoke/schema/schema/ice";
 import { Select } from "@bespoke/ui/Select";
 import type { ComponentProps } from "react";
-import { withKey } from "@/utils/withKey";
 
 type Option = {
 	value: Ice;

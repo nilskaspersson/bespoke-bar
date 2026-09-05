@@ -1,9 +1,9 @@
 "use client";
 
+import { useIsMounted } from "@bespoke/ui/hooks/useIsMounted";
 import { clsx } from "clsx";
 import { createContext, type ReactNode, useContext, useState } from "react";
 import { createPortal } from "react-dom";
-import { useIsMounted } from "@/hooks/useIsMounted";
 import styles from "./styles.module.css";
 
 const SlotContext = createContext<HTMLDivElement | null>(null);

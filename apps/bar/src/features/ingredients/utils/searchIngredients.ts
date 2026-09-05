@@ -1,9 +1,9 @@
+import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
 import {
 	createSearchIndex,
 	type SearchIndex,
 } from "@bespoke/domain/utils/search";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
-import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { normalizeInput } from "@/utils";
 
 const getIngredientId = (ingredient: Ingredient) => ingredient.id;

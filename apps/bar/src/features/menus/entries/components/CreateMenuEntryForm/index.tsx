@@ -9,6 +9,7 @@ import { CurrencyInput } from "@bespoke/ui/CurrencyInput";
 import { Grid } from "@bespoke/ui/Grid";
 import { Icon } from "@bespoke/ui/Icon";
 import { Menu } from "@bespoke/ui/Menu";
+import { RecipeCard } from "@bespoke/ui/RecipeCard";
 import { Skeleton } from "@bespoke/ui/Skeleton";
 import { Text } from "@bespoke/ui/Text";
 import { TextField } from "@bespoke/ui/TextField";
@@ -28,7 +29,6 @@ import {
 	isMenu,
 	isMenuWithEntries,
 } from "@/features/menus/utils";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { trpc } from "@/trpc/client";
 import { FormErrors } from "@/ui/FormErrors";
 import { createPromiseToast } from "@/utils/createPromiseToast";

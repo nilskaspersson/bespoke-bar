@@ -1,10 +1,10 @@
 "use client";
 
+import { Abv } from "@bespoke/ui/Abv";
 import { Chip } from "@bespoke/ui/Chip";
 import { Flex, type FlexProps } from "@bespoke/ui/Flex";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { use } from "react";
-import { Abv } from "@/features/ingredients/components/Abv";
 import type { MenuComposition } from "@/features/menus/utils/menuComposition";
 
 function formatRange(

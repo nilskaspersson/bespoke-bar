@@ -2,6 +2,7 @@
 
 import { METHOD_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { collator } from "@bespoke/domain/utils/collator";
+import { withKey } from "@bespoke/domain/utils/withKey";
 import {
 	type PreparationMethod,
 	preparationMethods,
@@ -11,7 +12,6 @@ import { Menu } from "@bespoke/ui/Menu";
 import { Select } from "@bespoke/ui/Select";
 import { type ComponentProps, use, useMemo } from "react";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
-import { withKey } from "@/utils/withKey";
 
 type Option = {
 	value: PreparationMethod;

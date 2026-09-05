@@ -2,13 +2,13 @@
 
 import { COCKTAIL_STYLE_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { collator } from "@bespoke/domain/utils/collator";
+import { withKey } from "@bespoke/domain/utils/withKey";
 import {
 	type CocktailStyle,
 	cocktailStyles,
 } from "@bespoke/schema/schema/cocktailStyles";
 import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
-import { withKey } from "@/utils/withKey";
 
 type Option = {
 	value: CocktailStyle;

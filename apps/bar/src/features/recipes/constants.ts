@@ -1,9 +1,6 @@
 import type { CocktailStyleFilter } from "@bespoke/domain/recipes/labels";
 import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
 import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
-import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
-
-export const EMPTY_RECIPE: BaseRecipe = {};
 
 /**
  * Percentage of the final volume that is dilution.

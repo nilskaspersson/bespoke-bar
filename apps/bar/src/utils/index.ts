@@ -1,5 +1,4 @@
-export { pick } from "@bespoke/domain/utils/collection";
-export { round } from "@bespoke/domain/utils/math";
+export { isObject, pick } from "@bespoke/domain/utils/collection";
 export { normalizeInput } from "@bespoke/domain/utils/text";
 
 /** @public */
@@ -68,10 +67,6 @@ export function invertMapToSets<T>(map: Map<string, T>): Map<T, Set<string>> {
 	return inverted;
 }
 
-export function pickRandom<T>(items: readonly [T, ...T[]]): T {
-	return items[Math.floor(Math.random() * items.length)];
-}
-
 export function times(n: number): number[] {
 	return Array.from({ length: n }, (_, i) => i);
 }
@@ -79,10 +74,6 @@ export function times(n: number): number[] {
 /** @public */
 export function sleep(ms: number): Promise<void> {
 	return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-export function isObject(o: unknown): o is Record<PropertyKey, unknown> {
-	return typeof o === "object" && o !== null && !Array.isArray(o);
 }
 
 export function getDifferentKeys<T extends Record<PropertyKey, unknown>>(

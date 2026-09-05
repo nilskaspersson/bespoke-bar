@@ -6,13 +6,13 @@ import {
 	buildIngredientMap,
 	stitchMenuEntries,
 } from "@bespoke/domain/ingredientLines/stitchIngredients";
+import { EntityActions } from "@bespoke/ui/EntityActions";
 import { Grid } from "@bespoke/ui/Grid";
 import { Skeleton } from "@bespoke/ui/Skeleton";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
-import { EntityActions } from "@/components/EntityActions";
 import { MenuDetailActions } from "@/features/menus/actions/components/MenuDetailActions";
 import { MenuRailActions } from "@/features/menus/actions/components/MenuRailActions";
 import { EmptyMenuEntry } from "@/features/menus/components/EmptyMenuEntry";

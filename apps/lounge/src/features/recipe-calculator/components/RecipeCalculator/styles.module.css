@@ -1,0 +1,49 @@
+@layer feature {
+	.root {
+		display: grid;
+		gap: var(--gap);
+		justify-content: center;
+		align-items: start;
+		grid-template-areas:
+			"editor"
+			"sidebar"
+			"list";
+
+		@container (width > 900px) {
+			grid-template-areas:
+				"editor list"
+				"sidebar list";
+			grid-template-columns: repeat(2, var(--recipe-preview-width));
+			grid-template-rows: auto 1fr;
+		}
+	}
+
+	.editor {
+		grid-area: editor;
+		display: grid;
+		max-width: var(--recipe-preview-width);
+		width: 100%;
+	}
+
+	.sidebar {
+		grid-area: sidebar;
+		max-width: var(--recipe-preview-width);
+		width: 100%;
+
+		@container (width > 900px) {
+			position: sticky;
+			top: var(--gap);
+		}
+	}
+
+	.list {
+		grid-area: list;
+		display: grid;
+		gap: var(--space-4);
+		justify-content: center;
+		grid-template-columns: repeat(
+				auto-fit,
+				minmax(min(var(--recipe-card-width), 100%), var(--recipe-card-width))
+			);
+	}
+}

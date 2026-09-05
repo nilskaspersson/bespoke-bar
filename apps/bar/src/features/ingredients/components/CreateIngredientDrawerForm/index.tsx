@@ -1,6 +1,11 @@
 "use client";
 
+import { getIngredientUrl } from "@bespoke/domain/ingredients/getIngredientUrl";
 import { draftIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
+import {
+	ingredientEditorStore,
+	useIngredientEditor,
+} from "@bespoke/ui/stores/ingredientEditor";
 import { toast } from "@bespoke/ui/Toast";
 import {
 	FormProvider,
@@ -12,11 +17,6 @@ import { useRouter } from "next/navigation";
 import { type ComponentProps, useRef, useState } from "react";
 import { createIngredient } from "@/features/ingredients/api/createIngredient";
 import { IngredientFormFields } from "@/features/ingredients/components/IngredientFormFields";
-import {
-	ingredientEditorStore,
-	useIngredientEditor,
-} from "@/features/ingredients/stores/ingredientEditor";
-import { getIngredientUrl } from "@/features/ingredients/utils";
 import {
 	clearIngredientDraft,
 	readIngredientDraft,

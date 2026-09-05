@@ -1,5 +1,6 @@
 "use client";
 
+import { getRecipeUrl } from "@bespoke/domain/recipes/getRecipeUrl";
 import {
 	type RecipeFormData,
 	recipeFormSchema,
@@ -8,6 +9,7 @@ import type { IngredientLineWithIngredient } from "@bespoke/schema/schema/ingred
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
 import { Button } from "@bespoke/ui/Button";
+import { EnrichmentMark } from "@bespoke/ui/EnrichmentMark";
 import { Grid } from "@bespoke/ui/Grid";
 import { Icon } from "@bespoke/ui/Icon";
 import { Kbd } from "@bespoke/ui/Kbd";
@@ -23,7 +25,6 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { useRouter } from "next/navigation";
 import { type ReactNode, use, useRef, useState } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
-import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { upsertRecipeWithLinesAction } from "@/features/recipes/api/upsertRecipesWithLines";
@@ -35,7 +36,6 @@ import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectIce } from "@/features/recipes/components/SelectIce";
 import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
 import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
-import { getRecipeUrl } from "@/features/recipes/utils";
 import { FormErrors } from "@/ui/FormErrors";
 import styles from "./styles.module.css";
 

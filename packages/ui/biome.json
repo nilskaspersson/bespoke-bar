@@ -35,11 +35,9 @@
 									"drizzle-orm",
 									"drizzle-orm/**",
 									"stripe",
-									"@lexical/**",
-									"lexical",
 									"@conform-to/**"
 								],
-								"message": "packages/ui is shared web-DOM UI: no server/db/auth/LLM SDKs, no Drizzle, no Lexical, and no Conform (form-coupled code stays in apps/bar). It may use react, react-dom, next, and @bespoke/{schema,domain}."
+								"message": "packages/ui is shared web-DOM UI: no server/db/auth/LLM SDKs, no Drizzle, and no Conform. Lexical itself is allowed (the editor is a controlled text input), but form- and route-coupled Lexical consumers stay in apps/bar. It may use react, react-dom, next, lexical, and @bespoke/{schema,domain}."
 							}
 						]
 					}

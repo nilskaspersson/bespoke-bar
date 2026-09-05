@@ -26,8 +26,12 @@
 	"dependencies": {
 		"@bespoke/domain": "workspace:*",
 		"@bespoke/schema": "workspace:*",
+		"@lexical/react": "catalog:",
+		"@lexical/selection": "catalog:",
+		"@lexical/utils": "catalog:",
 		"clsx": "catalog:",
 		"downshift": "catalog:",
+		"lexical": "catalog:",
 		"motion": "catalog:",
 		"next": "catalog:",
 		"react": "catalog:",

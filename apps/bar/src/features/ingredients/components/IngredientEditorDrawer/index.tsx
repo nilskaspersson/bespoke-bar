@@ -6,14 +6,14 @@ import { Heading } from "@bespoke/ui/Heading";
 import { HGroup } from "@bespoke/ui/HGroup";
 import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { Kbd } from "@bespoke/ui/Kbd";
+import {
+	ingredientEditorStore,
+	useIngredientEditor,
+} from "@bespoke/ui/stores/ingredientEditor";
 import { useEffect, useId } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { CreateIngredientDrawerForm } from "@/features/ingredients/components/CreateIngredientDrawerForm";
 import { EditIngredientForm } from "@/features/ingredients/components/EditIngredientForm";
-import {
-	ingredientEditorStore,
-	useIngredientEditor,
-} from "@/features/ingredients/stores/ingredientEditor";
 
 export function IngredientEditorDrawer() {
 	const formId = useId();

@@ -1,5 +1,7 @@
 "use client";
 
+import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
+import { getIngredientUrl } from "@bespoke/domain/ingredients/getIngredientUrl";
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { Button } from "@bespoke/ui/Button";
@@ -16,8 +18,6 @@ import Link from "next/link";
 import { useRouter, useSelectedLayoutSegment } from "next/navigation";
 import { parseAsStringLiteral, useQueryStates } from "nuqs";
 import { useDeferredValue, useMemo, useRef, useState } from "react";
-import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
-import { getIngredientUrl } from "@/features/ingredients/utils";
 import {
 	createIngredientSearchIndex,
 	filterIngredientsByQuery,

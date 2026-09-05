@@ -6,6 +6,7 @@ import { Heading } from "@bespoke/ui/Heading";
 import { Icon } from "@bespoke/ui/Icon";
 import { Text } from "@bespoke/ui/Text";
 import { cacheLife } from "next/cache";
+import Link from "next/link";
 import { LandingPageHero } from "@/features/landing-page/components/LandingPageHero";
 import styles from "./page.module.css";
 
@@ -32,8 +33,8 @@ export default async function LandingPage() {
 
 						<Text as="p" balance>
 							Bespoke Bar has <strong>tools for cocktail recipes.</strong>{" "}
-							Create, calculate, and collaborate on recipes and lists with your
-							team.
+							Create, <Link href="/tools/recipe-calculator">calculate</Link>,
+							and collaborate on recipes and lists with your team.
 						</Text>
 					</Grid>
 

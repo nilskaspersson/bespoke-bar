@@ -6,9 +6,9 @@ import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import type { Keyed } from "@bespoke/schema/types";
+import { DraftRecipesPreview } from "@bespoke/ui/DraftRecipesPreview";
 import { useFormMetadata } from "@conform-to/react";
 import { type ComponentProps, useDeferredValue, useId, useMemo } from "react";
-import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import { normalizeInput } from "@/utils";
 import { recipePreviewSchema } from "./schema";
 

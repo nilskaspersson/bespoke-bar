@@ -4,7 +4,10 @@ import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { Button } from "@bespoke/ui/Button";
+import { DraftRecipesPreview } from "@bespoke/ui/DraftRecipesPreview";
+import { DraftRecipesStatusBar } from "@bespoke/ui/DraftRecipesStatusBar";
 import { Kbd } from "@bespoke/ui/Kbd";
+import { RecipeEditor } from "@bespoke/ui/RecipeEditor";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { clsx } from "clsx";
 import { CLEAR_EDITOR_COMMAND, type LexicalEditor } from "lexical";
@@ -18,11 +21,8 @@ import {
 	useState,
 } from "react";
 import { BottomRailItems } from "@/components/BottomRail";
-import { DraftRecipesStatusBar } from "@/features/recipes/bulk/components/DraftRecipesStatusBar";
-import { RecipeEditor } from "@/features/recipes/bulk/components/RecipeEditor";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { DraftRecipesPreview } from "@/features/recipes/components/DraftRecipesPreview";
 import { useLocalStorage } from "@/hooks/useLocalStorage";
 import styles from "./styles.module.css";
 

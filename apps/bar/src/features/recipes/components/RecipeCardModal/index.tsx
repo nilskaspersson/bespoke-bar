@@ -9,6 +9,11 @@ import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { Icon } from "@bespoke/ui/Icon";
+import {
+	RecipeAdjustmentsControls,
+	useAdjustments,
+} from "@bespoke/ui/RecipeAdjustments";
+import { RecipeCard } from "@bespoke/ui/RecipeCard";
 import { Text } from "@bespoke/ui/Text";
 import { TRANSITION_DURATION_SLOW_MS } from "@bespoke/ui/utils/animate";
 import { readCssVar } from "@bespoke/ui/utils/styles";
@@ -27,11 +32,6 @@ import {
 } from "react";
 import { WakeLock } from "@/components/WakeLock";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
-import {
-	RecipeAdjustmentsControls,
-	useAdjustments,
-} from "@/features/recipes/components/RecipeAdjustments";
-import { RecipeCard } from "@/features/recipes/components/RecipeCard";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import {
 	recipeCardModalStore,

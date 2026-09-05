@@ -2,8 +2,8 @@
 
 import type { MenuEntryWithRecipe } from "@bespoke/schema/schema/menuEntries";
 import { LinkButton } from "@bespoke/ui/Button";
+import { EntityActions } from "@bespoke/ui/EntityActions";
 import { Icon } from "@bespoke/ui/Icon";
-import { EntityActions } from "@/components/EntityActions";
 import { RemoveMenuEntryButton } from "@/features/menus/actions/components/RemoveMenuEntryButton";
 import { addRecipeToMenu } from "@/features/menus/entries/api/addRecipeToMenu";
 import { removeRecipeFromMenu } from "@/features/menus/entries/api/removeRecipeFromMenu";
