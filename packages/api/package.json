@@ -21,7 +21,7 @@
 		"@bespoke/domain": "workspace:*",
 		"@bespoke/schema": "workspace:*",
 		"@clerk/nextjs": "catalog:",
-		"@google-cloud/vision": "5.3.7",
+		"@google-cloud/vision": "6.0.0",
 		"@google/genai": "2.21.0",
 		"@trpc/server": "catalog:",
 		"@upstash/ratelimit": "2.0.8",
