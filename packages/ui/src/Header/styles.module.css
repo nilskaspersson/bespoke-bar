@@ -14,10 +14,11 @@
 		padding: var(--space-5) var(--app-inset);
 	}
 
-	.auth {
+	.nav {
 		display: flex;
 		justify-content: flex-end;
 		flex-wrap: wrap-reverse;
 		gap: var(--gap--tiny);
+		align-self: center;
 	}
 }

@@ -1,4 +1,4 @@
-@layer feature {
+@layer component {
 	.card {
 		contain: content;
 		min-height: var(--recipe-card-height);

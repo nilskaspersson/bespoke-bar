@@ -1,6 +1,6 @@
 @layer feature {
 	.root {
-		--bc: var(--mauve-6);
+		--bc: var(--mauve-5);
 
 		display: grid;
 		grid-template-rows: auto 1fr auto;
