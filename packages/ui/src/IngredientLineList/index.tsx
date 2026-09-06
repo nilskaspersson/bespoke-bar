@@ -16,6 +16,7 @@ export function IngredientLineList<
 	withRounding,
 	withBestUnit,
 	animateNumbers,
+	isPublic,
 	...props
 }: {
 	lines: Keyed<T>[];
@@ -24,6 +25,7 @@ export function IngredientLineList<
 	withRounding?: boolean;
 	withBestUnit?: boolean;
 	animateNumbers?: boolean;
+	isPublic?: boolean;
 } & Omit<ComponentProps<"div">, "children">) {
 	return (
 		<div {...props}>
@@ -38,6 +40,7 @@ export function IngredientLineList<
 							withRounding={withRounding}
 							withBestUnit={withBestUnit}
 							animateNumbers={animateNumbers}
+							isPublic={isPublic}
 						/>
 					</li>
 				))}

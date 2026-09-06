@@ -22,6 +22,7 @@ export function IngredientLineEntry<
 	line,
 	servings = 1,
 	animateNumbers = true,
+	isPublic = false,
 	...props
 }: {
 	line: T;
@@ -31,6 +32,12 @@ export function IngredientLineEntry<
 	withBestUnit?: boolean;
 	servings?: number;
 	animateNumbers?: boolean;
+	/**
+	 * Renders for a reader with no Organisation behind them: anything that only
+	 * means something inside the Bar — the "New" label on a Draft Ingredient —
+	 * is left out.
+	 */
+	isPublic?: boolean;
 } & Omit<TextProps, "onChange">) {
 	const isDraftIngredient = !line.ingredientId;
 	const formatLineMeasure = useFormatLineMeasure();
@@ -84,9 +91,11 @@ export function IngredientLineEntry<
 						<OptionalText optional={line.optional} />
 					</span>
 
-					<Chip size={0} className={clsx(styles.node, styles.badge)}>
-						New
-					</Chip>
+					{isPublic ? null : (
+						<Chip size={0} className={clsx(styles.node, styles.badge)}>
+							New
+						</Chip>
+					)}
 				</>
 			) : (
 				<span className={clsx(styles.node, styles.label)}>
