@@ -2,7 +2,6 @@
 
 import { userInputToBulkRecipe } from "@bespoke/domain/ingredientLines/userInputToBulkRecipe";
 import { isEmptyDraftRecipe } from "@bespoke/domain/recipes/predicates";
-import { withKey } from "@bespoke/domain/utils/withKey";
 import { Abv } from "@bespoke/ui/Abv";
 import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { DraftRecipesStatusBar } from "@bespoke/ui/DraftRecipesStatusBar";
@@ -31,9 +30,9 @@ export function CocktailCalculator() {
 
 	const recipes = useMemo(
 		() =>
-			userInputToBulkRecipe(text, NO_INGREDIENTS)
-				.filter((recipe) => !isEmptyDraftRecipe(recipe))
-				.map(withKey),
+			userInputToBulkRecipe(text, NO_INGREDIENTS).filter(
+				(recipe) => !isEmptyDraftRecipe(recipe),
+			),
 		[text],
 	);
 

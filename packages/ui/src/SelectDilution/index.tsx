@@ -45,7 +45,6 @@ export function SelectDilution({
 	return (
 		<ControlLabel
 			htmlFor={inputId}
-			id={inputId}
 			required={required}
 			label={
 				label ??
@@ -57,7 +56,7 @@ export function SelectDilution({
 				type="range"
 				name={name}
 				defaultValue={defaultValue}
-				aria-describedby={`${inputId}-helper`}
+				aria-describedby={helperText ? `${inputId}-helper` : undefined}
 				min={0}
 				max={1}
 				step={0.01}

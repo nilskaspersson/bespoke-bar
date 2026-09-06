@@ -5,10 +5,8 @@ import {
 	getAssumedPreparationMethod,
 	METHOD_TO_DEFAULT_DILUTION,
 } from "@bespoke/domain/recipes/dilution";
-import { getKey, isKeyed } from "@bespoke/domain/utils/withKey";
 import type { PreparationMethod } from "@bespoke/schema/schema/preparationMethods";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
-import type { Keyed } from "@bespoke/schema/types";
 import { GraphPaper, type GraphPaperProps } from "@bespoke/ui/GraphPaper";
 import { Panel } from "@bespoke/ui/Panel";
 import { useAdjustments } from "@bespoke/ui/RecipeAdjustments";
@@ -32,65 +30,66 @@ export function RecipesPreview({
 	recipes,
 	...props
 }: Omit<GraphPaperProps<"section">, "children"> & {
-	recipes: Keyed<BaseRecipe>[];
+	recipes: BaseRecipe[];
 }) {
-	const { servings, conversionSystem, withRounding, withBestUnit } =
-		useAdjustments();
-	const [overrides, setOverrides] = useState<Record<number, Dilution>>({});
-
-	function update(index: number, dilution: Partial<Dilution>) {
-		setOverrides((current) => ({
-			...current,
-			[index]: { ...current[index], ...dilution } as Dilution,
-		}));
-	}
-
 	return (
 		<GraphPaper as="section" {...props}>
 			<ul className={styles.list}>
 				{(recipes.length > 0 ? recipes : [EMPTY_RECIPE]).map(
-					(recipe, index) => {
-						const { method, dilutionTarget } =
-							overrides[index] ?? assumedDilution(recipe);
-
-						return (
-							<li key={isKeyed(recipe) ? getKey(recipe) : "placeholder"}>
-								<Panel
-									as="article"
-									box={
-										<RecipeCard
-											className={styles.card}
-											isPublic
-											recipe={recipe}
-											servings={servings}
-											convertUnits={conversionSystem}
-											withRounding={withRounding}
-											withBestUnit={withBestUnit}
-										/>
-									}
-									footer={
-										<RecipeVolumeSummary
-											recipe={recipe}
-											method={method}
-											dilutionTarget={dilutionTarget}
-											onMethodChange={(next) =>
-												update(index, {
-													method: next,
-													dilutionTarget:
-														METHOD_TO_DEFAULT_DILUTION.get(next) ?? 0,
-												})
-											}
-											onDilutionChange={(next) =>
-												update(index, { method, dilutionTarget: next })
-											}
-										/>
-									}
-								/>
-							</li>
-						);
-					},
+					(recipe, index) => (
+						/**
+						 * Position is the only identity that survives typing: the parse
+						 * mints fresh keys, and name or contents change per keystroke.
+						 * Trade-off is a shift when a recipe above is added or removed.
+						 */
+						// biome-ignore lint/suspicious/noArrayIndexKey: identity explained above
+						<li key={index}>
+							<RecipePanel recipe={recipe} />
+						</li>
+					),
 				)}
 			</ul>
 		</GraphPaper>
+	);
+}
+
+function RecipePanel({ recipe }: { recipe: BaseRecipe }) {
+	const { servings, conversionSystem, withRounding, withBestUnit } =
+		useAdjustments();
+	const [override, setOverride] = useState<Dilution | null>(null);
+
+	const { method, dilutionTarget } = override ?? assumedDilution(recipe);
+
+	return (
+		<Panel
+			as="article"
+			box={
+				<RecipeCard
+					className={styles.card}
+					isPublic
+					recipe={recipe}
+					servings={servings}
+					convertUnits={conversionSystem}
+					withRounding={withRounding}
+					withBestUnit={withBestUnit}
+				/>
+			}
+			footer={
+				<RecipeVolumeSummary
+					recipe={recipe}
+					method={method}
+					dilutionTarget={dilutionTarget}
+					onMethodChange={(next) =>
+						setOverride({
+							method: next,
+							dilutionTarget: METHOD_TO_DEFAULT_DILUTION.get(next) ?? 0,
+						})
+					}
+					onDilutionChange={(next) =>
+						setOverride({ method, dilutionTarget: next })
+					}
+				/>
+			}
+		/>
 	);
 }
