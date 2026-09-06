@@ -7,16 +7,16 @@ import {
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { Button } from "@bespoke/ui/Button";
 import { Grid } from "@bespoke/ui/Grid";
 import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { useHydrateRecipeAdjustments } from "@bespoke/ui/RecipeAdjustments";
+import { RecipeAdjustmentsDock } from "@bespoke/ui/RecipeAdjustmentsDock";
 import { Text } from "@bespoke/ui/Text";
 import { AnimatePresence, m } from "motion/react";
 import { useDeferredValue, useMemo, useState } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import { ClearFiltersPill } from "@/features/recipes/components/ClearFiltersPill";
-import { RecipeAdjustmentsDock } from "@/features/recipes/components/RecipeAdjustmentsDock";
 import { RecipesFilterDrawer } from "@/features/recipes/components/RecipesFilterDrawer";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
 import { RecipesListHeader } from "@/features/recipes/components/RecipesListHeader";

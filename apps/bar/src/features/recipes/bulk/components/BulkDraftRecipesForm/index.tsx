@@ -3,9 +3,11 @@
 import type { RecipeFormData } from "@bespoke/schema/schema/composite";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { Button } from "@bespoke/ui/Button";
 import { DraftRecipesPreview } from "@bespoke/ui/DraftRecipesPreview";
 import { DraftRecipesStatusBar } from "@bespoke/ui/DraftRecipesStatusBar";
+import { useLocalStorage } from "@bespoke/ui/hooks/useLocalStorage";
 import { Kbd } from "@bespoke/ui/Kbd";
 import { RecipeEditor } from "@bespoke/ui/RecipeEditor";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
@@ -20,10 +22,8 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import styles from "./styles.module.css";
 
 const DRAFT_STORAGE_KEY = "recipe-editor-draft";

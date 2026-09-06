@@ -1,10 +1,10 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedMenus } from "@bespoke/api/menus/readBarMenus";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { LinkButton } from "@bespoke/ui/Button";
 import { Grid } from "@bespoke/ui/Grid";
 import { Icon } from "@bespoke/ui/Icon";
 import { Suspense } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import { CreateMenuButton } from "@/features/menus/components/CreateMenuButton";
 import {
 	MenuSidebar,

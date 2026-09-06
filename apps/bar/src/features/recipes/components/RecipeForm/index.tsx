@@ -1,5 +1,6 @@
 "use client";
 
+import { METHOD_TO_DEFAULT_DILUTION } from "@bespoke/domain/recipes/dilution";
 import { getRecipeUrl } from "@bespoke/domain/recipes/getRecipeUrl";
 import {
 	type RecipeFormData,
@@ -8,11 +9,13 @@ import {
 import type { IngredientLineWithIngredient } from "@bespoke/schema/schema/ingredientLines";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import type { RecipeWithLines } from "@bespoke/schema/schema/recipes";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { Button } from "@bespoke/ui/Button";
 import { EnrichmentMark } from "@bespoke/ui/EnrichmentMark";
 import { Grid } from "@bespoke/ui/Grid";
 import { Icon } from "@bespoke/ui/Icon";
 import { Kbd } from "@bespoke/ui/Kbd";
+import { SelectPreparationMethod } from "@bespoke/ui/SelectPreparationMethod";
 import { Text } from "@bespoke/ui/Text";
 import { TextField } from "@bespoke/ui/TextField";
 import { toast } from "@bespoke/ui/Toast";
@@ -24,7 +27,6 @@ import {
 import { parseWithZod } from "@conform-to/zod/v4";
 import { useRouter } from "next/navigation";
 import { type ReactNode, use, useRef, useState } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import { showRecipeLimitReachedToast } from "@/features/billing/components/RecipeLimitReachedToast";
 import { RecipeSlotUsageContext } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { upsertRecipeWithLinesAction } from "@/features/recipes/api/upsertRecipesWithLines";
@@ -34,8 +36,6 @@ import { SelectCocktailStyle } from "@/features/recipes/components/SelectCocktai
 import { SelectDilution } from "@/features/recipes/components/SelectDilution";
 import { SelectGlassware } from "@/features/recipes/components/SelectGlassware";
 import { SelectIce } from "@/features/recipes/components/SelectIce";
-import { SelectPreparationMethod } from "@/features/recipes/components/SelectPreparationMethod";
-import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
 import { FormErrors } from "@/ui/FormErrors";
 import styles from "./styles.module.css";
 

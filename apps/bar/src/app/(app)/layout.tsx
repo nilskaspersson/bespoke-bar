@@ -1,3 +1,4 @@
+import { BottomRailHost } from "@bespoke/ui/BottomRail";
 import { Flex } from "@bespoke/ui/Flex";
 import { Icon } from "@bespoke/ui/Icon";
 import { LoadingScreen } from "@bespoke/ui/LoadingScreen";
@@ -5,7 +6,6 @@ import { RedirectToSignIn, Show } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { AppNavToggle } from "@/components/AppNavToggle";
-import { BottomRailHost } from "@/components/BottomRail";
 import { OrgProvider } from "@/components/OrgProvider";
 import { Providers } from "@/components/Providers";
 import { IngredientEditorDrawer } from "@/features/ingredients/components/IngredientEditorDrawer";

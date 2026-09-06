@@ -3,9 +3,9 @@
 import { Icon } from "@bespoke/ui/Icon";
 import { Spinner } from "@bespoke/ui/Spinner";
 import type { ResolvedTheme } from "@bespoke/ui/theme/constants";
+import { useTheme } from "@bespoke/ui/theme/ThemeProvider";
 import { useEffect, useRef } from "react";
 import { Toaster as SonnerToaster } from "sonner";
-import { useTheme } from "@/hooks/useTheme";
 
 const ICONS_MAP = {
 	success: <Icon name="check" size={3} />,

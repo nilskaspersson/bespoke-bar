@@ -1,9 +1,9 @@
 "use client";
 
-import { Checkbox } from "@bespoke/ui/Checkbox";
-import { useIsMounted } from "@bespoke/ui/hooks/useIsMounted";
 import type { ComponentProps } from "react";
-import { useWakeLock } from "@/hooks/useWakeLock";
+import { Checkbox } from "../Checkbox";
+import { useIsMounted } from "../hooks/useIsMounted";
+import { useWakeLock } from "../hooks/useWakeLock";
 
 export function WakeLock(props: Partial<ComponentProps<typeof Checkbox>>) {
 	const isMounted = useIsMounted();

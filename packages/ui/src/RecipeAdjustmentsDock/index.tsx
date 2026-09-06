@@ -1,18 +1,18 @@
 "use client";
 
-import { Button } from "@bespoke/ui/Button";
-import { Chip } from "@bespoke/ui/Chip";
-import { usePopover } from "@bespoke/ui/hooks/usePopover";
-import { Icon } from "@bespoke/ui/Icon";
-import { Kbd } from "@bespoke/ui/Kbd";
-import { Popover } from "@bespoke/ui/Popover";
+import { clsx } from "clsx";
+import { type ToggleEventHandler, useMemo } from "react";
+import { Button } from "../Button";
+import { Chip } from "../Chip";
+import { usePopover } from "../hooks/usePopover";
+import { Icon } from "../Icon";
+import { Kbd } from "../Kbd";
+import { Popover } from "../Popover";
 import {
 	RecipeAdjustmentsControls,
 	useRawAdjustments,
-} from "@bespoke/ui/RecipeAdjustments";
-import { Text } from "@bespoke/ui/Text";
-import { clsx } from "clsx";
-import { type ToggleEventHandler, useMemo } from "react";
+} from "../RecipeAdjustments";
+import { Text } from "../Text";
 import styles from "./styles.module.css";
 
 type Props = {

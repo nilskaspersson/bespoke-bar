@@ -1,5 +1,5 @@
+import { PageHeader } from "@bespoke/ui/PageHeader";
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/PageHeader";
 
 export default function MenusPage() {
 	return (

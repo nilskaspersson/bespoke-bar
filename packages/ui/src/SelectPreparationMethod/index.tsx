@@ -1,19 +1,19 @@
 "use client";
 
+import { METHOD_TO_DEFAULT_DILUTION } from "@bespoke/domain/recipes/dilution";
 import { METHOD_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { collator } from "@bespoke/domain/utils/collator";
-import { withKey } from "@bespoke/domain/utils/withKey";
 import {
 	type PreparationMethod,
 	preparationMethods,
 } from "@bespoke/schema/schema/preparationMethods";
-import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
-import { Menu } from "@bespoke/ui/Menu";
-import { Select } from "@bespoke/ui/Select";
 import { type ComponentProps, use, useMemo } from "react";
-import { METHOD_TO_DEFAULT_DILUTION } from "@/features/recipes/constants";
+import { FormatterContext } from "../hooks/useFormatter";
+import { Menu } from "../Menu";
+import { Select } from "../Select";
 
 type Option = {
+	id: PreparationMethod;
 	value: PreparationMethod;
 	label: React.ReactNode;
 };
@@ -35,24 +35,23 @@ export function SelectPreparationMethod(
 	const options = useMemo(
 		() =>
 			preparationMethods.options
-				.map((item) =>
-					withKey({
-						value: item,
-						label: (
-							<Menu.Label
-								description={
-									METHOD_TO_DEFAULT_DILUTION.has(item)
-										? `Default dilution: ${percentageFormatter.format(
-												METHOD_TO_DEFAULT_DILUTION.get(item) ?? 0,
-											)}`
-										: null
-								}
-							>
-								{METHOD_TO_LABEL.get(item) ?? item}
-							</Menu.Label>
-						),
-					}),
-				)
+				.map((item) => ({
+					id: item,
+					value: item,
+					label: (
+						<Menu.Label
+							description={
+								METHOD_TO_DEFAULT_DILUTION.has(item)
+									? `Default dilution: ${percentageFormatter.format(
+											METHOD_TO_DEFAULT_DILUTION.get(item) ?? 0,
+										)}`
+									: null
+							}
+						>
+							{METHOD_TO_LABEL.get(item) ?? item}
+						</Menu.Label>
+					),
+				}))
 				.sort((a, b) => collator.compare(itemToString(a), itemToString(b))),
 		[percentageFormatter],
 	);

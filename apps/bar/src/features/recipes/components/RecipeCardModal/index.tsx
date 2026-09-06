@@ -8,6 +8,7 @@ import { Dialog } from "@bespoke/ui/Dialog";
 import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import { useDialog } from "@bespoke/ui/hooks/useDialog";
+import { useLocalStorage } from "@bespoke/ui/hooks/useLocalStorage";
 import { Icon } from "@bespoke/ui/Icon";
 import {
 	RecipeAdjustmentsControls,
@@ -17,6 +18,7 @@ import { RecipeCard } from "@bespoke/ui/RecipeCard";
 import { Text } from "@bespoke/ui/Text";
 import { TRANSITION_DURATION_SLOW_MS } from "@bespoke/ui/utils/animate";
 import { readCssVar } from "@bespoke/ui/utils/styles";
+import { WakeLock } from "@bespoke/ui/WakeLock";
 import {
 	usePersistenceInfo,
 	WithPersistenceInfo,
@@ -30,7 +32,6 @@ import {
 	useLayoutEffect,
 	useRef,
 } from "react";
-import { WakeLock } from "@/components/WakeLock";
 import { RecipeCardActions } from "@/features/recipes/actions/components/RecipeCardActions";
 import { RecipeMetrics } from "@/features/recipes/metrics/components/RecipeMetrics";
 import {
@@ -40,7 +41,6 @@ import {
 import { findRecipeCardEl } from "@/features/recipes/utils/recipeCardSource";
 import { RecipeTagsAction } from "@/features/tags/components/RecipeTagsAction";
 import { useCardTilt } from "@/hooks/useCardTilt";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useParticleEffect } from "@/hooks/useParticleEffect";
 import styles from "./styles.module.css";
 

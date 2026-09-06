@@ -1,10 +1,10 @@
-import { Eyebrow } from "@bespoke/ui/Eyebrow";
-import { Grid } from "@bespoke/ui/Grid";
-import { Heading } from "@bespoke/ui/Heading";
-import { HGroup } from "@bespoke/ui/HGroup";
-import type { IconName } from "@bespoke/ui/icons/types";
-import { Text } from "@bespoke/ui/Text";
 import type { ReactNode } from "react";
+import { Eyebrow } from "../Eyebrow";
+import { Grid } from "../Grid";
+import { Heading } from "../Heading";
+import { HGroup } from "../HGroup";
+import type { IconName } from "../icons/types";
+import { Text } from "../Text";
 import styles from "./styles.module.css";
 
 type Props = {
