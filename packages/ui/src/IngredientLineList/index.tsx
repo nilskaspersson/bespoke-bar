@@ -1,5 +1,4 @@
 import type { UnitSystems } from "@bespoke/domain/units/convert";
-import { getKey } from "@bespoke/domain/utils/withKey";
 import type { DraftIngredientLineWithDraftIngredient } from "@bespoke/schema/schema/ingredientLines";
 import type { Keyed } from "@bespoke/schema/types";
 import type { ComponentProps } from "react";
@@ -30,8 +29,8 @@ export function IngredientLineList<
 	return (
 		<div {...props}>
 			<Grid as="ul" gap={2} className={styles.list}>
-				{lines.map((line) => (
-					<li key={getKey(line)} className={styles.item}>
+				{lines.map((line, index) => (
+					<li key={"id" in line ? line.id : index} className={styles.item}>
 						<IngredientLineEntry
 							className={styles.entry}
 							line={line}
