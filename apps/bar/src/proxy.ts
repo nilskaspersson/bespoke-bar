@@ -1,6 +1,15 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
-export default clerkMiddleware();
+export default clerkMiddleware(async (auth, req) => {
+	if (req.nextUrl.pathname.startsWith("/api/")) return;
+
+	/**
+	 * Eagerly redirect unauthenticated users
+	 */
+	const { isAuthenticated, redirectToSignIn } = await auth();
+
+	if (!isAuthenticated) return redirectToSignIn();
+});
 
 export const config = {
 	matcher: [
