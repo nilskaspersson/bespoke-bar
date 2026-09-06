@@ -19,7 +19,7 @@ export function SelectDilution({
 	defaultValue = 0,
 	onChange,
 	label,
-	helperText = "Used to calculate the volume of the recipe.",
+	helperText = "Dilution as water gained.",
 }: {
 	name: string;
 	id?: string;
@@ -49,7 +49,7 @@ export function SelectDilution({
 			required={required}
 			label={
 				label ??
-				`Target dilution: ${percentageFormatter.format(dilutionTarget)} of undiluted volume`
+				`Target dilution: ${percentageFormatter.format(dilutionTarget)}`
 			}
 		>
 			<input

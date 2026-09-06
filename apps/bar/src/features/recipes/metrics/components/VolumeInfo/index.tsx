@@ -87,18 +87,18 @@ export function VolumeInfo<T extends BaseRecipe>({
 							</tr>
 
 							<tr>
-								<th>Water</th>
+								<th>Water gained</th>
 								<td>
 									{dilutionVolume} (
 									{percentageFormatter.format(
 										recipeMetrics.dilutionOfOriginalVolume,
-									)}{" "}
-									of undiluted volume)
+									)}
+									)
 								</td>
 							</tr>
 
 							<tr>
-								<th>Water percentage</th>
+								<th>Water in final drink</th>
 								<td>
 									{percentageFormatter.format(
 										recipeMetrics.dilutionOfFinalVolume,
