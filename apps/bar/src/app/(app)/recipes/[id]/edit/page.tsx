@@ -1,6 +1,7 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
 import { getCachedRecipe } from "@bespoke/api/recipes/readRecipe";
+import { getRecipeUrl } from "@bespoke/domain/recipes/getRecipeUrl";
 import { stitchRecipe } from "@bespoke/domain/recipes/stitchRecipe";
 import { LinkButton } from "@bespoke/ui/Button";
 import { Container } from "@bespoke/ui/Container";
@@ -12,7 +13,6 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { FormDraftPreview } from "@/features/recipes/components/FormDraftPreview";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
-import { getRecipeUrl } from "@/features/recipes/utils";
 import styles from "./page.module.css";
 
 type Props = {

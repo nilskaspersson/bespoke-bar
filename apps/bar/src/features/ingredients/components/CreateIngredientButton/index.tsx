@@ -1,8 +1,8 @@
 "use client";
 
 import { Button } from "@bespoke/ui/Button";
+import { useIngredientEditor } from "@bespoke/ui/stores/ingredientEditor";
 import type { ComponentProps } from "react";
-import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";
 
 export function CreateIngredientButton({
 	children,

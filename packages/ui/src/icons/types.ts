@@ -42,6 +42,7 @@ export type IconName =
 	| "heart-solid"
 	| "id-card"
 	| "image"
+	| "letter-case-capitalize"
 	| "magnifying-glass"
 	| "martini-glass"
 	| "memo"
@@ -71,4 +72,5 @@ export type IconName =
 	| "undo"
 	| "users"
 	| "wine-glass"
+	| "wrench"
 	| "xmark";

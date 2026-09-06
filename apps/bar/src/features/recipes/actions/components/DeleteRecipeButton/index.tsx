@@ -1,14 +1,14 @@
 "use client";
 
+import { getRecipeName } from "@bespoke/domain/recipes/labels";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import type { ButtonProps } from "@bespoke/ui/Button";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { RecipeName } from "@bespoke/ui/RecipeName";
 import { SubmitButton } from "@bespoke/ui/SubmitButton";
 import { Text } from "@bespoke/ui/Text";
 import type { ReactNode } from "react";
 import { deleteRecipe } from "@/features/recipes/api/deleteRecipe";
-import { RecipeName } from "@/features/recipes/components/RecipeName";
-import { getRecipeName } from "@/features/recipes/utils";
 import { createPromiseToast } from "@/utils/createPromiseToast";
 
 type Props = {

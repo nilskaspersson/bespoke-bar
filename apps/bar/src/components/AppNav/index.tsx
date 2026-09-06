@@ -4,11 +4,11 @@ import { Button, LinkButton } from "@bespoke/ui/Button";
 import { Icon } from "@bespoke/ui/Icon";
 import type { IconName } from "@bespoke/ui/icons/types";
 import { Text } from "@bespoke/ui/Text";
+import { ThemePicker } from "@bespoke/ui/ThemePicker";
+import { WakeLock } from "@bespoke/ui/WakeLock";
 import { clsx } from "clsx";
 import { m } from "motion/react";
 import type { Route } from "next";
-import { ThemePicker } from "@/components/ThemePicker";
-import { WakeLock } from "@/components/WakeLock";
 import styles from "./styles.module.css";
 
 type Item = {

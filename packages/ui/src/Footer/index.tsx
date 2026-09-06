@@ -71,11 +71,27 @@ export async function Footer({
 								</li>
 							</Text>
 						</Grid>
+
+						<Grid gap={1}>
+							<Heading level="h6" size={2}>
+								Tools
+							</Heading>
+
+							<Text as="ul" size={2}>
+								<li>
+									<a href={`${loungeUrl}/tools/cocktail-calculator`}>
+										Cocktail calculator
+									</a>
+								</li>
+							</Text>
+						</Grid>
 					</nav>
 
-					<Grid gap={4} className={styles.settings}>
-						{children}
-					</Grid>
+					{children ? (
+						<Grid gap={4} className={styles.settings}>
+							{children}
+						</Grid>
+					) : null}
 				</Flex>
 
 				<div>

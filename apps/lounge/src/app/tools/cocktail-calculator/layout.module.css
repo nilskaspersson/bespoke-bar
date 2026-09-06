@@ -1,0 +1,10 @@
+@layer layout {
+	.container {
+		display: grid;
+		grid-template-rows: 1fr auto;
+		flex: 1 1 auto;
+		min-height: 100lvh;
+		padding-inline: var(--app-inset);
+		padding-block: var(--app-header--height) var(--gap);
+	}
+}

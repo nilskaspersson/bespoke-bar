@@ -15,15 +15,9 @@ export async function Header({
 
 	return (
 		<header className={clsx(styles.header, className)} {...props}>
-			<Flex
-				justifyContent="space-between"
-				alignItems="center"
-				gap={4}
-				className={styles.container}
-			>
+			<Flex justifyContent="space-between" gap={4} className={styles.container}>
 				<Logo />
-
-				<div className={styles.auth}>{children}</div>
+				<nav className={styles.nav}>{children}</nav>
 			</Flex>
 		</header>
 	);

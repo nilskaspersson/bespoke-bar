@@ -1,0 +1,20 @@
+@layer feature {
+	.actions {
+		padding: var(--space-2);
+		border-top: 1px solid var(--mauve-5);
+		background-color: var(--mauve-2);
+	}
+
+	.separator {
+		border-right: 1px solid var(--mauve-5);
+		padding-right: var(--space-1);
+	}
+
+	.button {
+		border: 1px solid var(--mauve-5);
+
+		&[aria-disabled="true"] {
+			opacity: 0.5;
+		}
+	}
+}

@@ -4,10 +4,14 @@
  * `types.ts`.
  *
  * https://icon-sets.iconify.design/lucide/
+ * https://icon-sets.iconify.design/radix-icons/
  */
-import type { LucideIconName } from "./kits.types";
+import type { LucideIconName, RadixIconsIconName } from "./kits.types";
 
-type IconSource = { kit: "lucide"; name: LucideIconName } | { local: true };
+type IconSource =
+	| { kit: "lucide"; name: LucideIconName }
+	| { kit: "radix-icons"; name: RadixIconsIconName }
+	| { local: true };
 
 export const ICONS = {
 	"angle-down": { kit: "lucide", name: "chevron-down" },
@@ -38,6 +42,10 @@ export const ICONS = {
 	"glass-citrus": { local: true },
 	"heart-solid": { local: true },
 	"id-card": { kit: "lucide", name: "id-card" },
+	"letter-case-capitalize": {
+		kit: "radix-icons",
+		name: "letter-case-capitalize",
+	},
 	"magnifying-glass": { kit: "lucide", name: "search" },
 	"martini-glass": { kit: "lucide", name: "martini" },
 	"memo-pad": { kit: "lucide", name: "notebook" },
@@ -81,5 +89,6 @@ export const ICONS = {
 	trophy: { kit: "lucide", name: "trophy" },
 	undo: { kit: "lucide", name: "undo-2" },
 	users: { kit: "lucide", name: "users" },
+	wrench: { kit: "lucide", name: "wrench" },
 	xmark: { kit: "lucide", name: "x" },
 } as const satisfies Record<string, IconSource>;

@@ -1,0 +1,13 @@
+@layer feature {
+	.summary {
+		cursor: pointer;
+
+		&:hover {
+			color: var(--mauve-12);
+		}
+	}
+
+	.controls {
+		padding-top: var(--space-3);
+	}
+}

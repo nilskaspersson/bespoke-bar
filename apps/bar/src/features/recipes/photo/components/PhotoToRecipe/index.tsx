@@ -1,10 +1,12 @@
 "use client";
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { Button } from "@bespoke/ui/Button";
 import { Callout } from "@bespoke/ui/Callout";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { Grid } from "@bespoke/ui/Grid";
+import { useLocalStorage } from "@bespoke/ui/hooks/useLocalStorage";
 import { ImageUploadPreview } from "@bespoke/ui/ImageUploadPreview";
 import { Kbd } from "@bespoke/ui/Kbd";
 import { Text } from "@bespoke/ui/Text";
@@ -17,7 +19,6 @@ import {
 	useRef,
 	useState,
 } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicator";
 import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
@@ -25,7 +26,6 @@ import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/use
 import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { trpc } from "@/trpc/client";
 import styles from "./styles.module.css";
 

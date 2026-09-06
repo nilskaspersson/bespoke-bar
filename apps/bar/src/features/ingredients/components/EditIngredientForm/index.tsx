@@ -2,6 +2,10 @@
 
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
 import { updateIngredientFormSchema } from "@bespoke/schema/schema/ingredients";
+import {
+	ingredientEditorStore,
+	useIngredientEditor,
+} from "@bespoke/ui/stores/ingredientEditor";
 import { toast } from "@bespoke/ui/Toast";
 import {
 	FormProvider,
@@ -12,10 +16,6 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import { type ComponentProps, useRef, useState } from "react";
 import { updateIngredientAction } from "@/features/ingredients/api/updateIngredient";
 import { IngredientFormFields } from "@/features/ingredients/components/IngredientFormFields";
-import {
-	ingredientEditorStore,
-	useIngredientEditor,
-} from "@/features/ingredients/stores/ingredientEditor";
 import { useInvalidateClientCache } from "@/hooks/useInvalidateClientCache";
 
 type Props = {

@@ -32,8 +32,8 @@ export default async function LandingPage() {
 
 						<Text as="p" balance>
 							Bespoke Bar has <strong>tools for cocktail recipes.</strong>{" "}
-							Create, calculate, and collaborate on recipes and lists with your
-							team.
+							Create, calculate, and collaborate on recipes and lists. Curate
+							your own archive.
 						</Text>
 					</Grid>
 

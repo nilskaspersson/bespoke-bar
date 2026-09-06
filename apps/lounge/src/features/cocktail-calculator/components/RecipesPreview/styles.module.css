@@ -1,0 +1,14 @@
+@layer feature {
+	.list {
+		display: grid;
+		gap: var(--space-4);
+		grid-template-columns: repeat(
+				auto-fit,
+				minmax(min(var(--recipe-card-width), 100%), 1fr)
+			);
+	}
+
+	.card {
+		border-radius: calc(var(--radius--large) - var(--space-1));
+	}
+}

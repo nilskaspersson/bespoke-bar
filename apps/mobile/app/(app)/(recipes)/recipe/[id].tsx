@@ -171,7 +171,7 @@ export default function RecipeDetailScreen() {
 							<Row
 								theme={theme}
 								label="Dilution"
-								value={percentage.format(metrics.dilutionOfFinalVolume)}
+								value={percentage.format(metrics.dilutionOfOriginalVolume)}
 							/>
 							<Row
 								theme={theme}

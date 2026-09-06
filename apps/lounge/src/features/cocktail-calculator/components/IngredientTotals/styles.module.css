@@ -1,0 +1,45 @@
+@layer feature {
+	.table {
+		width: 100%;
+		border-collapse: collapse;
+
+		& :where(th, td) {
+			padding-block: var(--space-1);
+			vertical-align: baseline;
+		}
+	}
+
+	.columnHeader {
+		font-variant: all-small-caps;
+		letter-spacing: 0.06em;
+		padding-bottom: var(--space-2);
+		border-bottom: 1px solid var(--mauve-5);
+	}
+
+	.total {
+		padding-top: var(--space-2);
+		border-top: 1px solid var(--mauve-5);
+	}
+
+	.name {
+		width: 100%;
+		font-weight: 400;
+		text-wrap: pretty;
+		padding-right: var(--space-4);
+	}
+
+	.shrink {
+		white-space: nowrap;
+		padding-left: var(--gap--large);
+	}
+
+	.optional {
+		margin-left: 0.5ch;
+	}
+
+	.estimate {
+		text-decoration: underline dotted var(--mauve-8);
+		text-underline-offset: 0.25em;
+		cursor: help;
+	}
+}

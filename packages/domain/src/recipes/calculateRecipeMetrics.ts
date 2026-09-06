@@ -58,35 +58,27 @@ export function calculateLineVolumes<
 }
 
 /**
- * Get dilution target (percentage of final volume that should be water)
- * from recipe, defaulting to 0 if not defined
+ * Get dilution target (water added, as a percentage of the undiluted volume)
+ * from recipe.
  */
 function getDilutionTarget(recipe: BaseRecipe): number {
 	const target = recipe.dilutionTarget;
-	return typeof target === "number" && target >= 0 && target < 1 ? target : 0;
+	return typeof target === "number" && target >= 0 ? target : 0;
 }
 
 /**
- * Calculate dilution volume based on target percentage of final volume
+ * Calculate dilution volume from the target. The target is the volume _gained_,
+ * so 100 ml at 0.25 finishes at 125 ml, not 133 ml.
  */
 function calculateDilutionFromTarget(
 	originalVolume: number,
 	dilutionTarget: number,
 ): { dilutionVolume: number; finalVolume: number } {
-	if (dilutionTarget === 0 || originalVolume === 0) {
-		return {
-			dilutionVolume: 0,
-			finalVolume: originalVolume,
-		};
-	}
-
-	const dilutionVolume =
-		(dilutionTarget * originalVolume) / (1 - dilutionTarget);
-	const finalVolume = originalVolume + dilutionVolume;
+	const dilutionVolume = originalVolume * dilutionTarget;
 
 	return {
 		dilutionVolume,
-		finalVolume,
+		finalVolume: originalVolume + dilutionVolume,
 	};
 }
 

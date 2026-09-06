@@ -1,14 +1,14 @@
+import { lineIsDraft } from "@bespoke/domain/ingredientLines/predicates";
 import { calculateRecipeMetrics } from "@bespoke/domain/recipes/calculateRecipeMetrics";
+import { getKey } from "@bespoke/domain/utils/withKey";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import { Abv } from "@bespoke/ui/Abv";
 import { Callout } from "@bespoke/ui/Callout";
 import { Grid } from "@bespoke/ui/Grid";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { Text } from "@bespoke/ui/Text";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
-import { lineIsDraft } from "@/features/ingredientLines/utils";
-import { Abv } from "@/features/ingredients/components/Abv";
-import { getKey } from "@/utils/withKey";
 import styles from "./styles.module.css";
 
 export function AbvInfo<T extends BaseRecipe>({

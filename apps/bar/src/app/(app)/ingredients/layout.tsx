@@ -1,10 +1,10 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
 import { LinkButton } from "@bespoke/ui/Button";
 import { Grid } from "@bespoke/ui/Grid";
 import { Icon } from "@bespoke/ui/Icon";
 import { Suspense } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
 import { CreateIngredientButton } from "@/features/ingredients/components/CreateIngredientButton";
 import {
 	IngredientSidebar,

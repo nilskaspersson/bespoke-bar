@@ -1,3 +1,5 @@
+import { isRecipe } from "@bespoke/domain/recipes/predicates";
+import { namedEntityToUrlSlug } from "@bespoke/domain/utils/url";
 import type { MenuWithEntries } from "@bespoke/schema/schema/composite";
 import type {
 	MenuEntry,
@@ -5,9 +7,7 @@ import type {
 } from "@bespoke/schema/schema/menuEntries";
 import type { Menu } from "@bespoke/schema/schema/menus";
 import { DEFAULT_MENU_NAME } from "@/features/menus/constants";
-import { isRecipe } from "@/features/recipes/utils";
 import { isObject } from "@/utils";
-import { namedEntityToUrlSlug } from "@/utils/url";
 
 export function getMenuUrl(menu: Menu) {
 	return `/menus/${menu.id}/${namedEntityToUrlSlug(menu)}`;

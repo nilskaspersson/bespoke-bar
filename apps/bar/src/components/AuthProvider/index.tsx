@@ -1,10 +1,10 @@
 "use client";
 
+import { useIsMounted } from "@bespoke/ui/hooks/useIsMounted";
+import { useTheme } from "@bespoke/ui/theme/ThemeProvider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { type ComponentProps, type PropsWithChildren, useMemo } from "react";
-import { useIsMounted } from "@/hooks/useIsMounted";
-import { useTheme } from "@/hooks/useTheme";
 
 const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
 

@@ -2,15 +2,15 @@
 
 import { getMeasurementPriceUnit } from "@bespoke/domain/units/predicates";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
+import { Abv } from "@bespoke/ui/Abv";
 import { Button } from "@bespoke/ui/Button";
 import { Chip, type ChipProps } from "@bespoke/ui/Chip";
+import { EnrichmentMark } from "@bespoke/ui/EnrichmentMark";
 import { Flex, type FlexProps } from "@bespoke/ui/Flex";
+import { useFormatIngredientUnitCost } from "@bespoke/ui/hooks/useFormatIngredientUnitCost";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
+import { useIngredientEditor } from "@bespoke/ui/stores/ingredientEditor";
 import { type ReactNode, use } from "react";
-import { EnrichmentMark } from "@/components/EnrichmentMark";
-import { Abv } from "@/features/ingredients/components/Abv";
-import { useFormatIngredientUnitCost } from "@/features/ingredients/hooks/useFormatIngredientUnitCost";
-import { useIngredientEditor } from "@/features/ingredients/stores/ingredientEditor";
 import styles from "./styles.module.css";
 
 function EditableChip({

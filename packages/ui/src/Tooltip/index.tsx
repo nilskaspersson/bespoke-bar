@@ -16,11 +16,13 @@ import { Text } from "../Text";
 import type { PolymorphicProps } from "../utils/types";
 import styles from "./styles.module.css";
 
-export type TooltipProps<E extends ElementType = "span"> =
-	PolymorphicProps<E> & {
-		content: ReactNode;
-		as?: E;
-	};
+export type TooltipProps<E extends ElementType = "span"> = Omit<
+	PolymorphicProps<E>,
+	"content"
+> & {
+	content: ReactNode;
+	as?: E;
+};
 
 type Composed = {
 	style?: CSSProperties;

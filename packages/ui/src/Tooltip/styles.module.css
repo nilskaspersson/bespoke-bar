@@ -5,6 +5,8 @@
 		margin: 0 0 var(--space-2);
 		padding: var(--space-1) var(--space-2);
 		font-size: var(--size-1);
+		white-space: initial;
+		text-align: initial;
 
 		background-color: var(--mauve-12);
 		color: var(--mauve-1);

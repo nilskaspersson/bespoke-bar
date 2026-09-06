@@ -3,15 +3,15 @@
 import { getLineCost } from "@bespoke/domain/ingredientLines/getLineCost";
 import { getRecipeCost } from "@bespoke/domain/recipes/getRecipeCost";
 import type { UnitSystems } from "@bespoke/domain/units/convert";
+import { getKey } from "@bespoke/domain/utils/withKey";
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { Callout } from "@bespoke/ui/Callout";
 import { Grid } from "@bespoke/ui/Grid";
+import { useFormatLineMeasure } from "@bespoke/ui/hooks/useFormatLineMeasure";
 import { FormatterContext } from "@bespoke/ui/hooks/useFormatter";
 import { Text } from "@bespoke/ui/Text";
 import Link from "next/link";
 import { type ComponentProps, use } from "react";
-import { useFormatLineMeasure } from "@/features/ingredientLines/hooks/useFormatLineMeasure";
-import { getKey } from "@/utils/withKey";
 
 export function CostInfo<T extends BaseRecipe>({
 	recipe,

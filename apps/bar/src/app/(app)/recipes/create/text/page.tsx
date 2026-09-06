@@ -1,9 +1,9 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedRecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
+import { PageHeader } from "@bespoke/ui/PageHeader";
 import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import { Suspense } from "react";
-import { PageHeader } from "@/components/PageHeader";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";

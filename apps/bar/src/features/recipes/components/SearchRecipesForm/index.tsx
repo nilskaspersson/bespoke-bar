@@ -4,6 +4,7 @@ import {
 	applyRecipeFilters,
 	createRecipeSearchIndex,
 } from "@bespoke/domain/recipes/applyRecipeFilters";
+import { getRecipeUrl } from "@bespoke/domain/recipes/getRecipeUrl";
 import { pluralize } from "@bespoke/domain/utils/formatting";
 import { Button, type ButtonProps, LinkButton } from "@bespoke/ui/Button";
 import { Flex } from "@bespoke/ui/Flex";
@@ -31,7 +32,6 @@ import {
 } from "react";
 import { EmptyArea } from "@/components/EmptyArea";
 import { RecipesList } from "@/features/recipes/components/RecipesList";
-import { getRecipeUrl } from "@/features/recipes/utils";
 import { trpc } from "@/trpc/client";
 import styles from "./styles.module.css";
 

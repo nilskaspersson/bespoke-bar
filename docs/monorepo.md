@@ -11,7 +11,7 @@ Purity (`schema`/`domain` pure & RN-safe; `db`/`api` server-only) lives in CLAUD
 * **`api`** — anything touching the DB driver, Stripe, cache (`use cache`), auth, or an SDK. Whole service/read files, intact — don't split them along a db/api line.
 * **`db`** — only the connection, `drizzle.config.ts`, migrations, constraint-error helpers.
 * **`ui`** — web DOM primitives + theme (owns the `@layer` declaration) + icons, shared by `bar` + `lounge` (never `mobile`).
-* **stays in the app** — feature-/form-/route-coupled code: Conform schemas, tRPC input shapes, React components, anything importing `@/ui` or Lexical.
+* **stays in the app** — feature-/form-/route-coupled code: Conform schemas, tRPC input shapes, React components, anything importing `@/ui`. Lexical *consumers* that are form- or route-coupled stay too (`BulkDraftRecipesForm`), but the `RecipeEditor` itself now lives in `ui` — see ADR-0010's 2026-09-05 amendment.
 
 Worked example — `orgSubscriptions`: table + `subscriptionStatusSchema` + `isProActive` are shape → **`schema`**; `getOCRQuotaLimit` / slot math / `PRO_*_BONUS` are policy → **`domain`**; `upsertOrgSubscription` / `stripeWebhook` touch Stripe+DB → **`api`**.
 

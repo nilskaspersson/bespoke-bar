@@ -1,8 +1,8 @@
 import { LinkButton } from "@bespoke/ui/Button";
 import { Callout } from "@bespoke/ui/Callout";
 import { Flex } from "@bespoke/ui/Flex";
+import { PageHeader } from "@bespoke/ui/PageHeader";
 import type { Metadata } from "next";
-import { PageHeader } from "@/components/PageHeader";
 import { CreateIngredientButton } from "@/features/ingredients/components/CreateIngredientButton";
 
 export default function IngredientsPage() {

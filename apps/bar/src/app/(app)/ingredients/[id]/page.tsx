@@ -4,8 +4,12 @@ import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
 import { getCachedBarRecipes } from "@bespoke/api/recipes/readBarRecipes";
 import { getCachedUserFavoriteRecipeIds } from "@bespoke/api/recipes/readUserFavoriteRecipeIds";
 import { getCachedTags } from "@bespoke/api/tags/listTags";
+import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
 import { stitchRecipes } from "@bespoke/domain/recipes/stitchRecipe";
 import { pluralize } from "@bespoke/domain/utils/formatting";
+import { BottomRailItems } from "@bespoke/ui/BottomRail";
+import { EditIngredientButton } from "@bespoke/ui/EditIngredientButton";
+import { EnrichmentMark } from "@bespoke/ui/EnrichmentMark";
 import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
@@ -16,12 +20,8 @@ import { Text } from "@bespoke/ui/Text";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { BottomRailItems } from "@/components/BottomRail";
-import { EnrichmentMark } from "@/components/EnrichmentMark";
 import { DeleteIngredient } from "@/features/ingredients/actions/components/DeleteIngredient";
-import { EditIngredientButton } from "@/features/ingredients/components/EditIngredientButton";
 import { IngredientChips } from "@/features/ingredients/components/IngredientChips";
-import { CATEGORY_TO_LABEL } from "@/features/ingredients/constants";
 import { getRecipesUsingIngredient } from "@/features/ingredients/utils/getRecipesUsingIngredient";
 import {
 	RecipesList,

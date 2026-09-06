@@ -1,0 +1,33 @@
+@layer feature {
+	.root {
+		display: grid;
+		gap: var(--gap);
+		justify-content: center;
+	}
+
+	.workspace {
+		display: grid;
+		gap: var(--gap);
+
+		@container (width > 900px) {
+			grid-template-columns: repeat(2, var(--recipe-preview-width));
+			align-items: start;
+		}
+	}
+
+	.editor {
+		display: grid;
+		max-width: var(--recipe-preview-width);
+		width: 100%;
+
+		@container (width > 900px) {
+			position: sticky;
+			top: var(--gap);
+		}
+	}
+
+	.preview {
+		max-width: var(--recipe-preview-width);
+		width: 100%;
+	}
+}

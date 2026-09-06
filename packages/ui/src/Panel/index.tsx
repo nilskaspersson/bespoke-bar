@@ -7,12 +7,14 @@ export type PanelProps<E extends ElementType = "section"> =
 	PolymorphicProps<E> & {
 		as?: E;
 		header?: ReactNode;
+		box?: ReactNode;
 		footer?: ReactNode;
 	};
 
 export function Panel<E extends ElementType = "section">({
 	as = "section",
 	header,
+	box,
 	footer,
 	children,
 	className,
@@ -22,7 +24,7 @@ export function Panel<E extends ElementType = "section">({
 		as,
 		{ ...props, className: clsx(className, styles.panel) },
 		header != null ? <header className={styles.header}>{header}</header> : null,
-		<div className={styles.box}>{children}</div>,
+		box ?? <div className={styles.box}>{children}</div>,
 		footer != null ? <footer className={styles.footer}>{footer}</footer> : null,
 	);
 }
