@@ -1,0 +1,9 @@
+@layer layout {
+	.page {
+		display: grid;
+		gap: var(--gap--huge);
+		grid-template-rows: auto 1fr;
+		container-type: inline-size;
+		padding-bottom: var(--gap--huge);
+	}
+}

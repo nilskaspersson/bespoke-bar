@@ -22,7 +22,7 @@ Bespoke Bar's public, front-of-house surface — everything anonymous and unauth
 _Avoid_: defining the Lounge as "the surface over an Organisation's library" — that describes only its guest-**Menu** half; the term names the public surface, org-scoped or not. Surfacing Bar-only (internal) data on a guest **Menu**.
 
 **Public Tool**:
-A **Lounge** surface that works on data the visitor supplies, belongs to no **Organisation**, stores nothing, and needs no account — useful on its own terms, and an invitation into the **Bar**. The **Recipe Calculator** is the first.
+A **Lounge** surface that works on data the visitor supplies, belongs to no **Organisation**, stores nothing, and needs no account — useful on its own terms, and an invitation into the **Bar**. The **Cocktail Calculator** is the first.
 _Avoid_: treating a Public Tool as a demo, trial, or teaser of the Bar — it is a complete tool, with no account, no **Quota**, and no expiry. Conflating it with the guest-**Menu** half of the Lounge, which _is_ org-scoped.
 
 ### Photo-to-Recipe
@@ -60,7 +60,7 @@ A cocktail's full record — its **Ingredient Lines** plus metadata (**Cocktail 
 _Avoid_: equating a Recipe with its formula alone — that's the Recipe's **Spec**; the Recipe is the whole record (Spec + name, Style, serve, prose).
 
 **Draft Recipe**:
-A recipe-shaped value that belongs to no **Organisation** and sits in no library: **Ingredient Lines** plus optional metadata, but no identity. What **Photo-to-Recipe**, the bulk text editor, and the **Recipe Calculator** all produce; it becomes a **Recipe** on save, which is where it gains its id. Its lines carry **Draft Ingredients** — the same shape without identity — so a draft line _names_ an ingredient instead of referencing one, and is why such a line reads as "new".
+A recipe-shaped value that belongs to no **Organisation** and sits in no library: **Ingredient Lines** plus optional metadata, but no identity. What **Photo-to-Recipe**, the bulk text editor, and the **Cocktail Calculator** all produce; it becomes a **Recipe** on save, which is where it gains its id. Its lines carry **Draft Ingredients** — the same shape without identity — so a draft line _names_ an ingredient instead of referencing one, and is why such a line reads as "new".
 _Avoid_: "incomplete Recipe" — a **Recipe** may be incomplete and still be a Recipe; a Draft Recipe is not one at all, for want of identity. ("Unsaved recipe" is fine as prose.)
 
 **Name** (of a Recipe):
@@ -95,6 +95,10 @@ A Recipe's prose blurb — what the drink _is_ (character, flavour, story). **Me
 
 **Instructions**:
 How to _make_ the drink — method, technique, timing — as free prose. **Internal / operational**, never shown to guests. The free-text counterpart to the structured serve fields (glassware, ice, preparation method).
+
+**Dilution Target**:
+The water a **Recipe** takes on when it's made, as a fraction of its undiluted volume — the volume _gained_, which is the bartender's convention (a shaken drink ≈ 25%, so 100 ml finishes at 125 ml). Stored per Recipe; absent, it's estimated at display time from the **Preparation Method**. Uncapped — a julep passes 100% long before it's drunk.
+_Avoid_: reading it as the share of the _finished_ drink that is water (25% gained is 20% of the final volume) — the metrics expose that separately as `dilutionOfFinalVolume`.
 
 **Garnish** (field):
 A Recipe's finishing note — free text ("orange twist"), shown on the card. Deliberately **cosmetic and uncosted**: it is _not_ an **Ingredient Line**, so it has no measure, cost, or inventory. A garnish that must be costed is modelled as a normal line instead. A future line **role** (see `plans/ingredient-line-role.md`) would give garnishes a first-class home; not built yet.

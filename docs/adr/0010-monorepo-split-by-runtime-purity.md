@@ -119,7 +119,7 @@ all DOM UI stay in `apps/bar`"*) and, mechanically, `@lexical/**` + `lexical` in
 `noRestrictedImports` group in `packages/ui/biome.json`. **The editor is now shared**, and both
 are amended.
 
-The trigger is the **Recipe Calculator**, a **Public Tool** on the Lounge (see `CONTEXT.md`): a
+The trigger is the **Cocktail Calculator**, a **Public Tool** on the Lounge (see `CONTEXT.md`): a
 public, org-less page that renders `RecipeEditor` + `DraftRecipesPreview` +
 `RecipeAdjustmentsControls` over `ingredients: []`. That makes the Lounge the second consumer, so
 the second-tier promotion this ADR already sanctions ("recipe cards, the metrics family,

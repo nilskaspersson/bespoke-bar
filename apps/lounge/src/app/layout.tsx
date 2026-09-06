@@ -4,10 +4,14 @@ import shell from "@bespoke/ui/AppShell/styles.module.css";
 import { LinkButton } from "@bespoke/ui/Button";
 import { Footer } from "@bespoke/ui/Footer";
 import { Header } from "@bespoke/ui/Header";
+import { ThemePicker } from "@bespoke/ui/ThemePicker";
+import { ThemeProvider } from "@bespoke/ui/theme/ThemeProvider";
+import { WakeLock } from "@bespoke/ui/WakeLock";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import type { PropsWithChildren } from "react";
+import { Providers } from "@/components/Providers";
 
 const sans = Figtree({
 	subsets: ["latin"],
@@ -27,26 +31,42 @@ const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<AppShell className={clsx(sans.variable, serif.variable)}>
-			<div className={shell.layout}>
-				<Header className={shell.header}>
-					<LinkButton
-						href={`${BAR_URL}/recipes`}
-						variant="solid"
-						size="tiny"
-						color="heavy"
-					>
-						To the bar
-					</LinkButton>
-				</Header>
+			<ThemeProvider>
+				<Providers>
+					<div className={shell.layout}>
+						<Header className={shell.header}>
+							<LinkButton
+								href="/tools/cocktail-calculator"
+								variant="ghost"
+								size="tiny"
+								color="accent"
+							>
+								Cocktail calculator
+							</LinkButton>
 
-				<main className={shell.main}>{children}</main>
+							<LinkButton
+								href={`${BAR_URL}/recipes`}
+								variant="solid"
+								size="tiny"
+								color="heavy"
+							>
+								To the bar
+							</LinkButton>
+						</Header>
 
-				<Footer
-					className={shell.footer}
-					barUrl={BAR_URL}
-					loungeUrl={LOUNGE_URL}
-				/>
-			</div>
+						<main className={shell.main}>{children}</main>
+
+						<Footer
+							className={shell.footer}
+							barUrl={BAR_URL}
+							loungeUrl={LOUNGE_URL}
+						>
+							<ThemePicker />
+							<WakeLock size="small" />
+						</Footer>
+					</div>
+				</Providers>
+			</ThemeProvider>
 		</AppShell>
 	);
 }

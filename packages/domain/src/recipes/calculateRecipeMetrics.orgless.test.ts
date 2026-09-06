@@ -4,7 +4,7 @@ import { calculateRecipeMetrics } from "./calculateRecipeMetrics";
 import { getRecipeCost } from "./getRecipeCost";
 
 /**
- * The Recipe Calculator (a Public Tool on the Lounge) runs with no
+ * The Cocktail Calculator (a Public Tool on the Lounge) runs with no
  * Organisation, so it parses against an empty ingredient library. ABV must
  * still resolve, via `getDefaultIngredientData` seeding `CATEGORY_DEFAULT_ABV`
  * from the typed name. Cost must stay unavailable — there is no `unitCost`.
