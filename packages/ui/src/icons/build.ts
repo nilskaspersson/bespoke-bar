@@ -2,11 +2,14 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { getIconData } from "@iconify/utils";
 import lucide from "@iconify-json/lucide/icons.json" with { type: "json" };
+import radixIcons from "@iconify-json/radix-icons/icons.json" with {
+	type: "json",
+};
 import { ICONS } from "./config.ts";
 
 const start = performance.now();
 const here = import.meta.dirname;
-const kits = { lucide };
+const kits = { lucide, "radix-icons": radixIcons };
 
 function loadLocal(name: string) {
 	const svg = readFileSync(join(here, "svgs", `${name}.svg`), "utf8");

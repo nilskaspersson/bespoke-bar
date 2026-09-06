@@ -649,6 +649,9 @@ importers:
       '@iconify-json/lucide':
         specifier: 1.2.129
         version: 1.2.129
+      '@iconify-json/radix-icons':
+        specifier: 1.2.6
+        version: 1.2.6
       '@iconify/utils':
         specifier: 3.1.5
         version: 3.1.5
@@ -2026,6 +2029,9 @@ packages:
 
   '@iconify-json/lucide@1.2.129':
     resolution: {integrity: sha512-pa0ufllJOXTDIH2BxE/BtWQEf/x46/lINDWcmncICV1/52veZ7KSBzQaVh9xDpmjDs8QN4j2Ex/LWlSSveL3yw==}
+
+  '@iconify-json/radix-icons@1.2.6':
+    resolution: {integrity: sha512-izgVBJwk37dSvsma1QsRMfCWQ4FIImbBmJId1WUURzRZA5fFyKlCcG/nZC8se0KhOBWszo2mYgLmhKJv/DFPoA==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -8514,6 +8520,10 @@ snapshots:
       yargs: 17.7.3
 
   '@iconify-json/lucide@1.2.129':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/radix-icons@1.2.6':
     dependencies:
       '@iconify/types': 2.0.0
 
