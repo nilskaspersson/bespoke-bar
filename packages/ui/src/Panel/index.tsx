@@ -7,11 +7,6 @@ export type PanelProps<E extends ElementType = "section"> =
 	PolymorphicProps<E> & {
 		as?: E;
 		header?: ReactNode;
-		/**
-		 * Replaces the panel's inner box outright — the node given owns the
-		 * surface, and `children` is not rendered. For content that already is a
-		 * surface (a recipe card), so it doesn't end up boxed inside another one.
-		 */
 		box?: ReactNode;
 		footer?: ReactNode;
 	};

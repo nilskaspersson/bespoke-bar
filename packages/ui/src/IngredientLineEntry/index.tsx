@@ -32,11 +32,6 @@ export function IngredientLineEntry<
 	withBestUnit?: boolean;
 	servings?: number;
 	animateNumbers?: boolean;
-	/**
-	 * Renders for a reader with no Organisation behind them: anything that only
-	 * means something inside the Bar — the "New" label on a Draft Ingredient —
-	 * is left out.
-	 */
 	isPublic?: boolean;
 } & Omit<TextProps, "onChange">) {
 	const isDraftIngredient = !line.ingredientId;

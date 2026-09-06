@@ -59,8 +59,7 @@ export function calculateLineVolumes<
 
 /**
  * Get dilution target (water added, as a percentage of the undiluted volume)
- * from recipe, defaulting to 0 if not defined. Uncapped: a julep or a swizzle
- * passes 100% before it is finished.
+ * from recipe.
  */
 function getDilutionTarget(recipe: BaseRecipe): number {
 	const target = recipe.dilutionTarget;
@@ -68,9 +67,8 @@ function getDilutionTarget(recipe: BaseRecipe): number {
 }
 
 /**
- * Calculate dilution volume from the target. The target is the volume _gained_
- * — the bartender's convention, where a shaken drink takes on ~25% water — so
- * 100 ml at 0.25 finishes at 125 ml, not 133 ml.
+ * Calculate dilution volume from the target. The target is the volume _gained_,
+ * so 100 ml at 0.25 finishes at 125 ml, not 133 ml.
  */
 function calculateDilutionFromTarget(
 	originalVolume: number,

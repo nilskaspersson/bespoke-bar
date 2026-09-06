@@ -35,10 +35,6 @@ type Props<T> = {
 	withBestUnit?: boolean;
 	withLink?: boolean;
 	animateNumbers?: boolean;
-	/**
-	 * Renders for a reader with no Organisation behind them: anything that only
-	 * means something inside the Bar is left out.
-	 */
 	isPublic?: boolean;
 };
 

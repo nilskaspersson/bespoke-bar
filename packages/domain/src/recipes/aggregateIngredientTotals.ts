@@ -23,16 +23,8 @@ type Accumulator = Omit<IngredientTotal, "recipeCount"> & {
 };
 
 /**
- * The unit an ingredient's total is reported in: the first measured line's,
- * with every later line converted into it. Every Unit is volume-dimensioned,
- * so any two lines for the same ingredient can always be summed — a recipe
- * written in `cl` and one in `oz` land on whichever the reader wrote first,
- * which is the unit they are already thinking in.
- *
  * A quantity with no Unit ("1 cocktail cherry") is a count, so it is simply
- * added up and contributes no volume. Counts only accumulate while the
- * ingredient has no unit; the first measured line takes over, since a count
- * and a volume have nothing to add to each other.
+ * added up and contributes no volume.
  */
 function addLineToTotal(
 	total: Accumulator,
@@ -69,11 +61,6 @@ function addLineToTotal(
 	}
 }
 
-/**
- * Measured ingredients first, largest pour down — the order a spec reads in.
- * Unmeasured ones carry no amount to rank by, so they settle alphabetically
- * at the bottom.
- */
 function byVolumeThenName(a: IngredientTotal, b: IngredientTotal): number {
 	if (a.quantity === null || b.quantity === null) {
 		if (a.quantity !== null) return -1;
@@ -84,12 +71,6 @@ function byVolumeThenName(a: IngredientTotal, b: IngredientTotal): number {
 	return b.volumeInMl - a.volumeInMl;
 }
 
-/**
- * Rolls every Ingredient Line across a set of Draft Recipes into one total per
- * Ingredient — what the whole set costs you in bottles. Servings are
- * deliberately not applied: scaling is a display-time adjustment, so callers
- * multiply on the way out and this stays the spec as written.
- */
 export function aggregateIngredientTotals(
 	recipes: BaseRecipe[],
 ): IngredientTotals {

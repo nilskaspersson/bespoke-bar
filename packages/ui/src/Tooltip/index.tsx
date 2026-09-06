@@ -16,16 +16,13 @@ import { Text } from "../Text";
 import type { PolymorphicProps } from "../utils/types";
 import styles from "./styles.module.css";
 
-export type TooltipProps<E extends ElementType = "span"> =
-	/**
-	 * `content` is the tooltip's own slot, so it shadows the DOM attribute of
-	 * that name — without the omit the intersection narrows it to a string and
-	 * rich content stops typechecking.
-	 */
-	Omit<PolymorphicProps<E>, "content"> & {
-		content: ReactNode;
-		as?: E;
-	};
+export type TooltipProps<E extends ElementType = "span"> = Omit<
+	PolymorphicProps<E>,
+	"content"
+> & {
+	content: ReactNode;
+	as?: E;
+};
 
 type Composed = {
 	style?: CSSProperties;
