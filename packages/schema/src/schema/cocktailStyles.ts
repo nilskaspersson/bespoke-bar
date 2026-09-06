@@ -1,8 +1,6 @@
-import { pgEnum } from "drizzle-orm/pg-core";
-import { createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
+import { z } from "zod";
 
-export const cocktailStylesEnum = pgEnum("cocktail_styles", [
+export const COCKTAIL_STYLES = [
 	"aperitif",
 	"cooler",
 	"digestif",
@@ -20,8 +18,8 @@ export const cocktailStylesEnum = pgEnum("cocktail_styles", [
 	"sour",
 	"spritz",
 	"tiki",
-]);
+] as const;
 
-export const cocktailStyles = createSelectSchema(cocktailStylesEnum);
+export const cocktailStyles = z.enum(COCKTAIL_STYLES);
 
 export type CocktailStyle = z.infer<typeof cocktailStyles>;

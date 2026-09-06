@@ -18,10 +18,11 @@ import { z } from "zod";
 import { nullifyEmptyField } from "../form";
 import { normalizeIngredientName } from "../normalizeIngredientName";
 import { percentageToRatioSchema } from "../percentageToRatio";
-import { systemCategories, systemCategoryEnum } from "./categories";
+import { systemCategories } from "./categories";
 import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import { IngredientLinesTable } from "./ingredientLines";
-import { measurementTypes, supportedMeasurements } from "./units";
+import { measurementTypes, systemCategoryEnum } from "./pgEnums";
+import { supportedMeasurements } from "./units";
 
 export const IngredientsTable = pgTable(
 	"ingredients",

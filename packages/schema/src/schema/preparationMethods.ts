@@ -1,15 +1,13 @@
-import { pgEnum } from "drizzle-orm/pg-core";
-import { createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
+import { z } from "zod";
 
-export const preparationMethodEnum = pgEnum("preparation_method", [
+export const PREPARATION_METHODS = [
 	"blended",
 	"built",
 	"layered",
 	"shaken",
 	"stirred",
-]);
+] as const;
 
-export const preparationMethods = createSelectSchema(preparationMethodEnum);
+export const preparationMethods = z.enum(PREPARATION_METHODS);
 
 export type PreparationMethod = z.infer<typeof preparationMethods>;

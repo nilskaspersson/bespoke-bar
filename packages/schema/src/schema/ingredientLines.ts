@@ -12,8 +12,8 @@ import { z } from "zod";
 import type { Identity } from "../types";
 import { createdAtCol, nanoidPk } from "./columns";
 import { type Ingredient, IngredientsTable } from "./ingredients";
+import { unitEnum } from "./pgEnums";
 import { RecipesTable } from "./recipes";
-import { unitEnum } from "./units";
 
 export const IngredientLinesTable = pgTable(
 	"ingredient_lines",

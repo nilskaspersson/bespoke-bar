@@ -1,9 +1,7 @@
-import { pgEnum } from "drizzle-orm/pg-core";
-import { createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
+import { z } from "zod";
 
-export const iceEnum = pgEnum("ice", ["none", "cubed", "crushed"]);
+export const ICE_TYPES = ["none", "cubed", "crushed"] as const;
 
-export const ice = createSelectSchema(iceEnum);
+export const ice = z.enum(ICE_TYPES);
 
 export type Ice = z.infer<typeof ice>;
