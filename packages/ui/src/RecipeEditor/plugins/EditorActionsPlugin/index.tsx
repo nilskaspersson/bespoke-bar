@@ -25,6 +25,7 @@ import { EntityActions } from "../../../EntityActions";
 import { Flex } from "../../../Flex";
 import { Icon } from "../../../Icon";
 import { Text } from "../../../Text";
+import { Tooltip } from "../../../Tooltip";
 import styles from "./styles.module.css";
 
 export function EditorActionsPlugin() {
@@ -93,86 +94,101 @@ export function EditorActionsPlugin() {
 	}, [editor]);
 
 	return (
-		<EntityActions gap={2} className={styles.actions}>
+		<EntityActions gap={1} className={styles.actions}>
 			{(actionProps) => (
 				<>
-					<li className={styles.separator}>
+					<li>
 						<ButtonGroup>
-							<Button
+							<Tooltip
+								as={Button}
+								content="Undo"
 								{...actionProps}
 								className={styles.button}
 								onClick={canUndo ? undo : undefined}
 								aria-disabled={!canUndo}
-								title="Undo"
+								aria-label="Undo"
 							>
 								<Icon name="undo" size={2} />
-							</Button>
+							</Tooltip>
 
-							<Button
+							<Tooltip
+								as={Button}
+								content="Redo"
 								{...actionProps}
 								className={styles.button}
 								onClick={canRedo ? redo : undefined}
 								aria-disabled={!canRedo}
-								title="Redo"
+								aria-label="Redo"
 							>
 								<Icon name="redo" size={2} />
-							</Button>
+							</Tooltip>
 						</ButtonGroup>
 					</li>
 
-					<li className={styles.separator}>
-						<Button
+					<li>
+						<Tooltip
+							as={Button}
+							content="Clear editor"
 							{...actionProps}
 							color="red"
 							onClick={clear}
-							title="Clear editor"
+							aria-label="Clear editor"
 						>
-							<Icon name="trash" size={2} />
-						</Button>
+							<Icon name="trash" size={1} />
+						</Tooltip>
 					</li>
 
 					<li>
-						<Button {...actionProps} onClick={() => applyTransform(roundLine)}>
-							Round values
-						</Button>
+						<Tooltip
+							as={Button}
+							content="Round quantities"
+							{...actionProps}
+							onClick={() => applyTransform(roundLine)}
+							aria-label="Round quantities"
+						>
+							<Text size={3}>≈</Text>
+						</Tooltip>
 					</li>
 
 					<li>
-						<Button
+						<Tooltip
+							as={Button}
+							content="Capitalize"
 							{...actionProps}
 							onClick={() => applyTransform(capitalizeLine)}
+							aria-label="Capitalize"
 						>
-							Capitalize
-						</Button>
+							<Icon name="letter-case-capitalize" size={2} />
+						</Tooltip>
 					</li>
 
 					<Flex as="li" gap={1} alignItems="center" wrap>
-						<Text size={0} light compact>
-							Convert to
-						</Text>
-
 						<ButtonGroup>
-							<Button
+							<Tooltip
+								as={Button}
+								content="Convert to Metric"
 								{...actionProps}
 								className={styles.button}
-								title="Convert to metric"
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "metric"))
 								}
+								aria-label="Convert to Metric"
 							>
 								Metric
-							</Button>
+							</Tooltip>
 
-							<Button
+							<Tooltip
+								as={Button}
+								content="Convert to Imperial"
 								{...actionProps}
 								className={styles.button}
-								title="Convert to imperial"
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "imperial"))
 								}
+								aria-label="Convert to Imperial"
 							>
 								Imperial
-							</Button>
+							</Tooltip>
 						</ButtonGroup>
 					</Flex>
 				</>
