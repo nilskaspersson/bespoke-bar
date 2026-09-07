@@ -2,11 +2,7 @@
 
 import { collator } from "@bespoke/domain/utils/collator";
 import { withKey } from "@bespoke/domain/utils/withKey";
-<<<<<<< HEAD
 import { MEASUREMENT_TYPES } from "@bespoke/schema/schema/units";
-=======
-import { supportedMeasurements } from "@bespoke/schema/schema/units";
->>>>>>> main
 import { Menu } from "@bespoke/ui/Menu";
 import { Select } from "@bespoke/ui/Select";
 import type { ComponentProps } from "react";

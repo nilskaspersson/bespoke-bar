@@ -3,11 +3,7 @@
 import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
 import { collator } from "@bespoke/domain/utils/collator";
 import { withKey } from "@bespoke/domain/utils/withKey";
-<<<<<<< HEAD
 import { SYSTEM_CATEGORIES } from "@bespoke/schema/schema/categories";
-=======
-import { systemCategories } from "@bespoke/schema/schema/categories";
->>>>>>> main
 import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
 

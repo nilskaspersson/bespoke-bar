@@ -2,10 +2,6 @@
 
 import clsx from "clsx";
 import { type ChangeEvent, type KeyboardEvent, useId, useState } from "react";
-<<<<<<< HEAD
-=======
-import z from "zod";
->>>>>>> main
 import { Button } from "../Button";
 import { ControlLabel } from "../ControlLabel";
 import formControlStyles from "../FormControl/styles.module.css";

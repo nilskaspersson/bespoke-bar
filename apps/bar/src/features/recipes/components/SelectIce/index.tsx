@@ -2,11 +2,7 @@
 
 import { ICE_TO_LABEL } from "@bespoke/domain/recipes/labels";
 import { withKey } from "@bespoke/domain/utils/withKey";
-<<<<<<< HEAD
 import { ICE_TYPES, type Ice } from "@bespoke/schema/schema/ice";
-=======
-import { type Ice, ice } from "@bespoke/schema/schema/ice";
->>>>>>> main
 import { Select } from "@bespoke/ui/Select";
 import type { ComponentProps } from "react";
 
