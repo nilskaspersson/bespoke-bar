@@ -1,7 +1,8 @@
-import type { Measurement, Unit } from "@bespoke/schema/schema/units";
 import {
-	supportedMeasurements,
-	supportedUnits,
+	MEASUREMENT_TYPES,
+	type Measurement,
+	UNITS,
+	type Unit,
 } from "@bespoke/schema/schema/units";
 import { BARTENDING_UNITS } from "./constants";
 import type { BartendingUnits } from "./volume";
@@ -11,11 +12,11 @@ export function isBartendingUnit(unit: unknown): unit is BartendingUnits {
 }
 
 export function isMeasurementType(o: unknown): o is Measurement {
-	return supportedMeasurements.safeParse(o).success;
+	return (MEASUREMENT_TYPES as readonly unknown[]).includes(o);
 }
 
 export function isValidUnit(o: unknown): o is Unit {
-	return supportedUnits.safeParse(o).success;
+	return (UNITS as readonly unknown[]).includes(o);
 }
 
 export function getMeasurementPriceUnit(measurement: unknown): string {

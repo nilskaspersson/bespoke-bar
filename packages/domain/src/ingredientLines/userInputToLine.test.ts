@@ -1,5 +1,5 @@
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
-import { supportedUnits } from "@bespoke/schema/schema/units";
+import { UNITS } from "@bespoke/schema/schema/units";
 import { describe, expect, test } from "vitest";
 import { MOCK_INGREDIENTS } from "../mocks/ingredients";
 import { userInputToLine } from "./userInputToLine";
@@ -15,7 +15,7 @@ const EMPTY_INGREDIENT: Partial<Ingredient> = {
 
 describe("userInputToLine", () => {
 	describe("parses unit", () => {
-		test.each(supportedUnits.options)('"%s"', (unit) => {
+		test.each(UNITS)('"%s"', (unit) => {
 			expect(userInputToLine(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
 				quantity: 1,
 				unit,
@@ -32,24 +32,21 @@ describe("userInputToLine", () => {
 	});
 
 	describe("parses unit (uppercase)", () => {
-		test.each(supportedUnits.options.map((unit) => unit.toUpperCase()))(
-			'"%s"',
-			(unit) => {
-				expect(userInputToLine(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
-					quantity: 1,
-					unit: unit.toLowerCase(),
+		test.each(UNITS.map((unit) => unit.toUpperCase()))('"%s"', (unit) => {
+			expect(userInputToLine(`1 ${unit} gin`, MOCK_INGREDIENTS)).toEqual({
+				quantity: 1,
+				unit: unit.toLowerCase(),
 
-					ingredient: {
-						...EMPTY_INGREDIENT,
-						name: "gin",
-						abv: 0.4,
-						category: "gin",
-						measurementType: "volume",
-					},
-					ingredientId: undefined,
-				});
-			},
-		);
+				ingredient: {
+					...EMPTY_INGREDIENT,
+					name: "gin",
+					abv: 0.4,
+					category: "gin",
+					measurementType: "volume",
+				},
+				ingredientId: undefined,
+			});
+		});
 	});
 
 	describe("parses common unit deviations", () => {

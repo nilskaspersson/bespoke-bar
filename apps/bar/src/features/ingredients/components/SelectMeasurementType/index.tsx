@@ -2,7 +2,7 @@
 
 import { collator } from "@bespoke/domain/utils/collator";
 import { withKey } from "@bespoke/domain/utils/withKey";
-import { supportedMeasurements } from "@bespoke/schema/schema/units";
+import { MEASUREMENT_TYPES } from "@bespoke/schema/schema/units";
 import { Menu } from "@bespoke/ui/Menu";
 import { Select } from "@bespoke/ui/Select";
 import type { ComponentProps } from "react";
@@ -19,18 +19,16 @@ const getItemLabel = (item: Option) => item.label;
 const itemToString = (item: Option | null) =>
 	!item ? "" : (MEASUREMENT_TO_LABEL.get(item.value) ?? item.value);
 
-const OPTIONS = supportedMeasurements.options
-	.map((item) =>
-		withKey({
-			value: item,
-			label: (
-				<Menu.Label description={MEASUREMENT_TO_DESCRIPTION.get(item)}>
-					{MEASUREMENT_TO_LABEL.get(item) ?? item}
-				</Menu.Label>
-			),
-		}),
-	)
-	.sort((a, b) => collator.compare(itemToString(a), itemToString(b)));
+const OPTIONS = MEASUREMENT_TYPES.map((item) =>
+	withKey({
+		value: item,
+		label: (
+			<Menu.Label description={MEASUREMENT_TO_DESCRIPTION.get(item)}>
+				{MEASUREMENT_TO_LABEL.get(item) ?? item}
+			</Menu.Label>
+		),
+	}),
+).sort((a, b) => collator.compare(itemToString(a), itemToString(b)));
 
 export function SelectMeasurementType(
 	props: Omit<

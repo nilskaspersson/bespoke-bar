@@ -1,8 +1,4 @@
-import { pgEnum } from "drizzle-orm/pg-core";
-import { createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
-
-export const systemCategoryEnum = pgEnum("system_category", [
+export const SYSTEM_CATEGORIES = [
 	"absinthe",
 	"aquavit",
 	"armagnac",
@@ -56,8 +52,6 @@ export const systemCategoryEnum = pgEnum("system_category", [
 	"juice",
 	"honey",
 	"other",
-]);
+] as const;
 
-export const systemCategories = createSelectSchema(systemCategoryEnum);
-
-export type SystemCategory = z.infer<typeof systemCategories>;
+export type SystemCategory = (typeof SYSTEM_CATEGORIES)[number];

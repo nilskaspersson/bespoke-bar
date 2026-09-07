@@ -21,18 +21,26 @@ async function serializeLiveContract(): Promise<Contract> {
 	return serializeContract(appRouter);
 }
 
+const IMPORT_TIMEOUT = 30_000;
+
 describe("mobile contract additivity", () => {
-	it("stays additive against the committed baseline", async () => {
-		const current = await serializeLiveContract();
+	it(
+		"stays additive against the committed baseline",
+		async () => {
+			const current = await serializeLiveContract();
 
-		if (process.env.CONTRACT_UPDATE) {
-			writeFileSync(BASELINE_URL, `${JSON.stringify(current, null, "\t")}\n`);
-			return;
-		}
+			if (process.env.CONTRACT_UPDATE) {
+				writeFileSync(BASELINE_URL, `${JSON.stringify(current, null, "\t")}\n`);
+				return;
+			}
 
-		const baseline = JSON.parse(readFileSync(BASELINE_URL, "utf8")) as Contract;
+			const baseline = JSON.parse(
+				readFileSync(BASELINE_URL, "utf8"),
+			) as Contract;
 
-		const violations = diffContract(baseline, current);
-		expect(violations, violations.join("\n")).toEqual([]);
-	});
+			const violations = diffContract(baseline, current);
+			expect(violations, violations.join("\n")).toEqual([]);
+		},
+		IMPORT_TIMEOUT,
+	);
 });

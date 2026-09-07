@@ -1,11 +1,11 @@
 import { isEmptyField, nullifyEmptyField } from "@bespoke/schema/form";
 import { percentageToRatioSchema } from "@bespoke/schema/percentageToRatio";
-import { systemCategories } from "@bespoke/schema/schema/categories";
+import { systemCategorySchema } from "@bespoke/schema/schema/categories.zod";
 import { upsertRecipeSchema } from "@bespoke/schema/schema/composite";
 import {
-	supportedMeasurements,
-	supportedUnits,
-} from "@bespoke/schema/schema/units";
+	measurementSchema,
+	unitSchema,
+} from "@bespoke/schema/schema/units.zod";
 import { z } from "zod";
 
 function emptyToUndefined(value: unknown): unknown {
@@ -35,20 +35,20 @@ const previewIngredientSchema = z.object({
 	name: optionalString,
 	description: nullableString,
 	category: z
-		.preprocess(nullifyEmptyField, systemCategories.nullable())
+		.preprocess(nullifyEmptyField, systemCategorySchema.nullable())
 		.optional(),
 	abv: percentageToRatioSchema.optional(),
 	brand: nullableString,
 	unitCost: nullableNumber,
 	measurementType: z
-		.preprocess(nullifyEmptyField, supportedMeasurements.nullable())
+		.preprocess(nullifyEmptyField, measurementSchema.nullable())
 		.optional(),
 });
 
 const previewLineSchema = z.object({
 	id: optionalString,
 	quantity: nullableNumber,
-	unit: z.preprocess(nullifyEmptyField, supportedUnits.nullable()).optional(),
+	unit: z.preprocess(nullifyEmptyField, unitSchema.nullable()).optional(),
 	ingredientId: optionalString,
 	optional: nullableBoolean,
 	ingredient: previewIngredientSchema.default(() => ({})),

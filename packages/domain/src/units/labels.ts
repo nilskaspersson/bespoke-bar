@@ -1,4 +1,4 @@
-import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
+import { UNITS, type Unit } from "@bespoke/schema/schema/units";
 import { collator } from "../utils/collator";
 import { createSearchIndex } from "../utils/search";
 
@@ -29,7 +29,7 @@ export function getUnitLabel(unit: Unit): string {
  * Supported units sorted alphabetically by their display label. Shared by
  * the recipe-editor unit picker + typeahead so both lists agree on order.
  */
-export const SORTED_UNITS: Unit[] = supportedUnits.options.toSorted((a, b) =>
+export const SORTED_UNITS: Unit[] = UNITS.toSorted((a, b) =>
 	collator.compare(getUnitLabel(a), getUnitLabel(b)),
 );
 

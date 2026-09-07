@@ -1,10 +1,7 @@
-import {
-	type Measurement,
-	supportedMeasurements,
-	type Unit,
-} from "@bespoke/schema/schema/units";
+import type { Measurement, Unit } from "@bespoke/schema/schema/units";
 import { DB_UNIT_TO_LIB_UNIT } from "./constants";
 import { convert } from "./convert";
+import { isMeasurementType } from "./predicates";
 
 export function getMeasurementFromUnit(
 	unit: Unit | null | undefined,
@@ -20,7 +17,10 @@ export function getMeasurementFromUnit(
 	}
 
 	const libMeasurement = convert().describe(libUnit).measure;
-	const measurement = supportedMeasurements.parse(libMeasurement);
 
-	return measurement;
+	if (!isMeasurementType(libMeasurement)) {
+		return null;
+	}
+
+	return libMeasurement;
 }

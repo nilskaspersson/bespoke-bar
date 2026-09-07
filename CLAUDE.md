@@ -8,7 +8,9 @@ Next.js (App Router) + TypeScript + React, styled with CSS Modules. Hosted on Ve
 
 - Optimize aggressively.
 - Default to static rendering; use composition to achieve more statically rendered components.
-- Lean heavily into Zod for validation, type coercing, and runtime type checks.
+- Lean heavily into Zod for validation, type coercing, and runtime type checks — but keep it off client bundles, see below.
+- **Enum modules are split, and must stay split.** ES modules evaluate wholly, so importing a plain tuple from a module that also builds a `z.enum(…)` drags the entire ~85 KB gz Zod runtime into the browser. `schema/<x>.ts` therefore holds the `as const` tuple plus types derived from it (`(typeof UNITS)[number]`) and imports nothing; `schema/<x>.zod.ts` holds the schema. List and membership consumers import the tuple (`(UNITS as readonly unknown[]).includes(o)`); only genuine validators import `<x>.zod`. Never add a `z.enum` back to a values module, and don't reach for `/* @__PURE__ */` — Turbopack ignores it (measured).
+- Regression check after touching these: `pnpm --filter lounge build && grep -lF '$ZodError' apps/lounge/.next/static/chunks/*.js` must find nothing. Three details, each of which has already produced a false pass: `-F` (ugrep reads a leading `$` as an anchor and silently matches nothing without it); every chunk on disk, not just the ones in the page HTML (the lazy editor chunk hides there); and `$ZodError` rather than `invalid_type`, which some import styles strip. Sanity-check the command against `apps/bar`, which legitimately ships Zod — if it finds nothing there, the check itself is broken.
 - When working with Recipes, Ingredients, Menus, or other databse entries, ALWAYS use- or derive the schema and type from those existing declarations.
 
 ## Commands
