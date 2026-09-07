@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { UNITS, type Unit } from "@bespoke/schema/schema/units";
+=======
+import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
+>>>>>>> main
 import { collator } from "../utils/collator";
 import { createSearchIndex } from "../utils/search";
 

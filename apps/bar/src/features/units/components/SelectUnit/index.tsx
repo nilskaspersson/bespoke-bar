@@ -4,7 +4,11 @@ import { getUnitLabel } from "@bespoke/domain/units/labels";
 import { isValidUnit } from "@bespoke/domain/units/predicates";
 import { collator } from "@bespoke/domain/utils/collator";
 import { withKey } from "@bespoke/domain/utils/withKey";
+<<<<<<< HEAD
 import { UNITS, type Unit } from "@bespoke/schema/schema/units";
+=======
+import { supportedUnits, type Unit } from "@bespoke/schema/schema/units";
+>>>>>>> main
 import type { Keyed } from "@bespoke/schema/types";
 import { Select } from "@bespoke/ui/Select";
 import type { ComponentProps } from "react";

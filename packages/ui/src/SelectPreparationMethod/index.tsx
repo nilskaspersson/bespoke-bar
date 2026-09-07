@@ -34,6 +34,7 @@ export function SelectPreparationMethod(
 
 	const options = useMemo(
 		() =>
+<<<<<<< HEAD
 			PREPARATION_METHODS.map((item) => ({
 				id: item,
 				value: item,
@@ -51,6 +52,27 @@ export function SelectPreparationMethod(
 					</Menu.Label>
 				),
 			})).sort((a, b) => collator.compare(itemToString(a), itemToString(b))),
+=======
+			preparationMethods.options
+				.map((item) => ({
+					id: item,
+					value: item,
+					label: (
+						<Menu.Label
+							description={
+								METHOD_TO_DEFAULT_DILUTION.has(item)
+									? `Default dilution: ${percentageFormatter.format(
+											METHOD_TO_DEFAULT_DILUTION.get(item) ?? 0,
+										)}`
+									: null
+							}
+						>
+							{METHOD_TO_LABEL.get(item) ?? item}
+						</Menu.Label>
+					),
+				}))
+				.sort((a, b) => collator.compare(itemToString(a), itemToString(b))),
+>>>>>>> main
 		[percentageFormatter],
 	);
 
