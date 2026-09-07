@@ -18,11 +18,11 @@ import { z } from "zod";
 import { nullifyEmptyField } from "../form";
 import { normalizeIngredientName } from "../normalizeIngredientName";
 import { percentageToRatioSchema } from "../percentageToRatio";
-import { systemCategories } from "./categories";
+import { systemCategorySchema } from "./categories.zod";
 import { createdAtCol, nanoidPk, orgIdCascade } from "./columns";
 import { IngredientLinesTable } from "./ingredientLines";
 import { measurementTypes, systemCategoryEnum } from "./pgEnums";
-import { supportedMeasurements } from "./units";
+import { measurementSchema } from "./units.zod";
 
 export const IngredientsTable = pgTable(
 	"ingredients",
@@ -110,14 +110,14 @@ const ingredientConstraints = {
 		.trim()
 		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
-	category: systemCategories.nullish(),
+	category: systemCategorySchema.nullish(),
 	abv: z.number().min(0).max(1).nullish(),
 	brand: z.string().nullish(),
 	unitCost: z
 		.number({ message: "Cost must be a number" })
 		.positive("Cost must be positive")
 		.nullish(),
-	measurementType: supportedMeasurements.nullish(),
+	measurementType: measurementSchema.nullish(),
 };
 
 /**
@@ -131,7 +131,7 @@ const ingredientFormConstraints = {
 		.min(1, "Name is required")
 		.max(100, "Name must be 100 characters or less"),
 	category: z
-		.preprocess(nullifyEmptyField, systemCategories.nullable())
+		.preprocess(nullifyEmptyField, systemCategorySchema.nullable())
 		.optional(),
 	abv: percentageToRatioSchema.optional(),
 	brand: z.preprocess(nullifyEmptyField, z.string().nullable()).optional(),
@@ -145,7 +145,7 @@ const ingredientFormConstraints = {
 		)
 		.optional(),
 	measurementType: z
-		.preprocess(nullifyEmptyField, supportedMeasurements.nullable())
+		.preprocess(nullifyEmptyField, measurementSchema.nullable())
 		.optional(),
 };
 

@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const GLASSWARES = [
 	"coupe",
 	"fizz",
@@ -19,6 +17,4 @@ export const GLASSWARES = [
 	"wine",
 ] as const;
 
-export const glasswares = z.enum(GLASSWARES);
-
-export type Glassware = z.infer<typeof glasswares>;
+export type Glassware = (typeof GLASSWARES)[number];

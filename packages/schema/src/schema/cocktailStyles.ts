@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const COCKTAIL_STYLES = [
 	"aperitif",
 	"cooler",
@@ -20,6 +18,4 @@ export const COCKTAIL_STYLES = [
 	"tiki",
 ] as const;
 
-export const cocktailStyles = z.enum(COCKTAIL_STYLES);
-
-export type CocktailStyle = z.infer<typeof cocktailStyles>;
+export type CocktailStyle = (typeof COCKTAIL_STYLES)[number];

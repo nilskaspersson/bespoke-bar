@@ -3,18 +3,16 @@
 import { CATEGORY_TO_LABEL } from "@bespoke/domain/categories/labels";
 import { collator } from "@bespoke/domain/utils/collator";
 import { withKey } from "@bespoke/domain/utils/withKey";
-import { systemCategories } from "@bespoke/schema/schema/categories";
+import { SYSTEM_CATEGORIES } from "@bespoke/schema/schema/categories";
 import { Combobox } from "@bespoke/ui/Combobox";
 import type { ComponentProps } from "react";
 
-const OPTIONS = systemCategories.options
-	.map((item) =>
-		withKey({
-			value: item,
-			label: CATEGORY_TO_LABEL.get(item) ?? item,
-		}),
-	)
-	.sort((a, b) => collator.compare(a.label, b.label));
+const OPTIONS = SYSTEM_CATEGORIES.map((item) =>
+	withKey({
+		value: item,
+		label: CATEGORY_TO_LABEL.get(item) ?? item,
+	}),
+).sort((a, b) => collator.compare(a.label, b.label));
 
 type Option = (typeof OPTIONS)[number];
 

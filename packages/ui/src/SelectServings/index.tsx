@@ -2,7 +2,6 @@
 
 import clsx from "clsx";
 import { type ChangeEvent, type KeyboardEvent, useId, useState } from "react";
-import z from "zod";
 import { Button } from "../Button";
 import { ControlLabel } from "../ControlLabel";
 import formControlStyles from "../FormControl/styles.module.css";
@@ -61,8 +60,10 @@ export function SelectServings({
 	const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
 		const next = event.target.value;
 		setDraft(next);
-		const parsed = z.coerce.number().min(min).max(max).safeParse(next);
-		if (parsed.success) onChange(parsed.data);
+		const parsed = Number(next);
+		if (Number.isFinite(parsed) && parsed >= min && parsed <= max) {
+			onChange(parsed);
+		}
 	};
 
 	return (

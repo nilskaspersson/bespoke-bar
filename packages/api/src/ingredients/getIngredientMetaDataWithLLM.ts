@@ -1,5 +1,5 @@
-import { systemCategories } from "@bespoke/schema/schema/categories";
-import { supportedMeasurements } from "@bespoke/schema/schema/units";
+import { systemCategorySchema } from "@bespoke/schema/schema/categories.zod";
+import { measurementSchema } from "@bespoke/schema/schema/units.zod";
 import { z } from "zod";
 import { genAI } from "../genai";
 import { isTimeoutError, stripTagDelimiters } from "../llm";
@@ -25,8 +25,8 @@ const enrichmentFieldsSchema = z.object({
 		.describe(
 			"ABV as decimal (e.g. 0.40 for 40%). Only set for branded products with known ABV, otherwise null.",
 		),
-	category: systemCategories.nullable(),
-	measurementType: supportedMeasurements
+	category: systemCategorySchema.nullable(),
+	measurementType: measurementSchema
 		.nullable()
 		.describe(
 			"How this ingredient is typically measured: 'volume' for liquids, 'mass' for powders/solids, 'pieces' for whole items like eggs or fruit.",

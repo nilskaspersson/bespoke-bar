@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const PREPARATION_METHODS = [
 	"blended",
 	"built",
@@ -8,6 +6,4 @@ export const PREPARATION_METHODS = [
 	"stirred",
 ] as const;
 
-export const preparationMethods = z.enum(PREPARATION_METHODS);
-
-export type PreparationMethod = z.infer<typeof preparationMethods>;
+export type PreparationMethod = (typeof PREPARATION_METHODS)[number];

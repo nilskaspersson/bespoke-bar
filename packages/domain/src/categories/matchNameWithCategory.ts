@@ -1,6 +1,6 @@
 import {
+	SYSTEM_CATEGORIES,
 	type SystemCategory,
-	systemCategories,
 } from "@bespoke/schema/schema/categories";
 import { invertMapToLookup } from "../utils/collection";
 import { normalizeInput } from "../utils/text";
@@ -104,5 +104,5 @@ export function matchNameWithCategory(name: string): SystemCategory | null {
 }
 
 export function isSystemCategory(name: unknown): name is SystemCategory {
-	return systemCategories.safeParse(name).success;
+	return (SYSTEM_CATEGORIES as readonly unknown[]).includes(name);
 }

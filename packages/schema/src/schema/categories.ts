@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 export const SYSTEM_CATEGORIES = [
 	"absinthe",
 	"aquavit",
@@ -56,6 +54,4 @@ export const SYSTEM_CATEGORIES = [
 	"other",
 ] as const;
 
-export const systemCategories = z.enum(SYSTEM_CATEGORIES);
-
-export type SystemCategory = z.infer<typeof systemCategories>;
+export type SystemCategory = (typeof SYSTEM_CATEGORIES)[number];

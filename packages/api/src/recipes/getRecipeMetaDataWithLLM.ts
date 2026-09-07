@@ -1,13 +1,11 @@
 import { formatLine } from "@bespoke/domain/ingredientLines/formatLine";
-import {
-	type CocktailStyle,
-	cocktailStyles,
-} from "@bespoke/schema/schema/cocktailStyles";
-import { glasswares } from "@bespoke/schema/schema/glassware";
-import { ice } from "@bespoke/schema/schema/ice";
+import type { CocktailStyle } from "@bespoke/schema/schema/cocktailStyles";
+import { cocktailStyleSchema } from "@bespoke/schema/schema/cocktailStyles.zod";
+import { glasswareSchema } from "@bespoke/schema/schema/glassware.zod";
+import { iceSchema } from "@bespoke/schema/schema/ice.zod";
 import type { IngredientLine } from "@bespoke/schema/schema/ingredientLines";
 import type { Ingredient } from "@bespoke/schema/schema/ingredients";
-import { preparationMethods } from "@bespoke/schema/schema/preparationMethods";
+import { preparationMethodSchema } from "@bespoke/schema/schema/preparationMethods.zod";
 import type { Recipe } from "@bespoke/schema/schema/recipes";
 import { z } from "zod";
 import { genAI } from "../genai";
@@ -15,12 +13,12 @@ import { isTimeoutError, stripTagDelimiters } from "../llm";
 
 const recipeMetaSchema = z.object({
 	id: z.string().describe("The exact recipe id from the input"),
-	style: cocktailStyles.nullable().describe("The cocktail's major family"),
-	glassware: glasswares.nullable().describe("Typical serving glass"),
-	preparationMethod: preparationMethods
+	style: cocktailStyleSchema.nullable().describe("The cocktail's major family"),
+	glassware: glasswareSchema.nullable().describe("Typical serving glass"),
+	preparationMethod: preparationMethodSchema
 		.nullable()
 		.describe("How the drink is built"),
-	ice: ice.nullable().describe("Ice in the served drink"),
+	ice: iceSchema.nullable().describe("Ice in the served drink"),
 });
 
 const batchMetaSchema = z.array(recipeMetaSchema);

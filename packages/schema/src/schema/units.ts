@@ -1,5 +1,3 @@
-import { z } from "zod";
-
 /**
  * These are some of the volume units from `convert-units`. We are likely going to
  * want to extend this to include "oz" as a common shorthand for "fl-oz". We are
@@ -28,9 +26,7 @@ export const UNITS = [
 	"spray",
 ] as const;
 
-export const supportedUnits = z.enum(UNITS);
-
-export type Unit = z.infer<typeof supportedUnits>;
+export type Unit = (typeof UNITS)[number];
 
 /**
  * These measurements roughly align with some measurement of `convert-units`. While
@@ -39,6 +35,4 @@ export type Unit = z.infer<typeof supportedUnits>;
  */
 export const MEASUREMENT_TYPES = ["volume", "mass", "pieces"] as const;
 
-export const supportedMeasurements = z.enum(MEASUREMENT_TYPES);
-
-export type Measurement = z.infer<typeof supportedMeasurements>;
+export type Measurement = (typeof MEASUREMENT_TYPES)[number];
