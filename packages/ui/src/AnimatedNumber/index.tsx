@@ -68,14 +68,18 @@ export function AnimatedNumber({
 	);
 }
 
+const ROLL_BLUR = "blur(1px)";
+
 const rollVariants: Variants = {
 	enter: (slide: number) => ({
 		y: `${slide * 100}%`,
-		opacity: slide === 0 ? 0 : 1,
+		opacity: 0,
+		filter: ROLL_BLUR,
 	}),
-	settled: { y: "0%", opacity: 1 },
+	settled: { y: "0%", opacity: 1, filter: "blur(0px)" },
 	exit: (slide: number) => ({
 		y: `${slide * -100}%`,
-		opacity: slide === 0 ? 0 : 1,
+		opacity: 0,
+		filter: ROLL_BLUR,
 	}),
 };
