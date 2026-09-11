@@ -11,7 +11,6 @@
 			height: 900px;
 			pointer-events: none;
 			z-index: -1;
-			filter: blur(50px);
 			mask-image: linear-gradient(
 				to bottom,
 				black 0%,
@@ -21,23 +20,36 @@
 			background-image:
 				radial-gradient(
 					ellipse 70% 55% at 50% 10%,
-					hsl(from var(--iris-9) h s l / 0.55),
-					transparent 65%
+					hsl(from var(--iris-9) h s l / 0.47),
+					hsl(from var(--iris-9) h s l / 0.37) 20%,
+					hsl(from var(--iris-9) h s l / 0.19) 42%,
+					hsl(from var(--iris-9) h s l / 0.07) 58%,
+					transparent 75%
 				),
 				radial-gradient(
 					ellipse 45% 40% at 25% 5%,
-					hsl(from var(--red-9) h s l / 0.32),
-					transparent 60%
+					hsl(from var(--red-9) h s l / 0.25),
+					hsl(from var(--red-9) h s l / 0.19) 20%,
+					hsl(from var(--red-9) h s l / 0.1) 40%,
+					hsl(from var(--red-9) h s l / 0.035) 55%,
+					transparent 72%
 				),
 				radial-gradient(
 					ellipse 45% 40% at 75% 8%,
-					hsl(from var(--amber-9) h s l / 0.28),
-					transparent 60%
+					hsl(from var(--amber-9) h s l / 0.22),
+					hsl(from var(--amber-9) h s l / 0.17) 20%,
+					hsl(from var(--amber-9) h s l / 0.09) 40%,
+					hsl(from var(--amber-9) h s l / 0.03) 55%,
+					transparent 72%
 				),
 				radial-gradient(
 					ellipse 50% 35% at 50% 25%,
-					hsl(from var(--grass-9) h s l / 0.18),
-					transparent 70%
+					hsl(from var(--grass-9) h s l / 0.14),
+					hsl(from var(--grass-9) h s l / 0.12) 20%,
+					hsl(from var(--grass-9) h s l / 0.07) 40%,
+					hsl(from var(--grass-9) h s l / 0.035) 57%,
+					hsl(from var(--grass-9) h s l / 0.012) 70%,
+					transparent 85%
 				);
 		}
 	}
