@@ -6,6 +6,9 @@
 			"content" auto;
 		min-height: 100lvh;
 		padding: var(--gap);
+		position: relative;
+		isolation: isolate;
+		overflow-x: clip;
 
 		@media (min-width: 600px) {
 			padding: var(--gap--large);
@@ -14,22 +17,28 @@
 
 	.hero {
 		display: grid;
+		gap: var(--gap--huge) var(--gap--large);
 		align-items: center;
 		grid-area: hero;
 		padding-block: var(--gap--huge);
 		position: relative;
+
+		@media (min-width: 960px) {
+			grid-template-columns: minmax(0, 1fr) auto;
+		}
+	}
+
+	.aside {
+		justify-self: center;
+
+		@media (min-width: 960px) {
+			justify-self: end;
+		}
 	}
 
 	.content {
 		grid-area: content;
-	}
-
-	.tagline {
-		font-weight: 500;
-	}
-
-	.lower {
-		color: var(--iris-11);
+		position: relative;
 	}
 
 	.heading {
@@ -43,5 +52,11 @@
 		@media (min-width: 600px) {
 			font-size: var(--size-9);
 		}
+	}
+
+	.mark {
+		position: relative;
+		font-weight: inherit;
+		text-decoration: underline solid var(--iris-10);
 	}
 }

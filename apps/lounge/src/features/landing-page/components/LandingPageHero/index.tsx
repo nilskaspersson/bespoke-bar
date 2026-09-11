@@ -2,24 +2,28 @@ import { AnimatedBackground } from "@bespoke/ui/AnimatedBackground";
 import { Container } from "@bespoke/ui/Container";
 import { Heading } from "@bespoke/ui/Heading";
 import { clsx } from "clsx";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import styles from "./styles.module.css";
 
 export function LandingPageHero({
+	aside,
+	backdrop,
 	children,
 	className,
 	...props
-}: ComponentProps<"div">) {
+}: ComponentProps<"div"> & { aside?: ReactNode; backdrop?: ReactNode }) {
 	return (
 		<div className={clsx(styles.main, className)} {...props}>
 			<AnimatedBackground />
+			{backdrop}
 
 			<Container as="section" className={styles.hero}>
 				<Heading level="h1" className={styles.heading}>
-					<span className={styles.tagline}>Mise en place</span>
-					<br />
-					<span className={styles.lower}>Beyond your bar</span>
+					An archive for your{" "}
+					<strong className={styles.mark}>cocktail recipes</strong>.
 				</Heading>
+
+				{aside ? <div className={styles.aside}>{aside}</div> : null}
 			</Container>
 
 			<div className={styles.content}>{children}</div>

@@ -1,0 +1,30 @@
+@layer component {
+	.base {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
+		padding: var(--gap--huge) var(--gap);
+		color: var(--iris-12);
+		background-color: var(--iris-4);
+		background-image:
+			radial-gradient(80% 140% at 90% 50%, var(--iris-7), transparent 70%),
+			linear-gradient(160deg, var(--iris-3), var(--iris-5));
+	}
+
+	.heading {
+		max-width: 16ch;
+		text-wrap: balance;
+		font-weight: 300;
+		font-size: var(--size-7);
+		line-height: 1.05;
+		color: inherit;
+
+		@media (min-width: 600px) {
+			font-size: var(--size-8);
+		}
+	}
+
+	.body {
+		max-width: 44ch;
+	}
+}

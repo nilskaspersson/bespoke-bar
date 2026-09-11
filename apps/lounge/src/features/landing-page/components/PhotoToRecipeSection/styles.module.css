@@ -1,0 +1,81 @@
+@layer feature {
+	.band {
+		padding: var(--gap--huge) var(--gap);
+
+		@media (min-width: 600px) {
+			padding-inline: var(--gap--large);
+		}
+	}
+
+	.inner {
+		display: grid;
+		gap: var(--gap--large);
+	}
+
+	.header {
+		max-width: 60ch;
+	}
+
+	.figure {
+		display: grid;
+		gap: var(--gap);
+		align-items: center;
+		justify-items: center;
+
+		@container (width > 900px) {
+			grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+		}
+	}
+
+	.photo {
+		--bgc: var(--mauve-2);
+
+		position: relative;
+		display: grid;
+		gap: var(--gap);
+		align-content: center;
+		justify-items: center;
+		width: var(--recipe-card-width);
+		max-width: 100%;
+		min-height: var(--recipe-card-height);
+		padding: var(--gap--large);
+		border: 2px dashed var(--mauve-6);
+		border-radius: var(--radius--large);
+		background-color: var(--bgc);
+		color: var(--mauve-11);
+		text-align: center;
+	}
+
+	.placeholder {
+		position: absolute;
+		top: var(--space-3);
+		right: var(--space-3);
+	}
+
+	.cameraIcon {
+		color: var(--mauve-8);
+	}
+
+	.menu {
+		display: grid;
+		gap: var(--space-1);
+		color: var(--mauve-12);
+	}
+
+	.caption {
+		font-style: italic;
+	}
+
+	.arrow {
+		color: var(--iris-11);
+		rotate: 90deg;
+
+		@container (width > 900px) {
+			rotate: 0deg;
+		}
+	}
+
+	.card {
+		justify-self: center;
+	}
+}
