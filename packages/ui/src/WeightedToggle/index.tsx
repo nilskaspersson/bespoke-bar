@@ -21,11 +21,12 @@ type ItemProps = {
 	name: string;
 	isChecked: boolean;
 	onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+	className?: string;
 };
 
-function Item({ option, name, isChecked, onChange }: ItemProps) {
+function Item({ option, name, isChecked, onChange, className }: ItemProps) {
 	return (
-		<label className={styles.item}>
+		<label className={clsx(styles.label, className)}>
 			<input
 				name={name}
 				type="radio"
@@ -66,14 +67,13 @@ export function WeightedToggle({
 					return (
 						<div key={getKey(group)} className={styles.group}>
 							{isSingle ? (
-								<div className={styles.single}>
-									<Item
-										option={group.options[0]}
-										name={name}
-										isChecked={group.options[0].value === defaultValue}
-										onChange={onChange}
-									/>
-								</div>
+								<Item
+									option={group.options[0]}
+									name={name}
+									isChecked={group.options[0].value === defaultValue}
+									onChange={onChange}
+									className={styles.single}
+								/>
 							) : (
 								<div className={styles.multiple}>
 									<div className={styles.groupLabel}>
@@ -88,6 +88,7 @@ export function WeightedToggle({
 												name={name}
 												isChecked={option.value === defaultValue}
 												onChange={onChange}
+												className={styles.inset}
 											/>
 										))}
 									</div>

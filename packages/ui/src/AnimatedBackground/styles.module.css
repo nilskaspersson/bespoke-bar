@@ -22,7 +22,6 @@
 			var(--bgc) 40%,
 			var(--fade)
 		);
-		animation: aura 30s linear infinite;
 		transform: rotate(0) translate(20%) rotate(0);
 	}
 
@@ -48,11 +47,5 @@
 		bottom: -20%;
 		right: -25%;
 		animation-direction: reverse;
-	}
-
-	@keyframes aura {
-		100% {
-			transform: rotate(1turn) translate(20%) rotate(-1turn);
-		}
 	}
 }
