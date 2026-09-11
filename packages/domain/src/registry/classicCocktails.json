@@ -1,0 +1,4302 @@
+{
+	"meta": {
+		"description": "Classic cocktail specifications. Quantities follow the International Bartenders Association official list (2024 revision) as published at iba-world.com, except where a cocktail carries a 'spec_adjusted' note. All other text is original.",
+		"specSource": "https://iba-world.com/cocktails/",
+		"conventions": "Enum fields (unit, category, preparationMethod, ice, style) use the values of @bespoke/schema. A null unit marks an unmeasured line (to top, to taste) or a countable item, where quantity is a piece count."
+	},
+	"cocktails": [
+		{
+			"name": "Alexander",
+			"preparationMethod": "shaken",
+			"style": "digestif",
+			"garnish": "Grated nutmeg",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Cognac",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Crème de Cacao (Brown)",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Cream",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "dairy",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Americano",
+			"preparationMethod": "built",
+			"style": "aperitif",
+			"garnish": "Half orange slice, lemon zest",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Campari",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Campari"
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Soda Water",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Angel Face",
+			"preparationMethod": "shaken",
+			"style": "other",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Apricot Brandy",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Calvados",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "calvados",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Aviation",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Maraschino cherry",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Crème de Violette",
+					"quantity": 1,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Bee's Knees",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lemon or orange zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 52.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Honey Syrup",
+					"quantity": 2,
+					"unit": "tsp",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Bellini",
+			"preparationMethod": "stirred",
+			"style": "other",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Prosecco",
+					"quantity": 100,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				},
+				{
+					"name": "White peach purée",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Between the Sheets",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "White Rum",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Cognac",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Triple Sec",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Bijou",
+			"preparationMethod": "stirred",
+			"style": "martini",
+			"garnish": "Cherry",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Old Tom Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Green Chartreuse",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Chartreuse"
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Orange Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Black Russian",
+			"preparationMethod": "built",
+			"style": "digestif",
+			"garnish": null,
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Coffee Liqueur",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Bloody Mary",
+			"preparationMethod": "stirred",
+			"style": "other",
+			"garnish": "Celery stalk, lemon wedge",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Tomato Juice",
+					"quantity": 90,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Worcestershire Sauce",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Tabasco",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": "Tabasco"
+				},
+				{
+					"name": "Celery Salt",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Pepper",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Boulevardier",
+			"preparationMethod": "stirred",
+			"style": "negroni",
+			"garnish": "Orange zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Bourbon",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "bourbon",
+					"brand": null
+				},
+				{
+					"name": "Campari",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Campari"
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Bramble",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lemon slice, blackberries",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 12.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Crème de Mûre",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Brandy Crusta",
+			"preparationMethod": "stirred",
+			"style": "sour",
+			"garnish": "Sugar rim, wide lemon or orange peel",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Brandy",
+					"quantity": 52.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "brandy",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Curaçao",
+					"quantity": 1,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 1,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Aromatic Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Caipirinha",
+			"preparationMethod": "built",
+			"style": "sour",
+			"garnish": null,
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Cachaça",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "cachaca",
+					"brand": null
+				},
+				{
+					"name": "Lime wedges",
+					"quantity": 8,
+					"unit": null,
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				},
+				{
+					"name": "White Cane Sugar",
+					"quantity": 4,
+					"unit": "tsp",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Canchanchara",
+			"preparationMethod": "built",
+			"style": "sour",
+			"garnish": "Lime wedge",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Cuban Aguardiente",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Raw Honey",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "honey",
+					"brand": null
+				},
+				{
+					"name": "Water",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Cardinale",
+			"preparationMethod": "stirred",
+			"style": "negroni",
+			"garnish": "Lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Dry Vermouth",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Campari",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Campari"
+				}
+			]
+		},
+		{
+			"name": "Casino",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lemon zest, maraschino cherry",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Old Tom Gin",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Orange Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Champagne Cocktail",
+			"preparationMethod": "built",
+			"style": "other",
+			"garnish": "Orange zest, maraschino cherry",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Champagne",
+					"quantity": 90,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				},
+				{
+					"name": "Cognac",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				},
+				{
+					"name": "Grand Marnier",
+					"quantity": null,
+					"unit": "drop",
+					"optional": true,
+					"category": "liqueur",
+					"brand": "Grand Marnier"
+				},
+				{
+					"name": "Sugar Cube",
+					"quantity": 1,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Chartreuse Swizzle",
+			"preparationMethod": "built",
+			"style": "tiki",
+			"garnish": "Mint leaves, grated nutmeg",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Green Chartreuse",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Chartreuse"
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Falernum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Clover Club",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Fresh raspberries",
+			"ice": "none",
+			"specAdjusted": "Egg white: IBA lists 'a few drops'; set to 15 ml.",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Raspberry Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Corpse Reviver #2",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Orange zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Cointreau",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Cointreau"
+				},
+				{
+					"name": "Lillet Blanc",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Lillet"
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Absinthe",
+					"quantity": 1,
+					"unit": "dash",
+					"optional": false,
+					"category": "absinthe",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Cosmopolitan",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lemon twist",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Citron Vodka",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Cointreau",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Cointreau"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Cranberry Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Cuba Libre",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Lime wedge",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "White Rum",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Cola",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Daiquiri",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Cuban White Rum",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Superfine Sugar",
+					"quantity": 2,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Dark 'N' Stormy",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Lime wedge or slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Dark Rum",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": "Goslings"
+				},
+				{
+					"name": "Ginger Beer",
+					"quantity": 100,
+					"unit": "ml",
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Don's Special Daiquiri",
+			"preparationMethod": "blended",
+			"style": "tiki",
+			"garnish": "Half passion fruit",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Gold Jamaican Rum",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Cuban Rum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Passion Fruit Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Honey Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Dry Martini",
+			"preparationMethod": "stirred",
+			"style": "martini",
+			"garnish": "Lemon peel oil or green olive",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Dry Vermouth",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Espresso Martini",
+			"preparationMethod": "shaken",
+			"style": "digestif",
+			"garnish": "Three coffee beans",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Coffee Liqueur",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Kahlúa"
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Espresso",
+					"quantity": 1,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Fernandito",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": null,
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Fernet",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "amaro",
+					"brand": "Fernet-Branca"
+				},
+				{
+					"name": "Cola",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "French 75",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Champagne",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "French Connection",
+			"preparationMethod": "built",
+			"style": "digestif",
+			"garnish": null,
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Cognac",
+					"quantity": 35,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Amaretto",
+					"quantity": 35,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "French Martini",
+			"preparationMethod": "shaken",
+			"style": "other",
+			"garnish": "Lemon peel oil",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Raspberry Liqueur",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Garibaldi",
+			"preparationMethod": "built",
+			"style": "aperitif",
+			"garnish": "Orange wedge",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Campari",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Campari"
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Gin Basil Smash",
+			"preparationMethod": "shaken",
+			"style": "smash",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Basil Leaves",
+					"quantity": 10,
+					"unit": null,
+					"optional": false,
+					"category": "herb",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Gin Fizz",
+			"preparationMethod": "shaken",
+			"style": "fizz",
+			"garnish": "Lemon slice, lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Soda Water",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Grand Margarita",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Sea salt rim, lime slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Tequila",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "tequila",
+					"brand": null
+				},
+				{
+					"name": "Grand Marnier",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Grand Marnier"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Grasshopper",
+			"preparationMethod": "shaken",
+			"style": "digestif",
+			"garnish": "Mint leaf",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Crème de Cacao (White)",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Crème de Menthe (Green)",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Cream",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "dairy",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Hanky Panky",
+			"preparationMethod": "stirred",
+			"style": "martini",
+			"garnish": "Orange zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "London Dry Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Fernet",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "amaro",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Hemingway Special",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Rum",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Grapefruit Juice",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Horse's Neck",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Long lemon spiral",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Cognac",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Ginger Ale",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": null,
+					"unit": "dash",
+					"optional": true,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				}
+			]
+		},
+		{
+			"name": "IBA Tiki",
+			"preparationMethod": "shaken",
+			"style": "tiki",
+			"garnish": "Citrus, dehydrated pineapple slice",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Havana Club Profundo",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": "Havana Club"
+				},
+				{
+					"name": "Havana Club Smoky",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": "Havana Club"
+				},
+				{
+					"name": "Amaretto",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Hazelnut Liqueur",
+					"quantity": 5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Frangelico"
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 5,
+					"unit": "drop",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Passion Fruit Purée",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 90,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Ginger Slice",
+					"quantity": 1,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Illegal",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"specAdjusted": "Egg white: IBA lists 'a few drops'; set to 15 ml.",
+			"ingredients": [
+				{
+					"name": "Espadín Mezcal",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "mezcal",
+					"brand": null
+				},
+				{
+					"name": "Jamaican Overproof White Rum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Falernum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 1,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": true,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Irish Coffee",
+			"preparationMethod": "built",
+			"style": "other",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Irish Whiskey",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "whiskey",
+					"brand": null
+				},
+				{
+					"name": "Hot Coffee",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Cream",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "dairy",
+					"brand": null
+				},
+				{
+					"name": "Sugar",
+					"quantity": 1,
+					"unit": "tsp",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "John Collins",
+			"preparationMethod": "built",
+			"style": "fizz",
+			"garnish": "Lemon slice, maraschino cherry",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Soda Water",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Jungle Bird",
+			"preparationMethod": "shaken",
+			"style": "tiki",
+			"garnish": "Pineapple wedge",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Blackstrap Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Campari",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Campari"
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Demerara Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Kir",
+			"preparationMethod": "built",
+			"style": "aperitif",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Dry White Wine",
+					"quantity": 90,
+					"unit": "ml",
+					"optional": false,
+					"category": "wine",
+					"brand": null
+				},
+				{
+					"name": "Crème de Cassis",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Last Word",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Green Chartreuse",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Chartreuse"
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Lemon Drop Martini",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Triple Sec",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Long Island Iced Tea",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Lemon slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Tequila",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "tequila",
+					"brand": null
+				},
+				{
+					"name": "White Rum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Gin",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Cointreau",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Cointreau"
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Cola",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Mai-Tai",
+			"preparationMethod": "shaken",
+			"style": "tiki",
+			"garnish": "Pineapple spear, mint leaves, lime peel",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Amber Jamaican Rum",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Martinique Molasses Rum",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Orange Curaçao",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Orgeat Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Manhattan",
+			"preparationMethod": "stirred",
+			"style": "manhattan",
+			"garnish": "Cocktail cherry",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Rye Whiskey",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "rye",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 1,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				}
+			]
+		},
+		{
+			"name": "Margarita",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Half salt rim",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Tequila",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "tequila",
+					"brand": null
+				},
+				{
+					"name": "Triple Sec",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Martinez",
+			"preparationMethod": "stirred",
+			"style": "martini",
+			"garnish": "Lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "London Dry Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 1,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Orange Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Mary Pickford",
+			"preparationMethod": "shaken",
+			"style": "other",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "White Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Grenadine Syrup",
+					"quantity": 5,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Mimosa",
+			"preparationMethod": "built",
+			"style": "other",
+			"garnish": "Orange twist",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Orange Juice",
+					"quantity": 75,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Prosecco",
+					"quantity": 75,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Mint Julep",
+			"preparationMethod": "built",
+			"style": "julep",
+			"garnish": "Mint sprig",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Bourbon",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "bourbon",
+					"brand": null
+				},
+				{
+					"name": "Mint Sprigs",
+					"quantity": 4,
+					"unit": null,
+					"optional": false,
+					"category": "herb",
+					"brand": null
+				},
+				{
+					"name": "Powdered Sugar",
+					"quantity": 1,
+					"unit": "tsp",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Water",
+					"quantity": 2,
+					"unit": "tsp",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Missionary's Downfall",
+			"preparationMethod": "blended",
+			"style": "tiki",
+			"garnish": "Mint sprig, pineapple slice",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "White Rum",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Peach Brandy",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Honey Mix",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Mint Leaves",
+					"quantity": 10,
+					"unit": null,
+					"optional": false,
+					"category": "herb",
+					"brand": null
+				},
+				{
+					"name": "Pineapple Chunks",
+					"quantity": 4,
+					"unit": null,
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Mojito",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Mint sprigs, lime slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Cuban White Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Mint Sprigs",
+					"quantity": 6,
+					"unit": null,
+					"optional": false,
+					"category": "herb",
+					"brand": null
+				},
+				{
+					"name": "White Cane Sugar",
+					"quantity": 2,
+					"unit": "tsp",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Soda Water",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Monkey Gland",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Absinthe",
+					"quantity": 1,
+					"unit": "tbsp",
+					"optional": false,
+					"category": "absinthe",
+					"brand": null
+				},
+				{
+					"name": "Grenadine Syrup",
+					"quantity": 1,
+					"unit": "tbsp",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Moscow Mule",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Lime slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": "Smirnoff"
+				},
+				{
+					"name": "Ginger Beer",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Naked and Famous",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Mezcal",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "mezcal",
+					"brand": null
+				},
+				{
+					"name": "Yellow Chartreuse",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Chartreuse"
+				},
+				{
+					"name": "Aperol",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Aperol"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Negroni",
+			"preparationMethod": "built",
+			"style": "negroni",
+			"garnish": "Half orange slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Campari",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Campari"
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "New York Sour",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lemon or orange zest, cherry",
+			"ice": "cubed",
+			"specAdjusted": "Egg white: IBA lists 'a few drops'; set to 15 ml.",
+			"ingredients": [
+				{
+					"name": "Rye Whiskey",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "rye",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "egg",
+					"brand": null
+				},
+				{
+					"name": "Red Wine",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "wine",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Old Cuban",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Mint sprigs",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Mint Leaves",
+					"quantity": 7,
+					"unit": null,
+					"optional": false,
+					"category": "herb",
+					"brand": null
+				},
+				{
+					"name": "Aged Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				},
+				{
+					"name": "Champagne",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Old Fashioned",
+			"preparationMethod": "built",
+			"style": "oldFashioned",
+			"garnish": "Orange slice or zest, cocktail cherry",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Bourbon",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "bourbon",
+					"brand": null
+				},
+				{
+					"name": "Sugar Cube",
+					"quantity": 1,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": null,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				},
+				{
+					"name": "Water",
+					"quantity": null,
+					"unit": "dash",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Paloma",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Lime slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Tequila",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "tequila",
+					"brand": null
+				},
+				{
+					"name": "Lime",
+					"quantity": 5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Salt",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Pink Grapefruit Soda",
+					"quantity": 100,
+					"unit": "ml",
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Paper Plane",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Bourbon",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "bourbon",
+					"brand": null
+				},
+				{
+					"name": "Amaro Nonino",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "amaro",
+					"brand": "Nonino"
+				},
+				{
+					"name": "Aperol",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Aperol"
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Paradise",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Apricot Brandy",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Penicillin",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Candied ginger",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Blended Scotch Whisky",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "whiskey",
+					"brand": null
+				},
+				{
+					"name": "Islay Single Malt Whisky",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "whiskey",
+					"brand": "Lagavulin 16"
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Honey Syrup",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Ginger Slice",
+					"quantity": 3,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Piña Colada",
+			"preparationMethod": "blended",
+			"style": "tiki",
+			"garnish": "Pineapple slice, cocktail cherry",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "White Rum",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Coconut Cream",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "dairy",
+					"brand": null
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Pisco Punch",
+			"preparationMethod": "shaken",
+			"style": "punch",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Pisco",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "pisco",
+					"brand": null
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Dry White Wine",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "wine",
+					"brand": null
+				},
+				{
+					"name": "Cloves",
+					"quantity": 3,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Pisco Sour",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Dashes of bitters on the foam",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Pisco",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "pisco",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 1,
+					"unit": null,
+					"optional": false,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Planters Punch",
+			"preparationMethod": "built",
+			"style": "punch",
+			"garnish": "Orange zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Jamaican Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Sugar Cane Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Porn Star Martini",
+			"preparationMethod": "shaken",
+			"style": "other",
+			"garnish": "Half passion fruit; Champagne on the side",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Vanilla Vodka",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Passion Fruit Liqueur",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Passion Fruit Purée",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				},
+				{
+					"name": "Vanilla Sugar",
+					"quantity": 2,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Champagne",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Porto Flip",
+			"preparationMethod": "shaken",
+			"style": "flip",
+			"garnish": "Grated nutmeg",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Brandy",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "brandy",
+					"brand": null
+				},
+				{
+					"name": "Red Tawny Port",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "port",
+					"brand": null
+				},
+				{
+					"name": "Egg Yolk",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Rabo de Galo",
+			"preparationMethod": "stirred",
+			"style": "martini",
+			"garnish": "Orange twist",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Cachaça",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "cachaca",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": "Cinzano"
+				},
+				{
+					"name": "Cynar",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "amaro",
+					"brand": "Cynar"
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 2,
+					"unit": "drop",
+					"optional": true,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				}
+			]
+		},
+		{
+			"name": "Ramos Fizz",
+			"preparationMethod": "shaken",
+			"style": "fizz",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Cream",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "dairy",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "egg",
+					"brand": null
+				},
+				{
+					"name": "Orange Flower Water",
+					"quantity": 3,
+					"unit": "dash",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Vanilla Extract",
+					"quantity": 2,
+					"unit": "drop",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Soda Water",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Remember the Maine",
+			"preparationMethod": "stirred",
+			"style": "manhattan",
+			"garnish": "Lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Rye Whiskey",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "rye",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Cherry Liqueur",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Absinthe",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "absinthe",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Russian Spring Punch",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Blackberries, lemon slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Crème de Cassis",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Sparkling Wine",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Rusty Nail",
+			"preparationMethod": "built",
+			"style": "digestif",
+			"garnish": "Lemon zest",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Scotch Whisky",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "whiskey",
+					"brand": null
+				},
+				{
+					"name": "Drambuie",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Drambuie"
+				}
+			]
+		},
+		{
+			"name": "Sazerac",
+			"preparationMethod": "stirred",
+			"style": "oldFashioned",
+			"garnish": "Lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Cognac",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Absinthe",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "absinthe",
+					"brand": null
+				},
+				{
+					"name": "Sugar Cube",
+					"quantity": 1,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Peychaud's Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Peychaud's"
+				}
+			]
+		},
+		{
+			"name": "Sea Breeze",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Orange zest, cherry",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Cranberry Juice",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Grapefruit Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Sex on the Beach",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Half orange slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Vodka",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Peach Schnapps",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Cranberry Juice",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Sherry Cobbler",
+			"preparationMethod": "shaken",
+			"style": "other",
+			"garnish": "Fresh berries, quarter wheels of orange and lemon",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Amontillado Sherry",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "sherry",
+					"brand": null
+				},
+				{
+					"name": "Palo Cortado Sherry",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "sherry",
+					"brand": null
+				},
+				{
+					"name": "Superfine Sugar",
+					"quantity": 1,
+					"unit": "tsp",
+					"optional": false,
+					"category": "other",
+					"brand": null
+				},
+				{
+					"name": "Orange Wheel",
+					"quantity": 0.5,
+					"unit": null,
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				},
+				{
+					"name": "Lemon Wheel",
+					"quantity": 0.5,
+					"unit": null,
+					"optional": false,
+					"category": "fruit",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Sidecar",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Cognac",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Triple Sec",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Singapore Sling",
+			"preparationMethod": "shaken",
+			"style": "tiki",
+			"garnish": "Pineapple slice, maraschino cherry",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Cherry Liqueur",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Cointreau",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Cointreau"
+				},
+				{
+					"name": "Bénédictine",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Bénédictine"
+				},
+				{
+					"name": "Pineapple Juice",
+					"quantity": 120,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Grenadine Syrup",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 1,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				}
+			]
+		},
+		{
+			"name": "South Side",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Mint sprigs",
+			"ice": "none",
+			"specAdjusted": "Egg white: IBA lists 'a few drops'; set to 15 ml.",
+			"ingredients": [
+				{
+					"name": "London Dry Gin",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Mint Leaves",
+					"quantity": 6,
+					"unit": null,
+					"optional": false,
+					"category": "herb",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": true,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Spicy Fifty",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Red chili pepper",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Vanilla Vodka",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Elderflower Cordial",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Honey Syrup",
+					"quantity": 10,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": "Monin"
+				},
+				{
+					"name": "Red Chili Pepper Slices",
+					"quantity": 2,
+					"unit": null,
+					"optional": false,
+					"category": "other",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Spritz",
+			"preparationMethod": "built",
+			"style": "spritz",
+			"garnish": "Orange slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Prosecco",
+					"quantity": 90,
+					"unit": "ml",
+					"optional": false,
+					"category": "champagne",
+					"brand": null
+				},
+				{
+					"name": "Aperol",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Aperol"
+				},
+				{
+					"name": "Soda Water",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Stinger",
+			"preparationMethod": "stirred",
+			"style": "digestif",
+			"garnish": "Mint leaf",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Cognac",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Crème de Menthe (White)",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Suffering Bastard",
+			"preparationMethod": "shaken",
+			"style": "highball",
+			"garnish": "Mint sprig, orange slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Brandy",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "brandy",
+					"brand": null
+				},
+				{
+					"name": "Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				},
+				{
+					"name": "Ginger Beer",
+					"quantity": null,
+					"unit": null,
+					"optional": false,
+					"category": "soda",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Tequila Sunrise",
+			"preparationMethod": "built",
+			"style": "highball",
+			"garnish": "Half orange slice or orange zest",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Tequila",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "tequila",
+					"brand": null
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 90,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Grenadine Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Three Dots and a Dash",
+			"preparationMethod": "blended",
+			"style": "tiki",
+			"garnish": "Three cherries, pineapple chunk",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Rhum Agricole (Martinique)",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Blended Aged Rum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Falernum",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Allspice Dram",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "St. Elizabeth"
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Orange Juice",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "juice",
+					"brand": null
+				},
+				{
+					"name": "Honey Syrup",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				}
+			]
+		},
+		{
+			"name": "Tipperary",
+			"preparationMethod": "stirred",
+			"style": "manhattan",
+			"garnish": "Orange slice",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Irish Whiskey",
+					"quantity": 50,
+					"unit": "ml",
+					"optional": false,
+					"category": "whiskey",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Green Chartreuse",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Chartreuse"
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				}
+			]
+		},
+		{
+			"name": "Tommy's Margarita",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lime slice",
+			"ice": "cubed",
+			"ingredients": [
+				{
+					"name": "Tequila",
+					"quantity": 60,
+					"unit": "ml",
+					"optional": false,
+					"category": "tequila",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Agave Nectar",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Trinidad Sour",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Angostura Bitters",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				},
+				{
+					"name": "Orgeat Syrup",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Rye Whiskey",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "rye",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Tuxedo",
+			"preparationMethod": "stirred",
+			"style": "martini",
+			"garnish": "Cherry, lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Old Tom Gin",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Dry Vermouth",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Maraschino Liqueur",
+					"quantity": 0.5,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "liqueur",
+					"brand": "Luxardo"
+				},
+				{
+					"name": "Absinthe",
+					"quantity": 0.25,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "absinthe",
+					"brand": null
+				},
+				{
+					"name": "Orange Bitters",
+					"quantity": 3,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Ve.N.To",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Lemon zest, white grapes",
+			"ice": "cubed",
+			"specAdjusted": "Egg white: IBA lists 'a few drops'; set to 15 ml.",
+			"ingredients": [
+				{
+					"name": "White Grappa",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "grappa",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 22.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Honey Mix",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Chamomile Cordial",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": true,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Vesper",
+			"preparationMethod": "shaken",
+			"style": "martini",
+			"garnish": "Lemon zest",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Vodka",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "vodka",
+					"brand": null
+				},
+				{
+					"name": "Lillet Blanc",
+					"quantity": 7.5,
+					"unit": "ml",
+					"optional": false,
+					"category": "aperitif",
+					"brand": "Lillet"
+				}
+			]
+		},
+		{
+			"name": "Vieux Carré",
+			"preparationMethod": "stirred",
+			"style": "manhattan",
+			"garnish": "Orange zest, maraschino cherry",
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Rye Whiskey",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rye",
+					"brand": null
+				},
+				{
+					"name": "Cognac",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "cognac",
+					"brand": null
+				},
+				{
+					"name": "Sweet Red Vermouth",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "vermouth",
+					"brand": null
+				},
+				{
+					"name": "Bénédictine",
+					"quantity": 1,
+					"unit": "barspoon",
+					"optional": false,
+					"category": "herbal_liqueur",
+					"brand": "Bénédictine"
+				},
+				{
+					"name": "Peychaud's Bitters",
+					"quantity": 2,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Peychaud's"
+				}
+			]
+		},
+		{
+			"name": "Whiskey Sour",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": "Half orange slice, maraschino cherry",
+			"ice": "none",
+			"specAdjusted": "Egg white: IBA lists 'a few drops'; set to 15 ml.",
+			"ingredients": [
+				{
+					"name": "Bourbon",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "bourbon",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 25,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Simple Syrup",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Egg White",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": true,
+					"category": "egg",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "White Lady",
+			"preparationMethod": "shaken",
+			"style": "sour",
+			"garnish": null,
+			"ice": "none",
+			"ingredients": [
+				{
+					"name": "Gin",
+					"quantity": 40,
+					"unit": "ml",
+					"optional": false,
+					"category": "gin",
+					"brand": null
+				},
+				{
+					"name": "Triple Sec",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Lemon Juice",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				}
+			]
+		},
+		{
+			"name": "Zombie",
+			"preparationMethod": "blended",
+			"style": "tiki",
+			"garnish": "Mint leaves",
+			"ice": "crushed",
+			"ingredients": [
+				{
+					"name": "Jamaican Dark Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Gold Puerto Rican Rum",
+					"quantity": 45,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Demerara Rum",
+					"quantity": 30,
+					"unit": "ml",
+					"optional": false,
+					"category": "rum",
+					"brand": null
+				},
+				{
+					"name": "Lime Juice",
+					"quantity": 20,
+					"unit": "ml",
+					"optional": false,
+					"category": "citrus",
+					"brand": null
+				},
+				{
+					"name": "Falernum",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "liqueur",
+					"brand": null
+				},
+				{
+					"name": "Donn's Mix",
+					"quantity": 15,
+					"unit": "ml",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Grenadine Syrup",
+					"quantity": 1,
+					"unit": "tsp",
+					"optional": false,
+					"category": "syrup",
+					"brand": null
+				},
+				{
+					"name": "Angostura Bitters",
+					"quantity": 1,
+					"unit": "dash",
+					"optional": false,
+					"category": "cocktail_bitters",
+					"brand": "Angostura"
+				},
+				{
+					"name": "Pastis",
+					"quantity": 6,
+					"unit": "drop",
+					"optional": false,
+					"category": "absinthe",
+					"brand": "Pernod"
+				}
+			]
+		}
+	]
+}
