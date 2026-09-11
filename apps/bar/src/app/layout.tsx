@@ -12,7 +12,6 @@ import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { type PropsWithChildren, Suspense } from "react";
 import { AuthProvider } from "@/components/AuthProvider";
-import { ScrollFix } from "@/components/ScrollFix";
 import { Toaster } from "@/components/Toaster";
 import { AuthButtonsSkeleton } from "@/features/organisation/user/components/AuthButtons";
 import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
@@ -61,7 +60,6 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 			</ThemeProvider>
 
 			<Suspense>
-				<ScrollFix />
 				<NavigationObserver />
 			</Suspense>
 		</AppShell>
