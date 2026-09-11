@@ -1,5 +1,4 @@
 import { AnimatedBackground } from "@bespoke/ui/AnimatedBackground";
-import { Container } from "@bespoke/ui/Container";
 import { Heading } from "@bespoke/ui/Heading";
 import { clsx } from "clsx";
 import type { ComponentProps, ReactNode } from "react";
@@ -15,16 +14,19 @@ export function LandingPageHero({
 	return (
 		<div className={clsx(styles.main, className)} {...props}>
 			<AnimatedBackground />
-			{backdrop}
 
-			<Container as="section" className={styles.hero}>
-				<Heading level="h1" className={styles.heading}>
-					An archive for your{" "}
-					<strong className={styles.mark}>cocktail recipes</strong>.
-				</Heading>
+			{backdrop ? <div className={styles.backdrop}>{backdrop}</div> : null}
 
-				{aside ? <div className={styles.aside}>{aside}</div> : null}
-			</Container>
+			<div className={styles.container}>
+				<section className={styles.hero}>
+					<Heading level="h1" className={styles.heading}>
+						An archive for your{" "}
+						<strong className={styles.mark}>cocktail recipes</strong>.
+					</Heading>
+
+					{aside ? <div className={styles.aside}>{aside}</div> : null}
+				</section>
+			</div>
 
 			<div className={styles.content}>{children}</div>
 		</div>

@@ -1,7 +1,7 @@
 @layer feature {
 	.backdrop {
 		--wall-opacity: 0.55;
-		--wall-scale: 0.9;
+		--wall-scale: 0.75;
 		--wall-perspective: 3000px;
 		--wall-tilt-x: 45deg;
 		--wall-tilt-y: 0deg;
@@ -14,7 +14,6 @@
 			var(--wall-visible-cards) -
 			var(--wall-gap)
 		);
-		--wall-inset-inline-end: -10%;
 
 		position: absolute;
 		inset: 0;
@@ -22,8 +21,8 @@
 		pointer-events: none;
 		animation: fade-in 1.5s ease-out both;
 
-		@media (max-width: 600px) {
-			--wall-scale: 0.6;
+		@container hero (width >= 500px) {
+			--wall-scale: 0.9;
 		}
 
 		@media (prefers-reduced-motion: reduce) {
@@ -34,15 +33,29 @@
 	.wall {
 		position: absolute;
 		top: 50%;
-		inset-inline-end: var(--wall-inset-inline-end);
+		inset-inline: 0;
+		width: fit-content;
+		margin-inline: auto;
 		translate: 0 -50%;
 		transform: perspective(var(--wall-perspective)) rotateX(var(--wall-tilt-x))
 			rotateY(var(--wall-tilt-y)) rotateZ(var(--wall-tilt-z))
 			scale(var(--wall-scale));
+
+		@container hero (width < 800px) {
+			left: -15cqw;
+		}
+
+		@container hero (width < 600px) {
+			left: -25cqw;
+		}
 	}
 
 	.window {
 		height: var(--wall-height);
+		content-visibility: auto;
+		contain-intrinsic-size: auto
+			calc(3 * var(--recipe-card-width) + 2 * var(--wall-gap)) auto
+			var(--wall-height);
 		display: flex;
 		gap: var(--wall-gap);
 		align-items: flex-start;
@@ -79,6 +92,12 @@
 
 		&:nth-child(even) {
 			--direction: reverse;
+		}
+
+		@container hero (width < 800px) {
+			&:nth-child(3) {
+				display: none;
+			}
 		}
 
 		@media (prefers-reduced-motion: reduce) {

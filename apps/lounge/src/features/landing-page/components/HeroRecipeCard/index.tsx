@@ -3,6 +3,7 @@
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
 import { Checkbox } from "@bespoke/ui/Checkbox";
 import { ControlLabel } from "@bespoke/ui/ControlLabel";
+import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import {
 	useAdjustments,
@@ -31,10 +32,10 @@ export function HeroRecipeCard({ recipe }: { recipe: BaseRecipe }) {
 
 	return (
 		<LazyMotion features={loadMotionFeatures}>
-			<Grid gap={4} justifyItems="center">
+			<Flex direction="column" alignItems="center" gap={4}>
 				<AdjustedRecipeCard recipe={recipe} />
 				<HeroAdjustments />
-			</Grid>
+			</Flex>
 		</LazyMotion>
 	);
 }
