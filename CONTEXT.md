@@ -1,25 +1,29 @@
 # Bespoke Bar
 
-Cocktail-recipe management for bars. A small team (an **Organisation**) curates a private library of cocktail recipes, ingredients, and menus — both an archive of finished drinks and a workbench for drafting and developing new ones. Multi-tenant via `orgId`.
+Cocktail-recipe management for bars. A small team (an **Organisation**) curates a private **Archive** of cocktail recipes, ingredients, and menus — the lasting record of finished drinks and the workbench for drafting new ones. Multi-tenant via `orgId`.
 
 ## Language
 
 ### Organisation
 
 **Organisation**:
-The tenant boundary — the unit `orgId` scopes every row to, and the owner of a private library of **Recipes**, **Ingredients**, and **Menus**. Every query is scoped to exactly one Organisation (resolved by `authOrForbidden()`); nothing is global or cross-org. Usually a shared team, but the term names the _ownership boundary_, not a headcount: a single-member Organisation (one person's private workspace) is valid and intended. A **User** belongs to one or more Organisations and acts within one **Active Organisation** at a time.
+The tenant boundary — the unit `orgId` scopes every row to, and the owner of an **Archive** of **Recipes**, **Ingredients**, and **Menus**. Every query is scoped to exactly one Organisation (resolved by `authOrForbidden()`); nothing is global or cross-org. Usually a shared team, but the term names the _ownership boundary_, not a headcount: a single-member Organisation (one person's private workspace) is valid and intended. A **User** belongs to one or more Organisations and acts within one **Active Organisation** at a time.
 _Avoid_: defining Organisation as "a team" — that's the common case, not the meaning; it is the tenancy/ownership boundary, one member or many. "Account", "Workspace", "Tenant" as the canonical word — the term is **Organisation**.
 
 **Active Organisation**:
 The single **Organisation** a request acts within, resolved server-side from the auth session as `orgId`; every read and write is implicitly scoped to it. A **User** with several Organisations has exactly one Active at a time. "Authenticated" and "has an Active Organisation" are distinct states — a User may be signed in with none selected.
 
+**Archive**:
+An **Organisation's** whole collection of **Recipes**, **Ingredients**, and **Menus** — the product-level noun for what a **User** keeps in Bespoke Bar, and the thing the brand promises to keep lasting. It holds finished drinks and drafts-in-progress alike: the Archive _is_ the workbench a **Recipe** is developed on, so "in the Archive" says nothing about completeness. Always a noun, never an action.
+_Avoid_: "Library", "Collection", "Database", "Workspace" as the canonical word. "Archive" as a verb or button ("archive this recipe" reads as _hide it_, the opposite of the noun); "archived" as a Recipe state — there is none.
+
 **Bar**:
-The private, back-of-house workspace — the authenticated application surface over an **Organisation's** library, where the team develops and manages **Recipes**, **Ingredients**, and **Menus**. Scoped to the **Active Organisation** (what `barRecipes` / `barMenus` read).
+The private, back-of-house workspace — the authenticated application surface over an **Organisation's** **Archive**, where the team develops and manages **Recipes**, **Ingredients**, and **Menus**. Scoped to the **Active Organisation** (what `barRecipes` / `barMenus` read).
 _Avoid_: treating **Bar** as a synonym for **Organisation** — the Organisation is the tenant/ownership boundary; the Bar is the working surface over it. Both may be a workspace of one.
 
 **Lounge**:
-Bespoke Bar's public, front-of-house surface — everything anonymous and unauthenticated, whether or not it reads an **Organisation's** library. It hosts org-less surfaces today (marketing, legal, and **Public Tools**) and will host guest-facing **Menus** once **Public** ships. That guest-**Menu** half is _why_ a **Recipe's** **Description** is menu-facing while its **Instructions** stay internal to the **Bar** — one library, two audiences.
-_Avoid_: defining the Lounge as "the surface over an Organisation's library" — that describes only its guest-**Menu** half; the term names the public surface, org-scoped or not. Surfacing Bar-only (internal) data on a guest **Menu**.
+Bespoke Bar's public, front-of-house surface — everything anonymous and unauthenticated, whether or not it reads an **Organisation's** **Archive**. It hosts org-less surfaces today (marketing, legal, and **Public Tools**) and will host guest-facing **Menus** once **Public** ships. That guest-**Menu** half is _why_ a **Recipe's** **Description** is menu-facing while its **Instructions** stay internal to the **Bar** — one Archive, two audiences.
+_Avoid_: defining the Lounge as "the surface over an Organisation's Archive" — that describes only its guest-**Menu** half; the term names the public surface, org-scoped or not. Surfacing Bar-only (internal) data on a guest **Menu**.
 
 **Public Tool**:
 A **Lounge** surface that works on data the visitor supplies, belongs to no **Organisation**, stores nothing, and needs no account — useful on its own terms, and an invitation into the **Bar**. The **Cocktail Calculator** is the first.
@@ -56,11 +60,11 @@ _Avoid_: "AI-suggested", "AI-generated", "Enriched" (as the field-state label) �
 ### Recipes
 
 **Recipe**:
-A cocktail's full record — its **Ingredient Lines** plus metadata (**Cocktail Style**, glassware, ice, preparation method, dilution target, garnish, description, instructions, tags). Identified by an opaque id, never by name. Because the app is both an archive of finished drinks and a workbench for developing them, a Recipe may be **incomplete** — it's normal for a drink to have lines before it has a name.
+A cocktail's full record — its **Ingredient Lines** plus metadata (**Cocktail Style**, glassware, ice, preparation method, dilution target, garnish, description, instructions, tags). Identified by an opaque id, never by name. Because the **Archive** is also the workbench — finished drinks and drafts-in-progress live side by side — a Recipe may be **incomplete** — it's normal for a drink to have lines before it has a name.
 _Avoid_: equating a Recipe with its formula alone — that's the Recipe's **Spec**; the Recipe is the whole record (Spec + name, Style, serve, prose).
 
 **Draft Recipe**:
-A recipe-shaped value that belongs to no **Organisation** and sits in no library: **Ingredient Lines** plus optional metadata, but no identity. What **Photo-to-Recipe**, the bulk text editor, and the **Cocktail Calculator** all produce; it becomes a **Recipe** on save, which is where it gains its id. Its lines carry **Draft Ingredients** — the same shape without identity — so a draft line _names_ an ingredient instead of referencing one, and is why such a line reads as "new".
+A recipe-shaped value that belongs to no **Organisation** and sits in no **Archive**: **Ingredient Lines** plus optional metadata, but no identity. What **Photo-to-Recipe**, the bulk text editor, and the **Cocktail Calculator** all produce; it becomes a **Recipe** on save, which is where it gains its id. Its lines carry **Draft Ingredients** — the same shape without identity — so a draft line _names_ an ingredient instead of referencing one, and is why such a line reads as "new".
 _Avoid_: "incomplete Recipe" — a **Recipe** may be incomplete and still be a Recipe; a Draft Recipe is not one at all, for want of identity. ("Unsaved recipe" is fine as prose.)
 
 **Name** (of a Recipe):
@@ -106,7 +110,7 @@ A Recipe's finishing note — free text ("orange twist"), shown on the card. Del
 ### Ingredients
 
 **Ingredient**:
-A reusable, org-scoped library entry for a substance a drink is built from (a spirit, juice, syrup, garnish…). Its **name is its identity**: required, unique per **Organisation**, normalized (`lower(trim)`) — there is exactly one "Gin" per org. **Recipes reference Ingredients** — an **Ingredient Line** points at one and never copies it — so cost and ABV are derived _live_ from the current Ingredient: edit "Gin" and every Recipe using it re-computes (no snapshot). Typing a known name into a recipe line _reuses_ the existing Ingredient (**find-or-reference**); the standalone create form rejects a duplicate. An Ingredient that's in use can't be deleted — every referencing line must be removed first (no cascade, no force-delete).
+A reusable, org-scoped **Archive** entry for a substance a drink is built from (a spirit, juice, syrup, garnish…). Its **name is its identity**: required, unique per **Organisation**, normalized (`lower(trim)`) — there is exactly one "Gin" per org. **Recipes reference Ingredients** — an **Ingredient Line** points at one and never copies it — so cost and ABV are derived _live_ from the current Ingredient: edit "Gin" and every Recipe using it re-computes (no snapshot). Typing a known name into a recipe line _reuses_ the existing Ingredient (**find-or-reference**); the standalone create form rejects a duplicate. An Ingredient that's in use can't be deleted — every referencing line must be removed first (no cascade, no force-delete).
 _Avoid_: treating an Ingredient as recipe-local (it's shared); using **Brand** as identity (identity is the name, not the brand).
 
 **Ingredient Category**:
@@ -120,7 +124,7 @@ A curated, ordered selection of an **Organisation's** **Recipes**, assembled for
 _Avoid_: treating a Menu as a copy/snapshot of its Recipes (the reference is live).
 
 **Menu Entry**:
-One **Recipe's** placement on a **Menu** — a reference to a Recipe plus an optional **price** and a sort position. The unit a Menu's pricing and profit are figured on. A Recipe appears at most once per Menu. The **Menu-level structural twin of an Ingredient Line**: a reference to a library entity, with an optional amount, inside a parent.
+One **Recipe's** placement on a **Menu** — a reference to a Recipe plus an optional **price** and a sort position. The unit a Menu's pricing and profit are figured on. A Recipe appears at most once per Menu. The **Menu-level structural twin of an Ingredient Line**: a reference to an **Archive** entity, with an optional amount, inside a parent.
 _Avoid_: equating the Entry with the Recipe — the Entry is the Recipe's priced placement, not the Recipe itself.
 
 **Featured Menu**:
@@ -146,11 +150,11 @@ _Avoid_: bare "measurement"/"measure" — overloaded (the conversion library's _
 ### Mobile
 
 **Offline Reads**:
-The mobile-app capability that keeps an **Organisation's** library readable without connectivity: previously fetched **Recipes**, **Ingredients**, and **Menus** remain viewable from a local cache, reflecting the library as of the last connected session (possibly stale, never wrong-org). Reads only, deliberately: an edit is never queued, stored, or accepted offline — every write requires a live connection, so there is no sync and no conflict to resolve.
+The mobile-app capability that keeps an **Organisation's** **Archive** readable without connectivity: previously fetched **Recipes**, **Ingredients**, and **Menus** remain viewable from a local cache, reflecting the Archive as of the last connected session (possibly stale, never wrong-org). Reads only, deliberately: an edit is never queued, stored, or accepted offline — every write requires a live connection, so there is no sync and no conflict to resolve.
 _Avoid_: "offline-first", "offline sync", "queued edits" (all imply offline *writes* and conflict resolution — explicitly out of scope); conflating with **Offline Dev Auth** (a dev bypass, not a product capability).
 
 **Offline Auth**:
-Holding a previously-verified session while disconnected, so **Offline Reads** can show the library without a live authentication check. The principle: auth gates the network, not the pixels — offline, the app trusts the last verified session for *display*; every network call still authenticates for real, and nothing is ever verified without connectivity (it is a retained session, not a fresh proof). The product capability the name was reserved for; distinct from **Offline Dev Auth**.
+Holding a previously-verified session while disconnected, so **Offline Reads** can show the **Archive** without a live authentication check. The principle: auth gates the network, not the pixels — offline, the app trusts the last verified session for *display*; every network call still authenticates for real, and nothing is ever verified without connectivity (it is a retained session, not a fresh proof). The product capability the name was reserved for; distinct from **Offline Dev Auth**.
 _Avoid_: reading it as "authentication performed offline" (nothing is); using it for the dev bypass (that is **Offline *Dev* Auth** — the Dev is load-bearing).
 
 ### Development

@@ -10,10 +10,12 @@ import styles from "./styles.module.css";
 
 export function ServingsBadge({
 	servings,
+	animateNumbers = true,
 	className,
 	...props
 }: {
 	servings: number;
+	animateNumbers?: boolean;
 } & Omit<ChipProps, "children">) {
 	const { quantityFormatter } = use(FormatterContext);
 
@@ -29,7 +31,11 @@ export function ServingsBadge({
 			className={clsx(styles.servingsBadge, className)}
 			{...props}
 		>
-			<AnimatedNumber value={servings} format={formatServings} />
+			{animateNumbers ? (
+				<AnimatedNumber value={servings} format={formatServings} />
+			) : (
+				formatServings(servings)
+			)}
 			<Icon name="xmark" size={0} />
 		</Chip>
 	);

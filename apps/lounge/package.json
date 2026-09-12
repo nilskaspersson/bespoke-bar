@@ -15,6 +15,7 @@
 		"@bespoke/ui": "workspace:*",
 		"babel-plugin-react-compiler": "catalog:",
 		"clsx": "catalog:",
+		"framer-motion": "catalog:",
 		"motion": "catalog:",
 		"next": "catalog:",
 		"react": "catalog:",

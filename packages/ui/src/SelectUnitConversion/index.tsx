@@ -37,11 +37,13 @@ export function SelectUnitConversion({
 	defaultValue,
 	onChange,
 	name,
+	id,
 	className,
 }: {
 	defaultValue?: UnitSystems | null;
 	onChange?: (unitSystem: UnitSystems | null) => void;
 	name: string;
+	id?: string;
 	className?: string;
 }) {
 	const handleChange = useCallback(
@@ -61,6 +63,7 @@ export function SelectUnitConversion({
 			defaultValue={defaultValue ?? "off"}
 			groups={OPTIONS}
 			onChange={handleChange}
+			id={id}
 			className={className}
 		/>
 	);

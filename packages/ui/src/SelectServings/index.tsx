@@ -12,6 +12,14 @@ import styles from "./styles.module.css";
 const MAX = 1_000_000_000;
 const PAGE_STEP_MULTIPLIER = 10;
 
+/**
+ * Firefox restores form-control state (a button's `disabled` included) from
+ * its reload cache before React hydrates, then React reports the mismatch.
+ * `autocomplete=off` opts an element out; it isn't a typed button attribute,
+ * hence this spread.
+ */
+const NO_STATE_RESTORE = { autoComplete: "off" };
+
 export function SelectServings({
 	value,
 	onChange,
@@ -83,6 +91,7 @@ export function SelectServings({
 						icon
 						onClick={decrement}
 						disabled={value <= min}
+						{...NO_STATE_RESTORE}
 						aria-label="Decrement servings"
 					>
 						<Icon name="minus" />
@@ -94,6 +103,7 @@ export function SelectServings({
 						type="text"
 						inputMode="decimal"
 						className={clsx(styles.input, formControlStyles.reset)}
+						{...NO_STATE_RESTORE}
 						value={draft ?? String(value)}
 						role="spinbutton"
 						aria-valuemin={min}
@@ -116,6 +126,7 @@ export function SelectServings({
 						icon
 						onClick={increment}
 						disabled={value >= max}
+						{...NO_STATE_RESTORE}
 						aria-label="Increment servings"
 					>
 						<Icon name="plus" />

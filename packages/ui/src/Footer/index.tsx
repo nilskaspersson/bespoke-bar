@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import { cacheLife, cacheTag } from "next/cache";
+import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import { Flex } from "../Flex";
 import { Grid } from "../Grid";
@@ -39,19 +40,19 @@ export async function Footer({
 
 							<Text as="ul" size={2}>
 								<li>
-									<a href={barUrl || "/"}>Overview</a>
+									<Link href={barUrl || "/"}>Overview</Link>
 								</li>
 
 								<li>
-									<a href={`${barUrl}/menus`}>Menus</a>
+									<Link href={`${barUrl}/menus`}>Menus</Link>
 								</li>
 
 								<li>
-									<a href={`${barUrl}/recipes`}>Recipes</a>
+									<Link href={`${barUrl}/recipes`}>Recipes</Link>
 								</li>
 
 								<li>
-									<a href={`${barUrl}/ingredients`}>Ingredients</a>
+									<Link href={`${barUrl}/ingredients`}>Ingredients</Link>
 								</li>
 							</Text>
 						</Grid>
@@ -63,25 +64,29 @@ export async function Footer({
 
 							<Text as="ul" size={2}>
 								<li>
-									<a href={`${loungeUrl}/terms`}>Terms & conditions</a>
+									<Link href={`${loungeUrl}/terms`}>Terms & conditions</Link>
 								</li>
 
 								<li>
-									<a href={`${loungeUrl}/privacy`}>Privacy policy</a>
+									<Link href={`${loungeUrl}/privacy`}>Privacy policy</Link>
 								</li>
 							</Text>
 						</Grid>
 
 						<Grid gap={1}>
 							<Heading level="h6" size={2}>
-								Tools
+								Public
 							</Heading>
 
 							<Text as="ul" size={2}>
 								<li>
-									<a href={`${loungeUrl}/tools/cocktail-calculator`}>
+									<Link href={loungeUrl}>Landing page</Link>
+								</li>
+
+								<li>
+									<Link href={`${loungeUrl}/tools/cocktail-calculator`}>
 										Cocktail calculator
-									</a>
+									</Link>
 								</li>
 							</Text>
 						</Grid>

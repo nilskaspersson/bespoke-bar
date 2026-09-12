@@ -7,6 +7,7 @@ import { animate, keyframes } from "../utils/animate";
 
 type Props = {
 	servings?: number;
+	animateNumbers?: boolean;
 };
 
 /**
@@ -17,7 +18,7 @@ function isOnScreen(el: Element): boolean {
 	return el.checkVisibility({ contentVisibilityAuto: true });
 }
 
-export function RecipeNameAdornment({ servings }: Props) {
+export function RecipeNameAdornment({ servings, animateNumbers }: Props) {
 	const badgeRef = useRef<HTMLSpanElement>(null);
 	const prevServings = useRef(servings);
 
@@ -36,7 +37,11 @@ export function RecipeNameAdornment({ servings }: Props) {
 	return (
 		<>
 			{servings != null && servings > 1 ? (
-				<ServingsBadge servings={servings} ref={badgeRef} />
+				<ServingsBadge
+					servings={servings}
+					animateNumbers={animateNumbers}
+					ref={badgeRef}
+				/>
 			) : null}
 
 			<Icon name="duotone-martini-glass" size={3} />

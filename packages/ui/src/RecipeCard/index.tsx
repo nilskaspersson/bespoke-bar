@@ -58,7 +58,10 @@ function RecipeCardImpl<T extends BaseRecipe>({
 	const adornment =
 		nameAdornment ??
 		(servings !== undefined ? (
-			<RecipeNameAdornment servings={servings} />
+			<RecipeNameAdornment
+				servings={servings}
+				animateNumbers={animateNumbers}
+			/>
 		) : null);
 
 	return (
@@ -154,7 +157,7 @@ function RecipeCardImpl<T extends BaseRecipe>({
 
 			{recipe.garnish ? (
 				<Text as="p" size={3} serif>
-					<Text as="span" heavy>
+					<Text as="span" size={2} heavy>
 						Garnish:
 					</Text>{" "}
 					{recipe.garnish}

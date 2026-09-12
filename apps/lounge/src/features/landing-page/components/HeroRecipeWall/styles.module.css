@@ -1,0 +1,129 @@
+@layer feature {
+	.backdrop {
+		--wall-opacity: 0.55;
+		--wall-scale: 0.75;
+		--wall-perspective: 3000px;
+		--wall-tilt-x: 45deg;
+		--wall-tilt-y: 0deg;
+		--wall-tilt-z: -12deg;
+		--wall-gap: var(--gap);
+		--wall-pitch: calc(var(--recipe-card-height) + var(--wall-gap));
+		--wall-visible-cards: 4.5;
+		--wall-height: calc(
+			var(--wall-pitch) *
+			var(--wall-visible-cards) -
+			var(--wall-gap)
+		);
+
+		position: absolute;
+		inset: 0;
+		overflow: hidden;
+		pointer-events: none;
+		animation: fade-in 1.5s ease-out both;
+
+		@container hero (width >= 500px) {
+			--wall-scale: 0.9;
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			animation: none;
+		}
+	}
+
+	.wall {
+		position: absolute;
+		top: 50%;
+		inset-inline: 0;
+		width: fit-content;
+		margin-inline: auto;
+		translate: 0 -50%;
+		transform: perspective(var(--wall-perspective)) rotateX(var(--wall-tilt-x))
+			rotateY(var(--wall-tilt-y)) rotateZ(var(--wall-tilt-z))
+			scale(var(--wall-scale));
+
+		@container hero (width < 800px) {
+			left: -15cqw;
+		}
+
+		@container hero (width < 600px) {
+			left: -25cqw;
+		}
+	}
+
+	.window {
+		height: var(--wall-height);
+		content-visibility: auto;
+		contain-intrinsic-size: auto
+			calc(3 * var(--recipe-card-width) + 2 * var(--wall-gap)) auto
+			var(--wall-height);
+		display: flex;
+		gap: var(--wall-gap);
+		align-items: flex-start;
+		opacity: var(--wall-opacity);
+		mask-image:
+			linear-gradient(to bottom, transparent, #000 30%, #000 70%, transparent),
+			linear-gradient(to right, transparent, #000 25%, #000 80%, transparent);
+		mask-composite: intersect;
+	}
+
+	.column {
+		--duration: 120s;
+		--phase: 0;
+		--direction: normal;
+
+		flex: none;
+		width: var(--recipe-card-width);
+		display: flex;
+		flex-direction: column;
+		gap: var(--wall-gap);
+		animation: conveyor var(--duration) linear infinite;
+		animation-direction: var(--direction);
+		animation-delay: calc(var(--duration) * -1 * var(--phase));
+
+		&:nth-child(2) {
+			--duration: 150s;
+			--phase: 0.3;
+		}
+
+		&:nth-child(3) {
+			--duration: 135s;
+			--phase: 0.6;
+		}
+
+		&:nth-child(even) {
+			--direction: reverse;
+		}
+
+		@container hero (width < 800px) {
+			&:nth-child(3) {
+				display: none;
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			animation-play-state: paused;
+		}
+	}
+
+	/* Two copies with a gap between: one copy's length is half the column plus
+	   half a gap, and the percentage resolves against the column's own height. */
+	@keyframes conveyor {
+		from {
+			transform: translateY(0);
+		}
+
+		to {
+			transform: translateY(calc(-50% - var(--wall-gap) / 2));
+		}
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	.card {
+		box-shadow: var(--shadow--high);
+	}
+}

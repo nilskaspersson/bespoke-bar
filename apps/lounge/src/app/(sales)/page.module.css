@@ -1,0 +1,35 @@
+@layer layout {
+	.sheet {
+		--bgc: hsl(from var(--mauve-2) h s l / 0.6);
+
+		color: var(--mauve-12);
+		display: grid;
+		gap: var(--gap);
+		background-color: var(--bgc);
+		border-radius: var(--radius--huge);
+		padding: var(--gap--large);
+		box-shadow: var(--shadow--high);
+		transition-property: background-color, color;
+		transition-duration: var(--transition-duration);
+	}
+
+	.subhead {
+		max-width: 44ch;
+	}
+
+	.primary {
+		position: relative;
+		display: inline-flex;
+	}
+
+	.chip {
+		position: absolute;
+		top: 0;
+		right: 0;
+		translate: 35% -55%;
+		rotate: 8deg;
+		box-shadow: var(--shadow--low);
+		pointer-events: none;
+		z-index: 1;
+	}
+}

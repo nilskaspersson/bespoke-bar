@@ -1,0 +1,35 @@
+@layer feature {
+	.band {
+		display: grid;
+		gap: var(--gap--huge);
+		padding: var(--gap--huge) var(--gap--large);
+	}
+
+	.demo {
+		width: 100%;
+		max-width: 90rem;
+		margin-inline: auto;
+		container-type: inline-size;
+	}
+
+	.header {
+		margin-inline: auto;
+	}
+
+	.panel {
+		width: 100%;
+	}
+
+	.panelIcon {
+		color: var(--iris-9);
+	}
+
+	.photo {
+		display: block;
+		margin-inline: auto;
+		aspect-ratio: 3 / 4;
+		border-radius: calc(var(--radius--large) - var(--space-1));
+		border: 1px solid var(--mauve-3);
+		box-shadow: var(--shadow);
+	}
+}
