@@ -5,19 +5,19 @@
 	}
 
 	.contain {
-		padding: var(--space-5) var(--app-inset);
-		padding-top: calc(var(--gap--huge) * 2);
+		padding: calc(var(--gap--huge) * 2) var(--app-inset) var(--space-5);
 	}
 
 	.nav {
 		display: flex;
-		gap: var(--gap--huge);
+		flex-wrap: wrap;
+		gap: var(--gap--large) var(--gap--huge);
+	}
 
-		a {
-			&:hover,
-			&:focus {
-				color: var(--mauve-12);
-			}
+	.link {
+		&:hover,
+		&:focus {
+			color: var(--mauve-12);
 		}
 	}
 

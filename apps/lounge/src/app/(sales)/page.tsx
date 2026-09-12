@@ -23,6 +23,7 @@ const BAR_URL = process.env.NEXT_PUBLIC_BAR_URL ?? "";
 const FEATURED_RECIPE = "Penicillin";
 
 const WALL_RECIPES = [
+	"Spritz",
 	"Negroni",
 	"Old Fashioned",
 	"Margarita",
@@ -30,20 +31,19 @@ const WALL_RECIPES = [
 	"Manhattan",
 	"Whiskey Sour",
 	"Dry Martini",
+	"Sidecar",
+	"Sazerac",
+	"Cosmopolitan",
+	"Mai-Tai",
+	"Clover Club",
 	"Bijou",
 	"Aviation",
-	"Moscow Mule",
-	"Spritz",
-	"Cosmopolitan",
-	"Clover Club",
-	"Mai-Tai",
-	"Sazerac",
 	"French 75",
 	"Paloma",
+	"Moscow Mule",
 	"Piña Colada",
 	"Gin Fizz",
 	"Espresso Martini",
-	"Sidecar",
 	"Last Word",
 ];
 
@@ -65,15 +65,14 @@ export default async function LandingPage() {
 				backdrop={<HeroRecipeWall recipes={wallRecipes} />}
 			>
 				<Container as="section" className={styles.sheet}>
-					<Flex gap={5} justifyContent="space-between" alignItems="center" wrap>
-						<Grid gap={2}>
+					<Flex gap={5} justifyContent="flex-end" alignItems="center" wrap>
+						<Grid gap={2} className={styles.message}>
 							<Heading level="h2">Hello!</Heading>
 
 							<Text as="p" size={4} balance className={styles.subhead}>
-								Bespoke Bar has <strong>tools for your cocktail recipes</strong>
-								.
-								<br />
-								Curate, calculate, and collaborate on recipes and menus.
+								Bespoke Bar has{" "}
+								<strong>tools for your cocktail recipes.</strong> Curate,
+								calculate, and collaborate on recipes and menus.
 							</Text>
 						</Grid>
 
@@ -89,7 +88,7 @@ export default async function LandingPage() {
 								</LinkButton>
 
 								<Chip color="accent" className={styles.chip}>
-									It's free
+									It's free!
 								</Chip>
 							</span>
 
