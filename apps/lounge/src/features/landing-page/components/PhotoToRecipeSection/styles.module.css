@@ -1,81 +1,35 @@
 @layer feature {
 	.band {
-		padding: var(--gap--huge) var(--gap);
-
-		@media (min-width: 600px) {
-			padding-inline: var(--gap--large);
-		}
+		display: grid;
+		gap: var(--gap--huge);
+		padding: var(--gap--huge) var(--gap--large);
 	}
 
-	.inner {
-		display: grid;
-		gap: var(--gap--large);
+	.demo {
+		width: 100%;
+		max-width: 90rem;
+		margin-inline: auto;
+		container-type: inline-size;
 	}
 
 	.header {
-		max-width: 60ch;
+		margin-inline: auto;
 	}
 
-	.figure {
-		display: grid;
-		gap: var(--gap);
-		align-items: center;
-		justify-items: center;
+	.panel {
+		width: 100%;
+	}
 
-		@container (width > 900px) {
-			grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-		}
+	.panelIcon {
+		color: var(--iris-9);
 	}
 
 	.photo {
-		--bgc: var(--mauve-2);
-
-		position: relative;
-		display: grid;
-		gap: var(--gap);
-		align-content: center;
-		justify-items: center;
-		width: var(--recipe-card-width);
-		max-width: 100%;
-		min-height: var(--recipe-card-height);
-		padding: var(--gap--large);
-		border: 2px dashed var(--mauve-6);
-		border-radius: var(--radius--large);
-		background-color: var(--bgc);
-		color: var(--mauve-11);
-		text-align: center;
-	}
-
-	.placeholder {
-		position: absolute;
-		top: var(--space-3);
-		right: var(--space-3);
-	}
-
-	.cameraIcon {
-		color: var(--mauve-8);
-	}
-
-	.menu {
-		display: grid;
-		gap: var(--space-1);
-		color: var(--mauve-12);
-	}
-
-	.caption {
-		font-style: italic;
-	}
-
-	.arrow {
-		color: var(--iris-11);
-		rotate: 90deg;
-
-		@container (width > 900px) {
-			rotate: 0deg;
-		}
-	}
-
-	.card {
-		justify-self: center;
+		display: block;
+		margin-inline: auto;
+		aspect-ratio: 3 / 4;
+		border-radius: calc(var(--radius--large) - var(--space-1));
+		border: 1px solid var(--mauve-3);
+		box-shadow: var(--shadow);
 	}
 }

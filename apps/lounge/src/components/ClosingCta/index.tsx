@@ -15,7 +15,7 @@ export function ClosingCta({
 }: { barUrl: string } & ComponentProps<"section">) {
 	return (
 		<section className={clsx(styles.base, className)} {...props}>
-			<Container className={styles.inner}>
+			<Container>
 				<Grid gap={8} justifyContent="start">
 					<Grid gap={4}>
 						<Heading level="h2" className={styles.heading}>

@@ -3,7 +3,7 @@
 		position: relative;
 		isolation: isolate;
 		overflow: hidden;
-		padding: var(--gap--huge) var(--gap);
+		padding: var(--gap--huge) var(--gap--large);
 		color: var(--iris-12);
 		background-color: var(--iris-4);
 		background-image:

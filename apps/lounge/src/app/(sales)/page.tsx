@@ -12,7 +12,6 @@ import { Icon } from "@bespoke/ui/Icon";
 import { Text } from "@bespoke/ui/Text";
 import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
-import { FeatureList } from "@/features/landing-page/components/FeatureList";
 import { HeroRecipeCard } from "@/features/landing-page/components/HeroRecipeCard";
 import { HeroRecipeWall } from "@/features/landing-page/components/HeroRecipeWall";
 import { LandingPageHero } from "@/features/landing-page/components/LandingPageHero";
@@ -48,8 +47,6 @@ const WALL_RECIPES = [
 	"Last Word",
 ];
 
-const PHOTO_RECIPE = "Penicillin";
-
 export const metadata: Metadata = {
 	title: { absolute: "Bespoke Bar :: An archive for your cocktail recipes" },
 };
@@ -60,7 +57,6 @@ export default async function LandingPage() {
 
 	const heroRecipe = getClassicCocktail(FEATURED_RECIPE);
 	const wallRecipes = getClassicCocktails(WALL_RECIPES);
-	const photoRecipe = getClassicCocktail(PHOTO_RECIPE);
 
 	return (
 		<>
@@ -111,7 +107,7 @@ export default async function LandingPage() {
 				</Container>
 			</LandingPageHero>
 
-			<PhotoToRecipeSection recipe={photoRecipe} />
+			<PhotoToRecipeSection />
 		</>
 	);
 }

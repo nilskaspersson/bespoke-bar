@@ -1,71 +1,62 @@
-import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
-import { Chip } from "@bespoke/ui/Chip";
-import { Container } from "@bespoke/ui/Container";
+import { userInputToBulkRecipe } from "@bespoke/domain/ingredientLines/userInputToBulkRecipe";
+import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
 import { Icon } from "@bespoke/ui/Icon";
+import { Panel } from "@bespoke/ui/Panel";
 import { Text } from "@bespoke/ui/Text";
-import { DraftRecipeCard } from "@/features/landing-page/components/DraftRecipeCard";
+import Image from "next/image";
+import { PhotoToRecipeDemo } from "@/features/landing-page/components/PhotoToRecipeDemo";
 import styles from "./styles.module.css";
 
-export function PhotoToRecipeSection({ recipe }: { recipe: BaseRecipe }) {
+const BLOB_BASE_URL = process.env.NEXT_PUBLIC_BLOB_BASE_URL ?? "";
+
+const INITIAL_TEXT = "Gimlet\n5 cl Gin\n3 cl Lime juice\n2 cl Simple syrup";
+
+export function PhotoToRecipeSection() {
 	return (
 		<section className={styles.band}>
-			<Container className={styles.inner}>
-				<Grid as="header" gap={2} className={styles.header}>
-					<Heading level="h2" size={7}>
-						Start with what you already have.
-					</Heading>
+			<Grid as="header" gap={3} className={styles.header}>
+				<Heading level="h2" size={7} align="center">
+					Start with what you already have.
+				</Heading>
 
-					<Text as="p" size={3} balance>
-						Paste specs from your notes and each one becomes a recipe. Or
-						photograph a printed menu, a notebook page, or the chalkboard at
-						that bar you liked, and Bespoke Bar reads it into a draft ready to
-						review.
-					</Text>
+				<Text as="p" size={3} balance align="center">
+					Take a photo of your notebook, copy specs from your digital notes, or
+					upload a screenshot of a recipe. Bespoke Bar structures it as a
+					scaleable recipe.
+				</Text>
+			</Grid>
 
-					<Text as="p" size={1} light>
-						Three photo imports a month on the free plan. Fifty on Pro.
-					</Text>
-				</Grid>
+			<div className={styles.demo}>
+				<PhotoToRecipeDemo
+					initialText={INITIAL_TEXT}
+					initialRecipe={userInputToBulkRecipe(INITIAL_TEXT, [])[0]}
+					photo={
+						<Panel
+							className={styles.panel}
+							header={
+								<Flex gap={2} alignItems="center">
+									<Icon name="camera" size={3} className={styles.panelIcon} />
 
-				<div className={styles.figure}>
-					<div className={styles.photo}>
-						<Chip color="amber" size={1} className={styles.placeholder}>
-							Placeholder
-						</Chip>
-
-						<Icon name="camera" size={6} className={styles.cameraIcon} />
-
-						<div className={styles.menu}>
-							<Text as="p" serif size={5} weight={600} compact>
-								Penicillin
-							</Text>
-
-							<Text as="p" serif size={2} compact>
-								Blended Scotch, lemon, honey and ginger, a float of Islay malt
-							</Text>
-
-							<Text as="p" serif size={2} compact light>
-								14
-							</Text>
-						</div>
-
-						<Text as="p" size={0} light className={styles.caption}>
-							A photographed menu goes here.
-						</Text>
-					</div>
-
-					<Icon
-						name="arrow-right"
-						size={6}
-						className={styles.arrow}
-						aria-hidden="true"
-					/>
-
-					<DraftRecipeCard recipe={recipe} className={styles.card} />
-				</div>
-			</Container>
+									<Text size={1} weight={600}>
+										1. Photo
+									</Text>
+								</Flex>
+							}
+							box={
+								<Image
+									src={`${BLOB_BASE_URL}/static/gimlet.jpg`}
+									alt="A paper napkin with a handwritten Gimlet spec: 5 cl gin, 3 cl lime juice, 2 cl simple syrup"
+									width={150}
+									height={200}
+									className={styles.photo}
+								/>
+							}
+						/>
+					}
+				/>
+			</div>
 		</section>
 	);
 }
