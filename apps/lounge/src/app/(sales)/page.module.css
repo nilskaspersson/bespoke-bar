@@ -14,12 +14,15 @@
 	}
 
 	.subhead {
-		max-width: 44ch;
+		max-width: 40ch;
+	}
+
+	.message {
+		flex: 1 1 auto;
 	}
 
 	.primary {
 		position: relative;
-		display: inline-flex;
 	}
 
 	.chip {

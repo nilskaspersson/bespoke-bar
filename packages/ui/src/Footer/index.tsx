@@ -40,19 +40,21 @@ export async function Footer({
 
 							<Text as="ul" size={2}>
 								<li>
-									<Link href={barUrl || "/"}>Overview</Link>
+									<Link className={styles.link} href={`${barUrl}/menus`}>
+										Menus
+									</Link>
 								</li>
 
 								<li>
-									<Link href={`${barUrl}/menus`}>Menus</Link>
+									<Link className={styles.link} href={`${barUrl}/recipes`}>
+										Recipes
+									</Link>
 								</li>
 
 								<li>
-									<Link href={`${barUrl}/recipes`}>Recipes</Link>
-								</li>
-
-								<li>
-									<Link href={`${barUrl}/ingredients`}>Ingredients</Link>
+									<Link className={styles.link} href={`${barUrl}/ingredients`}>
+										Ingredients
+									</Link>
 								</li>
 							</Text>
 						</Grid>
@@ -64,11 +66,15 @@ export async function Footer({
 
 							<Text as="ul" size={2}>
 								<li>
-									<Link href={`${loungeUrl}/terms`}>Terms & conditions</Link>
+									<Link className={styles.link} href={`${loungeUrl}/terms`}>
+										Terms & conditions
+									</Link>
 								</li>
 
 								<li>
-									<Link href={`${loungeUrl}/privacy`}>Privacy policy</Link>
+									<Link className={styles.link} href={`${loungeUrl}/privacy`}>
+										Privacy policy
+									</Link>
 								</li>
 							</Text>
 						</Grid>
@@ -80,11 +86,16 @@ export async function Footer({
 
 							<Text as="ul" size={2}>
 								<li>
-									<Link href={loungeUrl}>Landing page</Link>
+									<Link className={styles.link} href={loungeUrl}>
+										Landing page
+									</Link>
 								</li>
 
 								<li>
-									<Link href={`${loungeUrl}/tools/cocktail-calculator`}>
+									<Link
+										className={styles.link}
+										href={`${loungeUrl}/tools/cocktail-calculator`}
+									>
 										Cocktail calculator
 									</Link>
 								</li>

@@ -72,7 +72,7 @@
 		color: var(--iris-12);
 		font-size: clamp(var(--size-8), 1rem + 6cqi, var(--size-9));
 		line-height: 1;
-		text-shadow: 0 0 1.5em black;
+		text-shadow: 0 0 1.5em var(--mauve-1);
 
 		@container hero (width <= 1100px) {
 			text-align: center;
