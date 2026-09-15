@@ -16,26 +16,19 @@ import {
 	usePersistenceInfo,
 	WithPersistenceInfo,
 } from "@bespoke/ui/WithPersistenceInfo";
-import { LazyMotion } from "motion/react";
 import { useId } from "react";
 import styles from "./styles.module.css";
 
 const COMMON_SERVINGS = [1, 2, 4, 6, 12];
 
-async function loadMotionFeatures() {
-	return import("./motionFeatures").then((m) => m.default);
-}
-
 export function HeroRecipeCard({ recipe }: { recipe: BaseRecipe }) {
 	useHydrateRecipeAdjustments();
 
 	return (
-		<LazyMotion features={loadMotionFeatures}>
-			<Flex direction="column" alignItems="center" gap={4}>
-				<AdjustedRecipeCard recipe={recipe} />
-				<HeroAdjustments />
-			</Flex>
-		</LazyMotion>
+		<Flex direction="column" alignItems="center" gap={4}>
+			<AdjustedRecipeCard recipe={recipe} />
+			<HeroAdjustments />
+		</Flex>
 	);
 }
 

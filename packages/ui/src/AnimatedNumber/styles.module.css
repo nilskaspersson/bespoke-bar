@@ -1,5 +1,8 @@
 @layer ui {
 	.number {
+		--slide: 0;
+		--roll-duration: var(--transition-duration--slow);
+
 		position: relative;
 		display: inline-block;
 		clip-path: inset(-0.2em -100vw);
@@ -12,8 +15,53 @@
 	}
 
 	.value {
+		--dy: var(--slide);
+
 		position: absolute;
 		top: 0;
 		left: 0;
+
+		@media (prefers-reduced-motion: reduce) {
+			--dy: 0;
+		}
+	}
+
+	.enter {
+		animation:
+			roll-in var(--roll-duration) var(--spring-lazy) both,
+			fade-in var(--roll-duration) ease-out both;
+	}
+
+	.exit {
+		pointer-events: none;
+		animation:
+			roll-out var(--roll-duration) var(--spring-lazy) both,
+			fade-out var(--roll-duration) ease-out both;
+	}
+
+	@keyframes roll-in {
+		from {
+			translate: 0 calc(var(--dy) * 100%);
+		}
+	}
+
+	@keyframes roll-out {
+		to {
+			translate: 0 calc(var(--dy) * -100%);
+		}
+	}
+
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+			filter: blur(1px);
+		}
+	}
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+			filter: blur(1px);
+		}
 	}
 }

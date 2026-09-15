@@ -9,7 +9,6 @@ import { useHydrateRecipeAdjustments } from "@bespoke/ui/RecipeAdjustments";
 import { RecipeAdjustmentsDock } from "@bespoke/ui/RecipeAdjustmentsDock";
 import { RecipeEditor } from "@bespoke/ui/RecipeEditor";
 import { Text } from "@bespoke/ui/Text";
-import { LazyMotion } from "motion/react";
 import { useMemo, useState } from "react";
 import { IngredientTotals } from "@/features/cocktail-calculator/components/IngredientTotals";
 import { RecipesPreview } from "@/features/cocktail-calculator/components/RecipesPreview";
@@ -18,10 +17,6 @@ import styles from "./styles.module.css";
 const NO_INGREDIENTS: never[] = [];
 
 const BAR_URL = process.env.NEXT_PUBLIC_BAR_URL ?? "";
-
-async function loadMotionFeatures() {
-	return import("./motionFeatures").then((m) => m.default);
-}
 
 export function CocktailCalculator() {
 	const [text, setText] = useState("");
@@ -37,7 +32,7 @@ export function CocktailCalculator() {
 	);
 
 	return (
-		<LazyMotion features={loadMotionFeatures}>
+		<>
 			<div className={styles.root}>
 				<div className={styles.workspace}>
 					<div className={styles.editor}>
@@ -63,6 +58,6 @@ export function CocktailCalculator() {
 			<BottomRailItems>
 				<RecipeAdjustmentsDock />
 			</BottomRailItems>
-		</LazyMotion>
+		</>
 	);
 }
