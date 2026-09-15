@@ -81,9 +81,6 @@ catalogs:
     lexical:
       specifier: 0.50.0
       version: 0.50.0
-    motion:
-      specifier: 13.2.0
-      version: 13.2.0
     next:
       specifier: 16.3.5
       version: 16.3.5
@@ -185,9 +182,6 @@ importers:
       lexical:
         specifier: 'catalog:'
         version: 0.50.0(typescript@7.0.2)
-      motion:
-        specifier: 'catalog:'
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next:
         specifier: 'catalog:'
         version: 16.3.5(@babel/core@7.29.7(supports-color@8.1.1))(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.101.0)
@@ -255,12 +249,6 @@ importers:
       clsx:
         specifier: 'catalog:'
         version: 2.1.1
-      framer-motion:
-        specifier: 'catalog:'
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      motion:
-        specifier: 'catalog:'
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next:
         specifier: 'catalog:'
         version: 16.3.5(@babel/core@7.29.7(supports-color@8.1.1))(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.101.0)
@@ -467,6 +455,9 @@ importers:
       stripe:
         specifier: 'catalog:'
         version: 22.6.2(@types/node@26.4.1)
+      uqr:
+        specifier: 0.1.3
+        version: 0.1.3
       zod:
         specifier: 'catalog:'
         version: 4.5.4
@@ -630,9 +621,6 @@ importers:
       lexical:
         specifier: 'catalog:'
         version: 0.50.0(typescript@7.0.2)
-      motion:
-        specifier: 'catalog:'
-        version: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       next:
         specifier: 'catalog:'
         version: 16.3.5(@babel/core@7.29.7(supports-color@8.1.1))(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.101.0)
@@ -5585,17 +5573,6 @@ packages:
   motion-utils@13.0.0:
     resolution: {integrity: sha512-7DnN7TmbLcYXcG4RVadXIihWlyuM9afoUww8Y5Agg431kGKiuL2/OMyP4mJ5wLz+pvN3t5ySClLOaVXJ+wekRQ==}
 
-  motion@13.2.0:
-    resolution: {integrity: sha512-4Hrb5vD6HhjFstLUiCmWvtpsw+WTpP4R+QXfSDYZBz7+uxE/LrRg3aV0ReJxHrTRffHhbIE6svEqnotngXvesQ==}
-    peerDependencies:
-      react: 19.2.8
-      react-dom: 19.2.8
-    peerDependenciesMeta:
-      react:
-        optional: true
-      react-dom:
-        optional: true
-
   ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
 
@@ -6672,6 +6649,9 @@ packages:
     hasBin: true
     peerDependencies:
       browserslist: '>= 4.21.0'
+
+  uqr@0.1.3:
+    resolution: {integrity: sha512-0rjE8iEJe4YmT9TOhwsZtqCMRLc5DXZUI2UEYUUg63ikBkqqE5EYWaI0etFe/5KUcmcYwLih2RND1kq+hrUJXA==}
 
   use-callback-ref@1.3.3:
     resolution: {integrity: sha512-jQL3lRnocaFtu3V00JToYz/4QkNWswxijDaCVNZRiRTO3HQDLsdu1ZtmIUvV4yPp+rvWm5j0y0TG/S61cuijTg==}
@@ -12239,14 +12219,6 @@ snapshots:
 
   motion-utils@13.0.0: {}
 
-  motion@13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8):
-    dependencies:
-      framer-motion: 13.2.0(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      tslib: 2.8.1
-    optionalDependencies:
-      react: 19.2.8
-      react-dom: 19.2.8(react@19.2.8)
-
   ms@2.0.0: {}
 
   ms@2.1.3: {}
@@ -13368,6 +13340,8 @@ snapshots:
       browserslist: 4.28.7
       escalade: 3.2.0
       picocolors: 1.1.1
+
+  uqr@0.1.3: {}
 
   use-callback-ref@1.3.3(@types/react@19.2.18)(react@19.2.8):
     dependencies:

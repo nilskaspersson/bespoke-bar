@@ -3,6 +3,7 @@ import { adminRouter } from "./admin";
 import { billingRouter } from "./billing";
 import { favoriteRouter } from "./favorite";
 import { featuredRouter } from "./featured";
+import { handoffRouter } from "./handoff";
 import { ingredientRouter } from "./ingredient";
 import { menuRouter } from "./menu";
 import { menuEntryRouter } from "./menuEntry";
@@ -19,6 +20,7 @@ export const appRouter = router({
 	menu: menuRouter,
 	menuEntry: menuEntryRouter,
 	featured: featuredRouter,
+	handoff: handoffRouter,
 	organisation: organisationRouter,
 	tag: tagRouter,
 });

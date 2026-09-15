@@ -30,6 +30,9 @@ export const appErrorSchema = z.discriminatedUnion("code", [
 		code: z.literal("NO_RECIPE_FOUND"),
 	}),
 	z.object({
+		code: z.literal("OCR_CONSENT_REQUIRED"),
+	}),
+	z.object({
 		code: z.literal("NO_RECIPES_PROVIDED"),
 	}),
 	z.object({
@@ -102,6 +105,12 @@ export function getAppErrorToast(payload: AppErrorPayload): AppErrorToast {
 				message: "No recipe found",
 				description:
 					"We couldn't read a recipe from the provided image. Try another photo.",
+			};
+		}
+		case "OCR_CONSENT_REQUIRED": {
+			return {
+				message: "Consent needed",
+				description: "Accept image processing before using Photo-to-Recipe.",
 			};
 		}
 		case "NO_RECIPES_PROVIDED": {

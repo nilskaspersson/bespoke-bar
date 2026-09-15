@@ -1,4 +1,5 @@
 import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
+import { Button } from "@bespoke/ui/Button";
 import { Callout } from "@bespoke/ui/Callout";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { FileInput } from "@bespoke/ui/FileInput";
@@ -26,6 +27,7 @@ export function UploadPhotoForm({
 	onSuccess,
 	onChange,
 	onParsingChange,
+	onHandoff,
 	className,
 	children,
 	usageInfo,
@@ -35,6 +37,8 @@ export function UploadPhotoForm({
 	onSuccess: (extractedText: string) => void;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 	onParsingChange?: (parsing: boolean) => void;
+	/** Renders the handoff button when given. */
+	onHandoff?: () => void;
 	usageInfo?: React.ReactNode;
 	disabled?: boolean;
 }) {
@@ -62,6 +66,23 @@ export function UploadPhotoForm({
 		useDialog();
 
 	const imageInputRef = useRef<HTMLInputElement>(null);
+
+	const ensureOCRConsent = useCallback(async (): Promise<boolean> => {
+		if (await checkOCRConsent()) return true;
+
+		showOCRConsentDialog();
+		const confirmed = await confirmOCRConsent();
+
+		if (!confirmed) return false;
+
+		try {
+			await unwrapAction(storeOCRConsent());
+		} catch (error) {
+			console.error(error);
+		}
+
+		return true;
+	}, [confirmOCRConsent, showOCRConsentDialog]);
 
 	const handleDroppedFiles = useCallback((files: FileList) => {
 		const input = imageInputRef.current;
@@ -105,23 +126,10 @@ export function UploadPhotoForm({
 			onParsingChange?.(true);
 			startLoading();
 
-			const isOCRConsentConfirmed = await checkOCRConsent();
-
-			if (!isOCRConsentConfirmed) {
-				showOCRConsentDialog();
-				const confirmed = await confirmOCRConsent();
-
-				if (!confirmed) {
-					dismissLoading();
-					onParsingChange?.(false);
-					return;
-				}
-
-				try {
-					await unwrapAction(storeOCRConsent());
-				} catch (error) {
-					console.error(error);
-				}
+			if (!(await ensureOCRConsent())) {
+				dismissLoading();
+				onParsingChange?.(false);
+				return;
 			}
 
 			const formData = new FormData();
@@ -184,7 +192,23 @@ export function UploadPhotoForm({
 						<Icon name="camera" /> Take a photo
 					</FileInput>
 
-					<Text heavy size={3} className={styles.dropHint}>
+					{onHandoff ? (
+						<Button
+							type="button"
+							variant="outline"
+							color="accent"
+							className={styles.handoffButton}
+							disabled={disabled || isParsingPhotoText}
+							onClick={async () => {
+								if (!(await ensureOCRConsent())) return;
+								onHandoff();
+							}}
+						>
+							<Icon name="qr-code" /> Take a photo with your phone
+						</Button>
+					) : null}
+
+					<Text heavy size={2} className={styles.dropHint}>
 						Drag & drop, or paste an image
 					</Text>
 				</Grid>

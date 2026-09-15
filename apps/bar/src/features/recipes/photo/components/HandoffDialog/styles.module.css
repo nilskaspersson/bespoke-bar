@@ -1,0 +1,39 @@
+@layer feature {
+	.dialog {
+		width: min(100%, 26rem);
+	}
+
+	/* Always dark on white; some scanners can't read inverted codes. */
+	.card {
+		width: min(280px, 100%);
+		padding: var(--space-3);
+		border-radius: var(--radius);
+		background-color: #fff;
+		transition: opacity var(--transition-duration);
+	}
+
+	.qr {
+		display: block;
+		width: 100%;
+		height: auto;
+		fill: #000;
+	}
+
+	.stale {
+		opacity: 0.35;
+		filter: grayscale(1);
+	}
+
+	.status {
+		min-height: var(--size-5);
+		text-align: center;
+	}
+
+	.connected {
+		color: var(--iris-11);
+	}
+
+	.hiccup {
+		color: var(--amber-11);
+	}
+}

@@ -1,0 +1,10 @@
+@layer feature {
+	.base {
+		width: min(100%, 28rem);
+		padding-block: var(--space-8);
+	}
+
+	.sentIcon {
+		color: var(--iris-11);
+	}
+}

@@ -1,7 +1,13 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 
 export default clerkMiddleware(async (auth, req) => {
-	if (req.nextUrl.pathname.startsWith("/api/")) return;
+	const { pathname } = req.nextUrl;
+
+	/**
+	 * API routes handle auth themselves, and the handoff page is authenticated
+	 * by its link.
+	 */
+	if (pathname.startsWith("/api/") || pathname.startsWith("/handoff/")) return;
 
 	/**
 	 * Eagerly redirect unauthenticated users

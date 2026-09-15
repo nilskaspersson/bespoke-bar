@@ -68,6 +68,8 @@
 			display: revert-layer;
 		}
 
+		/* On a touch device you're already holding the camera. */
+		.handoffButton,
 		.dropHint {
 			display: none;
 		}

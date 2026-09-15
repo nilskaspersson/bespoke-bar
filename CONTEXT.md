@@ -19,7 +19,7 @@ _Avoid_: "Library", "Collection", "Database", "Workspace" as the canonical word.
 
 **Bar**:
 The private, back-of-house workspace — the authenticated application surface over an **Organisation's** **Archive**, where the team develops and manages **Recipes**, **Ingredients**, and **Menus**. Scoped to the **Active Organisation** (what `barRecipes` / `barMenus` read).
-_Avoid_: treating **Bar** as a synonym for **Organisation** — the Organisation is the tenant/ownership boundary; the Bar is the working surface over it. Both may be a workspace of one.
+_Avoid_: treating **Bar** as a synonym for **Organisation** — the Organisation is the tenant/ownership boundary; the Bar is the working surface over it. Both may be a workspace of one. Assuming a sign-in session is the Bar's only credential — a **Handoff Link** is a delegated Bar credential, so the phone using one is in the Bar, not the **Lounge**.
 
 **Lounge**:
 Bespoke Bar's public, front-of-house surface — everything anonymous and unauthenticated, whether or not it reads an **Organisation's** **Archive**. It hosts org-less surfaces today (marketing, legal, and **Public Tools**) and will host guest-facing **Menus** once **Public** ships. That guest-**Menu** half is _why_ a **Recipe's** **Description** is menu-facing while its **Instructions** stay internal to the **Bar** — one Archive, two audiences.
@@ -47,6 +47,14 @@ A signed-amount entry that permanently raises an **Organisation's** **Quota** ce
 
 **Reservoir** (deferred):
 A separate finite pool of **Uses** an **Organisation** could buy as a pack, drained independently of the **Quota**. Not implemented; the schema is designed so it can be added additively later without backfilling.
+
+**Handoff**:
+A **Photo-to-Recipe** capture delegated from a desktop session to a phone: the **Bar** shows a QR code, the phone that scans it takes the photo, and the extracted text lands back in the desktop session as if the desktop had uploaded it. The phone acts within the desktop **User's** **Active Organisation** through a **Handoff Link**, not a sign-in of its own, so the resulting **Use** belongs to that Organisation and User exactly as a desktop upload would. Only extracted text crosses back; the image never leaves the phone-to-Vision path and is not stored.
+_Avoid_: "Remote upload" (nothing is uploaded *to* the desktop, and no image is stored anywhere); calling the phone side "unauthenticated" (it is authenticated by delegation, not anonymous); "Phone Capture" (`capture` already names the camera attribute).
+
+**Handoff Link**:
+The short-lived URL a **Handoff** QR code encodes — a delegated credential minted by a signed-in desktop session that lets the phone opening it submit a photo on that session's behalf. It is the phone's whole authentication; there is no sign-in on the phone, and the Link is useless once it expires or the desktop ends the Handoff, whether by receiving the photo's text or by abandoning it.
+_Avoid_: "token" in user-facing copy (an identifier detail, not the concept); treating a Handoff Link as a share link (it is bound to one desktop session, not to a **Recipe** or **Archive**).
 
 ### Enrichment
 
