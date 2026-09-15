@@ -1,6 +1,6 @@
 "use client";
 
-import { type MotionStyle, useReducedMotion, useSpring } from "motion/react";
+import { type MotionStyle, useReducedMotion, useSpring } from "framer-motion";
 import { type MouseEvent, useCallback, useRef } from "react";
 
 type TiltOptions = {

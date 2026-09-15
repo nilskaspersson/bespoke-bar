@@ -30,7 +30,6 @@
 		"drizzle-orm": "catalog:",
 		"lexical": "catalog:",
 		"framer-motion": "catalog:",
-		"motion": "catalog:",
 		"next": "catalog:",
 		"nuqs": "2.10.1",
 		"react": "catalog:",

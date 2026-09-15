@@ -24,7 +24,7 @@ import {
 	WithPersistenceInfo,
 } from "@bespoke/ui/WithPersistenceInfo";
 import { clsx } from "clsx";
-import { m } from "motion/react";
+import { m } from "framer-motion";
 import {
 	type RefObject,
 	useCallback,

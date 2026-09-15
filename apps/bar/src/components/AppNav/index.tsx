@@ -7,7 +7,7 @@ import { Text } from "@bespoke/ui/Text";
 import { ThemePicker } from "@bespoke/ui/ThemePicker";
 import { WakeLock } from "@bespoke/ui/WakeLock";
 import { clsx } from "clsx";
-import { m } from "motion/react";
+import { m } from "framer-motion";
 import type { Route } from "next";
 import styles from "./styles.module.css";
 

@@ -9,7 +9,7 @@ import {
 	useMotionValue,
 	useMotionValueEvent,
 	useTransform,
-} from "motion/react";
+} from "framer-motion";
 import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "../Button";
 import { Container } from "../Container";
