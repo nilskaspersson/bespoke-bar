@@ -6,7 +6,6 @@ import { ControlLabel } from "@bespoke/ui/ControlLabel";
 import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import {
-	useAdjustments,
 	useHydrateRecipeAdjustments,
 	useRawAdjustments,
 } from "@bespoke/ui/RecipeAdjustments";
@@ -42,7 +41,7 @@ export function HeroRecipeCard({ recipe }: { recipe: BaseRecipe }) {
 
 function AdjustedRecipeCard({ recipe }: { recipe: BaseRecipe }) {
 	const { servings, conversionSystem, withRounding, withBestUnit } =
-		useAdjustments();
+		useRawAdjustments();
 
 	return (
 		<RecipeCard

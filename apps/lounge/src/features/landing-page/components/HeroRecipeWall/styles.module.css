@@ -94,7 +94,11 @@
 			--direction: reverse;
 		}
 
-		@container hero (width < 800px) {
+		/**
+		 * Server HTML carries three columns; hydration drops the third on narrow screens
+		 * (NARROW_QUERY in index.tsx), this hides the column in the meantime
+		 */
+		@media (width < 800px) {
 			&:nth-child(3) {
 				display: none;
 			}
@@ -105,8 +109,10 @@
 		}
 	}
 
-	/* Two copies with a gap between: one copy's length is half the column plus
-	   half a gap, and the percentage resolves against the column's own height. */
+	/**
+	 * Two copies with a gap between: one copy's length is half the column plus half a
+	 * gap, and the percentage resolves against the column's own height.
+	 */
 	@keyframes conveyor {
 		from {
 			transform: translateY(0);
@@ -123,7 +129,10 @@
 		}
 	}
 
+	/**
+	 * Box shadows are relatively expensive to draw, remove it from the wall
+	 */
 	.card {
-		box-shadow: var(--shadow--high);
+		box-shadow: none;
 	}
 }
