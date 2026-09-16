@@ -12,6 +12,7 @@ export type IconName =
 	| "arrow-left"
 	| "arrow-right"
 	| "arrow-rotate-left"
+	| "arrow-rotate-right"
 	| "bars"
 	| "building"
 	| "camera"

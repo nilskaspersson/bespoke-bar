@@ -26,6 +26,7 @@ export const ICONS = {
 	"arrow-left": { kit: "lucide", name: "arrow-left" },
 	"arrow-right": { kit: "lucide", name: "arrow-right" },
 	"arrow-rotate-left": { kit: "lucide", name: "rotate-ccw" },
+	"arrow-rotate-right": { kit: "lucide", name: "rotate-cw" },
 	"circle-check": { kit: "lucide", name: "circle-check" },
 	"circle-exclamation": { kit: "lucide", name: "circle-alert" },
 	"circle-info": { kit: "lucide", name: "info" },
