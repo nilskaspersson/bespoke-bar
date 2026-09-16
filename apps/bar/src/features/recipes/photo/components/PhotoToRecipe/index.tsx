@@ -6,6 +6,7 @@ import { Button } from "@bespoke/ui/Button";
 import { Callout } from "@bespoke/ui/Callout";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { Grid } from "@bespoke/ui/Grid";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { useLocalStorage } from "@bespoke/ui/hooks/useLocalStorage";
 import { Icon } from "@bespoke/ui/Icon";
 import { ImageUploadPreview } from "@bespoke/ui/ImageUploadPreview";
@@ -24,9 +25,10 @@ import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicat
 import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
-import { HandoffDialogLoader } from "@/features/recipes/photo/components/HandoffDialog/loader";
+import { HandoffDialog } from "@/features/recipes/photo/components/HandoffDialog";
 import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
+import { useHandoffLink } from "@/features/recipes/photo/hooks/useHandoffLink";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
 import { trpc } from "@/trpc/client";
 import styles from "./styles.module.css";
@@ -81,8 +83,18 @@ export function PhotoToRecipe({
 		[setDraft],
 	);
 
+	const handoffDialog = useDialog();
+	const handoff = useHandoffLink({ onMintFailed: handoffDialog.closeModal });
+
+	function openHandoff() {
+		handoffDialog.showModal();
+		handoff.open();
+	}
+
 	const onHandoffResult = useCallback(
 		(extractedText: string) => {
+			handoff.settle();
+			handoffDialog.closeModal();
 			clearImagePreview();
 			setDraft({
 				ocrText: extractedText,
@@ -95,12 +107,8 @@ export function PhotoToRecipe({
 				block: "center",
 			});
 		},
-		[clearImagePreview, setDraft],
+		[handoff.settle, handoffDialog.closeModal, clearImagePreview, setDraft],
 	);
-
-	const [isHandoffOpen, setIsHandoffOpen] = useState(false);
-	const openHandoff = useCallback(() => setIsHandoffOpen(true), []);
-	const closeHandoff = useCallback(() => setIsHandoffOpen(false), []);
 
 	const handleDraftTextChange = useCallback(
 		(text: string) => {
@@ -211,12 +219,13 @@ export function PhotoToRecipe({
 				</Callout>
 			</Grid>
 
-			{isHandoffOpen ? (
-				<HandoffDialogLoader
-					onResult={onHandoffResult}
-					onClose={closeHandoff}
-				/>
-			) : null}
+			<HandoffDialog
+				dialog={handoffDialog}
+				link={handoff.link}
+				isMinting={handoff.isMinting}
+				onRenew={handoff.renew}
+				onResult={onHandoffResult}
+			/>
 
 			<BottomRailItems>
 				{canReset ? (

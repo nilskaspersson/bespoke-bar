@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { HandoffSkeleton } from "./skeleton";
 
-export const HandoffDialogLoader = dynamic(
-	() => import(".").then((m) => m.HandoffDialog),
-	{ ssr: false },
+export const HandoffContentLoader = dynamic(
+	() => import("./content").then((m) => m.HandoffContent),
+	{ ssr: false, loading: HandoffSkeleton },
 );
