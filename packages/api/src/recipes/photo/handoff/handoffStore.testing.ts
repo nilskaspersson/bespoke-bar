@@ -29,7 +29,7 @@ export function createFakeRedis() {
 		},
 		async hgetall(key) {
 			const target = hashes.get(key);
-			return target ? Object.fromEntries(target) : null;
+			return target ? Array.from(target.entries()).flat() : [];
 		},
 		async expireat(key, unixSeconds) {
 			if (!hashes.has(key)) return 0;

@@ -22,10 +22,10 @@ vi.mock("./handoffStore", async () => {
 
 const {
 	closeHandoff,
+	extendHandoff,
 	HandoffError,
 	inspectHandoff,
 	mintHandoff,
-	openHandoff,
 	readHandoffStatus,
 } = await import("./handoff.service");
 const { submitHandoffPhoto } = await import("./submitHandoffPhoto.service");
@@ -73,26 +73,14 @@ describe("mintHandoff", () => {
 	});
 });
 
-describe("inspectHandoff / openHandoff (phone)", () => {
-	it("marks the Handoff opened once and keeps the first timestamp", async () => {
+describe("inspectHandoff (phone)", () => {
+	it("reads a live Handoff with the record the phone acts under", async () => {
 		const { nonce } = await mint();
 
-		expect(await inspectHandoff(nonce, { nowMs: NOW })).toMatchObject({
+		expect(await inspectHandoff(nonce, { nowMs: NOW })).toEqual({
 			ok: true,
+			record: { ...auth, expiresAt: EXPIRES_AT, result: null },
 		});
-		expect(await readHandoffStatus(nonce, auth.orgId, { nowMs: NOW })).toEqual({
-			phase: "pending",
-		});
-
-		await openHandoff(nonce, { nowMs: NOW + 1_000 });
-		await openHandoff(nonce, { nowMs: NOW + 5_000 });
-
-		expect(
-			await readHandoffStatus(nonce, auth.orgId, { nowMs: NOW + 6_000 }),
-		).toEqual({ phase: "opened" });
-		expect(redis.hashes.get(`handoff:${nonce}`)?.get("openedAt")).toBe(
-			String(NOW + 1_000),
-		);
 	});
 
 	it("reads unknown, malformed and expired nonces as expired, strictly", async () => {
@@ -116,7 +104,7 @@ describe("inspectHandoff / openHandoff (phone)", () => {
 		const { nonce } = await mint();
 		await closeHandoff(nonce, auth.orgId);
 
-		expect(await openHandoff(nonce, { nowMs: NOW })).toEqual({
+		expect(await inspectHandoff(nonce, { nowMs: NOW })).toEqual({
 			ok: false,
 			reason: "closed",
 		});
@@ -216,21 +204,27 @@ describe("submitHandoffPhoto (phone)", () => {
 });
 
 describe("readHandoffStatus / closeHandoff (desktop)", () => {
-	it("reports pending as expired once the Link is past expiry, opened only past grace", async () => {
+	it("reads as lapsed through the grace period, then as expired", async () => {
 		const { nonce } = await mint();
 
 		expect(
-			await readHandoffStatus(nonce, auth.orgId, { nowMs: EXPIRES_AT }),
-		).toEqual({ phase: "expired" });
-
-		await openHandoff(nonce, { nowMs: NOW });
-
+			await readHandoffStatus(nonce, auth.orgId, { nowMs: EXPIRES_AT - 1 }),
+		).toEqual({ phase: "pending" });
 		expect(
 			await readHandoffStatus(nonce, auth.orgId, { nowMs: EXPIRES_AT }),
-		).toEqual({ phase: "opened" });
+		).toEqual({ phase: "lapsed" });
 		expect(
 			await readHandoffStatus(nonce, auth.orgId, { nowMs: PAST_GRACE }),
 		).toEqual({ phase: "expired" });
+	});
+
+	it("delivers a result that landed during grace", async () => {
+		const { nonce } = await mint();
+		await submitHandoffPhoto(nonce, formData, { nowMs: EXPIRES_AT - 1 });
+
+		expect(
+			await readHandoffStatus(nonce, auth.orgId, { nowMs: EXPIRES_AT + 1 }),
+		).toEqual({ phase: "done", extractedText: data.extractedText });
 	});
 
 	it("reads an unknown nonce as expired", async () => {
@@ -250,6 +244,37 @@ describe("readHandoffStatus / closeHandoff (desktop)", () => {
 		);
 		await expect(closeHandoff(nonce, "org_2")).rejects.toMatchObject({
 			code: "forbidden",
+		});
+	});
+
+	it("extends a live Link by a full TTL, for the phone and the key alike", async () => {
+		const { nonce } = await mint();
+		const later = NOW + 60_000;
+
+		expect(await extendHandoff(nonce, auth.orgId, { nowMs: later })).toEqual({
+			expiresAt: later + HANDOFF_LINK_TTL_MS,
+		});
+		expect(
+			await inspectHandoff(nonce, { nowMs: EXPIRES_AT + 30_000 }),
+		).toMatchObject({ ok: true });
+		expect(redis.expiries.get(`handoff:${nonce}`)).toBe(
+			Math.ceil((later + HANDOFF_LINK_TTL_MS + HANDOFF_RESULT_GRACE_MS) / 1000),
+		);
+	});
+
+	it("refuses to extend an expired, settled or unknown Link", async () => {
+		const { nonce } = await mint();
+		expect(
+			await extendHandoff(nonce, auth.orgId, { nowMs: EXPIRES_AT }),
+		).toEqual({ expiresAt: null });
+
+		await submitHandoffPhoto(nonce, formData, { nowMs: NOW });
+		expect(await extendHandoff(nonce, auth.orgId, { nowMs: NOW })).toEqual({
+			expiresAt: null,
+		});
+
+		expect(await extendHandoff("x".repeat(22), auth.orgId)).toEqual({
+			expiresAt: null,
 		});
 	});
 

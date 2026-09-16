@@ -16,19 +16,19 @@ lands back in the desktop session. Four coupled decisions:
    **Use** consent or at **Quota** cap, and sits behind the shared rate limit,
    which bounds unwanted mints.
 3. **Upstash Redis is the only state**, one hash per nonce with a TTL of expiry
-   plus grace: the mint record, `openedAt` (the phone loaded the page), and a
-   `result` field written with `HSETNX` so the first successful extraction
-   closes the Handoff and failures can retry without rescanning. The desktop
-   writes the same field as a tombstone when the dialog closes without a
-   result, so a stray later submission is refused *before* a Use is spent.
-   Every write re-applies the TTL, so a write racing the key's expiry cannot
-   leave an immortal hash.
+   plus grace: the mint record and a `result` field written with `HSETNX` so
+   the first successful extraction closes the Handoff and failures can retry
+   without rescanning. The desktop writes the same field as a tombstone when
+   it leaves the page or starts a new code, so a stray later submission is
+   refused *before* a Use is spent. Every write re-applies the TTL, so a write
+   racing the key's expiry cannot leave an immortal hash.
 4. **The desktop polls** a `protectedProcedure` (session must match the
-   record's org) with a capped geometric back-off: 2 s, ×1.5 per poll, 10 s
-   cap while waiting for a scan; a flat 2 s once the phone is connected.
-   Polling halts on a terminal phase from the server, at expiry plus grace, or
-   when the dialog unmounts, whichever is first. Around 95 polls worst case,
-   none once done. Polls go through the app, not straight to Upstash.
+   record's org) at a flat 3 s while the dialog is open, halting on a terminal
+   phase from the server (`done`, `closed`, `expired`, the last one reported
+   once grace has passed) or a terminal error. Around 140 polls worst case,
+   none once done. The server also reports `lapsed` between expiry and the end
+   of grace, so the dialog's inactive state is derived from the poll rather
+   than from a client clock. Polls go through the app, not straight to Upstash.
 
 ## Considered options
 
@@ -46,7 +46,11 @@ lands back in the desktop session. Four coupled decisions:
   and keeps the image off every server, but needs a signaling exchange and a
   TURN relay for the common case (phone on cellular, desktop on venue wifi),
   plus a peer library on the desktop bundle. Can be layered on later: the Link
-  and the `openedAt` handshake are the signaling channel it would need.
+  is the signaling channel it would need.
+- **An `openedAt` handshake** (the phone pinged a route on load) drove a
+  "phone connected" line and a faster poll once scanned. Dropped 2026-09-16:
+  a route, a store field, a phase and a poll branch for a status line the
+  desktop doesn't need, since the text landing is the signal that matters.
 - **Raw image via temporary storage (Vercel Blob / Redis).** Runs the existing
   desktop flow untouched, preview included, but contradicts the privacy promise
   and adds a storage dependency and cleanup.
@@ -75,10 +79,14 @@ lands back in the desktop session. Four coupled decisions:
   placeholder.
 - Handoff is unavailable wherever Upstash is not configured. This is the first
   feature where Redis holds load-bearing state rather than rate-limit counters.
-- Anyone holding a live Link can spend the org's Uses until expiry or until the
-  desktop tombstones it. The dialog owns the Handoff: mounted means live and
-  polling; closing it ends it, and a reload forgets it (at most one Use lands
-  unreceived). No automatic re-mint; an expired code offers a new one in place.
+- Anyone holding a live Link can spend the org's Uses until expiry (5 minutes)
+  or until the desktop tombstones it. The page owns the Link and the dialog
+  owns the polling: closing the dialog keeps the Link, and reopening extends a
+  still-live one by a full TTL (`handoff.extend`) instead of minting again;
+  leaving the page tombstones it, and a reload forgets it (at most one Use
+  lands unreceived). No automatic re-mint while a code is live; an expired
+  code offers a new one in place, and the dialog switches to that inactive
+  state on its own clock rather than announcing how long the code lasts.
 - A Use spent by a submission that completes after the desktop closed the
   dialog is discarded, consistent with the definition of a Use.
 - The phone page is a **Bar** surface under a delegated credential (see
@@ -87,7 +95,7 @@ lands back in the desktop session. Four coupled decisions:
   The page sends no referrer, since its URL is the credential.
 - The desktop half loads on first click (`next/dynamic`), so the photo page
   carries none of the Handoff code by default.
-- The pending back-off cap bounds how late a scan is noticed (≤ 10 s).
+- The poll interval bounds how late a result or expiry is noticed (≤ 3 s).
 - The whole worst-case poll budget costs about a third of the Vision call it
   accompanies, on Pro on-demand rates (Frankfurt), before included credit.
 - Vercel preview deployments have Deployment Protection on by default, so a

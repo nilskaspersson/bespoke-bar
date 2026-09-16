@@ -5,12 +5,13 @@ export const HANDOFF_CLOSED = "closed";
 
 /**
  * The bits of the Upstash client we use, so tests can pass a fake. Everything
- * is strings (`automaticDeserialization` is off).
+ * is strings (`automaticDeserialization` is off), which also leaves HGETALL as
+ * the raw flat `[field, value, …]` reply.
  */
 export type HandoffRedis = {
 	hset: (key: string, fields: Record<string, string>) => Promise<number>;
 	hsetnx: (key: string, field: string, value: string) => Promise<0 | 1>;
-	hgetall: (key: string) => Promise<Record<string, unknown> | null>;
+	hgetall: (key: string) => Promise<unknown[] | Record<string, unknown> | null>;
 	expireat: (key: string, unixSeconds: number) => Promise<0 | 1>;
 };
 
@@ -22,7 +23,6 @@ const storedSchema = z.object({
 	orgId: z.string().min(1),
 	userId: z.string().min(1),
 	expiresAt: z.coerce.number().int(),
-	openedAt: z.coerce.number().int().optional(),
 	result: z.string().optional(),
 });
 
@@ -31,8 +31,6 @@ export type HandoffRecord = {
 	userId: string;
 	/** Epoch ms. */
 	expiresAt: number;
-	/** Epoch ms; set once by the phone. */
-	openedAt: number | null;
 	result: HandoffResult | typeof HANDOFF_CLOSED | null;
 };
 
@@ -42,6 +40,22 @@ function key(nonce: string): string {
 
 function toUnixSeconds(ms: number): number {
 	return Math.ceil(ms / 1000);
+}
+
+function toHash(reply: unknown[] | Record<string, unknown> | null) {
+	if (!reply) {
+		return null;
+	}
+	if (!Array.isArray(reply)) {
+		return reply;
+	}
+
+	const hash: Record<string, unknown> = {};
+	for (let i = 0; i + 1 < reply.length; i += 2) {
+		hash[String(reply[i])] = reply[i + 1];
+	}
+
+	return hash;
 }
 
 export function createHandoffStore(redis: HandoffRedis) {
@@ -68,7 +82,7 @@ export function createHandoffStore(redis: HandoffRedis) {
 		},
 
 		async read(nonce: string): Promise<HandoffRecord | null> {
-			const raw = await redis.hgetall(key(nonce));
+			const raw = toHash(await redis.hgetall(key(nonce)));
 			if (!raw || Object.keys(raw).length === 0) {
 				return null;
 			}
@@ -85,17 +99,16 @@ export function createHandoffStore(redis: HandoffRedis) {
 				orgId: stored.orgId,
 				userId: stored.userId,
 				expiresAt: stored.expiresAt,
-				openedAt: stored.openedAt ?? null,
 				result,
 			};
 		},
 
-		/** HSETNX so a second scan doesn't move it. */
-		async markOpened(
+		/** Only on a record known to exist, else HSET would create a partial hash. */
+		async extend(
 			nonce: string,
-			{ nowMs, expireAtMs }: { nowMs: number; expireAtMs: number },
+			{ expiresAt, expireAtMs }: { expiresAt: number; expireAtMs: number },
 		): Promise<void> {
-			await redis.hsetnx(key(nonce), "openedAt", String(nowMs));
+			await redis.hset(key(nonce), { expiresAt: String(expiresAt) });
 			await touchExpiry(nonce, expireAtMs);
 		},
 

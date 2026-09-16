@@ -6,7 +6,7 @@ const { createHandoffStore, HANDOFF_CLOSED } = await import("./handoffStore");
 const { createFakeRedis } = await import("./handoffStore.testing");
 
 const NOW = 1_700_000_000_000;
-const EXPIRES_AT = NOW + 15 * 60_000;
+const EXPIRES_AT = NOW + 5 * 60_000;
 const EXPIRE_AT = EXPIRES_AT + 2 * 60_000;
 const NONCE = "n".repeat(22);
 const KEY = `handoff:${NONCE}`;
@@ -29,26 +29,8 @@ describe("handoffStore", () => {
 	it("creates a record that reads back with expiry set", async () => {
 		await store.create(NONCE, record, { expireAtMs: EXPIRE_AT });
 
-		expect(await store.read(NONCE)).toEqual({
-			...record,
-			openedAt: null,
-			result: null,
-		});
+		expect(await store.read(NONCE)).toEqual({ ...record, result: null });
 		expect(redis.expiries.get(KEY)).toBe(Math.ceil(EXPIRE_AT / 1000));
-	});
-
-	it("records the first open only", async () => {
-		await store.create(NONCE, record, { expireAtMs: EXPIRE_AT });
-		await store.markOpened(NONCE, {
-			nowMs: NOW + 1_000,
-			expireAtMs: EXPIRE_AT,
-		});
-		await store.markOpened(NONCE, {
-			nowMs: NOW + 5_000,
-			expireAtMs: EXPIRE_AT,
-		});
-
-		expect((await store.read(NONCE))?.openedAt).toBe(NOW + 1_000);
 	});
 
 	it("lets the first result claim the Handoff and refuses the second", async () => {

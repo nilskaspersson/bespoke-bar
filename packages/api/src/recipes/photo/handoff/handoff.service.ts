@@ -15,7 +15,8 @@ import {
 /** 16 random bytes as base64url. */
 export const handoffNonceSchema = z.string().regex(/^[A-Za-z0-9_-]{22}$/);
 
-export type HandoffPhase = "pending" | "opened" | "done" | "closed" | "expired";
+/** `lapsed`: past expiry but inside grace, so a late result may still land. */
+export type HandoffPhase = "pending" | "lapsed" | "done" | "closed" | "expired";
 
 /** A missing record counts as expired. */
 export type HandoffEndedReason = "expired" | "closed";
@@ -101,23 +102,6 @@ export async function inspectHandoff(
 	return { ok: true, record };
 }
 
-export async function openHandoff(
-	nonce: string,
-	{ nowMs = Date.now() }: { nowMs?: number } = {},
-): Promise<InspectHandoffResult> {
-	const inspected = await inspectHandoff(nonce, { nowMs });
-	if (!inspected.ok) {
-		return inspected;
-	}
-
-	await requireStore().markOpened(nonce, {
-		nowMs,
-		expireAtMs: graceEnd(inspected.record),
-	});
-
-	return inspected;
-}
-
 export type HandoffStatus =
 	| { phase: Exclude<HandoffPhase, "done"> }
 	| { phase: "done"; extractedText: string };
@@ -152,11 +136,35 @@ export async function readHandoffStatus(
 	if (record.result) {
 		return { phase: "done", extractedText: record.result.extractedText };
 	}
-	if (record.openedAt !== null) {
-		return { phase: nowMs >= graceEnd(record) ? "expired" : "opened" };
+
+	if (nowMs >= graceEnd(record)) {
+		return { phase: "expired" };
 	}
 
-	return { phase: nowMs >= record.expiresAt ? "expired" : "pending" };
+	return { phase: nowMs >= record.expiresAt ? "lapsed" : "pending" };
+}
+
+/**
+ * Pushes a live Link's expiry out by a full TTL so a reopened dialog reuses
+ * the code. Null when there is nothing live to extend.
+ */
+export async function extendHandoff(
+	nonce: string,
+	orgId: string,
+	{ nowMs = Date.now() }: { nowMs?: number } = {},
+): Promise<{ expiresAt: number | null }> {
+	const record = await readForDesktop(nonce, orgId);
+	if (!record || record.result !== null || nowMs >= record.expiresAt) {
+		return { expiresAt: null };
+	}
+
+	const expiresAt = nowMs + HANDOFF_LINK_TTL_MS;
+	await requireStore().extend(nonce, {
+		expiresAt,
+		expireAtMs: expiresAt + HANDOFF_RESULT_GRACE_MS,
+	});
+
+	return { expiresAt };
 }
 
 export async function closeHandoff(
