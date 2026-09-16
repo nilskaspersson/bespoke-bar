@@ -4,13 +4,16 @@ import type { HandoffEndedReason } from "@bespoke/api/recipes/photo/handoff/hand
 import { appErrorSchema, getAppErrorToast } from "@bespoke/schema/appError";
 import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
 import { Callout } from "@bespoke/ui/Callout";
+import { Divider } from "@bespoke/ui/Divider";
 import { FileInput } from "@bespoke/ui/FileInput";
 import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
 import { Icon } from "@bespoke/ui/Icon";
+import { Panel } from "@bespoke/ui/Panel";
 import { Text } from "@bespoke/ui/Text";
 import { toast } from "@bespoke/ui/Toast";
-import { type ComponentProps, useEffect, useState } from "react";
+import { type ComponentProps, useState } from "react";
+import { OCRProcessingNotice } from "@/features/consent/components/OCRProcessingNotice";
 import { HandoffEnded } from "@/features/recipes/photo/components/HandoffEnded";
 import styles from "./styles.module.css";
 
@@ -32,38 +35,8 @@ function isEndedStatus(status: number) {
 	return status === 410;
 }
 
-function handoffEndpoint(nonce: string, action?: "open") {
-	const base = `/api/photo/handoff/${nonce}`;
-	return action ? `${base}/${action}` : base;
-}
-
 export function HandoffCapture({ nonce }: { nonce: string }) {
 	const [state, setState] = useState<CaptureState>({ kind: "idle" });
-
-	/**
-	 * Done from the client so link previews don't count as a scan. Failing
-	 * silently is fine, the photo can still go through.
-	 */
-	useEffect(() => {
-		let cancelled = false;
-
-		void fetch(handoffEndpoint(nonce, "open"), { method: "POST" })
-			.then(async (res) => {
-				if (cancelled || !isEndedStatus(res.status)) return;
-
-				const json: unknown = await res.json().catch(() => null);
-				const reason =
-					json && typeof json === "object" && "reason" in json
-						? json.reason
-						: undefined;
-				setState({ kind: "ended", reason: endedReason(reason) });
-			})
-			.catch(() => {});
-
-		return () => {
-			cancelled = true;
-		};
-	}, [nonce]);
 
 	async function submit(file: File) {
 		setState({ kind: "submitting" });
@@ -73,7 +46,7 @@ export function HandoffCapture({ nonce }: { nonce: string }) {
 		formData.append("image", file);
 
 		try {
-			const res = await fetch(handoffEndpoint(nonce), {
+			const res = await fetch(`/api/photo/handoff/${nonce}`, {
 				method: "POST",
 				body: formData,
 			});
@@ -144,38 +117,45 @@ export function HandoffCapture({ nonce }: { nonce: string }) {
 	};
 
 	return (
-		<Grid gap={6} justifyItems="center" className={styles.base}>
-			<Grid gap={2} justifyItems="center">
-				<Heading level="h1" size={5} align="center">
-					Take a photo of the recipe
-				</Heading>
+		<Grid gap={6} justifyItems="center">
+			<Panel
+				footer={
+					<Callout variant="solid" color="light" icon="circle-info" size={1}>
+						<OCRProcessingNotice />
+					</Callout>
+				}
+			>
+				<Grid gap={6} className={styles.content}>
+					<Grid gap={2} justifyItems="center">
+						<Heading level="h1" size={5} align="center">
+							Take a photo of a recipe
+						</Heading>
 
-				<Text as="p" align="center" heavy>
-					The extracted text appears on your desktop a moment later.
-				</Text>
-			</Grid>
+						<Text as="p" align="center" heavy>
+							The extracted text appears on your other device a moment later.
+						</Text>
+					</Grid>
 
-			<Grid gap={2} justifyItems="center">
-				<FileInput
-					{...fileInputProps}
-					capture="environment"
-					buttonProps={{ variant: "solid", color: "accent", size: "large" }}
-				>
-					<Icon name="camera" /> Take a photo
-				</FileInput>
+					<Grid gap={2} justifyItems="center">
+						<FileInput
+							{...fileInputProps}
+							capture="environment"
+							buttonProps={{ variant: "solid", color: "accent" }}
+						>
+							<Icon name="camera" /> Take a photo
+						</FileInput>
 
-				<FileInput
-					{...fileInputProps}
-					buttonProps={{ variant: "outline", color: "accent" }}
-				>
-					<Icon name="image" /> Choose from library
-				</FileInput>
-			</Grid>
+						<Divider className={styles.divider}>or</Divider>
 
-			<Callout variant="solid" color="light" icon="circle-info" size={1}>
-				Images are processed by Google for text extraction. Bespoke Bar does not
-				store them.
-			</Callout>
+						<FileInput
+							{...fileInputProps}
+							buttonProps={{ variant: "outline", color: "accent" }}
+						>
+							<Icon name="image" /> Choose from library
+						</FileInput>
+					</Grid>
+				</Grid>
+			</Panel>
 		</Grid>
 	);
 }

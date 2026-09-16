@@ -1,8 +1,7 @@
 @layer layout {
 	.base {
 		display: grid;
-		justify-items: center;
-		align-content: start;
+		place-items: center;
 		padding: var(--gap);
 		flex: 1 1 auto;
 		min-height: 100lvh;

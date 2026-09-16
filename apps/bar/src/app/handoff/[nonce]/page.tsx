@@ -24,10 +24,6 @@ export default function HandoffPage({ params }: { params: Params }) {
 	);
 }
 
-/**
- * Only reads here. Marking the handoff as opened happens client-side, otherwise
- * link previews would count as a scan.
- */
 async function HandoffGate({ params }: { params: Params }) {
 	const { nonce } = await params;
 	const inspected = await inspectHandoff(nonce);

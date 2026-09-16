@@ -2,6 +2,7 @@ import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
 import { Button } from "@bespoke/ui/Button";
 import { Callout } from "@bespoke/ui/Callout";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
+import { Divider } from "@bespoke/ui/Divider";
 import { FileInput } from "@bespoke/ui/FileInput";
 import { Grid } from "@bespoke/ui/Grid";
 import { Heading } from "@bespoke/ui/Heading";
@@ -13,6 +14,7 @@ import { clsx } from "clsx";
 import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
 import { useCallback, useRef } from "react";
+import { OCRProcessingNotice } from "@/features/consent/components/OCRProcessingNotice";
 import {
 	checkOCRConsent,
 	storeOCRConsent,
@@ -176,9 +178,7 @@ export function UploadPhotoForm({
 						<Icon name="image" /> Select an image
 					</FileInput>
 
-					<Text className={styles.separator} size={2}>
-						<span>or</span>
-					</Text>
+					<Divider className={styles.divider}>or</Divider>
 
 					<FileInput
 						{...fileInputProps}
@@ -228,8 +228,7 @@ export function UploadPhotoForm({
 				description={
 					<Grid gap={3}>
 						<Text as="p">
-							Images are processed by Google for text extraction. Bespoke Bar
-							does not store these images.
+							<OCRProcessingNotice />
 						</Text>
 
 						<Callout
