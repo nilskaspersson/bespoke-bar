@@ -20,6 +20,7 @@ export function HandoffDialog({
 		<Dialog
 			ref={dialog.dialogRef}
 			isOpen={dialog.isOpen}
+			aria-label="Take a photo with your phone"
 			className={styles.dialog}
 		>
 			<HandoffContentLoader {...content} />

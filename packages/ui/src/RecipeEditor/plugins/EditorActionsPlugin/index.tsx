@@ -101,24 +101,22 @@ export function EditorActionsPlugin() {
 						<ButtonGroup>
 							<Tooltip
 								as={Button}
-								content="Undo"
+								label="Undo"
 								{...actionProps}
 								className={styles.button}
 								onClick={canUndo ? undo : undefined}
 								aria-disabled={!canUndo}
-								aria-label="Undo"
 							>
 								<Icon name="undo" size={2} />
 							</Tooltip>
 
 							<Tooltip
 								as={Button}
-								content="Redo"
+								label="Redo"
 								{...actionProps}
 								className={styles.button}
 								onClick={canRedo ? redo : undefined}
 								aria-disabled={!canRedo}
-								aria-label="Redo"
 							>
 								<Icon name="redo" size={2} />
 							</Tooltip>
@@ -128,11 +126,10 @@ export function EditorActionsPlugin() {
 					<li>
 						<Tooltip
 							as={Button}
-							content="Clear editor"
+							label="Clear editor"
 							{...actionProps}
 							color="red"
 							onClick={clear}
-							aria-label="Clear editor"
 						>
 							<Icon name="trash" size={1} />
 						</Tooltip>
@@ -141,10 +138,9 @@ export function EditorActionsPlugin() {
 					<li>
 						<Tooltip
 							as={Button}
-							content="Round quantities"
+							label="Round quantities"
 							{...actionProps}
 							onClick={() => applyTransform(roundLine)}
-							aria-label="Round quantities"
 						>
 							<Text size={3}>≈</Text>
 						</Tooltip>
@@ -153,10 +149,9 @@ export function EditorActionsPlugin() {
 					<li>
 						<Tooltip
 							as={Button}
-							content="Capitalize"
+							label="Capitalize"
 							{...actionProps}
 							onClick={() => applyTransform(capitalizeLine)}
-							aria-label="Capitalize"
 						>
 							<Icon name="letter-case-capitalize" size={2} />
 						</Tooltip>
@@ -166,26 +161,24 @@ export function EditorActionsPlugin() {
 						<ButtonGroup>
 							<Tooltip
 								as={Button}
-								content="Convert to Metric"
+								label="Convert to Metric"
 								{...actionProps}
 								className={styles.button}
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "metric"))
 								}
-								aria-label="Convert to Metric"
 							>
 								Metric
 							</Tooltip>
 
 							<Tooltip
 								as={Button}
-								content="Convert to Imperial"
+								label="Convert to Imperial"
 								{...actionProps}
 								className={styles.button}
 								onClick={() =>
 									applyTransform((line) => convertLine(line, "imperial"))
 								}
-								aria-label="Convert to Imperial"
 							>
 								Imperial
 							</Tooltip>

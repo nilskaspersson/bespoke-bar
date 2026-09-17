@@ -16,13 +16,17 @@ import { Text } from "../Text";
 import type { PolymorphicProps } from "../utils/types";
 import styles from "./styles.module.css";
 
+type Naming =
+	| { content: ReactNode; label?: never }
+	| { label: string; content?: never; "aria-label"?: never };
+
 export type TooltipProps<E extends ElementType = "span"> = Omit<
 	PolymorphicProps<E>,
-	"content"
-> & {
-	content: ReactNode;
-	as?: E;
-};
+	"content" | "label"
+> &
+	Naming & {
+		as?: E;
+	};
 
 type Composed = {
 	style?: CSSProperties;
@@ -39,24 +43,28 @@ type Composed = {
  * Anchors a hover/focus hint to its trigger and owns the trigger behaviour:
  * focusability, open on hover (mouse) and focus, click/Enter/Space capture (so the
  * trigger's activation can't leak to an ancestor), the anchored surface, and the
- * `aria-describedby` link.
+ * accessible link: `content` describes a trigger that already has a name, `label`
+ * is the name of one that doesn't (icon-only buttons).
  */
 export function Tooltip<E extends ElementType = "span">({
 	as,
 	content,
+	label,
 	children,
 	...rest
 }: TooltipProps<E>) {
 	const popover = usePopover();
 	const { id } = popover.contentProps;
 	const own = rest as Composed;
+	const naming =
+		label === undefined ? { "aria-describedby": id } : { "aria-label": label };
 
 	const trigger = createElement(
 		as ?? "span",
 		{
 			...rest,
+			...naming,
 			tabIndex: own.tabIndex ?? 0,
-			"aria-describedby": id,
 			style: { ...own.style, ...popover.triggerProps.style },
 			onPointerEnter: (e: PointerEvent) => {
 				own.onPointerEnter?.(e);
@@ -97,7 +105,7 @@ export function Tooltip<E extends ElementType = "span">({
 				className={styles.surface}
 			>
 				<Text size={1} compact weight={600}>
-					{content}
+					{label ?? content}
 				</Text>
 			</BarePopover>
 		</>

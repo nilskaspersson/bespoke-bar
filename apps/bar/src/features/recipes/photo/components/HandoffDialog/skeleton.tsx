@@ -17,6 +17,14 @@ export function HandoffSkeleton() {
 							className={styles.statusLine}
 						/>
 					</Text>
+					<Text as="p" size={2} heavy align="center">
+						<Skeleton
+							variant="text"
+							width="30ch"
+							height="1em"
+							className={styles.statusLine}
+						/>
+					</Text>
 				</div>
 			}
 		>

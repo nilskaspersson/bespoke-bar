@@ -223,6 +223,7 @@ export function PhotoToRecipe({
 				dialog={handoffDialog}
 				link={handoff.link}
 				isMinting={handoff.isMinting}
+				canRenew={handoff.canRenew}
 				onRenew={handoff.renew}
 				onResult={onHandoffResult}
 			/>
