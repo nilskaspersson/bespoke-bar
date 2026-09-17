@@ -4,6 +4,7 @@ import { Header } from "@bespoke/ui/Header";
 import { ThemePicker } from "@bespoke/ui/ThemePicker";
 import { WakeLock } from "@bespoke/ui/WakeLock";
 import { type PropsWithChildren, Suspense } from "react";
+import { AuthProvider } from "@/components/AuthProvider";
 import { AuthButtonsSkeleton } from "@/features/organisation/user/components/AuthButtons";
 import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 
@@ -11,7 +12,7 @@ const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
 
 export function Chrome({ children }: PropsWithChildren) {
 	return (
-		<>
+		<AuthProvider>
 			<Header className={shell.header}>
 				<Suspense fallback={<AuthButtonsSkeleton />}>
 					<AuthButtonsLoader />
@@ -28,6 +29,6 @@ export function Chrome({ children }: PropsWithChildren) {
 					<WakeLock size="small" />
 				</Footer>
 			</Suspense>
-		</>
+		</AuthProvider>
 	);
 }

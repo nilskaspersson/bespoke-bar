@@ -7,7 +7,6 @@ import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { type PropsWithChildren, Suspense } from "react";
-import { AuthProvider } from "@/components/AuthProvider";
 import { Toaster } from "@/components/Toaster";
 
 const sans = Figtree({
@@ -28,7 +27,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 			<ThemeProvider>
 				{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 				<div className={shell.layout} id="root">
-					<AuthProvider>{children}</AuthProvider>
+					{children}
 				</div>
 
 				<Toaster />
