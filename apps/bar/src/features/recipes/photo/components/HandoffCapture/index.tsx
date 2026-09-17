@@ -2,7 +2,10 @@
 
 import type { HandoffEndedReason } from "@bespoke/api/recipes/photo/handoff/handoff.service";
 import { appErrorSchema, getAppErrorToast } from "@bespoke/schema/appError";
-import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
+import {
+	ACCEPTED_IMAGE_TYPES,
+	IMAGE_TOO_LARGE_MESSAGE,
+} from "@bespoke/schema/constants";
 import { Callout } from "@bespoke/ui/Callout";
 import { Divider } from "@bespoke/ui/Divider";
 import { FileInput } from "@bespoke/ui/FileInput";
@@ -12,6 +15,7 @@ import { Icon } from "@bespoke/ui/Icon";
 import { Panel } from "@bespoke/ui/Panel";
 import { Text } from "@bespoke/ui/Text";
 import { toast } from "@bespoke/ui/Toast";
+import { downscaleImage } from "@bespoke/ui/utils/downscaleImage";
 import { type ComponentProps, useState } from "react";
 import { OCRProcessingNotice } from "@/features/consent/components/OCRProcessingNotice";
 import { HandoffEnded } from "@/features/recipes/photo/components/HandoffEnded";
@@ -43,13 +47,23 @@ export function HandoffCapture({ nonce }: { nonce: string }) {
 		const toastId = toast.loading("Processing image…");
 
 		const formData = new FormData();
-		formData.append("image", file);
+		formData.append("image", await downscaleImage(file));
 
 		try {
 			const res = await fetch(`/api/photo/handoff/${nonce}`, {
 				method: "POST",
 				body: formData,
 			});
+
+			if (res.status === 413) {
+				toast.error("Error processing image", {
+					id: toastId,
+					description: IMAGE_TOO_LARGE_MESSAGE,
+				});
+				setState({ kind: "idle" });
+				return;
+			}
+
 			const json = await res.json();
 
 			if (json.ok) {

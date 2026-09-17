@@ -1,6 +1,7 @@
 "use client";
 
 import { AppError, appErrorSchema } from "@bespoke/schema/appError";
+import { IMAGE_TOO_LARGE_MESSAGE } from "@bespoke/schema/constants";
 import { toast } from "@bespoke/ui/Toast";
 import { useCallback, useRef, useState } from "react";
 import { showOCRQuotaReachedToast } from "@/features/billing/components/OCRQuotaReachedToast";
@@ -57,6 +58,10 @@ export function useSubmitPhotoAction({
 					method: "POST",
 					body: formData,
 				});
+
+				if (res.status === 413) {
+					throw new Error(IMAGE_TOO_LARGE_MESSAGE);
+				}
 
 				const json = await res.json();
 

@@ -10,6 +10,7 @@ import { useConfirm } from "@bespoke/ui/hooks/useConfirm";
 import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { Icon } from "@bespoke/ui/Icon";
 import { Text } from "@bespoke/ui/Text";
+import { downscaleImage } from "@bespoke/ui/utils/downscaleImage";
 import { clsx } from "clsx";
 import Link from "next/link";
 import type { ChangeEventHandler, ComponentProps } from "react";
@@ -128,6 +129,8 @@ export function UploadPhotoForm({
 			onParsingChange?.(true);
 			startLoading();
 
+			const downscaling = downscaleImage(file);
+
 			if (!(await ensureOCRConsent())) {
 				dismissLoading();
 				onParsingChange?.(false);
@@ -135,7 +138,7 @@ export function UploadPhotoForm({
 			}
 
 			const formData = new FormData();
-			formData.append("image", file);
+			formData.append("image", await downscaling);
 			await submitPhotoAction(formData);
 		},
 	};
