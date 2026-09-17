@@ -42,6 +42,12 @@
 		}
 	}
 
+	.close {
+		position: fixed;
+		inset: var(--space-2) var(--space-2) auto auto;
+		z-index: 1;
+	}
+
 	/**
 	 * NOTE: Backdrop blur will always cover the rest of the app—including
 	 * notifications, and other static elements we may want to keep in the foreground.

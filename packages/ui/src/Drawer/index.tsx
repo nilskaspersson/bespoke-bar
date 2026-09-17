@@ -133,6 +133,7 @@ export function Drawer({
 			isOpen={mounted}
 			withBlur={false}
 			className={clsx(styles.drawer, className)}
+			withCloseButton={false}
 			onCancel={(event) => {
 				if (event.target !== event.currentTarget) return;
 				event.preventDefault();

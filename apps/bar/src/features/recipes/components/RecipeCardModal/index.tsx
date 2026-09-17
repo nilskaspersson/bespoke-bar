@@ -2,14 +2,12 @@
 
 import type { RecipeWithRelations } from "@bespoke/schema/schema/recipes";
 import type { Tag } from "@bespoke/schema/schema/tags";
-import { Button } from "@bespoke/ui/Button";
 import { Checkbox } from "@bespoke/ui/Checkbox";
 import { Dialog } from "@bespoke/ui/Dialog";
 import { Flex } from "@bespoke/ui/Flex";
 import { Grid } from "@bespoke/ui/Grid";
 import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { useLocalStorage } from "@bespoke/ui/hooks/useLocalStorage";
-import { Icon } from "@bespoke/ui/Icon";
 import {
 	RecipeAdjustmentsControls,
 	useAdjustments,
@@ -153,18 +151,6 @@ export function RecipeCardModal() {
 				handleClose();
 			}}
 		>
-			<Button
-				className={styles.close}
-				onClick={handleClose}
-				icon
-				variant="ghost"
-				size="small"
-				aria-label="Close"
-				title="Close"
-			>
-				<Icon name="xmark" size={5} />
-			</Button>
-
 			{current ? (
 				<RecipeCardModalContent
 					recipe={current.recipe}
