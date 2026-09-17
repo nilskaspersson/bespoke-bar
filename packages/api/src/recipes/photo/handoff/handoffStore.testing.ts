@@ -14,27 +14,25 @@ export function createFakeRedis() {
 	}
 
 	const redis: HandoffRedis = {
-		async hset(key, fields) {
-			const target = hash(key);
-			for (const [field, value] of Object.entries(fields)) {
-				target.set(field, value);
-			}
-			return Object.keys(fields).length;
-		},
-		async hsetnx(key, field, value) {
-			const target = hash(key);
-			if (target.has(field)) return 0;
-			target.set(field, value);
-			return 1;
-		},
 		async hgetall(key) {
 			const target = hashes.get(key);
 			return target ? Array.from(target.entries()).flat() : [];
 		},
-		async expireat(key, unixSeconds) {
-			if (!hashes.has(key)) return 0;
-			expiries.set(key, unixSeconds);
-			return 1;
+		async setFields(key, fields, expireAtUnixSeconds) {
+			const target = hash(key);
+			for (const [field, value] of Object.entries(fields)) {
+				target.set(field, value);
+			}
+			expiries.set(key, expireAtUnixSeconds);
+		},
+		async setFieldIfAbsent(key, field, value, expireAtUnixSeconds) {
+			const target = hash(key);
+			const absent = !target.has(field);
+			if (absent) {
+				target.set(field, value);
+			}
+			expiries.set(key, expireAtUnixSeconds);
+			return absent;
 		},
 	};
 

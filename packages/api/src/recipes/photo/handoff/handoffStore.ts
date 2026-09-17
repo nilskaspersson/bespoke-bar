@@ -4,16 +4,50 @@ import { z } from "zod";
 export const HANDOFF_CLOSED = "closed";
 
 /**
- * The bits of the Upstash client we use, so tests can pass a fake. Everything
- * is strings (`automaticDeserialization` is off), which also leaves HGETALL as
- * the raw flat `[field, value, …]` reply.
+ * Every write carries the key's absolute expiry, or a write racing the TTL would
+ * recreate the hash without an expiry. Values are strings throughout
+ * (`automaticDeserialization` is off), which also leaves HGETALL as the raw
+ * flat `[field, value, …]` reply.
  */
 export type HandoffRedis = {
-	hset: (key: string, fields: Record<string, string>) => Promise<number>;
-	hsetnx: (key: string, field: string, value: string) => Promise<0 | 1>;
 	hgetall: (key: string) => Promise<unknown[] | Record<string, unknown> | null>;
-	expireat: (key: string, unixSeconds: number) => Promise<0 | 1>;
+	/** HSET + EXPIREAT. */
+	setFields: (
+		key: string,
+		fields: Record<string, string>,
+		expireAtUnixSeconds: number,
+	) => Promise<void>;
+	/** HSETNX + EXPIREAT; true when the field was absent and is now set. */
+	setFieldIfAbsent: (
+		key: string,
+		field: string,
+		value: string,
+		expireAtUnixSeconds: number,
+	) => Promise<boolean>;
 };
+
+/** Both writes go in one pipeline, so each mutation is a single round trip. */
+export function createUpstashHandoffRedis(redis: Redis): HandoffRedis {
+	return {
+		hgetall: (key) => redis.hgetall(key),
+		async setFields(key, fields, expireAtUnixSeconds) {
+			await redis
+				.pipeline()
+				.hset(key, fields)
+				.expireat(key, expireAtUnixSeconds)
+				.exec();
+		},
+		async setFieldIfAbsent(key, field, value, expireAtUnixSeconds) {
+			const [set] = await redis
+				.pipeline()
+				.hsetnx(key, field, value)
+				.expireat(key, expireAtUnixSeconds)
+				.exec();
+
+			return set === 1;
+		},
+	};
+}
 
 const handoffResultSchema = z.object({ extractedText: z.string() });
 
@@ -59,26 +93,21 @@ function toHash(reply: unknown[] | Record<string, unknown> | null) {
 }
 
 export function createHandoffStore(redis: HandoffRedis) {
-	/**
-	 * Re-applied on every write, otherwise a write racing the TTL would recreate
-	 * the hash without one.
-	 */
-	async function touchExpiry(nonce: string, expireAtMs: number) {
-		await redis.expireat(key(nonce), toUnixSeconds(expireAtMs));
-	}
-
 	return {
 		async create(
 			nonce: string,
 			record: Pick<HandoffRecord, "orgId" | "userId" | "expiresAt">,
 			{ expireAtMs }: { expireAtMs: number },
 		): Promise<void> {
-			await redis.hset(key(nonce), {
-				orgId: record.orgId,
-				userId: record.userId,
-				expiresAt: String(record.expiresAt),
-			});
-			await touchExpiry(nonce, expireAtMs);
+			await redis.setFields(
+				key(nonce),
+				{
+					orgId: record.orgId,
+					userId: record.userId,
+					expiresAt: String(record.expiresAt),
+				},
+				toUnixSeconds(expireAtMs),
+			);
 		},
 
 		async read(nonce: string): Promise<HandoffRecord | null> {
@@ -108,34 +137,38 @@ export function createHandoffStore(redis: HandoffRedis) {
 			nonce: string,
 			{ expiresAt, expireAtMs }: { expiresAt: number; expireAtMs: number },
 		): Promise<void> {
-			await redis.hset(key(nonce), { expiresAt: String(expiresAt) });
-			await touchExpiry(nonce, expireAtMs);
+			await redis.setFields(
+				key(nonce),
+				{ expiresAt: String(expiresAt) },
+				toUnixSeconds(expireAtMs),
+			);
 		},
 
 		/** False if a result or tombstone is already there. */
-		async claimResult(
+		claimResult(
 			nonce: string,
 			result: HandoffResult,
 			{ expireAtMs }: { expireAtMs: number },
 		): Promise<boolean> {
-			const claimed =
-				(await redis.hsetnx(key(nonce), "result", JSON.stringify(result))) ===
-				1;
-			await touchExpiry(nonce, expireAtMs);
-
-			return claimed;
+			return redis.setFieldIfAbsent(
+				key(nonce),
+				"result",
+				JSON.stringify(result),
+				toUnixSeconds(expireAtMs),
+			);
 		},
 
 		/** Tombstone. False if a result already landed. */
-		async close(
+		close(
 			nonce: string,
 			{ expireAtMs }: { expireAtMs: number },
 		): Promise<boolean> {
-			const closed =
-				(await redis.hsetnx(key(nonce), "result", HANDOFF_CLOSED)) === 1;
-			await touchExpiry(nonce, expireAtMs);
-
-			return closed;
+			return redis.setFieldIfAbsent(
+				key(nonce),
+				"result",
+				HANDOFF_CLOSED,
+				toUnixSeconds(expireAtMs),
+			);
 		},
 	};
 }
@@ -149,6 +182,8 @@ const token = process.env.UPSTASH_KV_REST_API_TOKEN;
 export const handoffStore: HandoffStore | null =
 	url && token
 		? createHandoffStore(
-				new Redis({ url, token, automaticDeserialization: false }),
+				createUpstashHandoffRedis(
+					new Redis({ url, token, automaticDeserialization: false }),
+				),
 			)
 		: null;
