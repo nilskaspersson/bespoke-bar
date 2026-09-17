@@ -53,7 +53,7 @@ export function HandoffCapture({ nonce }: { nonce: string }) {
 			const json = await res.json();
 
 			if (json.ok) {
-				toast.success("Sent to your desktop", { id: toastId });
+				toast.success("Extraction completed", { id: toastId });
 				setState({ kind: "sent" });
 				return;
 			}
@@ -92,7 +92,7 @@ export function HandoffCapture({ nonce }: { nonce: string }) {
 				<Icon name="circle-check" size={7} className={styles.sentIcon} />
 
 				<Heading level="h1" size={5} align="center">
-					Sent to your desktop
+					Extraction completed
 				</Heading>
 
 				<Text as="p" align="center" heavy>
