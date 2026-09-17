@@ -21,6 +21,6 @@
 		"deps:verify": "pnpm install && turbo run lint check-types test bundle"
 	},
 	"devDependencies": {
-		"turbo": "2.10.12"
+		"turbo": "2.10.13"
 	}
 }
