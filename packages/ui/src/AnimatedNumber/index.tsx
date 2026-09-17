@@ -1,13 +1,7 @@
 "use client";
 
+import { mergeStyleSources, toCSSVars } from "@bespoke/ui/utils/styles";
 import { clsx } from "clsx";
-import {
-	AnimatePresence,
-	m,
-	type Transition,
-	useReducedMotion,
-	type Variants,
-} from "motion/react";
 import { type ComponentPropsWithoutRef, useState } from "react";
 import styles from "./styles.module.css";
 
@@ -19,10 +13,11 @@ type Props = {
 
 const DEFAULT_FORMAT = (value: number) => value.toString();
 
-const ROLL_TRANSITION: Transition = {
-	type: "spring",
-	visualDuration: 0.25,
-	bounce: 0.35,
+type Roll = {
+	value: number;
+	direction: number;
+	exiting: string | null;
+	generation: number;
 };
 
 export function AnimatedNumber({
@@ -31,55 +26,55 @@ export function AnimatedNumber({
 	className,
 	...props
 }: Props & ComponentPropsWithoutRef<"span">) {
-	const prefersReducedMotion = useReducedMotion();
-	const [[previous, direction], setSwap] = useState<[number, number]>([
+	const [roll, setRoll] = useState<Roll>({
 		value,
-		0,
-	]);
+		direction: 0,
+		exiting: null,
+		generation: 0,
+	});
 
-	if (previous !== value) {
-		setSwap([value, Math.sign(value - previous)]);
+	if (roll.value !== value) {
+		setRoll({
+			value,
+			direction: Math.sign(value - roll.value),
+			exiting: format(roll.value),
+			generation: roll.generation + 1,
+		});
 	}
 
-	const slide = prefersReducedMotion ? 0 : direction;
 	const formatted = format(value);
+	const rolled = roll.generation > 0;
 
 	return (
-		<span {...props} className={clsx(className, styles.number)}>
+		<span
+			{...props}
+			className={clsx(className, styles.number)}
+			style={mergeStyleSources(
+				props.style,
+				toCSSVars({ slide: roll.direction }),
+			)}
+		>
 			<span aria-hidden className={styles.sizer}>
 				{formatted}
 			</span>
 
-			<AnimatePresence initial={false} custom={slide}>
-				<m.span
-					key={formatted}
-					custom={slide}
-					className={styles.value}
-					variants={rollVariants}
-					initial="enter"
-					animate="settled"
-					exit="exit"
-					transition={ROLL_TRANSITION}
+			<span
+				key={roll.generation}
+				className={clsx(styles.value, { [styles.enter]: rolled })}
+			>
+				{formatted}
+			</span>
+
+			{roll.exiting !== null ? (
+				<span
+					key={`exit-${roll.generation}`}
+					aria-hidden
+					className={clsx(styles.value, styles.exit)}
+					onAnimationEnd={() => setRoll((r) => ({ ...r, exiting: null }))}
 				>
-					{formatted}
-				</m.span>
-			</AnimatePresence>
+					{roll.exiting}
+				</span>
+			) : null}
 		</span>
 	);
 }
-
-const ROLL_BLUR = "blur(1px)";
-
-const rollVariants: Variants = {
-	enter: (slide: number) => ({
-		y: `${slide * 100}%`,
-		opacity: 0,
-		filter: ROLL_BLUR,
-	}),
-	settled: { y: "0%", opacity: 1, filter: "blur(0px)" },
-	exit: (slide: number) => ({
-		y: `${slide * -100}%`,
-		opacity: 0,
-		filter: ROLL_BLUR,
-	}),
-};

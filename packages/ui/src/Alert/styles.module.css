@@ -1,5 +1,7 @@
 @layer component {
 	.lightbox {
+		--inset: var(--space-2);
+
 		display: grid;
 		grid-template:
 			"alert" 1fr
@@ -10,7 +12,7 @@
 		min-height: 0;
 		font-size: var(--size-3);
 		word-wrap: break-word;
-		padding: var(--gap--tiny);
+		padding: var(--inset);
 		color: var(--mauve-11);
 		margin-inline: var(--space-2);
 	}

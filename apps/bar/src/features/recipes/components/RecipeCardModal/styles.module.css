@@ -69,10 +69,4 @@
 	.card {
 		box-shadow: var(--shadow--high);
 	}
-
-	.close {
-		position: fixed;
-		top: var(--gap);
-		right: var(--gap);
-	}
 }

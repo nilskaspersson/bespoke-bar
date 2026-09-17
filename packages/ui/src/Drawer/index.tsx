@@ -9,7 +9,7 @@ import {
 	useMotionValue,
 	useMotionValueEvent,
 	useTransform,
-} from "motion/react";
+} from "framer-motion";
 import { type ComponentProps, type ReactNode, useEffect, useRef } from "react";
 import { Button } from "../Button";
 import { Container } from "../Container";
@@ -133,6 +133,7 @@ export function Drawer({
 			isOpen={mounted}
 			withBlur={false}
 			className={clsx(styles.drawer, className)}
+			withCloseButton={false}
 			onCancel={(event) => {
 				if (event.target !== event.currentTarget) return;
 				event.preventDefault();

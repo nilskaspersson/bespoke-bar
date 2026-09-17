@@ -60,3 +60,6 @@ next-env.d.ts
 
 # agent skills (auto-fetched content; commit skills-lock.json, not the fetched skills)
 /.agents/
+
+# next dev --experimental-https
+certificates

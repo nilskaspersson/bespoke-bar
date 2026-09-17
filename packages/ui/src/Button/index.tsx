@@ -55,7 +55,7 @@ export function Button({
 		>
 			{startAdornment}
 
-			<span className={styles.label}>{children}</span>
+			{children ? <span className={styles.label}>{children}</span> : null}
 
 			{endAdornment}
 		</button>
@@ -94,7 +94,7 @@ export function LinkButton({
 		>
 			{startAdornment}
 
-			<span className={styles.label}>{children}</span>
+			{children ? <span className={styles.label}>{children}</span> : null}
 
 			{endAdornment}
 		</Link>

@@ -1,0 +1,13 @@
+@layer feature {
+	.content {
+		padding-block: var(--gap--large);
+	}
+
+	.sentIcon {
+		color: var(--iris-11);
+	}
+
+	.divider {
+		--divider-width: 20ch;
+	}
+}

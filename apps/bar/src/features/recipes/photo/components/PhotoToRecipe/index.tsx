@@ -6,7 +6,9 @@ import { Button } from "@bespoke/ui/Button";
 import { Callout } from "@bespoke/ui/Callout";
 import { ConfirmAction } from "@bespoke/ui/ConfirmAction";
 import { Grid } from "@bespoke/ui/Grid";
+import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { useLocalStorage } from "@bespoke/ui/hooks/useLocalStorage";
+import { Icon } from "@bespoke/ui/Icon";
 import { ImageUploadPreview } from "@bespoke/ui/ImageUploadPreview";
 import { Kbd } from "@bespoke/ui/Kbd";
 import { Text } from "@bespoke/ui/Text";
@@ -23,15 +25,17 @@ import { OCRQuotaIndicator } from "@/features/billing/components/OCRQuotaIndicat
 import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { useCreateBulkDraftRecipes } from "@/features/recipes/bulk/hooks/useCreateBulkDraftRecipes";
 import { useBulkDraftTextToBaseRecipes } from "@/features/recipes/bulk/hooks/useFormatBulkDraftRecipes";
+import { HandoffDialog } from "@/features/recipes/photo/components/HandoffDialog";
 import { OCROutputPreview } from "@/features/recipes/photo/components/OCROutputPreview";
 import { UploadPhotoForm } from "@/features/recipes/photo/components/UploadPhotoForm";
+import { useHandoffLink } from "@/features/recipes/photo/hooks/useHandoffLink";
 import { useImageUploadPreview } from "@/hooks/useImageUploadPreview";
 import { trpc } from "@/trpc/client";
 import styles from "./styles.module.css";
 
 const DRAFT_STORAGE_KEY = "recipe-photo-draft";
 
-type PhotoDraft = { ocrText: string; draftText: string };
+type PhotoDraft = { ocrText: string; draftText: string; source?: "phone" };
 
 const EMPTY_DRAFT: PhotoDraft = { ocrText: "", draftText: "" };
 
@@ -79,6 +83,33 @@ export function PhotoToRecipe({
 		[setDraft],
 	);
 
+	const handoffDialog = useDialog();
+	const handoff = useHandoffLink({ onMintFailed: handoffDialog.closeModal });
+
+	function openHandoff() {
+		handoffDialog.showModal();
+		handoff.open();
+	}
+
+	const onHandoffResult = useCallback(
+		(extractedText: string) => {
+			handoff.settle();
+			handoffDialog.closeModal();
+			clearImagePreview();
+			setDraft({
+				ocrText: extractedText,
+				draftText: extractedText,
+				source: "phone",
+			});
+
+			outputContainerRef.current?.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		},
+		[handoff.settle, handoffDialog.closeModal, clearImagePreview, setDraft],
+	);
+
 	const handleDraftTextChange = useCallback(
 		(text: string) => {
 			setDraft((prev) => ({ ...prev, draftText: text }));
@@ -116,7 +147,8 @@ export function PhotoToRecipe({
 		{ onSuccess: resetFlow },
 	);
 
-	const hasSelectedImage = Boolean(imagePreviewUrl);
+	const isFromPhone = draft.source === "phone";
+	const hasSelectedImage = Boolean(imagePreviewUrl) || isFromPhone;
 	const hasParsedText = Boolean(ocrText);
 	const hasDraftRecipes = draftRecipes.length > 0;
 	const canReset = (hasSelectedImage || hasParsedText) && !isParsing;
@@ -127,6 +159,7 @@ export function PhotoToRecipe({
 				onChange={imageChangeHandler}
 				onSuccess={onSubmitPhotoSuccess}
 				onParsingChange={setIsParsing}
+				onHandoff={openHandoff}
 				className={clsx(styles.step, styles.stepUpload, {
 					[styles.hasImagePreview]: hasSelectedImage,
 				})}
@@ -144,6 +177,16 @@ export function PhotoToRecipe({
 				ref={imagePreviewRef}
 				src={imagePreviewUrl}
 				alt="Your image"
+				placeholder={
+					isFromPhone ? (
+						<Grid gap={1} justifyItems="center" className={styles.phone}>
+							<Icon name="mobile" size={6} />
+							<Text size={1} align="center" heavy>
+								Taken on your phone
+							</Text>
+						</Grid>
+					) : undefined
+				}
 				className={clsx(styles.step, styles.stepPreview, {
 					[styles.hasParsedText]: hasParsedText,
 					[styles.hasImagePreview]: hasSelectedImage,
@@ -176,6 +219,15 @@ export function PhotoToRecipe({
 				</Callout>
 			</Grid>
 
+			<HandoffDialog
+				dialog={handoffDialog}
+				link={handoff.link}
+				isMinting={handoff.isMinting}
+				canRenew={handoff.canRenew}
+				onRenew={handoff.renew}
+				onResult={onHandoffResult}
+			/>
+
 			<BottomRailItems>
 				{canReset ? (
 					<ConfirmAction
@@ -189,7 +241,7 @@ export function PhotoToRecipe({
 							rounded: true,
 							size: "default",
 						}}
-						notice="Extracting the image again will count as another daily use."
+						notice="Extracting an image again will count as another use this month."
 						description={
 							<Text as="p" heavy>
 								This clears the selected image and any Recipes extracted from

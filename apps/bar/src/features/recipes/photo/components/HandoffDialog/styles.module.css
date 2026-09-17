@@ -1,0 +1,64 @@
+@layer feature {
+	.dialog {
+		width: 26rem;
+		max-width: calc(100% - 2 * var(--space-2));
+	}
+
+	/* Always dark on white; some scanners can't read inverted codes. */
+	.card {
+		position: relative;
+		width: 280px;
+		max-width: 100%;
+		padding: var(--space-3);
+		border-radius: var(--radius);
+		background-color: white;
+	}
+
+	.placeholder {
+		width: 280px;
+		max-width: 100%;
+		height: auto;
+		aspect-ratio: 1;
+	}
+
+	.qr {
+		display: block;
+		width: 100%;
+		height: auto;
+		fill: black;
+		transition:
+			filter var(--transition-duration),
+			opacity var(--transition-duration);
+
+		&.stale {
+			filter: blur(6px);
+			opacity: 0.5;
+		}
+	}
+
+	.overlay {
+		position: absolute;
+		inset: 0;
+		display: grid;
+		place-items: center;
+	}
+
+	.copy {
+		position: absolute;
+		inset: auto var(--space-2) var(--space-2) auto;
+		justify-content: center;
+	}
+
+	.status {
+		min-height: var(--size-5);
+		text-align: center;
+	}
+
+	.statusLine {
+		vertical-align: middle;
+	}
+
+	.hiccup {
+		color: var(--amber-11);
+	}
+}

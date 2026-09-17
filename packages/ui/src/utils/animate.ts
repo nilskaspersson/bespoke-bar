@@ -1,4 +1,4 @@
-import type { MotionValue } from "motion/react";
+import type { MotionValue } from "framer-motion";
 
 export const SPRING_STIFFNESS = 400;
 export const SPRING_DAMPING = 35;

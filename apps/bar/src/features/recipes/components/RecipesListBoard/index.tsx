@@ -14,7 +14,7 @@ import { useDialog } from "@bespoke/ui/hooks/useDialog";
 import { useHydrateRecipeAdjustments } from "@bespoke/ui/RecipeAdjustments";
 import { RecipeAdjustmentsDock } from "@bespoke/ui/RecipeAdjustmentsDock";
 import { Text } from "@bespoke/ui/Text";
-import { AnimatePresence, m } from "motion/react";
+import { AnimatePresence, m } from "framer-motion";
 import { useDeferredValue, useMemo, useState } from "react";
 import { ClearFiltersPill } from "@/features/recipes/components/ClearFiltersPill";
 import { RecipesFilterDrawer } from "@/features/recipes/components/RecipesFilterDrawer";

@@ -35,6 +35,7 @@ export default createNextConfig({
 		frameSrc: ["https://challenges.cloudflare.com"],
 	},
 	experimental: { authInterrupts: true },
+	allowedDevOrigins: ["192.168.*.*"],
 	images: {
 		remotePatterns: [{ protocol: "https", hostname: "img.clerk.com" }],
 	},

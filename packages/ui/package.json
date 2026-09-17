@@ -34,7 +34,6 @@
 		"downshift": "catalog:",
 		"lexical": "catalog:",
 		"framer-motion": "catalog:",
-		"motion": "catalog:",
 		"next": "catalog:",
 		"react": "catalog:",
 		"react-dom": "catalog:",
@@ -44,7 +43,7 @@
 	"devDependencies": {
 		"@bespoke/config": "workspace:*",
 		"@biomejs/biome": "catalog:",
-		"@iconify-json/lucide": "1.2.131",
+		"@iconify-json/lucide": "1.2.133",
 		"@iconify-json/radix-icons": "1.2.6",
 		"@iconify/utils": "3.1.7",
 		"@types/node": "catalog:",

@@ -2,7 +2,7 @@
 	"$schema": "https://turborepo.dev/schema.json",
 	"ui": "tui",
 	"globalDependencies": [".editorconfig"],
-	"globalPassThroughEnv": ["VERCEL", "VERCEL_GIT_COMMIT_SHA"],
+	"globalPassThroughEnv": ["VERCEL", "VERCEL_GIT_COMMIT_SHA", "PNPM_CONFIG_*"],
 	"tasks": {
 		"icons:build": {
 			"inputs": [

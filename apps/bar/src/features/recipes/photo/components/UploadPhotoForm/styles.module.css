@@ -39,20 +39,8 @@
 		inset: var(--space-3) auto auto var(--space-3);
 	}
 
-	.separator {
-		display: grid;
-		align-items: center;
-		grid-template-columns: 1fr auto 1fr;
-		width: 20ch;
-		gap: var(--space-2);
-
-		&::before,
-		&::after {
-			content: "";
-			display: inline-block;
-			height: 1px;
-			background-color: var(--mauve-6);
-		}
+	.divider {
+		--divider-width: 20ch;
 	}
 
 	/*
@@ -68,6 +56,8 @@
 			display: revert-layer;
 		}
 
+		/* On a touch device you're already holding the camera. */
+		.handoffButton,
 		.dropHint {
 			display: none;
 		}

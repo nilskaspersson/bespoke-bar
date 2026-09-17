@@ -44,26 +44,22 @@ export function CocktailStyleDistribution({
 							className={styles.item}
 							style={toCSSVars({ jsxCount: item.count })}
 						>
-							<Tooltip content={`${item.label}: ${item.count}`}>
-								<Button
-									variant="base"
-									onClick={
-										isInteractable
-											? () => onToggleStyles([item.style])
-											: undefined
-									}
-									className={clsx(styles.segment, {
-										[styles.isStatic]: !isInteractable,
-										[styles.isInactive]: hasSelection && !isActive,
-									})}
-									style={toCSSVars({ jsxEntryColor: item.color })}
-									aria-pressed={isInteractable ? isActive : undefined}
-								>
-									<span className="sr-only">
-										{item.label}: {item.count}
-									</span>
-								</Button>
-							</Tooltip>
+							<Tooltip
+								as={Button}
+								label={`${item.label}: ${item.count}`}
+								variant="base"
+								onClick={
+									isInteractable
+										? () => onToggleStyles([item.style])
+										: undefined
+								}
+								className={clsx(styles.segment, {
+									[styles.isStatic]: !isInteractable,
+									[styles.isInactive]: hasSelection && !isActive,
+								})}
+								style={toCSSVars({ jsxEntryColor: item.color })}
+								aria-pressed={isInteractable ? isActive : undefined}
+							/>
 						</li>
 					);
 				})}

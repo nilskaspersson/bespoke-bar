@@ -1,13 +1,20 @@
 import { AppError } from "@bespoke/schema/appError";
-import { ACCEPTED_IMAGE_TYPES } from "@bespoke/schema/constants";
+import {
+	ACCEPTED_IMAGE_TYPES,
+	IMAGE_TOO_LARGE_MESSAGE,
+	MAX_IMAGE_BYTES,
+} from "@bespoke/schema/constants";
 import z from "zod";
 import { findRecipeInTextWithLLM } from "./findRecipeInTextWithLLM";
 import { parseTextFromImage } from "./vision";
 
 const fileSchema = z
 	.file()
-	.max(10 * 1024 * 1024) // 10 MB
-	.mime(ACCEPTED_IMAGE_TYPES);
+	.max(MAX_IMAGE_BYTES, IMAGE_TOO_LARGE_MESSAGE)
+	.mime(
+		ACCEPTED_IMAGE_TYPES,
+		"That file type isn't supported. Use a JPEG, PNG, WebP, or HEIC image.",
+	);
 
 export async function parseTextFromImageService(formData: FormData) {
 	const imageEntries = formData.getAll("image");
@@ -20,7 +27,13 @@ export async function parseTextFromImageService(formData: FormData) {
 		throw new Error("No valid image file provided");
 	}
 
-	const file = fileSchema.parse(validFile);
+	const parsedFile = fileSchema.safeParse(validFile);
+	if (!parsedFile.success) {
+		throw new Error(
+			parsedFile.error.issues[0]?.message ?? "Invalid image file",
+		);
+	}
+	const file = parsedFile.data;
 
 	/**
 	 * Do OCR with Google Vision API. This will find ALL text in the image.

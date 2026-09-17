@@ -2,11 +2,13 @@
 
 import { clsx } from "clsx";
 import type { ComponentProps, MouseEvent, RefObject } from "react";
+import { Button } from "../Button";
+import { Icon } from "../Icon";
 import styles from "./styles.module.css";
 
 /**
  * Polyfill backdrop-click dismiss for browsers that don't support the
- * `closedby="any"` attribute. Dispatches a synthetic `cancel` event so
+ * `closedby="any"` attribute. `requestClose()` fires a cancelable `cancel` so
  * consumers can keep a single `onCancel` teardown path.
  *
  * Runs unconditionally: Safari 26.2+ stubs `closedBy` on the prototype without
@@ -15,18 +17,13 @@ import styles from "./styles.module.css";
  * harmless — consumers' `onCancel` handlers are idempotent.
  */
 function handleBackdropClick(event: MouseEvent<HTMLDialogElement>) {
-	if (event.target !== event.currentTarget) {
-		return;
+	if (event.target === event.currentTarget) {
+		event.currentTarget.requestClose();
 	}
+}
 
-	const dialog = event.currentTarget;
-	const notPrevented = dialog.dispatchEvent(
-		new Event("cancel", { cancelable: true }),
-	);
-
-	if (notPrevented) {
-		dialog.close();
-	}
+function handleCloseClick(event: MouseEvent<HTMLButtonElement>) {
+	event.currentTarget.closest("dialog")?.requestClose();
 }
 
 export function Dialog({
@@ -34,11 +31,13 @@ export function Dialog({
 	className,
 	isOpen = false,
 	withBlur = true,
+	withCloseButton = true,
 	ref,
 	...props
 }: Omit<ComponentProps<"dialog">, "ref"> & {
 	isOpen?: boolean;
 	withBlur?: boolean;
+	withCloseButton?: boolean;
 	onClose?: () => void;
 	ref?: RefObject<HTMLDialogElement | null>;
 }) {
@@ -55,6 +54,21 @@ export function Dialog({
 			{...props}
 		>
 			{isOpen ? children : null}
+
+			{isOpen && withCloseButton ? (
+				<Button
+					className={styles.close}
+					onClick={handleCloseClick}
+					variant="clear"
+					color="light"
+					icon
+					rounded
+					aria-label="Close"
+					title="Close"
+				>
+					<Icon name="xmark" />
+				</Button>
+			) : null}
 		</dialog>
 	);
 }

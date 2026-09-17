@@ -1,11 +1,13 @@
 "use client";
 
 import type { BaseRecipe } from "@bespoke/schema/schema/recipes";
+import { useMediaQuery } from "@bespoke/ui/hooks/useMediaQuery";
 import { useAdjustments } from "@bespoke/ui/RecipeAdjustments";
 import { RecipeCard } from "@bespoke/ui/RecipeCard";
 import styles from "./styles.module.css";
 
 const COLUMNS = 3;
+const NARROW_COLUMNS = 2;
 
 /**
  * Cards stack at their natural height, so a column renders its cards twice and
@@ -16,15 +18,20 @@ const COLUMNS = 3;
 const CARDS_PER_COLUMN = 7;
 const COPIES = [0, 1];
 
+/** Paired with the `.column` rule that hides the third column before hydration. */
+const NARROW_QUERY = "(width < 800px)";
+
 export function HeroRecipeWall({ recipes }: { recipes: BaseRecipe[] }) {
 	const { servings, conversionSystem, withRounding, withBestUnit } =
 		useAdjustments();
+	const narrow = useMediaQuery(NARROW_QUERY);
 
 	if (recipes.length === 0) {
 		return null;
 	}
 
-	const columns = Array.from({ length: COLUMNS }, (_, column) =>
+	const columnCount = narrow ? NARROW_COLUMNS : COLUMNS;
+	const columns = Array.from({ length: columnCount }, (_, column) =>
 		Array.from(
 			{ length: CARDS_PER_COLUMN },
 			(_, row) =>

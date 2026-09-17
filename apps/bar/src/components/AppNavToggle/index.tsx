@@ -4,7 +4,7 @@ import { Button } from "@bespoke/ui/Button";
 import { usePopover } from "@bespoke/ui/hooks/usePopover";
 import { Icon } from "@bespoke/ui/Icon";
 import { Popover } from "@bespoke/ui/Popover";
-import { m } from "motion/react";
+import { m } from "framer-motion";
 import { AppNav } from "@/components/AppNav";
 import styles from "./styles.module.css";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { initializePlatform } from "@bespoke/ui/stores/platform";
-import { LazyMotion } from "motion/react";
+import { LazyMotion } from "framer-motion";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { useEffect } from "react";
 import { TRPCProvider } from "@/trpc/Provider";

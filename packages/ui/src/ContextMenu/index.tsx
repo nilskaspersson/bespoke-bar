@@ -1,7 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import { AnimatePresence, m } from "motion/react";
+import { AnimatePresence, m } from "framer-motion";
 import { createContext, type ReactNode, use, useCallback, useRef } from "react";
 import { Button } from "../Button";
 import { type UsePopoverReturn, usePopover } from "../hooks/usePopover";

@@ -23,8 +23,7 @@ export function ClosingCta({
 						</Heading>
 
 						<Text as="p" size={3} balance className={styles.body}>
-							Free, no card needed. Copy or export your recipes whenever you
-							like. They're yours.
+							Free, no card needed. Access your recipes wherever you are.
 						</Text>
 					</Grid>
 
