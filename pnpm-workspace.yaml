@@ -26,16 +26,16 @@ catalog:
   "@lexical/react": 0.50.0
   "@lexical/selection": 0.50.0
   "@lexical/utils": 0.50.0
-  "@tanstack/query-sync-storage-persister": 5.102.8
-  "@tanstack/react-query": 5.102.8
-  "@tanstack/react-query-persist-client": 5.102.8
-  "@trpc/client": 11.18.0
-  "@trpc/react-query": 11.18.0
-  "@trpc/server": 11.18.0
-  "@trpc/tanstack-react-query": 11.18.0
-  "@types/node": 26.4.1
-  "@types/react": 19.2.18
-  "@types/react-dom": 19.2.7
+  "@tanstack/query-sync-storage-persister": 5.103.1
+  "@tanstack/react-query": 5.103.1
+  "@tanstack/react-query-persist-client": 5.103.1
+  "@trpc/client": 11.19.0
+  "@trpc/react-query": 11.19.0
+  "@trpc/server": 11.19.0
+  "@trpc/tanstack-react-query": 11.19.0
+  "@types/node": 26.6.1
+  "@types/react": 19.3.0
+  "@types/react-dom": 19.3.0
   "@upstash/redis": 1.38.4
   "@vitejs/plugin-react": 6.1.1
   babel-plugin-react-compiler: 1.0.0
@@ -43,18 +43,18 @@ catalog:
   dotenv: 17.4.2
   downshift: 9.4.0
   drizzle-orm: 0.45.2
-  jsdom: 30.0.1
+  jsdom: 30.1.0
   lexical: 0.50.0
-  framer-motion: 13.2.0
+  framer-motion: 13.4.0
   next: 16.3.5
-  react: 19.2.8
-  react-dom: 19.2.8
+  react: 19.3.0
+  react-dom: 19.3.0
   sonner: 2.0.8
   stripe: 22.6.2
   typescript: 7.0.2
   typescript-plugin-css-modules: 5.2.0
   vitest: 5.0.1
-  zod: 4.5.4
+  zod: 4.6.5
   zustand: 5.0.15
 
 overrides:
@@ -91,3 +91,25 @@ minimumReleaseAgeExclude:
   - '@next/swc-win32-arm64-msvc@16.3.5'
   - '@next/swc-win32-x64-msvc@16.3.5'
   - next@16.3.5
+  - '@biomejs/biome@2.5.14'
+  - '@biomejs/cli-darwin-arm64@2.5.14'
+  - '@biomejs/cli-darwin-x64@2.5.14'
+  - '@biomejs/cli-linux-arm64-musl@2.5.14'
+  - '@biomejs/cli-linux-arm64@2.5.14'
+  - '@biomejs/cli-linux-x64-musl@2.5.14'
+  - '@biomejs/cli-linux-x64@2.5.14'
+  - '@biomejs/cli-win32-arm64@2.5.14'
+  - '@biomejs/cli-win32-x64@2.5.14'
+  - '@iconify-json/lucide@1.2.133'
+  - '@google/genai@2.23.0'
+  - '@tanstack/query-core@5.103.1'
+  - '@tanstack/query-persist-client-core@5.103.1'
+  - '@tanstack/query-sync-storage-persister@5.103.1'
+  - '@tanstack/react-query-persist-client@5.103.1'
+  - '@tanstack/react-query@5.103.1'
+  - '@trpc/client@11.19.0'
+  - '@trpc/react-query@11.19.0'
+  - '@trpc/server@11.19.0'
+  - '@trpc/tanstack-react-query@11.19.0'
+  - framer-motion@13.4.0
+  - jsdom@30.1.0
