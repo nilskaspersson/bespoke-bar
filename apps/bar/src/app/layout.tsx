@@ -1,20 +1,14 @@
 import "@bespoke/ui/theme";
 import { AppShell } from "@bespoke/ui/AppShell";
 import shell from "@bespoke/ui/AppShell/styles.module.css";
-import { Footer } from "@bespoke/ui/Footer";
-import { Header } from "@bespoke/ui/Header";
-import { ThemePicker } from "@bespoke/ui/ThemePicker";
 import { ThemeProvider } from "@bespoke/ui/theme/ThemeProvider";
 import { NavigationObserver } from "@bespoke/ui/utils/navigation";
-import { WakeLock } from "@bespoke/ui/WakeLock";
 import { clsx } from "clsx";
 import type { Metadata, Viewport } from "next";
 import { Figtree, Newsreader } from "next/font/google";
 import { type PropsWithChildren, Suspense } from "react";
 import { AuthProvider } from "@/components/AuthProvider";
 import { Toaster } from "@/components/Toaster";
-import { AuthButtonsSkeleton } from "@/features/organisation/user/components/AuthButtons";
-import { AuthButtonsLoader } from "@/features/organisation/user/components/AuthButtons/loader";
 
 const sans = Figtree({
 	subsets: ["latin"],
@@ -28,32 +22,13 @@ const serif = Newsreader({
 	display: "swap",
 });
 
-const LOUNGE_URL = process.env.NEXT_PUBLIC_LOUNGE_URL ?? "";
-
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
 	return (
 		<AppShell className={clsx(sans.variable, serif.variable)}>
 			<ThemeProvider>
 				{/** biome-ignore lint/correctness/useUniqueElementIds: Needed to blur the app for open dialogs. */}
 				<div className={shell.layout} id="root">
-					<AuthProvider>
-						<Header className={shell.header}>
-							<Suspense fallback={<AuthButtonsSkeleton />}>
-								<AuthButtonsLoader />
-							</Suspense>
-						</Header>
-
-						<Suspense fallback={<main className={shell.main} />}>
-							<main className={shell.main}>{children}</main>
-						</Suspense>
-					</AuthProvider>
-
-					<Suspense>
-						<Footer className={shell.footer} barUrl="" loungeUrl={LOUNGE_URL}>
-							<ThemePicker />
-							<WakeLock size="small" />
-						</Footer>
-					</Suspense>
+					<AuthProvider>{children}</AuthProvider>
 				</div>
 
 				<Toaster />
