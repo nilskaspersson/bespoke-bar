@@ -11,6 +11,7 @@ import { Icon } from "@bespoke/ui/Icon";
 import { Panel } from "@bespoke/ui/Panel";
 import { Spinner } from "@bespoke/ui/Spinner";
 import { Text } from "@bespoke/ui/Text";
+import { Tooltip } from "@bespoke/ui/Tooltip";
 import { clsx } from "clsx";
 import { useHandoffResult } from "@/features/recipes/photo/hooks/useHandoffResult";
 import { trpc } from "@/trpc/client";
@@ -42,11 +43,13 @@ function isTerminalError(
 export function HandoffContent({
 	link,
 	isMinting,
+	canRenew,
 	onRenew,
 	onResult,
 }: {
 	link: MintedHandoff | null;
 	isMinting: boolean;
+	canRenew: boolean;
 	onRenew: () => void;
 	onResult: (extractedText: string) => void;
 }) {
@@ -82,15 +85,21 @@ export function HandoffContent({
 		<Panel
 			footer={
 				<div className={styles.status} aria-live="polite">
-					<Text as="p" heavy align="center">
+					<Text as="p" heavy weight={600} align="center">
 						{isStale ? "The handoff has expired." : "Scan to start handoff."}
 					</Text>
 
 					{status.isError && !isStale ? (
-						<Text as="p" size={2} className={styles.hiccup}>
+						<Text as="p" size={2} align="center" className={styles.hiccup}>
 							Connection hiccup. Still checking.
 						</Text>
-					) : null}
+					) : (
+						<Text as="p" size={2} align="center" light>
+							{isStale
+								? "Refresh the code to start again."
+								: "Keep this open until the text arrives."}
+						</Text>
+					)}
 				</div>
 			}
 		>
@@ -108,11 +117,13 @@ export function HandoffContent({
 
 					{isStale ? (
 						<div className={styles.overlay}>
-							<Button
+							<Tooltip
+								as={Button}
+								label="Refresh QR code"
 								variant="solid"
 								color="amber"
-								onClick={onRenew}
-								disabled={isMinting}
+								onClick={canRenew ? onRenew : undefined}
+								aria-disabled={!canRenew}
 								icon
 							>
 								{isMinting ? (
@@ -120,7 +131,7 @@ export function HandoffContent({
 								) : (
 									<Icon name="arrow-rotate-right" />
 								)}
-							</Button>
+							</Tooltip>
 						</div>
 					) : (
 						<CopyToClipboard

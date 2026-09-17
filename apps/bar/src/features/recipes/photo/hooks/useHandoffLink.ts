@@ -1,5 +1,6 @@
 import type { MintedHandoff } from "@bespoke/api/recipes/photo/handoff/handoff.service";
 import { AppError } from "@bespoke/schema/appError";
+import { useTimedState } from "@bespoke/ui/hooks/useTimedState";
 import { toast } from "@bespoke/ui/Toast";
 import { useMutation } from "@tanstack/react-query";
 import { useCallback, useState } from "react";
@@ -8,6 +9,11 @@ import { mintHandoffLink } from "@/features/recipes/photo/api/mintHandoffLink";
 import { useCloseHandoffOnUnmount } from "@/features/recipes/photo/hooks/useCloseHandoffOnUnmount";
 import { trpc } from "@/trpc/client";
 import { getErrorToast, unwrapAction } from "@/utils/api";
+
+/**
+ * Every "start again" is a fresh nonce and a Redis write
+ */
+const RENEW_COOLDOWN_MS = 5_000;
 
 function showMintError(error: unknown) {
 	if (error instanceof AppError && error.payload.code === "OCR_QUOTA_REACHED") {
@@ -28,10 +34,17 @@ function showMintError(error: unknown) {
  */
 export function useHandoffLink({ onMintFailed }: { onMintFailed: () => void }) {
 	const [link, setLink] = useState<MintedHandoff | null>(null);
+	const [isCoolingDown, setCoolingDown] = useTimedState(
+		false,
+		RENEW_COOLDOWN_MS,
+	);
 
 	const mint = useMutation({
 		mutationFn: () => unwrapAction(mintHandoffLink()),
-		onSuccess: setLink,
+		onSuccess: (minted) => {
+			setLink(minted);
+			setCoolingDown(true);
+		},
 		onError: (error) => {
 			showMintError(error);
 			onMintFailed();
@@ -59,6 +72,7 @@ export function useHandoffLink({ onMintFailed }: { onMintFailed: () => void }) {
 	return {
 		link,
 		isMinting: mint.isPending,
+		canRenew: !mint.isPending && !isCoolingDown,
 		open() {
 			if (link) {
 				extend.mutate({ nonce: link.nonce });
