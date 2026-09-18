@@ -36,34 +36,51 @@ describe("handoffStore", () => {
 	it("lets the first result claim the Handoff and refuses the second", async () => {
 		await store.create(NONCE, record, { expireAtMs: EXPIRE_AT });
 
-		expect(
-			await store.claimResult(NONCE, result, { expireAtMs: EXPIRE_AT }),
-		).toBe(true);
-		expect(
-			await store.claimResult(
-				NONCE,
-				{ extractedText: "other" },
-				{ expireAtMs: EXPIRE_AT },
-			),
-		).toBe(false);
+		expect(await store.claimResult(NONCE, result)).toBe(true);
+		expect(await store.claimResult(NONCE, { extractedText: "other" })).toBe(
+			false,
+		);
 		expect((await store.read(NONCE))?.result).toEqual(result);
 	});
 
 	it("tombstones an unsettled Handoff so a later result is refused", async () => {
 		await store.create(NONCE, record, { expireAtMs: EXPIRE_AT });
 
-		expect(await store.close(NONCE, { expireAtMs: EXPIRE_AT })).toBe(true);
-		expect(
-			await store.claimResult(NONCE, result, { expireAtMs: EXPIRE_AT }),
-		).toBe(false);
+		expect(await store.close(NONCE)).toBe(true);
+		expect(await store.claimResult(NONCE, result)).toBe(false);
 		expect((await store.read(NONCE))?.result).toBe(HANDOFF_CLOSED);
 	});
 
 	it("does not overwrite a landed result with a tombstone", async () => {
 		await store.create(NONCE, record, { expireAtMs: EXPIRE_AT });
-		await store.claimResult(NONCE, result, { expireAtMs: EXPIRE_AT });
+		await store.claimResult(NONCE, result);
 
-		expect(await store.close(NONCE, { expireAtMs: EXPIRE_AT })).toBe(false);
+		expect(await store.close(NONCE)).toBe(false);
 		expect((await store.read(NONCE))?.result).toEqual(result);
+	});
+
+	it("never recreates a record that has expired", async () => {
+		expect(await store.claimResult(NONCE, result)).toBe(false);
+		expect(await store.close(NONCE)).toBe(false);
+		expect(
+			await store.extend(NONCE, {
+				expiresAt: EXPIRES_AT,
+				expireAtMs: EXPIRE_AT,
+			}),
+		).toBe(false);
+		expect(redis.hashes.has(KEY)).toBe(false);
+	});
+
+	it("keeps an extended expiry when a result lands afterwards", async () => {
+		const extendedExpireAt = EXPIRE_AT + 5 * 60_000;
+		await store.create(NONCE, record, { expireAtMs: EXPIRE_AT });
+		await store.extend(NONCE, {
+			expiresAt: EXPIRES_AT + 5 * 60_000,
+			expireAtMs: extendedExpireAt,
+		});
+
+		await store.claimResult(NONCE, result);
+
+		expect(redis.expiries.get(KEY)).toBe(Math.ceil(extendedExpireAt / 1000));
 	});
 });
