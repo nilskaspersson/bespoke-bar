@@ -51,7 +51,12 @@ export function PhotoToRecipe({
 			className={clsx(className, styles.root)}
 		>
 			{flow.hasParsedText ? (
-				<div className={styles.review}>
+				<Grid
+					gap={8}
+					justifyContent="center"
+					alignContent="start"
+					className={styles.review}
+				>
 					<Grid gap={4} className={styles.source}>
 						<FlowStep {...STEPS.photo} state={steps.photo} />
 						<PhotoSourceStrip flow={flow} />
@@ -66,7 +71,7 @@ export function PhotoToRecipe({
 						<FlowStep {...STEPS.recipes} state={steps.recipes} />
 						<DraftRecipesPreview recipes={flow.draftRecipes} />
 					</Grid>
-				</div>
+				</Grid>
 			) : (
 				<Grid className={styles.intro} alignItems="stretch" gap={6}>
 					<Grid as="section" gap={4}>

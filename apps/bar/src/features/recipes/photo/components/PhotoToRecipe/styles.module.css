@@ -19,10 +19,6 @@
 	}
 
 	.review {
-		display: grid;
-		justify-content: center;
-		align-items: start;
-		gap: var(--gap--large);
 		grid-template-columns: minmax(0, var(--recipe-preview-width));
 
 		@container (width > 900px) {
