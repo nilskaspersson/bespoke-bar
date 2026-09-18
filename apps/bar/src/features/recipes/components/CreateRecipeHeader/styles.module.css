@@ -1,0 +1,35 @@
+@layer composition {
+	.header {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: end;
+		gap: var(--gap);
+		padding-block: var(--gap--large) var(--gap);
+		border-bottom: 1px solid var(--glass--border-color);
+	}
+
+	.line {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: var(--space-0) var(--space-3);
+
+		@container (width < 700px) {
+			flex-direction: column;
+			align-items: start;
+		}
+	}
+
+	.overline {
+		display: flex;
+		align-items: center;
+		gap: var(--space-1);
+		color: var(--iris-11);
+		font-variant: all-small-caps;
+		letter-spacing: 0.1em;
+
+		&:is(:hover, :focus-visible) {
+			color: var(--iris-12);
+		}
+	}
+}

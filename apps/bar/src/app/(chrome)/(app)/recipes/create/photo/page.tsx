@@ -1,25 +1,21 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedRecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
-import { PageHeader } from "@bespoke/ui/PageHeader";
 import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
-import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
+import { CreateRecipeHeader } from "@/features/recipes/components/CreateRecipeHeader";
 import { PhotoToRecipe } from "@/features/recipes/photo/components/PhotoToRecipe";
 
 export default function PhotoToRecipePage() {
 	return (
 		<>
-			<PageHeader
-				overline="Recipes"
-				icon="duotone-martini-glass"
+			<CreateRecipeHeader
+				active="photo"
 				heading="Photo"
 				tagline="Snap a napkin."
-			>
-				<CreateRecipeNav active="photo" compact />
-			</PageHeader>
+			/>
 
 			<Suspense
 				fallback={

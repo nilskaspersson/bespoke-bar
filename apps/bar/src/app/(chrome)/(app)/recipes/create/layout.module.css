@@ -1,7 +1,7 @@
 @layer layout {
 	.container {
 		display: grid;
-		gap: var(--gap--huge);
+		gap: var(--gap--large);
 		container-type: inline-size;
 		grid-template-rows: auto 1fr;
 		padding-bottom: var(--gap);
