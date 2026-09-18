@@ -1,25 +1,21 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedRecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
-import { PageHeader } from "@bespoke/ui/PageHeader";
 import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import { Suspense } from "react";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
 import { createRecipesWithLinesFromData } from "@/features/recipes/api/upsertRecipesWithLines";
 import { BulkDraftRecipesForm } from "@/features/recipes/bulk/components/BulkDraftRecipesForm";
-import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
+import { CreateRecipeHeader } from "@/features/recipes/components/CreateRecipeHeader";
 
 export default function BulkCreateRecipePage() {
 	return (
 		<>
-			<PageHeader
-				overline="Recipes"
-				icon="duotone-martini-glass"
+			<CreateRecipeHeader
+				active="text"
 				heading="Text Editor"
 				tagline="Paste from your notes."
-			>
-				<CreateRecipeNav active="text" compact />
-			</PageHeader>
+			/>
 
 			<Suspense
 				fallback={

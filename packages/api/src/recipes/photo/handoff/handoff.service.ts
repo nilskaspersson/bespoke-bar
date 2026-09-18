@@ -159,12 +159,12 @@ export async function extendHandoff(
 	}
 
 	const expiresAt = nowMs + HANDOFF_LINK_TTL_MS;
-	await requireStore().extend(nonce, {
+	const extended = await requireStore().extend(nonce, {
 		expiresAt,
 		expireAtMs: expiresAt + HANDOFF_RESULT_GRACE_MS,
 	});
 
-	return { expiresAt };
+	return { expiresAt: extended ? expiresAt : null };
 }
 
 export async function closeHandoff(
@@ -176,9 +176,5 @@ export async function closeHandoff(
 		return { closed: false };
 	}
 
-	const closed = await requireStore().close(nonce, {
-		expireAtMs: graceEnd(record),
-	});
-
-	return { closed };
+	return { closed: await requireStore().close(nonce) };
 }

@@ -1,4 +1,3 @@
-import { HANDOFF_RESULT_GRACE_MS } from "@bespoke/domain/photoHandoff/constants";
 import { AppError } from "@bespoke/schema/appError";
 import { rateLimit } from "../../../rateLimit";
 import {
@@ -70,11 +69,9 @@ export async function submitHandoffPhoto(
 		return parsed;
 	}
 
-	const claimed = await store.claimResult(
-		nonce,
-		{ extractedText: parsed.body.data.extractedText },
-		{ expireAtMs: record.expiresAt + HANDOFF_RESULT_GRACE_MS },
-	);
+	const claimed = await store.claimResult(nonce, {
+		extractedText: parsed.body.data.extractedText,
+	});
 	if (!claimed) {
 		return ended("closed");
 	}

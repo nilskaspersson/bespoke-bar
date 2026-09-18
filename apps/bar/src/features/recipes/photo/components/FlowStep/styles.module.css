@@ -1,0 +1,33 @@
+@layer component {
+	.step {
+		--markerColor: var(--mauve-9);
+		--markerBorder: var(--mauve-7);
+		--markerBg: transparent;
+
+		&.active {
+			--markerColor: var(--iris-11);
+			--markerBorder: var(--iris-11);
+			--markerBg: var(--iris-3);
+		}
+
+		&.done {
+			--markerColor: var(--iris-1);
+			--markerBorder: var(--iris-9);
+			--markerBg: var(--iris-9);
+		}
+	}
+
+	.marker {
+		flex: 0 0 auto;
+		display: grid;
+		place-items: center;
+		width: var(--space-6);
+		aspect-ratio: 1;
+		border-radius: var(--radius--full);
+		border: 1px solid var(--markerBorder);
+		background-color: var(--markerBg);
+		color: var(--markerColor);
+		transition-property: color, background-color, border-color;
+		transition-duration: var(--transition-duration);
+	}
+}

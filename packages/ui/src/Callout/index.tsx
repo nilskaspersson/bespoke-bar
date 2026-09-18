@@ -13,7 +13,7 @@ type Props = {
 	heading?: ReactNode;
 	icon?: IconName;
 	size?: Scale;
-	variant?: "solid" | "inset";
+	variant?: "solid" | "inset" | "bare";
 };
 
 export function Callout({

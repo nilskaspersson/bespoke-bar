@@ -1,5 +1,6 @@
 @layer layout {
 	.nav {
 		align-self: end;
+		margin-top: var(--space-7);
 	}
 }

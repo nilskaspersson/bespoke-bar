@@ -19,7 +19,7 @@ export function useHandoffResult(
 		if (status?.phase !== "done") return;
 
 		onResult(status.extractedText);
-		toast.success("Recipe text received from your phone");
+		toast.success("Recipe text received from handoff");
 		void utils.billing.ocrQuotaState.invalidate();
 	}, [status, onResult, utils]);
 }

@@ -7,7 +7,13 @@ import { Text } from "@bespoke/ui/Text";
 import { use } from "react";
 import { trpc } from "@/trpc/client";
 
-export function OCRQuotaIndicator({ locked }: { locked?: boolean }) {
+export function OCRQuotaIndicator({
+	locked,
+	className,
+}: {
+	locked?: boolean;
+	className?: string;
+}) {
 	const { relativeTimeFormatter } = use(FormatterContext);
 	const { data } = trpc.billing.ocrQuotaState.useQuery(undefined, {
 		refetchOnMount: "always",
@@ -20,6 +26,7 @@ export function OCRQuotaIndicator({ locked }: { locked?: boolean }) {
 	return (
 		<Chip
 			size={1}
+			className={className}
 			variant="outline"
 			color={locked && data.remaining === 0 ? "red" : "amber"}
 			title={
@@ -28,7 +35,7 @@ export function OCRQuotaIndicator({ locked }: { locked?: boolean }) {
 					: undefined
 			}
 		>
-			This month: <AnimatedNumber value={data.used} /> /{" "}
+			Monthly scans: <AnimatedNumber value={data.used} /> /{" "}
 			<Text numeric weight={600}>
 				{data.limit}
 			</Text>

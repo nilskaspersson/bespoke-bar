@@ -18,21 +18,31 @@ export function createFakeRedis() {
 			const target = hashes.get(key);
 			return target ? Array.from(target.entries()).flat() : [];
 		},
-		async setFields(key, fields, expireAtUnixSeconds) {
+		async create(key, fields, expireAtUnixSeconds) {
 			const target = hash(key);
 			for (const [field, value] of Object.entries(fields)) {
 				target.set(field, value);
 			}
 			expiries.set(key, expireAtUnixSeconds);
 		},
-		async setFieldIfAbsent(key, field, value, expireAtUnixSeconds) {
-			const target = hash(key);
-			const absent = !target.has(field);
-			if (absent) {
+		async setFieldsIfExists(key, fields, expireAtUnixSeconds) {
+			const target = hashes.get(key);
+			if (!target) {
+				return false;
+			}
+			for (const [field, value] of Object.entries(fields)) {
 				target.set(field, value);
 			}
 			expiries.set(key, expireAtUnixSeconds);
-			return absent;
+			return true;
+		},
+		async setFieldIfAbsent(key, field, value) {
+			const target = hashes.get(key);
+			if (!target || target.has(field)) {
+				return false;
+			}
+			target.set(field, value);
+			return true;
 		},
 	};
 

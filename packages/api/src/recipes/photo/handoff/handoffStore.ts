@@ -4,47 +4,74 @@ import { z } from "zod";
 export const HANDOFF_CLOSED = "closed";
 
 /**
- * Every write carries the key's absolute expiry, or a write racing the TTL would
- * recreate the hash without an expiry. Values are strings throughout
- * (`automaticDeserialization` is off), which also leaves HGETALL as the raw
- * flat `[field, value, …]` reply.
+ * Only `create` may bring a key into existence, atomically with its expiry.
  */
 export type HandoffRedis = {
 	hgetall: (key: string) => Promise<unknown[] | Record<string, unknown> | null>;
-	/** HSET + EXPIREAT. */
-	setFields: (
+	/** HSET + EXPIREAT in one transaction. */
+	create: (
 		key: string,
 		fields: Record<string, string>,
 		expireAtUnixSeconds: number,
 	) => Promise<void>;
-	/** HSETNX + EXPIREAT; true when the field was absent and is now set. */
+	/** HSET + EXPIREAT; false when the key is gone. */
+	setFieldsIfExists: (
+		key: string,
+		fields: Record<string, string>,
+		expireAtUnixSeconds: number,
+	) => Promise<boolean>;
+	/**
+	 * HSETNX that leaves the expiry alone; true when the key exists and the
+	 * field was absent.
+	 */
 	setFieldIfAbsent: (
 		key: string,
 		field: string,
 		value: string,
-		expireAtUnixSeconds: number,
 	) => Promise<boolean>;
 };
 
-/** Both writes go in one pipeline, so each mutation is a single round trip. */
+const SET_FIELDS_IF_EXISTS = `
+	if redis.call("EXISTS", KEYS[1]) == 0 then
+		return 0
+	end
+	redis.call("HSET", KEYS[1], unpack(ARGV, 2))
+	redis.call("EXPIREAT", KEYS[1], ARGV[1])
+	return 1
+`;
+
+const SET_FIELD_IF_ABSENT = `
+	if redis.call("EXISTS", KEYS[1]) == 0 then
+		return 0
+	end
+	return redis.call("HSETNX", KEYS[1], ARGV[1], ARGV[2])
+`;
+
 export function createUpstashHandoffRedis(redis: Redis): HandoffRedis {
+	const setFieldsIfExists = redis.createScript<number>(SET_FIELDS_IF_EXISTS);
+	const setFieldIfAbsent = redis.createScript<number>(SET_FIELD_IF_ABSENT);
+
 	return {
 		hgetall: (key) => redis.hgetall(key),
-		async setFields(key, fields, expireAtUnixSeconds) {
+		async create(key, fields, expireAtUnixSeconds) {
 			await redis
-				.pipeline()
+				.multi()
 				.hset(key, fields)
 				.expireat(key, expireAtUnixSeconds)
 				.exec();
 		},
-		async setFieldIfAbsent(key, field, value, expireAtUnixSeconds) {
-			const [set] = await redis
-				.pipeline()
-				.hsetnx(key, field, value)
-				.expireat(key, expireAtUnixSeconds)
-				.exec();
+		async setFieldsIfExists(key, fields, expireAtUnixSeconds) {
+			const set = await setFieldsIfExists.exec(
+				[key],
+				[String(expireAtUnixSeconds), ...Object.entries(fields).flat()],
+			);
 
-			return set === 1;
+			return Number(set) === 1;
+		},
+		async setFieldIfAbsent(key, field, value) {
+			const set = await setFieldIfAbsent.exec([key], [field, value]);
+
+			return Number(set) === 1;
 		},
 	};
 }
@@ -99,7 +126,7 @@ export function createHandoffStore(redis: HandoffRedis) {
 			record: Pick<HandoffRecord, "orgId" | "userId" | "expiresAt">,
 			{ expireAtMs }: { expireAtMs: number },
 		): Promise<void> {
-			await redis.setFields(
+			await redis.create(
 				key(nonce),
 				{
 					orgId: record.orgId,
@@ -132,43 +159,30 @@ export function createHandoffStore(redis: HandoffRedis) {
 			};
 		},
 
-		/** Only on a record known to exist, else HSET would create a partial hash. */
-		async extend(
+		/** False if the record expired in the meantime. */
+		extend(
 			nonce: string,
 			{ expiresAt, expireAtMs }: { expiresAt: number; expireAtMs: number },
-		): Promise<void> {
-			await redis.setFields(
+		): Promise<boolean> {
+			return redis.setFieldsIfExists(
 				key(nonce),
 				{ expiresAt: String(expiresAt) },
 				toUnixSeconds(expireAtMs),
 			);
 		},
 
-		/** False if a result or tombstone is already there. */
-		claimResult(
-			nonce: string,
-			result: HandoffResult,
-			{ expireAtMs }: { expireAtMs: number },
-		): Promise<boolean> {
+		/** False if a result or tombstone is already there, or the record expired. */
+		claimResult(nonce: string, result: HandoffResult): Promise<boolean> {
 			return redis.setFieldIfAbsent(
 				key(nonce),
 				"result",
 				JSON.stringify(result),
-				toUnixSeconds(expireAtMs),
 			);
 		},
 
-		/** Tombstone. False if a result already landed. */
-		close(
-			nonce: string,
-			{ expireAtMs }: { expireAtMs: number },
-		): Promise<boolean> {
-			return redis.setFieldIfAbsent(
-				key(nonce),
-				"result",
-				HANDOFF_CLOSED,
-				toUnixSeconds(expireAtMs),
-			);
+		/** Tombstone. False if a result already landed, or the record expired. */
+		close(nonce: string): Promise<boolean> {
+			return redis.setFieldIfAbsent(key(nonce), "result", HANDOFF_CLOSED);
 		},
 	};
 }

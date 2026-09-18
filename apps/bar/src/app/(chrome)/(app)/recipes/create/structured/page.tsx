@@ -1,12 +1,11 @@
 import { authOrForbidden } from "@bespoke/api/auth";
 import { getCachedRecipeSlotUsage } from "@bespoke/api/billing/getRecipeSlotUsage";
 import { getCachedIngredients } from "@bespoke/api/ingredients/readIngredients";
-import { PageHeader } from "@bespoke/ui/PageHeader";
 import { Skeleton, SkeletonScreen } from "@bespoke/ui/Skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { RecipeSlotUsageProvider } from "@/features/billing/components/RecipeSlotUsageProvider";
-import { CreateRecipeNav } from "@/features/recipes/components/CreateRecipeNav";
+import { CreateRecipeHeader } from "@/features/recipes/components/CreateRecipeHeader";
 import { FormDraftPreview } from "@/features/recipes/components/FormDraftPreview";
 import { RecipeForm } from "@/features/recipes/components/RecipeForm";
 import styles from "./page.module.css";
@@ -14,14 +13,11 @@ import styles from "./page.module.css";
 export default function CreateRecipePage() {
 	return (
 		<>
-			<PageHeader
-				overline="Recipes"
-				icon="duotone-martini-glass"
+			<CreateRecipeHeader
+				active="structured"
 				heading="Structured"
 				tagline="Full control."
-			>
-				<CreateRecipeNav active="structured" compact />
-			</PageHeader>
+			/>
 
 			<Suspense
 				fallback={
