@@ -1,0 +1,116 @@
+@layer feature {
+	.stage {
+		--borderStyle: dashed;
+		--borderColor: var(--mauve-7);
+		--borderColorActive: var(--iris-11);
+
+		display: grid;
+		scroll-margin-top: var(--app-inset);
+	}
+
+	.form,
+	.photo {
+		grid-area: 1 / 1;
+		border-radius: var(--radius--large);
+	}
+
+	.form {
+		display: grid;
+		align-content: center;
+		border: 1px var(--borderStyle) var(--borderColor);
+		transition: border-color var(--transition-duration);
+	}
+
+	.photo {
+		position: relative;
+		z-index: 1;
+		overflow: hidden;
+		container-type: size;
+		padding: var(--space-6);
+		display: grid;
+		place-items: center;
+		border: 1px dashed var(--borderColorActive);
+		background-color: var(--mauve-1);
+		background-image: radial-gradient(var(--mauve-3) 1px, transparent 1px);
+		background-size: 10px 10px;
+		animation: photoStageIn var(--transition-duration--slow, 400ms) ease;
+	}
+
+	/*
+	 * Sized to the photo's own pixels (the largest box of its ratio that fits
+	 * the stage), so overlays cover the image rather than the letterboxing.
+	 */
+	.frame {
+		position: relative;
+		width: min(100cqw, 100cqh * var(--jsxPhotoRatio, 1));
+		aspect-ratio: var(--jsxPhotoRatio, 1);
+		border-radius: var(--radius);
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			border-radius: inherit;
+			pointer-events: none;
+			opacity: 0;
+			box-shadow:
+				0 0 0 1px hsl(from var(--iris-9) h s l / 0.7),
+				0 0 var(--space-5) hsl(from var(--iris-9) h s l / 0.45);
+			transition: opacity var(--transition-duration--slow);
+		}
+
+		&.scanning::after {
+			opacity: 1;
+			animation: photoStageGlow 1.4s ease-in-out infinite alternate;
+
+			@media (prefers-reduced-motion: reduce) {
+				animation: none;
+			}
+		}
+
+		&:not([style]) {
+			visibility: hidden;
+		}
+	}
+
+	.clip {
+		position: relative;
+		height: 100%;
+		overflow: hidden;
+		isolation: isolate;
+		border-radius: inherit;
+	}
+
+	.image {
+		display: block;
+		width: 100%;
+		height: 100%;
+		border-radius: inherit;
+	}
+
+	.handoff {
+		color: var(--iris-11);
+	}
+
+	.caption {
+		position: absolute;
+		inset: auto var(--space-2) var(--space-2);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-2);
+	}
+}
+
+@keyframes photoStageIn {
+	from {
+		opacity: 0;
+		scale: 0.98;
+	}
+}
+
+@keyframes photoStageGlow {
+	from {
+		opacity: 0.45;
+	}
+}

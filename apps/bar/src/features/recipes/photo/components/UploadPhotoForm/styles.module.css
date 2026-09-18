@@ -43,6 +43,11 @@
 		--divider-width: 20ch;
 	}
 
+	.dropHint {
+		position: absolute;
+		inset: auto var(--space-3) var(--space-3) auto;
+	}
+
 	/*
 	 * `capture` is only honoured by touch devices; elsewhere it silently opens a
 	 * file picker, so we show the drag-and-drop / paste hint instead.

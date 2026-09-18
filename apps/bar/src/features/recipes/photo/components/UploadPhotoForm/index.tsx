@@ -40,7 +40,6 @@ export function UploadPhotoForm({
 	onSuccess: (extractedText: string) => void;
 	onChange?: ChangeEventHandler<HTMLInputElement>;
 	onParsingChange?: (parsing: boolean) => void;
-	/** Renders the handoff button when given. */
 	onHandoff?: () => void;
 	usageInfo?: React.ReactNode;
 	disabled?: boolean;
@@ -157,7 +156,7 @@ export function UploadPhotoForm({
 					<Icon name="arrow-down-to-dotted-line" size={6} />
 
 					<Text size={3} weight={600} heavy align="center">
-						{isDraggingOver ? "Release to parse recipes!" : "Drop file here."}
+						{isDraggingOver ? "Release to extract Recipes" : "Drop image here."}
 					</Text>
 				</div>
 			) : null}
@@ -210,18 +209,20 @@ export function UploadPhotoForm({
 							<Icon name="qr-code" /> Take a photo with your phone
 						</Button>
 					) : null}
-
-					<Text heavy size={2} className={styles.dropHint}>
-						Drag & drop, or paste an image
-					</Text>
 				</Grid>
-
-				<Callout variant="solid" color="light" icon="circle-info" size={1}>
-					Multiple recipes can be extracted from an image.
-				</Callout>
 
 				{children}
 			</Grid>
+
+			<Callout
+				variant="bare"
+				color="regular"
+				icon="circle-info"
+				size={1}
+				className={styles.dropHint}
+			>
+				You can also drop or paste an image
+			</Callout>
 
 			<ConfirmAction.Alert
 				ref={ocrConsentDialogRef}

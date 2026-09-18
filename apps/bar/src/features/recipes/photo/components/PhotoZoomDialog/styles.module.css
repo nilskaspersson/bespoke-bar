@@ -1,0 +1,13 @@
+@layer feature {
+	.dialog {
+		width: min(92vw, 70rem);
+	}
+
+	.image {
+		display: block;
+		max-width: 100%;
+		max-height: 92svh;
+		margin-inline: auto;
+		border-radius: var(--radius--large);
+	}
+}
